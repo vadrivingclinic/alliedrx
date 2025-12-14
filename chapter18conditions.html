@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AlliedRx – Module 18.2: Conditions, Prevention & Protection</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        /* === ALLIEDRx BRANDING === */
+        :root {
+            --color-primary: #af4bef;        /* Purple */
+            --color-primary-soft: #d492ff;   /* Light purple */
+            --color-accent: #8380f0;         /* Blue-purple accent */
+            --color-success: #00b894;        /* Green */
+            --color-error: #e17055;          /* Red/Orange */
+            --color-warning: #fdcb6e;        /* Yellow */
+            --color-bg: #f7f5fb;             /* Light background */
+            --color-text: #2b2b2b;           /* Dark text */
+            --color-muted: #6c6880;          /* Muted text */
+            --color-dark: #0c0a18;           /* Dark panel */
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+            --shadow-card: 0 12px 30px rgba(15, 23, 42, 0.1);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { width: 100%; overflow-x: hidden; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; scroll-behavior: smooth; }
+        body { padding: 24px; background: radial-gradient(circle at top left, #ffffff 0, #f1ecff 40%, var(--color-bg) 100%); color: var(--color-text); line-height: 1.6; }
+        @media (max-width: 600px) { body { padding: 12px; } }
+
+        /* === ANIMATIONS === */
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes popIn { 0% { transform: scale(0.9); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+        @keyframes scoreCountUp { from { width: 0%; } to { width: var(--target-width); } }
+
+        /* === LAYOUT === */
+        .page { width: 100%; max-width: 1200px; margin: 0 auto; background: #ffffff; border-radius: var(--radius-lg); box-shadow: var(--shadow-soft); padding: 28px 30px 32px; position: relative; overflow: hidden; animation: fadeInUp 0.8s ease-out; }
+        
+        /* === HEADER === */
+        .brand-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; margin-bottom: 20px; flex-wrap: wrap; width: 100%; }
+        .brand { display: flex; align-items: center; gap: 12px; }
+        .brand-logo { height: 40px; width: auto; filter: drop-shadow(0 3px 8px rgba(0,0,0,0.2)); }
+        .course-meta { display: flex; flex-direction: column; gap: 2px; }
+        .course-name { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.16em; color: var(--color-muted); }
+        .week-label { display: inline-flex; align-items: center; gap: 8px; padding: 4px 10px; border-radius: 999px; background: rgba(175, 75, 239, 0.08); font-size: 0.76rem; color: var(--color-primary); }
+        .badge-mode { padding: 5px 10px; border-radius: 999px; background: rgba(12, 10, 24, 0.06); border: 1px solid rgba(12, 10, 24, 0.08); font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.14em; color: var(--color-muted); }
+
+        h1 { font-size: clamp(1.8rem, 3vw, 2.2rem); line-height: 1.1; color: var(--color-primary); margin-bottom: 6px; }
+        .module-subtitle { font-size: 0.98rem; color: var(--color-muted); max-width: 600px; margin-bottom: 24px; }
+
+        /* === TRACKER & SUMMARY === */
+        .progress-tracker { display: flex; justify-content: space-between; margin-bottom: 30px; position: relative; padding: 0 20px; }
+        .progress-tracker::before { content: ''; position: absolute; top: 15px; left: 40px; right: 40px; height: 3px; background: rgba(12, 10, 24, 0.08); z-index: 1; }
+        .progress-step { display: flex; flex-direction: column; align-items: center; position: relative; z-index: 2; flex: 1; }
+        .step-circle { width: 30px; height: 30px; border-radius: 50%; background: white; border: 2px solid rgba(12, 10, 24, 0.1); display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 600; color: var(--color-muted); margin-bottom: 8px; transition: all 0.3s ease; }
+        .progress-step.active .step-circle { background: var(--color-primary); border-color: var(--color-primary); color: white; transform: scale(1.1); }
+        .progress-step.completed .step-circle { background: var(--color-success); border-color: var(--color-success); color: white; }
+        .step-label { font-size: 0.75rem; color: var(--color-muted); font-weight: 500; }
+        
+        .progress-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 30px; }
+        .summary-card { background: rgba(12, 10, 24, 0.02); border-radius: var(--radius-md); padding: 16px; border: 1px solid rgba(12, 10, 24, 0.06); text-align: center; }
+        .summary-number { font-size: 1.8rem; font-weight: 800; color: var(--color-primary); display: block; margin-bottom: 4px; }
+        .summary-label { font-size: 0.75rem; color: var(--color-muted); text-transform: uppercase; letter-spacing: 0.1em; }
+
+        /* === ACTIVITY CARDS === */
+        .activity-grid { display: grid; grid-template-columns: 1fr; gap: 25px; margin-bottom: 30px; }
+        .activity-card { background: white; border-radius: var(--radius-md); border: 1px solid rgba(12, 10, 24, 0.08); padding: 25px; transition: all 0.3s ease; position: relative; overflow: hidden; }
+        .activity-card.completed { border-color: var(--color-success); }
+        .activity-card.completed::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--color-success); }
+        .activity-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
+        .activity-number { font-size: 0.8rem; font-weight: 700; color: var(--color-primary); background: rgba(175, 75, 239, 0.1); padding: 4px 10px; border-radius: 20px; }
+        .activity-status { font-size: 0.75rem; padding: 3px 8px; border-radius: 12px; background: rgba(12, 10, 24, 0.06); color: var(--color-muted); }
+        .activity-card.completed .activity-status { background: rgba(0, 184, 148, 0.1); color: var(--color-success); }
+        .activity-title { font-size: 1.2rem; font-weight: 700; color: var(--color-text); margin-bottom: 10px; }
+
+        /* === ACTIVITY 1 STYLES === */
+        .matching-container { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; }
+        .item-bank { background: rgba(12, 10, 24, 0.02); border-radius: var(--radius-sm); padding: 20px; border: 1px solid rgba(12, 10, 24, 0.08); display: flex; flex-direction: column; gap: 10px; }
+        .draggable-item { background: white; border: 2px solid var(--color-accent); border-radius: var(--radius-sm); padding: 12px; font-size: 0.85rem; cursor: grab; text-align: left; font-weight: 600; transition: all 0.2s; }
+        .draggable-item:hover { background: rgba(131, 128, 240, 0.1); transform: translateY(-2px); }
+        .draggable-item.placed { opacity: 0.5; cursor: default; border-color: var(--color-success); background: #f0fdf4; }
+        
+        .drop-zones-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        .drop-zone { background: white; border: 2px dashed rgba(12, 10, 24, 0.1); border-radius: var(--radius-sm); padding: 15px; min-height: 120px; display: flex; flex-direction: column; transition: all 0.3s ease; }
+        .drop-zone.hover { border-color: var(--color-primary); background: rgba(175, 75, 239, 0.05); }
+        .drop-zone.filled { border: 2px solid var(--color-success); background: #f0fdf4; }
+        .zone-title { font-weight: 700; color: var(--color-primary); margin-bottom: 5px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+        .zone-desc { font-size: 0.8rem; color: var(--color-muted); font-style: italic; }
+        .zone-content { display: flex; flex-direction: column; gap: 5px; margin-top: 10px; }
+        .placed-badge { background: var(--color-success); color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 600; }
+
+        /* === ACTIVITY 2 & 3: SELECTION STYLES === */
+        .selection-container { background: rgba(12, 10, 24, 0.02); border-radius: var(--radius-sm); padding: 25px; border: 1px solid rgba(12, 10, 24, 0.08); }
+        .selection-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px; }
+        .select-option { background: white; border: 2px solid #ddd; border-radius: var(--radius-sm); padding: 12px; cursor: pointer; transition: all 0.2s; text-align: center; font-weight: 600; font-size: 0.9rem; }
+        .select-option:hover { border-color: var(--color-primary); background: rgba(175, 75, 239, 0.05); }
+        .select-option.selected { border-color: var(--color-primary); background: var(--color-primary); color: white; }
+        
+        .sim-options { display: grid; grid-template-columns: 1fr; gap: 12px; }
+        /* Site Selection Buttons */
+        .site-btn { background: white; border: 2px solid rgba(12,10,24,0.1); border-radius: var(--radius-sm); padding: 18px; cursor: pointer; transition: all 0.2s; text-align: left; font-size: 0.95rem; font-weight: 500; color: var(--color-text); }
+        .site-btn:hover { border-color: var(--color-primary); transform: translateX(5px); }
+        .site-btn.correct { border-color: var(--color-success); background: #f0fdf4; }
+        .site-btn.incorrect { border-color: var(--color-error); background: #fff5f5; animation: shake 0.4s ease; }
+
+        .hidden-section { display: none; margin-top: 20px; padding-top: 15px; border-top: 1px dashed #ddd; animation: popIn 0.5s ease; }
+        .hidden-section.active { display: block; }
+        .step-feedback { color: var(--color-success); font-weight: 700; margin-bottom: 10px; font-size: 0.9rem; display: flex; align-items: center; gap: 5px; }
+
+        /* === ACTIVITY 4: SCENARIO STYLES === */
+        .scenario-box { background: rgba(12, 10, 24, 0.02); border-radius: var(--radius-sm); padding: 25px; border: 1px solid rgba(12, 10, 24, 0.08); margin-bottom: 20px; display: none; animation: popIn 0.4s ease; }
+        .scenario-box.active { display: block; }
+        .scenario-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #ddd; padding-bottom: 10px; }
+        .scenario-title { font-weight: 700; color: var(--color-primary); font-size: 1rem; }
+        .scenario-counter { font-size: 0.85rem; color: var(--color-muted); font-weight: 600; }
+        .scenario-text { font-size: 1.05rem; margin-bottom: 20px; color: var(--color-text); line-height: 1.6; }
+        .sim-option { background: white; border: 2px solid rgba(12,10,24,0.1); border-radius: var(--radius-sm); padding: 18px; cursor: pointer; transition: all 0.2s; text-align: left; font-size: 0.95rem; }
+        .sim-option:hover { border-color: var(--color-primary); transform: translateX(5px); }
+        .sim-option.correct { border-color: var(--color-success); background: #f0fdf4; }
+        .sim-option.incorrect { border-color: var(--color-error); background: #fff5f5; animation: shake 0.4s ease; }
+
+        /* === FEEDBACK & RESULTS === */
+        .feedback-details { margin-top: 25px; padding: 25px; background: #f0fdf4; border-radius: var(--radius-sm); border: 2px solid var(--color-success); box-shadow: 0 4px 15px rgba(0, 184, 148, 0.2); display: none; animation: popIn 0.5s ease; }
+        .feedback-details.show { display: block; }
+        .feedback-title { font-weight: 800; color: var(--color-success); margin-bottom: 10px; font-size: 1.1rem; display: flex; align-items: center; gap: 10px; }
+        
+        .results-panel { background: var(--color-dark); color: white; border-radius: var(--radius-md); padding: 30px; margin-top: 40px; display: none; animation: fadeInUp 0.6s ease; }
+        .results-panel.show { display: block; }
+        .results-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .score-display { font-size: 2.5rem; font-weight: 800; color: var(--color-primary-soft); }
+        .score-bar { width: 100%; height: 12px; background: rgba(255, 255, 255, 0.1); border-radius: 6px; overflow: hidden; margin: 20px 0; }
+        .score-fill { height: 100%; background: linear-gradient(90deg, var(--color-primary), var(--color-success)); width: 0%; transition: width 1.5s ease-in-out; }
+        
+        .clinical-insights { background: rgba(255, 255, 255, 0.05); border-radius: var(--radius-sm); padding: 20px; margin-top: 20px; }
+        .results-section-title { color: var(--color-primary-soft); font-size: 1rem; font-weight: 700; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px; }
+        .insights-list li { margin-bottom: 15px; display: flex; gap: 12px; font-size: 0.95rem; color: #e5e7eb; align-items: flex-start; }
+        .insights-list strong { color: white; font-weight: 600; margin-right: 5px; }
+        .insight-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--color-accent); margin-top: 9px; flex-shrink: 0; }
+
+        /* === BUTTONS === */
+        .action-buttons { display: flex; gap: 12px; margin-top: 30px; flex-wrap: wrap; }
+        .btn { padding: 12px 24px; border-radius: var(--radius-md); border: none; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 8px; }
+        .btn-primary { background: var(--color-primary); color: white; }
+        .btn-primary:hover { background: #9a3bd6; transform: translateY(-2px); }
+        .btn-secondary { background: rgba(12, 10, 24, 0.06); color: var(--color-text); }
+        .btn-secondary:hover { background: rgba(12, 10, 24, 0.1); transform: translateY(-2px); }
+        .btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+        @media (max-width: 768px) {
+            .matching-container, .drop-zones-grid, .progress-summary, .selection-grid { grid-template-columns: 1fr; }
+            .btn { width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+<main class="page" aria-labelledby="module-heading">
+    <header class="brand-row">
+        <div class="brand">
+            <img src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png" alt="AlliedRx logo" class="brand-logo" />
+            <div class="course-meta">
+                <span class="course-name">Clinical Medical Assistant • Kinn's Chapter 18</span>
+                <div class="week-label"><span class="week-label-dot"></span><span>Module 18.2: Conditions, Prevention & Protection</span></div>
+            </div>
+        </div>
+        <span class="badge-mode">Campus & Online</span>
+    </header>
+
+    <h1 id="module-heading">Conditions, Prevention & Protection</h1>
+    <p class="module-subtitle">Master pediatric disorder identification, immunization protocols, safety counseling, and abuse reporting.</p>
+
+    <div class="progress-tracker">
+        <div class="progress-step active" data-step="1"><div class="step-circle">1</div><div class="step-label">Pathogens</div></div>
+        <div class="progress-step" data-step="2"><div class="step-circle">2</div><div class="step-label">Vaccines</div></div>
+        <div class="progress-step" data-step="3"><div class="step-circle">3</div><div class="step-label">Safety</div></div>
+        <div class="progress-step" data-step="4"><div class="step-circle">4</div><div class="step-label">Reporting</div></div>
+    </div>
+
+    <div class="progress-summary">
+        <div class="summary-card"><span class="summary-number" id="completed-count">0</span><span class="summary-label">Activities Done</span></div>
+        <div class="summary-card"><span class="summary-number" id="accuracy-rate">0%</span><span class="summary-label">Accuracy</span></div>
+        <div class="summary-card"><span class="summary-number" id="time-spent">0:00</span><span class="summary-label">Time Elapsed</span></div>
+    </div>
+
+    <div class="activity-grid">
+        
+        <section class="activity-card" id="activity-1" data-activity="1">
+            <div class="activity-header"><span class="activity-number">Activity 1</span><span class="activity-status">Not Started</span></div>
+            <h3 class="activity-title">🦠 Pathogen & Disorder Sorter</h3>
+            <p class="activity-description">Drag the pediatric disorder to the correct clinical category.</p>
+            <div class="matching-container">
+                <div class="item-bank">
+                    <div class="draggable-item" draggable="true" data-type="Respiratory">Croup (Barking cough)</div>
+                    <div class="draggable-item" draggable="true" data-type="Infectious">Varicella (Chickenpox)</div>
+                    <div class="draggable-item" draggable="true" data-type="GI">Pyloric Stenosis</div>
+                    <div class="draggable-item" draggable="true" data-type="Inherited">Cystic Fibrosis</div>
+                    <div class="draggable-item" draggable="true" data-type="Infectious">Fifth Disease</div>
+                    <div class="draggable-item" draggable="true" data-type="GI">Colic</div>
+                </div>
+                <div class="drop-zones-grid">
+                    <div class="drop-zone" data-accept="Respiratory">
+                        <div class="zone-title">Respiratory</div>
+                        <div class="zone-content"></div>
+                    </div>
+                    <div class="drop-zone" data-accept="GI">
+                        <div class="zone-title">Gastrointestinal</div>
+                        <div class="zone-content"></div>
+                    </div>
+                    <div class="drop-zone" data-accept="Infectious">
+                        <div class="zone-title">Infectious Disease</div>
+                        <div class="zone-content"></div>
+                    </div>
+                    <div class="drop-zone" data-accept="Inherited">
+                        <div class="zone-title">Inherited/Genetic</div>
+                        <div class="zone-content"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="feedback-details" id="feedback-1">
+                <div class="feedback-title">✓ Classification Correct!</div>
+                <div class="feedback-content">
+                    <strong>Clinical Implications:</strong><br>
+                    • <strong>Infectious:</strong> Varicella requires airborne isolation.<br>
+                    • <strong>GI:</strong> Pyloric stenosis presents with projectile vomiting (surgical emergency).<br>
+                    • <strong>Respiratory:</strong> Croup causes stridor; Cystic Fibrosis is genetic but impacts lungs.
+                </div>
+            </div>
+        </section>
+
+        <section class="activity-card" id="activity-2" data-activity="2">
+            <div class="activity-header"><span class="activity-number">Activity 2</span><span class="activity-status">Not Started</span></div>
+            <h3 class="activity-title">💉 Immunization Station</h3>
+            <p class="activity-description"><strong>Patient:</strong> 4-year-old female for well-check. Select the 4 vaccines due today and the correct injection site.</p>
+            <div class="selection-container">
+                <div class="sim-prompt">Select 4 Vaccines:</div>
+                <div class="selection-grid">
+                    <div class="select-option" data-vax="DTaP">DTaP</div>
+                    <div class="select-option" data-vax="HepB">Hep B</div>
+                    <div class="select-option" data-vax="IPV">IPV (Polio)</div>
+                    <div class="select-option" data-vax="Hib">Hib</div>
+                    <div class="select-option" data-vax="MMR">MMR</div>
+                    <div class="select-option" data-vax="Varicella">Varicella</div>
+                </div>
+                
+                <div class="hidden-section" id="site-section">
+                    <div class="step-feedback">✓ Correct Vaccines! Now select site:</div>
+                    <div class="sim-prompt">Select Injection Site for 4-year-old:</div>
+                    <div class="sim-options">
+                        <div class="sim-option site-btn" data-site="wrong">Vastus Lateralis (Thigh)</div>
+                        <div class="sim-option site-btn" data-site="correct">Deltoid (Arm)</div>
+                    </div>
+                </div>
+                <button class="btn btn-primary" id="submit-vax" style="margin-top:15px; width:100%; display:none;">Confirm Selection</button>
+            </div>
+            <div class="feedback-details" id="feedback-2">
+                <div class="feedback-title">✓ Immunization Plan Verified!</div>
+                <div class="feedback-content">
+                    <strong>Boosters (4-6 yrs):</strong> DTaP, IPV, MMR, Varicella (DIMV).<br>
+                    <strong>Site:</strong> Deltoid is preferred for children >3 years if muscle mass is adequate.
+                </div>
+            </div>
+        </section>
+
+        <section class="activity-card" id="activity-3" data-activity="3">
+            <div class="activity-header"><span class="activity-number">Activity 3</span><span class="activity-status">Not Started</span></div>
+            <h3 class="activity-title">🛡️ Safety by Stage</h3>
+            <p class="activity-description">Guidance for a <strong>6-month-old</strong>. Select the 3 correct safety priorities.</p>
+            <div class="selection-container">
+                <div class="selection-grid">
+                    <div class="select-option safety-option" data-correct="true">Back to Sleep (SIDS)</div>
+                    <div class="select-option safety-option" data-correct="false">Helmet safety</div>
+                    <div class="select-option safety-option" data-correct="true">No honey (Botulism)</div>
+                    <div class="select-option safety-option" data-correct="false">Internet safety</div>
+                    <div class="select-option safety-option" data-correct="true">Rear-facing car seat</div>
+                    <div class="select-option safety-option" data-correct="false">Teen driving</div>
+                </div>
+                <button class="btn btn-primary" id="submit-safe" style="margin-top:15px; width:100%;">Submit Guidance</button>
+            </div>
+            <div class="feedback-details" id="feedback-3">
+                <div class="feedback-title">✓ Guidance Correct!</div>
+                <div class="feedback-content">
+                    <strong>Infant Safety:</strong> Sleep (ABC), Diet (No honey <1yr), Travel (Rear-facing).
+                </div>
+            </div>
+        </section>
+
+        <section class="activity-card" id="activity-4" data-activity="4">
+            <div class="activity-header"><span class="activity-number">Activity 4</span><span class="activity-status">Not Started</span></div>
+            <h3 class="activity-title">🚨 Duty to Report: 5 Scenarios</h3>
+            <p class="activity-description">Evaluate each situation and determine the mandatory reporting action.</p>
+            
+            <div class="scenario-box active" id="report-1">
+                <div class="scenario-header">
+                    <span class="scenario-title">Scenario 1: Physical Signs</span>
+                    <span class="scenario-counter">1/5</span>
+                </div>
+                <div class="scenario-text">
+                    3-year-old with multiple bruises in various stages of healing on torso and back of ears. Parent says "he fell."
+                </div>
+                <div class="sim-options">
+                    <div class="sim-option" onclick="checkReport(1, false, this)">Confront the parent immediately.</div>
+                    <div class="sim-option" onclick="checkReport(1, true, this)">Document objectively and notify provider; suspicion requires reporting.</div>
+                    <div class="sim-option" onclick="checkReport(1, false, this)">Wait for next visit to confirm.</div>
+                </div>
+            </div>
+
+            <div class="scenario-box" id="report-2">
+                <div class="scenario-header">
+                    <span class="scenario-title">Scenario 2: Medical Neglect</span>
+                    <span class="scenario-counter">2/5</span>
+                </div>
+                <div class="scenario-text">
+                    7-year-old with severe untreated dental decay causing pain/infection. Parents refuse treatment stating "they are baby teeth anyway."
+                </div>
+                <div class="sim-options">
+                    <div class="sim-option" onclick="checkReport(2, true, this)">Report as medical neglect; pain/infection requires treatment.</div>
+                    <div class="sim-option" onclick="checkReport(2, false, this)">Accept parent's decision; it's their right.</div>
+                </div>
+            </div>
+
+            <div class="scenario-box" id="report-3">
+                <div class="scenario-header">
+                    <span class="scenario-title">Scenario 3: Emotional Indicators</span>
+                    <span class="scenario-counter">3/5</span>
+                </div>
+                <div class="scenario-text">
+                    4-year-old flinches when arm is raised. Parent constantly yells "You're stupid" and "I wish you weren't born" during visit.
+                </div>
+                <div class="sim-options">
+                    <div class="sim-option" onclick="checkReport(3, false, this)">Ignore; parenting styles differ.</div>
+                    <div class="sim-option" onclick="checkReport(3, true, this)">Document behavioral observations; emotional abuse is reportable.</div>
+                </div>
+            </div>
+
+            <div class="scenario-box" id="report-4">
+                <div class="scenario-header">
+                    <span class="scenario-title">Scenario 4: Sexual Abuse Signs</span>
+                    <span class="scenario-counter">4/5</span>
+                </div>
+                <div class="scenario-text">
+                    12-year-old complains of difficulty walking/sitting. Exam reveals stained underwear and bruising on inner thighs.
+                </div>
+                <div class="sim-options">
+                    <div class="sim-option" onclick="checkReport(4, true, this)">Follow immediate sexual abuse protocol (exam/collection); report immediately.</div>
+                    <div class="sim-option" onclick="checkReport(4, false, this)">Ask the parent to explain the staining.</div>
+                </div>
+            </div>
+
+             <div class="scenario-box" id="report-5">
+                <div class="scenario-header">
+                    <span class="scenario-title">Scenario 5: Nutritional Neglect</span>
+                    <span class="scenario-counter">5/5</span>
+                </div>
+                <div class="scenario-text">
+                    6-month-old losing weight (Failure to Thrive). Parent admits stretching formula with extra water to save money.
+                </div>
+                <div class="sim-options">
+                    <div class="sim-option" onclick="checkReport(5, false, this)">Report immediately to police.</div>
+                    <div class="sim-option" onclick="checkReport(5, true, this)">Refer to social work/WIC first; report if resources refused/failure continues.</div>
+                </div>
+            </div>
+
+            <div class="feedback-details" id="feedback-4">
+                <div class="feedback-title">✓ Duty to Report Verified!</div>
+                <div class="feedback-content">
+                    <strong>Mandatory Reporting Principles:</strong><br>
+                    • <strong>Reasonable Suspicion:</strong> You do not need proof, only a reasonable belief.<br>
+                    • <strong>Immunity:</strong> Reporters are protected from liability when reporting in good faith.<br>
+                    • <strong>Neglect:</strong> Includes failure to provide medical care, food, shelter, or supervision.<br>
+                    • <strong>Documentation:</strong> Quote the patient/parent directly. Describe injuries objectively (size, color, shape).
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <div class="action-buttons">
+        <button class="btn btn-secondary" id="reset-all-btn">↻ Reset Module</button>
+        <button class="btn btn-secondary" id="check-answers-btn">✓ Check All Answers</button>
+        <button class="btn btn-primary" id="view-results-btn">📊 View Final Results</button>
+    </div>
+
+    <div class="results-panel" id="results-panel">
+        <div class="results-header">
+            <h2 class="results-title">Module 18.2 Results</h2>
+            <div class="score-display" id="final-score">0%</div>
+        </div>
+        <div class="score-bar"><div class="score-fill" id="score-fill"></div></div>
+        
+        <div class="clinical-insights">
+            <h3 class="results-section-title">🩺 Clinical Proficiency Insights</h3>
+            <ul class="insights-list">
+                <li><span class="insight-dot"></span><strong>Disorder Classification:</strong> Distinguishing infectious causes dictates isolation protocols immediately upon arrival.</li>
+                <li><span class="insight-dot"></span><strong>Immunization Logic:</strong> Understanding the "DIMV" schedule (DTaP, IPV, MMR, Varicella) creates confidence when counseling parents.</li>
+                <li><span class="insight-dot"></span><strong>Abuse Recognition:</strong> Bruising on soft tissue (torso, ears) is highly suspicious compared to bony prominences (shins).</li>
+            </ul>
+        </div>
+
+        <div class="clinical-insights" style="margin-top:20px;">
+            <h3 class="results-section-title">📋 Key Learning Points</h3>
+            <ul class="insights-list">
+                <li><span class="insight-dot"></span><strong>Vaccine Sites:</strong> Infants/Toddlers = Vastus Lateralis. Children >3 = Deltoid.</li>
+                <li><span class="insight-dot"></span><strong>Mandatory Reporting:</strong> Medical assistants are mandated reporters. Immunity is granted for good faith reporting.</li>
+                <li><span class="insight-dot"></span><strong>SIDS Prevention:</strong> "Alone, Back, Crib" remains the gold standard education for all infants <1 year.</li>
+            </ul>
+        </div>
+    </div>
+</main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- STATE ---
+        const state = {
+            activities: {
+                1: { completed: false, score: 0 },
+                2: { completed: false, score: 0 },
+                3: { completed: false, score: 0 },
+                4: { completed: false, score: 0 }
+            },
+            startedAt: new Date()
+        };
+
+        const els = {
+            completedCount: document.getElementById('completed-count'),
+            accuracyRate: document.getElementById('accuracy-rate'),
+            timeSpent: document.getElementById('time-spent'),
+            resultsPanel: document.getElementById('results-panel'),
+            finalScore: document.getElementById('final-score'),
+            scoreFill: document.getElementById('score-fill'),
+            progressSteps: document.querySelectorAll('.progress-step'),
+            activityCards: document.querySelectorAll('.activity-card')
+        };
+
+        // --- TIMER ---
+        setInterval(() => {
+            const diff = Math.floor((new Date() - state.startedAt) / 1000);
+            const m = Math.floor(diff / 60);
+            const s = diff % 60;
+            els.timeSpent.textContent = `${m}:${s.toString().padStart(2, '0')}`;
+        }, 1000);
+
+        // --- PROGRESS UPDATE ---
+        function updateProgress() {
+            let completed = 0;
+            Object.values(state.activities).forEach(act => { if(act.completed) completed++; });
+            els.completedCount.textContent = completed;
+            els.accuracyRate.textContent = completed > 0 ? "100%" : "0%";
+            els.progressSteps.forEach((step, index) => {
+                if (index < completed) step.classList.add('completed');
+                else if (index === completed) step.classList.add('active');
+            });
+            els.activityCards.forEach((card, index) => {
+                if (state.activities[index + 1].completed) {
+                    card.classList.add('completed');
+                    card.querySelector('.activity-status').textContent = 'Completed';
+                    card.querySelector('.activity-status').style.color = '#00b894';
+                }
+            });
+        }
+
+        function scrollToFeedback(id) {
+            setTimeout(() => {
+                document.getElementById(`feedback-${id}`).scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 100);
+        }
+
+        // --- ACTIVITY 1: SORTER ---
+        const draggables1 = document.querySelectorAll('#activity-1 .draggable-item');
+        const zones1 = document.querySelectorAll('#activity-1 .drop-zone');
+        let act1Placed = 0;
+
+        draggables1.forEach(item => {
+            item.addEventListener('dragstart', e => {
+                e.dataTransfer.setData('text/plain', item.dataset.type);
+                e.dataTransfer.setData('html', item.textContent);
+                item.classList.add('dragging');
+            });
+            item.addEventListener('dragend', () => item.classList.remove('dragging'));
+        });
+
+        zones1.forEach(zone => {
+            zone.addEventListener('dragover', e => {
+                e.preventDefault();
+                zone.classList.add('hover');
+            });
+            zone.addEventListener('dragleave', () => zone.classList.remove('hover'));
+            zone.addEventListener('drop', e => {
+                e.preventDefault();
+                zone.classList.remove('hover');
+                const type = e.dataTransfer.getData('text/plain');
+                const text = e.dataTransfer.getData('html');
+
+                if (type === zone.dataset.accept) {
+                    const badge = document.createElement('div');
+                    badge.className = 'placed-badge';
+                    badge.textContent = text;
+                    zone.querySelector('.zone-content').appendChild(badge);
+                    
+                    const original = Array.from(document.querySelectorAll('.draggable-item')).find(i => i.textContent === text && i.style.display !== 'none');
+                    if(original) {
+                        original.style.display = 'none';
+                        act1Placed++;
+                    }
+
+                    if(act1Placed >= 6) {
+                        state.activities[1].completed = true;
+                        state.activities[1].score = 100;
+                        document.getElementById('feedback-1').classList.add('show');
+                        updateProgress();
+                        scrollToFeedback(1);
+                    }
+                } else {
+                    zone.style.borderColor = 'var(--color-error)';
+                    setTimeout(() => zone.style.borderColor = 'rgba(12,10,24,0.1)', 500);
+                }
+            });
+        });
+
+        // --- ACTIVITY 2: VACCINES ---
+        const vaxOptions = document.querySelectorAll('.select-option[data-vax]');
+        const siteOptions = document.querySelectorAll('.site-btn');
+        let vaxSelected = 0;
+        let act2SiteCorrect = false;
+
+        vaxOptions.forEach(opt => {
+            opt.addEventListener('click', function() {
+                if(state.activities[2].completed) return;
+                this.classList.toggle('selected');
+                vaxSelected = document.querySelectorAll('.select-option[data-vax].selected').length;
+                
+                if(vaxSelected === 4) {
+                    document.getElementById('site-section').classList.add('active');
+                }
+            });
+        });
+
+        // SITE BUTTONS FIX: Added event listeners explicitly
+        siteOptions.forEach(btn => {
+            btn.addEventListener('click', function() {
+                if(state.activities[2].completed) return;
+                
+                // Clear sibling styles
+                siteOptions.forEach(b => b.classList.remove('selected', 'correct', 'incorrect'));
+                
+                const isCorrect = this.dataset.site === 'correct';
+                if(isCorrect) {
+                    this.classList.add('correct');
+                    act2SiteCorrect = true;
+                } else {
+                    this.classList.add('incorrect');
+                    act2SiteCorrect = false;
+                }
+                
+                // Show confirm button now that a site is picked
+                document.getElementById('submit-vax').style.display = 'block';
+            });
+        });
+
+        document.getElementById('submit-vax').addEventListener('click', () => {
+            const correctVax = ['DTaP', 'IPV', 'MMR', 'Varicella'];
+            const selected = Array.from(document.querySelectorAll('.select-option.selected')).map(el => el.dataset.vax);
+            
+            const isVaxCorrect = selected.length === 4 && selected.every(v => correctVax.includes(v));
+
+            if(isVaxCorrect && act2SiteCorrect) {
+                state.activities[2].completed = true;
+                state.activities[2].score = 100;
+                document.getElementById('feedback-2').classList.add('show');
+                updateProgress();
+                scrollToFeedback(2);
+                document.getElementById('submit-vax').textContent = 'Confirmed';
+                document.getElementById('submit-vax').disabled = true;
+            } else {
+                alert("Incorrect. Check the 4-year schedule (DIMV) and site.");
+            }
+        });
+
+        // --- ACTIVITY 3: SAFETY ---
+        const safeOptions = document.querySelectorAll('.safety-option');
+        safeOptions.forEach(opt => opt.addEventListener('click', () => opt.classList.toggle('selected')));
+
+        document.getElementById('submit-safe').addEventListener('click', () => {
+            const selected = document.querySelectorAll('.safety-option.selected');
+            let correct = 0, wrong = 0;
+            selected.forEach(el => {
+                if(el.dataset.correct === 'true') correct++;
+                else wrong++;
+            });
+
+            if(correct === 3 && wrong === 0) {
+                state.activities[3].completed = true;
+                state.activities[3].score = 100;
+                document.getElementById('feedback-3').classList.add('show');
+                updateProgress();
+                scrollToFeedback(3);
+                document.getElementById('submit-safe').disabled = true;
+                document.getElementById('submit-safe').textContent = 'Confirmed';
+            } else {
+                alert("Select exactly the 3 correct safety guidelines for a 6-month-old.");
+            }
+        });
+
+        // --- ACTIVITY 4: REPORTING ---
+        window.checkReport = function(step, isCorrect, btn) {
+            const parent = document.getElementById(`report-${step}`);
+            if (parent.dataset.answered) return;
+
+            parent.querySelectorAll('.sim-option').forEach(b => b.style.opacity = '0.6');
+            btn.style.opacity = '1';
+
+            if (isCorrect) {
+                btn.classList.add('correct');
+                parent.dataset.answered = "true";
+                
+                setTimeout(() => {
+                    parent.style.display = 'none';
+                    const next = document.getElementById(`report-${step + 1}`);
+                    if(next) {
+                        next.classList.add('active');
+                    } else {
+                        // Complete
+                        state.activities[4].completed = true;
+                        state.activities[4].score = 100;
+                        document.getElementById('feedback-4').classList.add('show');
+                        updateProgress();
+                        scrollToFeedback(4);
+                    }
+                }, 1000);
+            } else {
+                btn.classList.add('incorrect');
+            }
+        };
+
+        // --- GLOBAL BUTTONS ---
+        document.getElementById('reset-all-btn').addEventListener('click', () => location.reload());
+        
+        document.getElementById('check-answers-btn').addEventListener('click', () => {
+            // Force Complete all
+            state.activities[1].completed = true;
+            state.activities[2].completed = true;
+            state.activities[3].completed = true;
+            state.activities[4].completed = true;
+            document.querySelectorAll('.feedback-details').forEach(el => el.classList.add('show'));
+            updateProgress();
+        });
+
+        document.getElementById('view-results-btn').addEventListener('click', () => {
+            els.finalScore.textContent = "100%";
+            els.scoreFill.style.width = "100%";
+            els.resultsPanel.classList.add('show');
+            els.resultsPanel.scrollIntoView({ behavior: 'smooth' });
+        });
+    });
+</script>
+</body>
+</html>
