@@ -1,0 +1,2750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AlliedRx -- Chapter 9: Pharmacology Foundations</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-error: #e17055;
+            --color-warning: #fdcb6e;
+            --color-info: #0984e3;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
+            --color-dark: #0c0a18;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+            --shadow-card: 0 12px 30px rgba(15, 23, 42, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(
+                circle at top left,
+                #ffffff 0,
+                #f1ecff 40%,
+                var(--color-bg) 100%
+            );
+            color: var(--color-text);
+            -webkit-text-size-adjust: 100%;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 12px;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes checkmarkPop {
+            0% { transform: scale(0); opacity: 0; }
+            70% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 5px rgba(175, 75, 239, 0.5); }
+            50% { box-shadow: 0 0 20px rgba(175, 75, 239, 0.8); }
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @media (max-width: 900px) {
+            .page {
+                padding: 22px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 0;
+            }
+            .page {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 18px 14px 22px;
+            }
+        }
+
+        /* Header */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .brand-logo:hover {
+            transform: scale(1.05);
+        }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--color-success);
+            flex-shrink: 0;
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .badge-mode:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+        @media (max-width: 480px) {
+            .brand-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .badge-mode {
+                margin-top: 6px;
+            }
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 3vw, 2.2rem);
+            line-height: 1.1;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .module-subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 600px;
+            margin-bottom: 24px;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        /* Progress Tracker - 2-STEP ONLY */
+        .progress-tracker {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            position: relative;
+            padding: 0 20px;
+        }
+
+        .progress-tracker::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 50px;
+            right: 50px;
+            height: 3px;
+            background: rgba(12, 10, 24, 0.08);
+            z-index: 1;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+
+        .step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--color-muted);
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.active .step-circle {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .progress-step.completed .step-circle {
+            background: var(--color-success);
+            border-color: var(--color-success);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.75rem;
+            color: var(--color-muted);
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .progress-step.active .step-label {
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        /* Progress Summary */
+        .progress-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+            animation: fadeInUp 0.6s ease-out 0.5s both;
+        }
+
+        .summary-card {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            border: 1px solid rgba(12, 10, 24, 0.06);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-card);
+            border-color: var(--color-primary-soft);
+        }
+
+        .summary-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--color-primary);
+            display: block;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .summary-label {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Activity Grid */
+        .activity-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .activity-card {
+            background: white;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            padding: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .activity-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--color-primary);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .activity-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--color-primary-soft);
+        }
+
+        .activity-card:hover::before {
+            opacity: 1;
+        }
+
+        .activity-card.completed {
+            border-color: var(--color-success);
+        }
+
+        .activity-card.completed::before {
+            background: var(--color-success);
+            opacity: 1;
+        }
+
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .activity-number {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .activity-status {
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-muted);
+        }
+
+        .activity-card.completed .activity-status {
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--color-success);
+        }
+
+        .activity-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .activity-title::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--color-primary);
+        }
+
+        .activity-description {
+            font-size: 0.9rem;
+            color: var(--color-muted);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        /* Scenario Container */
+        .scenario-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+        }
+
+        .scenario-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .scenario-title::before {
+            content: '💊';
+        }
+
+        .scenario-description {
+            font-size: 0.9rem;
+            color: var(--color-text);
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        /* Activity 1: Drug Name Matching - REVISED */
+        .drug-matching-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .drug-matching-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .matching-section {
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            min-height: 250px;
+        }
+
+        .section-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(12, 10, 24, 0.1);
+        }
+
+        .drag-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .drag-item {
+            background: white;
+            border-radius: var(--radius-sm);
+            padding: 12px;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            cursor: grab;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+            text-align: center;
+        }
+
+        .drag-item:hover {
+            border-color: var(--color-primary-soft);
+            background: rgba(175, 75, 239, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .drag-item.dragging {
+            opacity: 0.7;
+            transform: scale(0.98);
+        }
+
+        .drag-item.placed {
+            border-color: var(--color-success);
+            background: rgba(0, 184, 148, 0.1);
+            cursor: default;
+        }
+
+        .drag-item.wrong {
+            border-color: var(--color-error);
+            background: rgba(225, 112, 85, 0.1);
+            animation: shake 0.5s ease;
+        }
+
+        .drop-zone {
+            min-height: 200px;
+            border: 2px dashed rgba(12, 10, 24, 0.1);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .drop-zone.hover {
+            border-color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.05);
+        }
+
+        .drop-zone.empty::after {
+            content: 'Drag drug names here to match with definitions';
+            color: var(--color-muted);
+            text-align: center;
+            display: block;
+            font-size: 0.9rem;
+            padding: 20px;
+        }
+
+        /* DEA Schedule Sorting - REVISED */
+        .dea-sorting-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .sorting-instructions {
+            background: rgba(175, 75, 239, 0.05);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--color-primary);
+        }
+
+        .schedule-dropzones {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+        }
+
+        @media (max-width: 1024px) {
+            .schedule-dropzones {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .schedule-dropzones {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .schedule-dropzone {
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 2px dashed rgba(12, 10, 24, 0.1);
+            min-height: 150px;
+            transition: all 0.3s ease;
+        }
+
+        .schedule-dropzone.hover {
+            border-color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.05);
+        }
+
+        .schedule-header {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--color-text);
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .schedule-description {
+            font-size: 0.75rem;
+            color: var(--color-muted);
+            text-align: center;
+            margin-bottom: 10px;
+            min-height: 40px;
+        }
+
+        .drug-pool {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            border: 1px solid rgba(12, 10, 24, 0.1);
+        }
+
+        .drug-item {
+            background: white;
+            border-radius: 20px;
+            padding: 8px 15px;
+            font-size: 0.8rem;
+            cursor: grab;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .drug-item:hover {
+            border-color: var(--color-primary-soft);
+            background: rgba(175, 75, 239, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .drug-item.dragging {
+            opacity: 0.7;
+            transform: scale(0.95);
+        }
+
+        /* Controlled Substance Protocol - REVISED */
+        .protocol-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .protocol-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .protocol-steps-shuffled {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .protocol-step {
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 2px dashed rgba(12, 10, 24, 0.1);
+            cursor: grab;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .protocol-step:hover {
+            background: rgba(175, 75, 239, 0.08);
+            border-color: var(--color-primary-soft);
+            transform: translateY(-2px);
+        }
+
+        .protocol-step.dragging {
+            opacity: 0.7;
+            transform: scale(0.98);
+        }
+
+        .protocol-dropzone {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            border: 2px dashed rgba(12, 10, 24, 0.1);
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .protocol-dropzone.hover {
+            border-color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.05);
+        }
+
+        .protocol-dropzone.empty::after {
+            content: 'Drag protocol steps here in correct order';
+            color: var(--color-muted);
+            text-align: center;
+            font-size: 0.9rem;
+            margin: auto;
+        }
+
+        .step-placeholder {
+            background: rgba(12, 10, 24, 0.05);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 2px dashed rgba(12, 10, 24, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-height: 60px;
+        }
+
+        .placeholder-number {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(12, 10, 24, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-text);
+            flex-shrink: 0;
+        }
+
+        .placeholder-text {
+            color: var(--color-muted);
+            font-size: 0.85rem;
+        }
+
+        /* Activity 2: Prescription Accuracy & Patient Safety */
+        .kathy-profile {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(175, 75, 239, 0.05);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--color-primary);
+        }
+
+        .kathy-avatar {
+            font-size: 2.5rem;
+        }
+
+        .kathy-info {
+            flex: 1;
+        }
+
+        .kathy-name {
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 5px;
+        }
+
+        .kathy-details {
+            font-size: 0.85rem;
+            color: var(--color-text);
+            line-height: 1.4;
+        }
+
+        .kathy-id {
+            background: white;
+            border-radius: var(--radius-sm);
+            padding: 10px;
+            border: 1px solid rgba(12, 10, 24, 0.1);
+            font-family: monospace;
+            font-size: 0.8rem;
+        }
+
+        .prescription-container {
+            background: white;
+            border-radius: var(--radius-sm);
+            padding: 25px;
+            border: 1px solid rgba(12, 10, 24, 0.1);
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .prescription-header {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 20px;
+            text-align: center;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--color-primary-soft);
+        }
+
+        .prescription-form {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .prescription-form {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--color-text);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .form-label.required::after {
+            content: '*';
+            color: var(--color-error);
+            font-size: 1.2rem;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            padding: 10px 12px;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(175, 75, 239, 0.1);
+        }
+
+        .form-input.correct {
+            border-color: var(--color-success);
+            background: rgba(0, 184, 148, 0.05);
+        }
+
+        .form-input.incorrect {
+            border-color: var(--color-error);
+            background: rgba(225, 112, 85, 0.05);
+        }
+
+        /* Age Factors with Feedback - REVISED */
+        .age-factors-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .age-factors-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .age-group {
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .age-group:hover {
+            transform: translateY(-3px);
+            border-color: var(--color-primary-soft);
+            background: rgba(175, 75, 239, 0.05);
+        }
+
+        .age-header {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .age-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .age-option {
+            padding: 10px 12px;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            border-radius: var(--radius-sm);
+            background: white;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+
+        .age-option:hover {
+            border-color: var(--color-primary-soft);
+            background: rgba(175, 75, 239, 0.05);
+        }
+
+        .age-option.selected {
+            border-color: var(--color-success);
+            background: rgba(0, 184, 148, 0.1);
+        }
+
+        .age-option.wrong {
+            border-color: var(--color-error);
+            background: rgba(225, 112, 85, 0.1);
+            animation: shake 0.5s ease;
+        }
+
+        .age-feedback {
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: var(--radius-sm);
+            padding: 10px;
+            margin-top: 10px;
+            border-left: 3px solid var(--color-info);
+            display: none;
+            font-size: 0.8rem;
+            line-height: 1.4;
+        }
+
+        .age-feedback.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* OTC Safety with Feedback - REVISED */
+        .otc-scenarios {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .otc-scenarios {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .otc-scenario {
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 1px solid rgba(12, 10, 24, 0.1);
+        }
+
+        .scenario-question {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--color-text);
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .otc-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .otc-option {
+            padding: 10px 12px;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            border-radius: var(--radius-sm);
+            background: white;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+
+        .otc-option:hover {
+            border-color: var(--color-primary-soft);
+            background: rgba(175, 75, 239, 0.05);
+        }
+
+        .otc-option.selected {
+            border-color: var(--color-success);
+            background: rgba(0, 184, 148, 0.1);
+        }
+
+        .otc-option.wrong {
+            border-color: var(--color-error);
+            background: rgba(225, 112, 85, 0.1);
+            animation: shake 0.5s ease;
+        }
+
+        .otc-feedback {
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: var(--radius-sm);
+            padding: 10px;
+            margin-top: 10px;
+            border-left: 3px solid var(--color-info);
+            display: none;
+            font-size: 0.8rem;
+            line-height: 1.4;
+        }
+
+        .otc-feedback.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* Safety Warning */
+        .safety-warning {
+            background: rgba(225, 112, 85, 0.1);
+            border: 2px solid var(--color-error);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin-top: 15px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            animation: glow 2s infinite;
+        }
+
+        .warning-icon {
+            font-size: 1.5rem;
+            color: var(--color-error);
+            flex-shrink: 0;
+        }
+
+        .warning-content {
+            flex: 1;
+        }
+
+        .warning-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--color-error);
+            margin-bottom: 5px;
+        }
+
+        .warning-text {
+            font-size: 0.85rem;
+            color: var(--color-text);
+        }
+
+        /* Feedback */
+        .feedback-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            margin-top: 20px;
+            display: none;
+        }
+
+        .feedback-container.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .feedback-header {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feedback-icon {
+            font-size: 1.2rem;
+        }
+
+        .feedback-icon.correct {
+            color: var(--color-success);
+        }
+
+        .feedback-icon.incorrect {
+            color: var(--color-error);
+        }
+
+        .feedback-content {
+            font-size: 0.85rem;
+            color: var(--color-text);
+            line-height: 1.5;
+        }
+
+        .feedback-content strong {
+            color: var(--color-primary);
+        }
+
+        .key-point {
+            background: rgba(175, 75, 239, 0.05);
+            border-radius: var(--radius-sm);
+            padding: 10px;
+            margin: 10px 0;
+            border-left: 3px solid var(--color-primary);
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #9a3bd6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(175, 75, 239, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-text);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(12, 10, 24, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-icon {
+            font-size: 1.1em;
+        }
+
+        /* Results Panel */
+        .results-panel {
+            background: var(--color-dark);
+            color: white;
+            border-radius: var(--radius-md);
+            padding: 30px;
+            margin-top: 30px;
+            display: none;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .results-panel.show {
+            display: block;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .results-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .score-display {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--color-primary-soft);
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .clinical-insights {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .insights-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-primary-soft);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .insights-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .insights-list li {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            font-size: 0.9rem;
+            color: #e5e7eb;
+        }
+
+        .insight-dot {
+            width: 6px;
+            height: 6px;
+            margin-top: 6px;
+            border-radius: 999px;
+            background: var(--color-accent);
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="module-heading">
+        <!-- Header -->
+        <header class="brand-row">
+            <div class="brand">
+                <img
+                    src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                    alt="AlliedRx logo"
+                    class="brand-logo"
+                />
+                <div class="course-meta">
+                    <span class="course-name">Clinical Medical Assistant • Week 9</span>
+                    <div class="week-label">
+                        <span class="week-label-dot"></span>
+                        <span>Chapter 9: Principles of Pharmacology</span>
+                    </div>
+                </div>
+            </div>
+            <span class="badge-mode">Campus &amp; Online</span>
+        </header>
+
+        <h1 id="module-heading">Pharmacology Foundations & Drug Regulation</h1>
+        <p class="module-subtitle">
+            Master drug naming conventions, DEA scheduling, controlled substance protocols, and prescription accuracy 
+            to ensure safe medication management in the ambulatory care setting.
+        </p>
+
+        <!-- Progress Tracker (2-STEP ONLY) -->
+        <div class="progress-tracker">
+            <div class="progress-step active" data-step="1">
+                <div class="step-circle">1</div>
+                <div class="step-label">Drug Classification</div>
+            </div>
+            <div class="progress-step" data-step="2">
+                <div class="step-circle">2</div>
+                <div class="step-label">Prescription Safety</div>
+            </div>
+        </div>
+
+        <!-- Progress Summary -->
+        <div class="progress-summary">
+            <div class="summary-card">
+                <span class="summary-number" id="completed-count">0</span>
+                <span class="summary-label">Activities Completed</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="accuracy-rate">0%</span>
+                <span class="summary-label">Current Accuracy</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="time-spent">0:00</span>
+                <span class="summary-label">Time Spent</span>
+            </div>
+        </div>
+
+        <!-- Activity Grid -->
+        <div class="activity-grid">
+            <!-- Activity 1: Drug Name & Classification Challenge - REVISED -->
+            <section class="activity-card" id="activity-1" data-activity="1" aria-label="Activity 1: Drug Name & Classification Challenge">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 1</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">Drug Name & Classification Challenge</h3>
+                <p class="activity-description">
+                    Kathy receives a call about "Lipitor." Match drug names to their definitions, sort drugs by DEA schedule, 
+                    and sequence controlled substance protocol steps.
+                </p>
+
+                <div class="scenario-container">
+                    <div class="scenario-title">Part 1: Drug Name Matching</div>
+                    <div class="scenario-description">
+                        A patient asks Kathy about their new medication "Lipitor." Drag each drug name type from the left to match with its correct definition on the right.
+                    </div>
+                </div>
+
+                <div class="drug-matching-container">
+                    <!-- Drag Items -->
+                    <div class="matching-section">
+                        <div class="section-title">Drag Drug Name Types Here</div>
+                        <div class="drag-container" id="drag-items">
+                            <div class="drag-item" data-type="chemical" draggable="true">Chemical Name</div>
+                            <div class="drag-item" data-type="generic" draggable="true">Generic Name</div>
+                            <div class="drag-item" data-type="trade" draggable="true">Trade/Brand Name</div>
+                            <div class="drag-item" data-type="class" draggable="true">Drug Class</div>
+                            <div class="drag-item" data-type="schedule" draggable="true">DEA Schedule</div>
+                        </div>
+                    </div>
+
+                    <!-- Drop Zone with Definitions -->
+                    <div class="matching-section">
+                        <div class="section-title">Match with Definitions</div>
+                        <div class="drop-zone empty" id="definition-dropzone">
+                            <!-- Definitions will be populated here by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DEA Schedule Sorting - REVISED -->
+                <div class="scenario-container">
+                    <div class="scenario-title">Part 2: DEA Schedule Sorting</div>
+                    <div class="scenario-description">
+                        Drag each drug from the pool below to its correct DEA schedule (I-V) based on abuse potential and medical use.
+                    </div>
+                </div>
+
+                <div class="dea-sorting-container">
+                    <div class="sorting-instructions">
+                        <strong>Schedule I:</strong> No accepted medical use, high abuse potential<br>
+                        <strong>Schedule II:</strong> High abuse, severe restrictions, no refills<br>
+                        <strong>Schedule III:</strong> Moderate abuse, Rx with up to 5 refills in 6 months<br>
+                        <strong>Schedule IV:</strong> Low abuse potential<br>
+                        <strong>Schedule V:</strong> Lowest abuse, some available OTC
+                    </div>
+
+                    <div class="schedule-dropzones">
+                        <div class="schedule-dropzone" data-schedule="I">
+                            <div class="schedule-header">Schedule I</div>
+                            <div class="schedule-description">No medical use, high abuse</div>
+                            <div class="drugs-container"></div>
+                        </div>
+                        <div class="schedule-dropzone" data-schedule="II">
+                            <div class="schedule-header">Schedule II</div>
+                            <div class="schedule-description">High abuse, no refills</div>
+                            <div class="drugs-container"></div>
+                        </div>
+                        <div class="schedule-dropzone" data-schedule="III">
+                            <div class="schedule-header">Schedule III</div>
+                            <div class="schedule-description">Moderate abuse</div>
+                            <div class="drugs-container"></div>
+                        </div>
+                        <div class="schedule-dropzone" data-schedule="IV">
+                            <div class="schedule-header">Schedule IV</div>
+                            <div class="schedule-description">Low abuse potential</div>
+                            <div class="drugs-container"></div>
+                        </div>
+                        <div class="schedule-dropzone" data-schedule="V">
+                            <div class="schedule-header">Schedule V</div>
+                            <div class="schedule-description">Lowest abuse</div>
+                            <div class="drugs-container"></div>
+                        </div>
+                    </div>
+
+                    <div class="drug-pool" id="drug-pool">
+                        <div class="drug-item" data-drug="heroin" data-schedule="I" draggable="true">Heroin</div>
+                        <div class="drug-item" data-drug="lsd" data-schedule="I" draggable="true">LSD</div>
+                        <div class="drug-item" data-drug="oxycodone" data-schedule="II" draggable="true">Oxycodone</div>
+                        <div class="drug-item" data-drug="fentanyl" data-schedule="II" draggable="true">Fentanyl</div>
+                        <div class="drug-item" data-drug="adderall" data-schedule="II" draggable="true">Adderall®</div>
+                        <div class="drug-item" data-drug="codeine" data-schedule="III" draggable="true">Codeine with aspirin</div>
+                        <div class="drug-item" data-drug="ketamine" data-schedule="III" draggable="true">Ketamine</div>
+                        <div class="drug-item" data-drug="steroids" data-schedule="III" draggable="true">Anabolic steroids</div>
+                        <div class="drug-item" data-drug="alprazolam" data-schedule="IV" draggable="true">Alprazolam (Xanax®)</div>
+                        <div class="drug-item" data-drug="diazepam" data-schedule="IV" draggable="true">Diazepam (Valium®)</div>
+                        <div class="drug-item" data-drug="zolpidem" data-schedule="IV" draggable="true">Zolpidem (Ambien®)</div>
+                        <div class="drug-item" data-drug="cough" data-schedule="V" draggable="true">Cough syrup with codeine</div>
+                        <div class="drug-item" data-drug="pregabalin" data-schedule="V" draggable="true">Pregabalin (Lyrica®)</div>
+                    </div>
+                </div>
+
+                <!-- Controlled Substance Protocol - REVISED -->
+                <div class="scenario-container">
+                    <div class="scenario-title">Part 3: Controlled Substance Protocol</div>
+                    <div class="scenario-description">
+                        Kathy needs to administer a Schedule II medication. Drag the steps into the correct sequence for proper controlled substance management.
+                    </div>
+                </div>
+
+                <div class="protocol-container">
+                    <!-- Shuffled Steps -->
+                    <div class="matching-section">
+                        <div class="section-title">Protocol Steps (Drag in order)</div>
+                        <div class="protocol-steps-shuffled" id="protocol-steps-shuffled">
+                            <!-- Steps will be shuffled and added by JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- Drop Zone with Placeholders -->
+                    <div class="matching-section">
+                        <div class="section-title">Correct Sequence</div>
+                        <div class="protocol-dropzone empty" id="protocol-dropzone">
+                            <!-- Placeholders will be added by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Safety Warning -->
+                <div class="safety-warning" id="schedule-warning" style="display: none;">
+                    <div class="warning-icon">⚠️</div>
+                    <div class="warning-content">
+                        <div class="warning-title">Controlled Substance Compliance Critical!</div>
+                        <div class="warning-text">
+                            Incorrect DEA schedule classification or improper controlled substance handling violates federal law. 
+                            Schedule II medications require written prescriptions with no refills. All discrepancies must be 
+                            reported immediately. Documentation must be precise and contemporaneous.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback-container" id="feedback-1">
+                    <div class="feedback-header">
+                        <span class="feedback-icon correct">✓</span>
+                        Drug Classification Mastered!
+                    </div>
+                    <div class="feedback-content">
+                        <div class="key-point">
+                            <strong>Drug Name Types:</strong><br>
+                            • <strong>Chemical:</strong> Exact molecular structure (atorvastatin calcium)<br>
+                            • <strong>Generic:</strong> Non-proprietary name, lowercase (atorvastatin)<br>
+                            • <strong>Trade/Brand:</strong> Manufacturer's name, registered trademark® (Lipitor®)<br>
+                            • <strong>Drug Class:</strong> Pharmacologic category (HMG-CoA reductase inhibitor)<br>
+                            • <strong>DEA Schedule:</strong> Abuse potential classification
+                        </div>
+                        
+                        <div class="key-point">
+                            <strong>DEA Schedule Criteria:</strong><br>
+                            • <strong>Schedule I:</strong> No accepted medical use, high abuse (heroin, LSD)<br>
+                            • <strong>Schedule II:</strong> High abuse, Rx with no refills (oxycodone, fentanyl)<br>
+                            • <strong>Schedule III:</strong> Moderate abuse, Rx with up to 5 refills in 6 months<br>
+                            • <strong>Schedule IV:</strong> Low abuse (alprazolam, diazepam)<br>
+                            • <strong>Schedule V:</strong> Lowest abuse, some OTC (cough syrup with codeine)
+                        </div>
+                        
+                        <div class="key-point">
+                            <strong>Controlled Substance Protocol:</strong><br>
+                            1. Count inventory at ALL shift changes<br>
+                            2. Document EVERY dose in controlled substance log<br>
+                            3. Verify patient ID using TWO identifiers<br>
+                            4. Witness waste with second staff member<br>
+                            5. Store securely - double-locked cabinet required<br>
+                            6. Report discrepancies within 24 hours
+                        </div>
+                        
+                        <strong>Legal Requirements:</strong><br>
+                        • Maintain accurate inventory records for 2 years<br>
+                        • Prescribers must have valid DEA registration<br>
+                        • Schedule II prescriptions cannot be phoned in (except emergencies)<br>
+                        • Tamper-resistant prescription pads required in most states
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity 2: Prescription Accuracy & Patient Safety - REVISED -->
+            <section class="activity-card" id="activity-2" data-activity="2" aria-label="Activity 2: Prescription Accuracy & Patient Safety">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 2</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">Prescription Accuracy & Patient Safety</h3>
+                <p class="activity-description">
+                    Transcribe a prescription accurately, understand age-related factors affecting medication action, 
+                    and provide appropriate OTC safety advice with immediate feedback.
+                </p>
+
+                <!-- Kathy's Profile -->
+                <div class="kathy-profile">
+                    <div class="kathy-avatar">👩‍⚕️</div>
+                    <div class="kathy-info">
+                        <div class="kathy-name">Kathy Augustina, MA (AAMA)</div>
+                        <div class="kathy-details">
+                            Medical Assistant • Primary Care Practice • 2 years experience<br>
+                            Responsibilities: Medication management, patient education, prescription transcription
+                        </div>
+                        <div class="kathy-id">
+                            Employee ID: MA-0923 • DEA Certified • CPR/BLS Certified<br>
+                            DOB: 04/15/1992 • Hire Date: 08/01/2023
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Prescription Transcription -->
+                <div class="scenario-container">
+                    <div class="scenario-title">Part 1: Prescription Transcription</div>
+                    <div class="scenario-description">
+                        Dr. Chen asks Kathy to transcribe a prescription for "Metformin 500mg" for John Smith (DOB: 05/15/1978). 
+                        Complete the electronic prescription form accurately.
+                    </div>
+                </div>
+
+                <div class="prescription-container">
+                    <div class="prescription-header">Electronic Prescription Form</div>
+                    <div class="prescription-form" id="prescription-form">
+                        <div class="form-group">
+                            <label class="form-label required">Patient Name</label>
+                            <input type="text" class="form-input" id="patient-name" placeholder="Last, First, Middle Initial">
+                            <div class="age-feedback" id="feedback-name" style="display: none;"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Date of Birth</label>
+                            <input type="text" class="form-input" id="patient-dob" placeholder="MM/DD/YYYY">
+                            <div class="age-feedback" id="feedback-dob" style="display: none;"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Drug Name</label>
+                            <input type="text" class="form-input" id="drug-name" placeholder="Generic or Trade Name">
+                            <div class="age-feedback" id="feedback-drug" style="display: none;"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Strength</label>
+                            <input type="text" class="form-input" id="drug-strength" placeholder="e.g., 500 mg">
+                            <div class="age-feedback" id="feedback-strength" style="display: none;"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Dosage Form</label>
+                            <select class="form-select" id="dosage-form">
+                                <option value="">Select form</option>
+                                <option value="tablet">Tablet</option>
+                                <option value="capsule">Capsule</option>
+                                <option value="liquid">Liquid</option>
+                                <option value="injection">Injection</option>
+                                <option value="cream">Cream/Ointment</option>
+                            </select>
+                            <div class="age-feedback" id="feedback-form" style="display: none;"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Quantity</label>
+                            <input type="text" class="form-input" id="quantity" placeholder="e.g., #30">
+                            <div class="age-feedback" id="feedback-quantity" style="display: none;"></div>
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="form-label required">Directions (SIG)</label>
+                            <textarea class="form-textarea" id="directions" rows="3" placeholder="Patient instructions"></textarea>
+                            <div class="age-feedback" id="feedback-directions" style="display: none;"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Refills</label>
+                            <select class="form-select" id="refills">
+                                <option value="">Select</option>
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="PRN">PRN</option>
+                            </select>
+                            <div class="age-feedback" id="feedback-refills" style="display: none;"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Provider DEA #</label>
+                            <input type="text" class="form-input" id="dea-number" placeholder="AB1234567">
+                            <div class="age-feedback" id="feedback-dea" style="display: none;"></div>
+                        </div>
+                    </div>
+                    <button class="btn btn-secondary" id="check-prescription" style="width: 100%; margin-top: 15px;">
+                        Check Prescription Accuracy
+                    </button>
+                </div>
+
+                <!-- Age Factor Analysis with Feedback - REVISED -->
+                <div class="scenario-container">
+                    <div class="scenario-title">Part 2: Age Factor Analysis</div>
+                    <div class="scenario-description">
+                        Select how age affects medication action for different patient populations. Immediate feedback will show why answers are correct or incorrect.
+                    </div>
+                </div>
+
+                <div class="age-factors-container" id="age-factors">
+                    <div class="age-group" data-age="pediatric">
+                        <div class="age-header">👶 Pediatric (0-12 years)</div>
+                        <div class="age-options">
+                            <div class="age-option" data-factor="A" data-feedback="Incorrect. Pediatric patients have higher body water percentage but LOWER metabolic rates due to immature systems.">Higher body water percentage, faster metabolism</div>
+                            <div class="age-option" data-factor="B" data-feedback="Correct! Pediatric patients have higher water content (80% vs 60% in adults) and immature liver/kidney function requiring dose adjustments.">Higher water content, immature liver/kidney function</div>
+                            <div class="age-option" data-factor="C" data-feedback="Incorrect. Pediatric doses are weight-based (mg/kg), not standard adult dosing with simple adjustment.">Standard adult dosing applies with weight adjustment</div>
+                            <div class="age-option" data-factor="D" data-feedback="Incorrect. Pediatric patients often have enhanced absorption but INCREASED side effects due to immature systems.">Enhanced drug absorption, reduced side effects</div>
+                        </div>
+                        <div class="age-feedback" id="feedback-pediatric"></div>
+                    </div>
+                    <div class="age-group" data-age="geriatric">
+                        <div class="age-header">👴 Geriatric (65+ years)</div>
+                        <div class="age-options">
+                            <div class="age-option" data-factor="A" data-feedback="Incorrect. Geriatric patients have DECREASED muscle mass (sarcopenia) and REDUCED drug clearance.">Increased muscle mass, enhanced drug clearance</div>
+                            <div class="age-option" data-factor="B" data-feedback="Correct! Geriatric patients have reduced kidney function (GFR declines 1% per year after 40) and polypharmacy increases interaction risks.">Reduced kidney function, polypharmacy risk</div>
+                            <div class="age-option" data-factor="C" data-feedback="Incorrect. Geriatric patients have SLOWER gastric emptying and REDUCED absorption.">Faster gastric emptying, improved absorption</div>
+                            <div class="age-option" data-factor="D" data-feedback="Incorrect. Geriatric patients have LOWER metabolic rates and LONGER drug half-lives.">Higher metabolic rate, shorter drug half-life</div>
+                        </div>
+                        <div class="age-feedback" id="feedback-geriatric"></div>
+                    </div>
+                    <div class="age-group" data-age="adult">
+                        <div class="age-header">👨 Adult (18-64 years)</div>
+                        <div class="age-options">
+                            <div class="age-option" data-factor="A" data-feedback="Correct! Standard pharmacokinetics apply but consider individual factors like weight, liver/kidney function, and genetics.">Standard pharmacokinetics apply</div>
+                            <div class="age-option" data-factor="B" data-feedback="Incorrect. Adults do not require pediatric dosing adjustments unless they have specific conditions.">Require pediatric dosing adjustments</div>
+                            <div class="age-option" data-factor="C" data-feedback="Incorrect. Geriatric precautions start at age 65+, not for all adults.">Need geriatric precautions always</div>
+                            <div class="age-option" data-factor="D" data-feedback="Incorrect. Blood-brain barrier is fully developed by age 2, not an adult consideration.">Immature blood-brain barrier</div>
+                        </div>
+                        <div class="age-feedback" id="feedback-adult"></div>
+                    </div>
+                </div>
+
+                <!-- OTC Safety Scenarios with Feedback - REVISED -->
+                <div class="scenario-container">
+                    <div class="scenario-title">Part 3: OTC Safety Advice</div>
+                    <div class="scenario-description">
+                        Select appropriate OTC recommendations for each patient scenario. Immediate feedback explains the clinical reasoning.
+                    </div>
+                </div>
+
+                <div class="otc-scenarios" id="otc-scenarios">
+                    <div class="otc-scenario">
+                        <div class="scenario-question">Patient on warfarin (anticoagulant) asks about NSAIDs for arthritis pain.</div>
+                        <div class="otc-options">
+                            <div class="otc-option" data-scenario="1" data-answer="A" data-feedback="❌ DANGEROUS! NSAIDs inhibit platelet function and increase bleeding risk with warfarin. This combination can cause life-threatening hemorrhage.">"Take ibuprofen as needed, it's safe with warfarin."</div>
+                            <div class="otc-option" data-scenario="1" data-answer="B" data-feedback="✅ CORRECT! NSAIDs increase bleeding risk with warfarin. Acetaminophen (up to 3g/day) is safer but monitor liver function.">"Avoid NSAIDs - increased bleeding risk. Use acetaminophen instead."</div>
+                            <div class="otc-option" data-scenario="1" data-answer="C" data-feedback="❌ DANGEROUS! Never adjust warfarin dose without INR monitoring. This could cause stroke or hemorrhage.">"Double your warfarin dose if you take NSAIDs."</div>
+                            <div class="otc-option" data-scenario="1" data-answer="D" data-feedback="❌ DANGEROUS! Aspirin is also an antiplatelet and increases bleeding risk with warfarin.">"Take aspirin instead - it's natural and safer."</div>
+                        </div>
+                        <div class="otc-feedback" id="feedback-scenario-1"></div>
+                    </div>
+                    <div class="otc-scenario">
+                        <div class="scenario-question">Elderly patient with insomnia wants OTC sleep aid.</div>
+                        <div class="otc-options">
+                            <div class="otc-option" data-scenario="2" data-answer="A" data-feedback="❌ RISKY! Diphenhydramine has strong anticholinergic effects causing confusion, dry mouth, constipation, and increases fall risk in elderly.">"Diphenhydramine (Benadryl) is safe for nightly use."</div>
+                            <div class="otc-option" data-scenario="2" data-answer="B" data-feedback="⚠️ CAUTION! Melatonin is safer than antihistamines but can cause daytime drowsiness. Start with 0.5-1mg, not 3mg.">"Melatonin 3mg at bedtime is a good option."</div>
+                            <div class="otc-option" data-scenario="2" data-answer="C" data-feedback="✅ CORRECT! Antihistamines cause sedation, confusion, and falls in elderly. Always discuss sleep issues with provider for proper evaluation.">"Avoid antihistamines - risk of confusion, falls. Discuss with provider."</div>
+                            <div class="otc-option" data-scenario="2" data-answer="D" data-feedback="❌ FALSE! OTC sleep aids are NOT all safe for elderly. Many have significant anticholinergic side effects.">"Take any OTC sleep aid, they're all safe for elderly."</div>
+                        </div>
+                        <div class="otc-feedback" id="feedback-scenario-2"></div>
+                    </div>
+                    <div class="otc-scenario">
+                        <div class="scenario-question">Hypertensive patient asks about decongestants for cold symptoms.</div>
+                        <div class="otc-options">
+                            <div class="otc-option" data-scenario="3" data-answer="A" data-feedback="❌ DANGEROUS! Pseudoephedrine is a vasoconstrictor that can raise BP by 10-20 mmHg. Contraindicated in hypertension.">"Pseudoephedrine is fine if you feel congested."</div>
+                            <div class="otc-option" data-scenario="3" data-answer="B" data-feedback="✅ CORRECT! Decongestants raise BP. Saline spray is safe. Antihistamines (non-sedating) may help but can cause dry mouth.">"Avoid decongestants - can raise BP. Use saline spray instead."</div>
+                            <div class="otc-option" data-scenario="3" data-answer="C" data-feedback="❌ DANGEROUS! Never adjust BP medication without provider guidance. This could cause hypotension or medication toxicity.">"Double your blood pressure medication with decongestants."</div>
+                            <div class="otc-option" data-scenario="3" data-answer="D" data-feedback="❌ FALSE! BP follows circadian rhythm but decongestants raise BP at any time. Nighttime dosing doesn't make it safe.">"Take decongestants only at night when BP is lower."</div>
+                        </div>
+                        <div class="otc-feedback" id="feedback-scenario-3"></div>
+                    </div>
+                    <div class="otc-scenario">
+                        <div class="scenario-question">Patient with GERD wants OTC antacid recommendations.</div>
+                        <div class="otc-options">
+                            <div class="otc-option" data-scenario="4" data-answer="A" data-feedback="⚠️ PARTIALLY CORRECT. Calcium carbonate (Tums) is safe short-term but can cause rebound acidity and constipation with chronic use.">"Calcium carbonate (Tums) as needed is safe."</div>
+                            <div class="otc-option" data-scenario="4" data-answer="B" data-feedback="⚠️ PARTIALLY CORRECT. Aluminum antacids can accumulate in kidney disease. Also cause constipation.">"Avoid aluminum-containing antacids if you have kidney issues."</div>
+                            <div class="otc-option" data-scenario="4" data-answer="C" data-feedback="❌ DANGEROUS! Maximum doses can cause electrolyte imbalances, alkalosis, or medication interactions.">"Take maximum dose of any antacid for quick relief."</div>
+                            <div class="otc-option" data-scenario="4" data-answer="D" data-feedback="✅ CORRECT! Both A and B are considerations. Also advise: Don't exceed 2 weeks without provider evaluation, take separately from other meds by 2 hours.">"Both A and B are correct considerations."</div>
+                        </div>
+                        <div class="otc-feedback" id="feedback-scenario-4"></div>
+                    </div>
+                </div>
+
+                <!-- Safety Warning -->
+                <div class="safety-warning">
+                    <div class="warning-icon">⚠️</div>
+                    <div class="warning-content">
+                        <div class="warning-title">Prescription Accuracy is Non-Negotiable!</div>
+                        <div class="warning-text">
+                            Transcribing errors can cause serious harm. Always verify: Right patient, right drug, right dose, 
+                            right route, right time, right documentation. OTC medications are NOT risk-free - they interact with 
+                            prescription drugs and have contraindications. Elderly patients are particularly vulnerable to 
+                            anticholinergic side effects from OTC sleep aids and cold medications.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback-container" id="feedback-2">
+                    <div class="feedback-header">
+                        <span class="feedback-icon correct">✓</span>
+                        Prescription Safety Achieved!
+                    </div>
+                    <div class="feedback-content">
+                        <div class="key-point">
+                            <strong>Prescription Accuracy Standards:</strong><br>
+                            • Verify TWO patient identifiers before transcribing<br>
+                            • Include ALL required elements: patient info, drug, strength, form, quantity, SIG, refills, provider info<br>
+                            • SIG should be clear: "Take 1 tablet by mouth twice daily with meals"<br>
+                            • Electronic prescriptions reduce errors but still require verification
+                        </div>
+                        
+                        <div class="key-point">
+                            <strong>Age-Related Pharmacokinetics:</strong><br>
+                            • <strong>Pediatric:</strong> Higher water content, immature liver/kidneys → adjust doses, monitor closely<br>
+                            • <strong>Geriatric:</strong> Reduced kidney function, polypharmacy risk → start low, go slow, monitor<br>
+                            • <strong>Adult:</strong> Standard pharmacokinetics apply but consider individual factors
+                        </div>
+                        
+                        <div class="key-point">
+                            <strong>OTC Safety Guidelines:</strong><br>
+                            • <strong>NSAIDs with anticoagulants:</strong> AVOID - bleeding risk<br>
+                            • <strong>Antihistamines in elderly:</strong> AVOID - sedation, confusion, falls<br>
+                            • <strong>Decongestants with hypertension:</strong> AVOID - BP elevation<br>
+                            • <strong>Antacids:</strong> Calcium carbonate safe short-term; avoid aluminum with kidney disease
+                        </div>
+                        
+                        <strong>Patient Education Points:</strong><br>
+                        • Read OTC labels carefully for active ingredients and warnings<br>
+                        • Report ALL medications (Rx and OTC) to all providers<br>
+                        • Don't exceed recommended doses or duration<br>
+                        • Store medications safely, check expiration dates<br>
+                        • Never share prescription medications
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn btn-secondary" id="reset-all-btn">
+                <span class="btn-icon">↻</span>
+                Reset All Activities
+            </button>
+            <button class="btn btn-secondary" id="check-answers-btn">
+                <span class="btn-icon">✓</span>
+                Check All Answers
+            </button>
+            <button class="btn btn-primary" id="view-results-btn">
+                <span class="btn-icon">📊</span>
+                View Final Results
+            </button>
+        </div>
+
+        <!-- Results Panel -->
+        <div class="results-panel" id="results-panel">
+            <div class="results-header">
+                <h2 class="results-title">Pharmacology Foundations Results</h2>
+                <div class="score-display" id="final-score">0%</div>
+            </div>
+            
+            <div class="clinical-insights">
+                <h3 class="insights-title">
+                    <span>🩺</span> Clinical Proficiency Insights
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Drug Name Mastery:</strong> Always use generic names when possible to avoid confusion. 
+                        Know that chemical names describe molecular structure, generic names are non-proprietary, 
+                        and trade names are manufacturer-specific. This knowledge prevents medication errors.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>DEA Schedule Compliance:</strong> Schedule I drugs have NO medical use. Schedule II 
+                        prescriptions cannot be refilled - new Rx required. Schedule III-V allow refills with limits. 
+                        ALL controlled substances require precise documentation and secure storage.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Prescription Accuracy:</strong> The "five rights" plus documentation: Right patient, 
+                        drug, dose, route, time, and documentation. Double-check every element, especially with 
+                        look-alike/sound-alike drugs. Use tall man lettering when appropriate (e.g., hydrALAZINE vs. hydrOXYzine).</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Age-Specific Considerations:</strong> Pediatric doses are weight-based. Geriatric 
+                        patients often need reduced doses due to decreased renal/hepatic function. Always consider 
+                        developmental stage and comorbidities when assessing medication appropriateness.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>OTC Medication Safety:</strong> OTC does NOT mean risk-free. Many OTC drugs interact 
+                        with prescriptions (NSAIDs with warfarin, antacids with tetracyclines). Elderly patients are 
+                        particularly vulnerable to anticholinergic effects from OTC sleep aids and cold medications.</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="clinical-insights" style="margin-top: 20px;">
+                <h3 class="insights-title">
+                    <span>📋</span> Documentation & Legal Compliance
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Controlled Substance Logs:</strong> Must include date, time, patient name, medication, 
+                        dose, administering staff, and witness for waste. Maintain records for 2 years minimum. 
+                        Inventory must be counted at every shift change with outgoing and incoming staff signatures.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Prescription Documentation:</strong> EHR entries must be complete and accurate. 
+                        Include indication when known. Document patient education provided about the medication, 
+                        including potential side effects and when to contact the provider.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Error Reporting:</strong> Medication errors must be reported immediately per 
+                        facility policy. Document objectively - what happened, when, who was involved, what actions 
+                        were taken. Focus on system improvement, not individual blame.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Continuing Education:</strong> Pharmacology knowledge must be updated regularly. 
+                        New drugs are constantly approved, and new safety information emerges. Document participation 
+                        in drug safety trainings and competency validations.</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // State Management
+            const state = {
+                activities: {
+                    1: { completed: false, correct: 0, total: 22, score: 0 }, // 5 matches + 12 drugs + 5 protocol
+                    2: { completed: false, correct: 0, total: 15, score: 0 }  // 8 prescription + 3 age + 4 OTC
+                },
+                startedAt: new Date(),
+                timeSpent: 0,
+                drugMatches: {},
+                drugPlacements: {},
+                protocolOrder: [],
+                prescriptionAnswers: {},
+                ageSelections: {},
+                otcSelections: {}
+            };
+
+            // DOM Elements
+            const progressSteps = document.querySelectorAll('.progress-step');
+            const activityCards = document.querySelectorAll('.activity-card');
+            const completedCount = document.getElementById('completed-count');
+            const accuracyRate = document.getElementById('accuracy-rate');
+            const timeSpent = document.getElementById('time-spent');
+            const resetBtn = document.getElementById('reset-all-btn');
+            const checkBtn = document.getElementById('check-answers-btn');
+            const resultsBtn = document.getElementById('view-results-btn');
+            const resultsPanel = document.getElementById('results-panel');
+            const finalScore = document.getElementById('final-score');
+            const scheduleWarning = document.getElementById('schedule-warning');
+            const checkPrescriptionBtn = document.getElementById('check-prescription');
+
+            // Timer for time spent
+            function updateTimer() {
+                const now = new Date();
+                const diff = Math.floor((now - state.startedAt) / 1000);
+                state.timeSpent = diff;
+                const minutes = Math.floor(diff / 60);
+                const seconds = diff % 60;
+                timeSpent.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            }
+            setInterval(updateTimer, 1000);
+
+            // Update Progress Summary
+            function updateProgressSummary() {
+                let completed = 0;
+                let totalCorrect = 0;
+                let totalItems = 0;
+
+                Object.values(state.activities).forEach(activity => {
+                    if (activity.completed) completed++;
+                    totalCorrect += activity.correct;
+                    totalItems += activity.total;
+                });
+
+                completedCount.textContent = completed;
+                const accuracy = totalItems > 0 ? Math.round((totalCorrect / totalItems) * 100) : 0;
+                accuracyRate.textContent = `${accuracy}%`;
+
+                // Update progress steps
+                progressSteps.forEach((step, index) => {
+                    if (index < completed) {
+                        step.classList.add('completed');
+                        step.classList.remove('active');
+                    } else if (index === completed) {
+                        step.classList.add('active');
+                        step.classList.remove('completed');
+                    } else {
+                        step.classList.remove('active', 'completed');
+                    }
+                });
+            }
+
+            // Activity 1: Drug Name & Classification Challenge - REVISED
+            function initActivity1() {
+                const dragItems = document.querySelectorAll('#activity-1 .drag-item');
+                const definitionDropzone = document.getElementById('definition-dropzone');
+                const drugItems = document.querySelectorAll('#activity-1 .drug-item');
+                const scheduleDropzones = document.querySelectorAll('#activity-1 .schedule-dropzone');
+                const protocolStepsContainer = document.getElementById('protocol-steps-shuffled');
+                const protocolDropzone = document.getElementById('protocol-dropzone');
+                const feedback = document.getElementById('feedback-1');
+                const status = document.querySelector('#activity-1 .activity-status');
+
+                // Correct definitions
+                const definitions = [
+                    { type: 'chemical', text: 'Exact molecular structure (e.g., atorvastatin calcium)' },
+                    { type: 'generic', text: 'Non-proprietary name, lowercase (e.g., atorvastatin)' },
+                    { type: 'trade', text: 'Manufacturer\'s brand name, registered® (e.g., Lipitor®)' },
+                    { type: 'class', text: 'Pharmacologic category (e.g., HMG-CoA reductase inhibitor)' },
+                    { type: 'schedule', text: 'DEA abuse potential classification (I-V)' }
+                ];
+
+                // Initialize definition dropzone
+                definitions.forEach(def => {
+                    const div = document.createElement('div');
+                    div.className = 'drag-item';
+                    div.dataset.type = def.type;
+                    div.dataset.correct = def.type;
+                    div.textContent = def.text;
+                    definitionDropzone.appendChild(div);
+                });
+
+                // Correct protocol order
+                const protocolSteps = [
+                    'Count inventory with outgoing staff at shift change',
+                    'Document all controlled substances in designated log',
+                    'Verify patient identification before administration',
+                    'Witness and document waste if partial dose discarded',
+                    'Lock remaining medication in secure storage immediately',
+                    'Report any discrepancies to supervisor immediately'
+                ];
+
+                // Shuffle and initialize protocol steps
+                const shuffledSteps = [...protocolSteps].sort(() => Math.random() - 0.5);
+                shuffledSteps.forEach((step, index) => {
+                    const stepDiv = document.createElement('div');
+                    stepDiv.className = 'protocol-step';
+                    stepDiv.dataset.step = (index + 1).toString();
+                    stepDiv.dataset.correct = (protocolSteps.indexOf(step) + 1).toString();
+                    stepDiv.textContent = step;
+                    stepDiv.draggable = true;
+                    protocolStepsContainer.appendChild(stepDiv);
+                });
+
+                // Initialize protocol dropzone placeholders
+                for (let i = 1; i <= 6; i++) {
+                    const placeholder = document.createElement('div');
+                    placeholder.className = 'step-placeholder';
+                    placeholder.dataset.position = i;
+                    placeholder.innerHTML = `
+                        <div class="placeholder-number">${i}</div>
+                        <div class="placeholder-text">Step ${i} - Drop here</div>
+                    `;
+                    protocolDropzone.appendChild(placeholder);
+                }
+
+                // Drug name matching drag and drop
+                dragItems.forEach(item => {
+                    item.addEventListener('dragstart', function(e) {
+                        e.dataTransfer.setData('text/plain', JSON.stringify({
+                            type: this.dataset.type,
+                            text: this.textContent
+                        }));
+                        this.classList.add('dragging');
+                    });
+
+                    item.addEventListener('dragend', function() {
+                        this.classList.remove('dragging');
+                    });
+                });
+
+                definitionDropzone.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    this.classList.add('hover');
+                });
+
+                definitionDropzone.addEventListener('dragleave', function() {
+                    this.classList.remove('hover');
+                });
+
+                definitionDropzone.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('hover');
+
+                    const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+                    const draggedType = data.type;
+                    
+                    // Find matching definition
+                    const definitions = this.querySelectorAll('.drag-item');
+                    definitions.forEach(def => {
+                        if (def.dataset.type === draggedType) {
+                            // Check if correct
+                            const isCorrect = def.dataset.correct === draggedType;
+                            
+                            if (isCorrect) {
+                                def.classList.add('placed');
+                                state.drugMatches[draggedType] = true;
+                                
+                                // Hide dragged item
+                                const draggedItem = document.querySelector(`.drag-item[data-type="${draggedType}"]:not(.placed)`);
+                                if (draggedItem) {
+                                    draggedItem.style.display = 'none';
+                                }
+                            } else {
+                                def.classList.add('wrong');
+                                setTimeout(() => {
+                                    def.classList.remove('wrong');
+                                }, 1000);
+                            }
+                        }
+                    });
+
+                    checkActivity1Completion();
+                });
+
+                // DEA schedule sorting
+                drugItems.forEach(item => {
+                    item.addEventListener('dragstart', function(e) {
+                        e.dataTransfer.setData('text/plain', JSON.stringify({
+                            drug: this.dataset.drug,
+                            schedule: this.dataset.schedule,
+                            text: this.textContent
+                        }));
+                        this.classList.add('dragging');
+                    });
+
+                    item.addEventListener('dragend', function() {
+                        this.classList.remove('dragging');
+                    });
+                });
+
+                scheduleDropzones.forEach(zone => {
+                    zone.addEventListener('dragover', function(e) {
+                        e.preventDefault();
+                        this.classList.add('hover');
+                    });
+
+                    zone.addEventListener('dragleave', function() {
+                        this.classList.remove('hover');
+                    });
+
+                    zone.addEventListener('drop', function(e) {
+                        e.preventDefault();
+                        this.classList.remove('hover');
+
+                        const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+                        const targetSchedule = this.dataset.schedule;
+                        const correctSchedule = data.schedule;
+                        
+                        // Check if correct
+                        if (targetSchedule === correctSchedule) {
+                            const drugDiv = document.createElement('div');
+                            drugDiv.className = 'drug-item placed';
+                            drugDiv.textContent = data.text;
+                            this.querySelector('.drugs-container').appendChild(drugDiv);
+                            
+                            state.drugPlacements[data.drug] = targetSchedule;
+                            
+                            // Hide from pool
+                            const original = document.querySelector(`.drug-item[data-drug="${data.drug}"]:not(.placed)`);
+                            if (original) {
+                                original.style.display = 'none';
+                            }
+                        } else {
+                            scheduleWarning.style.display = 'flex';
+                            setTimeout(() => {
+                                scheduleWarning.style.display = 'none';
+                            }, 2000);
+                        }
+
+                        checkActivity1Completion();
+                    });
+                });
+
+                // Protocol sequencing
+                const protocolStepsElements = document.querySelectorAll('#activity-1 .protocol-step');
+                protocolStepsElements.forEach(step => {
+                    step.addEventListener('dragstart', function(e) {
+                        e.dataTransfer.setData('text/plain', JSON.stringify({
+                            step: this.dataset.step,
+                            correct: this.dataset.correct,
+                            text: this.textContent
+                        }));
+                        this.classList.add('dragging');
+                    });
+
+                    step.addEventListener('dragend', function() {
+                        this.classList.remove('dragging');
+                    });
+                });
+
+                protocolDropzone.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    this.classList.add('hover');
+                });
+
+                protocolDropzone.addEventListener('dragleave', function() {
+                    this.classList.remove('hover');
+                });
+
+                protocolDropzone.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('hover');
+
+                    const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+                    const placeholder = e.target.closest('.step-placeholder');
+                    
+                    if (placeholder) {
+                        const position = parseInt(placeholder.dataset.position);
+                        const correctPosition = parseInt(data.correct);
+                        
+                        // Check if correct position
+                        if (position === correctPosition) {
+                            placeholder.innerHTML = `
+                                <div class="placeholder-number">${position}</div>
+                                <div class="step-text">${data.text}</div>
+                            `;
+                            placeholder.classList.add('placed');
+                            
+                            state.protocolOrder[position - 1] = data.step;
+                            
+                            // Hide from shuffled steps
+                            const original = document.querySelector(`.protocol-step[data-step="${data.step}"]`);
+                            if (original) {
+                                original.style.display = 'none';
+                            }
+                        } else {
+                            placeholder.classList.add('wrong');
+                            setTimeout(() => {
+                                placeholder.classList.remove('wrong');
+                            }, 1000);
+                        }
+                    }
+
+                    checkActivity1Completion();
+                });
+
+                function checkActivity1Completion() {
+                    if (state.activities[1].completed) return;
+
+                    // Check drug matches (5 points)
+                    const drugMatchesComplete = Object.keys(state.drugMatches).length === 5;
+                    
+                    // Check drug placements (12 points)
+                    const drugPlacementsComplete = Object.keys(state.drugPlacements).length === 12;
+                    
+                    // Check protocol order (6 points)
+                    const protocolComplete = state.protocolOrder.filter(Boolean).length === 6;
+
+                    if (drugMatchesComplete && drugPlacementsComplete && protocolComplete) {
+                        // Calculate score
+                        let score = 0;
+                        
+                        // Drug matches (5 points)
+                        score += 5;
+                        
+                        // Drug placements (12 points)
+                        score += 12;
+                        
+                        // Protocol sequence (5 points if mostly correct)
+                        score += 5;
+
+                        state.activities[1].completed = true;
+                        state.activities[1].correct = score;
+                        state.activities[1].score = Math.round((score / 22) * 100);
+                        
+                        status.textContent = 'Completed';
+                        document.querySelector('#activity-1').classList.add('completed');
+                        feedback.classList.add('show');
+                        
+                        updateProgressSummary();
+                    }
+                }
+            }
+
+            // Activity 2: Prescription Accuracy & Patient Safety - REVISED
+            function initActivity2() {
+                const prescriptionInputs = document.querySelectorAll('#activity-2 .form-input, #activity-2 .form-select, #activity-2 .form-textarea');
+                const ageOptions = document.querySelectorAll('#activity-2 .age-option');
+                const otcOptions = document.querySelectorAll('#activity-2 .otc-option');
+                const feedback = document.getElementById('feedback-2');
+                const status = document.querySelector('#activity-2 .activity-status');
+
+                // Correct prescription values
+                const correctPrescription = {
+                    'patient-name': 'Smith, John A',
+                    'patient-dob': '05/15/1978',
+                    'drug-name': 'Metformin',
+                    'drug-strength': '500 mg',
+                    'dosage-form': 'tablet',
+                    'quantity': '#60',
+                    'directions': 'Take 1 tablet by mouth twice daily with meals.',
+                    'refills': '3',
+                    'dea-number': 'AB1234567'
+                };
+
+                // Correct age factors
+                const correctAgeFactors = {
+                    'pediatric': 'B',
+                    'geriatric': 'B',
+                    'adult': 'A'
+                };
+
+                // Correct OTC answers
+                const correctOTCAnswers = {
+                    '1': 'B',
+                    '2': 'C',
+                    '3': 'B',
+                    '4': 'D'
+                };
+
+                // Check prescription button
+                checkPrescriptionBtn.addEventListener('click', function() {
+                    if (state.activities[2].completed) return;
+
+                    let prescriptionCorrect = 0;
+                    
+                    prescriptionInputs.forEach(input => {
+                        const id = input.id;
+                        const correctValue = correctPrescription[id];
+                        const feedbackEl = document.getElementById(`feedback-${id}`);
+                        
+                        if (correctValue) {
+                            if (input.tagName === 'SELECT') {
+                                if (input.value === correctValue) {
+                                    input.style.borderColor = 'var(--color-success)';
+                                    prescriptionCorrect++;
+                                    state.prescriptionAnswers[id] = true;
+                                    feedbackEl.textContent = '✓ Correct!';
+                                    feedbackEl.style.borderLeftColor = 'var(--color-success)';
+                                } else {
+                                    input.style.borderColor = 'var(--color-error)';
+                                    state.prescriptionAnswers[id] = false;
+                                    feedbackEl.textContent = `✘ Should be: ${correctValue}`;
+                                    feedbackEl.style.borderLeftColor = 'var(--color-error)';
+                                }
+                            } else {
+                                if (input.value.trim() === correctValue) {
+                                    input.classList.add('correct');
+                                    input.classList.remove('incorrect');
+                                    prescriptionCorrect++;
+                                    state.prescriptionAnswers[id] = true;
+                                    feedbackEl.textContent = '✓ Correct!';
+                                    feedbackEl.style.borderLeftColor = 'var(--color-success)';
+                                } else {
+                                    input.classList.add('incorrect');
+                                    input.classList.remove('correct');
+                                    state.prescriptionAnswers[id] = false;
+                                    feedbackEl.textContent = `✘ Should be: ${correctValue}`;
+                                    feedbackEl.style.borderLeftColor = 'var(--color-error)';
+                                }
+                            }
+                            feedbackEl.classList.add('show');
+                        }
+                    });
+
+                    // Update state
+                    state.activities[2].correct += prescriptionCorrect;
+                    checkActivity2Completion();
+                });
+
+                // Age factor selection with feedback
+                ageOptions.forEach(option => {
+                    option.addEventListener('click', function() {
+                        if (state.activities[2].completed) return;
+
+                        const ageGroup = this.closest('.age-group').dataset.age;
+                        const factor = this.dataset.factor;
+                        const feedbackText = this.dataset.feedback;
+                        const feedbackEl = document.getElementById(`feedback-${ageGroup}`);
+                        
+                        // Remove all selections from this age group
+                        const groupOptions = this.closest('.age-group').querySelectorAll('.age-option');
+                        groupOptions.forEach(opt => {
+                            opt.classList.remove('selected', 'wrong');
+                        });
+
+                        // Mark selected
+                        this.classList.add('selected');
+                        state.ageSelections[ageGroup] = factor;
+
+                        // Check if correct and show feedback
+                        const isCorrect = factor === correctAgeFactors[ageGroup];
+                        if (isCorrect) {
+                            this.classList.add('selected');
+                            feedbackEl.textContent = feedbackText;
+                            feedbackEl.style.borderLeftColor = 'var(--color-success)';
+                        } else {
+                            this.classList.add('wrong');
+                            feedbackEl.textContent = feedbackText;
+                            feedbackEl.style.borderLeftColor = 'var(--color-error)';
+                        }
+                        feedbackEl.classList.add('show');
+
+                        checkActivity2Completion();
+                    });
+                });
+
+                // OTC scenario selection with feedback
+                otcOptions.forEach(option => {
+                    option.addEventListener('click', function() {
+                        if (state.activities[2].completed) return;
+
+                        const scenario = this.dataset.scenario;
+                        const answer = this.dataset.answer;
+                        const feedbackText = this.dataset.feedback;
+                        const feedbackEl = document.getElementById(`feedback-scenario-${scenario}`);
+                        
+                        // Remove all selections from this scenario
+                        const scenarioOptions = this.closest('.otc-scenario').querySelectorAll('.otc-option');
+                        scenarioOptions.forEach(opt => {
+                            opt.classList.remove('selected', 'wrong');
+                        });
+
+                        // Mark selected
+                        this.classList.add('selected');
+                        state.otcSelections[scenario] = answer;
+
+                        // Check if correct and show feedback
+                        const isCorrect = answer === correctOTCAnswers[scenario];
+                        if (isCorrect) {
+                            this.classList.add('selected');
+                            feedbackEl.innerHTML = feedbackText;
+                            feedbackEl.style.borderLeftColor = 'var(--color-success)';
+                        } else {
+                            this.classList.add('wrong');
+                            feedbackEl.innerHTML = feedbackText;
+                            feedbackEl.style.borderLeftColor = 'var(--color-error)';
+                        }
+                        feedbackEl.classList.add('show');
+
+                        checkActivity2Completion();
+                    });
+                });
+
+                function checkActivity2Completion() {
+                    if (state.activities[2].completed) return;
+
+                    const prescriptionChecked = Object.keys(state.prescriptionAnswers).length === 9;
+                    const ageFactorsSelected = Object.keys(state.ageSelections).length === 3;
+                    const otcSelected = Object.keys(state.otcSelections).length === 4;
+
+                    if (prescriptionChecked && ageFactorsSelected && otcSelected) {
+                        // Calculate OTC score
+                        let otcScore = 0;
+                        Object.keys(state.otcSelections).forEach(scenario => {
+                            if (state.otcSelections[scenario] === correctOTCAnswers[scenario]) {
+                                otcScore++;
+                            }
+                        });
+
+                        // Calculate age factors score
+                        let ageScore = 0;
+                        Object.keys(state.ageSelections).forEach(ageGroup => {
+                            if (state.ageSelections[ageGroup] === correctAgeFactors[ageGroup]) {
+                                ageScore++;
+                            }
+                        });
+
+                        // Calculate prescription score
+                        const prescriptionScore = state.activities[2].correct;
+
+                        // Total score
+                        const totalScore = prescriptionScore + ageScore + otcScore;
+
+                        state.activities[2].completed = true;
+                        state.activities[2].correct = totalScore;
+                        state.activities[2].score = Math.round((totalScore / 15) * 100);
+                        
+                        status.textContent = 'Completed';
+                        document.querySelector('#activity-2').classList.add('completed');
+                        feedback.classList.add('show');
+                        
+                        updateProgressSummary();
+                    }
+                }
+            }
+
+            // Reset All Activities
+            function resetAllActivities() {
+                // Reset state
+                Object.keys(state.activities).forEach(key => {
+                    state.activities[key] = {
+                        completed: false,
+                        correct: 0,
+                        total: parseInt(key) === 1 ? 22 : 15,
+                        score: 0
+                    };
+                });
+
+                state.drugMatches = {};
+                state.drugPlacements = {};
+                state.protocolOrder = [];
+                state.prescriptionAnswers = {};
+                state.ageSelections = {};
+                state.otcSelections = {};
+
+                // Reset UI
+                activityCards.forEach(card => {
+                    card.classList.remove('completed');
+                    const status = card.querySelector('.activity-status');
+                    status.textContent = 'Not Started';
+                    const feedback = card.querySelector('.feedback-container');
+                    feedback.classList.remove('show');
+                });
+
+                // Reset Activity 1
+                const definitionDropzone = document.getElementById('definition-dropzone');
+                definitionDropzone.innerHTML = '';
+                
+                // Reinitialize definitions
+                const definitions = [
+                    { type: 'chemical', text: 'Exact molecular structure (e.g., atorvastatin calcium)' },
+                    { type: 'generic', text: 'Non-proprietary name, lowercase (e.g., atorvastatin)' },
+                    { type: 'trade', text: 'Manufacturer\'s brand name, registered® (e.g., Lipitor®)' },
+                    { type: 'class', text: 'Pharmacologic category (e.g., HMG-CoA reductase inhibitor)' },
+                    { type: 'schedule', text: 'DEA abuse potential classification (I-V)' }
+                ];
+
+                definitions.forEach(def => {
+                    const div = document.createElement('div');
+                    div.className = 'drag-item';
+                    div.dataset.type = def.type;
+                    div.dataset.correct = def.type;
+                    div.textContent = def.text;
+                    definitionDropzone.appendChild(div);
+                });
+
+                // Show all drag items
+                document.querySelectorAll('#activity-1 .drag-item:not([data-correct])').forEach(item => {
+                    item.style.display = '';
+                });
+
+                // Reset drug placements
+                document.querySelectorAll('#activity-1 .drug-item').forEach(item => {
+                    item.style.display = '';
+                    item.classList.remove('placed', 'dragging');
+                });
+
+                document.querySelectorAll('#activity-1 .schedule-dropzone .drugs-container').forEach(container => {
+                    container.innerHTML = '';
+                });
+
+                // Reset protocol
+                const protocolStepsContainer = document.getElementById('protocol-steps-shuffled');
+                const protocolDropzone = document.getElementById('protocol-dropzone');
+                
+                protocolStepsContainer.innerHTML = '';
+                protocolDropzone.innerHTML = '';
+                
+                // Reinitialize protocol
+                const protocolSteps = [
+                    'Count inventory with outgoing staff at shift change',
+                    'Document all controlled substances in designated log',
+                    'Verify patient identification before administration',
+                    'Witness and document waste if partial dose discarded',
+                    'Lock remaining medication in secure storage immediately',
+                    'Report any discrepancies to supervisor immediately'
+                ];
+
+                const shuffledSteps = [...protocolSteps].sort(() => Math.random() - 0.5);
+                shuffledSteps.forEach((step, index) => {
+                    const stepDiv = document.createElement('div');
+                    stepDiv.className = 'protocol-step';
+                    stepDiv.dataset.step = (index + 1).toString();
+                    stepDiv.dataset.correct = (protocolSteps.indexOf(step) + 1).toString();
+                    stepDiv.textContent = step;
+                    stepDiv.draggable = true;
+                    protocolStepsContainer.appendChild(stepDiv);
+                });
+
+                for (let i = 1; i <= 6; i++) {
+                    const placeholder = document.createElement('div');
+                    placeholder.className = 'step-placeholder';
+                    placeholder.dataset.position = i;
+                    placeholder.innerHTML = `
+                        <div class="placeholder-number">${i}</div>
+                        <div class="placeholder-text">Step ${i} - Drop here</div>
+                    `;
+                    protocolDropzone.appendChild(placeholder);
+                }
+
+                scheduleWarning.style.display = 'none';
+
+                // Reset Activity 2
+                document.querySelectorAll('#activity-2 .form-input, #activity-2 .form-select, #activity-2 .form-textarea').forEach(input => {
+                    input.value = '';
+                    input.classList.remove('correct', 'incorrect');
+                    if (input.tagName === 'SELECT') {
+                        input.style.borderColor = '';
+                    }
+                });
+
+                document.querySelectorAll('#activity-2 .age-option').forEach(option => {
+                    option.classList.remove('selected', 'wrong');
+                });
+
+                document.querySelectorAll('#activity-2 .otc-option').forEach(option => {
+                    option.classList.remove('selected', 'wrong');
+                });
+
+                document.querySelectorAll('#activity-2 .age-feedback, #activity-2 .otc-feedback').forEach(feedback => {
+                    feedback.classList.remove('show');
+                    feedback.innerHTML = '';
+                });
+
+                checkPrescriptionBtn.disabled = false;
+
+                // Reset results
+                resultsPanel.classList.remove('show');
+
+                // Update progress
+                updateProgressSummary();
+            }
+
+            // Check All Answers
+            function checkAllAnswers() {
+                // Complete Activity 1 with correct answers
+                if (!state.activities[1].completed) {
+                    // Mark drug matches as correct
+                    const definitionItems = document.querySelectorAll('#activity-1 .drag-item[data-correct]');
+                    definitionItems.forEach(item => {
+                        item.classList.add('placed');
+                    });
+
+                    // Hide drag items
+                    document.querySelectorAll('#activity-1 .drag-item:not([data-correct])').forEach(item => {
+                        item.style.display = 'none';
+                    });
+
+                    // Place drugs in correct schedules
+                    const drugItems = document.querySelectorAll('#activity-1 .drug-item');
+                    drugItems.forEach(item => {
+                        const schedule = item.dataset.schedule;
+                        const scheduleZone = document.querySelector(`.schedule-dropzone[data-schedule="${schedule}"] .drugs-container`);
+                        if (scheduleZone) {
+                            const drugDiv = document.createElement('div');
+                            drugDiv.className = 'drug-item placed';
+                            drugDiv.textContent = item.textContent;
+                            scheduleZone.appendChild(drugDiv);
+                            item.style.display = 'none';
+                        }
+                    });
+
+                    // Place protocol in correct order
+                    const protocolDropzone = document.getElementById('protocol-dropzone');
+                    protocolDropzone.innerHTML = '';
+                    
+                    const correctSteps = [
+                        'Count inventory with outgoing staff at shift change',
+                        'Document all controlled substances in designated log',
+                        'Verify patient identification before administration',
+                        'Witness and document waste if partial dose discarded',
+                        'Lock remaining medication in secure storage immediately',
+                        'Report any discrepancies to supervisor immediately'
+                    ];
+
+                    correctSteps.forEach((step, index) => {
+                        const placeholder = document.createElement('div');
+                        placeholder.className = 'step-placeholder placed';
+                        placeholder.innerHTML = `
+                            <div class="placeholder-number">${index + 1}</div>
+                            <div class="step-text">${step}</div>
+                        `;
+                        protocolDropzone.appendChild(placeholder);
+                    });
+
+                    // Hide shuffled steps
+                    document.querySelectorAll('#activity-1 .protocol-step').forEach(step => {
+                        step.style.display = 'none';
+                    });
+
+                    state.activities[1].completed = true;
+                    state.activities[1].correct = 22;
+                    state.activities[1].score = 100;
+                    document.querySelector('#activity-1 .activity-status').textContent = 'Completed';
+                    document.querySelector('#activity-1').classList.add('completed');
+                    document.getElementById('feedback-1').classList.add('show');
+                }
+
+                // Complete Activity 2 with correct answers
+                if (!state.activities[2].completed) {
+                    // Fill prescription with correct answers
+                    const correctPrescription = {
+                        'patient-name': 'Smith, John A',
+                        'patient-dob': '05/15/1978',
+                        'drug-name': 'Metformin',
+                        'drug-strength': '500 mg',
+                        'dosage-form': 'tablet',
+                        'quantity': '#60',
+                        'directions': 'Take 1 tablet by mouth twice daily with meals.',
+                        'refills': '3',
+                        'dea-number': 'AB1234567'
+                    };
+
+                    Object.keys(correctPrescription).forEach(id => {
+                        const input = document.getElementById(id);
+                        const feedbackEl = document.getElementById(`feedback-${id}`);
+                        if (input) {
+                            if (input.tagName === 'SELECT') {
+                                input.value = correctPrescription[id];
+                                input.style.borderColor = 'var(--color-success)';
+                            } else {
+                                input.value = correctPrescription[id];
+                                input.classList.add('correct');
+                            }
+                            feedbackEl.textContent = '✓ Correct!';
+                            feedbackEl.style.borderLeftColor = 'var(--color-success)';
+                            feedbackEl.classList.add('show');
+                        }
+                    });
+
+                    // Select correct age factors
+                    const correctAgeFactors = {
+                        'pediatric': 'B',
+                        'geriatric': 'B', 
+                        'adult': 'A'
+                    };
+
+                    Object.keys(correctAgeFactors).forEach(ageGroup => {
+                        const correctOption = document.querySelector(`.age-group[data-age="${ageGroup}"] .age-option[data-factor="${correctAgeFactors[ageGroup]}"]`);
+                        const feedbackEl = document.getElementById(`feedback-${ageGroup}`);
+                        if (correctOption) {
+                            correctOption.classList.add('selected');
+                            feedbackEl.textContent = correctOption.dataset.feedback;
+                            feedbackEl.style.borderLeftColor = 'var(--color-success)';
+                            feedbackEl.classList.add('show');
+                        }
+                    });
+
+                    // Select correct OTC answers
+                    const correctOTCAnswers = {
+                        '1': 'B',
+                        '2': 'C',
+                        '3': 'B',
+                        '4': 'D'
+                    };
+
+                    Object.keys(correctOTCAnswers).forEach(scenario => {
+                        const correctOption = document.querySelector(`.otc-option[data-scenario="${scenario}"][data-answer="${correctOTCAnswers[scenario]}"]`);
+                        const feedbackEl = document.getElementById(`feedback-scenario-${scenario}`);
+                        if (correctOption) {
+                            correctOption.classList.add('selected');
+                            feedbackEl.innerHTML = correctOption.dataset.feedback;
+                            feedbackEl.style.borderLeftColor = 'var(--color-success)';
+                            feedbackEl.classList.add('show');
+                        }
+                    });
+
+                    state.activities[2].completed = true;
+                    state.activities[2].correct = 15;
+                    state.activities[2].score = 100;
+                    document.querySelector('#activity-2 .activity-status').textContent = 'Completed';
+                    document.querySelector('#activity-2').classList.add('completed');
+                    document.getElementById('feedback-2').classList.add('show');
+                    
+                    checkPrescriptionBtn.disabled = true;
+                }
+
+                updateProgressSummary();
+            }
+
+            // View Final Results
+            function viewFinalResults() {
+                let totalScore = 0;
+                let activityCount = 0;
+                
+                Object.values(state.activities).forEach(activity => {
+                    if (activity.completed) {
+                        totalScore += activity.score;
+                        activityCount++;
+                    }
+                });
+
+                const averageScore = activityCount > 0 ? Math.round(totalScore / activityCount) : 0;
+                finalScore.textContent = `${averageScore}%`;
+                resultsPanel.classList.add('show');
+                resultsPanel.scrollIntoView({ behavior: 'smooth' });
+            }
+
+            // Initialize activities
+            initActivity1();
+            initActivity2();
+
+            // Event listeners
+            resetBtn.addEventListener('click', resetAllActivities);
+            checkBtn.addEventListener('click', checkAllAnswers);
+            resultsBtn.addEventListener('click', viewFinalResults);
+
+            // Initial progress update
+            updateProgressSummary();
+        });
+    </script>
+</body>
+</html>
