@@ -1,0 +1,1459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chapter 9 Wrap-Up — Principles of Pharmacology</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-error: #e17055;
+            --color-warning: #fdcb6e;
+            --color-info: #0984e3;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
+            --color-dark: #0c0a18;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+            --shadow-card: 0 12px 30px rgba(15, 23, 42, 0.1);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        @keyframes checkmarkPop {
+            0% { transform: scale(0); opacity: 0; }
+            70% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        @keyframes slideIn {
+            from { transform: translateX(-20px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            padding: 24px;
+            background: radial-gradient(circle at top left, #ffffff 0, #f3edff 40%, var(--color-bg) 100%);
+            color: var(--color-text);
+            -webkit-text-size-adjust: 100%;
+            animation: fadeIn 0.8s ease;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 12px; }
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1120px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px;
+            display: grid;
+            grid-template-columns: minmax(0, 3.1fr) minmax(0, 2.4fr);
+            gap: 28px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @media (max-width: 900px) {
+            .page {
+                grid-template-columns: 1fr;
+                padding: 22px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 0; }
+            .page {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 18px 14px 22px;
+                gap: 22px;
+            }
+        }
+
+        img, .page, .column, .card, .side-card, .completion-card {
+            max-width: 100%;
+        }
+
+        .column {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header / Branding */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            width: 100%;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+        }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--color-success);
+            flex-shrink: 0;
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+        }
+
+        @media (max-width: 480px) {
+            .brand-row { flex-direction: column; align-items: flex-start; }
+            .badge-mode { margin-top: 6px; }
+        }
+
+        h1 {
+            font-size: clamp(1.9rem, 3vw, 2.3rem);
+            line-height: 1.05;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.7s ease 0.1s both;
+        }
+
+        .subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 36rem;
+            margin-bottom: 18px;
+            animation: fadeInUp 0.7s ease 0.2s both;
+        }
+
+        .subtitle strong {
+            color: var(--color-primary);
+        }
+
+        /* Sections */
+        .section-label {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-primary);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--color-text);
+        }
+
+        .card {
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(15, 23, 42, 0.06);
+            padding: 14px 16px 16px;
+            margin-bottom: 14px;
+            background: linear-gradient(135deg, rgba(175, 75, 239, 0.06), rgba(255, 255, 255, 0.98));
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .card + .card {
+            margin-top: 6px;
+        }
+
+        .card p {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--color-text);
+        }
+
+        .small {
+            font-size: 0.82rem;
+            color: var(--color-muted);
+        }
+
+        /* Quiz Styles */
+        .quiz-item {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px dashed rgba(148, 163, 184, 0.7);
+        }
+
+        .quiz-question {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .quiz-options {
+            list-style: none;
+            padding-left: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            font-size: 0.88rem;
+        }
+
+        .quiz-options li {
+            display: flex;
+            align-items: flex-start;
+            gap: 6px;
+            padding: 8px;
+            border-radius: var(--radius-sm);
+            transition: background-color 0.2s;
+            cursor: pointer;
+        }
+
+        .quiz-options li:hover {
+            background-color: rgba(175, 75, 239, 0.05);
+        }
+
+        .quiz-options input {
+            margin-top: 3px;
+            cursor: pointer;
+        }
+
+        .quiz-feedback {
+            font-size: 0.82rem;
+            margin-top: 5px;
+            min-height: 1.1em;
+            padding: 8px;
+            border-radius: var(--radius-sm);
+            display: none;
+        }
+
+        .quiz-feedback.correct {
+            color: var(--color-success);
+            background-color: rgba(0, 184, 148, 0.1);
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .quiz-feedback.incorrect {
+            color: var(--color-error);
+            background-color: rgba(225, 112, 85, 0.1);
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .btn {
+            border-radius: 999px;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 10px;
+            font-size: 0.84rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            cursor: pointer;
+            background: linear-gradient(135deg, var(--color-primary), #7c3aed);
+            color: #ffffff;
+            box-shadow: 0 10px 25px rgba(88, 28, 135, 0.35);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(88, 28, 135, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 5px 12px rgba(88, 28, 135, 0.4);
+        }
+
+        /* Drag and Drop Styles */
+        .drag-container {
+            margin: 20px 0;
+        }
+
+        .drag-drop-zone {
+            min-height: 120px;
+            border: 2px dashed var(--color-primary-soft);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            margin: 10px 0;
+            background: rgba(175, 75, 239, 0.03);
+            transition: all 0.3s ease;
+        }
+
+        .drag-drop-zone.active {
+            border-color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.08);
+            transform: scale(1.01);
+        }
+
+        .drag-item {
+            display: inline-block;
+            padding: 10px 16px;
+            margin: 5px;
+            background: var(--color-primary);
+            color: white;
+            border-radius: var(--radius-sm);
+            cursor: move;
+            user-select: none;
+            box-shadow: var(--shadow-card);
+            transition: transform 0.2s ease;
+        }
+
+        .drag-item:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .drag-item.dragging {
+            opacity: 0.5;
+            transform: scale(0.95);
+        }
+
+        /* Agency Matching - IMPROVED CONTRAST */
+        .agency-match-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .agency-item {
+            padding: 12px;
+            border-radius: var(--radius-sm);
+            background: linear-gradient(135deg, rgba(131, 128, 240, 0.1), rgba(255, 255, 255, 0.95));
+            border: 2px solid var(--color-accent);
+            cursor: move;
+            user-select: none;
+            transition: all 0.3s ease;
+            color: var(--color-text);
+        }
+
+        .agency-item:hover {
+            transform: translateY(-3px);
+            border-color: var(--color-primary);
+            box-shadow: var(--shadow-hover);
+            background: linear-gradient(135deg, rgba(175, 75, 239, 0.1), rgba(255, 255, 255, 0.98));
+        }
+
+        .agency-item strong {
+            color: var(--color-primary);
+            display: block;
+            margin-bottom: 4px;
+            font-size: 0.9rem;
+        }
+
+        .agency-item small {
+            color: var(--color-muted);
+            font-size: 0.8rem;
+            line-height: 1.4;
+        }
+
+        .agency-match-zone {
+            min-height: 80px;
+            border: 2px dashed var(--color-muted);
+            border-radius: var(--radius-md);
+            padding: 15px;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .agency-match-zone strong {
+            color: var(--color-text);
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+
+        .agency-match-zone.correct {
+            border-color: var(--color-success);
+            background: rgba(0, 184, 148, 0.08);
+        }
+
+        .agency-match-zone.incorrect {
+            border-color: var(--color-error);
+            background: rgba(225, 112, 85, 0.08);
+        }
+
+        .correct-match {
+            color: var(--color-success);
+            font-weight: 600;
+            margin-top: 10px;
+            display: none;
+            font-size: 0.85rem;
+        }
+
+        .correct-match.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* Vocabulary Flashcards */
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+            margin-top: 4px;
+        }
+
+        @media (max-width: 900px) {
+            .vocab-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .vocab-card {
+            border-radius: var(--radius-md);
+            padding: 12px 14px;
+            background: var(--color-dark);
+            color: #f0f0f0; /* Lightened text for better contrast */
+            font-size: 0.86rem;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .vocab-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .vocab-term {
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: #fef9c3; /* Bright yellow for terms */
+            font-size: 0.9rem;
+        }
+
+        .vocab-definition {
+            font-size: 0.82rem;
+            line-height: 1.5;
+            display: none;
+            color: #e5e7eb; /* Light gray for definitions */
+        }
+
+        .vocab-card.active .vocab-definition {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .vocab-card::after {
+            content: "Tap to flip";
+            position: absolute;
+            right: 10px;
+            bottom: 8px;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #a5b4fc; /* Brighter purple-blue */
+            background: rgba(12, 10, 24, 0.7);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .vocab-card.active::after {
+            content: "Hide";
+            color: #c4b5fd; /* Even brighter when active */
+        }
+
+        /* Reflection */
+        textarea {
+            width: 100%;
+            min-height: 80px;
+            border-radius: var(--radius-sm);
+            border: 1px solid rgba(148, 163, 184, 0.7);
+            padding: 10px 11px;
+            font-family: inherit;
+            font-size: 0.88rem;
+            resize: vertical;
+            margin-top: 6px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(175, 75, 239, 0.1);
+        }
+
+        .checklist {
+            list-style: none;
+            margin-top: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            font-size: 0.86rem;
+        }
+
+        .checklist li {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            padding: 8px;
+            border-radius: var(--radius-sm);
+            transition: background-color 0.2s;
+        }
+
+        .checklist li:hover {
+            background-color: rgba(175, 75, 239, 0.05);
+        }
+
+        .checklist input {
+            margin-top: 2px;
+            cursor: pointer;
+        }
+
+        /* Right Column Cards - IMPROVED FOR READABILITY */
+        .side-card {
+            background: linear-gradient(135deg, rgba(12, 10, 24, 0.95), rgba(30, 25, 60, 0.98));
+            color: #f0f0f0; /* Light gray instead of pure white */
+            border-radius: var(--radius-md);
+            padding: 18px 20px 20px;
+            font-size: 0.9rem; /* Slightly larger */
+            line-height: 1.7;
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.6);
+            margin-bottom: 16px;
+            animation: fadeInUp 0.6s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .side-card p {
+            color: #e5e7eb; /* Light gray for paragraphs */
+            margin-bottom: 12px;
+        }
+
+        .side-card strong {
+            color: #ffffff; /* White for strong emphasis */
+            font-weight: 700;
+        }
+
+        .side-subtitle {
+            font-size: 0.82rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #c4b5fd; /* Bright purple */
+            font-weight: 700; /* Bolder */
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .side-list {
+            list-style: none;
+            margin-top: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-size: 0.88rem;
+        }
+
+        .side-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            color: #e5e7eb; /* Light gray */
+        }
+
+        .dot {
+            width: 8px; /* Slightly larger */
+            height: 8px;
+            margin-top: 7px;
+            border-radius: 999px;
+            background: #a5b4fc; /* Brighter dot */
+            flex-shrink: 0;
+        }
+
+        .completion-card {
+            border-radius: var(--radius-md);
+            border: 1px dashed rgba(148, 163, 184, 0.7);
+            padding: 14px 16px;
+            font-size: 0.85rem;
+            color: var(--color-text); /* Dark text for better contrast */
+            background: rgba(248, 250, 252, 0.95);
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .completion-card p {
+            color: var(--color-text);
+        }
+
+        .completion-card .side-list li {
+            color: var(--color-text);
+        }
+
+        /* Progress Tracker */
+        .progress-tracker {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+            padding: 10px;
+            background: rgba(175, 75, 239, 0.05);
+            border-radius: var(--radius-lg);
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .step-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(175, 75, 239, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--color-primary);
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.active .step-circle {
+            background: var(--color-primary);
+            color: white;
+            box-shadow: 0 8px 20px rgba(175, 75, 239, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        .step-label {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+            text-align: center;
+        }
+
+        .progress-step.active .step-label {
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        /* Label improvements */
+        label.small {
+            color: #d1d5db; /* Light gray for labels in dark cards */
+            display: block;
+            margin-top: 15px;
+            font-size: 0.85rem;
+        }
+
+        /* Textarea placeholder color */
+        textarea::placeholder {
+            color: rgba(148, 163, 184, 0.7);
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="wrapup-heading">
+        <!-- Progress Tracker -->
+        <div class="progress-tracker">
+            <div class="progress-step active" data-step="1">
+                <div class="step-circle">1</div>
+                <div class="step-label">Pharma Knowledge Check</div>
+            </div>
+            <div class="progress-step" data-step="2">
+                <div class="step-circle">2</div>
+                <div class="step-label">DEA Regulations & Safety</div>
+            </div>
+        </div>
+
+        <!-- LEFT COLUMN -->
+        <section class="column">
+            <header class="brand-row">
+                <div class="brand">
+                    <img
+                        src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                        alt="AlliedRx logo"
+                        class="brand-logo"
+                    />
+                    <div class="course-meta">
+                        <span class="course-name">Clinical Medical Assistant • Week 9</span>
+                        <div class="week-label">
+                            <span class="week-label-dot"></span>
+                            <span>Chapter 9: Principles of Pharmacology</span>
+                        </div>
+                    </div>
+                </div>
+                <span class="badge-mode">Campus & Online</span>
+            </header>
+
+            <h1 id="wrapup-heading">Pharmacology Principles Wrap-Up</h1>
+            <p class="subtitle">
+                Review key concepts from <strong>Chapter 9 — Principles of Pharmacology</strong>. 
+                Test your knowledge of drug regulation, terminology, and safety protocols essential for medication management.
+            </p>
+
+            <!-- ACTIVITY 1: Drag & Drop Drug Name Exercise -->
+            <section aria-label="Activity 1: Drug Name Matching">
+                <p class="section-label">Activity 1</p>
+                <h2 class="section-title">Drug Name Identification</h2>
+                <div class="card">
+                    <p class="small">
+                        Drag each drug name example to its correct classification. Understanding these distinctions is crucial for accurate medication documentation.
+                    </p>
+
+                    <div class="drag-container">
+                        <div class="drag-drop-zone" id="chemical-zone" data-type="chemical">
+                            <strong>Chemical Name</strong><br>
+                            <small>The precise molecular structure</small>
+                        </div>
+                        
+                        <div class="drag-drop-zone" id="generic-zone" data-type="generic">
+                            <strong>Generic Name</strong><br>
+                            <small>Non-proprietary name assigned by manufacturer</small>
+                        </div>
+                        
+                        <div class="drag-drop-zone" id="trade-zone" data-type="trade">
+                            <strong>Trade/Brand Name</strong><br>
+                            <small>Proprietary name registered by pharmaceutical company</small>
+                        </div>
+
+                        <div style="margin-top: 20px; padding: 15px; background: rgba(175, 75, 239, 0.05); border-radius: var(--radius-md);">
+                            <p style="margin-bottom: 10px; font-weight: 600; color: var(--color-text);">Drag these items to the correct zones above:</p>
+                            <div class="drag-item" draggable="true" data-type="chemical">7-chloro-1,3-dihydro-1-methyl-5-phenyl-2H-1,4-benzodiazepin-2-one</div>
+                            <div class="drag-item" draggable="true" data-type="generic">Diazepam</div>
+                            <div class="drag-item" draggable="true" data-type="trade">Valium®</div>
+                            <div class="drag-item" draggable="true" data-type="chemical">N-(4-hydroxyphenyl)acetamide</div>
+                            <div class="drag-item" draggable="true" data-type="generic">Acetaminophen</div>
+                            <div class="drag-item" draggable="true" data-type="trade">Tylenol®</div>
+                        </div>
+                    </div>
+
+                    <button class="btn" type="button" onclick="checkDragDrop()" aria-label="Check drag and drop answers">Check Matches</button>
+                    <div id="drag-feedback" class="quiz-feedback" style="display:none;"></div>
+                </div>
+            </section>
+
+            <!-- Drug Regulation Quiz -->
+            <section aria-label="Regulation Quiz">
+                <p class="section-label">Knowledge Check</p>
+                <h2 class="section-title">Government Regulation Quiz</h2>
+                <div class="card" id="quiz-card">
+                    <p class="small">
+                        Test your understanding of U.S. drug regulation agencies and controlled substance schedules.
+                    </p>
+
+                    <div class="quiz-item" data-answer="b">
+                        <p class="quiz-question">
+                            1. Which agency regulates the development and approval of all prescription and OTC drugs in the U.S.?
+                        </p>
+                        <ul class="quiz-options">
+                            <li>
+                                <input type="radio" name="q1" value="a" id="q1a" />
+                                <label for="q1a">Drug Enforcement Administration (DEA)</label>
+                            </li>
+                            <li>
+                                <input type="radio" name="q1" value="b" id="q1b" />
+                                <label for="q1b">Food and Drug Administration (FDA)</label>
+                            </li>
+                            <li>
+                                <input type="radio" name="q1" value="c" id="q1c" />
+                                <label for="q1c">Centers for Disease Control and Prevention (CDC)</label>
+                            </li>
+                        </ul>
+                        <div class="quiz-feedback" id="q1-feedback"></div>
+                    </div>
+
+                    <div class="quiz-item" data-answer="c">
+                        <p class="quiz-question">
+                            2. Schedule II controlled substances (like oxycodone) require what type of prescription under DEA regulations?
+                        </p>
+                        <ul class="quiz-options">
+                            <li>
+                                <input type="radio" name="q2" value="a" id="q2a" />
+                                <label for="q2a">Verbal orders only, no written prescription needed</label>
+                            </li>
+                            <li>
+                                <input type="radio" name="q2" value="b" id="q2b" />
+                                <label for="q2b">May be refilled up to 5 times within 6 months</label>
+                            </li>
+                            <li>
+                                <input type="radio" name="q2" value="c" id="q2c" />
+                                <label for="q2c">Written prescription only, no refills permitted</label>
+                            </li>
+                        </ul>
+                        <div class="quiz-feedback" id="q2-feedback"></div>
+                    </div>
+
+                    <div class="quiz-item" data-answer="a">
+                        <p class="quiz-question">
+                            3. What is the primary purpose of a drug formulary in healthcare?
+                        </p>
+                        <ul class="quiz-options">
+                            <li>
+                                <input type="radio" name="q3" value="a" id="q3a" />
+                                <label for="q3a">Lists drugs covered by insurance and guides prescribing decisions</label>
+                            </li>
+                            <li>
+                                <input type="radio" name="q3" value="b" id="q3b" />
+                                <label for="q3b">Documents drug interactions for pharmacy reference</label>
+                            </li>
+                            <li>
+                                <input type="radio" name="q3" value="c" id="q3c" />
+                                <label for="q3c">Tracks controlled substance inventory in the practice</label>
+                            </li>
+                        </ul>
+                        <div class="quiz-feedback" id="q3-feedback"></div>
+                    </div>
+
+                    <button class="btn" type="button" onclick="checkQuiz()" aria-label="Check quiz answers">Check Answers</button>
+                </div>
+            </section>
+
+            <!-- Key Vocabulary Flashcards -->
+            <section aria-label="Key vocabulary flashcards">
+                <p class="section-label">Essential Terms</p>
+                <h2 class="section-title">Pharmacology Vocabulary</h2>
+                <div class="card">
+                    <p class="small">
+                        Select each card to reveal definitions. Master these terms for safe medication administration.
+                    </p>
+                    <div class="vocab-grid">
+                        <div class="vocab-card" onclick="toggleVocab(this)" tabindex="0" role="button" aria-label="Flip card to see definition of Therapeutic Range">
+                            <div class="vocab-term">Therapeutic Range</div>
+                            <div class="vocab-definition">
+                                The blood concentration of a drug that produces the desired effect without causing toxicity. Maintaining levels within this range is crucial for safe, effective treatment.
+                            </div>
+                        </div>
+                        <div class="vocab-card" onclick="toggleVocab(this)" tabindex="0" role="button" aria-label="Flip card to see definition of Enteric Coated">
+                            <div class="vocab-term">Enteric Coated</div>
+                            <div class="vocab-definition">
+                                An oral medication coated to resist stomach acid, ensuring absorption in the small intestine. These should NOT be crushed or chewed.
+                            </div>
+                        </div>
+                        <div class="vocab-card" onclick="toggleVocab(this)" tabindex="0" role="button" aria-label="Flip card to see definition of Pharmacology">
+                            <div class="vocab-term">Pharmacology</div>
+                            <div class="vocab-definition">
+                                The science of drugs, including their origin, nature, chemistry, effects, and uses. Clinical pharmacology studies drug effects in medical treatment.
+                            </div>
+                        </div>
+                        <div class="vocab-card" onclick="toggleVocab(this)" tabindex="0" role="button" aria-label="Flip card to see definition of Pharmacokinetics">
+                            <div class="vocab-term">Pharmacokinetics</div>
+                            <div class="vocab-definition">
+                                What the body does to a drug: absorption, distribution, metabolism, and excretion (ADME). Understanding this helps predict drug behavior.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- RIGHT COLUMN -->
+        <aside class="column" aria-label="Activity 2: DEA Regulations & Safety">
+            <!-- ACTIVITY 2: Controlled Substance Schedules -->
+            <section>
+                <p class="section-label">Activity 2</p>
+                <h2 class="section-title">Controlled Substance Schedules</h2>
+                <div class="side-card">
+                    <p class="side-subtitle">Kathy's Scenario</p>
+                    <p>
+                        Kathy, a new medical assistant, must manage controlled substances in her primary care practice. 
+                        She needs to understand DEA schedules to ensure compliance and prevent drug abuse.
+                    </p>
+                    
+                    <div class="agency-match-container">
+                        <div class="agency-item" draggable="true" data-schedule="I" id="schedule1">
+                            <strong>Schedule I</strong>
+                            <small>Heroin, LSD, marijuana</small>
+                        </div>
+                        <div class="agency-item" draggable="true" data-schedule="II" id="schedule2">
+                            <strong>Schedule II</strong>
+                            <small>Oxycodone, fentanyl, Adderall®</small>
+                        </div>
+                        <div class="agency-item" draggable="true" data-schedule="III" id="schedule3">
+                            <strong>Schedule III</strong>
+                            <small>Codeine combinations, ketamine</small>
+                        </div>
+                        <div class="agency-item" draggable="true" data-schedule="IV" id="schedule4">
+                            <strong>Schedule IV</strong>
+                            <small>Xanax®, Ambien®, Valium®</small>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 20px;">
+                        <p style="color: #e5e7eb; margin-bottom: 10px;"><strong>Match to DEA Regulations:</strong></p>
+                        
+                        <div class="agency-match-zone" id="zone-no-accepted" data-regulation="No accepted medical use, high abuse potential">
+                            <strong>No accepted medical use, high abuse potential</strong>
+                            <div class="correct-match" id="match1">✓ Correct: Schedule I</div>
+                        </div>
+                        
+                        <div class="agency-match-zone" id="zone-written-no-refills" data-regulation="Written Rx only, no refills, high abuse potential">
+                            <strong>Written prescription only, no refills, high abuse potential</strong>
+                            <div class="correct-match" id="match2">✓ Correct: Schedule II</div>
+                        </div>
+                        
+                        <div class="agency-match-zone" id="zone-refills-6months" data-regulation="May be refilled up to 5 times in 6 months, moderate abuse potential">
+                            <strong>May be refilled up to 5 times in 6 months, moderate abuse potential</strong>
+                            <div class="correct-match" id="match3">✓ Correct: Schedule III</div>
+                        </div>
+                        
+                        <div class="agency-match-zone" id="zone-refills-5times" data-regulation="May be refilled up to 5 times in 6 months, low abuse potential">
+                            <strong>May be refilled up to 5 times in 6 months, low abuse potential</strong>
+                            <div class="correct-match" id="match4">✓ Correct: Schedule IV</div>
+                        </div>
+                    </div>
+
+                    <button class="btn" type="button" onclick="checkScheduleMatches()" style="margin-top: 15px;" aria-label="Check schedule matching">Check Schedule Matches</button>
+                </div>
+            </section>
+
+            <!-- Prescription Safety -->
+            <section>
+                <p class="section-label">Safety Focus</p>
+                <h2 class="section-title">Prescription Accuracy & Safety</h2>
+                <div class="side-card">
+                    <p>
+                        As Kathy works with e-prescriptions, she must ensure accuracy and patient safety. Consider these critical elements:
+                    </p>
+                    
+                    <ul class="side-list" style="margin-top: 12px;">
+                        <li>
+                            <span class="dot"></span>
+                            <span><strong>Rights of Medication Administration:</strong> Right patient, drug, dose, route, time, documentation</span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span><strong>E-prescription Requirements:</strong> Identity proofing, two-factor authentication, audit trails</span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span><strong>Patient Education:</strong> Purpose, side effects, administration instructions, storage</span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span><strong>Age Considerations:</strong> Pediatric dosing, geriatric metabolism changes, polypharmacy risks</span>
+                        </li>
+                    </ul>
+
+                    <label class="small" for="safety-notes" style="display:block;margin-top:15px;">
+                        What steps would you take if you discovered a prescription error? Document your response:
+                    </label>
+                    <textarea 
+                        id="safety-notes" 
+                        placeholder="Describe your process for identifying, reporting, and correcting a medication error..."
+                        aria-label="Safety protocol text area"
+                        oninput="updateActivity2Progress()"
+                    ></textarea>
+                </div>
+            </section>
+
+            <!-- Pharmacology Readiness Checklist -->
+            <section>
+                <p class="section-label">Self-Assessment</p>
+                <h2 class="section-title">Pharmacology Competency Checklist</h2>
+                <div class="side-card">
+                    <p>
+                        Mark each item when you feel confident in these essential pharmacology skills:
+                    </p>
+                    <ul class="checklist" style="margin-top:10px;">
+                        <li>
+                            <input type="checkbox" id="check-dea" onclick="updateActivity2Progress()" />
+                            <label for="check-dea" style="color: #e5e7eb;">
+                                I can identify the five DEA controlled substance schedules and their restrictions.
+                            </label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="check-names" onclick="updateActivity2Progress()" />
+                            <label for="check-names" style="color: #e5e7eb;">
+                                I differentiate between chemical, generic, and trade names of medications.
+                            </label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="check-safety" onclick="updateActivity2Progress()" />
+                            <label for="check-safety" style="color: #e5e7eb;">
+                                I understand safety measures for OTC drugs and patient education requirements.
+                            </label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="check-age" onclick="updateActivity2Progress()" />
+                            <label for="check-age" style="color: #e5e7eb;">
+                                I recognize how age affects drug action (pediatric vs. geriatric considerations).
+                            </label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="check-refs" onclick="updateActivity2Progress()" />
+                            <label for="check-refs" style="color: #e5e7eb;">
+                                I know how to use drug reference materials to verify medication information.
+                            </label>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Completion Reminder -->
+            <section>
+                <p class="section-label">Ready to Move Forward?</p>
+                <h2 class="section-title">Chapter 9 Completion</h2>
+                <div class="completion-card">
+                    <p>
+                        Before continuing to Chapter 10, ensure you have:
+                    </p>
+                    <ul class="side-list" style="margin-top:8px;">
+                        <li>
+                            <span class="dot"></span>
+                            <span>Completed the <strong>Drug Name Matching</strong> activity successfully</span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span>Answered all <strong>Regulation Quiz</strong> questions correctly</span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span>Matched all <strong>DEA Schedules</strong> to their regulations</span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span>Documented your <strong>safety protocol</strong> for medication errors</span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span>Completed your <strong>competency checklist</strong></span>
+                        </li>
+                    </ul>
+                    <p style="margin-top:8px;">
+                        When confident with pharmacology principles, mark this chapter complete and proceed.
+                    </p>
+                </div>
+            </section>
+        </aside>
+    </main>
+
+    <script>
+        // State management for 2 activities
+        const moduleState = {
+            activities: {
+                1: { completed: false, correct: 0, total: 6, score: 0 },
+                2: { completed: false }
+            },
+            startedAt: new Date(),
+            timeSpent: 0
+        };
+
+        // Drag and Drop functionality for Activity 1
+        let draggedItem = null;
+        const correctMatches = {
+            'chemical': ['7-chloro-1,3-dihydro-1-methyl-5-phenyl-2H-1,4-benzodiazepin-2-one', 'N-(4-hydroxyphenyl)acetamide'],
+            'generic': ['Diazepam', 'Acetaminophen'],
+            'trade': ['Valium®', 'Tylenol®']
+        };
+
+        // Setup draggable items
+        document.querySelectorAll('.drag-item').forEach(item => {
+            item.addEventListener('dragstart', handleDragStart);
+            item.addEventListener('dragend', handleDragEnd);
+        });
+
+        // Setup drop zones
+        document.querySelectorAll('.drag-drop-zone').forEach(zone => {
+            zone.addEventListener('dragover', handleDragOver);
+            zone.addEventListener('dragleave', handleDragLeave);
+            zone.addEventListener('drop', handleDrop);
+        });
+
+        function handleDragStart(e) {
+            draggedItem = this;
+            this.classList.add('dragging');
+            e.dataTransfer.setData('text/plain', this.textContent);
+            e.dataTransfer.effectAllowed = 'move';
+        }
+
+        function handleDragEnd() {
+            this.classList.remove('dragging');
+            draggedItem = null;
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            this.classList.add('active');
+        }
+
+        function handleDragLeave() {
+            this.classList.remove('active');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            this.classList.remove('active');
+            
+            if (draggedItem) {
+                // Check if item already exists in a zone
+                const existingItems = document.querySelectorAll(`.drag-item[data-original="${draggedItem.textContent}"]`);
+                existingItems.forEach(item => item.remove());
+                
+                // Create a new item for the drop zone
+                const newItem = draggedItem.cloneNode(true);
+                newItem.setAttribute('data-original', draggedItem.textContent);
+                newItem.style.margin = '5px';
+                newItem.draggable = false;
+                newItem.style.cursor = 'default';
+                newItem.addEventListener('click', function() {
+                    this.remove();
+                });
+                
+                this.appendChild(newItem);
+            }
+        }
+
+        function checkDragDrop() {
+            const zones = document.querySelectorAll('.drag-drop-zone');
+            let correctCount = 0;
+            let totalItems = 0;
+            const feedback = document.getElementById('drag-feedback');
+            
+            zones.forEach(zone => {
+                const zoneType = zone.getAttribute('data-type');
+                const items = zone.querySelectorAll('.drag-item');
+                totalItems += items.length;
+                
+                items.forEach(item => {
+                    const itemText = item.getAttribute('data-original') || item.textContent;
+                    if (correctMatches[zoneType] && correctMatches[zoneType].includes(itemText)) {
+                        item.style.backgroundColor = 'var(--color-success)';
+                        correctCount++;
+                    } else {
+                        item.style.backgroundColor = 'var(--color-error)';
+                        item.style.animation = 'shake 0.5s ease';
+                    }
+                });
+            });
+            
+            // Update activity state
+            moduleState.activities[1].completed = true;
+            moduleState.activities[1].correct = correctCount;
+            moduleState.activities[1].score = Math.round((correctCount / 6) * 100);
+            
+            // Show feedback
+            feedback.style.display = 'block';
+            if (correctCount === 6) {
+                feedback.textContent = '✓ Perfect! You correctly identified all drug name types.';
+                feedback.className = 'quiz-feedback correct';
+            } else {
+                feedback.textContent = `You matched ${correctCount} out of 6 correctly. Review chemical vs. generic vs. trade names.`;
+                feedback.className = 'quiz-feedback incorrect';
+            }
+            
+            updateProgressTracker();
+        }
+
+        // Quiz logic for Activity 1
+        function checkQuiz() {
+            const items = document.querySelectorAll('.quiz-item');
+            let correctCount = 0;
+            
+            items.forEach((item, index) => {
+                const correctAnswer = item.getAttribute('data-answer');
+                const name = `q${index + 1}`;
+                const selected = document.querySelector(`input[name="${name}"]:checked`);
+                const feedback = document.getElementById(`${name}-feedback`);
+                
+                if (!selected) {
+                    feedback.textContent = 'Please select an answer.';
+                    feedback.className = 'quiz-feedback incorrect';
+                    feedback.style.display = 'block';
+                    return;
+                }
+                
+                if (selected.value === correctAnswer) {
+                    feedback.textContent = getQuizFeedback(index, true);
+                    feedback.className = 'quiz-feedback correct';
+                    feedback.style.display = 'block';
+                    correctCount++;
+                    
+                    const selectedLabel = selected.closest('li');
+                    selectedLabel.style.backgroundColor = 'rgba(0, 184, 148, 0.1)';
+                } else {
+                    feedback.textContent = getQuizFeedback(index, false);
+                    feedback.className = 'quiz-feedback incorrect';
+                    feedback.style.display = 'block';
+                    
+                    const selectedLabel = selected.closest('li');
+                    selectedLabel.style.animation = 'shake 0.5s ease';
+                    selectedLabel.style.backgroundColor = 'rgba(225, 112, 85, 0.1)';
+                    
+                    // Highlight correct answer
+                    const correctInput = document.querySelector(`input[name="${name}"][value="${correctAnswer}"]`);
+                    if (correctInput) {
+                        const correctLabel = correctInput.closest('li');
+                        correctLabel.style.backgroundColor = 'rgba(0, 184, 148, 0.1)';
+                        correctLabel.style.border = '1px solid rgba(0, 184, 148, 0.3)';
+                    }
+                }
+            });
+            
+            // Update activity state
+            if (!moduleState.activities[1].completed) {
+                moduleState.activities[1].completed = true;
+                moduleState.activities[1].correct += correctCount;
+                moduleState.activities[1].score = Math.round((moduleState.activities[1].correct / 9) * 100);
+            }
+            
+            updateProgressTracker();
+            
+            // Show summary
+            if (correctCount === 3) {
+                showQuizCompletionMessage('Excellent! You understand drug regulation agencies and requirements.');
+            }
+        }
+        
+        function getQuizFeedback(questionIndex, isCorrect) {
+            const correctFeedbacks = [
+                '✓ Correct! The FDA regulates drug development and approval.',
+                '✓ Correct! Schedule II substances require written prescriptions with no refills.',
+                '✓ Correct! Formularies guide insurance coverage and prescribing decisions.'
+            ];
+            
+            const incorrectFeedbacks = [
+                '✗ The FDA regulates drug approval. DEA manages controlled substances.',
+                '✗ Schedule II has strictest controls: written Rx only, no refills.',
+                '✗ Formularies primarily list covered drugs for insurance purposes.'
+            ];
+            
+            return isCorrect ? correctFeedbacks[questionIndex] : incorrectFeedbacks[questionIndex];
+        }
+        
+        function showQuizCompletionMessage(message) {
+            const quizCard = document.getElementById('quiz-card');
+            const existingMessage = quizCard.querySelector('.completion-message');
+            
+            if (existingMessage) {
+                existingMessage.remove();
+            }
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'quiz-feedback correct';
+            messageDiv.style.marginTop = '15px';
+            messageDiv.style.padding = '12px';
+            messageDiv.textContent = message;
+            messageDiv.classList.add('completion-message');
+            
+            const button = quizCard.querySelector('.btn');
+            quizCard.insertBefore(messageDiv, button.nextSibling);
+        }
+
+        // Schedule matching for Activity 2
+        let draggedSchedule = null;
+        
+        document.querySelectorAll('.agency-item').forEach(item => {
+            item.addEventListener('dragstart', function(e) {
+                draggedSchedule = this;
+                this.style.opacity = '0.5';
+                e.dataTransfer.setData('text/plain', this.id);
+            });
+            
+            item.addEventListener('dragend', function() {
+                this.style.opacity = '1';
+                draggedSchedule = null;
+            });
+        });
+        
+        document.querySelectorAll('.agency-match-zone').forEach(zone => {
+            zone.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                this.style.borderColor = 'var(--color-primary)';
+            });
+            
+            zone.addEventListener('dragleave', function() {
+                this.style.borderColor = '';
+            });
+            
+            zone.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.style.borderColor = '';
+                
+                if (draggedSchedule) {
+                    const schedule = draggedSchedule.getAttribute('data-schedule');
+                    const zoneId = this.id;
+                    
+                    // Remove any existing matches
+                    const existingMatch = this.querySelector('.agency-item');
+                    if (existingMatch) {
+                        existingMatch.remove();
+                    }
+                    
+                    // Add the dragged item
+                    const clone = draggedSchedule.cloneNode(true);
+                    clone.style.opacity = '1';
+                    clone.style.marginTop = '10px';
+                    clone.draggable = false;
+                    this.appendChild(clone);
+                }
+            });
+        });
+        
+        function checkScheduleMatches() {
+            const correctMatches = {
+                'zone-no-accepted': 'I',
+                'zone-written-no-refills': 'II',
+                'zone-refills-6months': 'III',
+                'zone-refills-5times': 'IV'
+            };
+            
+            let allCorrect = true;
+            
+            Object.keys(correctMatches).forEach(zoneId => {
+                const zone = document.getElementById(zoneId);
+                const item = zone.querySelector('.agency-item');
+                const matchDiv = zone.querySelector('.correct-match');
+                
+                if (item && item.getAttribute('data-schedule') === correctMatches[zoneId]) {
+                    zone.classList.remove('incorrect');
+                    zone.classList.add('correct');
+                    matchDiv.classList.add('show');
+                    allCorrect = true;
+                } else {
+                    zone.classList.remove('correct');
+                    zone.classList.add('incorrect');
+                    if (matchDiv) matchDiv.classList.remove('show');
+                    allCorrect = false;
+                }
+            });
+            
+            // Update Activity 2 completion
+            if (allCorrect) {
+                moduleState.activities[2].completed = true;
+                updateProgressTracker();
+            }
+        }
+
+        // Vocabulary flip functionality
+        function toggleVocab(card) {
+            card.classList.toggle('active');
+            
+            if (card.classList.contains('active')) {
+                card.style.transform = 'translateY(-3px)';
+                card.style.boxShadow = 'var(--shadow-hover)';
+            }
+        }
+
+        // Update progress tracker
+        function updateProgressTracker() {
+            const step2 = document.querySelector('[data-step="2"]');
+            
+            if (moduleState.activities[1].completed) {
+                step2.classList.add('active');
+            }
+        }
+
+        // Track Activity 2 progress
+        function updateActivity2Progress() {
+            const textarea = document.getElementById('safety-notes');
+            const checkboxes = document.querySelectorAll('.side-card input[type="checkbox"]:checked');
+            
+            if (textarea.value.trim().length > 0 && checkboxes.length >= 3) {
+                moduleState.activities[2].completed = true;
+            }
+        }
+
+        // Track time spent
+        setInterval(() => {
+            moduleState.timeSpent++;
+        }, 1000);
+
+        // Initialize checklist interactions
+        document.querySelectorAll('.checklist input').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                if (this.checked) {
+                    const label = this.closest('li');
+                    label.style.textDecoration = 'line-through';
+                    label.style.opacity = '0.7';
+                }
+            });
+        });
+
+        // Keyboard accessibility for vocabulary cards
+        document.querySelectorAll('.vocab-card').forEach(card => {
+            card.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    toggleVocab(this);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
