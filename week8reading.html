@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AlliedRx -- Week 9 Reading Assignments</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        /* === ALLIEDRX BRAND CSS VARIABLES (EXACT MATCH) === */
+        :root {
+            --color-primary: #af4bef; /* Purple - main brand color */
+            --color-primary-soft: #d492ff; /* Light purple */
+            --color-accent: #8380f0; /* Blue-purple accent */
+            --color-success: #00b894; /* Green for correct/success */
+            --color-error: #e17055; /* Red/Orange for errors */
+            --color-warning: #fdcb6e; /* Yellow for warnings */
+            --color-info: #0984e3; /* Blue for info */
+            --color-bg: #f7f5fb; /* Light background */
+            --color-text: #2b2b2b; /* Dark text */
+            --color-muted: #6c6880; /* Muted text */
+            --color-dark: #0c0a18; /* Dark background */
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+            --shadow-card: 0 12px 30px rgba(15, 23, 42, 0.1);
+        }
+
+        /* === REQUIRED ANIMATIONS (EXACT MATCH) === */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        @keyframes checkmarkPop {
+            0% { transform: scale(0); opacity: 0; }
+            70% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* === BASE STYLES === */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(
+                circle at top left,
+                #ffffff 0,
+                #f1ecff 40%,
+                var(--color-bg) 100%
+            );
+            color: var(--color-text);
+            -webkit-text-size-adjust: 100%;
+        }
+        @media (max-width: 600px) {
+            body { padding: 12px; }
+        }
+        @media (max-width: 480px) {
+            body { padding: 0; }
+        }
+
+        /* === MAIN PAGE CONTAINER === */
+        .page {
+            width: 100%;
+            max-width: 1120px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px 30px;
+            display: grid;
+            grid-template-columns: minmax(0, 3.1fr) minmax(0, 2.4fr);
+            gap: 28px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+        @media (max-width: 900px) {
+            .page {
+                grid-template-columns: 1fr;
+                padding: 22px;
+            }
+        }
+        @media (max-width: 480px) {
+            .page {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 18px 14px 22px;
+                gap: 22px;
+            }
+        }
+
+        /* === HEADER WITH WEEK/CHAPTER (EXACT TEMPLATE) === */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+        .brand-logo:hover { transform: scale(1.05); }
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+            animation: pulse 3s infinite;
+        }
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--color-success);
+            flex-shrink: 0;
+            animation: blink 1.5s infinite;
+        }
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+        .badge-mode:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+        @media (max-width: 480px) {
+            .brand-row { flex-direction: column; align-items: flex-start; }
+            .badge-mode { margin-top: 6px; }
+        }
+
+        /* === TYPOGRAPHY === */
+        h1 {
+            font-size: clamp(2rem, 3vw, 2.4rem);
+            line-height: 1.05;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+        .subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 34rem;
+            margin-bottom: 18px;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+        .subtitle strong { color: var(--color-primary); }
+
+        /* === PROGRESS TRACKER (2-STEP) === */
+        .progress-tracker {
+            display: flex;
+            gap: 12px;
+            margin: 20px 0 24px;
+            padding: 12px;
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(12, 10, 24, 0.06);
+        }
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+            opacity: 0.5;
+            transition: all 0.3s ease;
+        }
+        .progress-step.active {
+            opacity: 1;
+        }
+        .step-circle {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--color-primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            box-shadow: 0 8px 20px rgba(175, 75, 239, 0.3);
+        }
+        .step-label {
+            font-size: 0.82rem;
+            text-align: center;
+            color: var(--color-muted);
+            font-weight: 600;
+        }
+        .progress-step.active .step-label {
+            color: var(--color-primary);
+        }
+
+        /* === READING CARDS (2 ACTIVITIES) === */
+        .reading-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 12px;
+        }
+        .reading-card {
+            border-radius: var(--radius-md);
+            padding: 18px 20px;
+            border: 1px solid rgba(15, 23, 42, 0.06);
+            background: linear-gradient(
+                135deg,
+                rgba(175, 75, 239, 0.07),
+                rgba(255, 255, 255, 0.95)
+            );
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 14px;
+            align-items: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        .reading-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.7s ease;
+        }
+        .reading-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--color-primary-soft);
+        }
+        .reading-card:hover::before { left: 100%; }
+        .reading-card.completed {
+            border-color: var(--color-success);
+            background: linear-gradient(
+                135deg,
+                rgba(0, 184, 148, 0.07),
+                rgba(255, 255, 255, 0.95)
+            );
+        }
+        @media (max-width: 600px) {
+            .reading-card {
+                grid-template-columns: 1fr;
+                align-items: flex-start;
+            }
+            .chapter-pill { justify-self: flex-start; }
+            .tag-time { justify-self: flex-start; margin-top: 6px; }
+        }
+
+        .chapter-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px 12px;
+            border-radius: 999px;
+            background: #ffffff;
+            box-shadow: 0 6px 18px rgba(79, 70, 229, 0.16);
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+        .reading-card:hover .chapter-pill {
+            background: var(--color-primary);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .chapter-main {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .chapter-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--color-text);
+            transition: color 0.3s ease;
+        }
+        .reading-card:hover .chapter-title { color: var(--color-primary); }
+        .chapter-text {
+            font-size: 0.86rem;
+            color: var(--color-muted);
+            line-height: 1.5;
+        }
+
+        .tag-time {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            font-size: 0.76rem;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+        .reading-card:hover .tag-time {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        /* === INTERACTIVE CHECKLIST === */
+        .checklist-heading {
+            font-size: 0.86rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-primary);
+            font-weight: 600;
+            margin-top: 24px;
+            margin-bottom: 12px;
+        }
+        .checklist {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-size: 0.86rem;
+            color: var(--color-text);
+        }
+        .checklist li {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            padding: 10px;
+            border-radius: var(--radius-sm);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .checklist li:hover {
+            background: rgba(175, 75, 239, 0.05);
+            transform: translateX(5px);
+        }
+        .checklist li.completed { opacity: 0.8; }
+        .check-dot {
+            width: 22px;
+            height: 22px;
+            border-radius: 6px;
+            border: 2px solid rgba(148, 163, 184, 0.9);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: rgba(148, 163, 184, 0.9);
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+        .checklist li:hover .check-dot { border-color: var(--color-primary); }
+        .checklist li.completed .check-dot {
+            background: var(--color-success);
+            border-color: var(--color-success);
+            color: white;
+        }
+
+        /* === RIGHT COLUMN CONTENT === */
+        .section-tag {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-primary);
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        .side-heading {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--color-text);
+            margin-bottom: 14px;
+        }
+        .side-card {
+            background: rgba(12, 10, 24, 0.94);
+            color: #e5e7eb;
+            border-radius: var(--radius-md);
+            padding: 18px 20px 20px;
+            font-size: 0.9rem;
+            line-height: 1.7;
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.6);
+            margin-bottom: 16px;
+            transition: transform 0.3s ease;
+        }
+        .side-card:hover { transform: translateY(-2px); }
+        .side-card strong { color: #ffffff; }
+        .side-subheading {
+            font-size: 0.86rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: #c4b5fd;
+            font-weight: 600;
+            margin: 16px 0 10px;
+        }
+        .side-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-size: 0.86rem;
+        }
+        .side-list li {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            transition: transform 0.3s ease;
+            padding: 4px 0;
+        }
+        .side-list li:hover { transform: translateX(5px); }
+        .dot {
+            width: 8px;
+            height: 8px;
+            margin-top: 6px;
+            border-radius: 999px;
+            background: var(--color-accent);
+            flex-shrink: 0;
+            animation: pulse 2s infinite;
+        }
+        .side-list li:hover .dot {
+            background: var(--color-primary);
+            transform: scale(1.3);
+        }
+
+        .note-card {
+            margin-top: 14px;
+            border-radius: var(--radius-sm);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            background: rgba(15, 23, 42, 0.75);
+            padding: 14px 16px;
+            font-size: 0.82rem;
+            color: #e5e7eb;
+            transition: all 0.3s ease;
+        }
+        .note-card:hover {
+            border-color: var(--color-primary-soft);
+            background: rgba(15, 23, 42, 0.9);
+        }
+        .note-card strong { color: #fef3c7; }
+
+        /* === ACTION BUTTONS === */
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 24px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 10px 20px;
+            border-radius: var(--radius-sm);
+            border: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #9a3bd6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(175, 75, 239, 0.3);
+        }
+        .btn-secondary {
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-text);
+        }
+        .btn-secondary:hover {
+            background: rgba(12, 10, 24, 0.1);
+            transform: translateY(-2px);
+        }
+        .btn-icon { font-size: 1.1em; }
+
+        /* === COMPLETION CELEBRATION === */
+        .completion-celebration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeIn 0.5s ease;
+        }
+        .celebration-content {
+            background: white;
+            padding: 40px;
+            border-radius: var(--radius-lg);
+            text-align: center;
+            max-width: 500px;
+            animation: fadeInUp 0.5s ease;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+        }
+        .celebration-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+        .celebration-title {
+            font-size: 1.8rem;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+        }
+        .celebration-text {
+            color: var(--color-muted);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        .celebration-btn {
+            padding: 12px 24px;
+            background: var(--color-primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .celebration-btn:hover {
+            background: #9a3bd6;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="week9-reading-heading">
+        <!-- LEFT COLUMN: Reading assignments & checklist -->
+        <section class="column" aria-label="Week 9 reading assignments">
+            <!-- HEADER WITH WEEK/CHAPTER (EXACT TEMPLATE) -->
+            <header class="brand-row">
+                <div class="brand">
+                    <img
+                        src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                        alt="AlliedRx logo"
+                        class="brand-logo"
+                    />
+                    <div class="course-meta">
+                        <span class="course-name">Clinical Medical Assistant • Week 9</span>
+                        <div class="week-label">
+                            <span class="week-label-dot"></span>
+                            <span>Chapter 9 & 19: Pharmacology & Orthopedics</span>
+                        </div>
+                    </div>
+                </div>
+                <span class="badge-mode">Campus &amp; Online</span>
+            </header>
+
+            <h1 id="week9-reading-heading">Week 9 Reading Assignments</h1>
+            <p class="subtitle">
+                This week, you'll master <strong>pharmacology principles</strong> 
+                and <strong>orthopedic medicine</strong> through two comprehensive textbook chapters. 
+                These skills are essential for medication safety and musculoskeletal patient care.
+            </p>
+
+            <!-- PROGRESS TRACKER (2-STEP) -->
+            <div class="progress-tracker">
+                <div class="progress-step active" data-step="1">
+                    <div class="step-circle">1</div>
+                    <div class="step-label">Chapter 9: Pharmacology</div>
+                </div>
+                <div class="progress-step" data-step="2">
+                    <div class="step-circle">2</div>
+                    <div class="step-label">Chapter 19: Orthopedics</div>
+                </div>
+            </div>
+
+            <!-- READING CARDS (2 ACTIVITIES) -->
+            <div class="reading-grid">
+                <!-- Chapter 9: Principles of Pharmacology -->
+                <article class="reading-card" id="chapter9-card" data-chapter="9" tabindex="0" role="button" aria-label="Chapter 9: Principles of Pharmacology">
+                    <div class="chapter-pill">Chapter 9</div>
+                    <div class="chapter-main">
+                        <div class="chapter-title">Principles of Pharmacology</div>
+                        <p class="chapter-text">
+                            Focus on <strong>drug regulation</strong>, 
+                            <strong>medication management</strong>, 
+                            <strong>prescription safety</strong>, 
+                            and <strong>patient education for medication use</strong>. 
+                            Master DEA schedules, drug classifications, and pharmacokinetics.
+                        </p>
+                    </div>
+                    <div class="tag-time" id="chapter9-time">Est. 75–90 min</div>
+                </article>
+
+                <!-- Chapter 19: Assisting in Orthopedic Medicine -->
+                <article class="reading-card" id="chapter19-card" data-chapter="19" tabindex="0" role="button" aria-label="Chapter 19: Assisting in Orthopedic Medicine">
+                    <div class="chapter-pill">Chapter 19</div>
+                    <div class="chapter-main">
+                        <div class="chapter-title">Assisting in Orthopedic Medicine</div>
+                        <p class="chapter-text">
+                            Study <strong>musculoskeletal anatomy</strong>, 
+                            <strong>common fractures & disorders</strong>, 
+                            <strong>orthopedic procedures</strong>, 
+                            <strong>therapeutic modalities</strong>, and 
+                            <strong>assistive device fitting</strong>. 
+                            Learn to differentiate between various joint and spinal disorders.
+                        </p>
+                    </div>
+                    <div class="tag-time" id="chapter19-time">Est. 80–95 min</div>
+                </article>
+            </div>
+
+            <p class="reading-notes">
+                <strong>Textbook:</strong> Kinn's The Medical Assistant, 13th Edition
+            </p>
+
+            <!-- INTERACTIVE CHECKLIST -->
+            <p class="checklist-heading">How to maximize your reading effectiveness</p>
+            <ul class="checklist" id="reading-checklist">
+                <li data-index="0" tabindex="0" role="checkbox" aria-checked="false">
+                    <span class="check-dot">□</span>
+                    <span>Create flashcards for the five DEA schedules of controlled substances with examples of drugs in each category.</span>
+                </li>
+                <li data-index="1" tabindex="0" role="checkbox" aria-checked="false">
+                    <span class="check-dot">□</span>
+                    <span>Practice transcribing a prescription accurately, including all required elements (patient name, drug, dosage, route, etc.).</span>
+                </li>
+                <li data-index="2" tabindex="0" role="checkbox" aria-checked="false">
+                    <span class="check-dot">□</span>
+                    <span>Draw and label the major bones and joints of the musculoskeletal system from Chapter 19 for quick reference.</span>
+                </li>
+                <li data-index="3" tabindex="0" role="checkbox" aria-checked="false">
+                    <span class="check-dot">□</span>
+                    <span>Develop a patient education plan for a patient with osteoporosis, including medication safety and fall prevention strategies.</span>
+                </li>
+                <li data-index="4" tabindex="0" role="checkbox" aria-checked="false">
+                    <span class="check-dot">□</span>
+                    <span>Role-play explaining proper crutch walking techniques to a patient with a fractured tibia, including safety considerations.</span>
+                </li>
+            </ul>
+
+            <!-- ACTION BUTTONS -->
+            <div class="action-buttons">
+                <button class="btn btn-primary" id="mark-all-read" aria-label="Mark all readings and checklist items as completed">
+                    <span class="btn-icon">✓</span>
+                    Mark All as Read
+                </button>
+                <button class="btn btn-secondary" id="reset-progress" aria-label="Reset all progress to start over">
+                    <span class="btn-icon">↺</span>
+                    Reset Progress
+                </button>
+            </div>
+
+            <p class="complete-hint">
+                Once you've completed both chapters and the checklist items, proceed to 
+                the interactive modules for hands-on practice with medication management 
+                and orthopedic clinical skills.
+            </p>
+        </section>
+
+        <!-- RIGHT COLUMN: Clinical application & connections -->
+        <aside class="column" aria-label="Why these readings are important">
+            <p class="section-tag">Clinical Application</p>
+            <h2 class="side-heading">Why Pharmacology + Orthopedics Matter Together</h2>
+            
+            <div class="side-card">
+                <p>
+                    <strong>Chapter 9 (Pharmacology)</strong> teaches you how to 
+                    manage medications safely, understand drug regulations, educate patients 
+                    about medication use, and prevent drug errors—skills essential for all 
+                    clinical specialties, especially orthopedics where pain management is critical.
+                </p>
+                <p>
+                    <strong>Chapter 19 (Orthopedics)</strong> shows you how to 
+                    assist with musculoskeletal care, understand fractures and joint disorders, 
+                    apply therapeutic modalities, and fit assistive devices—critical skills 
+                    for helping patients recover from injuries and manage chronic conditions.
+                </p>
+
+                <p class="side-subheading">Clinical Connections You'll Make:</p>
+                <ul class="side-list">
+                    <li>
+                        <span class="dot"></span>
+                        <span>Pharmacology knowledge (Ch 9) directly applies to orthopedic pain management with NSAIDs, opioids, and muscle relaxants (Ch 19).</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span>Understanding drug side effects (Ch 9) helps when monitoring orthopedic patients on long-term corticosteroid therapy for inflammation (Ch 19).</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span>Medication education skills (Ch 9 Obj 13) are essential when teaching orthopedic patients about proper analgesic use and fall prevention (Ch 19 Obj 17).</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span>Drug interaction knowledge (Ch 9) is crucial for elderly orthopedic patients who may be on multiple medications for comorbidities.</span>
+                    </li>
+                </ul>
+
+                <div class="note-card">
+                    <strong>Clinical Scenarios to Consider:</strong>
+                    <ul style="margin-top: 8px; padding-left: 20px;">
+                        <li><strong>Kathy Augustina (Chapter 9):</strong> Managing medication questions and ensuring safe prescription practices in a busy primary care practice</li>
+                        <li><strong>Kaiwan Tillman (Chapter 19):</strong> Assisting with sports injury treatments and fitting athletes with assistive devices</li>
+                        <li>Educating a post-fracture patient about pain medication timing and potential side effects</li>
+                        <li>Explaining the importance of medication compliance to a rheumatoid arthritis patient starting DMARD therapy</li>
+                    </ul>
+                </div>
+
+                <div class="note-card" style="margin-top: 12px;">
+                    <strong>Key Learning Objectives Integration:</strong>
+                    <ul style="margin-top: 8px; padding-left: 20px;">
+                        <li>Combine DEA regulation knowledge (Ch 9 Obj 2) with orthopedic pain medication management (Ch 19 patient care)</li>
+                        <li>Apply prescription transcription skills (Ch 9 Obj 8) when documenting orthopedic medication orders</li>
+                        <li>Use patient education principles (Ch 9 Obj 13) for teaching about orthopedic medications and therapeutic exercises</li>
+                        <li>Implement legal responsibilities (Ch 9 Obj 14) when assisting with controlled substances in orthopedic procedures</li>
+                    </ul>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <!-- COMPLETION CELEBRATION MODAL -->
+    <div class="completion-celebration" id="celebration-modal" role="dialog" aria-labelledby="celebration-title" aria-modal="true">
+        <div class="celebration-content">
+            <div class="celebration-icon">🎉</div>
+            <h2 class="celebration-title" id="celebration-title">Reading Complete!</h2>
+            <p class="celebration-text">
+                Excellent work completing both Chapter 9 (Pharmacology) and 
+                Chapter 19 (Orthopedics). You've built strong skills in medication safety 
+                and musculoskeletal patient care.
+            </p>
+            <p class="celebration-text">
+                You're now ready for the interactive modules where you'll apply these 
+                concepts in simulated clinical scenarios with Kathy Augustina and Kaiwan Tillman.
+            </p>
+            <button class="celebration-btn" id="close-celebration" aria-label="Close celebration and continue">Continue to Modules</button>
+        </div>
+    </div>
+
+    <script>
+        // === STATE MANAGEMENT (2 ACTIVITIES ONLY) ===
+        const state = {
+            activities: {
+                1: { completed: false, chapter: 9 },
+                2: { completed: false, chapter: 19 }
+            },
+            checklist: [false, false, false, false, false],
+            startedAt: new Date(),
+            timeSpent: 0
+        };
+
+        // === DOM ELEMENTS ===
+        const chapter9Card = document.getElementById('chapter9-card');
+        const chapter19Card = document.getElementById('chapter19-card');
+        const checklistItems = document.querySelectorAll('#reading-checklist li');
+        const progressSteps = document.querySelectorAll('.progress-step');
+        const markAllBtn = document.getElementById('mark-all-read');
+        const resetBtn = document.getElementById('reset-progress');
+        const celebrationModal = document.getElementById('celebration-modal');
+        const closeCelebrationBtn = document.getElementById('close-celebration');
+
+        // === PROGRESS CALCULATION ===
+        function calculateProgress() {
+            const totalItems = 7; // 2 chapters + 5 checklist items
+            let completed = 0;
+            
+            if (state.activities[1].completed) completed++;
+            if (state.activities[2].completed) completed++;
+            state.checklist.forEach(item => { if (item) completed++; });
+            
+            const percentage = Math.round((completed / totalItems) * 100);
+            
+            // Update progress tracker steps
+            if (completed >= 1) {
+                progressSteps[0].classList.add('active');
+                progressSteps[0].querySelector('.step-circle').style.background = 'var(--color-success)';
+            } else {
+                progressSteps[0].classList.remove('active');
+                progressSteps[0].querySelector('.step-circle').style.background = 'var(--color-primary)';
+            }
+            
+            if (completed >= totalItems) {
+                progressSteps[1].classList.add('active');
+                progressSteps[1].querySelector('.step-circle').style.background = 'var(--color-success)';
+                showCelebration();
+            } else if (completed >= 4) {
+                progressSteps[1].classList.add('active');
+                progressSteps[1].querySelector('.step-circle').style.background = 'var(--color-primary)';
+            } else {
+                progressSteps[1].classList.remove('active');
+                progressSteps[1].querySelector('.step-circle').style.background = 'var(--color-primary)';
+            }
+            
+            return percentage;
+        }
+
+        // === TOGGLE CHAPTER COMPLETION ===
+        function toggleChapter(chapter) {
+            const card = chapter === 9 ? chapter9Card : chapter19Card;
+            const isCompleted = chapter === 9 ? state.activities[1].completed : state.activities[2].completed;
+            
+            if (isCompleted) {
+                // Mark as incomplete
+                card.classList.remove('completed');
+                card.setAttribute('aria-label', `Chapter ${chapter}: ${chapter === 9 ? 'Principles of Pharmacology' : 'Assisting in Orthopedic Medicine'}`);
+                
+                if (chapter === 9) {
+                    state.activities[1].completed = false;
+                    document.getElementById('chapter9-time').textContent = 'Est. 75–90 min';
+                } else {
+                    state.activities[2].completed = false;
+                    document.getElementById('chapter19-time').textContent = 'Est. 80–95 min';
+                }
+            } else {
+                // Mark as complete
+                card.classList.add('completed');
+                card.setAttribute('aria-label', `Chapter ${chapter}: Completed`);
+                
+                if (chapter === 9) {
+                    state.activities[1].completed = true;
+                    document.getElementById('chapter9-time').textContent = '✓ Completed';
+                } else {
+                    state.activities[2].completed = true;
+                    document.getElementById('chapter19-time').textContent = '✓ Completed';
+                }
+                
+                // Celebration animation
+                card.style.transform = 'scale(1.05)';
+                card.style.boxShadow = '0 25px 50px rgba(0, 184, 148, 0.25)';
+                setTimeout(() => {
+                    card.style.transform = '';
+                    card.style.boxShadow = '';
+                }, 300);
+            }
+            
+            // Announce to screen readers
+            announceToScreenReader(`Chapter ${chapter} ${isCompleted ? 'marked as not completed' : 'marked as completed'}`);
+            calculateProgress();
+        }
+
+        // === TOGGLE CHECKLIST ITEM ===
+        function toggleChecklistItem(index) {
+            const item = checklistItems[index];
+            const dot = item.querySelector('.check-dot');
+            
+            state.checklist[index] = !state.checklist[index];
+            const isCompleted = state.checklist[index];
+            
+            if (isCompleted) {
+                item.classList.add('completed');
+                item.setAttribute('aria-checked', 'true');
+                dot.textContent = '✓';
+                dot.style.background = 'var(--color-success)';
+                dot.style.borderColor = 'var(--color-success)';
+                dot.style.color = 'white';
+                dot.style.animation = 'checkmarkPop 0.3s ease';
+            } else {
+                item.classList.remove('completed');
+                item.setAttribute('aria-checked', 'false');
+                dot.textContent = '□';
+                dot.style.background = '';
+                dot.style.borderColor = 'rgba(148, 163, 184, 0.9)';
+                dot.style.color = 'rgba(148, 163, 184, 0.9)';
+                dot.style.animation = '';
+            }
+            
+            // Animation
+            item.style.transform = 'translateX(5px)';
+            setTimeout(() => { item.style.transform = ''; }, 200);
+            
+            calculateProgress();
+        }
+
+        // === MARK ALL AS READ ===
+        function markAllAsRead() {
+            // Mark both chapters
+            state.activities[1].completed = true;
+            state.activities[2].completed = true;
+            chapter9Card.classList.add('completed');
+            chapter19Card.classList.add('completed');
+            chapter9Card.setAttribute('aria-label', 'Chapter 9: Completed');
+            chapter19Card.setAttribute('aria-label', 'Chapter 19: Completed');
+            document.getElementById('chapter9-time').textContent = '✓ Completed';
+            document.getElementById('chapter19-time').textContent = '✓ Completed';
+            
+            // Mark all checklist items
+            state.checklist = [true, true, true, true, true];
+            checklistItems.forEach((item, index) => {
+                item.classList.add('completed');
+                item.setAttribute('aria-checked', 'true');
+                const dot = item.querySelector('.check-dot');
+                dot.textContent = '✓';
+                dot.style.background = 'var(--color-success)';
+                dot.style.borderColor = 'var(--color-success)';
+                dot.style.color = 'white';
+                dot.style.animation = 'checkmarkPop 0.3s ease';
+            });
+            
+            // Celebration animations
+            const cards = document.querySelectorAll('.reading-card');
+            cards.forEach((card, i) => {
+                card.style.transform = 'scale(1.05)';
+                card.style.boxShadow = '0 25px 50px rgba(0, 184, 148, 0.25)';
+                setTimeout(() => {
+                    card.style.transform = '';
+                    card.style.boxShadow = '';
+                }, 300 + (i * 100));
+            });
+            
+            announceToScreenReader('All readings and checklist items marked as completed');
+            calculateProgress();
+        }
+
+        // === RESET PROGRESS ===
+        function resetProgress() {
+            // Reset chapters
+            state.activities[1].completed = false;
+            state.activities[2].completed = false;
+            chapter9Card.classList.remove('completed');
+            chapter19Card.classList.remove('completed');
+            chapter9Card.setAttribute('aria-label', 'Chapter 9: Principles of Pharmacology');
+            chapter19Card.setAttribute('aria-label', 'Chapter 19: Assisting in Orthopedic Medicine');
+            document.getElementById('chapter9-time').textContent = 'Est. 75–90 min';
+            document.getElementById('chapter19-time').textContent = 'Est. 80–95 min';
+            
+            // Reset checklist
+            state.checklist = [false, false, false, false, false];
+            checklistItems.forEach((item, index) => {
+                item.classList.remove('completed');
+                item.setAttribute('aria-checked', 'false');
+                const dot = item.querySelector('.check-dot');
+                dot.textContent = '□';
+                dot.style.background = '';
+                dot.style.borderColor = 'rgba(148, 163, 184, 0.9)';
+                dot.style.color = 'rgba(148, 163, 184, 0.9)';
+                dot.style.animation = '';
+            });
+            
+            // Shake animation for visual feedback
+            document.querySelector('.page').style.animation = 'shake 0.5s ease';
+            setTimeout(() => {
+                document.querySelector('.page').style.animation = '';
+            }, 500);
+            
+            announceToScreenReader('All progress has been reset');
+            calculateProgress();
+        }
+
+        // === SHOW CELEBRATION ===
+        function showCelebration() {
+            setTimeout(() => {
+                celebrationModal.style.display = 'flex';
+                celebrationModal.setAttribute('aria-hidden', 'false');
+                document.querySelector('.celebration-btn').focus();
+            }, 800);
+        }
+
+        // === CLOSE CELEBRATION ===
+        function closeCelebration() {
+            celebrationModal.style.display = 'none';
+            celebrationModal.setAttribute('aria-hidden', 'true');
+        }
+
+        // === ACCESSIBILITY: ANNOUNCE TO SCREEN READERS ===
+        function announceToScreenReader(message) {
+            const announcement = document.createElement('div');
+            announcement.setAttribute('aria-live', 'assertive');
+            announcement.setAttribute('aria-atomic', 'true');
+            announcement.style.position = 'absolute';
+            announcement.style.width = '1px';
+            announcement.style.height = '1px';
+            announcement.style.padding = '0';
+            announcement.style.margin = '-1px';
+            announcement.style.overflow = 'hidden';
+            announcement.style.clip = 'rect(0, 0, 0, 0)';
+            announcement.style.whiteSpace = 'nowrap';
+            announcement.style.border = '0';
+            announcement.textContent = message;
+            document.body.appendChild(announcement);
+            setTimeout(() => { document.body.removeChild(announcement); }, 1000);
+        }
+
+        // === EVENT LISTENERS ===
+        document.addEventListener('DOMContentLoaded', function() {
+            // Chapter card interactions
+            chapter9Card.addEventListener('click', () => toggleChapter(9));
+            chapter19Card.addEventListener('click', () => toggleChapter(19));
+            
+            chapter9Card.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    toggleChapter(9);
+                }
+            });
+            chapter19Card.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    toggleChapter(19);
+                }
+            });
+            
+            // Checklist interactions
+            checklistItems.forEach((item, index) => {
+                item.addEventListener('click', () => toggleChecklistItem(index));
+                item.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        toggleChecklistItem(index);
+                    }
+                });
+            });
+            
+            // Button interactions
+            markAllBtn.addEventListener('click', markAllAsRead);
+            resetBtn.addEventListener('click', resetProgress);
+            closeCelebrationBtn.addEventListener('click', closeCelebration);
+            
+            // Close modal when clicking outside
+            celebrationModal.addEventListener('click', (e) => {
+                if (e.target === celebrationModal) {
+                    closeCelebration();
+                }
+            });
+            
+            // Keyboard navigation for modal
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && celebrationModal.style.display === 'flex') {
+                    closeCelebration();
+                }
+            });
+            
+            // Initialize with first checklist item for demo
+            setTimeout(() => {
+                toggleChecklistItem(0);
+            }, 1500);
+            
+            // Scroll animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+            
+            // Observe reading cards
+            const readingCards = document.querySelectorAll('.reading-card');
+            readingCards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                observer.observe(card);
+            });
+            
+            // Observe checklist items with delay
+            checklistItems.forEach((item, index) => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateX(-20px)';
+                item.style.transition = `opacity 0.5s ease ${index * 0.1}s, transform 0.5s ease ${index * 0.1}s`;
+                observer.observe(item);
+            });
+            
+            // Track time spent
+            setInterval(() => {
+                state.timeSpent++;
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
