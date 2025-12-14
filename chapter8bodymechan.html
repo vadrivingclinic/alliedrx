@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AlliedRx – Module 8.2: Positioning & Body Mechanics Clinic</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        /* === ALLIEDRx BRANDING EXACT MATCH === */
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-error: #e17055;
+            --color-warning: #fdcb6e;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
+            --color-dark: #0c0a18;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+            --shadow-card: 0 12px 30px rgba(15, 23, 42, 0.1);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html, body {
+            width: 100%; overflow-x: hidden;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            padding: 24px;
+            background: radial-gradient(circle at top left, #ffffff 0, #f1ecff 40%, var(--color-bg) 100%);
+            color: var(--color-text);
+            line-height: 1.6;
+        }
+
+        @media (max-width: 600px) { body { padding: 12px; } }
+
+        /* === ANIMATIONS === */
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes popIn { 0% { transform: scale(0.9); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+        @keyframes scoreCountUp { from { width: 0%; } to { width: var(--target-width); } }
+
+        /* === LAYOUT === */
+        .page {
+            width: 100%; max-width: 1200px; margin: 0 auto;
+            background: #ffffff; border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft); padding: 28px 30px 32px;
+            position: relative; overflow: hidden; animation: fadeInUp 0.8s ease-out;
+        }
+
+        /* === HEADER === */
+        .brand-row {
+            display: flex; align-items: flex-start; justify-content: space-between;
+            gap: 14px; margin-bottom: 20px; flex-wrap: wrap; width: 100%;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+        .brand { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .brand-logo { height: 40px; width: auto; filter: drop-shadow(0 3px 8px rgba(0,0,0,0.2)); transition: transform 0.3s ease; }
+        .brand-logo:hover { transform: scale(1.05); }
+        .course-meta { display: flex; flex-direction: column; gap: 2px; max-width: 100%; }
+        .course-name { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.16em; color: var(--color-muted); }
+        .week-label {
+            display: inline-flex; align-items: center; gap: 8px; padding: 4px 10px;
+            border-radius: 999px; background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem; color: var(--color-primary);
+        }
+        .badge-mode {
+            padding: 5px 10px; border-radius: 999px; background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08); font-size: 0.74rem; text-transform: uppercase;
+            letter-spacing: 0.14em; color: var(--color-muted); white-space: nowrap;
+        }
+
+        h1 { font-size: clamp(1.8rem, 3vw, 2.2rem); line-height: 1.1; color: var(--color-primary); margin-bottom: 6px; }
+        .module-subtitle { font-size: 0.98rem; color: var(--color-muted); max-width: 600px; margin-bottom: 24px; }
+
+        /* === PROGRESS TRACKER === */
+        .progress-tracker {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 30px; position: relative; padding: 0 20px;
+        }
+        .progress-tracker::before {
+            content: ''; position: absolute; top: 15px; left: 50px; right: 50px;
+            height: 3px; background: rgba(12, 10, 24, 0.08); z-index: 1;
+        }
+        .progress-step {
+            display: flex; flex-direction: column; align-items: center; position: relative; z-index: 2; flex: 1;
+        }
+        .step-circle {
+            width: 30px; height: 30px; border-radius: 50%; background: white;
+            border: 2px solid rgba(12, 10, 24, 0.1); display: flex; align-items: center;
+            justify-content: center; font-size: 0.85rem; font-weight: 600; color: var(--color-muted);
+            margin-bottom: 8px; transition: all 0.3s ease;
+        }
+        .progress-step.active .step-circle {
+            background: var(--color-primary); border-color: var(--color-primary); color: white; transform: scale(1.1);
+        }
+        .progress-step.completed .step-circle {
+            background: var(--color-success); border-color: var(--color-success); color: white;
+        }
+        .step-label { font-size: 0.75rem; color: var(--color-muted); text-align: center; font-weight: 500; }
+        .progress-step.active .step-label { color: var(--color-primary); font-weight: 600; }
+
+        /* === SUMMARY CARDS === */
+        .progress-summary {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;
+            margin-bottom: 30px; animation: fadeInUp 0.6s ease-out 0.5s both;
+        }
+        .summary-card {
+            background: rgba(12, 10, 24, 0.02); border-radius: var(--radius-md); padding: 16px;
+            border: 1px solid rgba(12, 10, 24, 0.06); text-align: center;
+        }
+        .summary-number {
+            font-size: 1.8rem; font-weight: 800; color: var(--color-primary); display: block; line-height: 1; margin-bottom: 4px;
+        }
+        .summary-label { font-size: 0.75rem; color: var(--color-muted); text-transform: uppercase; letter-spacing: 0.1em; }
+
+        /* === ACTIVITY CARDS === */
+        .activity-grid { display: grid; grid-template-columns: 1fr; gap: 25px; margin-bottom: 30px; }
+        .activity-card {
+            background: white; border-radius: var(--radius-md); border: 1px solid rgba(12, 10, 24, 0.08);
+            padding: 25px; transition: all 0.3s ease; position: relative; overflow: hidden;
+            animation: fadeInUp 0.6s ease-out;
+        }
+        .activity-card:hover {
+            transform: translateY(-4px); box-shadow: var(--shadow-hover); border-color: var(--color-primary-soft);
+        }
+        .activity-card.completed { border-color: var(--color-success); }
+        .activity-card.completed::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%;
+            background: var(--color-success); opacity: 1;
+        }
+
+        .activity-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
+        .activity-number {
+            font-size: 0.8rem; font-weight: 700; color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.1); padding: 4px 10px; border-radius: 20px;
+        }
+        .activity-status {
+            font-size: 0.75rem; padding: 3px 8px; border-radius: 12px;
+            background: rgba(12, 10, 24, 0.06); color: var(--color-muted);
+        }
+        .activity-card.completed .activity-status { background: rgba(0, 184, 148, 0.1); color: var(--color-success); }
+        .activity-title { font-size: 1.2rem; font-weight: 700; color: var(--color-text); margin-bottom: 10px; }
+        .activity-description { font-size: 0.95rem; color: var(--color-muted); margin-bottom: 20px; }
+
+        /* === ACTIVITY 1: POSITIONING STYLES === */
+        .positioning-container {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+        }
+        .position-pool {
+            background: rgba(12, 10, 24, 0.02); border-radius: var(--radius-sm);
+            padding: 20px; border: 1px solid rgba(12, 10, 24, 0.08); display: flex; flex-direction: column; gap: 10px;
+        }
+        .draggable-item {
+            background: white; border: 2px solid var(--color-accent); border-radius: var(--radius-sm);
+            padding: 12px; font-size: 0.9rem; cursor: grab; text-align: left; font-weight: 600;
+            transition: all 0.2s; user-select: none; display: flex; justify-content: space-between;
+        }
+        .draggable-item:hover { background: rgba(131, 128, 240, 0.1); transform: translateY(-2px); }
+        .draggable-item.dragging { opacity: 0.5; }
+        .draggable-item.placed { opacity: 0.5; cursor: default; background: rgba(0, 184, 148, 0.1); border-color: var(--color-success); }
+
+        .drop-zones-grid {
+            display: grid; grid-template-columns: 1fr; gap: 15px;
+        }
+        .drop-zone {
+            background: white; border: 2px dashed rgba(12, 10, 24, 0.1); border-radius: var(--radius-sm);
+            padding: 15px; min-height: 80px; display: flex; flex-direction: column; justify-content: center;
+            transition: all 0.3s ease;
+        }
+        .drop-zone.hover { border-color: var(--color-primary); background: rgba(175, 75, 239, 0.05); }
+        .drop-zone.filled { border: 2px solid var(--color-success); background: rgba(0, 184, 148, 0.05); }
+        
+        .zone-label { font-size: 0.75rem; color: var(--color-muted); text-transform: uppercase; font-weight: 700; margin-bottom: 4px; }
+        .zone-desc { font-size: 0.9rem; color: var(--color-text); line-height: 1.4; }
+        .zone-answer {
+            margin-top: 8px; padding: 6px; background: var(--color-success); color: white;
+            border-radius: 4px; text-align: center; font-size: 0.8rem; font-weight: 600; display: none;
+        }
+
+        /* === ACTIVITY 2: BODY MECHANICS STYLES (FIXED) === */
+        .mechanics-container {
+            background: rgba(12, 10, 24, 0.02); border-radius: var(--radius-sm);
+            padding: 25px; border: 1px solid rgba(12, 10, 24, 0.08);
+        }
+        .sim-step { display: none; animation: popIn 0.4s ease; }
+        .sim-step.active { display: block; }
+        .sim-prompt { font-size: 1.05rem; font-weight: 600; color: var(--color-text); margin-bottom: 20px; }
+        .sim-options { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .sim-option {
+            background: white; border: 2px solid transparent; border-radius: var(--radius-sm);
+            padding: 20px; cursor: pointer; transition: all 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+        .sim-option:hover { border-color: var(--color-primary); transform: translateY(-3px); }
+        .sim-option.correct { border-color: var(--color-success); background: #f0fdf4; }
+        .sim-option.incorrect { border-color: var(--color-error); background: #fff5f5; animation: shake 0.4s ease; }
+        /* Note: No emoji class here anymore, strictly text styling */
+        .option-desc { font-size: 0.95rem; font-weight: 500; color: var(--color-text); }
+
+        /* === FEEDBACK & RESULTS === */
+        .feedback-details {
+            margin-top: 25px; padding: 25px; background: #f0fdf4; border-radius: var(--radius-sm);
+            border: 2px solid var(--color-success); box-shadow: 0 4px 15px rgba(0, 184, 148, 0.2);
+            display: none; animation: popIn 0.5s ease;
+        }
+        .feedback-details.show { display: block; }
+        .feedback-title {
+            font-weight: 800; color: var(--color-success); margin-bottom: 15px; font-size: 1.1rem;
+            display: flex; align-items: center; gap: 10px; text-transform: uppercase; letter-spacing: 0.05em;
+        }
+        .feedback-content { font-size: 0.95rem; color: var(--color-text); line-height: 1.6; }
+
+        .clinical-tip {
+            background: rgba(253, 203, 110, 0.1); border-left: 4px solid var(--color-warning);
+            padding: 15px; margin: 20px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+        }
+        .tip-title { font-weight: 700; color: var(--color-warning); margin-bottom: 5px; display: flex; align-items: center; gap: 5px; }
+
+        /* High-Detail Results Panel Styles */
+        .results-panel {
+            background: var(--color-dark); color: white; border-radius: var(--radius-md);
+            padding: 30px; margin-top: 40px; display: none; animation: fadeInUp 0.6s ease;
+        }
+        .results-panel.show { display: block; }
+        .results-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .results-title { font-size: 1.3rem; font-weight: 700; color: white; }
+        .score-display { font-size: 2.5rem; font-weight: 800; color: var(--color-primary-soft); text-align: center; margin: 20px 0; }
+        .score-bar {
+            width: 100%; height: 12px; background: rgba(255, 255, 255, 0.1); border-radius: 6px; overflow: hidden; margin: 20px 0;
+        }
+        .score-fill {
+            height: 100%; background: linear-gradient(90deg, var(--color-primary), var(--color-success)); width: 0%; transition: width 1.5s ease-in-out;
+        }
+        
+        .results-section-title {
+            color: var(--color-primary-soft); font-size: 1rem; font-weight: 700; 
+            margin: 25px 0 15px 0; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px;
+        }
+        .insights-list li { margin-bottom: 15px; display: flex; gap: 12px; font-size: 0.95rem; color: #e5e7eb; align-items: flex-start; line-height: 1.5; }
+        .insights-list strong { color: white; font-weight: 600; margin-right: 5px; }
+        .insight-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--color-accent); margin-top: 9px; flex-shrink: 0; }
+
+        /* === BUTTONS === */
+        .action-buttons { display: flex; gap: 12px; margin-top: 30px; flex-wrap: wrap; }
+        .btn {
+            padding: 12px 24px; border-radius: var(--radius-md); border: none; font-size: 0.9rem;
+            font-weight: 600; cursor: pointer; transition: all 0.3s ease; display: inline-flex;
+            align-items: center; gap: 8px;
+        }
+        .btn-primary { background: var(--color-primary); color: white; }
+        .btn-primary:hover { background: #9a3bd6; transform: translateY(-2px); }
+        .btn-secondary { background: rgba(12, 10, 24, 0.06); color: var(--color-text); }
+        .btn-secondary:hover { background: rgba(12, 10, 24, 0.1); transform: translateY(-2px); }
+
+        @media (max-width: 768px) {
+            .positioning-container, .sim-options, .progress-summary { grid-template-columns: 1fr; }
+            .btn { width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+<main class="page" aria-labelledby="module-heading">
+    <header class="brand-row">
+        <div class="brand">
+            <img src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png" alt="AlliedRx logo" class="brand-logo" />
+            <div class="course-meta">
+                <span class="course-name">Clinical Medical Assistant • Kinn's Chapter 8</span>
+                <div class="week-label">
+                    <span class="week-label-dot"></span>
+                    <span>Module 8.2: Positioning & Body Mechanics</span>
+                </div>
+            </div>
+        </div>
+        <span class="badge-mode">Campus & Online</span>
+    </header>
+
+    <h1 id="module-heading">Positioning & Body Mechanics Clinic</h1>
+    <p class="module-subtitle">
+        Join Felicia Grand, CMA (AAMA), to master patient positioning for various exams and ensure provider safety through proper body mechanics principles.
+    </p>
+
+    <div class="progress-tracker">
+        <div class="progress-step active" data-step="1">
+            <div class="step-circle">1</div>
+            <div class="step-label">Positioning Match</div>
+        </div>
+        <div class="progress-step" data-step="2">
+            <div class="step-circle">2</div>
+            <div class="step-label">Safety Challenge</div>
+        </div>
+    </div>
+
+    <div class="progress-summary">
+        <div class="summary-card">
+            <span class="summary-number" id="completed-count">0</span>
+            <span class="summary-label">Activities Completed</span>
+        </div>
+        <div class="summary-card">
+            <span class="summary-number" id="accuracy-rate">0%</span>
+            <span class="summary-label">Current Accuracy</span>
+        </div>
+        <div class="summary-card">
+            <span class="summary-number" id="time-spent">0:00</span>
+            <span class="summary-label">Time Spent</span>
+        </div>
+    </div>
+
+    <div class="activity-grid">
+        
+        <section class="activity-card" id="activity-1" data-activity="1">
+            <div class="activity-header">
+                <span class="activity-number">Activity 1</span>
+                <span class="activity-status">Not Started</span>
+            </div>
+            <h3 class="activity-title">🛌 Patient Positioning Pro</h3>
+            <p class="activity-description">Match the exam position to its correct clinical indication. Drag the position name to the matching description card.</p>
+            
+            <div class="positioning-container">
+                <div class="position-pool">
+                    <div style="font-size:0.8rem; color:var(--color-primary); font-weight:700; text-align:center; margin-bottom:10px;">POSITIONS</div>
+                    <div class="draggable-item" draggable="true" data-position="Lithotomy">Lithotomy (Stirrups)</div>
+                    <div class="draggable-item" draggable="true" data-position="Supine">Supine (Flat)</div>
+                    <div class="draggable-item" draggable="true" data-position="Fowlers">Fowler's (90° Sit)</div>
+                    <div class="draggable-item" draggable="true" data-position="Prone">Prone (Stomach)</div>
+                    <div class="draggable-item" draggable="true" data-position="Sims">Sims (Lateral)</div>
+                    <div class="draggable-item" draggable="true" data-position="Trendelenburg">Trendelenburg (Shock)</div>
+                </div>
+                <div class="drop-zones-grid">
+                    <div class="drop-zone" data-accept="Lithotomy">
+                        <div class="zone-label">GYN / Pap Smear</div>
+                        <div class="zone-desc">Patient on back, legs flexed in stirrups. Used for vaginal examinations.</div>
+                        <div class="zone-answer"></div>
+                    </div>
+                    <div class="drop-zone" data-accept="Supine">
+                        <div class="zone-label">Abdominal / Breast</div>
+                        <div class="zone-desc">Patient lies flat on back with arms at sides. Used to palpate organs.</div>
+                        <div class="zone-answer"></div>
+                    </div>
+                    <div class="drop-zone" data-accept="Fowlers">
+                        <div class="zone-label">Respiratory Distress</div>
+                        <div class="zone-desc">Patient sits at 90-degree angle. Improves breathing for asthma/COPD.</div>
+                        <div class="zone-answer"></div>
+                    </div>
+                    <div class="drop-zone" data-accept="Prone">
+                        <div class="zone-label">Back / Spine</div>
+                        <div class="zone-desc">Patient lies on stomach, head turned to side. Used to inspect posterior trunk.</div>
+                        <div class="zone-answer"></div>
+                    </div>
+                    <div class="drop-zone" data-accept="Sims">
+                        <div class="zone-label">Rectal / Enema</div>
+                        <div class="zone-desc">Patient on left side, right knee flexed. Used for rectal temps and exams.</div>
+                        <div class="zone-answer"></div>
+                    </div>
+                    <div class="drop-zone" data-accept="Trendelenburg">
+                        <div class="zone-label">Shock / Syncope</div>
+                        <div class="zone-desc">Head lower than feet. Used to treat severe hypotension or shock.</div>
+                        <div class="zone-answer"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feedback-details" id="feedback-1">
+                <div class="feedback-title">✓ Positioning Mastered!</div>
+                <div class="feedback-content">
+                    <strong>Clinical Context:</strong><br>
+                    • <strong>Lithotomy:</strong> Most embarrassing for patients; drape extensively and only position immediately before exam.<br>
+                    • <strong>Fowler's:</strong> Essential for COPD patients who cannot breathe while lying flat (orthopnea).<br>
+                    • <strong>Sims:</strong> Gravity aids enema administration in this position.<br>
+                    • <strong>Safety:</strong> Never leave a patient unattended in Trendelenburg or Lithotomy due to fall risk.
+                </div>
+            </div>
+        </section>
+
+        <section class="activity-card" id="activity-2" data-activity="2">
+            <div class="activity-header">
+                <span class="activity-number">Activity 2</span>
+                <span class="activity-status">Not Started</span>
+            </div>
+            <h3 class="activity-title">🏋️ Body Mechanics Challenge</h3>
+            <p class="activity-description">Navigate these workplace scenarios by choosing the safest ergonomic action. Prevent injury to yourself and the patient.</p>
+            
+            <div class="mechanics-container">
+                <div class="sim-step active" id="sim-1">
+                    <div class="sim-prompt"><strong>Scenario 1: Lifting.</strong> You need to move a heavy box of saline (30 lbs) from the floor to the counter.</div>
+                    <div class="sim-options">
+                        <div class="sim-option" onclick="checkSim(1, false, this)">
+                            <div class="option-desc">Bend at the waist, keep legs straight, and lift using back muscles.</div>
+                        </div>
+                        <div class="sim-option" onclick="checkSim(1, true, this)">
+                            <div class="option-desc">Squat close to the load, keep back straight, and lift with your legs.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sim-step" id="sim-2">
+                    <div class="sim-prompt"><strong>Scenario 2: Pivoting.</strong> You are holding a tray and need to place it on a side counter behind you.</div>
+                    <div class="sim-options">
+                        <div class="sim-option" onclick="checkSim(2, true, this)">
+                            <div class="option-desc">Pivot your feet toward the counter, ensuring your body stays aligned.</div>
+                        </div>
+                        <div class="sim-option" onclick="checkSim(2, false, this)">
+                            <div class="option-desc">Keep your feet planted and twist your torso to reach the counter.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sim-step" id="sim-3">
+                    <div class="sim-prompt"><strong>Scenario 3: Transfer.</strong> A patient is heavier than expected and needs help moving to the table.</div>
+                    <div class="sim-options">
+                        <div class="sim-option" onclick="checkSim(3, false, this)">
+                            <div class="option-desc">Try to lift them quickly yourself to stay on schedule.</div>
+                        </div>
+                        <div class="sim-option" onclick="checkSim(3, true, this)">
+                            <div class="option-desc">Stop and ask a colleague for assistance or use a mechanical lift.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feedback-details" id="feedback-2">
+                <div class="feedback-title">✓ Safety Protocols Verified!</div>
+                <div class="feedback-content">
+                    <strong>Ergonomic Principles:</strong><br>
+                    • <strong>Lift with Legs:</strong> Your quadriceps are the strongest muscles; protect your lumbar spine.<br>
+                    • <strong>Pivot, Don't Twist:</strong> Twisting under load is the #1 cause of intervertebral disc injury.<br>
+                    • <strong>Get Help:</strong> "Heroic" lifting often ends in injury. Asking for help is a sign of professionalism.
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <div class="action-buttons">
+        <button class="btn btn-secondary" id="reset-all-btn">
+            ↻ Reset Module
+        </button>
+        <button class="btn btn-secondary" id="check-answers-btn">
+            ✓ Check All Answers
+        </button>
+        <button class="btn btn-primary" id="view-results-btn">
+            📊 View Final Results
+        </button>
+    </div>
+
+    <div class="results-panel" id="results-panel">
+        <div class="results-header">
+            <h2 class="results-title">Module 8.2 Results</h2>
+            <div class="score-display" id="final-score">0%</div>
+        </div>
+        <div class="score-bar"><div class="score-fill" id="score-fill"></div></div>
+        
+        <div class="clinical-insights">
+            <h3 class="results-section-title">🩺 Clinical Proficiency Insights</h3>
+            <ul class="insights-list">
+                <li>
+                    <span class="insight-dot"></span>
+                    <span><strong>Patient Dignity:</strong> Positioning involves vulnerability. Always minimize exposure time and use drapes effectively before asking a patient to assume positions like Lithotomy or Knee-Chest.</span>
+                </li>
+                <li>
+                    <span class="insight-dot"></span>
+                    <span><strong>Safety Mechanics:</strong> The #1 cause of career-ending injury for Medical Assistants is improper lifting. Never twist the spine while under load; pivot feet instead.</span>
+                </li>
+                <li>
+                    <span class="insight-dot"></span>
+                    <span><strong>Respiratory Support:</strong> Recognizing when to place a patient in High Fowler's (90°) can be life-saving for patients experiencing orthopnea or acute respiratory distress.</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="clinical-insights" style="margin-top:20px;">
+            <h3 class="results-section-title">📋 Key Learning Points</h3>
+            <ul class="insights-list">
+                <li>
+                    <span class="insight-dot"></span>
+                    <span><strong>Sims Position:</strong> Left lateral lie allows gravity to aid in rectal exams and enema administration.</span>
+                </li>
+                <li>
+                    <span class="insight-dot"></span>
+                    <span><strong>Center of Gravity:</strong> Keep heavy loads close to the body to maintain balance and reduce spinal torque.</span>
+                </li>
+                <li>
+                    <span class="insight-dot"></span>
+                    <span><strong>Trendelenburg:</strong> Used primarily for shock/hypotension to facilitate blood flow to the brain; rarely used for routine exams.</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- STATE ---
+        const state = {
+            activities: {
+                1: { completed: false, correct: 0, total: 6, score: 0 },
+                2: { completed: false, correct: 0, total: 3, score: 0 }
+            },
+            startedAt: new Date(),
+            timeSpent: 0
+        };
+
+        // --- DOM ELEMENTS ---
+        const els = {
+            completedCount: document.getElementById('completed-count'),
+            accuracyRate: document.getElementById('accuracy-rate'),
+            timeSpent: document.getElementById('time-spent'),
+            resultsPanel: document.getElementById('results-panel'),
+            finalScore: document.getElementById('final-score'),
+            scoreFill: document.getElementById('score-fill'),
+            progressSteps: document.querySelectorAll('.progress-step'),
+            activityCards: document.querySelectorAll('.activity-card')
+        };
+
+        // --- TIMER ---
+        setInterval(() => {
+            const now = new Date();
+            const diff = Math.floor((now - state.startedAt) / 1000);
+            const m = Math.floor(diff / 60);
+            const s = diff % 60;
+            els.timeSpent.textContent = `${m}:${s.toString().padStart(2, '0')}`;
+        }, 1000);
+
+        // --- PROGRESS UPDATE ---
+        function updateProgress() {
+            let completed = 0;
+            let totalCorrect = 0;
+            let totalItems = 0;
+
+            Object.values(state.activities).forEach(act => {
+                if (act.completed) completed++;
+                totalCorrect += act.correct;
+                totalItems += act.total;
+            });
+
+            els.completedCount.textContent = completed;
+            const accuracy = totalItems > 0 ? Math.round((totalCorrect / totalItems) * 100) : 0;
+            els.accuracyRate.textContent = `${accuracy}%`;
+
+            els.progressSteps.forEach((step, index) => {
+                if (index < completed) {
+                    step.classList.add('completed');
+                    step.classList.remove('active');
+                } else if (index === completed) {
+                    step.classList.add('active');
+                }
+            });
+
+            els.activityCards.forEach((card, index) => {
+                const actId = index + 1;
+                const status = card.querySelector('.activity-status');
+                if (state.activities[actId].completed) {
+                    card.classList.add('completed');
+                    status.textContent = 'Completed';
+                    status.style.color = '#00b894';
+                }
+            });
+        }
+
+        function scrollToFeedback(id) {
+            setTimeout(() => {
+                document.getElementById(`feedback-${id}`).scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 100);
+        }
+
+        // --- ACTIVITY 1: MATCHING ---
+        const draggables = document.querySelectorAll('.draggable-item');
+        const zones = document.querySelectorAll('.drop-zone');
+        let act1Placed = 0;
+
+        draggables.forEach(item => {
+            item.addEventListener('dragstart', e => {
+                e.dataTransfer.setData('text/plain', item.dataset.position);
+                item.classList.add('dragging');
+            });
+            item.addEventListener('dragend', () => item.classList.remove('dragging'));
+        });
+
+        zones.forEach(zone => {
+            zone.addEventListener('dragover', e => {
+                e.preventDefault();
+                if (!zone.classList.contains('filled')) zone.classList.add('hover');
+            });
+            zone.addEventListener('dragleave', () => zone.classList.remove('hover'));
+            zone.addEventListener('drop', e => {
+                e.preventDefault();
+                zone.classList.remove('hover');
+                const position = e.dataTransfer.getData('text/plain');
+
+                if (position === zone.dataset.accept) {
+                    zone.classList.add('filled');
+                    const ans = zone.querySelector('.zone-answer');
+                    ans.textContent = position;
+                    ans.style.display = 'block';
+
+                    const original = document.querySelector(`.draggable-item[data-position="${position}"]`);
+                    if(original) {
+                        original.classList.add('placed');
+                        original.draggable = false;
+                    }
+
+                    act1Placed++;
+                    if(act1Placed === 6) {
+                        state.activities[1].completed = true;
+                        state.activities[1].correct = 6;
+                        state.activities[1].score = 100;
+                        document.getElementById('feedback-1').classList.add('show');
+                        updateProgress();
+                        scrollToFeedback(1);
+                    }
+                } else {
+                    zone.style.borderColor = 'var(--color-error)';
+                    setTimeout(() => zone.style.borderColor = 'rgba(12,10,24,0.1)', 500);
+                }
+            });
+        });
+
+        // --- ACTIVITY 2: SIMULATOR ---
+        window.checkSim = function(step, isCorrect, btn) {
+            const parent = document.getElementById(`sim-${step}`);
+            if (parent.dataset.answered) return;
+
+            parent.querySelectorAll('.sim-option').forEach(b => b.style.opacity = '0.6');
+            btn.style.opacity = '1';
+
+            if (isCorrect) {
+                btn.classList.add('correct');
+                parent.dataset.answered = "true";
+                state.activities[2].correct++;
+
+                setTimeout(() => {
+                    parent.style.display = 'none';
+                    const next = document.getElementById(`sim-${step + 1}`);
+                    if (next) {
+                        next.classList.add('active');
+                    } else {
+                        // All scenarios done
+                        state.activities[2].completed = true;
+                        state.activities[2].score = 100;
+                        document.getElementById('feedback-2').classList.add('show');
+                        updateProgress();
+                        scrollToFeedback(2);
+                    }
+                }, 1000);
+            } else {
+                btn.classList.add('incorrect');
+            }
+        };
+
+        // --- BUTTONS ---
+        document.getElementById('reset-all-btn').addEventListener('click', () => location.reload());
+        
+        document.getElementById('check-answers-btn').addEventListener('click', () => {
+            // Auto-solve Activity 1
+            zones.forEach(z => {
+                if(!z.classList.contains('filled')) {
+                    z.classList.add('filled');
+                    z.querySelector('.zone-answer').textContent = z.dataset.accept;
+                    z.querySelector('.zone-answer').style.display = 'block';
+                }
+            });
+            document.querySelectorAll('.draggable-item').forEach(i => i.classList.add('placed'));
+            state.activities[1].completed = true;
+            state.activities[1].score = 100;
+            document.getElementById('feedback-1').classList.add('show');
+
+            // Auto-solve Activity 2
+            state.activities[2].completed = true;
+            state.activities[2].score = 100;
+            document.getElementById('sim-1').style.display = 'none';
+            document.getElementById('sim-2').style.display = 'none';
+            document.getElementById('sim-3').style.display = 'block'; 
+            document.getElementById('feedback-2').classList.add('show');
+            
+            updateProgress();
+        });
+
+        document.getElementById('view-results-btn').addEventListener('click', () => {
+            const totalScore = (state.activities[1].score + state.activities[2].score) / 2;
+            els.finalScore.textContent = `${Math.round(totalScore)}%`;
+            els.scoreFill.style.width = `${totalScore}%`;
+            els.resultsPanel.classList.add('show');
+            els.resultsPanel.scrollIntoView({ behavior: 'smooth' });
+        });
+    });
+</script>
+</body>
+</html>
