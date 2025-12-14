@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AlliedRx – Module 8.3: Physical Exam Procedure Assistant</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        /* === ALLIEDRx BRANDING EXACT MATCH === */
+        :root {
+            --color-primary: #af4bef;        /* Purple */
+            --color-primary-soft: #d492ff;   /* Light purple */
+            --color-accent: #8380f0;         /* Blue-purple accent */
+            --color-success: #00b894;        /* Green */
+            --color-error: #e17055;          /* Red/Orange */
+            --color-warning: #fdcb6e;        /* Yellow */
+            --color-bg: #f7f5fb;             /* Light background */
+            --color-text: #2b2b2b;           /* Dark text */
+            --color-muted: #6c6880;          /* Muted text */
+            --color-dark: #0c0a18;           /* Dark panel */
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+            --shadow-card: 0 12px 30px rgba(15, 23, 42, 0.1);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html, body {
+            width: 100%; overflow-x: hidden;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            padding: 24px;
+            background: radial-gradient(circle at top left, #ffffff 0, #f1ecff 40%, var(--color-bg) 100%);
+            color: var(--color-text);
+            line-height: 1.6;
+        }
+
+        @media (max-width: 600px) { body { padding: 12px; } }
+
+        /* === ANIMATIONS === */
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes popIn { 0% { transform: scale(0.9); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+        @keyframes scoreCountUp { from { width: 0%; } to { width: var(--target-width); } }
+        @keyframes glow { 0%, 100% { box-shadow: 0 0 5px rgba(175, 75, 239, 0.5); } 50% { box-shadow: 0 0 20px rgba(175, 75, 239, 0.8); } }
+
+        /* === LAYOUT === */
+        .page {
+            width: 100%; max-width: 1200px; margin: 0 auto;
+            background: #ffffff; border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft); padding: 28px 30px 32px;
+            position: relative; overflow: hidden; animation: fadeInUp 0.8s ease-out;
+        }
+
+        /* === HEADER === */
+        .brand-row {
+            display: flex; align-items: flex-start; justify-content: space-between;
+            gap: 14px; margin-bottom: 20px; flex-wrap: wrap; width: 100%;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+        .brand { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .brand-logo { height: 40px; width: auto; filter: drop-shadow(0 3px 8px rgba(0,0,0,0.2)); transition: transform 0.3s ease; }
+        .brand-logo:hover { transform: scale(1.05); }
+        .course-meta { display: flex; flex-direction: column; gap: 2px; max-width: 100%; }
+        .course-name { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.16em; color: var(--color-muted); }
+        .week-label {
+            display: inline-flex; align-items: center; gap: 8px; padding: 4px 10px;
+            border-radius: 999px; background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem; color: var(--color-primary);
+        }
+        .badge-mode {
+            padding: 5px 10px; border-radius: 999px; background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08); font-size: 0.74rem; text-transform: uppercase;
+            letter-spacing: 0.14em; color: var(--color-muted); white-space: nowrap;
+        }
+
+        h1 { font-size: clamp(1.8rem, 3vw, 2.2rem); line-height: 1.1; color: var(--color-primary); margin-bottom: 6px; }
+        .module-subtitle { font-size: 0.98rem; color: var(--color-muted); max-width: 600px; margin-bottom: 24px; }
+
+        /* === PROGRESS TRACKER === */
+        .progress-tracker {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 30px; position: relative; padding: 0 20px;
+        }
+        .progress-tracker::before {
+            content: ''; position: absolute; top: 15px; left: 40px; right: 40px;
+            height: 3px; background: rgba(12, 10, 24, 0.08); z-index: 1;
+        }
+        .progress-step {
+            display: flex; flex-direction: column; align-items: center; position: relative; z-index: 2; flex: 1;
+        }
+        .step-circle {
+            width: 30px; height: 30px; border-radius: 50%; background: white;
+            border: 2px solid rgba(12, 10, 24, 0.1); display: flex; align-items: center;
+            justify-content: center; font-size: 0.85rem; font-weight: 600; color: var(--color-muted);
+            margin-bottom: 8px; transition: all 0.3s ease;
+        }
+        .progress-step.active .step-circle {
+            background: var(--color-primary); border-color: var(--color-primary); color: white; transform: scale(1.1);
+        }
+        .progress-step.completed .step-circle {
+            background: var(--color-success); border-color: var(--color-success); color: white;
+        }
+        .step-label { font-size: 0.75rem; color: var(--color-muted); text-align: center; font-weight: 500; }
+        .progress-step.active .step-label { color: var(--color-primary); font-weight: 600; }
+
+        /* === SUMMARY CARDS === */
+        .progress-summary {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;
+            margin-bottom: 30px; animation: fadeInUp 0.6s ease-out 0.5s both;
+        }
+        .summary-card {
+            background: rgba(12, 10, 24, 0.02); border-radius: var(--radius-md); padding: 16px;
+            border: 1px solid rgba(12, 10, 24, 0.06); text-align: center;
+        }
+        .summary-number {
+            font-size: 1.8rem; font-weight: 800; color: var(--color-primary); display: block; line-height: 1; margin-bottom: 4px;
+        }
+        .summary-label { font-size: 0.75rem; color: var(--color-muted); text-transform: uppercase; letter-spacing: 0.1em; }
+
+        /* === ACTIVITY CARDS === */
+        .activity-grid { display: grid; grid-template-columns: 1fr; gap: 25px; margin-bottom: 30px; }
+        .activity-card {
+            background: white; border-radius: var(--radius-md); border: 1px solid rgba(12, 10, 24, 0.08);
+            padding: 25px; transition: all 0.3s ease; position: relative; overflow: hidden;
+            animation: fadeInUp 0.6s ease-out;
+        }
+        .activity-card:hover {
+            transform: translateY(-4px); box-shadow: var(--shadow-hover); border-color: var(--color-primary-soft);
+        }
+        .activity-card.completed { border-color: var(--color-success); }
+        .activity-card.completed::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%;
+            background: var(--color-success); opacity: 1;
+        }
+
+        .activity-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
+        .activity-number {
+            font-size: 0.8rem; font-weight: 700; color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.1); padding: 4px 10px; border-radius: 20px;
+        }
+        .activity-status {
+            font-size: 0.75rem; padding: 3px 8px; border-radius: 12px;
+            background: rgba(12, 10, 24, 0.06); color: var(--color-muted);
+        }
+        .activity-card.completed .activity-status { background: rgba(0, 184, 148, 0.1); color: var(--color-success); }
+        .activity-title { font-size: 1.2rem; font-weight: 700; color: var(--color-text); margin-bottom: 10px; }
+        .activity-description { font-size: 0.95rem; color: var(--color-muted); margin-bottom: 20px; }
+
+        /* === ACTIVITY 1: SEQUENCE STYLES === */
+        .sequence-container {
+            display: grid; grid-template-columns: 1fr 2fr; gap: 20px;
+        }
+        .steps-bank {
+            background: rgba(12, 10, 24, 0.02); border-radius: var(--radius-sm);
+            padding: 20px; border: 1px solid rgba(12, 10, 24, 0.08); display: flex; flex-direction: column; gap: 10px;
+        }
+        .draggable-step {
+            background: white; border: 2px solid var(--color-accent); border-radius: var(--radius-sm);
+            padding: 12px; font-size: 0.9rem; cursor: grab; text-align: left; font-weight: 600;
+            transition: all 0.2s; user-select: none; display: flex; align-items: center; gap: 10px;
+        }
+        .draggable-step:hover { background: rgba(131, 128, 240, 0.1); transform: translateY(-2px); }
+        .draggable-step.dragging { opacity: 0.5; }
+        .draggable-step.placed { opacity: 0.5; cursor: default; background: rgba(0, 184, 148, 0.1); border-color: var(--color-success); }
+        .step-icon { font-size: 1.2rem; min-width: 30px; text-align: center; }
+
+        .sequence-slots {
+            display: flex; flex-direction: column; gap: 15px;
+        }
+        .sequence-slot {
+            background: white; border: 2px dashed rgba(12, 10, 24, 0.1); border-radius: var(--radius-sm);
+            padding: 15px; min-height: 65px; display: flex; align-items: center; gap: 15px;
+            transition: all 0.3s ease;
+        }
+        .sequence-slot.hover { border-color: var(--color-primary); background: rgba(175, 75, 239, 0.05); }
+        .sequence-slot.filled { border: 2px solid var(--color-success); background: rgba(0, 184, 148, 0.05); }
+        
+        .slot-number {
+            width: 28px; height: 28px; border-radius: 50%; background: var(--color-primary); color: white;
+            font-size: 0.8rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .sequence-slot.filled .slot-number { background: var(--color-success); }
+        .slot-placeholder { font-size: 0.85rem; color: var(--color-muted); font-style: italic; }
+        .slot-content { font-size: 0.9rem; color: var(--color-text); font-weight: 600; }
+
+        /* === ACTIVITY 2: ETHICS NAVIGATOR STYLES === */
+        .scenario-box {
+            background: rgba(12, 10, 24, 0.02); border-radius: var(--radius-sm); padding: 25px;
+            border: 1px solid rgba(12, 10, 24, 0.08); margin-bottom: 20px;
+            display: none; animation: popIn 0.4s ease;
+        }
+        .scenario-box.active { display: block; }
+        .scenario-header { display: flex; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px solid #ddd; padding-bottom: 10px; }
+        .scenario-title { font-weight: 700; color: var(--color-primary); }
+        .scenario-text { font-size: 1.05rem; margin-bottom: 20px; color: var(--color-text); line-height: 1.6; }
+        
+        .options-list { display: flex; flex-direction: column; gap: 12px; }
+        .option-btn {
+            background: white; border: 2px solid rgba(12, 10, 24, 0.1); border-radius: var(--radius-sm);
+            padding: 18px; cursor: pointer; transition: all 0.2s; text-align: left;
+            font-size: 0.95rem; font-weight: 500; color: var(--color-text);
+        }
+        .option-btn:hover { border-color: var(--color-primary); transform: translateX(5px); }
+        .option-btn.correct { border-color: var(--color-success); background: #f0fdf4; }
+        .option-btn.incorrect { border-color: var(--color-error); background: #fff5f5; animation: shake 0.4s ease; }
+
+        /* === FEEDBACK & RESULTS === */
+        .feedback-details {
+            margin-top: 25px; padding: 25px; background: #f0fdf4; border-radius: var(--radius-sm);
+            border: 2px solid var(--color-success); box-shadow: 0 4px 15px rgba(0, 184, 148, 0.2);
+            display: none; animation: popIn 0.5s ease;
+        }
+        .feedback-details.show { display: block; }
+        .feedback-title {
+            font-weight: 800; color: var(--color-success); margin-bottom: 15px; font-size: 1.1rem;
+            display: flex; align-items: center; gap: 10px; text-transform: uppercase; letter-spacing: 0.05em;
+        }
+        .feedback-content { font-size: 0.95rem; color: var(--color-text); line-height: 1.6; }
+
+        /* High-Detail Results Panel */
+        .results-panel {
+            background: var(--color-dark); color: white; border-radius: var(--radius-md);
+            padding: 30px; margin-top: 40px; display: none; animation: fadeInUp 0.6s ease;
+        }
+        .results-panel.show { display: block; }
+        .results-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .results-title { font-size: 1.3rem; font-weight: 700; color: white; }
+        .score-display { font-size: 2.5rem; font-weight: 800; color: var(--color-primary-soft); text-align: center; margin: 20px 0; }
+        .score-bar {
+            width: 100%; height: 12px; background: rgba(255, 255, 255, 0.1); border-radius: 6px; overflow: hidden; margin: 20px 0;
+        }
+        .score-fill {
+            height: 100%; background: linear-gradient(90deg, var(--color-primary), var(--color-success)); width: 0%; transition: width 1.5s ease-in-out;
+        }
+        
+        .results-section-title {
+            color: var(--color-primary-soft); font-size: 1rem; font-weight: 700; 
+            margin: 25px 0 15px 0; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px;
+        }
+        .insights-list li { margin-bottom: 15px; display: flex; gap: 12px; font-size: 0.95rem; color: #e5e7eb; align-items: flex-start; line-height: 1.5; }
+        .insights-list strong { color: white; font-weight: 600; margin-right: 5px; }
+        .insight-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--color-accent); margin-top: 9px; flex-shrink: 0; }
+
+        /* === BUTTONS === */
+        .action-buttons { display: flex; gap: 12px; margin-top: 30px; flex-wrap: wrap; }
+        .btn {
+            padding: 12px 24px; border-radius: var(--radius-md); border: none; font-size: 0.9rem;
+            font-weight: 600; cursor: pointer; transition: all 0.3s ease; display: inline-flex;
+            align-items: center; gap: 8px;
+        }
+        .btn-primary { background: var(--color-primary); color: white; }
+        .btn-primary:hover { background: #9a3bd6; transform: translateY(-2px); }
+        .btn-secondary { background: rgba(12, 10, 24, 0.06); color: var(--color-text); }
+        .btn-secondary:hover { background: rgba(12, 10, 24, 0.1); transform: translateY(-2px); }
+
+        @media (max-width: 768px) {
+            .sequence-container, .sim-options, .progress-summary { grid-template-columns: 1fr; }
+            .btn { width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+<main class="page" aria-labelledby="module-heading">
+    <header class="brand-row">
+        <div class="brand">
+            <img src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png" alt="AlliedRx logo" class="brand-logo" />
+            <div class="course-meta">
+                <span class="course-name">Clinical Medical Assistant • Kinn's Chapter 8</span>
+                <div class="week-label">
+                    <span class="week-label-dot"></span>
+                    <span>Module 8.3: Procedure Assistant</span>
+                </div>
+            </div>
+        </div>
+        <span class="badge-mode">Campus & Online</span>
+    </header>
+
+    <h1 id="module-heading">Physical Exam Procedure Assistant</h1>
+    <p class="module-subtitle">
+        Join Felicia Grand, CMA (AAMA), to refine clinical competency in exam sequencing and navigate complex patient education and ethical scenarios.
+    </p>
+
+    <div class="progress-tracker">
+        <div class="progress-step active" data-step="1">
+            <div class="step-circle">1</div>
+            <div class="step-label">Exam Sequence</div>
+        </div>
+        <div class="progress-step" data-step="2">
+            <div class="step-circle">2</div>
+            <div class="step-label">Ethics Navigator</div>
+        </div>
+    </div>
+
+    <div class="progress-summary">
+        <div class="summary-card">
+            <span class="summary-number" id="completed-count">0</span>
+            <span class="summary-label">Activities Completed</span>
+        </div>
+        <div class="summary-card">
+            <span class="summary-number" id="accuracy-rate">0%</span>
+            <span class="summary-label">Current Accuracy</span>
+        </div>
+        <div class="summary-card">
+            <span class="summary-number" id="time-spent">0:00</span>
+            <span class="summary-label">Time Spent</span>
+        </div>
+    </div>
+
+    <div class="activity-grid">
+        
+        <section class="activity-card" id="activity-1" data-activity="1">
+            <div class="activity-header">
+                <span class="activity-number">Activity 1</span>
+                <span class="activity-status">Not Started</span>
+            </div>
+            <h3 class="activity-title">🩺 Exam Sequence Simulator</h3>
+            <p class="activity-description">Arranging the physical exam steps in the correct standard order (IPPA) ensures efficiency and accuracy. Drag the techniques to their correct numbered position.</p>
+            
+            <div class="sequence-container">
+                <div class="steps-bank">
+                    <div style="font-size:0.8rem; color:var(--color-primary); font-weight:700; text-align:center; margin-bottom:10px;">TECHNIQUES</div>
+                    <div class="draggable-step" draggable="true" data-step="Auscultation"><span class="step-icon">🔊</span> Auscultation</div>
+                    <div class="draggable-step" draggable="true" data-step="Inspection"><span class="step-icon">👁️</span> Inspection</div>
+                    <div class="draggable-step" draggable="true" data-step="Percussion"><span class="step-icon">🥁</span> Percussion</div>
+                    <div class="draggable-step" draggable="true" data-step="Palpation"><span class="step-icon">✋</span> Palpation</div>
+                </div>
+                <div class="sequence-slots">
+                    <div class="sequence-slot" data-order="1">
+                        <div class="slot-number">1</div>
+                        <div class="slot-placeholder">Drop Step 1 Here</div>
+                        <div class="slot-content"></div>
+                    </div>
+                    <div class="sequence-slot" data-order="2">
+                        <div class="slot-number">2</div>
+                        <div class="slot-placeholder">Drop Step 2 Here</div>
+                        <div class="slot-content"></div>
+                    </div>
+                    <div class="sequence-slot" data-order="3">
+                        <div class="slot-number">3</div>
+                        <div class="slot-placeholder">Drop Step 3 Here</div>
+                        <div class="slot-content"></div>
+                    </div>
+                    <div class="sequence-slot" data-order="4">
+                        <div class="slot-number">4</div>
+                        <div class="slot-placeholder">Drop Step 4 Here</div>
+                        <div class="slot-content"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feedback-details" id="feedback-1">
+                <div class="feedback-title">✓ Sequence Verified!</div>
+                <div class="feedback-content">
+                    <strong>Standard Order (IPPA):</strong><br>
+                    1. <strong>Inspection:</strong> Always look first. Observation yields 90% of the diagnosis.<br>
+                    2. <strong>Palpation:</strong> Touch follows observation to confirm findings.<br>
+                    3. <strong>Percussion:</strong> Tapping assesses density of underlying structures.<br>
+                    4. <strong>Auscultation:</strong> Listening is generally last.<br><br>
+                    <strong>🚨 Clinical Alert (Abdominal Exception):</strong> For abdominal exams, the order changes to <strong>Inspection, Auscultation, Percussion, Palpation</strong>. [cite_start]You must listen before touching, as palpation can alter bowel sounds[cite: 7].
+                </div>
+            </div>
+        </section>
+
+        <section class="activity-card" id="activity-2" data-activity="2">
+            <div class="activity-header">
+                <span class="activity-number">Activity 2</span>
+                <span class="activity-status">Not Started</span>
+            </div>
+            <h3 class="activity-title">⚖️ Patient Education & Ethics Navigator</h3>
+            <p class="activity-description">Navigate complex clinical scenarios involving patient rights, privacy, and education. Select the most professional response for Felicia.</p>
+            
+            <div class="simulator-container">
+                <div class="scenario-box active" id="scenario-1">
+                    <div class="scenario-header">
+                        <span class="scenario-title">Scenario 1: Modesty & Compliance</span>
+                        <span>1/3</span>
+                    </div>
+                    <div class="scenario-text">
+                        A female patient is scheduled for a breast exam but refuses to remove her bra, stating she feels too exposed. The provider will be in shortly.
+                    </div>
+                    <div class="options-list">
+                        <div class="option-btn" onclick="checkEthics(1, false, this)">Tell her she must remove it or the doctor cannot perform the exam.</div>
+                        <div class="option-btn" onclick="checkEthics(1, true, this)">Validate her concern and offer a gown with the opening in the front, explaining she only needs to uncover one side at a time.</div>
+                        <div class="option-btn" onclick="checkEthics(1, false, this)">Go get the provider immediately to handle the refusal.</div>
+                    </div>
+                </div>
+
+                <div class="scenario-box" id="scenario-2">
+                    <div class="scenario-header">
+                        <span class="scenario-title">Scenario 2: Family & HIPAA</span>
+                        <span>2/3</span>
+                    </div>
+                    <div class="scenario-text">
+                        The patient's adult daughter is in the exam room. The patient asks you, "Did my STD test results come back?"
+                    </div>
+                    <div class="options-list">
+                        <div class="option-btn" onclick="checkEthics(2, false, this)">Answer yes or no since the daughter is present in the room.</div>
+                        <div class="option-btn" onclick="checkEthics(2, true, this)">State that results are available and ask the patient if she would like to discuss them privately or with her daughter present.</div>
+                        <div class="option-btn" onclick="checkEthics(2, false, this)">Ask the daughter to leave the room immediately.</div>
+                    </div>
+                </div>
+
+                <div class="scenario-box" id="scenario-3">
+                    <div class="scenario-header">
+                        <span class="scenario-title">Scenario 3: Chaperone Duties</span>
+                        <span>3/3</span>
+                    </div>
+                    <div class="scenario-text">
+                        Dr. Kosto (female) is performing a pelvic exam on a female patient. The patient says, "I don't need a chaperone, I trust the doctor."
+                    </div>
+                    <div class="options-list">
+                        <div class="option-btn" onclick="checkEthics(3, false, this)">Leave the room to respect the patient's wishes.</div>
+                        <div class="option-btn" onclick="checkEthics(3, true, this)">Explain that for the protection of both the patient and provider, it is office policy to have a chaperone present for all sensitive exams.</div>
+                        <div class="option-btn" onclick="checkEthics(3, false, this)">Stay in the room but turn your back to give them privacy.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feedback-details" id="feedback-2">
+                <div class="feedback-title">✓ Ethical Standards Met!</div>
+                <div class="feedback-content">
+                    <strong>Key Takeaways:</strong><br>
+                    • <strong>Modesty:</strong> Always offer alternatives (draping, partial exposure) to increase comfort.<br>
+                    • <strong>Privacy:</strong> Presence does not equal consent. Always verify permission before discussing PHI with family.<br>
+                    • <strong>Chaperones:</strong> Essential for legal protection of all parties during sensitive exams, regardless of patient preference.
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <div class="action-buttons">
+        <button class="btn btn-secondary" id="reset-all-btn">
+            ↻ Reset Module
+        </button>
+        <button class="btn btn-secondary" id="check-answers-btn">
+            ✓ Check All Answers
+        </button>
+        <button class="btn btn-primary" id="view-results-btn">
+            📊 View Final Results
+        </button>
+    </div>
+
+    <div class="results-panel" id="results-panel">
+        <div class="results-header">
+            <h2 class="results-title">Module 8.3 Results</h2>
+            <div class="score-display" id="final-score">0%</div>
+        </div>
+        <div class="score-bar"><div class="score-fill" id="score-fill"></div></div>
+        
+        <div class="clinical-insights">
+            <h3 class="results-section-title">🩺 Clinical Proficiency Insights</h3>
+            <ul class="insights-list">
+                <li>
+                    <span class="insight-dot"></span>
+                    <span><strong>Exam Sequencing:</strong> Mastering the standard IPPA sequence ensures efficiency. Remember the "Abdominal Exception" (Auscultate before Palpate) to avoid creating false bowel sounds.</span>
+                </li>
+                <li>
+                    <span class="insight-dot"></span>
+                    <span><strong>Patient Comfort:</strong> Preserving dignity through proper draping and communication builds trust and reduces patient anxiety during vulnerable moments.</span>
+                </li>
+                <li>
+                    <span class="insight-dot"></span>
+                    <span><strong>Role of the MA:</strong> You are the patient's advocate. If they seem uncomfortable, pause and address their concerns before the provider enters.</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="clinical-insights" style="margin-top:20px;">
+            <h3 class="results-section-title">📋 Key Learning Points</h3>
+            <ul class="insights-list">
+                <li>
+                    <span class="insight-dot"></span>
+                    <span><strong>HIPAA Compliance:</strong> Always verify who is allowed to hear medical information, even with spouses or parents of adult children present.</span>
+                </li>
+                <li>
+                    <span class="insight-dot"></span>
+                    <span><strong>Chaperone Policy:</strong> Standard of care requires a third party for all sensitive examinations (breast, genital, rectal) to protect against liability.</span>
+                </li>
+                <li>
+                    <span class="insight-dot"></span>
+                    <span><strong>Documentation:</strong> "If it wasn't documented, it wasn't done." Record the presence of a chaperone and any patient education provided.</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- STATE ---
+        const state = {
+            activities: {
+                1: { completed: false, correct: 0, total: 4, score: 0 },
+                2: { completed: false, correct: 0, total: 3, score: 0 }
+            },
+            startedAt: new Date(),
+            timeSpent: 0
+        };
+
+        // --- DOM ELEMENTS ---
+        const els = {
+            completedCount: document.getElementById('completed-count'),
+            accuracyRate: document.getElementById('accuracy-rate'),
+            timeSpent: document.getElementById('time-spent'),
+            resultsPanel: document.getElementById('results-panel'),
+            finalScore: document.getElementById('final-score'),
+            scoreFill: document.getElementById('score-fill'),
+            progressSteps: document.querySelectorAll('.progress-step'),
+            activityCards: document.querySelectorAll('.activity-card')
+        };
+
+        // --- TIMER ---
+        setInterval(() => {
+            const now = new Date();
+            const diff = Math.floor((now - state.startedAt) / 1000);
+            const m = Math.floor(diff / 60);
+            const s = diff % 60;
+            els.timeSpent.textContent = `${m}:${s.toString().padStart(2, '0')}`;
+        }, 1000);
+
+        // --- PROGRESS UPDATE ---
+        function updateProgress() {
+            let completed = 0;
+            let totalCorrect = 0;
+            let totalItems = 0;
+
+            Object.values(state.activities).forEach(act => {
+                if (act.completed) completed++;
+                totalCorrect += act.correct;
+                totalItems += act.total;
+            });
+
+            els.completedCount.textContent = completed;
+            const accuracy = totalItems > 0 ? Math.round((totalCorrect / totalItems) * 100) : 0;
+            els.accuracyRate.textContent = `${accuracy}%`;
+
+            els.progressSteps.forEach((step, index) => {
+                if (index < completed) {
+                    step.classList.add('completed');
+                    step.classList.remove('active');
+                } else if (index === completed) {
+                    step.classList.add('active');
+                }
+            });
+
+            els.activityCards.forEach((card, index) => {
+                const actId = index + 1;
+                const status = card.querySelector('.activity-status');
+                if (state.activities[actId].completed) {
+                    card.classList.add('completed');
+                    status.textContent = 'Completed';
+                    status.style.color = '#00b894';
+                }
+            });
+        }
+
+        function scrollToFeedback(id) {
+            setTimeout(() => {
+                document.getElementById(`feedback-${id}`).scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 100);
+        }
+
+        // --- ACTIVITY 1: SEQUENCING ---
+        const draggables = document.querySelectorAll('.draggable-step');
+        const slots = document.querySelectorAll('.sequence-slot');
+        const correctOrder = ['Inspection', 'Palpation', 'Percussion', 'Auscultation'];
+        let placedItems = [];
+
+        draggables.forEach(item => {
+            item.addEventListener('dragstart', e => {
+                e.dataTransfer.setData('text/plain', item.dataset.step);
+                item.classList.add('dragging');
+            });
+            item.addEventListener('dragend', () => item.classList.remove('dragging'));
+        });
+
+        slots.forEach(slot => {
+            slot.addEventListener('dragover', e => {
+                e.preventDefault();
+                if (!slot.classList.contains('filled')) slot.classList.add('hover');
+            });
+            slot.addEventListener('dragleave', () => slot.classList.remove('hover'));
+            slot.addEventListener('drop', e => {
+                e.preventDefault();
+                slot.classList.remove('hover');
+                
+                // Only allow drop in next available slot
+                const slotIndex = parseInt(slot.dataset.order) - 1;
+                if (slotIndex !== placedItems.length) return;
+
+                const stepName = e.dataTransfer.getData('text/plain');
+                if (placedItems.includes(stepName)) return;
+
+                placedItems.push(stepName);
+
+                // Visual Update
+                slot.classList.add('filled');
+                slot.querySelector('.slot-placeholder').style.display = 'none';
+                slot.querySelector('.slot-content').textContent = stepName;
+
+                // Hide original
+                const original = document.querySelector(`.draggable-step[data-step="${stepName}"]`);
+                if(original) {
+                    original.classList.add('placed');
+                    original.draggable = false;
+                }
+
+                // Check Completion
+                if (placedItems.length === 4) {
+                    const isCorrect = JSON.stringify(placedItems) === JSON.stringify(correctOrder);
+                    state.activities[1].completed = true;
+                    state.activities[1].correct = isCorrect ? 4 : 0; 
+                    state.activities[1].score = isCorrect ? 100 : 0;
+                    
+                    document.getElementById('activity-1').classList.add('completed');
+                    document.querySelector('#activity-1 .activity-status').textContent = 'Completed';
+                    document.querySelector('#activity-1 .activity-status').style.color = '#00b894';
+                    
+                    document.getElementById('feedback-1').classList.add('show');
+                    updateProgress();
+                    scrollToFeedback(1);
+                }
+            });
+        });
+
+        // --- ACTIVITY 2: ETHICS NAVIGATOR ---
+        window.checkEthics = function(scenarioNum, isCorrect, btnElement) {
+            const parent = document.getElementById(`scenario-${scenarioNum}`);
+            if (parent.dataset.answered) return;
+
+            // Visual State
+            parent.querySelectorAll('.option-btn').forEach(b => b.style.opacity = '0.6');
+            btnElement.style.opacity = '1';
+
+            if (isCorrect) {
+                btnElement.classList.add('correct');
+                parent.dataset.answered = "true";
+                state.activities[2].correct++;
+
+                setTimeout(() => {
+                    parent.style.display = 'none';
+                    const next = document.getElementById(`scenario-${scenarioNum + 1}`);
+                    if (next) {
+                        next.classList.add('active');
+                    } else {
+                        state.activities[2].completed = true;
+                        state.activities[2].score = 100;
+                        document.getElementById('activity-2').classList.add('completed');
+                        document.querySelector('#activity-2 .activity-status').textContent = 'Completed';
+                        document.querySelector('#activity-2 .activity-status').style.color = '#00b894';
+                        document.getElementById('feedback-2').classList.add('show');
+                        updateProgress();
+                        scrollToFeedback(2);
+                    }
+                }, 1000);
+            } else {
+                btnElement.classList.add('incorrect');
+            }
+        };
+
+        // --- BUTTONS ---
+        document.getElementById('reset-all-btn').addEventListener('click', () => location.reload());
+        
+        document.getElementById('check-answers-btn').addEventListener('click', () => {
+            // Auto-solve Activity 1
+            const correctOrder = ['Inspection', 'Palpation', 'Percussion', 'Auscultation'];
+            slots.forEach((s, i) => {
+                s.classList.add('filled');
+                s.querySelector('.slot-placeholder').style.display = 'none';
+                s.querySelector('.slot-content').textContent = correctOrder[i];
+            });
+            document.querySelectorAll('.draggable-step').forEach(i => i.classList.add('placed'));
+            state.activities[1].completed = true;
+            state.activities[1].score = 100;
+            document.getElementById('feedback-1').classList.add('show');
+
+            // Auto-solve Activity 2
+            state.activities[2].completed = true;
+            state.activities[2].score = 100;
+            document.getElementById('scenario-1').style.display = 'none';
+            document.getElementById('scenario-2').style.display = 'none';
+            document.getElementById('scenario-3').style.display = 'block'; 
+            document.getElementById('feedback-2').classList.add('show');
+            
+            updateProgress();
+        });
+
+        document.getElementById('view-results-btn').addEventListener('click', () => {
+            const totalScore = (state.activities[1].score + state.activities[2].score) / 2;
+            els.finalScore.textContent = `${Math.round(totalScore)}%`;
+            els.scoreFill.style.width = `${totalScore}%`;
+            els.resultsPanel.classList.add('show');
+            els.resultsPanel.scrollIntoView({ behavior: 'smooth' });
+        });
+    });
+</script>
+</body>
+</html>
