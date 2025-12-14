@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AlliedRx -- Week 8 Objectives</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-error: #e17055;
+            --color-warning: #fdcb6e;
+            --color-info: #0984e3;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
+            --color-dark: #0c0a18;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+            --shadow-card: 0 12px 30px rgba(15, 23, 42, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(
+                circle at top left,
+                #ffffff 0,
+                #f1ecff 40%,
+                var(--color-bg) 100%
+            );
+            color: var(--color-text);
+            -webkit-text-size-adjust: 100%;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 12px;
+            }
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1120px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px;
+            display: grid;
+            grid-template-columns: minmax(0, 3.1fr) minmax(0, 2.4fr);
+            gap: 28px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        @media (max-width: 900px) {
+            .page {
+                grid-template-columns: 1fr;
+                padding: 22px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 0;
+            }
+            .page {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 18px 14px 22px;
+                gap: 22px;
+            }
+        }
+
+        /* Header */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .brand-logo:hover {
+            transform: scale(1.05);
+        }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+            animation: pulse 2s infinite;
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--color-success);
+            flex-shrink: 0;
+            animation: blink 1.5s infinite;
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .badge-mode:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+        @media (max-width: 480px) {
+            .brand-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .badge-mode {
+                margin-top: 6px;
+            }
+        }
+
+        h1 {
+            font-size: clamp(2rem, 3vw, 2.4rem);
+            line-height: 1.05;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 34rem;
+            margin-bottom: 18px;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        /* Objectives list */
+        .objectives-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .objective-card {
+            background: #08070a;
+            color: #ffffff;
+            border-radius: 18px;
+            padding: 10px 16px 14px;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .objective-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.7s ease;
+        }
+
+        .objective-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .objective-card:hover::before {
+            left: 100%;
+        }
+
+        .objective-card.active {
+            background: linear-gradient(135deg, #0f172a, #1e1b4b);
+            border-left: 4px solid var(--color-accent);
+        }
+
+        @media (max-width: 480px) {
+            .objective-card {
+                grid-template-columns: auto 1fr;
+                grid-template-rows: auto auto;
+            }
+            .objective-icon {
+                justify-self: flex-end;
+            }
+        }
+
+        .objective-number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 999px;
+            background: #ffffff;
+            color: #111827;
+            font-weight: 700;
+            font-size: 1.05rem;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .objective-card:hover .objective-number {
+            background: var(--color-primary-soft);
+            transform: rotate(5deg);
+        }
+
+        .objective-main {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .objective-verb {
+            font-size: 0.98rem;
+            font-weight: 700;
+            color: var(--color-primary-soft);
+            transition: color 0.3s ease;
+        }
+
+        .objective-card:hover .objective-verb {
+            color: #ffffff;
+        }
+
+        .objective-text {
+            font-size: 0.84rem;
+            color: #e5e7eb;
+            line-height: 1.4;
+        }
+
+        .objective-icon {
+            width: 26px;
+            height: 26px;
+            border-radius: 999px;
+            border: 1px solid rgba(250, 250, 250, 0.16);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: #f9fafb;
+            background: linear-gradient(135deg, rgba(175, 75, 239, 0.1), rgba(0, 0, 0, 0.4));
+            transition: all 0.3s ease;
+        }
+
+        .objective-card:hover .objective-icon {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+            transform: scale(1.1);
+        }
+
+        /* Filter buttons */
+        .chapter-filter {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border-radius: 20px;
+            background: rgba(12, 10, 24, 0.05);
+            border: 1px solid rgba(12, 10, 24, 0.1);
+            color: var(--color-text);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+        .filter-btn.active {
+            background: var(--color-primary);
+            color: white;
+            border-color: var(--color-primary);
+        }
+
+        /* Progress counter */
+        .progress-counter {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(175, 75, 239, 0.05);
+            border-radius: 16px;
+            padding: 12px 18px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(175, 75, 239, 0.1);
+        }
+
+        .counter-item {
+            text-align: center;
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .counter-item:nth-child(1) { animation-delay: 0.8s; }
+        .counter-item:nth-child(2) { animation-delay: 1s; }
+        .counter-item:nth-child(3) { animation-delay: 1.2s; }
+
+        .counter-number {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--color-primary);
+            display: block;
+        }
+
+        .counter-label {
+            font-size: 0.75rem;
+            color: var(--color-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Right column content */
+        .objectives-header {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--color-text);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.5s both;
+        }
+
+        .section-tag {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-primary);
+            font-weight: 600;
+            margin-bottom: 10px;
+            animation: fadeInUp 0.6s ease-out 0.6s both;
+        }
+
+        .week-overview {
+            background: rgba(12, 10, 24, 0.94);
+            border-radius: 18px;
+            padding: 16px 18px 18px;
+            color: #e5e7eb;
+            font-size: 0.88rem;
+            line-height: 1.7;
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.6);
+            margin-bottom: 16px;
+            animation: fadeInUp 0.6s ease-out 0.7s both;
+            transition: transform 0.3s ease;
+        }
+
+        .week-overview:hover {
+            transform: translateY(-2px);
+        }
+
+        .week-overview strong {
+            color: #ffffff;
+        }
+
+        .mini-heading {
+            font-size: 0.86rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: #c4b5fd;
+            font-weight: 600;
+            margin: 8px 0 10px;
+        }
+
+        .outcomes-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-size: 0.86rem;
+            color: #f9fafb;
+        }
+
+        .outcomes-list li {
+            display: flex;
+            gap: 8px;
+            align-items: flex-start;
+            transition: transform 0.3s ease;
+        }
+
+        .outcomes-list li:hover {
+            transform: translateX(5px);
+        }
+
+        .dot {
+            width: 6px;
+            height: 6px;
+            margin-top: 6px;
+            border-radius: 999px;
+            background: var(--color-accent);
+            flex-shrink: 0;
+            animation: pulse 2s infinite;
+        }
+
+        .note-card {
+            margin-top: 14px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            background: rgba(15, 23, 42, 0.7);
+            padding: 10px 12px;
+            font-size: 0.78rem;
+            color: #e5e7eb;
+            transition: all 0.3s ease;
+        }
+
+        .note-card:hover {
+            border-color: var(--color-primary-soft);
+            background: rgba(15, 23, 42, 0.9);
+        }
+
+        .note-card strong {
+            color: #fef3c7;
+        }
+
+        /* Case Study Box */
+        .case-study {
+            background: linear-gradient(135deg, rgba(131, 128, 240, 0.1), rgba(175, 75, 239, 0.1));
+            border-radius: 18px;
+            padding: 18px;
+            margin-top: 20px;
+            border: 1px solid rgba(131, 128, 240, 0.2);
+        }
+
+        .case-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--color-accent);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .case-content {
+            font-size: 0.85rem;
+            color: #ffffff;
+            line-height: 1.5;
+        }
+
+        .case-content strong {
+            color: #d492ff;
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="week9-heading">
+        <!-- LEFT COLUMN: title + objective cards -->
+        <section class="column" aria-label="Week 8 objectives list">
+            <header class="brand-row">
+                <div class="brand">
+                    <img
+                        src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                        alt="AlliedRx logo"
+                        class="brand-logo"
+                    />
+                    <div class="course-meta">
+                        <span class="course-name">Clinical Medical Assistant • CCMA</span>
+                        <div class="week-label">
+                            <span class="week-label-dot"></span>
+                            <span>Week 8 --- Pharmacology & Orthopedics</span>
+                        </div>
+                    </div>
+                </div>
+                <span class="badge-mode">Campus & Online</span>
+            </header>
+
+            <h1 id="week9-heading">Week 8 Objectives</h1>
+            <p class="subtitle">
+                Master <strong>pharmacology principles and medication safety</strong> while developing 
+                <strong>orthopedic clinical expertise</strong> to manage musculoskeletal disorders and 
+                provide comprehensive medication therapy for orthopedic patients.
+            </p>
+
+            <!-- Interactive filter buttons -->
+            <div class="chapter-filter">
+                <button class="filter-btn active" data-filter="all">All Objectives</button>
+                <button class="filter-btn" data-filter="chapter9">Chapter 9: Pharmacology</button>
+                <button class="filter-btn" data-filter="chapter19">Chapter 19: Orthopedics</button>
+            </div>
+
+            <!-- Progress counter -->
+            <div class="progress-counter">
+                <div class="counter-item">
+                    <span class="counter-number" id="total-objectives">32</span>
+                    <span class="counter-label">Total Objectives</span>
+                </div>
+                <div class="counter-item">
+                    <span class="counter-number">2</span>
+                    <span class="counter-label">Chapters</span>
+                </div>
+                <div class="counter-item">
+                    <span class="counter-number">18</span>
+                    <span class="counter-label">Clinical Skills</span>
+                </div>
+            </div>
+
+            <div class="objectives-list" id="objectives-container">
+                <!-- Chapter 9: Pharmacology Objectives -->
+                <article class="objective-card" data-chapter="chapter9">
+                    <div class="objective-number">01</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Define & Pronounce</div>
+                        <p class="objective-text">
+                            Define, spell, and pronounce pharmacology terminology: angina pectoris, bronchodilator, cirrhosis, formulary, therapeutic range, tinnitus.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">📚</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter9">
+                    <div class="objective-number">02</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Distinguish & Cite</div>
+                        <p class="objective-text">
+                            Distinguish among government agencies regulating drugs; cite DEA regulations for controlled substances management.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🏛️</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter9">
+                    <div class="objective-number">03</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">List</div>
+                        <p class="objective-text">
+                            List DEA regulations for prescription drugs for each of the five schedules of the Controlled Substances Act.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">📋</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter9">
+                    <div class="objective-number">04</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Explain</div>
+                        <p class="objective-text">
+                            Explain the medical assistant's role in preventing drug abuse and identifying substance misuse patterns.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🛡️</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter9">
+                    <div class="objective-number">05</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Differentiate</div>
+                        <p class="objective-text">
+                            Differentiate a drug's chemical, generic, and trade names with clinical application examples.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">💊</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter9">
+                    <div class="objective-number">06</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Describe & Explain</div>
+                        <p class="objective-text">
+                            Describe use of drug reference materials; explain five pregnancy risk categories for drugs.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">📖</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter9">
+                    <div class="objective-number">07</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Discuss & Define</div>
+                        <p class="objective-text">
+                            Discuss tips for studying pharmacology; define five medical terms describing clinical drug use.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🧠</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter9">
+                    <div class="objective-number">08</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Cite</div>
+                        <p class="objective-text">
+                            Cite safety measures for over-the-counter (OTC) drug use and potential interactions with prescription medications.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">⚠️</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter9">
+                    <div class="objective-number">09</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Diagram & Demonstrate</div>
+                        <p class="objective-text">
+                            Diagram parts of a prescription; demonstrate accurate prescription transcription; describe e-prescription methods.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">📝</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter9">
+                    <div class="objective-number">10</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Relate</div>
+                        <p class="objective-text">
+                            Relate pharmacokinetics principles (absorption, distribution, metabolism, excretion) to clinical drug use.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🔄</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter9">
+                    <div class="objective-number">11</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Describe</div>
+                        <p class="objective-text">
+                            Describe factors affecting drug action, including physiologic changes associated with aging and disease states.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">👵</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter9">
+                    <div class="objective-number">12</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Identify</div>
+                        <p class="objective-text">
+                            Identify classifications of drug actions and therapeutic uses for common medication categories.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🔬</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter9">
+                    <div class="objective-number">13</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Differentiate</div>
+                        <p class="objective-text">
+                            Differentiate among commonly used herbal remedies and alternative therapies, including potential drug interactions.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🌿</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter9">
+                    <div class="objective-number">14</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Examine & Identify</div>
+                        <p class="objective-text">
+                            Examine the medical assistant's role in drug therapy education; identify legal responsibilities in medication management.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">⚖️</div>
+                </article>
+
+                <!-- Chapter 19: Orthopedics Objectives -->
+                <article class="objective-card" data-chapter="chapter19">
+                    <div class="objective-number">15</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Define & Pronounce</div>
+                        <p class="objective-text">
+                            Define, spell, and pronounce orthopedic terminology: arthritis, bursae, cartilage, crepitation, goniometer, luxation.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">📚</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter19">
+                    <div class="objective-number">16</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Describe</div>
+                        <p class="objective-text">
+                            Describe principal anatomic structures of musculoskeletal system and their functions in movement and support.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🦴</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter19">
+                    <div class="objective-number">17</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Differentiate</div>
+                        <p class="objective-text">
+                            Differentiate among tendons, bursae, and ligaments in structure, function, and common disorders.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🔄</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter19">
+                    <div class="objective-number">18</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Summarize</div>
+                        <p class="objective-text">
+                            Summarize major muscular disorders including strains, sprains, myositis, and muscular dystrophies.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">💪</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter19">
+                    <div class="objective-number">19</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Identify & Describe</div>
+                        <p class="objective-text">
+                            Identify and describe common types of fractures: simple, compound, greenstick, comminuted, spiral.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">⚠️</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter19">
+                    <div class="objective-number">20</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Explain</div>
+                        <p class="objective-text">
+                            Explain the difference between osteomalacia and osteoporosis in etiology, symptoms, and treatment.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🦴</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter19">
+                    <div class="objective-number">21</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Classify</div>
+                        <p class="objective-text">
+                            Classify typical spinal column disorders: scoliosis, kyphosis, lordosis, herniated discs, spinal stenosis.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">📊</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter19">
+                    <div class="objective-number">22</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Differentiate</div>
+                        <p class="objective-text">
+                            Differentiate among various joint disorders: osteoarthritis, rheumatoid arthritis, gout, bursitis.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🦵</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter19">
+                    <div class="objective-number">23</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Summarize</div>
+                        <p class="objective-text">
+                            Summarize the medical assistant's role in assisting with orthopedic procedures and diagnostic testing.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">👩‍⚕️</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter19">
+                    <div class="objective-number">24</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Explain</div>
+                        <p class="objective-text">
+                            Explain common diagnostic procedures used in orthopedics: X-rays, MRI, CT scans, arthroscopy, bone scans.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🔍</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter19">
+                    <div class="objective-number">25</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Discuss</div>
+                        <p class="objective-text">
+                            Discuss therapeutic modalities used in orthopedic medicine: heat, cold, ultrasound, electrical stimulation.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🔥❄️</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter19">
+                    <div class="objective-number">26</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Apply & Assist</div>
+                        <p class="objective-text">
+                            Apply cold therapy to acute injuries; assist with hot moist heat application for chronic conditions.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🏥</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter19">
+                    <div class="objective-number">27</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Discuss</div>
+                        <p class="objective-text">
+                            Discuss therapeutic ultrasonography, massage, exercise, and electrical muscle stimulation applications.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">⚡</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter19">
+                    <div class="objective-number">28</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Explain & Fit</div>
+                        <p class="objective-text">
+                            Explain use of ambulatory devices; properly fit patient with crutches; coach correct crutch walking mechanics.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🩼</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter19">
+                    <div class="objective-number">29</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Discuss & Prepare</div>
+                        <p class="objective-text">
+                            Discuss fracture management; prepare for and assist with application and removal of casts.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🦴</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter19">
+                    <div class="objective-number">30</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Summarize</div>
+                        <p class="objective-text">
+                            Summarize patient education guidelines for orthopedic patients regarding mobility, exercise, and recovery.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">📋</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter19">
+                    <div class="objective-number">31</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Discuss</div>
+                        <p class="objective-text">
+                            Discuss legal and ethical implications in orthopedic practice, including informed consent and documentation.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">⚖️</div>
+                </article>
+
+                <!-- Combined Objective -->
+                <article class="objective-card" data-chapter="combined">
+                    <div class="objective-number">32</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Integrate & Apply</div>
+                        <p class="objective-text">
+                            Integrate pharmacology knowledge with orthopedic care; apply medication safety principles to pain management.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🔗</div>
+                </article>
+            </div>
+        </section>
+
+        <!-- RIGHT COLUMN: narrative + outcomes framing -->
+        <aside class="column" aria-label="Overview of this week's content">
+            <h2 class="objectives-header">Medication Safety & Musculoskeletal Care</h2>
+            <p class="section-tag">Drug Therapy • Orthopedic Procedures • Pain Management</p>
+
+            <div class="week-overview">
+                <p>
+                    Week 8 combines <strong>pharmacology principles with orthopedic specialization</strong>, 
+                    creating essential knowledge for managing musculoskeletal disorders. You'll learn 
+                    medication safety protocols while developing expertise in orthopedic assessments, 
+                    therapeutic modalities, and rehabilitation techniques for comprehensive patient care.
+                </p>
+
+                <p>
+                    These chapters connect through <strong>pain management and medication safety</strong>. 
+                    Orthopedic patients often require analgesics, anti-inflammatories, and muscle relaxants. 
+                    Understanding pharmacology ensures safe medication use while orthopedic knowledge 
+                    provides context for appropriate drug selection and monitoring.
+                </p>
+
+                <!-- Case Study from Chapter 9 -->
+                <div class="case-study">
+                    <div class="case-title">
+                        <span>💊</span> Chapter 9 Case Study: Kathy Augustina, CMA (AAMA)
+                    </div>
+                    <div class="case-content">
+                        <strong>Practice:</strong> Primary care with focus on medication management<br>
+                        <strong>Responsibilities:</strong> Medication questions, prescription processing, patient education<br>
+                        <strong>Critical Skills:</strong> Controlled substance regulations, drug interactions, age-specific dosing, e-prescribing systems
+                    </div>
+                </div>
+
+                <!-- Case Study from Chapter 19 -->
+                <div class="case-study">
+                    <div class="case-title">
+                        <span>🏀</span> Chapter 19 Case Study: Kaiwan Tillman, CMA (AMMA)
+                    </div>
+                    <div class="case-content">
+                        <strong>Setting:</strong> Sports Medicine Associates orthopedic clinic<br>
+                        <strong>Patient Population:</strong> Professional athletes, sports injuries, musculoskeletal disorders<br>
+                        <strong>Key Procedures:</strong> Fracture management, therapeutic modalities, assistive device fitting, rehabilitation exercises
+                    </div>
+                </div>
+
+                <p class="mini-heading">By the end of this week, you will be able to:</p>
+                <ul class="outcomes-list">
+                    <li>
+                        <span class="dot"></span>
+                        <span>Manage controlled substances according to DEA regulations and practice protocols.</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span>Accurately transcribe prescriptions and utilize e-prescribing systems for orthopedic medications.</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span>Apply appropriate therapeutic modalities (heat/cold) for musculoskeletal injuries.</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span>Fit patients with assistive devices and teach proper ambulation techniques.</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span>Integrate pharmacology knowledge with orthopedic care for comprehensive pain management.</span>
+                    </li>
+                </ul>
+
+                <div class="note-card">
+                    <strong>Orthopedic Pharmacology Tip:</strong> NSAIDs (nonsteroidal anti-inflammatory drugs) like ibuprofen 
+                    and naproxen are commonly prescribed for orthopedic pain but require monitoring for 
+                    <strong>GI bleeding and renal function</strong>. Always assess for contraindications and 
+                    educate patients about taking with food.
+                </div>
+
+                <div class="note-card" style="margin-top: 12px;">
+                    <strong>Controlled Substance Protocol:</strong> Schedule II medications (oxycodone, hydrocodone) for 
+                    orthopedic pain require <strong>written prescriptions with no refills</strong>. Document 
+                    <strong>pain assessment scores</strong> before and after administration. Monitor for signs 
+                    of misuse or diversion in patients with chronic pain conditions.
+                </div>
+
+                <div class="note-card" style="margin-top: 12px;">
+                    <strong>RICE Protocol:</strong> For acute musculoskeletal injuries: <strong>Rest, Ice, Compression, Elevation</strong>. 
+                    Apply ice for 15-20 minutes every 2-3 hours for first 48 hours. Use barrier between ice 
+                    and skin to prevent frostbite. Switch to heat therapy after acute phase (48-72 hours).
+                </div>
+
+                <div class="note-card" style="margin-top: 12px;">
+                    <strong>Crutch Fitting Protocol:</strong> Proper crutch height = 1-1.5 inches below axilla with 
+                    shoulders relaxed. Hand grips at wrist crease when arms hang naturally. Teach 
+                    <strong>three-point gait</strong> for non-weight bearing and <strong>four-point gait</strong> 
+                    for partial weight bearing. Never lean on axillary bars.
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Filter functionality
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const objectiveCards = document.querySelectorAll('.objective-card');
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Update active button
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+
+                    const filter = this.getAttribute('data-filter');
+
+                    // Filter cards
+                    objectiveCards.forEach(card => {
+                        if (filter === 'all') {
+                            card.style.display = 'grid';
+                            setTimeout(() => {
+                                card.style.opacity = '1';
+                                card.style.transform = 'translateY(0)';
+                            }, 10);
+                        } else {
+                            if (card.getAttribute('data-chapter') === filter) {
+                                card.style.display = 'grid';
+                                setTimeout(() => {
+                                    card.style.opacity = '1';
+                                    card.style.transform = 'translateY(0)';
+                                }, 10);
+                            } else {
+                                card.style.opacity = '0';
+                                card.style.transform = 'translateY(10px)';
+                                setTimeout(() => {
+                                    card.style.display = 'none';
+                                }, 300);
+                            }
+                        }
+                    });
+                });
+            });
+
+            // Interactive objective cards
+            objectiveCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    // Toggle active state
+                    this.classList.toggle('active');
+
+                    // Add subtle animation
+                    if (this.classList.contains('active')) {
+                        const icon = this.querySelector('.objective-icon');
+                        icon.style.transform = 'scale(1.2) rotate(10deg)';
+                        setTimeout(() => {
+                            icon.style.transform = 'scale(1.1)';
+                        }, 300);
+                    }
+                });
+
+                // Add keyboard navigation
+                card.setAttribute('tabindex', '0');
+                card.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        this.click();
+                    }
+                });
+            });
+
+            // Animate counter numbers
+            function animateCounter(element, target, duration) {
+                let start = 0;
+                const increment = target / (duration / 16);
+                const timer = setInterval(() => {
+                    start += increment;
+                    if (start >= target) {
+                        element.textContent = target;
+                        clearInterval(timer);
+                    } else {
+                        element.textContent = Math.floor(start);
+                    }
+                }, 16);
+            }
+
+            // Start counter animation after page load
+            setTimeout(() => {
+                const counterElement = document.getElementById('total-objectives');
+                animateCounter(counterElement, 32, 1200);
+            }, 1500);
+
+            // Add hover effect to outcomes list items
+            const outcomesItems = document.querySelectorAll('.outcomes-list li');
+            outcomesItems.forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    const dot = this.querySelector('.dot');
+                    dot.style.transform = 'scale(1.5)';
+                    dot.style.background = 'var(--color-primary)';
+                });
+                item.addEventListener('mouseleave', function() {
+                    const dot = this.querySelector('.dot');
+                    dot.style.transform = 'scale(1)';
+                    dot.style.background = 'var(--color-accent)';
+                });
+            });
+
+            // Add scroll animation for cards
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all objective cards
+            objectiveCards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                observer.observe(card);
+            });
+
+            // Add interactivity to case study boxes
+            const caseStudies = document.querySelectorAll('.case-study');
+            caseStudies.forEach(study => {
+                study.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-3px)';
+                    this.style.boxShadow = '0 12px 30px rgba(131, 128, 240, 0.2)';
+                });
+                study.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                    this.style.boxShadow = 'none';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
