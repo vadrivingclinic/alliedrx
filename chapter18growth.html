@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AlliedRx – Module 18.1: Pediatric Growth & Development</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        /* === ALLIEDRx BRANDING EXACT MATCH === */
+        :root {
+            --color-primary: #af4bef;        /* Purple */
+            --color-primary-soft: #d492ff;   /* Light purple */
+            --color-accent: #8380f0;         /* Blue-purple accent */
+            --color-success: #00b894;        /* Green */
+            --color-error: #e17055;          /* Red/Orange */
+            --color-warning: #fdcb6e;        /* Yellow */
+            --color-bg: #f7f5fb;             /* Light background */
+            --color-text: #2b2b2b;           /* Dark text */
+            --color-muted: #6c6880;          /* Muted text */
+            --color-dark: #0c0a18;           /* Dark panel */
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+            --shadow-card: 0 12px 30px rgba(15, 23, 42, 0.1);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html, body {
+            width: 100%; overflow-x: hidden;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            padding: 24px;
+            background: radial-gradient(circle at top left, #ffffff 0, #f1ecff 40%, var(--color-bg) 100%);
+            color: var(--color-text);
+            line-height: 1.6;
+        }
+
+        @media (max-width: 600px) { body { padding: 12px; } }
+
+        /* === ANIMATIONS === */
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes popIn { 0% { transform: scale(0.9); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+        @keyframes scoreCountUp { from { width: 0%; } to { width: var(--target-width); } }
+
+        /* === LAYOUT === */
+        .page {
+            width: 100%; max-width: 1200px; margin: 0 auto;
+            background: #ffffff; border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft); padding: 28px 30px 32px;
+            position: relative; overflow: hidden; animation: fadeInUp 0.8s ease-out;
+        }
+
+        /* === HEADER === */
+        .brand-row {
+            display: flex; align-items: flex-start; justify-content: space-between;
+            gap: 14px; margin-bottom: 20px; flex-wrap: wrap; width: 100%;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+        .brand { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .brand-logo { height: 40px; width: auto; filter: drop-shadow(0 3px 8px rgba(0,0,0,0.2)); transition: transform 0.3s ease; }
+        .brand-logo:hover { transform: scale(1.05); }
+        .course-meta { display: flex; flex-direction: column; gap: 2px; max-width: 100%; }
+        .course-name { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.16em; color: var(--color-muted); }
+        .week-label {
+            display: inline-flex; align-items: center; gap: 8px; padding: 4px 10px;
+            border-radius: 999px; background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem; color: var(--color-primary);
+        }
+        .badge-mode {
+            padding: 5px 10px; border-radius: 999px; background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08); font-size: 0.74rem; text-transform: uppercase;
+            letter-spacing: 0.14em; color: var(--color-muted); white-space: nowrap;
+        }
+
+        h1 { font-size: clamp(1.8rem, 3vw, 2.2rem); line-height: 1.1; color: var(--color-primary); margin-bottom: 6px; }
+        .module-subtitle { font-size: 0.98rem; color: var(--color-muted); max-width: 600px; margin-bottom: 24px; }
+
+        /* === PROGRESS TRACKER === */
+        .progress-tracker {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 30px; position: relative; padding: 0 20px;
+        }
+        .progress-tracker::before {
+            content: ''; position: absolute; top: 15px; left: 40px; right: 40px;
+            height: 3px; background: rgba(12, 10, 24, 0.08); z-index: 1;
+        }
+        .progress-step {
+            display: flex; flex-direction: column; align-items: center; position: relative; z-index: 2; flex: 1;
+        }
+        .step-circle {
+            width: 30px; height: 30px; border-radius: 50%; background: white;
+            border: 2px solid rgba(12, 10, 24, 0.1); display: flex; align-items: center;
+            justify-content: center; font-size: 0.85rem; font-weight: 600; color: var(--color-muted);
+            margin-bottom: 8px; transition: all 0.3s ease;
+        }
+        .progress-step.active .step-circle {
+            background: var(--color-primary); border-color: var(--color-primary); color: white; transform: scale(1.1);
+        }
+        .progress-step.completed .step-circle {
+            background: var(--color-success); border-color: var(--color-success); color: white;
+        }
+        .step-label { font-size: 0.75rem; color: var(--color-muted); text-align: center; font-weight: 500; }
+        .progress-step.active .step-label { color: var(--color-primary); font-weight: 600; }
+
+        /* === SUMMARY CARDS === */
+        .progress-summary {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;
+            margin-bottom: 30px; animation: fadeInUp 0.6s ease-out 0.5s both;
+        }
+        .summary-card {
+            background: rgba(12, 10, 24, 0.02); border-radius: var(--radius-md); padding: 16px;
+            border: 1px solid rgba(12, 10, 24, 0.06); text-align: center;
+        }
+        .summary-number {
+            font-size: 1.8rem; font-weight: 800; color: var(--color-primary); display: block; line-height: 1; margin-bottom: 4px;
+        }
+        .summary-label { font-size: 0.75rem; color: var(--color-muted); text-transform: uppercase; letter-spacing: 0.1em; }
+
+        /* === ACTIVITY CARDS === */
+        .activity-grid { display: grid; grid-template-columns: 1fr; gap: 25px; margin-bottom: 30px; }
+        .activity-card {
+            background: white; border-radius: var(--radius-md); border: 1px solid rgba(12, 10, 24, 0.08);
+            padding: 25px; transition: all 0.3s ease; position: relative; overflow: hidden;
+            animation: fadeInUp 0.6s ease-out;
+        }
+        .activity-card:hover {
+            transform: translateY(-4px); box-shadow: var(--shadow-hover); border-color: var(--color-primary-soft);
+        }
+        .activity-card.completed { border-color: var(--color-success); }
+        .activity-card.completed::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%;
+            background: var(--color-success); opacity: 1;
+        }
+
+        .activity-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
+        .activity-number {
+            font-size: 0.8rem; font-weight: 700; color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.1); padding: 4px 10px; border-radius: 20px;
+        }
+        .activity-status {
+            font-size: 0.75rem; padding: 3px 8px; border-radius: 12px;
+            background: rgba(12, 10, 24, 0.06); color: var(--color-muted);
+        }
+        .activity-card.completed .activity-status { background: rgba(0, 184, 148, 0.1); color: var(--color-success); }
+        .activity-title { font-size: 1.2rem; font-weight: 700; color: var(--color-text); margin-bottom: 10px; }
+        .activity-description { font-size: 0.95rem; color: var(--color-muted); margin-bottom: 20px; }
+
+        /* === ACTIVITY 1: MATCHING STYLES === */
+        .matching-container { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; }
+        .item-bank {
+            background: rgba(12, 10, 24, 0.02); border-radius: var(--radius-sm);
+            padding: 20px; border: 1px solid rgba(12, 10, 24, 0.08); display: flex; flex-direction: column; gap: 10px;
+        }
+        .draggable-item {
+            background: white; border: 2px solid var(--color-accent); border-radius: var(--radius-sm);
+            padding: 12px; font-size: 0.85rem; cursor: grab; text-align: left; font-weight: 600;
+            transition: all 0.3s ease; user-select: none;
+        }
+        .draggable-item:hover { background: rgba(131, 128, 240, 0.1); transform: translateY(-2px); }
+        .draggable-item.dragging { opacity: 0.5; }
+        .draggable-item.placed { opacity: 0.5; cursor: default; background: rgba(0, 184, 148, 0.1); border-color: var(--color-success); }
+
+        .drop-zones-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+        @media (max-width: 768px) { .drop-zones-grid { grid-template-columns: 1fr; } }
+        
+        .drop-zone {
+            background: white; border: 2px dashed rgba(12, 10, 24, 0.1); border-radius: var(--radius-sm);
+            padding: 15px; min-height: 150px; display: flex; flex-direction: column;
+            transition: all 0.3s ease;
+        }
+        .drop-zone.hover { border-color: var(--color-primary); background: rgba(175, 75, 239, 0.05); }
+        .drop-zone.filled { border: 2px solid var(--color-success); background: rgba(0, 184, 148, 0.05); }
+        .zone-title { font-size: 0.9rem; font-weight: 700; color: var(--color-primary); margin-bottom: 5px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+        .zone-desc { font-size: 0.8rem; color: var(--color-muted); font-style: italic; margin-bottom: 8px; }
+        .zone-content { display: flex; flex-direction: column; gap: 5px; flex: 1; }
+
+        /* === ACTIVITY 2 & 4: SCENARIO/RED FLAGS === */
+        .scenario-container {
+            background: rgba(12, 10, 24, 0.02); border-radius: var(--radius-sm);
+            padding: 25px; border: 1px solid rgba(12, 10, 24, 0.08);
+        }
+        .sim-step { display: none; animation: popIn 0.4s ease; }
+        .sim-step.active { display: block; }
+        .sim-prompt { font-size: 1.05rem; font-weight: 600; color: var(--color-text); margin-bottom: 10px; }
+        .sim-context { font-size: 0.9rem; color: var(--color-muted); margin-bottom: 20px; font-style: italic; background: rgba(255,255,255,0.7); padding: 10px; border-radius: 8px; }
+        .sim-options { display: grid; grid-template-columns: 1fr; gap: 12px; }
+        .sim-option {
+            background: white; border: 2px solid rgba(12,10,24,0.1); border-radius: var(--radius-sm);
+            padding: 18px; cursor: pointer; transition: all 0.2s;
+            text-align: left; font-size: 0.95rem; color: var(--color-text); font-weight: 500;
+        }
+        .sim-option:hover { border-color: var(--color-primary); transform: translateX(5px); }
+        .sim-option.correct { border-color: var(--color-success); background: #f0fdf4; }
+        .sim-option.incorrect { border-color: var(--color-error); background: #fff5f5; animation: shake 0.4s ease; }
+
+        /* === ACTIVITY 3: TWO EXAMS === */
+        .comparison-table { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .compare-column {
+            background: white; border-radius: var(--radius-sm); padding: 15px;
+            border: 2px solid rgba(12, 10, 24, 0.05); min-height: 200px;
+        }
+        .col-header { text-align: center; font-weight: 700; color: var(--color-primary); margin-bottom: 15px; font-size: 1rem; }
+        .compare-zone {
+            min-height: 150px; border: 2px dashed #ddd; border-radius: 8px; padding: 10px;
+            display: flex; flex-direction: column; gap: 8px; transition: all 0.3s;
+        }
+        .compare-zone.hover { border-color: var(--color-primary); background: rgba(175, 75, 239, 0.05); }
+
+        /* === FEEDBACK & RESULTS === */
+        .feedback-details {
+            margin-top: 25px; padding: 25px; background: #f0fdf4; border-radius: var(--radius-sm);
+            border: 2px solid var(--color-success); box-shadow: 0 4px 15px rgba(0, 184, 148, 0.2);
+            display: none; animation: popIn 0.5s ease;
+        }
+        .feedback-details.show { display: block; }
+        .feedback-title {
+            font-weight: 800; color: var(--color-success); margin-bottom: 15px; font-size: 1.1rem;
+            display: flex; align-items: center; gap: 10px; text-transform: uppercase; letter-spacing: 0.05em;
+        }
+        .feedback-content { font-size: 0.95rem; color: var(--color-text); line-height: 1.6; }
+
+        /* High-Detail Results Panel */
+        .results-panel {
+            background: var(--color-dark); color: white; border-radius: var(--radius-md);
+            padding: 30px; margin-top: 40px; display: none; animation: fadeInUp 0.6s ease;
+        }
+        .results-panel.show { display: block; }
+        .results-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .results-title { font-size: 1.3rem; font-weight: 700; color: white; }
+        .score-display { font-size: 2.5rem; font-weight: 800; color: var(--color-primary-soft); text-align: center; margin: 20px 0; }
+        .score-bar {
+            width: 100%; height: 12px; background: rgba(255, 255, 255, 0.1); border-radius: 6px; overflow: hidden; margin: 20px 0;
+        }
+        .score-fill {
+            height: 100%; background: linear-gradient(90deg, var(--color-primary), var(--color-success)); width: 0%; transition: width 1.5s ease-in-out;
+        }
+        
+        .results-section-title {
+            color: var(--color-primary-soft); font-size: 1rem; font-weight: 700; 
+            margin: 25px 0 15px 0; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px;
+        }
+        .insights-list li { margin-bottom: 15px; display: flex; gap: 12px; font-size: 0.95rem; color: #e5e7eb; align-items: flex-start; line-height: 1.5; }
+        .insights-list strong { color: white; font-weight: 600; margin-right: 5px; }
+        .insight-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--color-accent); margin-top: 9px; flex-shrink: 0; }
+
+        /* === BUTTONS === */
+        .action-buttons { display: flex; gap: 12px; margin-top: 30px; flex-wrap: wrap; }
+        .btn {
+            padding: 12px 24px; border-radius: var(--radius-md); border: none; font-size: 0.9rem;
+            font-weight: 600; cursor: pointer; transition: all 0.3s ease; display: inline-flex;
+            align-items: center; gap: 8px;
+        }
+        .btn-primary { background: var(--color-primary); color: white; }
+        .btn-primary:hover { background: #9a3bd6; transform: translateY(-2px); }
+        .btn-secondary { background: rgba(12, 10, 24, 0.06); color: var(--color-text); }
+        .btn-secondary:hover { background: rgba(12, 10, 24, 0.1); transform: translateY(-2px); }
+
+        @media (max-width: 768px) {
+            .matching-container, .drop-zones-grid, .progress-summary, .comparison-table { grid-template-columns: 1fr; }
+            .btn { width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+<main class="page" aria-labelledby="module-heading">
+    <header class="brand-row">
+        <div class="brand">
+            <img src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png" alt="AlliedRx logo" class="brand-logo" />
+            <div class="course-meta">
+                <span class="course-name">Clinical Medical Assistant • Kinn's Chapter 18</span>
+                <div class="week-label">
+                    <span class="week-label-dot"></span>
+                    <span>Module 18.1: Pediatric Growth & Development</span>
+                </div>
+            </div>
+        </div>
+        <span class="badge-mode">Campus & Online</span>
+    </header>
+
+    <h1 id="module-heading">Growth, Development & The Pediatric Foundation</h1>
+    <p class="module-subtitle">
+        Join Susie Kwong, CMA (AAMA), to build foundational knowledge of pediatric milestones, developmental theories, and red flag recognition for effective patient care.
+    </p>
+
+    <div class="progress-tracker">
+        <div class="progress-step active" data-step="1"><div class="step-circle">1</div><div class="step-label">Milestones</div></div>
+        <div class="progress-step" data-step="2"><div class="step-circle">2</div><div class="step-label">Theorists</div></div>
+        <div class="progress-step" data-step="3"><div class="step-circle">3</div><div class="step-label">Two Exams</div></div>
+        <div class="progress-step" data-step="4"><div class="step-circle">4</div><div class="step-label">Red Flags</div></div>
+    </div>
+
+    <div class="progress-summary">
+        <div class="summary-card">
+            <span class="summary-number" id="completed-count">0</span>
+            <span class="summary-label">Activities Completed</span>
+        </div>
+        <div class="summary-card">
+            <span class="summary-number" id="accuracy-rate">0%</span>
+            <span class="summary-label">Current Accuracy</span>
+        </div>
+        <div class="summary-card">
+            <span class="summary-number" id="time-spent">0:00</span>
+            <span class="summary-label">Time Spent</span>
+        </div>
+    </div>
+
+    <div class="activity-grid">
+        
+        <section class="activity-card" id="activity-1" data-activity="1">
+            <div class="activity-header"><span class="activity-number">Activity 1</span><span class="activity-status">Not Started</span></div>
+            <h3 class="activity-title">🧩 Milestone Match-Up</h3>
+            <p class="activity-description">Drag the developmental milestone to the correct age group. These milestones are critical for the Denver II screening and telephone triage.</p>
+            
+            <div class="matching-container">
+                <div class="item-bank">
+                    <div style="font-size:0.8rem; color:var(--color-primary); font-weight:700; text-align:center; margin-bottom:10px;">MILESTONES</div>
+                    <div class="draggable-item" draggable="true" data-age="Infant">Rolls over (front to back)</div>
+                    <div class="draggable-item" draggable="true" data-age="Toddler">Uses 2-word sentences</div>
+                    <div class="draggable-item" draggable="true" data-age="Infant">Pincer grasp (thumb/finger)</div>
+                    <div class="draggable-item" draggable="true" data-age="Preschool">Rides a tricycle</div>
+                    <div class="draggable-item" draggable="true" data-age="Toddler">Walks alone</div>
+                    <div class="draggable-item" draggable="true" data-age="Preschool">Copies a circle</div>
+                </div>
+                <div class="drop-zones-grid">
+                    <div class="drop-zone" data-accept="Infant">
+                        <div class="zone-title">Infant (0-12 mo)</div>
+                        <div class="zone-desc">Rapid physical growth, reflexes</div>
+                        <div class="zone-content"></div>
+                    </div>
+                    <div class="drop-zone" data-accept="Toddler">
+                        <div class="zone-title">Toddler (1-3 yrs)</div>
+                        <div class="zone-desc">Autonomy, language explosion</div>
+                        <div class="zone-content"></div>
+                    </div>
+                    <div class="drop-zone" data-accept="Preschool">
+                        <div class="zone-title">Preschool (3-5 yrs)</div>
+                        <div class="zone-desc">Social play, fine motor refinement</div>
+                        <div class="zone-content"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feedback-details" id="feedback-1">
+                <div class="feedback-title">✓ Milestones Verified!</div>
+                <div class="feedback-content">
+                    <strong>Why this matters:</strong><br>
+                    • <strong>Infants:</strong> Rolling over (4-6mo) and Pincer grasp (9mo) are key indicators of neurological health.<br>
+                    • <strong>Toddlers:</strong> Walking (12-15mo) and 2-word sentences (2yr) are frequent parental concerns.<br>
+                    • <strong>Preschool:</strong> Tricycle riding (3yr) shows gross motor coordination; copying shapes shows cognitive readiness for school.
+                </div>
+            </div>
+        </section>
+
+        <section class="activity-card" id="activity-2" data-activity="2">
+            <div class="activity-header"><span class="activity-number">Activity 2</span><span class="activity-status">Not Started</span></div>
+            <h3 class="activity-title">🧠 Theorist in Action</h3>
+            <p class="activity-description">Apply developmental theories (Erikson/Piaget) to solve patient cooperation issues. Select the best approach for Susie.</p>
+            
+            <div class="simulator-container">
+                <div class="sim-step active" id="sim-1">
+                    <div class="sim-prompt">Scenario 1: The "No!" Toddler</div>
+                    <div class="sim-context">A 2-year-old refuses to sit on the scale. According to Erikson (Autonomy vs. Shame), what is the best strategy?</div>
+                    <div class="sim-options">
+                        <div class="sim-option" onclick="checkSim(1, false, this)">Force them onto the scale quickly to get it over with.</div>
+                        <div class="sim-option" onclick="checkSim(1, true, this)">Offer a choice: "Do you want to take off your shoes or your coat first?"</div>
+                        <div class="sim-option" onclick="checkSim(1, false, this)">Tell them "Good boys sit still" to shame them into compliance.</div>
+                    </div>
+                </div>
+
+                <div class="sim-step" id="sim-2">
+                    <div class="sim-prompt">Scenario 2: The Logical School-Ager</div>
+                    <div class="sim-context">A 7-year-old is asking about their flu shot. According to Piaget (Concrete Operational), how should you explain it?</div>
+                    <div class="sim-options">
+                        <div class="sim-option" onclick="checkSim(2, true, this)">Be honest: "It will pinch for a second, but it helps your body fight germs."</div>
+                        <div class="sim-option" onclick="checkSim(2, false, this)">Use abstract metaphors: "It's like a magic shield."</div>
+                        <div class="sim-option" onclick="checkSim(2, false, this)">Lie: "It won't hurt at all."</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feedback-details" id="feedback-2">
+                <div class="feedback-title">✓ Theory Applied!</div>
+                <div class="feedback-content">
+                    <strong>Clinical Application:</strong><br>
+                    • <strong>Toddlers</strong> need perceived control. Forced choices (this or that) build autonomy.<br>
+                    • <strong>School-age children</strong> value logic and cause-and-effect. Honesty builds trust; lying destroys it forever.
+                </div>
+            </div>
+        </section>
+
+        <section class="activity-card" id="activity-3" data-activity="3">
+            <div class="activity-header"><span class="activity-number">Activity 3</span><span class="activity-status">Not Started</span></div>
+            <h3 class="activity-title">⚖️ The Two Examinations</h3>
+            <p class="activity-description">Sort the clinical tasks into the correct visit type: <strong>Well-Child</strong> (Preventive) or <strong>Sick-Child</strong> (Acute).</p>
+            
+            <div class="matching-container">
+                <div class="item-bank" id="bank-3">
+                    <div class="draggable-item" draggable="true" data-type="Well">Immunization Administration</div>
+                    <div class="draggable-item" draggable="true" data-type="Sick">Strep Throat Swab</div>
+                    <div class="draggable-item" draggable="true" data-type="Well">Growth Chart Plotting</div>
+                    <div class="draggable-item" draggable="true" data-type="Sick">Fever Management Education</div>
+                    <div class="draggable-item" draggable="true" data-type="Well">Anticipatory Guidance</div>
+                    <div class="draggable-item" draggable="true" data-type="Sick">Urgent Triage</div>
+                </div>
+                <div class="comparison-table">
+                    <div class="compare-column">
+                        <div class="col-header">Well-Child Visit</div>
+                        <div class="compare-zone" data-accept="Well"></div>
+                    </div>
+                    <div class="compare-column">
+                        <div class="col-header">Sick-Child Visit</div>
+                        <div class="compare-zone" data-accept="Sick"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feedback-details" id="feedback-3">
+                <div class="feedback-title">✓ Visit Types Distinguished!</div>
+                <div class="feedback-content">
+                    <strong>Key Differences:</strong><br>
+                    • <strong>Well-Child:</strong> Focus is on growth, development, prevention (vaccines), and safety education.<br>
+                    • <strong>Sick-Child:</strong> Focus is on the chief complaint (CC), diagnosis, and immediate treatment.<br>
+                    <em>Note: A sick child may be rescheduled for their well-visit procedures (like vaccines) until they recover.</em>
+                </div>
+            </div>
+        </section>
+
+        <section class="activity-card" id="activity-4" data-activity="4">
+            <div class="activity-header"><span class="activity-number">Activity 4</span><span class="activity-status">Not Started</span></div>
+            <h3 class="activity-title">🚩 Recognizing Red Flags</h3>
+            <p class="activity-description">Analyze the vignette to identify the critical clinical concern. Select the correct assessment.</p>
+            
+            <div class="simulator-container">
+                <div class="sim-step active" id="flag-1">
+                    <div class="sim-prompt">Vignette 1: The Quiet Mother</div>
+                    <div class="sim-context">During a 2-month checkup, the mother avoids eye contact with the baby, speaks in a flat monotone, and says, "He cries all the time. I can't do anything right." The baby is clean but quiet.</div>
+                    <div class="sim-options">
+                        <div class="sim-option" onclick="checkFlag(1, false, this)">Assess for failure to thrive in the infant.</div>
+                        <div class="sim-option" onclick="checkFlag(1, true, this)">Screen mother for Postpartum Depression (PPD) immediately.</div>
+                        <div class="sim-option" onclick="checkFlag(1, false, this)">Document "normal maternal fatigue."</div>
+                    </div>
+                </div>
+
+                <div class="sim-step" id="flag-2">
+                    <div class="sim-prompt">Vignette 2: The Regression</div>
+                    <div class="sim-context">A 3-year-old who was fully potty trained for 6 months has started wetting their pants daily and using "baby talk" since their new sister arrived last week.</div>
+                    <div class="sim-options">
+                        <div class="sim-option" onclick="checkFlag(2, true, this)">Normal regression due to sibling rivalry/stress. Reassure parents.</div>
+                        <div class="sim-option" onclick="checkFlag(2, false, this)">Urgent referral for developmental delay.</div>
+                        <div class="sim-option" onclick="checkFlag(2, false, this)">Test immediately for urinary tract infection.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feedback-details" id="feedback-4">
+                <div class="feedback-title">✓ Assessments Correct!</div>
+                <div class="feedback-content">
+                    <strong>Clinical Insights:</strong><br>
+                    • <strong>PPD:</strong> Maternal depression affects infant bonding and development. Screening is a vital part of pediatric care.<br>
+                    • <strong>Regression:</strong> Common during stress (new sibling, moving). It is usually temporary. However, loss of skills *without* a stressor is a major red flag for neurological issues.
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <div class="action-buttons">
+        <button class="btn btn-secondary" id="reset-all-btn">
+            ↻ Reset Module
+        </button>
+        <button class="btn btn-secondary" id="check-answers-btn">
+            ✓ Check All Answers
+        </button>
+        <button class="btn btn-primary" id="view-results-btn">
+            📊 View Final Results
+        </button>
+    </div>
+
+    <div class="results-panel" id="results-panel">
+        <div class="results-header">
+            <h2 class="results-title">Module 18.1 Results</h2>
+            <div class="score-display" id="final-score">0%</div>
+        </div>
+        <div class="score-bar"><div class="score-fill" id="score-fill"></div></div>
+        
+        <div class="clinical-insights">
+            <h3 class="results-section-title">🩺 Clinical Proficiency Insights</h3>
+            <ul class="insights-list">
+                <li>
+                    <span class="insight-dot"></span>
+                    <span><strong>Triage Competence:</strong> Understanding milestones allows you to distinguish between a worried parent ("My 9-month-old isn't walking") and a true delay ("My 18-month-old isn't walking").</span>
+                </li>
+                <li>
+                    <span class="insight-dot"></span>
+                    <span><strong>Communication Strategy:</strong> Tailoring your approach to the child's developmental stage (choices for toddlers, honesty for school-age) reduces procedure time and anxiety.</span>
+                </li>
+                <li>
+                    <span class="insight-dot"></span>
+                    <span><strong>Family-Centered Care:</strong> Recognizing PPD or sibling stress acknowledges that the patient exists within a family unit. Treating the family helps the child.</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="clinical-insights" style="margin-top:20px;">
+            <h3 class="results-section-title">📋 Key Learning Points</h3>
+            <ul class="insights-list">
+                <li>
+                    <span class="insight-dot"></span>
+                    <span><strong>Erikson's Stages:</strong> Trust (Infant) → Autonomy (Toddler) → Initiative (Preschool) → Industry (School) → Identity (Teen).</span>
+                </li>
+                <li>
+                    <span class="insight-dot"></span>
+                    <span><strong>Well-Child Visits:</strong> Follow a specific periodicity schedule (e.g., 2mo, 4mo, 6mo) focused on growth, vaccines, and anticipatory guidance.</span>
+                </li>
+                <li>
+                    <span class="insight-dot"></span>
+                    <span><strong>Denver II:</strong> A standardized tool used to screen for developmental delays in personal-social, fine motor, language, and gross motor domains.</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- STATE ---
+        const state = {
+            activities: {
+                1: { completed: false, correct: 0, total: 6, score: 0 },
+                2: { completed: false, correct: 0, total: 2, score: 0 },
+                3: { completed: false, correct: 0, total: 6, score: 0 },
+                4: { completed: false, correct: 0, total: 2, score: 0 }
+            },
+            startedAt: new Date(),
+            timeSpent: 0
+        };
+
+        // --- DOM ELEMENTS ---
+        const els = {
+            completedCount: document.getElementById('completed-count'),
+            accuracyRate: document.getElementById('accuracy-rate'),
+            timeSpent: document.getElementById('time-spent'),
+            resultsPanel: document.getElementById('results-panel'),
+            finalScore: document.getElementById('final-score'),
+            scoreFill: document.getElementById('score-fill'),
+            progressSteps: document.querySelectorAll('.progress-step'),
+            activityCards: document.querySelectorAll('.activity-card')
+        };
+
+        // --- TIMER ---
+        setInterval(() => {
+            const now = new Date();
+            const diff = Math.floor((now - state.startedAt) / 1000);
+            const m = Math.floor(diff / 60);
+            const s = diff % 60;
+            els.timeSpent.textContent = `${m}:${s.toString().padStart(2, '0')}`;
+        }, 1000);
+
+        // --- PROGRESS UPDATE ---
+        function updateProgress() {
+            let completed = 0;
+            let totalCorrect = 0;
+            let totalItems = 0;
+
+            Object.values(state.activities).forEach(act => {
+                if (act.completed) completed++;
+                totalCorrect += act.correct;
+                totalItems += act.total;
+            });
+
+            els.completedCount.textContent = completed;
+            const accuracy = totalItems > 0 ? Math.round((totalCorrect / totalItems) * 100) : 0;
+            els.accuracyRate.textContent = `${accuracy}%`;
+
+            els.progressSteps.forEach((step, index) => {
+                if (index < completed) {
+                    step.classList.add('completed');
+                    step.classList.remove('active');
+                } else if (index === completed) {
+                    step.classList.add('active');
+                }
+            });
+
+            els.activityCards.forEach((card, index) => {
+                const actId = index + 1;
+                const status = card.querySelector('.activity-status');
+                if (state.activities[actId].completed) {
+                    card.classList.add('completed');
+                    status.textContent = 'Completed';
+                    status.style.color = '#00b894';
+                }
+            });
+        }
+
+        function scrollToFeedback(id) {
+            setTimeout(() => {
+                document.getElementById(`feedback-${id}`).scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 100);
+        }
+
+        // --- ACTIVITY 1: MATCHING ---
+        const draggables1 = document.querySelectorAll('#activity-1 .draggable-item');
+        const zones1 = document.querySelectorAll('#activity-1 .drop-zone');
+        let act1Placed = 0;
+
+        draggables1.forEach(item => {
+            item.addEventListener('dragstart', e => {
+                e.dataTransfer.setData('text/plain', item.dataset.age);
+                e.dataTransfer.setData('source', 'act1');
+                item.classList.add('dragging');
+            });
+            item.addEventListener('dragend', () => item.classList.remove('dragging'));
+        });
+
+        zones1.forEach(zone => {
+            zone.addEventListener('dragover', e => {
+                e.preventDefault();
+                if (!zone.classList.contains('filled')) zone.classList.add('hover');
+            });
+            zone.addEventListener('dragleave', () => zone.classList.remove('hover'));
+            zone.addEventListener('drop', e => {
+                e.preventDefault();
+                zone.classList.remove('hover');
+                if (e.dataTransfer.getData('source') !== 'act1') return;
+
+                const age = e.dataTransfer.getData('text/plain');
+
+                if (age === zone.dataset.accept) {
+                    // Correct
+                    const original = document.querySelector(`#activity-1 .draggable-item[data-age="${age}"]:not(.placed)`);
+                    if(original) {
+                        const clone = original.cloneNode(true);
+                        clone.classList.add('placed');
+                        clone.draggable = false;
+                        zone.querySelector('.zone-content').appendChild(clone);
+                        original.classList.add('placed'); // Mark original as placed
+                        original.style.display = 'none';
+                        act1Placed++;
+                    }
+
+                    if(act1Placed >= 6) {
+                        state.activities[1].completed = true;
+                        state.activities[1].correct = 6;
+                        state.activities[1].score = 100;
+                        document.getElementById('feedback-1').classList.add('show');
+                        updateProgress();
+                        scrollToFeedback(1);
+                    }
+                } else {
+                    zone.style.borderColor = 'var(--color-error)';
+                    setTimeout(() => zone.style.borderColor = 'rgba(12,10,24,0.1)', 500);
+                }
+            });
+        });
+
+        // --- ACTIVITY 2: SIMULATOR (Theorist) ---
+        window.checkSim = function(step, isCorrect, btn) {
+            const parent = document.getElementById(`sim-${step}`);
+            if (parent.dataset.answered) return;
+
+            parent.querySelectorAll('.sim-option').forEach(b => b.style.opacity = '0.6');
+            btn.style.opacity = '1';
+
+            if (isCorrect) {
+                btn.classList.add('correct');
+                parent.dataset.answered = "true";
+                state.activities[2].correct++;
+
+                setTimeout(() => {
+                    parent.style.display = 'none';
+                    const next = document.getElementById(`sim-${step + 1}`);
+                    if (next) {
+                        next.classList.add('active');
+                    } else {
+                        state.activities[2].completed = true;
+                        state.activities[2].score = 100;
+                        document.getElementById('feedback-2').classList.add('show');
+                        updateProgress();
+                        scrollToFeedback(2);
+                    }
+                }, 1000);
+            } else {
+                btn.classList.add('incorrect');
+            }
+        };
+
+        // --- ACTIVITY 3: TWO EXAMS (Comparison Sorting) ---
+        const draggables3 = document.querySelectorAll('#bank-3 .draggable-item');
+        const zones3 = document.querySelectorAll('.compare-zone');
+        let act3Placed = 0;
+
+        draggables3.forEach(item => {
+            item.addEventListener('dragstart', e => {
+                e.dataTransfer.setData('text/plain', item.dataset.type);
+                e.dataTransfer.setData('source', 'act3');
+                item.classList.add('dragging');
+            });
+            item.addEventListener('dragend', () => item.classList.remove('dragging'));
+        });
+
+        zones3.forEach(zone => {
+            zone.addEventListener('dragover', e => {
+                e.preventDefault();
+                zone.classList.add('hover');
+            });
+            zone.addEventListener('dragleave', () => zone.classList.remove('hover'));
+            zone.addEventListener('drop', e => {
+                e.preventDefault();
+                zone.classList.remove('hover');
+                if (e.dataTransfer.getData('source') !== 'act3') return;
+
+                const type = e.dataTransfer.getData('text/plain');
+
+                if (type === zone.dataset.accept) {
+                    const original = document.querySelector(`#bank-3 .draggable-item[data-type="${type}"]:not(.placed)`);
+                    if(original) {
+                        const clone = original.cloneNode(true);
+                        clone.classList.add('placed');
+                        clone.draggable = false;
+                        zone.appendChild(clone);
+                        original.classList.add('placed');
+                        original.style.display = 'none';
+                        act3Placed++;
+                    }
+
+                    if(act3Placed >= 6) {
+                        state.activities[3].completed = true;
+                        state.activities[3].correct = 6;
+                        state.activities[3].score = 100;
+                        document.getElementById('feedback-3').classList.add('show');
+                        updateProgress();
+                        scrollToFeedback(3);
+                    }
+                } else {
+                    zone.style.borderColor = 'var(--color-error)';
+                    setTimeout(() => zone.style.borderColor = '#ddd', 500);
+                }
+            });
+        });
+
+        // --- ACTIVITY 4: RED FLAGS ---
+        window.checkFlag = function(step, isCorrect, btn) {
+            const parent = document.getElementById(`flag-${step}`);
+            if (parent.dataset.answered) return;
+
+            parent.querySelectorAll('.sim-option').forEach(b => b.style.opacity = '0.6');
+            btn.style.opacity = '1';
+
+            if (isCorrect) {
+                btn.classList.add('correct');
+                parent.dataset.answered = "true";
+                state.activities[4].correct++;
+
+                setTimeout(() => {
+                    parent.style.display = 'none';
+                    const next = document.getElementById(`flag-${step + 1}`);
+                    if (next) {
+                        next.classList.add('active');
+                    } else {
+                        state.activities[4].completed = true;
+                        state.activities[4].score = 100;
+                        document.getElementById('feedback-4').classList.add('show');
+                        updateProgress();
+                        scrollToFeedback(4);
+                    }
+                }, 1000);
+            } else {
+                btn.classList.add('incorrect');
+            }
+        };
+
+        // --- BUTTONS ---
+        document.getElementById('reset-all-btn').addEventListener('click', () => location.reload());
+        
+        document.getElementById('check-answers-btn').addEventListener('click', () => {
+            // Force Complete Act 1
+            const items1 = document.querySelectorAll('#activity-1 .draggable-item');
+            items1.forEach(item => {
+                if (!item.classList.contains('placed')) {
+                    const type = item.dataset.age;
+                    const zone = document.querySelector(`#activity-1 .drop-zone[data-accept="${type}"] .zone-content`);
+                    const clone = item.cloneNode(true);
+                    clone.classList.add('placed');
+                    zone.appendChild(clone);
+                    item.style.display = 'none';
+                }
+            });
+            state.activities[1].completed = true;
+            state.activities[1].score = 100;
+            document.getElementById('feedback-1').classList.add('show');
+
+            // Force Complete Act 2
+            state.activities[2].completed = true;
+            state.activities[2].score = 100;
+            document.getElementById('sim-1').style.display = 'none';
+            document.getElementById('sim-2').style.display = 'none';
+            document.getElementById('feedback-2').classList.add('show');
+
+             // Force Complete Act 3
+            const items3 = document.querySelectorAll('#bank-3 .draggable-item');
+            items3.forEach(item => {
+                if (!item.classList.contains('placed')) {
+                    const type = item.dataset.type;
+                    const zone = document.querySelector(`.compare-zone[data-accept="${type}"]`);
+                    const clone = item.cloneNode(true);
+                    clone.classList.add('placed');
+                    zone.appendChild(clone);
+                    item.style.display = 'none';
+                }
+            });
+            state.activities[3].completed = true;
+            state.activities[3].score = 100;
+            document.getElementById('feedback-3').classList.add('show');
+
+            // Force Complete Act 4
+            state.activities[4].completed = true;
+            state.activities[4].score = 100;
+            document.getElementById('flag-1').style.display = 'none';
+            document.getElementById('flag-2').style.display = 'none';
+            document.getElementById('feedback-4').classList.add('show');
+            
+            updateProgress();
+        });
+
+        document.getElementById('view-results-btn').addEventListener('click', () => {
+            const totalScore = (state.activities[1].score + state.activities[2].score + state.activities[3].score + state.activities[4].score) / 4;
+            els.finalScore.textContent = `${Math.round(totalScore)}%`;
+            els.scoreFill.style.width = `${totalScore}%`;
+            els.resultsPanel.classList.add('show');
+            els.resultsPanel.scrollIntoView({ behavior: 'smooth' });
+        });
+    });
+</script>
+</body>
+</html>
