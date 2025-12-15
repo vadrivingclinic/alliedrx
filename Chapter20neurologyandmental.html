@@ -1,0 +1,2101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AlliedRx -- Module 9B: Neurology & Mental Health</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-error: #e17055;
+            --color-warning: #fdcb6e;
+            --color-info: #0984e3;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
+            --color-dark: #0c0a18;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+            --shadow-card: 0 12px 30px rgba(15, 23, 42, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(circle at top left, #ffffff 0, #f1ecff 40%, var(--color-bg) 100%);
+            color: var(--color-text);
+            line-height: 1.5;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 12px; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes checkmarkPop {
+            0% { transform: scale(0); opacity: 0; }
+            70% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @media (max-width: 900px) {
+            .page { padding: 22px; }
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 0; }
+            .page {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 18px 14px 22px;
+            }
+        }
+
+        /* Header */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            filter: drop-shadow(0 3px 8px rgba(0,0,0,0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .brand-logo:hover { transform: scale(1.05); }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--color-success);
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            transition: all 0.3s ease;
+        }
+
+        .badge-mode:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 3vw, 2.2rem);
+            line-height: 1.1;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .module-subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 600px;
+            margin-bottom: 24px;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        /* Progress Tracker - 2 STEP ONLY */
+        .progress-tracker {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            position: relative;
+            padding: 0 40px;
+        }
+
+        .progress-tracker::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 40px;
+            right: 40px;
+            height: 3px;
+            background: rgba(12, 10, 24, 0.08);
+            z-index: 1;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+
+        .step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--color-muted);
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.active .step-circle {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .progress-step.completed .step-circle {
+            background: var(--color-success);
+            border-color: var(--color-success);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.75rem;
+            color: var(--color-muted);
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .progress-step.active .step-label {
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        /* Progress Summary */
+        .progress-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+            animation: fadeInUp 0.6s ease-out 0.5s both;
+        }
+
+        @media (max-width: 600px) {
+            .progress-summary {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+        }
+
+        .summary-card {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            border: 1px solid rgba(12, 10, 24, 0.06);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-card);
+            border-color: var(--color-primary-soft);
+        }
+
+        .summary-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--color-primary);
+            display: block;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .summary-label {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Activity Grid - SINGLE COLUMN */
+        .activity-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .activity-card {
+            background: white;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            padding: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .activity-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--color-primary);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .activity-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--color-primary-soft);
+        }
+
+        .activity-card:hover::before {
+            opacity: 1;
+        }
+
+        .activity-card.completed {
+            border-color: var(--color-success);
+        }
+
+        .activity-card.completed::before {
+            background: var(--color-success);
+            opacity: 1;
+        }
+
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .activity-number {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .activity-status {
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-muted);
+        }
+
+        .activity-card.completed .activity-status {
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--color-success);
+        }
+
+        .activity-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .activity-icon {
+            font-size: 1.2rem;
+        }
+
+        .activity-description {
+            font-size: 0.9rem;
+            color: var(--color-muted);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        /* Activity 1: CNS vs PNS Disorders */
+        .nervous-system-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .nervous-system-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .system-category {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            border: 2px dashed rgba(12, 10, 24, 0.1);
+            min-height: 300px;
+            transition: all 0.3s ease;
+        }
+
+        .system-category.hover {
+            border-color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.05);
+        }
+
+        .system-category.cns {
+            border-color: rgba(0, 184, 148, 0.3);
+        }
+
+        .system-category.pns {
+            border-color: rgba(131, 128, 240, 0.3);
+        }
+
+        .system-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 15px;
+            text-align: center;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(12, 10, 24, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .system-content {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            min-height: 200px;
+        }
+
+        .disorder-items-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .disorder-item {
+            background: rgba(12, 10, 24, 0.05);
+            border-radius: 20px;
+            padding: 8px 15px;
+            font-size: 0.85rem;
+            cursor: grab;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            user-select: none;
+        }
+
+        .disorder-item:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            transform: translateY(-2px);
+        }
+
+        .disorder-item.dragging {
+            opacity: 0.7;
+            transform: scale(0.95);
+        }
+
+        .disorder-item.placed {
+            cursor: default;
+            background: rgba(0, 184, 148, 0.1);
+            border-color: var(--color-success);
+        }
+
+        /* Symptom Checklist - FIXED: All items look identical */
+        .symptom-checklist {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-top: 20px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+        }
+
+        .checklist-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .checklist-instruction {
+            font-size: 0.85rem;
+            color: var(--color-muted);
+            margin-bottom: 15px;
+            font-style: italic;
+            padding: 10px;
+            background: rgba(175, 75, 239, 0.05);
+            border-radius: var(--radius-sm);
+        }
+
+        .checklist-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        @media (max-width: 600px) {
+            .checklist-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px;
+            background: white;
+            border-radius: var(--radius-sm);
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .checklist-item:hover {
+            background: rgba(175, 75, 239, 0.08);
+            border-color: var(--color-primary-soft);
+        }
+
+        .checklist-item.selected {
+            background: rgba(0, 184, 148, 0.1);
+            border-color: var(--color-success);
+        }
+
+        .checklist-item.wrong {
+            background: rgba(225, 112, 85, 0.1);
+            border-color: var(--color-error);
+            animation: shake 0.5s ease;
+        }
+
+        .checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(12, 10, 24, 0.2);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .checklist-item.selected .checkbox {
+            background: var(--color-success);
+            border-color: var(--color-success);
+            color: white;
+        }
+
+        .checklist-item.selected .checkbox:after {
+            content: '✓';
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .checklist-text {
+            font-size: 0.85rem;
+            color: var(--color-text);
+        }
+
+        /* Activity 2: Diagnostic Procedures & Patient Care - FIXED */
+        .procedure-scenario {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+        }
+
+        .scenario-patient {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .patient-avatar {
+            width: 50px;
+            height: 50px;
+            background: rgba(175, 75, 239, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .patient-info {
+            flex: 1;
+        }
+
+        .patient-name {
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 4px;
+        }
+
+        .patient-details {
+            font-size: 0.85rem;
+            color: var(--color-muted);
+            line-height: 1.4;
+        }
+
+        .procedure-instruction {
+            font-size: 0.85rem;
+            color: var(--color-muted);
+            margin-bottom: 15px;
+            font-style: italic;
+            padding: 10px;
+            background: rgba(175, 75, 239, 0.05);
+            border-radius: var(--radius-sm);
+        }
+
+        /* FIXED: All step cards look identical now */
+        .procedure-steps-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .step-card {
+            background: white;
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            cursor: grab;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 250px;
+            flex: 1;
+        }
+
+        .step-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-card);
+            border-color: var(--color-primary-soft);
+        }
+
+        .step-card.dragging {
+            opacity: 0.7;
+            transform: scale(0.98);
+        }
+
+        /* REMOVED: distractor styling - all cards look the same */
+        .step-text {
+            font-size: 0.9rem;
+            color: var(--color-text);
+            flex: 1;
+        }
+
+        .procedure-sequence {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            border: 2px dashed rgba(12, 10, 24, 0.1);
+            min-height: 200px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .procedure-sequence.hover {
+            border-color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.05);
+        }
+
+        .procedure-sequence.empty::after {
+            content: 'Drag ONLY the correct EEG preparation steps here in correct sequence';
+            color: var(--color-muted);
+            text-align: center;
+            font-size: 0.9rem;
+            margin: auto;
+        }
+
+        /* Added styling for placed steps in sequence */
+        .step-in-sequence {
+            background: white;
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 2px solid rgba(0, 184, 148, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(0, 184, 148, 0.05);
+        }
+
+        .step-in-sequence .step-order {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--color-success);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        /* Mental Health Communication */
+        .communication-scenario {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-top: 20px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+        }
+
+        .scenario-text {
+            font-size: 0.9rem;
+            color: var(--color-text);
+            margin-bottom: 15px;
+            line-height: 1.5;
+            font-style: italic;
+        }
+
+        .response-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .response-options {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .response-option {
+            padding: 12px 15px;
+            background: white;
+            border-radius: var(--radius-sm);
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+        }
+
+        .response-option:hover {
+            background: rgba(175, 75, 239, 0.08);
+            border-color: var(--color-primary-soft);
+        }
+
+        .response-option.selected {
+            background: rgba(0, 184, 148, 0.1);
+            border-color: var(--color-success);
+        }
+
+        .response-option.wrong {
+            background: rgba(225, 112, 85, 0.1);
+            border-color: var(--color-error);
+            animation: shake 0.5s ease;
+        }
+
+        /* Tips Box */
+        .tips-box {
+            background: rgba(253, 203, 110, 0.1);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid var(--color-warning);
+        }
+
+        .tips-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--color-warning);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tips-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .tips-list li {
+            font-size: 0.85rem;
+            color: var(--color-text);
+            margin-bottom: 6px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .tips-list li:before {
+            content: '💡';
+            position: absolute;
+            left: 0;
+            font-size: 0.8rem;
+        }
+
+        /* HIPAA & Ethics Section */
+        .hipaa-scenario {
+            background: rgba(9, 132, 227, 0.1);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-top: 20px;
+            border-left: 4px solid var(--color-info);
+        }
+
+        .hipaa-question {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-info);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .hipaa-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .hipaa-option {
+            padding: 10px 15px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: var(--radius-sm);
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+        }
+
+        .hipaa-option:hover {
+            background: white;
+            border-color: var(--color-info);
+        }
+
+        .hipaa-option.selected {
+            background: rgba(9, 132, 227, 0.1);
+            border-color: var(--color-info);
+        }
+
+        /* Feedback */
+        .feedback-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            margin-top: 20px;
+            display: none;
+        }
+
+        .feedback-container.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .feedback-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feedback-icon {
+            font-size: 1.2rem;
+        }
+
+        .feedback-icon.correct {
+            color: var(--color-success);
+        }
+
+        .feedback-icon.incorrect {
+            color: var(--color-error);
+        }
+
+        .feedback-content {
+            font-size: 0.85rem;
+            color: var(--color-text);
+            line-height: 1.5;
+        }
+
+        .feedback-content strong {
+            color: var(--color-primary);
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #9a3bd6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(175, 75, 239, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-text);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(12, 10, 24, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-icon {
+            font-size: 1.1em;
+        }
+
+        /* Results Panel */
+        .results-panel {
+            background: var(--color-dark);
+            color: white;
+            border-radius: var(--radius-md);
+            padding: 30px;
+            margin-top: 30px;
+            display: none;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .results-panel.show {
+            display: block;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .results-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .score-display {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--color-primary-soft);
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .clinical-insights {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .insights-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-primary-soft);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .insights-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .insights-list li {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            font-size: 0.9rem;
+            color: #e5e7eb;
+        }
+
+        .insight-dot {
+            width: 6px;
+            height: 6px;
+            margin-top: 6px;
+            border-radius: 999px;
+            background: var(--color-accent);
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="module-heading">
+        <!-- Header -->
+        <header class="brand-row">
+            <div class="brand">
+                <img
+                    src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                    alt="AlliedRx logo"
+                    class="brand-logo"
+                />
+                <div class="course-meta">
+                    <span class="course-name">Clinical Medical Assistant • Week 9</span>
+                    <div class="week-label">
+                        <span class="week-label-dot"></span>
+                        <span>Chapter 20: Neurology & Mental Health</span>
+                    </div>
+                </div>
+            </div>
+            <span class="badge-mode">Campus & Online</span>
+        </header>
+
+        <h1 id="module-heading">Neurology & Mental Health Clinical Applications</h1>
+        <p class="module-subtitle">
+            Master neurological assessment, diagnostic procedures, and therapeutic communication 
+            for patients with nervous system and mental health disorders.
+        </p>
+
+        <!-- Progress Tracker - 2 STEP ONLY -->
+        <div class="progress-tracker">
+            <div class="progress-step active" data-step="1">
+                <div class="step-circle">1</div>
+                <div class="step-label">Disorder Classification</div>
+            </div>
+            <div class="progress-step" data-step="2">
+                <div class="step-circle">2</div>
+                <div class="step-label">Procedures & Communication</div>
+            </div>
+        </div>
+
+        <!-- Progress Summary -->
+        <div class="progress-summary">
+            <div class="summary-card">
+                <span class="summary-number" id="completed-count">0</span>
+                <span class="summary-label">Activities Completed</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="accuracy-rate">0%</span>
+                <span class="summary-label">Current Accuracy</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="time-spent">0:00</span>
+                <span class="summary-label">Time Spent</span>
+            </div>
+        </div>
+
+        <!-- Activity Grid - SINGLE COLUMN FOR 2 ACTIVITIES -->
+        <div class="activity-grid">
+            <!-- Activity 1: CNS vs PNS Disorders -->
+            <section class="activity-card" id="activity-1" data-activity="1" aria-label="Activity 1: Nervous System Disorder Classification">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 1</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">
+                    <span class="activity-icon">🧠</span>
+                    Nervous System Disorder Classification
+                </h3>
+                <p class="activity-description">
+                    Differentiate between Central Nervous System (CNS) and Peripheral Nervous System (PNS) disorders. 
+                    Identify typical symptoms and understand disease pathology.
+                </p>
+
+                <!-- CNS vs PNS Drag and Drop -->
+                <div class="nervous-system-container">
+                    <div class="system-category cns" id="cns-category" data-category="cns">
+                        <div class="system-title">
+                            <span>🏛️</span> Central Nervous System (CNS)
+                        </div>
+                        <div class="system-content"></div>
+                    </div>
+                    <div class="system-category pns" id="pns-category" data-category="pns">
+                        <div class="system-title">
+                            <span>🔗</span> Peripheral Nervous System (PNS)
+                        </div>
+                        <div class="system-content"></div>
+                    </div>
+                </div>
+
+                <!-- Disorder Items -->
+                <div class="disorder-items-container">
+                    <div class="disorder-item" data-category="cns" draggable="true">Multiple Sclerosis</div>
+                    <div class="disorder-item" data-category="cns" draggable="true">Parkinson's Disease</div>
+                    <div class="disorder-item" data-category="cns" draggable="true">Alzheimer's Disease</div>
+                    <div class="disorder-item" data-category="cns" draggable="true">Stroke (CVA)</div>
+                    <div class="disorder-item" data-category="cns" draggable="true">Epilepsy</div>
+                    <div class="disorder-item" data-category="cns" draggable="true">Meningitis</div>
+                    <div class="disorder-item" data-category="pns" draggable="true">Carpal Tunnel Syndrome</div>
+                    <div class="disorder-item" data-category="pns" draggable="true">Bell's Palsy</div>
+                    <div class="disorder-item" data-category="pns" draggable="true">Guillain-Barré Syndrome</div>
+                    <div class="disorder-item" data-category="pns" draggable="true">Diabetic Neuropathy</div>
+                    <div class="disorder-item" data-category="pns" draggable="true">Sciatica</div>
+                    <div class="disorder-item" data-category="pns" draggable="true">Myasthenia Gravis</div>
+                </div>
+
+                <!-- Stroke Symptom Checklist - FIXED: All items look identical -->
+                <div class="symptom-checklist">
+                    <div class="checklist-title">
+                        <span>⚠️</span> Stroke (CVA) Recognition: Select ONLY Symptoms Requiring Immediate 911 Call
+                    </div>
+                    <div class="checklist-instruction">
+                        <strong>Critical Thinking Challenge:</strong> Some symptoms may be concerning but don't necessarily indicate an emergency stroke requiring immediate 911. Select ONLY those that meet the FAST criteria or indicate acute neurological emergency.
+                    </div>
+                    <div class="checklist-grid">
+                        <!-- All items look identical - no visual hints -->
+                        <div class="checklist-item" data-symptom="facial_droop" data-emergency="true">
+                            <div class="checkbox"></div>
+                            <div class="checklist-text">Sudden facial drooping or asymmetry</div>
+                        </div>
+                        <div class="checklist-item" data-symptom="arm_weakness" data-emergency="true">
+                            <div class="checkbox"></div>
+                            <div class="checklist-text">Arm weakness or drift (can't raise both arms equally)</div>
+                        </div>
+                        <div class="checklist-item" data-symptom="speech_difficulty" data-emergency="true">
+                            <div class="checkbox"></div>
+                            <div class="checklist-text">Speech difficulty or slurred speech (new onset)</div>
+                        </div>
+                        <div class="checklist-item" data-symptom="sudden_headache" data-emergency="true">
+                            <div class="checkbox"></div>
+                            <div class="checklist-text">Sudden severe headache ("worst headache of life")</div>
+                        </div>
+                        <div class="checklist-item" data-symptom="vision_changes" data-emergency="true">
+                            <div class="checkbox"></div>
+                            <div class="checklist-text">Sudden vision loss in one or both eyes</div>
+                        </div>
+                        <div class="checklist-item" data-symptom="mild_headache" data-emergency="false">
+                            <div class="checkbox"></div>
+                            <div class="checklist-text">Mild headache for several days</div>
+                        </div>
+                        <div class="checklist-item" data-symptom="chronic_numbness" data-emergency="false">
+                            <div class="checkbox"></div>
+                            <div class="checklist-text">Chronic numbness/tingling in hands (months)</div>
+                        </div>
+                        <div class="checklist-item" data-symptom="gradual_memory" data-emergency="false">
+                            <div class="checkbox"></div>
+                            <div class="checklist-text">Gradual memory changes over past year</div>
+                        </div>
+                        <div class="checklist-item" data-symptom="dizziness" data-emergency="false">
+                            <div class="checkbox"></div>
+                            <div class="checklist-text">Occasional dizziness when standing up</div>
+                        </div>
+                        <div class="checklist-item" data-symptom="confusion" data-emergency="true">
+                            <div class="checkbox"></div>
+                            <div class="checklist-text">Sudden confusion or trouble understanding</div>
+                        </div>
+                        <div class="checklist-item" data-symptom="balance_problems" data-emergency="true">
+                            <div class="checkbox"></div>
+                            <div class="checklist-text">Sudden trouble walking or loss of balance</div>
+                        </div>
+                        <div class="checklist-item" data-symptom="tiredness" data-emergency="false">
+                            <div class="checkbox"></div>
+                            <div class="checklist-text">General tiredness or fatigue</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tips Box -->
+                <div class="tips-box">
+                    <div class="tips-title">
+                        <span>💡</span> Clinical Differentiation Tips
+                    </div>
+                    <ul class="tips-list">
+                        <li><strong>CNS disorders</strong> affect brain/spinal cord: think cognitive, motor control, consciousness.</li>
+                        <li><strong>PNS disorders</strong> affect nerves outside CNS: think sensation, muscle strength, reflexes.</li>
+                        <li><strong>Remember FAST for stroke:</strong> Face drooping, Arm weakness, Speech difficulty, Time to call 911.</li>
+                        <li><strong>Key differentiator:</strong> "Sudden" onset = emergency. Chronic or gradual symptoms = schedule appointment.</li>
+                        <li><strong>Time is brain:</strong> Stroke treatment must begin within 3-4.5 hours for best outcomes.</li>
+                    </ul>
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback-container" id="feedback-1">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Nervous System Disorders Classified!
+                    </div>
+                    <div class="feedback-content">
+                        <strong>CNS Disorders (Brain & Spinal Cord):</strong><br>
+                        • <strong>Multiple Sclerosis:</strong> Autoimmune demyelination of CNS<br>
+                        • <strong>Parkinson's:</strong> Degeneration of substantia nigra (dopamine)<br>
+                        • <strong>Alzheimer's:</strong> Progressive dementia with plaques/tangles<br>
+                        • <strong>Stroke (CVA):</strong> Brain blood flow interruption<br>
+                        • <strong>Epilepsy:</strong> Recurrent seizures from abnormal electrical activity<br>
+                        • <strong>Meningitis:</strong> Inflammation of meninges (brain/spinal cord covering)<br><br>
+                        
+                        <strong>PNS Disorders (Nerves Outside CNS):</strong><br>
+                        • <strong>Carpal Tunnel:</strong> Median nerve compression at wrist<br>
+                        • <strong>Bell's Palsy:</strong> Facial nerve paralysis (usually temporary)<br>
+                        • <strong>Guillain-Barré:</strong> Autoimmune attack on peripheral nerves<br>
+                        • <strong>Diabetic Neuropathy:</strong> Nerve damage from chronic high glucose<br>
+                        • <strong>Sciatica:</strong> Compression/irritation of sciatic nerve<br>
+                        • <strong>Myasthenia Gravis:</strong> Autoimmune affecting neuromuscular junction<br><br>
+                        
+                        <strong>Stroke Recognition - CRITICAL THINKING:</strong><br>
+                        <strong>✓ IMMEDIATE 911 REQUIRED (FAST Criteria):</strong><br>
+                        • Sudden facial drooping or asymmetry<br>
+                        • Arm weakness or drift (can't raise both arms equally)<br>
+                        • Speech difficulty or slurred speech (new onset)<br>
+                        • Sudden severe headache ("worst headache of life")<br>
+                        • Sudden vision loss in one or both eyes<br>
+                        • Sudden confusion or trouble understanding<br>
+                        • Sudden trouble walking or loss of balance<br><br>
+                        
+                        <strong>✗ Schedule Appointment (Not Immediate 911):</strong><br>
+                        • Mild headache for several days (chronic, not sudden/severe)<br>
+                        • Chronic numbness/tingling in hands (months duration)<br>
+                        • Gradual memory changes over past year (progressive, not sudden)<br>
+                        • Occasional dizziness when standing up (likely orthostatic hypotension)<br>
+                        • General tiredness or fatigue (non-specific symptom)<br><br>
+                        
+                        <strong>Clinical Judgment:</strong> The key differentiator is <strong>"SUDDEN" onset</strong>. 
+                        Chronic or gradual symptoms warrant medical evaluation but don't require emergency 911 response.
+                        When in doubt, always err on the side of calling 911 for possible stroke.
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity 2: Diagnostic Procedures & Patient Care - FIXED -->
+            <section class="activity-card" id="activity-2" data-activity="2" aria-label="Activity 2: Diagnostic Procedures & Patient Communication">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 2</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">
+                    <span class="activity-icon">🩺</span>
+                    Diagnostic Procedures & Therapeutic Communication
+                </h3>
+                <p class="activity-description">
+                    Practice preparing patients for neurological procedures and apply therapeutic 
+                    communication techniques for patients with mental health concerns.
+                </p>
+
+                <!-- EEG Preparation Scenario - FIXED: All cards look identical -->
+                <div class="procedure-scenario">
+                    <div class="scenario-patient">
+                        <div class="patient-avatar">👨</div>
+                        <div class="patient-info">
+                            <div class="patient-name">Mr. James Wilson, 58</div>
+                            <div class="patient-details">
+                                Referred for EEG to evaluate possible seizure activity. History of recent blackout episodes. 
+                                Anxious about the procedure. Takes Levothyroxine daily.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="procedure-instruction">
+                        <strong>Critical Thinking:</strong> Among the steps below, some are CORRECT EEG preparation steps, 
+                        some are INCORRECT, and some are DISTRACTORS that apply to other procedures. 
+                        Drag ONLY the CORRECT steps into the sequence area in the proper order.
+                    </div>
+                    
+                    <div class="procedure-steps-container">
+                        <!-- All cards look identical - no visual hints -->
+                        <div class="step-card" data-step="1" draggable="true" data-correct="true">
+                            <div class="step-text">Explain procedure: painless recording of brain electrical activity</div>
+                        </div>
+                        <div class="step-card" data-step="2" draggable="true" data-correct="true">
+                            <div class="step-text">Instruct to wash hair night before (no oils, sprays, conditioners)</div>
+                        </div>
+                        <div class="step-card" data-step="3" draggable="true" data-correct="true">
+                            <div class="step-text">Advise to continue regular medications unless directed otherwise</div>
+                        </div>
+                        <div class="step-card" data-step="4" draggable="true" data-correct="true">
+                            <div class="step-text">Instruct on sleep: adequate sleep unless sleep deprivation ordered</div>
+                        </div>
+                        <div class="step-card" draggable="true" data-correct="false">
+                            <div class="step-text">Hold breath during the procedure</div>
+                        </div>
+                        <div class="step-card" draggable="true" data-correct="false">
+                            <div class="step-text">Fast for 8 hours before procedure</div>
+                        </div>
+                        <div class="step-card" data-step="5" draggable="true" data-correct="true">
+                            <div class="step-text">Explain electrodes placed on scalp with conductive paste</div>
+                        </div>
+                        <div class="step-card" data-step="6" draggable="true" data-correct="true">
+                            <div class="step-text">Inform about activation procedures (deep breathing, flashing lights)</div>
+                        </div>
+                        <div class="step-card" data-step="7" draggable="true" data-correct="true">
+                            <div class="step-text">Schedule procedure and provide written instructions</div>
+                        </div>
+                        <div class="step-card" draggable="true" data-correct="false">
+                            <div class="step-text">Drink contrast dye 1 hour before the procedure</div>
+                        </div>
+                    </div>
+
+                    <div class="procedure-sequence empty" id="eeg-sequence"></div>
+                </div>
+
+                <!-- Mental Health Communication Scenario -->
+                <div class="communication-scenario">
+                    <div class="scenario-text">
+                        "I just don't see the point anymore. Everything feels so heavy, and I can't even get out of bed most days. 
+                        My family says I should just 'snap out of it,' but they don't understand how hard this is."
+                    </div>
+                    
+                    <div class="checklist-title">
+                        <span>🗣️</span> Select the MOST therapeutic response:
+                    </div>
+                    
+                    <div class="response-options">
+                        <div class="response-option" data-response="1">
+                            "You need to think more positively. Look on the bright side!"
+                        </div>
+                        <div class="response-option" data-response="2">
+                            "I understand how you feel. Depression is a real medical condition."
+                        </div>
+                        <div class="response-option" data-response="3">
+                            "Just try exercising more. That always makes me feel better."
+                        </div>
+                        <div class="response-option" data-response="4">
+                            "It sounds like you're experiencing significant depression. Would you like to talk about treatment options with the provider?"
+                        </div>
+                    </div>
+                </div>
+
+                <!-- HIPAA & Ethics Scenario -->
+                <div class="hipaa-scenario">
+                    <div class="hipaa-question">
+                        <span>🔒</span> HIPAA Scenario: A patient's family member calls asking for test results
+                    </div>
+                    <div class="scenario-text">
+                        Mrs. Chen's daughter calls the neurology office: "My mother had her MRI yesterday for memory problems. 
+                        Can you tell me the results? I'm her daughter and I take care of her."
+                    </div>
+                    
+                    <div class="hipaa-options">
+                        <div class="hipaa-option" data-option="1">
+                            Provide the results since she's family and involved in care
+                        </div>
+                        <div class="hipaa-option" data-option="2">
+                            Verify Mrs. Chen has authorized release of information to her daughter
+                        </div>
+                        <div class="hipaa-option" data-option="3">
+                            Tell her you can't discuss anything without her mother present
+                        </div>
+                        <div class="hipaa-option" data-option="4">
+                            Give general information but withhold specific diagnosis
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tips Box -->
+                <div class="tips-box">
+                    <div class="tips-title">
+                        <span>💡</span> Patient Care & Communication Tips
+                    </div>
+                    <ul class="tips-list">
+                        <li><strong>EEG vs Other Procedures:</strong> EEG doesn't require fasting, contrast, or breath-holding. Hair preparation is unique to EEG.</li>
+                        <li><strong>Therapeutic Communication:</strong> Use reflective listening, validate feelings, avoid giving advice or false reassurance.</li>
+                        <li><strong>Mental Health Stigma:</strong> Use person-first language ("person with depression" not "depressed person").</li>
+                        <li><strong>HIPAA Compliance:</strong> Always verify authorization before releasing ANY PHI, even to family members.</li>
+                        <li><strong>Documentation:</strong> Record patient education provided, concerns expressed, and safety assessments.</li>
+                    </ul>
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback-container" id="feedback-2">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Clinical Procedures & Communication Mastered!
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Correct EEG Preparation Sequence (7 Steps):</strong><br>
+                        1. Explain procedure (painless brain activity recording)<br>
+                        2. Wash hair night before (no products - critical for electrode contact)<br>
+                        3. Continue regular medications (unless directed otherwise)<br>
+                        4. Sleep instructions (adequate sleep, possible deprivation if ordered)<br>
+                        5. Explain electrode placement (scalp with conductive paste)<br>
+                        6. Inform about activation procedures (breathing, lights)<br>
+                        7. Schedule and provide written instructions<br><br>
+                        
+                        <strong>Distractors/Incorrect Steps Explained:</strong><br>
+                        • <strong>"Hold breath during procedure"</strong> - INCORRECT: This is for MRI, not EEG<br>
+                        • <strong>"Fast for 8 hours before"</strong> - INCORRECT: EEG doesn't require fasting<br>
+                        • <strong>"Drink contrast dye 1 hour before"</strong> - INCORRECT: This is for CT scan with contrast<br><br>
+                        
+                        <strong>Why Sequence Matters:</strong> Hair products interfere with electrode-scalp contact. 
+                        Sleep deprivation may be ordered for certain epilepsy types. Continuing medications prevents 
+                        withdrawal symptoms. Understanding what's NOT needed prevents unnecessary patient burden.<br><br>
+                        
+                        <strong>Therapeutic Response Analysis:</strong><br>
+                        • <strong>Response 4 is MOST therapeutic:</strong> Validates experience, uses clinical terminology, offers collaboration with provider<br>
+                        • <strong>Avoid:</strong> Minimizing ("snap out of it"), giving personal advice ("exercise helps me"), or false reassurance<br>
+                        • <strong>Key technique:</strong> Reflective listening + offering professional support<br><br>
+                        
+                        <strong>HIPAA Correct Action:</strong><br>
+                        • <strong>Option 2 is correct:</strong> Verify authorization before releasing ANY PHI<br>
+                        • <strong>NEVER assume</strong> family involvement equals authorization<br>
+                        • <strong>Document</strong> the inquiry and your response in the patient's record<br>
+                        • <strong>Appropriate response:</strong> "I need to verify your mother's authorization first. Would you like me to have her call you?"<br><br>
+                        
+                        <strong>Clinical Documentation:</strong> Always document patient education provided, 
+                        safety concerns addressed (suicidal ideation screening), and HIPAA-related inquiries.
+                        For EEG prep, document which instructions were given and patient understanding.
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn btn-secondary" id="reset-all-btn" aria-label="Reset all activities">
+                <span class="btn-icon">↻</span>
+                Reset All Activities
+            </button>
+            <button class="btn btn-secondary" id="check-answers-btn" aria-label="Check all answers">
+                <span class="btn-icon">✓</span>
+                Check All Answers
+            </button>
+            <button class="btn btn-primary" id="view-results-btn" aria-label="View final results">
+                <span class="btn-icon">📊</span>
+                View Final Results
+            </button>
+        </div>
+
+        <!-- Results Panel -->
+        <div class="results-panel" id="results-panel">
+            <div class="results-header">
+                <h2 class="results-title">Neurology & Mental Health Competency Results</h2>
+            </div>
+            <div class="score-display" id="final-score">0%</div>
+            
+            <div class="clinical-insights">
+                <h3 class="insights-title">
+                    <span>🧠</span> Neurological Assessment Insights
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>CNS vs PNS:</strong> CNS = brain/spinal cord (cognitive, consciousness, motor control). PNS = peripheral nerves (sensation, reflexes, muscle strength). Accurate differentiation guides diagnostic testing and treatment approaches.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Stroke Recognition:</strong> TIME IS BRAIN. Know FAST: Face, Arm, Speech, Time. Document exact symptom onset time - it determines thrombolytic therapy eligibility (3-4.5 hour window). Key: "Sudden" onset distinguishes emergency from chronic conditions.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>EEG vs Other Procedures:</strong> EEG requires hair prep (no products), doesn't require fasting/contrast. Sleep deprivation may be ordered. Document all patient education and ensure understanding of what's NOT required.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Seizure Safety:</strong> During seizure: Time it, protect from injury (move objects), turn on side (recovery position), NEVER put anything in mouth. Document duration and characteristics.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="clinical-insights" style="margin-top: 20px;">
+                <h3 class="insights-title">
+                    <span>💬</span> Mental Health Communication & Ethics
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Therapeutic Communication:</strong> Use reflective listening ("It sounds like..."), validate feelings, avoid advice-giving. Person-first language reduces stigma ("person with schizophrenia" not "schizophrenic").</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Safety Assessment:</strong> MUST ask about suicidal/homicidal ideation with depressed patients. Document exact wording of patient response. Know your facility's emergency protocols.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>HIPAA in Neurology/Mental Health:</strong> Extra sensitivity required. Family involvement doesn't equal authorization. Verify release forms for EVERY disclosure, even to involved family members.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Documentation Standards:</strong> Record mental status exam findings objectively. Quote patient statements when possible. Document safety assessments, education provided, and follow-up plans.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="clinical-insights" style="margin-top: 20px; background: rgba(225, 112, 85, 0.05); border-left: 4px solid var(--color-error);">
+                <h3 class="insights-title" style="color: var(--color-error);">
+                    <span>⚠️</span> Critical Safety Alerts
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot" style="background: var(--color-error);"></span>
+                        <span><strong>STAT Response Required:</strong> Stroke symptoms (FAST criteria), status epilepticus (seizure >5 minutes), sudden severe headache ("worst headache of life"), acute mental status changes.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot" style="background: var(--color-error);"></span>
+                        <span><strong>Mandatory Reporting:</strong> Elder abuse, child abuse, domestic violence, Tarasoff duty (threat to identifiable person). Know your state's specific requirements.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot" style="background: var(--color-error);"></span>
+                        <span><strong>Procedure Errors:</strong> Don't confuse EEG prep with MRI/CT instructions. EEG: hair prep important. MRI: no metal, possible contrast. CT: possible contrast, possible fasting.</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // State Management - 2 ACTIVITIES ONLY
+            const state = {
+                activities: {
+                    1: { completed: false, correct: 0, total: 19, score: 0 }, // 12 drag items + 7 correct symptoms
+                    2: { completed: false, correct: 0, total: 19, score: 0 }    // 7 EEG steps + 1 response + 1 HIPAA + 10 sequence points
+                },
+                startedAt: new Date(),
+                timeSpent: 0
+            };
+
+            // DOM Elements
+            const progressSteps = document.querySelectorAll('.progress-step');
+            const activityCards = document.querySelectorAll('.activity-card');
+            const completedCount = document.getElementById('completed-count');
+            const accuracyRate = document.getElementById('accuracy-rate');
+            const timeSpent = document.getElementById('time-spent');
+            const resetBtn = document.getElementById('reset-all-btn');
+            const checkBtn = document.getElementById('check-answers-btn');
+            const resultsBtn = document.getElementById('view-results-btn');
+            const resultsPanel = document.getElementById('results-panel');
+            const finalScore = document.getElementById('final-score');
+
+            // Timer for time spent
+            function updateTimer() {
+                const now = new Date();
+                const diff = Math.floor((now - state.startedAt) / 1000);
+                state.timeSpent = diff;
+                const minutes = Math.floor(diff / 60);
+                const seconds = diff % 60;
+                timeSpent.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            }
+            setInterval(updateTimer, 1000);
+
+            // Update Progress Summary
+            function updateProgressSummary() {
+                let completed = 0;
+                let totalCorrect = 0;
+                let totalItems = 0;
+
+                Object.values(state.activities).forEach(activity => {
+                    if (activity.completed) completed++;
+                    totalCorrect += activity.correct;
+                    totalItems += activity.total;
+                });
+
+                completedCount.textContent = completed;
+                const accuracy = totalItems > 0 ? Math.round((totalCorrect / totalItems) * 100) : 0;
+                accuracyRate.textContent = `${accuracy}%`;
+
+                // Update progress steps
+                progressSteps.forEach((step, index) => {
+                    if (index < completed) {
+                        step.classList.add('completed');
+                        step.classList.remove('active');
+                    } else if (index === completed) {
+                        step.classList.add('active');
+                        step.classList.remove('completed');
+                    } else {
+                        step.classList.remove('active', 'completed');
+                    }
+                });
+            }
+
+            // Activity 1: CNS vs PNS Disorders - FIXED
+            function initActivity1() {
+                const disorderItems = document.querySelectorAll('#activity-1 .disorder-item');
+                const cnsCategory = document.getElementById('cns-category');
+                const pnsCategory = document.getElementById('pns-category');
+                const symptomChecklist = document.querySelectorAll('#activity-1 .checklist-item');
+                const feedback = document.getElementById('feedback-1');
+                const status = document.querySelector('#activity-1 .activity-status');
+
+                const correctCategories = {
+                    'Multiple Sclerosis': 'cns',
+                    'Parkinson\'s Disease': 'cns',
+                    'Alzheimer\'s Disease': 'cns',
+                    'Stroke (CVA)': 'cns',
+                    'Epilepsy': 'cns',
+                    'Meningitis': 'cns',
+                    'Carpal Tunnel Syndrome': 'pns',
+                    'Bell\'s Palsy': 'pns',
+                    'Guillain-Barré Syndrome': 'pns',
+                    'Diabetic Neuropathy': 'pns',
+                    'Sciatica': 'pns',
+                    'Myasthenia Gravis': 'pns'
+                };
+
+                // Only 7 symptoms require immediate 911 (not all 12)
+                const emergencySymptoms = ['facial_droop', 'arm_weakness', 'speech_difficulty', 
+                                          'sudden_headache', 'vision_changes', 'confusion', 'balance_problems'];
+
+                let placedItems = 0;
+                let correctPlacements = 0;
+                let selectedSymptoms = [];
+                let correctSymptomCount = 0;
+
+                // Setup drag and drop for disorders
+                disorderItems.forEach(item => {
+                    item.addEventListener('dragstart', function(e) {
+                        e.dataTransfer.setData('text/plain', this.textContent);
+                        this.classList.add('dragging');
+                    });
+
+                    item.addEventListener('dragend', function() {
+                        this.classList.remove('dragging');
+                    });
+                });
+
+                [cnsCategory, pnsCategory].forEach(category => {
+                    category.addEventListener('dragover', function(e) {
+                        e.preventDefault();
+                        this.classList.add('hover');
+                    });
+
+                    category.addEventListener('dragleave', function() {
+                        this.classList.remove('hover');
+                    });
+
+                    category.addEventListener('drop', function(e) {
+                        e.preventDefault();
+                        this.classList.remove('hover');
+                        const itemText = e.dataTransfer.getData('text/plain');
+                        
+                        const originalItem = Array.from(disorderItems).find(item => 
+                            item.textContent === itemText && !item.classList.contains('placed')
+                        );
+
+                        if (originalItem) {
+                            const targetCategory = this.dataset.category;
+                            const isCorrect = correctCategories[itemText] === targetCategory;
+                            
+                            const placedDiv = document.createElement('div');
+                            placedDiv.className = 'disorder-item placed';
+                            placedDiv.textContent = itemText;
+                            placedDiv.style.margin = '4px 0';
+                            this.querySelector('.system-content').appendChild(placedDiv);
+                            
+                            originalItem.style.display = 'none';
+                            originalItem.classList.add('placed');
+                            
+                            placedItems++;
+                            if (isCorrect) correctPlacements++;
+                            
+                            checkActivity1Completion();
+                        }
+                    });
+                });
+
+                // Setup symptom checklist - FIXED: No visual hints
+                symptomChecklist.forEach(item => {
+                    item.addEventListener('click', function() {
+                        const symptom = this.dataset.symptom;
+                        const isEmergency = this.dataset.emergency === 'true';
+                        
+                        if (this.classList.contains('selected')) {
+                            this.classList.remove('selected');
+                            selectedSymptoms = selectedSymptoms.filter(s => s !== symptom);
+                            if (isEmergency) correctSymptomCount--;
+                        } else {
+                            this.classList.add('selected');
+                            selectedSymptoms.push(symptom);
+                            if (isEmergency) correctSymptomCount++;
+                        }
+                        
+                        // Check if all correct symptoms are selected (7 total)
+                        const allEmergencySelected = emergencySymptoms.every(s => 
+                            selectedSymptoms.includes(s));
+                        const noNonEmergencySelected = selectedSymptoms.every(s => 
+                            emergencySymptoms.includes(s));
+                        
+                        if (allEmergencySelected && noNonEmergencySelected && selectedSymptoms.length === 7) {
+                            // All correct!
+                            checkActivity1Completion();
+                        }
+                    });
+                });
+
+                function checkActivity1Completion() {
+                    if (placedItems === 12 && selectedSymptoms.length === 7) {
+                        state.activities[1].completed = true;
+                        state.activities[1].correct = correctPlacements + correctSymptomCount;
+                        state.activities[1].score = Math.round((state.activities[1].correct / 19) * 100);
+                        
+                        status.textContent = 'Completed';
+                        status.style.color = '#00b894';
+                        document.querySelector('#activity-1').classList.add('completed');
+                        feedback.classList.add('show');
+                        
+                        updateProgressSummary();
+                    }
+                }
+            }
+
+            // Activity 2: Diagnostic Procedures & Patient Care - FIXED
+            function initActivity2() {
+                const eegSteps = document.querySelectorAll('#activity-2 .step-card');
+                const eegSequence = document.getElementById('eeg-sequence');
+                const responseOptions = document.querySelectorAll('#activity-2 .response-option');
+                const hipaaOptions = document.querySelectorAll('#activity-2 .hipaa-option');
+                const feedback = document.getElementById('feedback-2');
+                const status = document.querySelector('#activity-2 .activity-status');
+
+                const correctEEGOrder = ['1', '2', '3', '4', '5', '6', '7'];
+                const correctResponse = '4';
+                const correctHipaaOption = '2';
+
+                let placedSteps = [];
+                let selectedResponse = null;
+                let selectedHipaaOption = null;
+
+                // Setup EEG step dragging - FIXED: No visual hints
+                eegSteps.forEach(step => {
+                    step.addEventListener('dragstart', function(e) {
+                        e.dataTransfer.setData('text/plain', JSON.stringify({
+                            step: this.dataset.step,
+                            text: this.querySelector('.step-text').textContent,
+                            isCorrect: this.dataset.correct === 'true'
+                        }));
+                        this.classList.add('dragging');
+                    });
+
+                    step.addEventListener('dragend', function() {
+                        this.classList.remove('dragging');
+                    });
+                });
+
+                eegSequence.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    this.classList.add('hover');
+                    this.classList.remove('empty');
+                });
+
+                eegSequence.addEventListener('dragleave', function() {
+                    this.classList.remove('hover');
+                });
+
+                eegSequence.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('hover');
+                    const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+
+                    // Check if it's a correct step (not a distractor)
+                    if (data.isCorrect) {
+                        const stepNumber = data.step;
+                        
+                        if (!placedSteps.includes(stepNumber)) {
+                            placedSteps.push(stepNumber);
+
+                            const stepDiv = document.createElement('div');
+                            stepDiv.className = 'step-in-sequence';
+                            const orderNumber = placedSteps.length;
+                            stepDiv.innerHTML = `
+                                <div class="step-order">${orderNumber}</div>
+                                <div class="step-text">${data.text}</div>
+                            `;
+                            this.appendChild(stepDiv);
+
+                            const originalStep = Array.from(eegSteps).find(step => 
+                                step.dataset.step === stepNumber && step.style.display !== 'none'
+                            );
+                            if (originalStep) {
+                                originalStep.style.display = 'none';
+                            }
+
+                            checkActivity2Completion();
+                        }
+                    } else {
+                        // Show error for distractor - but don't reveal which ones are distractors
+                        const sequence = this;
+                        sequence.style.borderColor = 'var(--color-error)';
+                        sequence.style.background = 'rgba(225, 112, 85, 0.05)';
+                        setTimeout(() => {
+                            sequence.style.borderColor = '';
+                            sequence.style.background = '';
+                        }, 1000);
+                    }
+                });
+
+                // Setup response selection
+                responseOptions.forEach(option => {
+                    option.addEventListener('click', function() {
+                        responseOptions.forEach(opt => opt.classList.remove('selected'));
+                        this.classList.add('selected');
+                        selectedResponse = this.dataset.response;
+                        checkActivity2Completion();
+                    });
+                });
+
+                // Setup HIPAA option selection
+                hipaaOptions.forEach(option => {
+                    option.addEventListener('click', function() {
+                        hipaaOptions.forEach(opt => opt.classList.remove('selected'));
+                        this.classList.add('selected');
+                        selectedHipaaOption = this.dataset.option;
+                        checkActivity2Completion();
+                    });
+                });
+
+                function checkActivity2Completion() {
+                    const eegComplete = placedSteps.length === 7;
+                    const responseComplete = selectedResponse !== null;
+                    const hipaaComplete = selectedHipaaOption !== null;
+
+                    if (eegComplete && responseComplete && hipaaComplete) {
+                        // Calculate score
+                        let score = 0;
+                        
+                        // EEG sequence points (1 point per correct step placed)
+                        score += placedSteps.length;
+                        
+                        // Bonus for correct sequence order (3 points)
+                        if (JSON.stringify(placedSteps) === JSON.stringify(correctEEGOrder)) {
+                            score += 3;
+                        }
+                        
+                        // Response selection (2 points for correct)
+                        if (selectedResponse === correctResponse) score += 2;
+                        
+                        // HIPAA selection (2 points for correct)
+                        if (selectedHipaaOption === correctHipaaOption) score += 2;
+                        
+                        state.activities[2].completed = true;
+                        state.activities[2].correct = score;
+                        state.activities[2].score = Math.round((score / 19) * 100);
+                        
+                        status.textContent = 'Completed';
+                        status.style.color = '#00b894';
+                        document.querySelector('#activity-2').classList.add('completed');
+                        feedback.classList.add('show');
+                        
+                        updateProgressSummary();
+                    }
+                }
+            }
+
+            // Reset All Activities
+            function resetAllActivities() {
+                // Reset state
+                state.activities = {
+                    1: { completed: false, correct: 0, total: 19, score: 0 },
+                    2: { completed: false, correct: 0, total: 19, score: 0 }
+                };
+                state.startedAt = new Date();
+
+                // Reset UI
+                activityCards.forEach(card => {
+                    card.classList.remove('completed');
+                    const status = card.querySelector('.activity-status');
+                    status.textContent = 'Not Started';
+                    status.style.color = '';
+                    const feedback = card.querySelector('.feedback-container');
+                    feedback.classList.remove('show');
+                });
+
+                // Reset Activity 1
+                document.querySelectorAll('.system-content').forEach(content => {
+                    content.innerHTML = '';
+                });
+                
+                document.querySelectorAll('#activity-1 .disorder-item').forEach(item => {
+                    item.style.display = '';
+                    item.classList.remove('placed');
+                });
+                
+                document.querySelectorAll('#activity-1 .checklist-item').forEach(item => {
+                    item.classList.remove('selected', 'wrong');
+                });
+
+                // Reset Activity 2
+                const eegSequence = document.getElementById('eeg-sequence');
+                eegSequence.innerHTML = '';
+                eegSequence.classList.add('empty');
+                eegSequence.style.borderColor = '';
+                eegSequence.style.background = '';
+                
+                document.querySelectorAll('#activity-2 .step-card').forEach(step => {
+                    step.style.display = '';
+                });
+                
+                document.querySelectorAll('#activity-2 .response-option').forEach(option => {
+                    option.classList.remove('selected');
+                });
+                
+                document.querySelectorAll('#activity-2 .hipaa-option').forEach(option => {
+                    option.classList.remove('selected');
+                });
+
+                // Reset results
+                resultsPanel.classList.remove('show');
+
+                // Update progress
+                updateProgressSummary();
+            }
+
+            // Check All Answers
+            function checkAllAnswers() {
+                // Trigger completion for both activities with correct answers
+                if (!state.activities[1].completed) {
+                    const feedback = document.getElementById('feedback-1');
+                    const status = document.querySelector('#activity-1 .activity-status');
+                    
+                    // Auto-place all items correctly
+                    const correctCNS = ['Multiple Sclerosis', 'Parkinson\'s Disease', 'Alzheimer\'s Disease', 
+                                       'Stroke (CVA)', 'Epilepsy', 'Meningitis'];
+                    const correctPNS = ['Carpal Tunnel Syndrome', 'Bell\'s Palsy', 'Guillain-Barré Syndrome',
+                                       'Diabetic Neuropathy', 'Sciatica', 'Myasthenia Gravis'];
+                    
+                    // Clear and rebuild
+                    document.querySelector('#cns-category .system-content').innerHTML = '';
+                    document.querySelector('#pns-category .system-content').innerHTML = '';
+                    
+                    correctCNS.forEach(disorder => {
+                        const div = document.createElement('div');
+                        div.className = 'disorder-item placed';
+                        div.textContent = disorder;
+                        div.style.margin = '4px 0';
+                        document.querySelector('#cns-category .system-content').appendChild(div);
+                    });
+                    
+                    correctPNS.forEach(disorder => {
+                        const div = document.createElement('div');
+                        div.className = 'disorder-item placed';
+                        div.textContent = disorder;
+                        div.style.margin = '4px 0';
+                        document.querySelector('#pns-category .system-content').appendChild(div);
+                    });
+                    
+                    // Hide all original items
+                    document.querySelectorAll('#activity-1 .disorder-item').forEach(item => {
+                        item.style.display = 'none';
+                        item.classList.add('placed');
+                    });
+                    
+                    // Select only the 7 correct emergency symptoms
+                    const emergencySymptoms = ['facial_droop', 'arm_weakness', 'speech_difficulty', 
+                                              'sudden_headache', 'vision_changes', 'confusion', 'balance_problems'];
+                    
+                    document.querySelectorAll('#activity-1 .checklist-item').forEach(item => {
+                        if (emergencySymptoms.includes(item.dataset.symptom)) {
+                            item.classList.add('selected');
+                        }
+                    });
+                    
+                    state.activities[1].completed = true;
+                    state.activities[1].correct = 19;
+                    state.activities[1].score = 100;
+                    status.textContent = 'Completed';
+                    status.style.color = '#00b894';
+                    document.querySelector('#activity-1').classList.add('completed');
+                    feedback.classList.add('show');
+                }
+
+                if (!state.activities[2].completed) {
+                    const feedback = document.getElementById('feedback-2');
+                    const status = document.querySelector('#activity-2 .activity-status');
+                    
+                    // Clear and rebuild EEG sequence (only correct steps)
+                    const eegSequence = document.getElementById('eeg-sequence');
+                    eegSequence.innerHTML = '';
+                    eegSequence.classList.remove('empty');
+                    
+                    const correctSteps = [
+                        {step: '1', text: 'Explain procedure: painless recording of brain electrical activity'},
+                        {step: '2', text: 'Instruct to wash hair night before (no oils, sprays, conditioners)'},
+                        {step: '3', text: 'Advise to continue regular medications unless directed otherwise'},
+                        {step: '4', text: 'Instruct on sleep: adequate sleep unless sleep deprivation ordered'},
+                        {step: '5', text: 'Explain electrodes placed on scalp with conductive paste'},
+                        {step: '6', text: 'Inform about activation procedures (deep breathing, flashing lights)'},
+                        {step: '7', text: 'Schedule procedure and provide written instructions'}
+                    ];
+                    
+                    correctSteps.forEach((step, index) => {
+                        const stepDiv = document.createElement('div');
+                        stepDiv.className = 'step-in-sequence';
+                        stepDiv.innerHTML = `
+                            <div class="step-order">${index + 1}</div>
+                            <div class="step-text">${step.text}</div>
+                        `;
+                        eegSequence.appendChild(stepDiv);
+                    });
+                    
+                    // Hide all original steps
+                    document.querySelectorAll('#activity-2 .step-card').forEach(step => {
+                        step.style.display = 'none';
+                    });
+                    
+                    // Select correct responses
+                    document.querySelector('#activity-2 .response-option[data-response="4"]').classList.add('selected');
+                    document.querySelector('#activity-2 .hipaa-option[data-option="2"]').classList.add('selected');
+                    
+                    state.activities[2].completed = true;
+                    state.activities[2].correct = 19;
+                    state.activities[2].score = 100;
+                    status.textContent = 'Completed';
+                    status.style.color = '#00b894';
+                    document.querySelector('#activity-2').classList.add('completed');
+                    feedback.classList.add('show');
+                }
+
+                updateProgressSummary();
+            }
+
+            // View Final Results
+            function viewFinalResults() {
+                let totalScore = 0;
+                let activityCount = 0;
+                
+                Object.values(state.activities).forEach(activity => {
+                    if (activity.completed) {
+                        totalScore += activity.score;
+                        activityCount++;
+                    }
+                });
+
+                const averageScore = activityCount > 0 ? Math.round(totalScore / activityCount) : 0;
+                finalScore.textContent = `${averageScore}%`;
+                resultsPanel.classList.add('show');
+                resultsPanel.scrollIntoView({ behavior: 'smooth' });
+            }
+
+            // Initialize activities
+            initActivity1();
+            initActivity2();
+
+            // Event listeners
+            resetBtn.addEventListener('click', resetAllActivities);
+            checkBtn.addEventListener('click', checkAllAnswers);
+            resultsBtn.addEventListener('click', viewFinalResults);
+
+            // Initial progress update
+            updateProgressSummary();
+        });
+    </script>
+</body>
+</html>
