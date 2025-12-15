@@ -1,0 +1,2635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AlliedRx - Module 9.3: Medication Administration & Safety</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-error: #e17055;
+            --color-warning: #fdcb6e;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
+            --color-dark: #0c0a18;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+            --shadow-card: 0 12px 30px rgba(15, 23, 42, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(
+                circle at top left,
+                #ffffff 0,
+                #f1ecff 40%,
+                var(--color-bg) 100%
+            );
+            color: var(--color-text);
+            -webkit-text-size-adjust: 100%;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 12px;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes checkmarkPop {
+            0% { transform: scale(0); opacity: 0; }
+            70% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 5px rgba(175, 75, 239, 0.5); }
+            50% { box-shadow: 0 0 20px rgba(175, 75, 239, 0.8); }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Main Container */
+        .page {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @media (max-width: 900px) {
+            .page {
+                padding: 22px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 0; }
+            .page {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 18px 14px 22px;
+            }
+        }
+
+        /* Header */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .brand-logo:hover {
+            transform: scale(1.05);
+        }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--color-success);
+            flex-shrink: 0;
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .badge-mode:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+        @media (max-width: 480px) {
+            .brand-row { flex-direction: column; align-items: flex-start; }
+            .badge-mode { margin-top: 6px; }
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 3vw, 2.2rem);
+            line-height: 1.1;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .module-subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 600px;
+            margin-bottom: 24px;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        /* Progress Tracker */
+        .progress-tracker {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            position: relative;
+            padding: 0 20px;
+        }
+
+        .progress-tracker::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 50px;
+            right: 50px;
+            height: 3px;
+            background: rgba(12, 10, 24, 0.08);
+            z-index: 1;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+
+        .step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--color-muted);
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.active .step-circle {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .progress-step.completed .step-circle {
+            background: var(--color-success);
+            border-color: var(--color-success);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.75rem;
+            color: var(--color-muted);
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .progress-step.active .step-label {
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        /* Progress Summary */
+        .progress-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+            animation: fadeInUp 0.6s ease-out 0.5s both;
+        }
+
+        .summary-card {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            border: 1px solid rgba(12, 10, 24, 0.06);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-card);
+            border-color: var(--color-primary-soft);
+        }
+
+        .summary-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--color-primary);
+            display: block;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .summary-label {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Activity Grid */
+        .activity-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 900px) {
+            .activity-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .activity-card {
+            background: white;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            padding: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .activity-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--color-primary);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .activity-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--color-primary-soft);
+        }
+
+        .activity-card:hover::before {
+            opacity: 1;
+        }
+
+        .activity-card.completed {
+            border-color: var(--color-success);
+        }
+
+        .activity-card.completed::before {
+            background: var(--color-success);
+            opacity: 1;
+        }
+
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .activity-number {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .activity-status {
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-muted);
+        }
+
+        .activity-card.completed .activity-status {
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--color-success);
+        }
+
+        .activity-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 8px;
+        }
+
+        .activity-description {
+            font-size: 0.9rem;
+            color: var(--color-muted);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        /* Activity 1: Seven Rights Sequence */
+        .rights-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .right-item {
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            cursor: grab;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            user-select: none;
+        }
+
+        .right-item:hover {
+            background: rgba(175, 75, 239, 0.08);
+            border-color: var(--color-primary-soft);
+            transform: translateY(-2px);
+        }
+
+        .right-item.dragging {
+            opacity: 0.7;
+            transform: scale(0.98);
+        }
+
+        .right-item.placed {
+            background: rgba(0, 184, 148, 0.1);
+            border-color: var(--color-success);
+            cursor: default;
+        }
+
+        .right-text {
+            font-size: 0.9rem;
+            color: var(--color-text);
+            flex: 1;
+        }
+
+        .rights-dropzone {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            border: 2px dashed rgba(12, 10, 24, 0.1);
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .rights-dropzone.hover {
+            border-color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.05);
+        }
+
+        .rights-dropzone.empty::after {
+            content: 'Drag Seven Rights of Medication Administration here in correct order';
+            color: var(--color-muted);
+            text-align: center;
+            font-size: 0.9rem;
+            margin: auto;
+        }
+
+        .dropzone-number {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: var(--color-primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        /* Activity 2: Injection Techniques */
+        .injection-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .injection-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .injection-category {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 2px dashed rgba(12, 10, 24, 0.1);
+            min-height: 180px;
+            transition: all 0.3s ease;
+        }
+
+        .injection-category.hover {
+            border-color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.05);
+        }
+
+        .injection-category.subcutaneous {
+            border-color: rgba(0, 184, 148, 0.3);
+        }
+
+        .injection-category.intramuscular {
+            border-color: rgba(131, 128, 240, 0.3);
+        }
+
+        .injection-category.intradermal {
+            border-color: rgba(253, 203, 110, 0.3);
+        }
+
+        .injection-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+            text-align: center;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(12, 10, 24, 0.08);
+        }
+
+        .injection-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .injection-item {
+            background: rgba(12, 10, 24, 0.05);
+            border-radius: 20px;
+            padding: 8px 15px;
+            font-size: 0.85rem;
+            cursor: grab;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .injection-item:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            transform: translateY(-2px);
+        }
+
+        .injection-item.dragging {
+            opacity: 0.7;
+            transform: scale(0.95);
+        }
+
+        /* Anatomical Landmarks */
+        .landmarks-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+        }
+
+        .landmark-item {
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .landmark-item:hover {
+            background: rgba(175, 75, 239, 0.08);
+            border-color: var(--color-primary-soft);
+            transform: translateX(5px);
+        }
+
+        .landmark-item.selected {
+            background: rgba(0, 184, 148, 0.1);
+            border-color: var(--color-success);
+        }
+
+        .landmark-item.wrong {
+            background: rgba(225, 112, 85, 0.1);
+            border-color: var(--color-error);
+            animation: shake 0.5s ease;
+        }
+
+        .landmark-site {
+            font-weight: 600;
+            color: var(--color-primary);
+            min-width: 150px;
+        }
+
+        .landmark-description {
+            flex: 1;
+            font-size: 0.9rem;
+        }
+
+        /* Activity 3: Pediatric Dosage Calculation */
+        .calculation-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+        }
+
+        .calculation-problem {
+            background: white;
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+        }
+
+        .problem-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+        }
+
+        .problem-text {
+            font-size: 0.9rem;
+            color: var(--color-text);
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .calculation-formula {
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: var(--radius-sm);
+            padding: 12px;
+            margin: 15px 0;
+            font-family: monospace;
+            font-size: 0.9rem;
+            border-left: 3px solid var(--color-primary);
+        }
+
+        .calculation-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .calculation-option {
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: var(--radius-sm);
+            padding: 12px 15px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .calculation-option:hover {
+            background: rgba(175, 75, 239, 0.08);
+            border-color: var(--color-primary-soft);
+            transform: translateX(5px);
+        }
+
+        .calculation-option.selected {
+            background: rgba(0, 184, 148, 0.1);
+            border-color: var(--color-success);
+        }
+
+        .calculation-option.wrong {
+            background: rgba(225, 112, 85, 0.1);
+            border-color: var(--color-error);
+            animation: shake 0.5s ease;
+        }
+
+        .calculation-result {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .calculation-result.correct {
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--color-success);
+            border: 1px solid var(--color-success);
+            display: block;
+        }
+
+        .calculation-result.incorrect {
+            background: rgba(225, 112, 85, 0.1);
+            color: var(--color-error);
+            border: 1px solid var(--color-error);
+            display: block;
+        }
+
+        /* Activity 4: Medication Reconciliation */
+        .reconciliation-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+        }
+
+        .medication-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .medication-item {
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .medication-item:hover {
+            background: rgba(175, 75, 239, 0.08);
+            border-color: var(--color-primary-soft);
+            transform: translateY(-2px);
+        }
+
+        .medication-item.selected {
+            background: rgba(0, 184, 148, 0.1);
+            border-color: var(--color-success);
+        }
+
+        .medication-item.duplicate {
+            background: rgba(253, 203, 110, 0.1);
+            border-color: var(--color-warning);
+        }
+
+        .medication-item.interaction {
+            background: rgba(225, 112, 85, 0.1);
+            border-color: var(--color-error);
+        }
+
+        .medication-name {
+            font-weight: 600;
+            color: var(--color-primary);
+            min-width: 120px;
+        }
+
+        .medication-details {
+            flex: 1;
+            font-size: 0.85rem;
+        }
+
+        /* Activity 5: Adverse Reaction Response */
+        .reaction-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .reaction-container::before {
+            content: '⚠️ EMERGENCY ⚠️';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--color-error);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            animation: pulse 2s infinite;
+        }
+
+        .reaction-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .reaction-step {
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 2px solid transparent;
+            cursor: grab;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .reaction-step:hover {
+            background: rgba(175, 75, 239, 0.08);
+            border-color: var(--color-primary-soft);
+            transform: translateY(-2px);
+        }
+
+        .reaction-step.dragging {
+            opacity: 0.7;
+            transform: scale(0.98);
+        }
+
+        .reaction-step.placed {
+            background: rgba(0, 184, 148, 0.1);
+            border-color: var(--color-success);
+            cursor: default;
+        }
+
+        .reaction-text {
+            font-size: 0.9rem;
+            color: var(--color-text);
+            flex: 1;
+        }
+
+        /* Sequence Display */
+        .sequence-dropzone {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            border: 2px dashed rgba(12, 10, 24, 0.1);
+            min-height: 150px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .sequence-dropzone.hover {
+            border-color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.05);
+        }
+
+        .sequence-dropzone.empty::after {
+            content: 'Drag reaction response steps here in correct order';
+            color: var(--color-muted);
+            text-align: center;
+            font-size: 0.9rem;
+            margin: auto;
+            display: block;
+            padding: 20px;
+        }
+
+        /* Reaction Type Explanation */
+        .reaction-type-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-top: 20px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+        }
+
+        .reaction-type-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .reaction-type-description {
+            font-size: 0.9rem;
+            color: var(--color-text);
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .reaction-type-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .reaction-type-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .reaction-type-card {
+            background: white;
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+        }
+
+        .reaction-type-name {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 8px;
+        }
+
+        .reaction-type-examples {
+            font-size: 0.85rem;
+            color: var(--color-text);
+            margin-bottom: 10px;
+            font-style: italic;
+        }
+
+        .reaction-type-characteristics {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+        }
+
+        /* Feedback */
+        .feedback-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            margin-top: 20px;
+            display: none;
+        }
+
+        .feedback-container.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .feedback-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feedback-icon {
+            font-size: 1.2rem;
+        }
+
+        .feedback-icon.correct {
+            color: var(--color-success);
+        }
+
+        .feedback-icon.incorrect {
+            color: var(--color-error);
+        }
+
+        .feedback-content {
+            font-size: 0.85rem;
+            color: var(--color-text);
+            line-height: 1.5;
+        }
+
+        .feedback-content strong {
+            color: var(--color-primary);
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #9a3bd6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(175, 75, 239, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-text);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(12, 10, 24, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-icon {
+            font-size: 1.1em;
+        }
+
+        /* Results Panel */
+        .results-panel {
+            background: var(--color-dark);
+            color: white;
+            border-radius: var(--radius-md);
+            padding: 30px;
+            margin-top: 30px;
+            display: none;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .results-panel.show {
+            display: block;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .results-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .score-display {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--color-primary-soft);
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .clinical-insights {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .insights-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-primary-soft);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .insights-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .insights-list li {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            font-size: 0.9rem;
+            color: #e5e7eb;
+        }
+
+        .insight-dot {
+            width: 6px;
+            height: 6px;
+            margin-top: 6px;
+            border-radius: 999px;
+            background: var(--color-accent);
+            flex-shrink: 0;
+        }
+
+        /* Safety Warning */
+        .safety-warning {
+            background: rgba(225, 112, 85, 0.1);
+            border: 2px solid var(--color-error);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin-top: 15px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            animation: glow 2s infinite;
+        }
+
+        .warning-icon {
+            font-size: 1.5rem;
+            color: var(--color-error);
+            flex-shrink: 0;
+        }
+
+        .warning-content {
+            flex: 1;
+        }
+
+        .warning-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--color-error);
+            margin-bottom: 5px;
+        }
+
+        .warning-text {
+            font-size: 0.85rem;
+            color: var(--color-text);
+        }
+
+        /* Special Note */
+        .special-note {
+            background: rgba(175, 75, 239, 0.08);
+            border: 2px solid var(--color-primary-soft);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin-top: 15px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .note-icon {
+            font-size: 1.5rem;
+            color: var(--color-primary);
+            flex-shrink: 0;
+        }
+
+        .note-content {
+            flex: 1;
+        }
+
+        .note-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 5px;
+        }
+
+        .note-text {
+            font-size: 0.85rem;
+            color: var(--color-text);
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="module-heading">
+        <!-- Header -->
+        <header class="brand-row">
+            <div class="brand">
+                <img
+                    src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                    alt="AlliedRx logo"
+                    class="brand-logo"
+                />
+                <div class="course-meta">
+                    <span class="course-name">Clinical Medical Assistant • Week 9</span>
+                    <div class="week-label">
+                        <span class="week-label-dot"></span>
+                        <span>Chapter 9: Medication Administration & Safety</span>
+                    </div>
+                </div>
+            </div>
+            <span class="badge-mode">Campus & Online</span>
+        </header>
+
+        <h1 id="module-heading">Module 9.3: Medication Administration & Safety</h1>
+        <p class="module-subtitle">
+            Master safe medication administration techniques, dosage calculations, and emergency response 
+            protocols to prevent errors and ensure patient safety in clinical practice.
+        </p>
+
+        <!-- Progress Tracker -->
+        <div class="progress-tracker">
+            <div class="progress-step active" data-step="1">
+                <div class="step-circle">1</div>
+                <div class="step-label">Seven Rights</div>
+            </div>
+            <div class="progress-step" data-step="2">
+                <div class="step-circle">2</div>
+                <div class="step-label">Injection Sites</div>
+            </div>
+            <div class="progress-step" data-step="3">
+                <div class="step-circle">3</div>
+                <div class="step-label">Dosage Calc</div>
+            </div>
+            <div class="progress-step" data-step="4">
+                <div class="step-circle">4</div>
+                <div class="step-label">Reconciliation</div>
+            </div>
+            <div class="progress-step" data-step="5">
+                <div class="step-circle">5</div>
+                <div class="step-label">Reactions</div>
+            </div>
+        </div>
+
+        <!-- Progress Summary -->
+        <div class="progress-summary">
+            <div class="summary-card">
+                <span class="summary-number" id="completed-count">0</span>
+                <span class="summary-label">Activities Completed</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="accuracy-rate">0%</span>
+                <span class="summary-label">Current Accuracy</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="time-spent">0:00</span>
+                <span class="summary-label">Time Spent</span>
+            </div>
+        </div>
+
+        <!-- Activity Grid -->
+        <div class="activity-grid">
+            <!-- Activity 1: Seven Rights Sequence (Random Order) -->
+            <section class="activity-card" id="activity-1" data-activity="1">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 1</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">Seven Rights Sequence</h3>
+                <p class="activity-description">
+                    Drag the Seven Rights of Medication Administration into the correct sequence. 
+                    Following these rights in order prevents medication errors and ensures patient safety.
+                </p>
+
+                <!-- Rights Dropzone -->
+                <div class="rights-dropzone empty" id="rights-dropzone"></div>
+
+                <!-- Rights Items (Will be randomized by JavaScript) -->
+                <div class="rights-container" id="rights-items">
+                    <div class="right-item draggable" data-right="1" draggable="true">
+                        <div class="right-text">Right Patient - Verify using two identifiers</div>
+                    </div>
+                    <div class="right-item draggable" data-right="2" draggable="true">
+                        <div class="right-text">Right Medication - Check label three times</div>
+                    </div>
+                    <div class="right-item draggable" data-right="3" draggable="true">
+                        <div class="right-text">Right Dose - Calculate and verify appropriate amount</div>
+                    </div>
+                    <div class="right-item draggable" data-right="4" draggable="true">
+                        <div class="right-text">Right Route - Confirm administration method</div>
+                    </div>
+                    <div class="right-item draggable" data-right="5" draggable="true">
+                        <div class="right-text">Right Time - Administer at correct frequency</div>
+                    </div>
+                    <div class="right-item draggable" data-right="6" draggable="true">
+                        <div class="right-text">Right Documentation - Record immediately after administration</div>
+                    </div>
+                    <div class="right-item draggable" data-right="7" draggable="true">
+                        <div class="right-text">Right Reason - Ensure indication matches prescription</div>
+                    </div>
+                </div>
+
+                <!-- Safety Warning -->
+                <div class="safety-warning" id="rights-warning" style="display: none;">
+                    <div class="warning-icon">⚠️</div>
+                    <div class="warning-content">
+                        <div class="warning-title">Medication Error Risk!</div>
+                        <div class="warning-text">
+                            Skipping any of the Seven Rights increases error risk by 300%. 
+                            Always verify patient identity first - wrong patient errors are most dangerous.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback-container" id="feedback-1">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Seven Rights Sequence Correct!
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Correct Sequence & Rationale:</strong><br>
+                        1. <strong>Right Patient</strong> - Verify using two identifiers (name, DOB, ID#)<br>
+                        2. <strong>Right Medication</strong> - Check label 3 times: when removing, preparing, and administering<br>
+                        3. <strong>Right Dose</strong> - Calculate independently, have second nurse verify high-alert medications<br>
+                        4. <strong>Right Route</strong> - Confirm method (oral, IV, IM, etc.) - wrong route can be fatal<br>
+                        5. <strong>Right Time</strong> - Administer within 30 minutes before/after scheduled time<br>
+                        6. <strong>Right Documentation</strong> - Document immediately after administration, not before<br>
+                        7. <strong>Right Reason</strong> - Ensure medication matches diagnosis/indication<br><br>
+                        
+                        <strong>Additional Rights:</strong> Right to Refuse, Right Education, Right Assessment, Right Evaluation
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity 2: Injection Techniques & Sites -->
+            <section class="activity-card" id="activity-2" data-activity="2">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 2</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">Injection Techniques & Sites</h3>
+                <p class="activity-description">
+                    Match injection characteristics to their correct types and identify anatomical landmarks 
+                    for safe administration. Proper site selection prevents complications.
+                </p>
+
+                <!-- Injection Categories -->
+                <div class="injection-grid">
+                    <div class="injection-category subcutaneous" data-category="subcutaneous" id="subcutaneous-category">
+                        <div class="injection-title">Subcutaneous</div>
+                        <div class="injection-content"></div>
+                    </div>
+                    <div class="injection-category intramuscular" data-category="intramuscular" id="intramuscular-category">
+                        <div class="injection-title">Intramuscular</div>
+                        <div class="injection-content"></div>
+                    </div>
+                    <div class="injection-category intradermal" data-category="intradermal" id="intradermal-category">
+                        <div class="injection-title">Intradermal</div>
+                        <div class="injection-content"></div>
+                    </div>
+                </div>
+
+                <!-- Injection Items -->
+                <div class="injection-items">
+                    <div class="injection-item draggable" data-category="subcutaneous" draggable="true">45-90 degree angle</div>
+                    <div class="injection-item draggable" data-category="subcutaneous" draggable="true">0.5-1 mL volume</div>
+                    <div class="injection-item draggable" data-category="subcutaneous" draggable="true">Insulin, heparin</div>
+                    <div class="injection-item draggable" data-category="intramuscular" draggable="true">90 degree angle</div>
+                    <div class="injection-item draggable" data-category="intramuscular" draggable="true">Up to 3-4 mL volume</div>
+                    <div class="injection-item draggable" data-category="intramuscular" draggable="true">Vaccines, antibiotics</div>
+                    <div class="injection-item draggable" data-category="intradermal" draggable="true">10-15 degree angle</div>
+                    <div class="injection-item draggable" data-category="intradermal" draggable="true">0.1 mL volume</div>
+                    <div class="injection-item draggable" data-category="intradermal" draggable="true">TB tests, allergies</div>
+                </div>
+
+                <!-- Anatomical Landmarks -->
+                <div class="landmarks-container">
+                    <p style="font-size: 0.9rem; margin-bottom: 15px; font-weight: 600; color: var(--color-primary);">
+                        Select correct IM injection sites for adults:
+                    </p>
+                    <div class="landmark-item" data-site="vastus-lateralis" data-correct="true">
+                        <span class="landmark-site">Vastus Lateralis</span>
+                        <span class="landmark-description">Anterior lateral thigh, for all ages including infants</span>
+                    </div>
+                    <div class="landmark-item" data-site="ventrogluteal" data-correct="true">
+                        <span class="landmark-site">Ventrogluteal</span>
+                        <span class="landmark-description">Hip area, preferred for adults (fewer nerves/vessels)</span>
+                    </div>
+                    <div class="landmark-item" data-site="deltoid" data-correct="true">
+                        <span class="landmark-site">Deltoid</span>
+                        <span class="landmark-description">Upper arm, max 1 mL volume, avoid radial nerve</span>
+                    </div>
+                    <div class="landmark-item" data-site="dorsogluteal" data-correct="false">
+                        <span class="landmark-site">Dorsogluteal</span>
+                        <span class="landmark-description">Buttocks, NOT recommended due to sciatic nerve risk</span>
+                    </div>
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback-container" id="feedback-2">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Injection Techniques Mastered!
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Injection Guidelines:</strong><br>
+                        • <strong>Subcutaneous (SubQ):</strong> 45-90° angle, 0.5-1 mL, abdomen (2" from umbilicus), thighs, upper arms<br>
+                        • <strong>Intramuscular (IM):</strong> 90° angle, up to 3-4 mL, Z-track technique for irritating medications<br>
+                        • <strong>Intradermal (ID):</strong> 10-15° angle, 0.1 mL, inner forearm, produces wheal<br><br>
+                        
+                        <strong>Site Selection Priorities:</strong><br>
+                        1. <strong>Ventrogluteal:</strong> Safest for adults (away from major nerves/vessels)<br>
+                        2. <strong>Vastus Lateralis:</strong> Safest for infants/children<br>
+                        3. <strong>Deltoid:</strong> Small volumes only (max 1 mL)<br>
+                        4. <strong>Avoid Dorsogluteal:</strong> High risk of sciatic nerve injury<br><br>
+                        
+                        <strong>Needle Sizes:</strong> SubQ 25-27G ½-⅝", IM 20-23G 1-1½" (based on patient size)
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity 3: Pediatric Dosage Calculation -->
+            <section class="activity-card" id="activity-3" data-activity="3">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 3</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">Pediatric Dosage Calculation</h3>
+                <p class="activity-description">
+                    Calculate safe pediatric medication doses using body surface area (BSA) and weight-based formulas. 
+                    Pediatric dosing requires precision to prevent toxicity.
+                </p>
+
+                <div class="calculation-container">
+                    <div class="calculation-problem">
+                        <div class="problem-title">Problem 1: Weight-Based Dosing</div>
+                        <div class="problem-text">
+                            Order: Amoxicillin 20 mg/kg/day PO in divided doses q8h<br>
+                            Patient weight: 15 kg<br>
+                            Supply: Amoxicillin 125 mg/5 mL suspension<br>
+                            Calculate the mL per dose
+                        </div>
+                        
+                        <div class="calculation-formula">
+                            Step 1: Calculate daily dose = 20 mg/kg × 15 kg = 300 mg/day<br>
+                            Step 2: Calculate dose per administration = 300 mg/day ÷ 3 doses = 100 mg/dose<br>
+                            Step 3: Calculate concentration = 125 mg/5 mL = 25 mg/mL<br>
+                            Step 4: Calculate mL per dose = 100 mg ÷ 25 mg/mL = ? mL
+                        </div>
+                        
+                        <div class="calculation-options">
+                            <div class="calculation-option" data-problem="1" data-answer="3">3 mL per dose</div>
+                            <div class="calculation-option" data-problem="1" data-answer="4">4 mL per dose</div>
+                            <div class="calculation-option" data-problem="1" data-answer="5">5 mL per dose</div>
+                            <div class="calculation-option" data-problem="1" data-answer="6">6 mL per dose</div>
+                        </div>
+                        
+                        <div class="calculation-result" id="problem1-result"></div>
+                    </div>
+
+                    <div class="calculation-problem">
+                        <div class="problem-title">Problem 2: Body Surface Area</div>
+                        <div class="problem-text">
+                            Order: Chemotherapy drug 1.5 mg/m²/day<br>
+                            Patient height: 110 cm, weight: 20 kg<br>
+                            Calculate the daily dose in mg using the Mosteller formula
+                        </div>
+                        
+                        <div class="calculation-formula">
+                            Mosteller Formula: BSA (m²) = √[(height cm × weight kg) ÷ 3600]<br>
+                            Step 1: Calculate BSA = √[(110 × 20) ÷ 3600] = √[2200 ÷ 3600] = √0.611 = ? m²<br>
+                            Step 2: Calculate dose = 1.5 mg/m² × BSA = ? mg
+                        </div>
+                        
+                        <div class="calculation-options">
+                            <div class="calculation-option" data-problem="2" data-answer="1.0">1.0 mg daily</div>
+                            <div class="calculation-option" data-problem="2" data-answer="1.17">1.17 mg daily</div>
+                            <div class="calculation-option" data-problem="2" data-answer="1.35">1.35 mg daily</div>
+                            <div class="calculation-option" data-problem="2" data-answer="1.5">1.5 mg daily</div>
+                        </div>
+                        
+                        <div class="calculation-result" id="problem2-result"></div>
+                    </div>
+
+                    <div class="calculation-problem">
+                        <div class="problem-title">Problem 3: Safe Dose Range</div>
+                        <div class="problem-text">
+                            Medication safe range: 5-7 mg/kg/day<br>
+                            Patient weight: 25 kg<br>
+                            Order: 150 mg PO daily<br>
+                            Is this dose safe? Calculate range and compare
+                        </div>
+                        
+                        <div class="calculation-formula">
+                            Step 1: Calculate minimum safe dose = 5 mg/kg × 25 kg = 125 mg/day<br>
+                            Step 2: Calculate maximum safe dose = 7 mg/kg × 25 kg = 175 mg/day<br>
+                            Step 3: Compare ordered dose (150 mg) to range (125-175 mg)
+                        </div>
+                        
+                        <div class="calculation-options">
+                            <div class="calculation-option" data-problem="3" data-answer="safe">Yes, within safe range (125-175 mg)</div>
+                            <div class="calculation-option" data-problem="3" data-answer="low">No, below minimum (needs 125 mg minimum)</div>
+                            <div class="calculation-option" data-problem="3" data-answer="high">No, above maximum (maximum 175 mg)</div>
+                        </div>
+                        
+                        <div class="calculation-result" id="problem3-result"></div>
+                    </div>
+                </div>
+
+                <!-- Special Note -->
+                <div class="special-note">
+                    <div class="note-icon">📝</div>
+                    <div class="note-content">
+                        <div class="note-title">Critical Calculation Rules</div>
+                        <div class="note-text">
+                            • Always double-check calculations with another provider for high-risk medications<br>
+                            • Use mg/kg/day for most pediatric drugs, m² for chemotherapy<br>
+                            • Round appropriately: liquids to nearest 0.1 mL, tablets to nearest half tab when scored<br>
+                            • Verify dose doesn't exceed adult maximum dose
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback-container" id="feedback-3">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Pediatric Calculations Correct!
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Problem Solutions:</strong><br>
+                        1. <strong>Amoxicillin:</strong> 20 mg/kg/day × 15 kg = 300 mg/day ÷ 3 doses = 100 mg/dose<br>
+                           &nbsp;&nbsp;100 mg ÷ (125 mg/5 mL) = 100 mg ÷ 25 mg/mL = <strong>4 mL per dose</strong><br>
+                        2. <strong>BSA:</strong> √[(110 × 20) ÷ 3600] = √[2200 ÷ 3600] = √0.611 = 0.782 m²<br>
+                           &nbsp;&nbsp;1.5 mg/m² × 0.782 m² = <strong>1.173 mg daily dose</strong><br>
+                        3. <strong>Safe Range:</strong> 5-7 mg/kg × 25 kg = 125-175 mg/day<br>
+                           &nbsp;&nbsp;150 mg is within 125-175 mg range → <strong>SAFE</strong><br><br>
+                        
+                        <strong>Pediatric Dosing Principles:</strong><br>
+                        • Children are NOT small adults - metabolism and distribution differ<br>
+                        • Use weight in kg (never pounds) for calculations<br>
+                        • Consider renal/hepatic function in premature infants<br>
+                        • Always use proper measuring device (oral syringe, not household spoon)
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity 4: Medication Reconciliation -->
+            <section class="activity-card" id="activity-4" data-activity="4">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 4</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">Medication Reconciliation</h3>
+                <p class="activity-description">
+                    Identify medication discrepancies, duplicates, and interactions during 
+                    admission reconciliation. Proper reconciliation prevents 46% of medication errors.
+                </p>
+
+                <div class="reconciliation-container">
+                    <p style="font-size: 0.9rem; margin-bottom: 15px; font-weight: 600; color: var(--color-primary);">
+                        Patient medications on admission. Select all issues:
+                    </p>
+                    
+                    <div class="medication-list">
+                        <div class="medication-item" data-med="lisinopril" data-issue="none">
+                            <span class="medication-name">Lisinopril</span>
+                            <span class="medication-details">10 mg daily for hypertension</span>
+                        </div>
+                        <div class="medication-item" data-med="hydrochlorothiazide" data-issue="duplicate">
+                            <span class="medication-name">Hydrochlorothiazide</span>
+                            <span class="medication-details">25 mg daily (already in lisinopril/HCTZ combo)</span>
+                        </div>
+                        <div class="medication-item" data-med="warfarin" data-issue="interaction">
+                            <span class="medication-name">Warfarin</span>
+                            <span class="medication-details">5 mg daily, INR 2.8</span>
+                        </div>
+                        <div class="medication-item" data-med="ibuprofen" data-issue="interaction">
+                            <span class="medication-name">Ibuprofen</span>
+                            <span class="medication-details">800 mg TID PRN for arthritis pain</span>
+                        </div>
+                        <div class="medication-item" data-med="metformin" data-issue="dose">
+                            <span class="medication-name">Metformin</span>
+                            <span class="medication-details">1000 mg BID (renal function: CrCl 35 mL/min)</span>
+                        </div>
+                        <div class="medication-item" data-med="atorvastatin" data-issue="none">
+                            <span class="medication-name">Atorvastatin</span>
+                            <span class="medication-details">40 mg nightly for hyperlipidemia</span>
+                        </div>
+                    </div>
+
+                    <div class="safety-warning" id="reconciliation-warning" style="display: none;">
+                        <div class="warning-icon">⚠️</div>
+                        <div class="warning-content">
+                            <div class="warning-title">Critical Interaction Alert!</div>
+                            <div class="warning-text">
+                                Warfarin + NSAIDs significantly increase bleeding risk. 
+                                NSAIDs also reduce renal function, affecting metformin clearance.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback-container" id="feedback-4">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Reconciliation Issues Identified!
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Medication Issues Found:</strong><br>
+                        1. <strong>Duplicate Therapy:</strong> Hydrochlorothiazide duplicate in lisinopril/HCTZ combo<br>
+                        2. <strong>Drug Interaction:</strong> Warfarin + ibuprofen = increased bleeding risk<br>
+                        3. <strong>Renal Dosing:</strong> Metformin contraindicated with CrCl &lt;30 mL/min (patient at 35 - needs monitoring)<br><br>
+                        
+                        <strong>Reconciliation Process:</strong><br>
+                        • <strong>Best Possible Medication History (BPMH):</strong> Verify with patient, family, pharmacy<br>
+                        • <strong>Compare:</strong> Admission orders vs. home medications<br>
+                        • <strong>Reconcile:</strong> Resolve discrepancies with provider<br>
+                        • <strong>Communicate:</strong> Provide updated list at discharge<br><br>
+                        
+                        <strong>High-Risk Situations:</strong> Transitions of care, multiple providers, 
+                        high-risk medications (anticoagulants, insulin, opioids), cognitive impairment
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity 5: Adverse Reaction Response -->
+            <section class="activity-card" id="activity-5" data-activity="5">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 5</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">Adverse Reaction Response</h3>
+                <p class="activity-description">
+                    Sequence emergency response steps for anaphylaxis and understand different 
+                    types of adverse drug reactions. Proper response timing saves lives.
+                </p>
+
+                <div class="reaction-container">
+                    <div class="reaction-steps" id="reaction-sequence">
+                        <div class="reaction-step draggable" data-step="1" draggable="true">
+                            <div class="reaction-text">Stop medication immediately</div>
+                        </div>
+                        <div class="reaction-step draggable" data-step="2" draggable="true">
+                            <div class="reaction-text">Assess ABCs (Airway, Breathing, Circulation)</div>
+                        </div>
+                        <div class="reaction-step draggable" data-step="3" draggable="true">
+                            <div class="reaction-text">Administer epinephrine IM (anterolateral thigh)</div>
+                        </div>
+                        <div class="reaction-step draggable" data-step="4" draggable="true">
+                            <div class="reaction-text">Call rapid response/code team</div>
+                        </div>
+                        <div class="reaction-step draggable" data-step="5" draggable="true">
+                            <div class="reaction-text">Position patient supine with legs elevated</div>
+                        </div>
+                        <div class="reaction-step draggable" data-step="6" draggable="true">
+                            <div class="reaction-text">Administer oxygen, establish IV access</div>
+                        </div>
+                        <div class="reaction-step draggable" data-step="7" draggable="true">
+                            <div class="reaction-text">Document reaction and interventions</div>
+                        </div>
+                        <div class="reaction-step draggable" data-step="8" draggable="true">
+                            <div class="reaction-text">Report to FDA MedWatch and pharmacy</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sequence Display -->
+                <div class="sequence-dropzone empty" id="reaction-dropzone"></div>
+
+                <!-- Reaction Type Explanation -->
+                <div class="reaction-type-container">
+                    <div class="reaction-type-title">Understanding Different Reaction Types</div>
+                    <div class="reaction-type-description">
+                        Adverse drug reactions (ADRs) are classified into different types based on their mechanism, 
+                        predictability, and relationship to dose. Understanding these differences helps in prevention, 
+                        identification, and management.
+                    </div>
+                    
+                    <div class="reaction-type-grid">
+                        <div class="reaction-type-card">
+                            <div class="reaction-type-name">Allergic Reaction</div>
+                            <div class="reaction-type-examples">Examples: Penicillin allergy, NSAID-induced urticaria</div>
+                            <div class="reaction-type-characteristics">
+                                • Immune system-mediated response<br>
+                                • Not dose-dependent<br>
+                                • Requires prior exposure (sensitization)<br>
+                                • Can range from mild rash to anaphylaxis<br>
+                                • Treatment: Stop drug, antihistamines, epinephrine for severe
+                            </div>
+                        </div>
+                        
+                        <div class="reaction-type-card">
+                            <div class="reaction-type-name">Idiosyncratic Reaction</div>
+                            <div class="reaction-type-examples">Examples: Malignant hyperthermia, neuroleptic malignant syndrome</div>
+                            <div class="reaction-type-characteristics">
+                                • Unpredictable, unusual response<br>
+                                • Often genetic predisposition<br>
+                                • Not related to drug's pharmacological action<br>
+                                • Can be severe or life-threatening<br>
+                                • Treatment: Stop drug, supportive care
+                            </div>
+                        </div>
+                        
+                        <div class="reaction-type-card">
+                            <div class="reaction-type-name">Side Effect</div>
+                            <div class="reaction-type-examples">Examples: Nausea from antibiotics, drowsiness from antihistamines</div>
+                            <div class="reaction-type-characteristics">
+                                • Predictable pharmacological effect<br>
+                                • Dose-dependent<br>
+                                • Usually mild to moderate<br>
+                                • Often listed in drug information<br>
+                                • Treatment: Adjust dose or manage symptoms
+                            </div>
+                        </div>
+                        
+                        <div class="reaction-type-card">
+                            <div class="reaction-type-name">Toxic Reaction</div>
+                            <div class="reaction-type-examples">Examples: Digoxin toxicity, lithium toxicity</div>
+                            <div class="reaction-type-characteristics">
+                                • Due to excessive dosing<br>
+                                • Predictable based on drug properties<br>
+                                • Often involves narrow therapeutic index drugs<br>
+                                • Can be life-threatening<br>
+                                • Treatment: Stop drug, specific antidotes if available
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback-container" id="feedback-5">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Emergency Response Correct!
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Anaphylaxis Protocol (FAST):</strong><br>
+                        F - Face (swelling, itching)<br>
+                        A - Airway (tightness, stridor, hoarseness)<br>
+                        S - Stomach (cramping, vomiting)<br>
+                        T - Total body (hives, redness, low BP)<br><br>
+                        
+                        <strong>Emergency Response Sequence:</strong><br>
+                        1. STOP medication, call for help<br>
+                        2. EPINEPHRINE 0.3-0.5 mg IM (adult dose)<br>
+                        3. POSITION supine with legs elevated<br>
+                        4. OXYGEN, IV fluids, monitor vitals<br>
+                        5. SECONDARY medications: antihistamines, steroids, bronchodilators<br>
+                        6. DOCUMENT thoroughly: time, symptoms, interventions<br>
+                        7. REPORT to FDA MedWatch (required for severe reactions)<br><br>
+                        
+                        <strong>Key Differences in Reaction Types:</strong><br>
+                        • <strong>Allergic:</strong> Immune-mediated, requires prior exposure<br>
+                        • <strong>Idiosyncratic:</strong> Unpredictable, often genetic<br>
+                        • <strong>Side Effect:</strong> Predictable, dose-related<br>
+                        • <strong>Toxic:</strong> Overdose, narrow therapeutic index
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn btn-secondary" id="reset-all-btn">
+                <span class="btn-icon">↻</span>
+                Reset All Activities
+            </button>
+            <button class="btn btn-secondary" id="check-answers-btn">
+                <span class="btn-icon">✓</span>
+                Check All Answers
+            </button>
+            <button class="btn btn-primary" id="view-results-btn">
+                <span class="btn-icon">📊</span>
+                View Final Results
+            </button>
+        </div>
+
+        <!-- Results Panel -->
+        <div class="results-panel" id="results-panel">
+            <div class="results-header">
+                <h2 class="results-title">Medication Administration & Safety Results</h2>
+                <div class="score-display" id="final-score">0%</div>
+            </div>
+            
+            <div class="clinical-insights">
+                <h3 class="insights-title">
+                    <span>🩺</span> Clinical Proficiency Insights
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Seven Rights Protocol:</strong> Following the sequence reduces errors by 80%. Always start with patient verification - wrong patient errors are most dangerous and preventable.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Injection Safety:</strong> Ventrogluteal site has 90% fewer complications than dorsogluteal. Z-track technique prevents medication leakage and skin staining with iron preparations.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Pediatric Calculations:</strong> Weight in kg must be current (within 24 hours for critically ill). BSA calculations are essential for chemotherapy, where small errors cause significant toxicity.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Medication Reconciliation:</strong> Completed within 24 hours of admission reduces ADEs by 46%. Best Possible Medication History requires verification from at least two sources.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Anaphylaxis Response:</strong> Epinephrine administration within 3 minutes improves outcomes by 70%. Never delay epinephrine to start IV or give other medications first.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="clinical-insights" style="margin-top: 20px;">
+                <h3 class="insights-title">
+                    <span>📋</span> Documentation & Quality Indicators
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Medication Administration Record (MAR):</strong> Document immediately after administration. Include time, dose, route, site (for injections), and your initials. Never document before giving.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Error Reporting:</strong> Report ALL errors and near-misses. Focus on system improvements, not individual blame. Document objectively: who, what, when, where, how, and contributing factors.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>High-Alert Medications:</strong> Double verification required for insulin, heparin, opioids, chemotherapy. Document both verifiers' names and times.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Patient Education Documentation:</strong> Document specific teaching provided, materials given, patient questions, and verification of understanding using teach-back method.</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // State Management
+            const state = {
+                activities: {
+                    1: { completed: false, correct: 0, total: 7, score: 0 },
+                    2: { completed: false, correct: 0, total: 12, score: 0 }, // 9 items + 3 landmarks
+                    3: { completed: false, correct: 0, total: 3, score: 0 },
+                    4: { completed: false, correct: 0, total: 3, score: 0 }, // 3 issues to identify
+                    5: { completed: false, correct: 0, total: 8, score: 0 } // 8 steps
+                },
+                startedAt: new Date(),
+                timeSpent: 0
+            };
+
+            // DOM Elements
+            const progressSteps = document.querySelectorAll('.progress-step');
+            const activityCards = document.querySelectorAll('.activity-card');
+            const completedCount = document.getElementById('completed-count');
+            const accuracyRate = document.getElementById('accuracy-rate');
+            const timeSpent = document.getElementById('time-spent');
+            const resetBtn = document.getElementById('reset-all-btn');
+            const checkBtn = document.getElementById('check-answers-btn');
+            const resultsBtn = document.getElementById('view-results-btn');
+            const resultsPanel = document.getElementById('results-panel');
+            const finalScore = document.getElementById('final-score');
+
+            // Timer for time spent
+            function updateTimer() {
+                const now = new Date();
+                const diff = Math.floor((now - state.startedAt) / 1000);
+                state.timeSpent = diff;
+                const minutes = Math.floor(diff / 60);
+                const seconds = diff % 60;
+                timeSpent.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            }
+            setInterval(updateTimer, 1000);
+
+            // Update Progress Summary
+            function updateProgressSummary() {
+                let completed = 0;
+                let totalCorrect = 0;
+                let totalItems = 0;
+
+                Object.values(state.activities).forEach(activity => {
+                    if (activity.completed) completed++;
+                    totalCorrect += activity.correct;
+                    totalItems += activity.total;
+                });
+
+                completedCount.textContent = completed;
+                const accuracy = totalItems > 0 ? Math.round((totalCorrect / totalItems) * 100) : 0;
+                accuracyRate.textContent = `${accuracy}%`;
+
+                // Update progress steps
+                progressSteps.forEach((step, index) => {
+                    if (index < completed) {
+                        step.classList.add('completed');
+                        step.classList.remove('active');
+                    } else if (index === completed) {
+                        step.classList.add('active');
+                        step.classList.remove('completed');
+                    } else {
+                        step.classList.remove('active', 'completed');
+                    }
+                });
+            }
+
+            // Randomize array elements
+            function shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            }
+
+            // Activity 1: Seven Rights Sequence (Random Order)
+            function initActivity1() {
+                const rightsContainer = document.getElementById('rights-items');
+                const rightItems = Array.from(document.querySelectorAll('#activity-1 .right-item'));
+                const dropzone = document.getElementById('rights-dropzone');
+                const warning = document.getElementById('rights-warning');
+                const feedback = document.getElementById('feedback-1');
+                const status = document.querySelector('#activity-1 .activity-status');
+
+                const correctOrder = ['1', '2', '3', '4', '5', '6', '7'];
+                let placedRights = [];
+
+                // Randomize the initial order
+                shuffleArray(rightItems).forEach(item => {
+                    rightsContainer.appendChild(item);
+                });
+
+                // Setup drag and drop
+                rightItems.forEach(item => {
+                    item.addEventListener('dragstart', function(e) {
+                        e.dataTransfer.setData('text/plain', JSON.stringify({
+                            right: this.dataset.right,
+                            text: this.querySelector('.right-text').textContent
+                        }));
+                        this.classList.add('dragging');
+                    });
+
+                    item.addEventListener('dragend', function() {
+                        this.classList.remove('dragging');
+                    });
+                });
+
+                dropzone.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    this.classList.add('hover');
+                    this.classList.remove('empty');
+                });
+
+                dropzone.addEventListener('dragleave', function() {
+                    this.classList.remove('hover');
+                });
+
+                dropzone.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('hover');
+                    const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+
+                    // Check if right already placed
+                    if (!placedRights.includes(data.right)) {
+                        placedRights.push(data.right);
+
+                        // Create and add right to dropzone with position number
+                        const rightDiv = document.createElement('div');
+                        rightDiv.className = 'right-item placed';
+                        rightDiv.innerHTML = `
+                            <div class="dropzone-number">${placedRights.length}</div>
+                            <div class="right-text">${data.text}</div>
+                        `;
+                        this.appendChild(rightDiv);
+
+                        // Hide original item
+                        const originalItem = document.querySelector(`#activity-1 .right-item[data-right="${data.right}"]`);
+                        if (originalItem) {
+                            originalItem.style.display = 'none';
+                        }
+
+                        // Check completion
+                        if (placedRights.length === 7) {
+                            // Check if order is correct
+                            const isCorrect = JSON.stringify(placedRights) === JSON.stringify(correctOrder);
+                            state.activities[1].completed = true;
+                            state.activities[1].correct = isCorrect ? 7 : 4;
+                            state.activities[1].score = isCorrect ? 100 : 57;
+                            status.textContent = 'Completed';
+                            status.style.color = '#00b894';
+                            document.querySelector('#activity-1').classList.add('completed');
+                            feedback.classList.add('show');
+                            
+                            if (!isCorrect) {
+                                warning.style.display = 'flex';
+                            }
+                            
+                            updateProgressSummary();
+                        }
+                    }
+                });
+            }
+
+            // Activity 2: Injection Techniques
+            function initActivity2() {
+                const injectionItems = document.querySelectorAll('#activity-2 .injection-item');
+                const injectionCategories = document.querySelectorAll('#activity-2 .injection-category');
+                const landmarkItems = document.querySelectorAll('#activity-2 .landmark-item');
+                const feedback = document.getElementById('feedback-2');
+                const status = document.querySelector('#activity-2 .activity-status');
+
+                const correctCategories = {
+                    '45-90 degree angle': 'subcutaneous',
+                    '0.5-1 mL volume': 'subcutaneous',
+                    'Insulin, heparin': 'subcutaneous',
+                    '90 degree angle': 'intramuscular',
+                    'Up to 3-4 mL volume': 'intramuscular',
+                    'Vaccines, antibiotics': 'intramuscular',
+                    '10-15 degree angle': 'intradermal',
+                    '0.1 mL volume': 'intradermal',
+                    'TB tests, allergies': 'intradermal'
+                };
+
+                let placedItems = 0;
+                let correctPlacements = 0;
+                let landmarksSelected = 0;
+                let correctLandmarks = 0;
+
+                // Setup drag and drop for injection items
+                injectionItems.forEach(item => {
+                    item.addEventListener('dragstart', function(e) {
+                        e.dataTransfer.setData('text/plain', JSON.stringify({
+                            text: this.textContent,
+                            category: this.dataset.category
+                        }));
+                        this.classList.add('dragging');
+                    });
+
+                    item.addEventListener('dragend', function() {
+                        this.classList.remove('dragging');
+                    });
+                });
+
+                injectionCategories.forEach(category => {
+                    category.addEventListener('dragover', function(e) {
+                        e.preventDefault();
+                        this.classList.add('hover');
+                    });
+
+                    category.addEventListener('dragleave', function() {
+                        this.classList.remove('hover');
+                    });
+
+                    category.addEventListener('drop', function(e) {
+                        e.preventDefault();
+                        this.classList.remove('hover');
+                        const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+                        const targetCategory = this.dataset.category;
+
+                        // Check if item already placed
+                        const existingItems = Array.from(this.querySelectorAll('.injection-content div'));
+                        const alreadyPlaced = existingItems.some(div => div.textContent === data.text);
+
+                        if (!alreadyPlaced) {
+                            // Check if placement is correct
+                            const isCorrect = correctCategories[data.text] === targetCategory;
+
+                            const div = document.createElement('div');
+                            div.textContent = data.text;
+                            div.style.padding = '6px 10px';
+                            div.style.margin = '4px 0';
+                            div.style.background = isCorrect ? 
+                                (targetCategory === 'subcutaneous' ? 'rgba(0, 184, 148, 0.1)' : 
+                                 targetCategory === 'intramuscular' ? 'rgba(131, 128, 240, 0.1)' : 
+                                 'rgba(253, 203, 110, 0.1)') : 
+                                'rgba(225, 112, 85, 0.1)';
+                            div.style.borderRadius = '8px';
+                            div.style.fontSize = '0.8rem';
+
+                            this.querySelector('.injection-content').appendChild(div);
+
+                            // Hide original item
+                            const originalItem = Array.from(injectionItems).find(item =>
+                                item.textContent === data.text && item.style.display !== 'none'
+                            );
+
+                            if (originalItem) {
+                                originalItem.style.display = 'none';
+                                placedItems++;
+                                if (isCorrect) correctPlacements++;
+                            }
+
+                            checkActivity2Completion();
+                        }
+                    });
+                });
+
+                // Landmark selection
+                landmarkItems.forEach(item => {
+                    item.addEventListener('click', function() {
+                        if (state.activities[2].completed) return;
+
+                        if (this.classList.contains('selected')) {
+                            this.classList.remove('selected');
+                            landmarksSelected--;
+                            if (this.dataset.correct === 'true') correctLandmarks--;
+                        } else {
+                            this.classList.add('selected');
+                            landmarksSelected++;
+                            if (this.dataset.correct === 'true') correctLandmarks++;
+                            
+                            // Show wrong feedback
+                            if (this.dataset.correct === 'false') {
+                                this.classList.add('wrong');
+                                setTimeout(() => {
+                                    this.classList.remove('wrong');
+                                }, 500);
+                            }
+                        }
+
+                        checkActivity2Completion();
+                    });
+                });
+
+                function checkActivity2Completion() {
+                    if (placedItems === 9 && landmarksSelected >= 3) {
+                        state.activities[2].completed = true;
+                        state.activities[2].correct = correctPlacements + correctLandmarks;
+                        state.activities[2].score = Math.round((state.activities[2].correct / 12) * 100);
+                        status.textContent = 'Completed';
+                        status.style.color = '#00b894';
+                        document.querySelector('#activity-2').classList.add('completed');
+                        feedback.classList.add('show');
+                        updateProgressSummary();
+                    }
+                }
+            }
+
+            // Activity 3: Pediatric Dosage Calculation
+            function initActivity3() {
+                const calculationOptions = document.querySelectorAll('#activity-3 .calculation-option');
+                const feedback = document.getElementById('feedback-3');
+                const status = document.querySelector('#activity-3 .activity-status');
+
+                let problemsCompleted = 0;
+                let correctProblems = 0;
+
+                // Problem answers
+                const correctAnswers = {
+                    '1': '4',
+                    '2': '1.17',
+                    '3': 'safe'
+                };
+
+                calculationOptions.forEach(option => {
+                    option.addEventListener('click', function() {
+                        if (state.activities[3].completed) return;
+                        
+                        const problem = this.dataset.problem;
+                        const answer = this.dataset.answer;
+                        const resultDiv = document.getElementById(`problem${problem}-result`);
+                        
+                        // Remove selection from other options in same problem
+                        const container = this.closest('.calculation-problem');
+                        container.querySelectorAll('.calculation-option').forEach(opt => {
+                            opt.classList.remove('selected', 'wrong');
+                        });
+                        
+                        // Check if answer is correct
+                        const isCorrect = answer === correctAnswers[problem];
+                        
+                        if (isCorrect) {
+                            this.classList.add('selected');
+                            resultDiv.textContent = getProblemFeedback(problem, true);
+                            resultDiv.className = 'calculation-result correct';
+                            correctProblems++;
+                        } else {
+                            this.classList.add('wrong');
+                            resultDiv.textContent = getProblemFeedback(problem, false);
+                            resultDiv.className = 'calculation-result incorrect';
+                        }
+                        
+                        problemsCompleted++;
+                        
+                        // Check if all problems completed
+                        if (problemsCompleted === 3) {
+                            state.activities[3].completed = true;
+                            state.activities[3].correct = correctProblems;
+                            state.activities[3].score = Math.round((correctProblems / 3) * 100);
+                            status.textContent = 'Completed';
+                            status.style.color = '#00b894';
+                            document.querySelector('#activity-3').classList.add('completed');
+                            feedback.classList.add('show');
+                            updateProgressSummary();
+                        }
+                    });
+                });
+
+                function getProblemFeedback(problem, isCorrect) {
+                    const feedbacks = {
+                        '1': {
+                            correct: 'Correct! 20 mg/kg × 15 kg = 300 mg/day ÷ 3 doses = 100 mg/dose. 100 mg ÷ (125 mg/5 mL) = 100 mg ÷ 25 mg/mL = 4 mL per dose.',
+                            incorrect: 'Incorrect. Calculate: 20 mg/kg × 15 kg = 300 mg/day ÷ 3 doses = 100 mg/dose. Then: 100 mg ÷ (125 mg/5 mL) = 100 mg ÷ 25 mg/mL = 4 mL per dose.'
+                        },
+                        '2': {
+                            correct: 'Correct! BSA = √[(110 × 20) ÷ 3600] = √0.611 = 0.782 m². Dose = 1.5 mg/m² × 0.782 m² = 1.173 mg daily.',
+                            incorrect: 'Incorrect. Calculate BSA: √[(110 cm × 20 kg) ÷ 3600] = √[2200 ÷ 3600] = √0.611 = 0.782 m². Then: 1.5 mg/m² × 0.782 m² = 1.173 mg daily.'
+                        },
+                        '3': {
+                            correct: 'Correct! Safe range: 5-7 mg/kg × 25 kg = 125-175 mg/day. 150 mg is within this range.',
+                            incorrect: 'Incorrect. Calculate range: 5 mg/kg × 25 kg = 125 mg (min), 7 mg/kg × 25 kg = 175 mg (max). 150 mg is within 125-175 mg range.'
+                        }
+                    };
+                    
+                    return isCorrect ? feedbacks[problem].correct : feedbacks[problem].incorrect;
+                }
+            }
+
+            // Activity 4: Medication Reconciliation
+            function initActivity4() {
+                const medicationItems = document.querySelectorAll('#activity-4 .medication-item');
+                const warning = document.getElementById('reconciliation-warning');
+                const feedback = document.getElementById('feedback-4');
+                const status = document.querySelector('#activity-4 .activity-status');
+
+                const issuesToIdentify = ['duplicate', 'interaction', 'interaction', 'dose'];
+                let selectedItems = 0;
+                let correctSelections = 0;
+
+                medicationItems.forEach(item => {
+                    item.addEventListener('click', function() {
+                        if (state.activities[4].completed) return;
+
+                        const hasIssue = this.dataset.issue !== 'none';
+                        
+                        if (this.classList.contains('selected')) {
+                            this.classList.remove('selected');
+                            selectedItems--;
+                            if (hasIssue) correctSelections--;
+                            
+                            // Remove special classes
+                            this.classList.remove('duplicate', 'interaction', 'dose');
+                        } else {
+                            this.classList.add('selected');
+                            selectedItems++;
+                            
+                            // Add appropriate class based on issue
+                            if (this.dataset.issue === 'duplicate') {
+                                this.classList.add('duplicate');
+                                correctSelections++;
+                            } else if (this.dataset.issue === 'interaction') {
+                                this.classList.add('interaction');
+                                correctSelections++;
+                            } else if (this.dataset.issue === 'dose') {
+                                this.classList.add('interaction'); // Using interaction class for visual
+                                correctSelections++;
+                            }
+                        }
+
+                        // Show warning if interaction selected
+                        const hasInteraction = Array.from(medicationItems).some(item => 
+                            item.classList.contains('selected') && item.dataset.issue === 'interaction'
+                        );
+                        
+                        if (hasInteraction) {
+                            warning.style.display = 'flex';
+                        } else {
+                            warning.style.display = 'none';
+                        }
+
+                        // Check completion (need to identify all 3 issues)
+                        if (selectedItems >= 3) {
+                            state.activities[4].completed = true;
+                            state.activities[4].correct = correctSelections;
+                            state.activities[4].score = Math.round((correctSelections / 3) * 100);
+                            status.textContent = 'Completed';
+                            status.style.color = '#00b894';
+                            document.querySelector('#activity-4').classList.add('completed');
+                            feedback.classList.add('show');
+                            updateProgressSummary();
+                        }
+                    });
+                });
+            }
+
+            // Activity 5: Adverse Reaction Response (Random Order)
+            function initActivity5() {
+                const reactionContainer = document.getElementById('reaction-sequence');
+                const reactionSteps = Array.from(document.querySelectorAll('#activity-5 .reaction-step'));
+                const dropzone = document.getElementById('reaction-dropzone');
+                const feedback = document.getElementById('feedback-5');
+                const status = document.querySelector('#activity-5 .activity-status');
+
+                const correctOrder = ['1', '2', '3', '4', '5', '6', '7', '8'];
+                let placedSteps = [];
+
+                // Randomize the initial order
+                shuffleArray(reactionSteps).forEach(step => {
+                    reactionContainer.appendChild(step);
+                });
+
+                // Setup drag and drop
+                reactionSteps.forEach(step => {
+                    step.addEventListener('dragstart', function(e) {
+                        e.dataTransfer.setData('text/plain', JSON.stringify({
+                            step: this.dataset.step,
+                            text: this.querySelector('.reaction-text').textContent
+                        }));
+                        this.classList.add('dragging');
+                    });
+
+                    step.addEventListener('dragend', function() {
+                        this.classList.remove('dragging');
+                    });
+                });
+
+                dropzone.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    this.classList.add('hover');
+                    this.classList.remove('empty');
+                });
+
+                dropzone.addEventListener('dragleave', function() {
+                    this.classList.remove('hover');
+                });
+
+                dropzone.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('hover');
+                    const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+
+                    // Check if step already placed
+                    if (!placedSteps.includes(data.step)) {
+                        placedSteps.push(data.step);
+
+                        // Create and add step to dropzone with position number
+                        const stepDiv = document.createElement('div');
+                        stepDiv.className = 'right-item placed';
+                        stepDiv.innerHTML = `
+                            <div class="dropzone-number">${placedSteps.length}</div>
+                            <div class="right-text">${data.text}</div>
+                        `;
+                        this.appendChild(stepDiv);
+
+                        // Hide original step
+                        const originalStep = document.querySelector(`#activity-5 .reaction-step[data-step="${data.step}"]`);
+                        if (originalStep) {
+                            originalStep.style.display = 'none';
+                        }
+
+                        // Check completion
+                        if (placedSteps.length === 8) {
+                            // Check if order is correct
+                            const isCorrect = JSON.stringify(placedSteps) === JSON.stringify(correctOrder);
+                            state.activities[5].completed = true;
+                            state.activities[5].correct = isCorrect ? 8 : 4;
+                            state.activities[5].score = isCorrect ? 100 : 50;
+                            status.textContent = 'Completed';
+                            status.style.color = '#00b894';
+                            document.querySelector('#activity-5').classList.add('completed');
+                            feedback.classList.add('show');
+                            updateProgressSummary();
+                        }
+                    }
+                });
+            }
+
+            // Reset All Activities
+            function resetAllActivities() {
+                // Reset state
+                Object.keys(state.activities).forEach(key => {
+                    state.activities[key] = {
+                        completed: false,
+                        correct: 0,
+                        total: parseInt(key) === 1 ? 7 : parseInt(key) === 2 ? 12 : parseInt(key) === 3 ? 3 : parseInt(key) === 4 ? 3 : 8,
+                        score: 0
+                    };
+                });
+
+                // Reset UI
+                activityCards.forEach(card => {
+                    card.classList.remove('completed');
+                    const status = card.querySelector('.activity-status');
+                    status.textContent = 'Not Started';
+                    status.style.color = '';
+                    const feedback = card.querySelector('.feedback-container');
+                    feedback.classList.remove('show');
+                });
+
+                // Reset Activity 1
+                const dropzone1 = document.getElementById('rights-dropzone');
+                dropzone1.innerHTML = '';
+                dropzone1.classList.add('empty');
+                document.querySelectorAll('#activity-1 .right-item').forEach(item => {
+                    item.style.display = '';
+                    item.classList.remove('placed', 'dragging');
+                });
+                document.getElementById('rights-warning').style.display = 'none';
+                
+                // Re-shuffle Activity 1 items
+                const rightsContainer = document.getElementById('rights-items');
+                const rightItems = Array.from(document.querySelectorAll('#activity-1 .right-item'));
+                shuffleArray(rightItems).forEach(item => {
+                    rightsContainer.appendChild(item);
+                });
+
+                // Reset Activity 2
+                document.querySelectorAll('#activity-2 .injection-content').forEach(content => {
+                    content.innerHTML = '';
+                });
+                document.querySelectorAll('#activity-2 .injection-item').forEach(item => {
+                    item.style.display = '';
+                    item.classList.remove('dragging');
+                });
+                document.querySelectorAll('#activity-2 .landmark-item').forEach(item => {
+                    item.classList.remove('selected', 'wrong');
+                });
+
+                // Reset Activity 3
+                document.querySelectorAll('#activity-3 .calculation-option').forEach(option => {
+                    option.classList.remove('selected', 'wrong');
+                });
+                document.querySelectorAll('#activity-3 .calculation-result').forEach(result => {
+                    result.className = 'calculation-result';
+                    result.textContent = '';
+                });
+
+                // Reset Activity 4
+                document.querySelectorAll('#activity-4 .medication-item').forEach(item => {
+                    item.classList.remove('selected', 'duplicate', 'interaction', 'dose');
+                });
+                document.getElementById('reconciliation-warning').style.display = 'none';
+
+                // Reset Activity 5
+                const dropzone5 = document.getElementById('reaction-dropzone');
+                dropzone5.innerHTML = '';
+                dropzone5.classList.add('empty');
+                document.querySelectorAll('#activity-5 .reaction-step').forEach(step => {
+                    step.style.display = '';
+                    step.classList.remove('placed', 'dragging');
+                });
+                
+                // Re-shuffle Activity 5 items
+                const reactionContainer = document.getElementById('reaction-sequence');
+                const reactionSteps = Array.from(document.querySelectorAll('#activity-5 .reaction-step'));
+                shuffleArray(reactionSteps).forEach(step => {
+                    reactionContainer.appendChild(step);
+                });
+
+                // Reset results
+                resultsPanel.classList.remove('show');
+
+                // Update progress
+                updateProgressSummary();
+            }
+
+            // Check All Answers
+            function checkAllAnswers() {
+                // Complete Activity 1
+                if (!state.activities[1].completed) {
+                    const feedback = document.getElementById('feedback-1');
+                    const status = document.querySelector('#activity-1 .activity-status');
+                    state.activities[1].completed = true;
+                    state.activities[1].correct = 7;
+                    state.activities[1].score = 100;
+                    status.textContent = 'Completed';
+                    status.style.color = '#00b894';
+                    document.querySelector('#activity-1').classList.add('completed');
+                    feedback.classList.add('show');
+                }
+
+                // Complete Activity 2
+                if (!state.activities[2].completed) {
+                    const feedback = document.getElementById('feedback-2');
+                    const status = document.querySelector('#activity-2 .activity-status');
+                    state.activities[2].completed = true;
+                    state.activities[2].correct = 12;
+                    state.activities[2].score = 100;
+                    status.textContent = 'Completed';
+                    status.style.color = '#00b894';
+                    document.querySelector('#activity-2').classList.add('completed');
+                    feedback.classList.add('show');
+                }
+
+                // Complete Activity 3
+                if (!state.activities[3].completed) {
+                    const feedback = document.getElementById('feedback-3');
+                    const status = document.querySelector('#activity-3 .activity-status');
+                    
+                    // Set correct answers
+                    document.querySelector('#activity-3 .calculation-option[data-problem="1"][data-answer="4"]').classList.add('selected');
+                    document.querySelector('#activity-3 .calculation-option[data-problem="2"][data-answer="1.17"]').classList.add('selected');
+                    document.querySelector('#activity-3 .calculation-option[data-problem="3"][data-answer="safe"]').classList.add('selected');
+                    
+                    document.getElementById('problem1-result').textContent = 'Correct: 4 mL per dose';
+                    document.getElementById('problem1-result').className = 'calculation-result correct';
+                    document.getElementById('problem2-result').textContent = 'Correct: 1.17 mg daily';
+                    document.getElementById('problem2-result').className = 'calculation-result correct';
+                    document.getElementById('problem3-result').textContent = 'Correct: 150 mg is within safe range (125-175 mg)';
+                    document.getElementById('problem3-result').className = 'calculation-result correct';
+                    
+                    state.activities[3].completed = true;
+                    state.activities[3].correct = 3;
+                    state.activities[3].score = 100;
+                    status.textContent = 'Completed';
+                    status.style.color = '#00b894';
+                    document.querySelector('#activity-3').classList.add('completed');
+                    feedback.classList.add('show');
+                }
+
+                // Complete Activity 4
+                if (!state.activities[4].completed) {
+                    const feedback = document.getElementById('feedback-4');
+                    const status = document.querySelector('#activity-4 .activity-status');
+                    
+                    // Select items with issues
+                    document.querySelectorAll('#activity-4 .medication-item[data-issue!="none"]').forEach(item => {
+                        item.classList.add('selected');
+                        if (item.dataset.issue === 'duplicate') item.classList.add('duplicate');
+                        if (item.dataset.issue === 'interaction') item.classList.add('interaction');
+                        if (item.dataset.issue === 'dose') item.classList.add('interaction');
+                    });
+                    
+                    document.getElementById('reconciliation-warning').style.display = 'flex';
+                    
+                    state.activities[4].completed = true;
+                    state.activities[4].correct = 3;
+                    state.activities[4].score = 100;
+                    status.textContent = 'Completed';
+                    status.style.color = '#00b894';
+                    document.querySelector('#activity-4').classList.add('completed');
+                    feedback.classList.add('show');
+                }
+
+                // Complete Activity 5
+                if (!state.activities[5].completed) {
+                    const feedback = document.getElementById('feedback-5');
+                    const status = document.querySelector('#activity-5 .activity-status');
+                    
+                    // Add all steps in correct order
+                    const correctOrder = ['1', '2', '3', '4', '5', '6', '7', '8'];
+                    correctOrder.forEach((stepNum, index) => {
+                        const stepDiv = document.createElement('div');
+                        stepDiv.className = 'right-item placed';
+                        stepDiv.innerHTML = `
+                            <div class="dropzone-number">${index + 1}</div>
+                            <div class="right-text">${document.querySelector(`#activity-5 .reaction-step[data-step="${stepNum}"] .reaction-text`).textContent}</div>
+                        `;
+                        document.getElementById('reaction-dropzone').appendChild(stepDiv);
+                        
+                        // Hide original step
+                        document.querySelector(`#activity-5 .reaction-step[data-step="${stepNum}"]`).style.display = 'none';
+                    });
+                    
+                    document.getElementById('reaction-dropzone').classList.remove('empty');
+                    
+                    state.activities[5].completed = true;
+                    state.activities[5].correct = 8;
+                    state.activities[5].score = 100;
+                    status.textContent = 'Completed';
+                    status.style.color = '#00b894';
+                    document.querySelector('#activity-5').classList.add('completed');
+                    feedback.classList.add('show');
+                }
+
+                updateProgressSummary();
+            }
+
+            // View Final Results
+            function viewFinalResults() {
+                let totalScore = 0;
+                let activityCount = 0;
+
+                Object.values(state.activities).forEach(activity => {
+                    if (activity.completed) {
+                        totalScore += activity.score;
+                        activityCount++;
+                    }
+                });
+
+                const averageScore = activityCount > 0 ? Math.round(totalScore / activityCount) : 0;
+                finalScore.textContent = `${averageScore}%`;
+                resultsPanel.classList.add('show');
+                resultsPanel.scrollIntoView({ behavior: 'smooth' });
+            }
+
+            // Initialize all activities
+            initActivity1();
+            initActivity2();
+            initActivity3();
+            initActivity4();
+            initActivity5();
+
+            // Event listeners
+            resetBtn.addEventListener('click', resetAllActivities);
+            checkBtn.addEventListener('click', checkAllAnswers);
+            resultsBtn.addEventListener('click', viewFinalResults);
+
+            // Initial progress update
+            updateProgressSummary();
+        });
+    </script>
+</body>
+</html>
