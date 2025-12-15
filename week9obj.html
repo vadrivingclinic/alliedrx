@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AlliedRx -- Week 9 Objectives</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-error: #e17055;
+            --color-warning: #fdcb6e;
+            --color-info: #0984e3;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
+            --color-dark: #0c0a18;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+            --shadow-card: 0 12px 30px rgba(15, 23, 42, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(
+                circle at top left,
+                #ffffff 0,
+                #f1ecff 40%,
+                var(--color-bg) 100%
+            );
+            color: var(--color-text);
+            -webkit-text-size-adjust: 100%;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 12px;
+            }
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1120px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px;
+            display: grid;
+            grid-template-columns: minmax(0, 3.1fr) minmax(0, 2.4fr);
+            gap: 28px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        @media (max-width: 900px) {
+            .page {
+                grid-template-columns: 1fr;
+                padding: 22px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 0;
+            }
+            .page {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 18px 14px 22px;
+                gap: 22px;
+            }
+        }
+
+        /* Header */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .brand-logo:hover {
+            transform: scale(1.05);
+        }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+            animation: pulse 2s infinite;
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--color-success);
+            flex-shrink: 0;
+            animation: blink 1.5s infinite;
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .badge-mode:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+        @media (max-width: 480px) {
+            .brand-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .badge-mode {
+                margin-top: 6px;
+            }
+        }
+
+        h1 {
+            font-size: clamp(2rem, 3vw, 2.4rem);
+            line-height: 1.05;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 34rem;
+            margin-bottom: 18px;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        /* Objectives list */
+        .objectives-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .objective-card {
+            background: #08070a;
+            color: #ffffff;
+            border-radius: 18px;
+            padding: 10px 16px 14px;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .objective-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.7s ease;
+        }
+
+        .objective-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .objective-card:hover::before {
+            left: 100%;
+        }
+
+        .objective-card.active {
+            background: linear-gradient(135deg, #0f172a, #1e1b4b);
+            border-left: 4px solid var(--color-accent);
+        }
+
+        @media (max-width: 480px) {
+            .objective-card {
+                grid-template-columns: auto 1fr;
+                grid-template-rows: auto auto;
+            }
+            .objective-icon {
+                justify-self: flex-end;
+            }
+        }
+
+        .objective-number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 999px;
+            background: #ffffff;
+            color: #111827;
+            font-weight: 700;
+            font-size: 1.05rem;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .objective-card:hover .objective-number {
+            background: var(--color-primary-soft);
+            transform: rotate(5deg);
+        }
+
+        .objective-main {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .objective-verb {
+            font-size: 0.98rem;
+            font-weight: 700;
+            color: var(--color-primary-soft);
+            transition: color 0.3s ease;
+        }
+
+        .objective-card:hover .objective-verb {
+            color: #ffffff;
+        }
+
+        .objective-text {
+            font-size: 0.84rem;
+            color: #e5e7eb;
+            line-height: 1.4;
+        }
+
+        .objective-icon {
+            width: 26px;
+            height: 26px;
+            border-radius: 999px;
+            border: 1px solid rgba(250, 250, 250, 0.16);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: #f9fafb;
+            background: linear-gradient(135deg, rgba(175, 75, 239, 0.1), rgba(0, 0, 0, 0.4));
+            transition: all 0.3s ease;
+        }
+
+        .objective-card:hover .objective-icon {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+            transform: scale(1.1);
+        }
+
+        /* Filter buttons */
+        .chapter-filter {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border-radius: 20px;
+            background: rgba(12, 10, 24, 0.05);
+            border: 1px solid rgba(12, 10, 24, 0.1);
+            color: var(--color-text);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+        .filter-btn.active {
+            background: var(--color-primary);
+            color: white;
+            border-color: var(--color-primary);
+        }
+
+        /* Progress counter */
+        .progress-counter {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(175, 75, 239, 0.05);
+            border-radius: 16px;
+            padding: 12px 18px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(175, 75, 239, 0.1);
+        }
+
+        .counter-item {
+            text-align: center;
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .counter-item:nth-child(1) { animation-delay: 0.8s; }
+        .counter-item:nth-child(2) { animation-delay: 1s; }
+        .counter-item:nth-child(3) { animation-delay: 1.2s; }
+
+        .counter-number {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--color-primary);
+            display: block;
+        }
+
+        .counter-label {
+            font-size: 0.75rem;
+            color: var(--color-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Right column content */
+        .objectives-header {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--color-text);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.5s both;
+        }
+
+        .section-tag {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-primary);
+            font-weight: 600;
+            margin-bottom: 10px;
+            animation: fadeInUp 0.6s ease-out 0.6s both;
+        }
+
+        .week-overview {
+            background: rgba(12, 10, 24, 0.94);
+            border-radius: 18px;
+            padding: 16px 18px 18px;
+            color: #e5e7eb;
+            font-size: 0.88rem;
+            line-height: 1.7;
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.6);
+            margin-bottom: 16px;
+            animation: fadeInUp 0.6s ease-out 0.7s both;
+            transition: transform 0.3s ease;
+        }
+
+        .week-overview:hover {
+            transform: translateY(-2px);
+        }
+
+        .week-overview strong {
+            color: #ffffff;
+        }
+
+        .mini-heading {
+            font-size: 0.86rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: #c4b5fd;
+            font-weight: 600;
+            margin: 8px 0 10px;
+        }
+
+        .outcomes-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-size: 0.86rem;
+            color: #f9fafb;
+        }
+
+        .outcomes-list li {
+            display: flex;
+            gap: 8px;
+            align-items: flex-start;
+            transition: transform 0.3s ease;
+        }
+
+        .outcomes-list li:hover {
+            transform: translateX(5px);
+        }
+
+        .dot {
+            width: 6px;
+            height: 6px;
+            margin-top: 6px;
+            border-radius: 999px;
+            background: var(--color-accent);
+            flex-shrink: 0;
+            animation: pulse 2s infinite;
+        }
+
+        .note-card {
+            margin-top: 14px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            background: rgba(15, 23, 42, 0.7);
+            padding: 10px 12px;
+            font-size: 0.78rem;
+            color: #e5e7eb;
+            transition: all 0.3s ease;
+        }
+
+        .note-card:hover {
+            border-color: var(--color-primary-soft);
+            background: rgba(15, 23, 42, 0.9);
+        }
+
+        .note-card strong {
+            color: #fef3c7;
+        }
+
+        /* Case Study Box */
+        .case-study {
+            background: linear-gradient(135deg, rgba(131, 128, 240, 0.1), rgba(175, 75, 239, 0.1));
+            border-radius: 18px;
+            padding: 18px;
+            margin-top: 20px;
+            border: 1px solid rgba(131, 128, 240, 0.2);
+        }
+
+        .case-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--color-accent);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .case-content {
+            font-size: 0.85rem;
+            color: #ffffff;
+            line-height: 1.5;
+        }
+
+        .case-content strong {
+            color: #d492ff;
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="week9-heading">
+        <!-- LEFT COLUMN: title + objective cards -->
+        <section class="column" aria-label="Week 9 objectives list">
+            <header class="brand-row">
+                <div class="brand">
+                    <img
+                        src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                        alt="AlliedRx logo"
+                        class="brand-logo"
+                    />
+                    <div class="course-meta">
+                        <span class="course-name">Clinical Medical Assistant • CCMA</span>
+                        <div class="week-label">
+                            <span class="week-label-dot"></span>
+                            <span>Week 9 --- Pharmacology Math & Neurology</span>
+                        </div>
+                    </div>
+                </div>
+                <span class="badge-mode">Campus & Online</span>
+            </header>
+
+            <h1 id="week9-heading">Week 9 Objectives</h1>
+            <p class="subtitle">
+                Master <strong>accurate medication calculations</strong> while developing 
+                <strong>neurologic assessment skills</strong> to ensure safe medication administration 
+                and provide specialized care for patients with nervous system and mental health disorders.
+            </p>
+
+            <!-- Interactive filter buttons -->
+            <div class="chapter-filter">
+                <button class="filter-btn active" data-filter="all">All Objectives</button>
+                <button class="filter-btn" data-filter="chapter10">Chapter 10: Pharmacology Math</button>
+                <button class="filter-btn" data-filter="chapter20">Chapter 20: Neurology & Mental Health</button>
+            </div>
+
+            <!-- Progress counter -->
+            <div class="progress-counter">
+                <div class="counter-item">
+                    <span class="counter-number" id="total-objectives">25</span>
+                    <span class="counter-label">Total Objectives</span>
+                </div>
+                <div class="counter-item">
+                    <span class="counter-number">2</span>
+                    <span class="counter-label">Chapters</span>
+                </div>
+                <div class="counter-item">
+                    <span class="counter-number">14</span>
+                    <span class="counter-label">Clinical Skills</span>
+                </div>
+            </div>
+
+            <div class="objectives-list" id="objectives-container">
+                <!-- Chapter 10: Pharmacology Math Objectives -->
+                <article class="objective-card" data-chapter="chapter10">
+                    <div class="objective-number">01</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Define & Pronounce</div>
+                        <p class="objective-text">
+                            Define, spell, and pronounce pharmacology math terminology: dispense, unit dose, conversion, reconstitution, therapeutic range.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">📚</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter10">
+                    <div class="objective-number">02</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Summarize</div>
+                        <p class="objective-text">
+                            Summarize the important parts of a drug label including drug name, strength, expiration date, lot number, and administration instructions.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🏷️</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter10">
+                    <div class="objective-number">03</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Demonstrate</div>
+                        <p class="objective-text">
+                            Demonstrate knowledge of basic math computations including fractions, decimals, percentages, and ratios for medication calculations.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🧮</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter10">
+                    <div class="objective-number">04</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Define</div>
+                        <p class="objective-text">
+                            Define basic units of measurement in metric (grams, liters, milliliters) and household systems (teaspoons, tablespoons, cups).
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">📏</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter10">
+                    <div class="objective-number">05</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Convert</div>
+                        <p class="objective-text">
+                            Convert among measurement systems including metric to household, apothecary to metric, and international unit conversions.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🔄</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter10">
+                    <div class="objective-number">06</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Demonstrate & Calculate</div>
+                        <p class="objective-text">
+                            Demonstrate basic math computations by calculating correct dose amounts using ratio-proportion and dimensional analysis methods.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🔢</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter10">
+                    <div class="objective-number">07</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Calculate</div>
+                        <p class="objective-text">
+                            Calculate proper dosages of medication for administration using mathematical computations with attention to decimal placement.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">💊</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter10">
+                    <div class="objective-number">08</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Determine</div>
+                        <p class="objective-text">
+                            Determine accurate pediatric doses of medication using weight-based calculations and body surface area formulas.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">👶</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter10">
+                    <div class="objective-number">09</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Summarize</div>
+                        <p class="objective-text">
+                            Summarize how to reconstitute powdered injectable medications, including proper diluent selection and final concentration calculations.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">💉</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter10">
+                    <div class="objective-number">10</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Specify</div>
+                        <p class="objective-text">
+                            Specify the legal and ethical responsibilities of a medical assistant in calculating drug dosages and verifying calculations.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">⚖️</div>
+                </article>
+
+                <!-- Chapter 20: Neurology & Mental Health Objectives -->
+                <article class="objective-card" data-chapter="chapter20">
+                    <div class="objective-number">11</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Define & Pronounce</div>
+                        <p class="objective-text">
+                            Define, spell, and pronounce neurology terminology: ataxia, aura, diplopia, embolus, exacerbation, cryptogenic.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">📚</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter20">
+                    <div class="objective-number">12</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Summarize</div>
+                        <p class="objective-text">
+                            Summarize the anatomy and physiology of the nervous system including neurons, neurotransmitters, and neural pathways.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🧠</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter20">
+                    <div class="objective-number">13</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Differentiate</div>
+                        <p class="objective-text">
+                            Differentiate between the central nervous system (brain and spinal cord) and peripheral nervous system (nerves and ganglia).
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🔀</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter20">
+                    <div class="objective-number">14</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Distinguish & Identify</div>
+                        <p class="objective-text">
+                            Distinguish among common nervous system diseases; identify typical symptoms associated with neurologic disorders.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🩺</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter20">
+                    <div class="objective-number">15</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Describe</div>
+                        <p class="objective-text">
+                            Describe the pathology of cerebrovascular diseases including stroke, TIA, aneurysm, and vascular malformations.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🩸</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter20">
+                    <div class="objective-number">16</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Identify</div>
+                        <p class="objective-text">
+                            Identify the various types of epilepsy including generalized tonic-clonic, absence, complex partial, and myoclonic seizures.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">⚡</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter20">
+                    <div class="objective-number">17</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Compare & Contrast</div>
+                        <p class="objective-text">
+                            Compare and contrast encephalitis and meningitis in etiology, symptoms, diagnostic procedures, and treatment approaches.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🦠</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter20">
+                    <div class="objective-number">18</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Explain</div>
+                        <p class="objective-text">
+                            Explain the dynamics of brain and spinal cord injuries including concussion, contusion, and various levels of spinal cord injury.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">⚠️</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter20">
+                    <div class="objective-number">19</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Summarize</div>
+                        <p class="objective-text">
+                            Summarize common CNS and PNS diseases including multiple sclerosis, Parkinson's, Alzheimer's, and peripheral neuropathies.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">📋</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter20">
+                    <div class="objective-number">20</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Differentiate</div>
+                        <p class="objective-text">
+                            Differentiate among common mental health disorders: depression, anxiety, bipolar disorder, schizophrenia, and PTSD.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🧠</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter20">
+                    <div class="objective-number">21</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Analyze</div>
+                        <p class="objective-text">
+                            Analyze the medical assistant's role in the neurologic examination including cranial nerve assessment and coordination testing.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🔍</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter20">
+                    <div class="objective-number">22</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Explain & Outline</div>
+                        <p class="objective-text">
+                            Explain common diagnostic procedures for the nervous system; outline steps to prepare patients for EEG and lumbar puncture.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">📊</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter20">
+                    <div class="objective-number">23</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Describe & Prepare</div>
+                        <p class="objective-text">
+                            Describe steps for preparing and assisting with lumbar puncture; ensure patient safety and comfort during procedure.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">💉</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter20">
+                    <div class="objective-number">24</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Discuss</div>
+                        <p class="objective-text">
+                            Discuss implications of patient education in neurology and mental health practice, including medication adherence and symptom management.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">👨‍👩‍👧‍👦</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter20">
+                    <div class="objective-number">25</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Explain</div>
+                        <p class="objective-text">
+                            Explain legal issues and HIPAA applications associated with neurology and mental health, including confidentiality for sensitive conditions.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">⚖️</div>
+                </article>
+            </div>
+        </section>
+
+        <!-- RIGHT COLUMN: narrative + outcomes framing -->
+        <aside class="column" aria-label="Overview of this week's content">
+            <h2 class="objectives-header">Precision Math & Neurologic Expertise</h2>
+            <p class="section-tag">Medication Calculations • Neurologic Assessment • Mental Health Care</p>
+
+            <div class="week-overview">
+                <p>
+                    Week 9 combines <strong>critical medication calculation skills</strong> with 
+                    <strong>specialized neurologic knowledge</strong>. You'll learn precise math techniques 
+                    for safe medication administration while developing expertise in assessing and 
+                    caring for patients with nervous system and mental health disorders.
+                </p>
+
+                <p>
+                    These chapters connect through <strong>medication precision for neurologic conditions</strong>. 
+                    Accurate dosing is especially critical for neurologic medications like anticonvulsants, 
+                    while understanding neurologic disorders ensures appropriate medication administration 
+                    and monitoring for patients with complex conditions.
+                </p>
+
+                <!-- Case Study from Chapter 10 -->
+                <div class="case-study">
+                    <div class="case-title">
+                        <span>🧮</span> Chapter 10 Case Study: Heather Izacco, Medical Assistant
+                    </div>
+                    <div class="case-content">
+                        <strong>Situation:</strong> New graduate working with Dr. Carlos Angio in family practice<br>
+                        <strong>Challenge:</strong> Medication calculation anxiety and confidence in math skills<br>
+                        <strong>Focus Areas:</strong> Pediatric dosing calculations, measurement system conversions, 
+                        reconstitution of powdered medications, verification protocols
+                    </div>
+                </div>
+
+                <!-- Case Study from Chapter 20 -->
+                <div class="case-study">
+                    <div class="case-title">
+                        <span>🧠</span> Chapter 20 Case Study: Mai Lee, CMA (AAMA)
+                    </div>
+                    <div class="case-content">
+                        <strong>Practice:</strong> Neurology specialty practice with Dr. Kim Song<br>
+                        <strong>Responsibilities:</strong> Training new staff, assisting with neurologic exams, 
+                        patient education for complex conditions<br>
+                        <strong>Specialized Skills:</strong> Seizure management, migraine assessment, 
+                        mental health screening, diagnostic procedure preparation
+                    </div>
+                </div>
+
+                <p class="mini-heading">By the end of this week, you will be able to:</p>
+                <ul class="outcomes-list">
+                    <li>
+                        <span class="dot"></span>
+                        <span>Accurately calculate medication doses using multiple mathematical methods and verify calculations.</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span>Convert between measurement systems and calculate pediatric doses using weight-based formulas.</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span>Assist with neurologic examinations including cranial nerve assessment and coordination testing.</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span>Prepare patients for neurologic diagnostic procedures (EEG, lumbar puncture) with proper education.</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span>Recognize symptoms of common neurologic and mental health disorders and provide appropriate support.</span>
+                    </li>
+                </ul>
+
+                <div class="note-card">
+                    <strong>Medication Calculation Safety:</strong> Always use the <strong>"Double-Check" rule</strong> for 
+                    medication calculations. Calculate independently, then verify using a different method 
+                    (ratio-proportion vs. dimensional analysis). For pediatric doses, <strong>calculate based on weight in kg</strong> 
+                    and have another healthcare professional verify before administration.
+                </div>
+
+                <div class="note-card" style="margin-top: 12px;">
+                    <strong>Neurologic Medication Precision:</strong> Anticonvulsant medications like phenytoin and 
+                    valproic acid have <strong>narrow therapeutic ranges</strong>. Small calculation errors can lead 
+                    to toxicity or treatment failure. Always verify doses and monitor for side effects 
+                    specific to neurologic medications.
+                </div>
+
+                <div class="note-card" style="margin-top: 12px;">
+                    <strong>Seizure Safety Protocol:</strong> During a seizure: <strong>Time the seizure</strong>, 
+                    <strong>protect from injury</strong> (move furniture, cushion head), <strong>turn patient on side</strong>, 
+                    <strong>never restrain</strong> or put anything in mouth. Document duration, type of movements, 
+                    and post-ictal state. Administer emergency medications only as ordered.
+                </div>
+
+                <div class="note-card" style="margin-top: 12px;">
+                    <strong>Mental Health Sensitivity:</strong> When working with mental health patients: 
+                    <strong>Use non-judgmental language</strong>, <strong>maintain appropriate boundaries</strong>, 
+                    <strong>validate feelings without reinforcing delusions</strong>. Document objectively 
+                    using direct quotes when possible. Know emergency protocols for suicidal ideation 
+                    or aggressive behavior.
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Filter functionality
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const objectiveCards = document.querySelectorAll('.objective-card');
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Update active button
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+
+                    const filter = this.getAttribute('data-filter');
+
+                    // Filter cards
+                    objectiveCards.forEach(card => {
+                        if (filter === 'all') {
+                            card.style.display = 'grid';
+                            setTimeout(() => {
+                                card.style.opacity = '1';
+                                card.style.transform = 'translateY(0)';
+                            }, 10);
+                        } else {
+                            if (card.getAttribute('data-chapter') === filter) {
+                                card.style.display = 'grid';
+                                setTimeout(() => {
+                                    card.style.opacity = '1';
+                                    card.style.transform = 'translateY(0)';
+                                }, 10);
+                            } else {
+                                card.style.opacity = '0';
+                                card.style.transform = 'translateY(10px)';
+                                setTimeout(() => {
+                                    card.style.display = 'none';
+                                }, 300);
+                            }
+                        }
+                    });
+                });
+            });
+
+            // Interactive objective cards
+            objectiveCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    // Toggle active state
+                    this.classList.toggle('active');
+
+                    // Add subtle animation
+                    if (this.classList.contains('active')) {
+                        const icon = this.querySelector('.objective-icon');
+                        icon.style.transform = 'scale(1.2) rotate(10deg)';
+                        setTimeout(() => {
+                            icon.style.transform = 'scale(1.1)';
+                        }, 300);
+                    }
+                });
+
+                // Add keyboard navigation
+                card.setAttribute('tabindex', '0');
+                card.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        this.click();
+                    }
+                });
+            });
+
+            // Animate counter numbers
+            function animateCounter(element, target, duration) {
+                let start = 0;
+                const increment = target / (duration / 16);
+                const timer = setInterval(() => {
+                    start += increment;
+                    if (start >= target) {
+                        element.textContent = target;
+                        clearInterval(timer);
+                    } else {
+                        element.textContent = Math.floor(start);
+                    }
+                }, 16);
+            }
+
+            // Start counter animation after page load
+            setTimeout(() => {
+                const counterElement = document.getElementById('total-objectives');
+                animateCounter(counterElement, 25, 1000);
+            }, 1500);
+
+            // Add hover effect to outcomes list items
+            const outcomesItems = document.querySelectorAll('.outcomes-list li');
+            outcomesItems.forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    const dot = this.querySelector('.dot');
+                    dot.style.transform = 'scale(1.5)';
+                    dot.style.background = 'var(--color-primary)';
+                });
+                item.addEventListener('mouseleave', function() {
+                    const dot = this.querySelector('.dot');
+                    dot.style.transform = 'scale(1)';
+                    dot.style.background = 'var(--color-accent)';
+                });
+            });
+
+            // Add scroll animation for cards
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all objective cards
+            objectiveCards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                observer.observe(card);
+            });
+
+            // Add interactivity to case study boxes
+            const caseStudies = document.querySelectorAll('.case-study');
+            caseStudies.forEach(study => {
+                study.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-3px)';
+                    this.style.boxShadow = '0 12px 30px rgba(131, 128, 240, 0.2)';
+                });
+                study.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                    this.style.boxShadow = 'none';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
