@@ -1,0 +1,2348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AlliedRx – Module 2: Diabetes Focus: Diagnosis & Daily Management</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-error: #e17055;
+            --color-warning: #fdcb6e;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
+            --color-dark: #0c0a18;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+            --shadow-card: 0 12px 30px rgba(15, 23, 42, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(circle at top left, #ffffff 0, #f1ecff 40%, var(--color-bg) 100%);
+            color: var(--color-text);
+            -webkit-text-size-adjust: 100%;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 12px; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        @keyframes checkmarkPop {
+            0% { transform: scale(0); opacity: 0; }
+            70% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @media (max-width: 900px) { .page { padding: 22px; } }
+        @media (max-width: 480px) {
+            body { padding: 0; }
+            .page { border-radius: 0; box-shadow: none; padding: 18px 14px 22px; }
+        }
+
+        /* Header */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .brand-logo:hover { transform: scale(1.05); }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--color-success);
+            flex-shrink: 0;
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .badge-mode:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+        @media (max-width: 480px) {
+            .brand-row { flex-direction: column; align-items: flex-start; }
+            .badge-mode { margin-top: 6px; }
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 3vw, 2.2rem);
+            line-height: 1.1;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .module-subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 600px;
+            margin-bottom: 24px;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        /* Progress Tracker */
+        .progress-tracker {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            position: relative;
+            padding: 0 20px;
+        }
+
+        .progress-tracker::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 50px;
+            right: 50px;
+            height: 3px;
+            background: rgba(12, 10, 24, 0.08);
+            z-index: 1;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+
+        .step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--color-muted);
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.active .step-circle {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .progress-step.completed .step-circle {
+            background: var(--color-success);
+            border-color: var(--color-success);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.75rem;
+            color: var(--color-muted);
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .progress-step.active .step-label {
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        /* Progress Summary */
+        .progress-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+            animation: fadeInUp 0.6s ease-out 0.5s both;
+        }
+
+        .summary-card {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            border: 1px solid rgba(12, 10, 24, 0.06);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-card);
+            border-color: var(--color-primary-soft);
+        }
+
+        .summary-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--color-primary);
+            display: block;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .summary-label {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Activity Grid */
+        .activity-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 900px) { .activity-grid { grid-template-columns: 1fr; } }
+
+        .activity-card {
+            background: white;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            padding: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .activity-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--color-primary);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .activity-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--color-primary-soft);
+        }
+
+        .activity-card:hover::before { opacity: 1; }
+        .activity-card.completed { border-color: var(--color-success); }
+        .activity-card.completed::before { background: var(--color-success); opacity: 1; }
+
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .activity-number {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .activity-status {
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-muted);
+        }
+
+        .activity-card.completed .activity-status {
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--color-success);
+        }
+
+        .activity-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 8px;
+        }
+
+        .activity-description {
+            font-size: 0.9rem;
+            color: var(--color-muted);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        /* Activity 1: The Diabetes Detective */
+        .case-file {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--color-accent);
+        }
+
+        .case-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--color-accent);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .case-details {
+            font-size: 0.9rem;
+            color: var(--color-text);
+            line-height: 1.6;
+        }
+
+        .case-details strong {
+            color: var(--color-primary);
+        }
+
+        .criteria-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .criteria-item {
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: var(--radius-sm);
+            padding: 12px 15px;
+            border: 2px solid transparent;
+            cursor: grab;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            user-select: none;
+        }
+
+        .criteria-item:hover {
+            background: rgba(175, 75, 239, 0.08);
+            border-color: var(--color-primary-soft);
+            transform: translateY(-2px);
+        }
+
+        .criteria-item.dragging {
+            opacity: 0.7;
+            transform: scale(0.98);
+        }
+
+        .criteria-item.placed {
+            background: rgba(0, 184, 148, 0.1);
+            border-color: var(--color-success);
+            cursor: default;
+        }
+
+        .criteria-dropzone {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            border: 2px dashed rgba(12, 10, 24, 0.1);
+            min-height: 120px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .criteria-dropzone.hover {
+            border-color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.05);
+        }
+
+        .criteria-dropzone.empty::after {
+            content: 'Drag applicable ADA criteria here';
+            color: var(--color-muted);
+            text-align: center;
+            font-size: 0.9rem;
+            display: block;
+            padding: 40px 0;
+        }
+
+        .diagnosis-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .diagnosis-options { grid-template-columns: 1fr; }
+        }
+
+        .diagnosis-option {
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .diagnosis-option:hover {
+            background: rgba(175, 75, 239, 0.08);
+            border-color: var(--color-primary-soft);
+            transform: translateY(-2px);
+        }
+
+        .diagnosis-option.selected {
+            background: rgba(0, 184, 148, 0.1);
+            border-color: var(--color-success);
+        }
+
+        .diagnosis-option.wrong {
+            background: rgba(225, 112, 85, 0.1);
+            border-color: var(--color-error);
+            animation: shake 0.5s ease;
+        }
+
+        /* Activity 2: Glucose Log Analysis */
+        .log-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+        }
+
+        .log-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        .log-table th {
+            background: rgba(175, 75, 239, 0.1);
+            color: var(--color-primary);
+            font-weight: 600;
+            padding: 12px;
+            text-align: left;
+            border-bottom: 2px solid rgba(12, 10, 24, 0.1);
+        }
+
+        .log-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid rgba(12, 10, 24, 0.08);
+        }
+
+        .log-table tr:hover {
+            background: rgba(175, 75, 239, 0.05);
+        }
+
+        .high-value {
+            color: var(--color-error);
+            font-weight: 600;
+        }
+
+        .low-value {
+            color: var(--color-warning);
+            font-weight: 600;
+        }
+
+        .normal-value {
+            color: var(--color-success);
+            font-weight: 600;
+        }
+
+        .pattern-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .pattern-item {
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: var(--radius-sm);
+            padding: 10px 15px;
+            border: 2px solid transparent;
+            cursor: grab;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+            user-select: none;
+        }
+
+        .pattern-item:hover {
+            background: rgba(175, 75, 239, 0.08);
+            border-color: var(--color-primary-soft);
+            transform: translateY(-2px);
+        }
+
+        .pattern-item.dragging {
+            opacity: 0.7;
+            transform: scale(0.98);
+        }
+
+        .pattern-item.placed {
+            background: rgba(0, 184, 148, 0.1);
+            border-color: var(--color-success);
+            cursor: default;
+        }
+
+        .timeline-dropzone {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            border: 2px dashed rgba(12, 10, 24, 0.1);
+            min-height: 100px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-dropzone.hover {
+            border-color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.05);
+        }
+
+        .timeline-dropzone.empty::after {
+            content: 'Drag patterns onto the timeline where they occur';
+            color: var(--color-muted);
+            text-align: center;
+            font-size: 0.9rem;
+            display: block;
+            padding: 30px 0;
+        }
+
+        .action-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .action-item {
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: var(--radius-sm);
+            padding: 10px 15px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+        }
+
+        .action-item:hover {
+            background: rgba(175, 75, 239, 0.08);
+            border-color: var(--color-primary-soft);
+            transform: translateY(-2px);
+        }
+
+        .action-item.selected {
+            background: rgba(0, 184, 148, 0.1);
+            border-color: var(--color-success);
+        }
+
+        .action-item.wrong {
+            background: rgba(225, 112, 85, 0.1);
+            border-color: var(--color-error);
+        }
+
+        /* Activity 3: Emergency Triage - FIXED */
+        .symptom-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .symptom-container { grid-template-columns: 1fr; }
+        }
+
+        .symptom-column {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            min-height: 200px;
+        }
+
+        .column-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 15px;
+            text-align: center;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(12, 10, 24, 0.1);
+        }
+
+        .symptom-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-height: 150px;
+        }
+
+        .symptom-tag {
+            background: rgba(12, 10, 24, 0.05);
+            border-radius: 20px;
+            padding: 8px 15px;
+            font-size: 0.85rem;
+            cursor: grab;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            user-select: none;
+        }
+
+        .symptom-tag:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            transform: translateY(-2px);
+        }
+
+        .symptom-tag.dragging {
+            opacity: 0.7;
+            transform: scale(0.95);
+        }
+
+        .symptom-tag.placed {
+            cursor: default;
+        }
+
+        .symptom-tag.hypo {
+            background: rgba(253, 203, 110, 0.1);
+            border-color: rgba(253, 203, 110, 0.3);
+        }
+
+        .symptom-tag.hyper {
+            background: rgba(225, 112, 85, 0.1);
+            border-color: rgba(225, 112, 85, 0.3);
+        }
+
+        .action-sequence-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .action-sequence {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            border: 2px dashed rgba(12, 10, 24, 0.1);
+            min-height: 200px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .action-sequence.hover {
+            border-color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.05);
+        }
+
+        .action-sequence.empty::after {
+            content: 'Drag action steps here in correct sequence';
+            color: var(--color-muted);
+            text-align: center;
+            font-size: 0.9rem;
+            display: block;
+            padding: 80px 0;
+        }
+
+        .action-step {
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: var(--radius-sm);
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            border: 2px solid transparent;
+            cursor: grab;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            user-select: none;
+        }
+
+        .action-step:hover {
+            background: rgba(175, 75, 239, 0.08);
+            border-color: var(--color-primary-soft);
+        }
+
+        .action-step.dragging {
+            opacity: 0.7;
+            transform: scale(0.98);
+        }
+
+        .action-step.placed {
+            background: rgba(0, 184, 148, 0.1);
+            border-color: var(--color-success);
+            cursor: default;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .step-number {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--color-success);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        /* Individual Activity Buttons */
+        .activity-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn-activity {
+            padding: 10px 20px;
+            border-radius: var(--radius-sm);
+            border: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-check {
+            background: var(--color-success);
+            color: white;
+        }
+
+        .btn-check:hover {
+            background: #00a085;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 184, 148, 0.3);
+        }
+
+        .btn-reset {
+            background: rgba(12, 10, 24, 0.08);
+            color: var(--color-text);
+        }
+
+        .btn-reset:hover {
+            background: rgba(12, 10, 24, 0.12);
+            transform: translateY(-2px);
+        }
+
+        .btn-icon {
+            font-size: 1em;
+        }
+
+        /* Feedback */
+        .feedback-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            margin-top: 20px;
+            display: none;
+        }
+
+        .feedback-container.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .feedback-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feedback-icon {
+            font-size: 1.2rem;
+        }
+
+        .feedback-icon.correct { color: var(--color-success); }
+        .feedback-icon.incorrect { color: var(--color-error); }
+
+        .feedback-content {
+            font-size: 0.85rem;
+            color: var(--color-text);
+            line-height: 1.5;
+        }
+
+        .feedback-content strong { color: var(--color-primary); }
+
+        .clinical-tip {
+            background: rgba(0, 184, 148, 0.08);
+            border-left: 4px solid var(--color-success);
+            padding: 12px;
+            margin-top: 10px;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            font-size: 0.85rem;
+        }
+
+        /* Emergency Warning */
+        .emergency-warning {
+            background: rgba(225, 112, 85, 0.1);
+            border: 2px solid var(--color-error);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin-top: 15px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            animation: pulse 2s infinite;
+        }
+
+        .warning-icon {
+            font-size: 1.5rem;
+            color: var(--color-error);
+            flex-shrink: 0;
+        }
+
+        .warning-content {
+            flex: 1;
+        }
+
+        .warning-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--color-error);
+            margin-bottom: 5px;
+        }
+
+        .warning-text {
+            font-size: 0.85rem;
+            color: var(--color-text);
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #9a3bd6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(175, 75, 239, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-text);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(12, 10, 24, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-icon {
+            font-size: 1.1em;
+        }
+
+        /* Results Panel */
+        .results-panel {
+            background: var(--color-dark);
+            color: white;
+            border-radius: var(--radius-md);
+            padding: 30px;
+            margin-top: 30px;
+            display: none;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .results-panel.show {
+            display: block;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .results-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .score-display {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--color-primary-soft);
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .clinical-insights {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .insights-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-primary-soft);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .insights-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .insights-list li {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            font-size: 0.9rem;
+            color: #e5e7eb;
+        }
+
+        .insight-dot {
+            width: 6px;
+            height: 6px;
+            margin-top: 6px;
+            border-radius: 999px;
+            background: var(--color-accent);
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="module-heading">
+        <!-- Header -->
+        <header class="brand-row">
+            <div class="brand">
+                <img
+                    src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                    alt="AlliedRx logo"
+                    class="brand-logo"
+                />
+                <div class="course-meta">
+                    <span class="course-name">Clinical Medical Assistant • Week 21</span>
+                    <div class="week-label">
+                        <span class="week-label-dot"></span>
+                        <span>Chapter 21: Assisting in Endocrinology</span>
+                    </div>
+                </div>
+            </div>
+            <span class="badge-mode">Campus & Online</span>
+        </header>
+
+        <h1 id="module-heading">Diabetes Focus: Diagnosis & Daily Management</h1>
+        <p class="module-subtitle">
+            Master diabetes diagnosis using ADA criteria, analyze glucose patterns for better management, 
+            and triage acute complications through realistic clinical simulations.
+        </p>
+
+        <!-- Progress Tracker -->
+        <div class="progress-tracker">
+            <div class="progress-step active" data-step="1">
+                <div class="step-circle">1</div>
+                <div class="step-label">ADA Diagnosis</div>
+            </div>
+            <div class="progress-step" data-step="2">
+                <div class="step-circle">2</div>
+                <div class="step-label">Pattern Analysis</div>
+            </div>
+            <div class="progress-step" data-step="3">
+                <div class="step-circle">3</div>
+                <div class="step-label">Emergency Triage</div>
+            </div>
+        </div>
+
+        <!-- Progress Summary -->
+        <div class="progress-summary">
+            <div class="summary-card">
+                <span class="summary-number" id="completed-count">0</span>
+                <span class="summary-label">Activities Completed</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="accuracy-rate">0%</span>
+                <span class="summary-label">Current Accuracy</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="time-spent">0:00</span>
+                <span class="summary-label">Time Spent</span>
+            </div>
+        </div>
+
+        <!-- Activity Grid -->
+        <div class="activity-grid">
+            <!-- Activity 1: The Diabetes Detective -->
+            <section class="activity-card" id="activity-1" data-activity="1">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 1</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">The Diabetes Detective: ADA Criteria Case Files</h3>
+                <p class="activity-description">
+                    Analyze patient data, apply ADA diagnostic criteria, and determine the correct diabetes diagnosis.
+                </p>
+
+                <div class="case-file">
+                    <div class="case-title">📋 Case File #1: James Wilson, 19-year-old male</div>
+                    <div class="case-details">
+                        <strong>Presenting Symptoms:</strong> 10 lb weight loss over 2 weeks, polyuria, polydipsia, fatigue<br>
+                        <strong>Past Medical History:</strong> Previously healthy, no medications<br>
+                        <strong>Family History:</strong> No diabetes in immediate family<br>
+                        <strong>Physical Exam:</strong> BMI 21, moderate dehydration<br>
+                        <strong>Lab Results:</strong><br>
+                        • Fasting Plasma Glucose: 156 mg/dL<br>
+                        • Random Plasma Glucose: 298 mg/dL<br>
+                        • HbA1c: 8.9%<br>
+                        • GAD-65 Antibodies: Positive<br>
+                        • C-Peptide: Low<br>
+                        • Urine Ketones: Moderate
+                    </div>
+                </div>
+
+                <div class="criteria-container">
+                    <div class="criteria-item draggable" data-criteria="1" draggable="true">FPG ≥126 mg/dL on two occasions</div>
+                    <div class="criteria-item draggable" data-criteria="2" draggable="true">HbA1c ≥6.5%</div>
+                    <div class="criteria-item draggable" data-criteria="3" draggable="true">Classic symptoms + random glucose ≥200 mg/dL</div>
+                    <div class="criteria-item draggable" data-criteria="4" draggable="true">2-hour OGTT ≥200 mg/dL</div>
+                    <div class="criteria-item draggable" data-criteria="5" draggable="true">FPG 100-125 mg/dL (prediabetes)</div>
+                    <div class="criteria-item draggable" data-criteria="6" draggable="true">HbA1c 5.7-6.4% (prediabetes)</div>
+                </div>
+
+                <div class="criteria-dropzone empty" id="criteria-dropzone-1"></div>
+
+                <div class="diagnosis-options">
+                    <div class="diagnosis-option" data-diagnosis="normal">Normal</div>
+                    <div class="diagnosis-option" data-diagnosis="prediabetes">Prediabetes</div>
+                    <div class="diagnosis-option" data-diagnosis="type1">Type 1 Diabetes</div>
+                    <div class="diagnosis-option" data-diagnosis="type2">Type 2 Diabetes</div>
+                    <div class="diagnosis-option" data-diagnosis="gestational">Gestational Diabetes</div>
+                    <div class="diagnosis-option" data-diagnosis="secondary">Secondary Diabetes</div>
+                </div>
+
+                <!-- Individual Activity Buttons -->
+                <div class="activity-buttons">
+                    <button class="btn-activity btn-check" id="check-activity-1">
+                        <span class="btn-icon">✓</span>
+                        Check Activity 1
+                    </button>
+                    <button class="btn-activity btn-reset" id="reset-activity-1">
+                        <span class="btn-icon">↻</span>
+                        Reset Activity 1
+                    </button>
+                </div>
+
+                <div class="feedback-container" id="feedback-1">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Diagnosis Complete!
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Correct Diagnosis: Type 1 Diabetes</strong><br><br>
+                        <strong>ADA Criteria Met:</strong><br>
+                        1. <strong>FPG ≥126 mg/dL</strong> (156 mg/dL confirms diabetes)<br>
+                        2. <strong>HbA1c ≥6.5%</strong> (8.9% confirms diabetes)<br>
+                        3. <strong>Classic symptoms + random glucose ≥200 mg/dL</strong> (polyuria, polydipsia + 298 mg/dL)<br><br>
+                        <strong>Key Differentiators for Type 1:</strong><br>
+                        • Positive GAD-65 antibodies (autoimmune marker)<br>
+                        • Low C-peptide (indicating insulin deficiency)<br>
+                        • Presence of ketones (common in Type 1 at diagnosis)<br>
+                        • Young age, acute symptom onset, weight loss<br>
+                        • Normal BMI (not typical for Type 2)<br><br>
+                        <strong>Clinical Pearl:</strong> In younger patients with acute symptoms and ketosis, always consider Type 1 diabetes even if they don't fit the classic "childhood onset" pattern.
+                    </div>
+                    <div class="clinical-tip">
+                        <strong>🩺 Pro Tip:</strong> Document WHICH ADA criteria were met (e.g., "Diagnosed per ADA criteria: FPG ≥126 mg/dL and HbA1c ≥6.5%"). This is important for billing and quality reporting.
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity 2: Glucose Log Analysis -->
+            <section class="activity-card" id="activity-2" data-activity="2">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 2</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">Glucose Log Analysis: Pattern Recognition</h3>
+                <p class="activity-description">
+                    Analyze a 3-day glucose log, identify patterns, and recommend appropriate management adjustments.
+                </p>
+
+                <div class="log-container">
+                    <table class="log-table">
+                        <thead>
+                            <tr>
+                                <th>Day/Time</th>
+                                <th>Glucose (mg/dL)</th>
+                                <th>Meal/Notes</th>
+                                <th>Medication</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Day 1 - Fasting</td>
+                                <td class="high-value">142</td>
+                                <td>Before breakfast</td>
+                                <td>Metformin 1000mg</td>
+                            </tr>
+                            <tr>
+                                <td>Day 1 - Post Breakfast</td>
+                                <td class="high-value">198</td>
+                                <td>Pancakes, syrup</td>
+                                <td>--</td>
+                            </tr>
+                            <tr>
+                                <td>Day 1 - Pre-Lunch</td>
+                                <td class="normal-value">112</td>
+                                <td>Before lunch</td>
+                                <td>--</td>
+                            </tr>
+                            <tr>
+                                <td>Day 1 - Post Lunch</td>
+                                <td class="high-value">184</td>
+                                <td>Sandwich, chips</td>
+                                <td>--</td>
+                            </tr>
+                            <tr>
+                                <td>Day 1 - Bedtime</td>
+                                <td class="normal-value">128</td>
+                                <td>Before sleep</td>
+                                <td>--</td>
+                            </tr>
+                            <tr>
+                                <td>Day 2 - Fasting</td>
+                                <td class="high-value">138</td>
+                                <td>Before breakfast</td>
+                                <td>Metformin 1000mg</td>
+                            </tr>
+                            <tr>
+                                <td>Day 2 - Post Breakfast</td>
+                                <td class="high-value">205</td>
+                                <td>Cereal, banana</td>
+                                <td>--</td>
+                            </tr>
+                            <tr>
+                                <td>Day 2 - Pre-Lunch</td>
+                                <td class="normal-value">108</td>
+                                <td>Before lunch</td>
+                                <td>--</td>
+                            </tr>
+                            <tr>
+                                <td>Day 2 - 3 AM</td>
+                                <td class="low-value">68</td>
+                                <td>Woke up sweaty</td>
+                                <td>--</td>
+                            </tr>
+                            <tr>
+                                <td>Day 3 - Fasting</td>
+                                <td class="high-value">155</td>
+                                <td>Before breakfast</td>
+                                <td>Metformin 1000mg</td>
+                            </tr>
+                            <tr>
+                                <td>Day 3 - Post Breakfast</td>
+                                <td class="high-value">192</td>
+                                <td>Toast, juice</td>
+                                <td>--</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="pattern-options">
+                    <div class="pattern-item draggable" data-pattern="1" draggable="true">Consistently high fasting glucose</div>
+                    <div class="pattern-item draggable" data-pattern="2" draggable="true">Post-breakfast glucose spikes</div>
+                    <div class="pattern-item draggable" data-pattern="3" draggable="true">Possible nighttime hypoglycemia</div>
+                    <div class="pattern-item draggable" data-pattern="4" draggable="true">High carbohydrate meals</div>
+                    <div class="pattern-item draggable" data-pattern="5" draggable="true">Good pre-lunch control</div>
+                </div>
+
+                <div class="timeline-dropzone empty" id="timeline-dropzone"></div>
+
+                <p style="font-size: 0.9rem; margin-bottom: 15px; color: var(--color-primary); font-weight: 600;">
+                    Based on patterns, select appropriate management actions:
+                </p>
+
+                <div class="action-options">
+                    <div class="action-item" data-action="1">Increase morning metformin dose</div>
+                    <div class="action-item" data-action="2">Add bedtime long-acting insulin</div>
+                    <div class="action-item" data-action="3">Review carbohydrate counting</div>
+                    <div class="action-item" data-action="4">Add bedtime snack</div>
+                    <div class="action-item" data-action="5">Recommend continuous glucose monitor</div>
+                    <div class="action-item" data-action="6">Switch to low-carb breakfast options</div>
+                </div>
+
+                <!-- Individual Activity Buttons -->
+                <div class="activity-buttons">
+                    <button class="btn-activity btn-check" id="check-activity-2">
+                        <span class="btn-icon">✓</span>
+                        Check Activity 2
+                    </button>
+                    <button class="btn-activity btn-reset" id="reset-activity-2">
+                        <span class="btn-icon">↻</span>
+                        Reset Activity 2
+                    </button>
+                </div>
+
+                <div class="feedback-container" id="feedback-2">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Pattern Analysis Complete!
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Key Patterns Identified:</strong><br>
+                        1. <strong>Consistently high fasting glucose</strong> (142, 138, 155 mg/dL) - suggests possible dawn phenomenon or inadequate overnight control<br>
+                        2. <strong>Post-breakfast glucose spikes</strong> (198, 205, 192 mg/dL) - indicates breakfast carbohydrates need adjustment<br>
+                        3. <strong>Possible nighttime hypoglycemia</strong> (68 mg/dL at 3 AM) - explains high fasting glucose (Somogyi effect)<br>
+                        4. <strong>High carbohydrate meals noted</strong> (pancakes/syrup, cereal/banana, toast/juice)<br><br>
+                        
+                        <strong>Recommended Actions:</strong><br>
+                        • <strong>Review carbohydrate counting</strong> - especially for breakfast<br>
+                        • <strong>Add bedtime snack</strong> - to prevent nighttime hypoglycemia<br>
+                        • <strong>Switch to low-carb breakfast options</strong> - protein/fat based instead of high-carb<br>
+                        • <strong>Recommend continuous glucose monitor</strong> - to better track overnight patterns<br><br>
+                        
+                        <strong>Why NOT increase medication yet?</strong> The nighttime low suggests current medication might be adequate if diet is adjusted. Always address lifestyle before increasing medications.
+                    </div>
+                    <div class="clinical-tip">
+                        <strong>🩺 Pro Tip:</strong> The Somogyi effect (rebound hyperglycemia after hypoglycemia) often presents as high fasting glucose with nighttime lows. Check 3 AM glucose before increasing evening medications!
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity 3: Emergency Triage - FIXED -->
+            <section class="activity-card" id="activity-3" data-activity="3">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 3</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">Emergency Triage: Symptom Sort & Action Sequence</h3>
+                <p class="activity-description">
+                    Sort symptoms by complication type, then sequence emergency actions correctly for hypoglycemia management.
+                </p>
+
+                <div class="symptom-container">
+                    <div class="symptom-column">
+                        <div class="column-title">Symptoms to Sort</div>
+                        <div class="symptom-list" id="symptoms-source">
+                            <div class="symptom-tag draggable" data-symptom="1" data-type="hypo" draggable="true">Shaking/tremors</div>
+                            <div class="symptom-tag draggable" data-symptom="2" data-type="hyper" draggable="true">Fruity breath odor</div>
+                            <div class="symptom-tag draggable" data-symptom="3" data-type="hypo" draggable="true">Confusion/disorientation</div>
+                            <div class="symptom-tag draggable" data-symptom="4" data-type="hyper" draggable="true">Kussmaul breathing</div>
+                            <div class="symptom-tag draggable" data-symptom="5" data-type="hypo" draggable="true">Profuse sweating</div>
+                            <div class="symptom-tag draggable" data-symptom="6" data-type="hyper" draggable="true">Nausea/vomiting</div>
+                            <div class="symptom-tag draggable" data-symptom="7" data-type="hypo" draggable="true">Slurred speech</div>
+                            <div class="symptom-tag draggable" data-symptom="8" data-type="hyper" draggable="true">Polyuria</div>
+                        </div>
+                    </div>
+                    
+                    <div class="symptom-column">
+                        <div class="column-title" style="color: var(--color-warning);">Hypoglycemia Column</div>
+                        <div class="symptom-list" id="hypo-column" data-type="hypo"></div>
+                    </div>
+                    
+                    <div class="symptom-column">
+                        <div class="column-title" style="color: var(--color-error);">Hyperglycemia/DKA Column</div>
+                        <div class="symptom-list" id="hyper-column" data-type="hyper"></div>
+                    </div>
+                </div>
+
+                <p style="font-size: 0.9rem; margin: 20px 0 15px; color: var(--color-primary); font-weight: 600;">
+                    Now sequence the emergency actions for hypoglycemia:
+                </p>
+
+                <div class="action-sequence empty" id="action-sequence"></div>
+
+                <div class="action-container">
+                    <div class="action-step draggable" data-step="1" draggable="true">Check blood glucose if possible</div>
+                    <div class="action-step draggable" data-step="2" draggable="true">If conscious & able to swallow, give 15g fast-acting carbs</div>
+                    <div class="action-step draggable" data-step="3" draggable="true">Wait 15 minutes</div>
+                    <div class="action-step draggable" data-step="4" draggable="true">Recheck blood glucose</div>
+                    <div class="action-step draggable" data-step="5" draggable="true">If still low (<70 mg/dL), repeat 15g carbs</div>
+                    <div class="action-step draggable" data-step="6" draggable="true">If unconscious/unable to swallow, call 911 immediately</div>
+                    <div class="action-step draggable" data-step="7" draggable="true">Once glucose >70 mg/dL, give protein snack if meal >1 hour away</div>
+                </div>
+
+                <!-- Individual Activity Buttons -->
+                <div class="activity-buttons">
+                    <button class="btn-activity btn-check" id="check-activity-3">
+                        <span class="btn-icon">✓</span>
+                        Check Activity 3
+                    </button>
+                    <button class="btn-activity btn-reset" id="reset-activity-3">
+                        <span class="btn-icon">↻</span>
+                        Reset Activity 3
+                    </button>
+                </div>
+
+                <div class="emergency-warning" id="emergency-warning" style="display: none;">
+                    <div class="warning-icon">⚠️</div>
+                    <div class="warning-content">
+                        <div class="warning-title">CRITICAL: Hypoglycemia Protocol</div>
+                        <div class="warning-text">
+                            <strong>Rule of 15:</strong> 15g carbs, wait 15 minutes, recheck. If unconscious or unable to swallow, DO NOT give oral carbs - call 911 immediately. Glucagon may be administered by trained individuals.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="feedback-container" id="feedback-3">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Emergency Protocol Mastered!
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Correct Symptom Sorting:</strong><br>
+                        <strong>Hypoglycemia:</strong> Shaking/tremors, confusion/disorientation, profuse sweating, slurred speech<br>
+                        <strong>Hyperglycemia/DKA:</strong> Fruity breath odor, Kussmaul breathing, nausea/vomiting, polyuria<br><br>
+                        
+                        <strong>Correct Action Sequence for Hypoglycemia:</strong><br>
+                        1. <strong>Check blood glucose</strong> if possible (confirm hypoglycemia)<br>
+                        2. <strong>If conscious & able to swallow, give 15g fast-acting carbs</strong> (4oz juice, regular soda, glucose tablets)<br>
+                        3. <strong>Wait 15 minutes</strong> (allow time for absorption)<br>
+                        4. <strong>Recheck blood glucose</strong> (assess response)<br>
+                        5. <strong>If still low (<70 mg/dL), repeat 15g carbs</strong> (second dose if needed)<br>
+                        6. <strong>If unconscious/unable to swallow, call 911 immediately</strong> (DO NOT give oral carbs)<br>
+                        7. <strong>Once glucose >70 mg/dL, give protein snack if meal >1 hour away</strong> (prevent recurrence)<br><br>
+                        
+                        <strong>Key Distinctions:</strong><br>
+                        • Hypoglycemia: <strong>Rapid onset</strong> (minutes), adrenergic symptoms (shaking, sweating)<br>
+                        • Hyperglycemia/DKA: <strong>Slower onset</strong> (hours-days), metabolic symptoms (fruity breath, Kussmaul)<br>
+                        • <strong>NEVER</strong> give food/drink to unconscious person - risk of aspiration
+                    </div>
+                    <div class="clinical-tip">
+                        <strong>🩺 Pro Tip:</strong> Document exact times, treatments given, and response. This is critical for medication adjustments and if emergency services are called. Teach patients/families the "Rule of 15" and when to use glucagon.
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Global Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn btn-secondary" id="reset-all-btn">
+                <span class="btn-icon">↻</span>
+                Reset All Activities
+            </button>
+            <button class="btn btn-secondary" id="check-all-btn">
+                <span class="btn-icon">✓</span>
+                Check All Answers
+            </button>
+            <button class="btn btn-primary" id="view-results-btn">
+                <span class="btn-icon">📊</span>
+                View Final Results
+            </button>
+        </div>
+
+        <!-- Results Panel -->
+        <div class="results-panel" id="results-panel">
+            <div class="results-header">
+                <h2 class="results-title">Diabetes Management Proficiency</h2>
+                <div class="score-display" id="final-score">0%</div>
+            </div>
+            
+            <div class="clinical-insights">
+                <h3 class="insights-title">
+                    <span>🩺</span> Clinical Application Insights
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Diagnostic Precision:</strong> ADA criteria require EITHER (1) two abnormal lab values on different days OR (2) one abnormal value + classic symptoms. Always document which criteria were met.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Pattern Recognition:</strong> Look for trends, not single values. Consistent highs at specific times indicate predictable patterns that can be addressed with targeted interventions.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Hypoglycemia vs Hyperglycemia:</strong> Rapid onset + adrenergic symptoms = hypoglycemia. Gradual onset + metabolic symptoms = hyperglycemia/DKA. Treatment approaches are opposite.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Patient-Centered Management:</strong> Adjust one thing at a time. Start with lifestyle (diet/exercise), then medication timing/dose, then consider adding new medications.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Emergency Preparedness:</strong> Every diabetes patient should have a hypoglycemia emergency plan including when to use glucagon. Document this in their chart.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="clinical-insights" style="margin-top: 20px;">
+                <h3 class="insights-title">
+                    <span>📋</span> Documentation & Safety Standards
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>ADA Criteria Documentation:</strong> Always note which specific criteria were met (e.g., "FPG ≥126 mg/dL and HbA1c ≥6.5%"). Required for quality measures.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Glucose Log Documentation:</strong> Include dates, times, values, relation to meals/meds, and patient comments. Flag patterns for provider review.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Emergency Response Documentation:</strong> Document exact times, treatments given, responses, and instructions provided. Critical for liability protection.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Patient Education Documentation:</strong> Document topics covered, materials provided, and patient/family comprehension (use teach-back method).</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // State Management
+            const state = {
+                activities: {
+                    1: { completed: false, correct: 0, total: 4, score: 0 }, // 3 criteria + 1 diagnosis
+                    2: { completed: false, correct: 0, total: 8, score: 0 }, // 3 patterns + 4 actions
+                    3: { completed: false, correct: 0, total: 11, score: 0 } // 8 symptoms + 3 sequence steps
+                },
+                startedAt: new Date(),
+                timeSpent: 0
+            };
+
+            // DOM Elements
+            const progressSteps = document.querySelectorAll('.progress-step');
+            const activityCards = document.querySelectorAll('.activity-card');
+            const completedCount = document.getElementById('completed-count');
+            const accuracyRate = document.getElementById('accuracy-rate');
+            const timeSpent = document.getElementById('time-spent');
+            const resetAllBtn = document.getElementById('reset-all-btn');
+            const checkAllBtn = document.getElementById('check-all-btn');
+            const resultsBtn = document.getElementById('view-results-btn');
+            const resultsPanel = document.getElementById('results-panel');
+            const finalScore = document.getElementById('final-score');
+
+            // Timer for time spent
+            function updateTimer() {
+                const now = new Date();
+                const diff = Math.floor((now - state.startedAt) / 1000);
+                state.timeSpent = diff;
+                const minutes = Math.floor(diff / 60);
+                const seconds = diff % 60;
+                timeSpent.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            }
+            setInterval(updateTimer, 1000);
+
+            // Update Progress Summary
+            function updateProgressSummary() {
+                let completed = 0;
+                let totalCorrect = 0;
+                let totalItems = 0;
+
+                Object.values(state.activities).forEach(activity => {
+                    if (activity.completed) completed++;
+                    totalCorrect += activity.correct;
+                    totalItems += activity.total;
+                });
+
+                completedCount.textContent = completed;
+                const accuracy = totalItems > 0 ? Math.round((totalCorrect / totalItems) * 100) : 0;
+                accuracyRate.textContent = `${accuracy}%`;
+
+                // Update progress steps
+                progressSteps.forEach((step, index) => {
+                    if (index < completed) {
+                        step.classList.add('completed');
+                        step.classList.remove('active');
+                    } else if (index === completed) {
+                        step.classList.add('active');
+                        step.classList.remove('completed');
+                    } else {
+                        step.classList.remove('active', 'completed');
+                    }
+                });
+            }
+
+            // Activity 1: The Diabetes Detective
+            function initActivity1() {
+                const criteriaItems = document.querySelectorAll('#activity-1 .criteria-item');
+                const dropzone = document.getElementById('criteria-dropzone-1');
+                const diagnosisOptions = document.querySelectorAll('#activity-1 .diagnosis-option');
+                const checkBtn = document.getElementById('check-activity-1');
+                const resetBtn = document.getElementById('reset-activity-1');
+                const feedback = document.getElementById('feedback-1');
+                const status = document.querySelector('#activity-1 .activity-status');
+                
+                const correctCriteria = ['1', '2', '3']; // FPG ≥126, A1c ≥6.5%, symptoms + random glucose
+                const correctDiagnosis = 'type1';
+                let placedCriteria = [];
+                let selectedDiagnosis = null;
+
+                // Setup drag and drop for criteria
+                criteriaItems.forEach(item => {
+                    item.addEventListener('dragstart', function(e) {
+                        if (this.classList.contains('placed')) return;
+                        e.dataTransfer.setData('text/plain', JSON.stringify({
+                            criteria: this.dataset.criteria,
+                            text: this.textContent
+                        }));
+                        this.classList.add('dragging');
+                    });
+
+                    item.addEventListener('dragend', function() {
+                        this.classList.remove('dragging');
+                    });
+                });
+
+                dropzone.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    this.classList.add('hover');
+                    this.classList.remove('empty');
+                });
+
+                dropzone.addEventListener('dragleave', function() {
+                    this.classList.remove('hover');
+                });
+
+                dropzone.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('hover');
+                    const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+
+                    // Check if criteria already placed
+                    if (!placedCriteria.includes(data.criteria)) {
+                        placedCriteria.push(data.criteria);
+                        
+                        // Create and add criteria to dropzone
+                        const criteriaDiv = document.createElement('div');
+                        criteriaDiv.className = 'criteria-item placed';
+                        criteriaDiv.textContent = data.text;
+                        this.appendChild(criteriaDiv);
+
+                        // Hide original item
+                        const originalItem = document.querySelector(`#activity-1 .criteria-item[data-criteria="${data.criteria}"]`);
+                        if (originalItem) {
+                            originalItem.style.display = 'none';
+                        }
+                    }
+                });
+
+                // Diagnosis selection
+                diagnosisOptions.forEach(option => {
+                    option.addEventListener('click', function() {
+                        if (state.activities[1].completed) return;
+                        
+                        diagnosisOptions.forEach(opt => opt.classList.remove('selected', 'wrong'));
+                        this.classList.add('selected');
+                        selectedDiagnosis = this.dataset.diagnosis;
+                    });
+                });
+
+                // Check Activity 1 button
+                checkBtn.addEventListener('click', function() {
+                    if (state.activities[1].completed) return;
+                    
+                    if (placedCriteria.length === 0 || !selectedDiagnosis) {
+                        alert('Please drag at least one criteria to the dropzone and select a diagnosis.');
+                        return;
+                    }
+
+                    checkActivity1();
+                });
+
+                // Reset Activity 1 button
+                resetBtn.addEventListener('click', function() {
+                    resetActivity1();
+                });
+
+                function checkActivity1() {
+                    let criteriaScore = 0;
+                    placedCriteria.forEach(criteria => {
+                        if (correctCriteria.includes(criteria)) criteriaScore++;
+                    });
+                    
+                    const diagnosisCorrect = selectedDiagnosis === correctDiagnosis ? 1 : 0;
+                    
+                    // Highlight correct/wrong
+                    criteriaItems.forEach(item => {
+                        if (correctCriteria.includes(item.dataset.criteria) && !placedCriteria.includes(item.dataset.criteria)) {
+                            item.style.display = 'none';
+                            const criteriaDiv = document.createElement('div');
+                            criteriaDiv.className = 'criteria-item placed';
+                            criteriaDiv.textContent = item.textContent;
+                            dropzone.appendChild(criteriaDiv);
+                            placedCriteria.push(item.dataset.criteria);
+                        }
+                    });
+                    
+                    diagnosisOptions.forEach(option => {
+                        if (option.dataset.diagnosis === correctDiagnosis) {
+                            option.classList.add('selected');
+                        } else if (option.dataset.diagnosis === selectedDiagnosis && selectedDiagnosis !== correctDiagnosis) {
+                            option.classList.add('wrong');
+                        }
+                    });
+
+                    state.activities[1].completed = true;
+                    state.activities[1].correct = criteriaScore + diagnosisCorrect;
+                    state.activities[1].score = Math.round((state.activities[1].correct / 4) * 100);
+                    status.textContent = 'Completed';
+                    status.style.color = '#00b894';
+                    document.querySelector('#activity-1').classList.add('completed');
+                    feedback.classList.add('show');
+
+                    updateProgressSummary();
+                }
+
+                function resetActivity1() {
+                    dropzone.innerHTML = '';
+                    dropzone.classList.add('empty');
+                    placedCriteria = [];
+                    selectedDiagnosis = null;
+                    
+                    criteriaItems.forEach(item => {
+                        item.style.display = '';
+                        item.classList.remove('placed', 'dragging');
+                    });
+                    
+                    diagnosisOptions.forEach(option => {
+                        option.classList.remove('selected', 'wrong');
+                    });
+                    
+                    if (state.activities[1].completed) {
+                        state.activities[1].completed = false;
+                        state.activities[1].correct = 0;
+                        state.activities[1].score = 0;
+                        status.textContent = 'Not Started';
+                        status.style.color = '';
+                        document.querySelector('#activity-1').classList.remove('completed');
+                        feedback.classList.remove('show');
+                        updateProgressSummary();
+                    }
+                }
+            }
+
+            // Activity 2: Glucose Log Analysis
+            function initActivity2() {
+                const patternItems = document.querySelectorAll('#activity-2 .pattern-item');
+                const timelineDropzone = document.getElementById('timeline-dropzone');
+                const actionItems = document.querySelectorAll('#activity-2 .action-item');
+                const checkBtn = document.getElementById('check-activity-2');
+                const resetBtn = document.getElementById('reset-activity-2');
+                const feedback = document.getElementById('feedback-2');
+                const status = document.querySelector('#activity-2 .activity-status');
+                
+                const correctPatterns = ['1', '2', '3']; // High fasting, post-breakfast spikes, nighttime lows
+                const correctActions = ['3', '4', '5', '6']; // Review carbs, bedtime snack, CGM, low-carb breakfast
+                let placedPatterns = [];
+                let selectedActions = [];
+
+                // Setup drag and drop for patterns
+                patternItems.forEach(item => {
+                    item.addEventListener('dragstart', function(e) {
+                        if (this.classList.contains('placed')) return;
+                        e.dataTransfer.setData('text/plain', JSON.stringify({
+                            pattern: this.dataset.pattern,
+                            text: this.textContent
+                        }));
+                        this.classList.add('dragging');
+                    });
+
+                    item.addEventListener('dragend', function() {
+                        this.classList.remove('dragging');
+                    });
+                });
+
+                timelineDropzone.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    this.classList.add('hover');
+                    this.classList.remove('empty');
+                });
+
+                timelineDropzone.addEventListener('dragleave', function() {
+                    this.classList.remove('hover');
+                });
+
+                timelineDropzone.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('hover');
+                    const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+
+                    // Check if pattern already placed
+                    if (!placedPatterns.includes(data.pattern)) {
+                        placedPatterns.push(data.pattern);
+                        
+                        // Create and add pattern to dropzone
+                        const patternDiv = document.createElement('div');
+                        patternDiv.className = 'pattern-item placed';
+                        patternDiv.textContent = data.text;
+                        this.appendChild(patternDiv);
+
+                        // Hide original item
+                        const originalItem = document.querySelector(`#activity-2 .pattern-item[data-pattern="${data.pattern}"]`);
+                        if (originalItem) {
+                            originalItem.style.display = 'none';
+                        }
+                    }
+                });
+
+                // Action selection
+                actionItems.forEach(item => {
+                    item.addEventListener('click', function() {
+                        if (state.activities[2].completed) return;
+                        
+                        const action = this.dataset.action;
+                        
+                        if (this.classList.contains('selected')) {
+                            this.classList.remove('selected');
+                            selectedActions = selectedActions.filter(a => a !== action);
+                        } else {
+                            this.classList.add('selected');
+                            selectedActions.push(action);
+                        }
+                    });
+                });
+
+                // Check Activity 2 button
+                checkBtn.addEventListener('click', function() {
+                    if (state.activities[2].completed) return;
+                    
+                    if (placedPatterns.length === 0 || selectedActions.length === 0) {
+                        alert('Please identify at least one pattern and select at least one management action.');
+                        return;
+                    }
+
+                    checkActivity2();
+                });
+
+                // Reset Activity 2 button
+                resetBtn.addEventListener('click', function() {
+                    resetActivity2();
+                });
+
+                function checkActivity2() {
+                    let patternScore = 0;
+                    placedPatterns.forEach(pattern => {
+                        if (correctPatterns.includes(pattern)) patternScore++;
+                    });
+                    
+                    let actionScore = 0;
+                    selectedActions.forEach(action => {
+                        if (correctActions.includes(action)) actionScore++;
+                    });
+                    
+                    // Add missing correct patterns
+                    correctPatterns.forEach(patternId => {
+                        if (!placedPatterns.includes(patternId)) {
+                            const patternItem = document.querySelector(`#activity-2 .pattern-item[data-pattern="${patternId}"]`);
+                            if (patternItem) {
+                                patternItem.style.display = 'none';
+                                const patternDiv = document.createElement('div');
+                                patternDiv.className = 'pattern-item placed';
+                                patternDiv.textContent = patternItem.textContent;
+                                timelineDropzone.appendChild(patternDiv);
+                                placedPatterns.push(patternId);
+                                patternScore++;
+                            }
+                        }
+                    });
+                    
+                    // Highlight correct/wrong actions
+                    actionItems.forEach(item => {
+                        if (correctActions.includes(item.dataset.action) && !selectedActions.includes(item.dataset.action)) {
+                            item.classList.add('selected');
+                            selectedActions.push(item.dataset.action);
+                            actionScore++;
+                        } else if (!correctActions.includes(item.dataset.action) && selectedActions.includes(item.dataset.action)) {
+                            item.classList.add('wrong');
+                        }
+                    });
+
+                    state.activities[2].completed = true;
+                    state.activities[2].correct = patternScore + actionScore;
+                    state.activities[2].score = Math.round((state.activities[2].correct / 7) * 100);
+                    status.textContent = 'Completed';
+                    status.style.color = '#00b894';
+                    document.querySelector('#activity-2').classList.add('completed');
+                    feedback.classList.add('show');
+
+                    updateProgressSummary();
+                }
+
+                function resetActivity2() {
+                    timelineDropzone.innerHTML = '';
+                    timelineDropzone.classList.add('empty');
+                    placedPatterns = [];
+                    selectedActions = [];
+                    
+                    patternItems.forEach(item => {
+                        item.style.display = '';
+                        item.classList.remove('placed', 'dragging');
+                    });
+                    
+                    actionItems.forEach(item => {
+                        item.classList.remove('selected', 'wrong');
+                    });
+                    
+                    if (state.activities[2].completed) {
+                        state.activities[2].completed = false;
+                        state.activities[2].correct = 0;
+                        state.activities[2].score = 0;
+                        status.textContent = 'Not Started';
+                        status.style.color = '';
+                        document.querySelector('#activity-2').classList.remove('completed');
+                        feedback.classList.remove('show');
+                        updateProgressSummary();
+                    }
+                }
+            }
+
+            // Activity 3: Emergency Triage - FIXED
+            function initActivity3() {
+                const symptomTags = document.querySelectorAll('#symptoms-source .symptom-tag');
+                const hypoColumn = document.getElementById('hypo-column');
+                const hyperColumn = document.getElementById('hyper-column');
+                const actionSteps = document.querySelectorAll('#activity-3 .action-step');
+                const actionSequence = document.getElementById('action-sequence');
+                const checkBtn = document.getElementById('check-activity-3');
+                const resetBtn = document.getElementById('reset-activity-3');
+                const warning = document.getElementById('emergency-warning');
+                const feedback = document.getElementById('feedback-3');
+                const status = document.querySelector('#activity-3 .activity-status');
+                
+                const correctHypoSymptoms = ['1', '3', '5', '7']; // Shaking, confusion, sweating, slurred speech
+                const correctHyperSymptoms = ['2', '4', '6', '8']; // Fruity breath, Kussmaul, nausea, polyuria
+                const correctSequence = ['1', '2', '3', '4', '5', '6', '7']; // All steps in order
+                
+                let placedHypoSymptoms = [];
+                let placedHyperSymptoms = [];
+                let placedSequence = [];
+
+                // Setup drag and drop for symptoms - FIXED VERSION
+                symptomTags.forEach(tag => {
+                    tag.addEventListener('dragstart', function(e) {
+                        e.dataTransfer.setData('text/plain', JSON.stringify({
+                            symptom: this.dataset.symptom,
+                            type: this.dataset.type,
+                            text: this.textContent
+                        }));
+                        this.classList.add('dragging');
+                    });
+
+                    tag.addEventListener('dragend', function() {
+                        this.classList.remove('dragging');
+                    });
+                });
+
+                // Setup drop zones for symptoms
+                [hypoColumn, hyperColumn].forEach(column => {
+                    column.addEventListener('dragover', function(e) {
+                        e.preventDefault();
+                        this.style.backgroundColor = 'rgba(175, 75, 239, 0.05)';
+                    });
+
+                    column.addEventListener('dragleave', function() {
+                        this.style.backgroundColor = '';
+                    });
+
+                    column.addEventListener('drop', function(e) {
+                        e.preventDefault();
+                        this.style.backgroundColor = '';
+                        const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+                        const columnType = this.dataset.type;
+                        
+                        // Check if symptom already placed in any column
+                        const allPlaced = [...placedHypoSymptoms, ...placedHyperSymptoms];
+                        if (allPlaced.includes(data.symptom)) {
+                            return;
+                        }
+                        
+                        // Add to appropriate array
+                        if (columnType === 'hypo') {
+                            placedHypoSymptoms.push(data.symptom);
+                        } else {
+                            placedHyperSymptoms.push(data.symptom);
+                        }
+                        
+                        // Create and add symptom to column
+                        const symptomDiv = document.createElement('div');
+                        symptomDiv.className = `symptom-tag placed ${columnType}`;
+                        symptomDiv.textContent = data.text;
+                        symptomDiv.setAttribute('data-symptom', data.symptom);
+                        symptomDiv.setAttribute('data-type', data.type);
+                        this.appendChild(symptomDiv);
+
+                        // Hide original item
+                        const originalItem = document.querySelector(`#symptoms-source .symptom-tag[data-symptom="${data.symptom}"]`);
+                        if (originalItem) {
+                            originalItem.style.display = 'none';
+                        }
+                        
+                        // Show warning when all symptoms are sorted
+                        if (placedHypoSymptoms.length + placedHyperSymptoms.length === 8) {
+                            warning.style.display = 'flex';
+                        }
+                    });
+                });
+
+                // Setup drag and drop for action sequence
+                actionSteps.forEach(step => {
+                    step.addEventListener('dragstart', function(e) {
+                        if (this.classList.contains('placed')) return;
+                        e.dataTransfer.setData('text/plain', JSON.stringify({
+                            step: this.dataset.step,
+                            text: this.textContent
+                        }));
+                        this.classList.add('dragging');
+                    });
+
+                    step.addEventListener('dragend', function() {
+                        this.classList.remove('dragging');
+                    });
+                });
+
+                actionSequence.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    this.classList.add('hover');
+                    this.classList.remove('empty');
+                });
+
+                actionSequence.addEventListener('dragleave', function() {
+                    this.classList.remove('hover');
+                });
+
+                actionSequence.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('hover');
+                    const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+
+                    // Check if step already placed
+                    if (!placedSequence.includes(data.step)) {
+                        placedSequence.push(data.step);
+                        
+                        // Create and add step to sequence
+                        const stepDiv = document.createElement('div');
+                        stepDiv.className = 'action-step placed';
+                        stepDiv.innerHTML = `
+                            <div class="step-number">${placedSequence.length}</div>
+                            <div class="step-text">${data.text}</div>
+                        `;
+                        stepDiv.setAttribute('data-step', data.step);
+                        this.appendChild(stepDiv);
+
+                        // Hide original item
+                        const originalItem = document.querySelector(`#activity-3 .action-step[data-step="${data.step}"]`);
+                        if (originalItem) {
+                            originalItem.style.display = 'none';
+                        }
+                    }
+                });
+
+                // Check Activity 3 button
+                checkBtn.addEventListener('click', function() {
+                    if (state.activities[3].completed) return;
+                    
+                    if ((placedHypoSymptoms.length + placedHyperSymptoms.length) === 0 || placedSequence.length === 0) {
+                        alert('Please sort symptoms into the correct columns and sequence at least one action step.');
+                        return;
+                    }
+
+                    checkActivity3();
+                });
+
+                // Reset Activity 3 button
+                resetBtn.addEventListener('click', function() {
+                    resetActivity3();
+                });
+
+                function checkActivity3() {
+                    let symptomScore = 0;
+                    
+                    // Check hypo symptoms
+                    placedHypoSymptoms.forEach(symptom => {
+                        if (correctHypoSymptoms.includes(symptom)) symptomScore++;
+                    });
+                    
+                    // Check hyper symptoms
+                    placedHyperSymptoms.forEach(symptom => {
+                        if (correctHyperSymptoms.includes(symptom)) symptomScore++;
+                    });
+                    
+                    // Add missing correct symptoms
+                    correctHypoSymptoms.forEach(symptomId => {
+                        if (!placedHypoSymptoms.includes(symptomId)) {
+                            const symptomTag = document.querySelector(`#symptoms-source .symptom-tag[data-symptom="${symptomId}"]`);
+                            if (symptomTag) {
+                                symptomTag.style.display = 'none';
+                                const symptomDiv = document.createElement('div');
+                                symptomDiv.className = 'symptom-tag placed hypo';
+                                symptomDiv.textContent = symptomTag.textContent;
+                                symptomDiv.setAttribute('data-symptom', symptomId);
+                                hypoColumn.appendChild(symptomDiv);
+                                placedHypoSymptoms.push(symptomId);
+                                symptomScore++;
+                            }
+                        }
+                    });
+                    
+                    correctHyperSymptoms.forEach(symptomId => {
+                        if (!placedHyperSymptoms.includes(symptomId)) {
+                            const symptomTag = document.querySelector(`#symptoms-source .symptom-tag[data-symptom="${symptomId}"]`);
+                            if (symptomTag) {
+                                symptomTag.style.display = 'none';
+                                const symptomDiv = document.createElement('div');
+                                symptomDiv.className = 'symptom-tag placed hyper';
+                                symptomDiv.textContent = symptomTag.textContent;
+                                symptomDiv.setAttribute('data-symptom', symptomId);
+                                hyperColumn.appendChild(symptomDiv);
+                                placedHyperSymptoms.push(symptomId);
+                                symptomScore++;
+                            }
+                        }
+                    });
+                    
+                    let sequenceScore = 0;
+                    // Check sequence order
+                    placedSequence.forEach((step, index) => {
+                        if (step === correctSequence[index]) {
+                            sequenceScore++;
+                        }
+                    });
+                    
+                    // Add missing sequence steps in correct order
+                    correctSequence.forEach((stepId, index) => {
+                        if (!placedSequence.includes(stepId)) {
+                            const actionStep = document.querySelector(`#activity-3 .action-step[data-step="${stepId}"]`);
+                            if (actionStep) {
+                                actionStep.style.display = 'none';
+                                const stepDiv = document.createElement('div');
+                                stepDiv.className = 'action-step placed';
+                                stepDiv.innerHTML = `
+                                    <div class="step-number">${index + 1}</div>
+                                    <div class="step-text">${actionStep.textContent}</div>
+                                `;
+                                stepDiv.setAttribute('data-step', stepId);
+                                actionSequence.appendChild(stepDiv);
+                                placedSequence.splice(index, 0, stepId);
+                                sequenceScore++;
+                            }
+                        }
+                    });
+
+                    state.activities[3].completed = true;
+                    state.activities[3].correct = symptomScore + sequenceScore;
+                    state.activities[3].score = Math.round((state.activities[3].correct / 11) * 100);
+                    status.textContent = 'Completed';
+                    status.style.color = '#00b894';
+                    document.querySelector('#activity-3').classList.add('completed');
+                    feedback.classList.add('show');
+                    warning.style.display = 'flex';
+
+                    updateProgressSummary();
+                }
+
+                function resetActivity3() {
+                    hypoColumn.innerHTML = '';
+                    hyperColumn.innerHTML = '';
+                    actionSequence.innerHTML = '';
+                    actionSequence.classList.add('empty');
+                    placedHypoSymptoms = [];
+                    placedHyperSymptoms = [];
+                    placedSequence = [];
+                    
+                    symptomTags.forEach(tag => {
+                        tag.style.display = '';
+                        tag.classList.remove('dragging');
+                    });
+                    
+                    actionSteps.forEach(step => {
+                        step.style.display = '';
+                        step.classList.remove('placed', 'dragging');
+                    });
+                    
+                    warning.style.display = 'none';
+                    
+                    if (state.activities[3].completed) {
+                        state.activities[3].completed = false;
+                        state.activities[3].correct = 0;
+                        state.activities[3].score = 0;
+                        status.textContent = 'Not Started';
+                        status.style.color = '';
+                        document.querySelector('#activity-3').classList.remove('completed');
+                        feedback.classList.remove('show');
+                        updateProgressSummary();
+                    }
+                }
+            }
+
+            // Reset All Activities
+            function resetAllActivities() {
+                // Reset state
+                Object.keys(state.activities).forEach(key => {
+                    state.activities[key] = {
+                        completed: false,
+                        correct: 0,
+                        total: parseInt(key) === 1 ? 4 : parseInt(key) === 2 ? 7 : 11,
+                        score: 0
+                    };
+                });
+
+                // Reset UI
+                activityCards.forEach(card => {
+                    card.classList.remove('completed');
+                    const status = card.querySelector('.activity-status');
+                    status.textContent = 'Not Started';
+                    status.style.color = '';
+                    const feedback = card.querySelector('.feedback-container');
+                    feedback.classList.remove('show');
+                });
+
+                // Reset Activity 1
+                const dropzone1 = document.getElementById('criteria-dropzone-1');
+                dropzone1.innerHTML = '';
+                dropzone1.classList.add('empty');
+                document.querySelectorAll('#activity-1 .criteria-item').forEach(item => {
+                    item.style.display = '';
+                    item.classList.remove('placed', 'dragging');
+                });
+                document.querySelectorAll('#activity-1 .diagnosis-option').forEach(option => {
+                    option.classList.remove('selected', 'wrong');
+                });
+
+                // Reset Activity 2
+                const dropzone2 = document.getElementById('timeline-dropzone');
+                dropzone2.innerHTML = '';
+                dropzone2.classList.add('empty');
+                document.querySelectorAll('#activity-2 .pattern-item').forEach(item => {
+                    item.style.display = '';
+                    item.classList.remove('placed', 'dragging');
+                });
+                document.querySelectorAll('#activity-2 .action-item').forEach(item => {
+                    item.classList.remove('selected', 'wrong');
+                });
+
+                // Reset Activity 3
+                document.getElementById('hypo-column').innerHTML = '';
+                document.getElementById('hyper-column').innerHTML = '';
+                document.getElementById('action-sequence').innerHTML = '';
+                document.getElementById('action-sequence').classList.add('empty');
+                document.querySelectorAll('#symptoms-source .symptom-tag').forEach(tag => {
+                    tag.style.display = '';
+                    tag.classList.remove('dragging');
+                });
+                document.querySelectorAll('#activity-3 .action-step').forEach(step => {
+                    step.style.display = '';
+                    step.classList.remove('placed', 'dragging');
+                });
+                document.getElementById('emergency-warning').style.display = 'none';
+
+                // Reset results
+                resultsPanel.classList.remove('show');
+
+                // Update progress
+                updateProgressSummary();
+            }
+
+            // Check All Answers
+            checkAllBtn.addEventListener('click', function() {
+                // Activity 1
+                if (!state.activities[1].completed) {
+                    const checkBtn1 = document.getElementById('check-activity-1');
+                    checkBtn1.click();
+                }
+
+                // Activity 2
+                if (!state.activities[2].completed) {
+                    const checkBtn2 = document.getElementById('check-activity-2');
+                    checkBtn2.click();
+                }
+
+                // Activity 3
+                if (!state.activities[3].completed) {
+                    const checkBtn3 = document.getElementById('check-activity-3');
+                    checkBtn3.click();
+                }
+            });
+
+            // View Final Results
+            resultsBtn.addEventListener('click', function() {
+                let totalScore = 0;
+                let activityCount = 0;
+                
+                Object.values(state.activities).forEach(activity => {
+                    if (activity.completed) {
+                        totalScore += activity.score;
+                        activityCount++;
+                    }
+                });
+                
+                const averageScore = activityCount > 0 ? Math.round(totalScore / activityCount) : 0;
+                finalScore.textContent = `${averageScore}%`;
+                resultsPanel.classList.add('show');
+                resultsPanel.scrollIntoView({ behavior: 'smooth' });
+            });
+
+            // Initialize all activities
+            initActivity1();
+            initActivity2();
+            initActivity3();
+
+            // Event listeners for global buttons
+            resetAllBtn.addEventListener('click', resetAllActivities);
+
+            // Initial progress update
+            updateProgressSummary();
+        });
+    </script>
+</body>
+</html>
