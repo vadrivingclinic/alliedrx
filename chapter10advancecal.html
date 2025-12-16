@@ -1,0 +1,2100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AlliedRx -- Module 9C: Advanced Pharmacology Calculations</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-error: #e17055;
+            --color-warning: #fdcb6e;
+            --color-info: #0984e3;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
+            --color-dark: #0c0a18;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+            --shadow-card: 0 12px 30px rgba(15, 23, 42, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(circle at top left, #ffffff 0, #f1ecff 40%, var(--color-bg) 100%);
+            color: var(--color-text);
+            line-height: 1.5;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 12px; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes checkmarkPop {
+            0% { transform: scale(0); opacity: 0; }
+            70% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @media (max-width: 900px) {
+            .page { padding: 22px; }
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 0; }
+            .page {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 18px 14px 22px;
+            }
+        }
+
+        /* Header */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            filter: drop-shadow(0 3px 8px rgba(0,0,0,0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .brand-logo:hover { transform: scale(1.05); }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--color-success);
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            transition: all 0.3s ease;
+        }
+
+        .badge-mode:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 3vw, 2.2rem);
+            line-height: 1.1;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .module-subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 600px;
+            margin-bottom: 24px;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        /* Progress Tracker - 2 STEP ONLY */
+        .progress-tracker {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            position: relative;
+            padding: 0 40px;
+        }
+
+        .progress-tracker::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 40px;
+            right: 40px;
+            height: 3px;
+            background: rgba(12, 10, 24, 0.08);
+            z-index: 1;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+
+        .step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--color-muted);
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.active .step-circle {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .progress-step.completed .step-circle {
+            background: var(--color-success);
+            border-color: var(--color-success);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.75rem;
+            color: var(--color-muted);
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .progress-step.active .step-label {
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        /* Progress Summary */
+        .progress-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+            animation: fadeInUp 0.6s ease-out 0.5s both;
+        }
+
+        @media (max-width: 600px) {
+            .progress-summary {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+        }
+
+        .summary-card {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            border: 1px solid rgba(12, 10, 24, 0.06);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-card);
+            border-color: var(--color-primary-soft);
+        }
+
+        .summary-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--color-primary);
+            display: block;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .summary-label {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Activity Grid - SINGLE COLUMN */
+        .activity-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .activity-card {
+            background: white;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            padding: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .activity-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--color-primary);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .activity-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--color-primary-soft);
+        }
+
+        .activity-card:hover::before {
+            opacity: 1;
+        }
+
+        .activity-card.completed {
+            border-color: var(--color-success);
+        }
+
+        .activity-card.completed::before {
+            background: var(--color-success);
+            opacity: 1;
+        }
+
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .activity-number {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .activity-status {
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-muted);
+        }
+
+        .activity-card.completed .activity-status {
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--color-success);
+        }
+
+        .activity-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .activity-icon {
+            font-size: 1.2rem;
+        }
+
+        .activity-description {
+            font-size: 0.9rem;
+            color: var(--color-muted);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        /* Calculation Scenario */
+        .calculation-scenario {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+        }
+
+        .scenario-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .scenario-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(175, 75, 239, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .scenario-info {
+            flex: 1;
+        }
+
+        .scenario-name {
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 4px;
+        }
+
+        .scenario-details {
+            font-size: 0.85rem;
+            color: var(--color-muted);
+            line-height: 1.4;
+        }
+
+        .scenario-instruction {
+            font-size: 0.85rem;
+            color: var(--color-muted);
+            margin-bottom: 15px;
+            font-style: italic;
+            padding: 10px;
+            background: rgba(175, 75, 239, 0.05);
+            border-radius: var(--radius-sm);
+        }
+
+        /* Drug Label Display */
+        .drug-label-display {
+            background: white;
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            border: 1px solid #ddd;
+            font-family: monospace;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            max-width: 400px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .drug-label-display .dosage {
+            font-weight: 700;
+            color: var(--color-error);
+            font-size: 1rem;
+        }
+
+        .drug-label-display .brand {
+            font-weight: 700;
+            color: var(--color-primary);
+            font-size: 0.95rem;
+        }
+
+        /* IV Calculation Components */
+        .iv-calculation-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+        }
+
+        .iv-formula {
+            font-family: monospace;
+            background: rgba(12, 10, 24, 0.05);
+            padding: 15px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 15px;
+            border-left: 4px solid var(--color-info);
+        }
+
+        .calculation-inputs {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .calculation-inputs {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .input-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--color-muted);
+        }
+
+        .input-field {
+            padding: 12px;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            font-family: monospace;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(175, 75, 239, 0.1);
+        }
+
+        .input-field.correct {
+            border-color: var(--color-success);
+            background: rgba(0, 184, 148, 0.05);
+        }
+
+        .input-field.incorrect {
+            border-color: var(--color-error);
+            background: rgba(225, 112, 85, 0.05);
+            animation: shake 0.5s ease;
+        }
+
+        .select-field {
+            padding: 12px;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .select-field:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(175, 75, 239, 0.1);
+        }
+
+        /* Multiple Choice Questions */
+        .mcq-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+        }
+
+        .mcq-question {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-text);
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .mcq-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .mcq-option {
+            padding: 12px 15px;
+            background: white;
+            border-radius: var(--radius-sm);
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .mcq-option:hover {
+            background: rgba(175, 75, 239, 0.08);
+            border-color: var(--color-primary-soft);
+        }
+
+        .mcq-option.selected {
+            background: rgba(0, 184, 148, 0.1);
+            border-color: var(--color-success);
+        }
+
+        .mcq-option.wrong {
+            background: rgba(225, 112, 85, 0.1);
+            border-color: var(--color-error);
+            animation: shake 0.5s ease;
+        }
+
+        .option-letter {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: rgba(12, 10, 24, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--color-text);
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .mcq-option.selected .option-letter {
+            background: var(--color-success);
+            color: white;
+        }
+
+        .option-text {
+            flex: 1;
+            line-height: 1.4;
+        }
+
+        /* Table Analysis Activity */
+        .table-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            overflow-x: auto;
+        }
+
+        .medication-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        .medication-table th {
+            background: rgba(175, 75, 239, 0.1);
+            color: var(--color-primary);
+            font-weight: 600;
+            text-align: left;
+            padding: 12px;
+            border-bottom: 2px solid rgba(12, 10, 24, 0.1);
+        }
+
+        .medication-table td {
+            padding: 12px;
+            border-bottom: 1px solid rgba(12, 10, 24, 0.08);
+            vertical-align: top;
+        }
+
+        .medication-table tr:hover {
+            background: rgba(175, 75, 239, 0.05);
+        }
+
+        .table-question {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-text);
+            margin: 15px 0;
+            line-height: 1.5;
+        }
+
+        /* Tips Box */
+        .tips-box {
+            background: rgba(253, 203, 110, 0.1);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid var(--color-warning);
+        }
+
+        .tips-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--color-warning);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tips-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .tips-list li {
+            font-size: 0.85rem;
+            color: var(--color-text);
+            margin-bottom: 6px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .tips-list li:before {
+            content: '💡';
+            position: absolute;
+            left: 0;
+            font-size: 0.8rem;
+        }
+
+        /* Safety Warning */
+        .safety-warning {
+            background: rgba(225, 112, 85, 0.1);
+            border: 2px solid var(--color-error);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin-top: 15px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .warning-icon {
+            font-size: 1.5rem;
+            color: var(--color-error);
+            flex-shrink: 0;
+        }
+
+        .warning-content {
+            flex: 1;
+        }
+
+        .warning-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--color-error);
+            margin-bottom: 5px;
+        }
+
+        .warning-text {
+            font-size: 0.85rem;
+            color: var(--color-text);
+        }
+
+        /* Feedback */
+        .feedback-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            margin-top: 20px;
+            display: none;
+        }
+
+        .feedback-container.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .feedback-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feedback-icon {
+            font-size: 1.2rem;
+        }
+
+        .feedback-icon.correct {
+            color: var(--color-success);
+        }
+
+        .feedback-icon.incorrect {
+            color: var(--color-error);
+        }
+
+        .feedback-content {
+            font-size: 0.85rem;
+            color: var(--color-text);
+            line-height: 1.5;
+        }
+
+        .feedback-content strong {
+            color: var(--color-primary);
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #9a3bd6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(175, 75, 239, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-text);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(12, 10, 24, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-icon {
+            font-size: 1.1em;
+        }
+
+        /* Results Panel */
+        .results-panel {
+            background: var(--color-dark);
+            color: white;
+            border-radius: var(--radius-md);
+            padding: 30px;
+            margin-top: 30px;
+            display: none;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .results-panel.show {
+            display: block;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .results-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .score-display {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--color-primary-soft);
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .clinical-insights {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .insights-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-primary-soft);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .insights-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .insights-list li {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            font-size: 0.9rem;
+            color: #e5e7eb;
+        }
+
+        .insight-dot {
+            width: 6px;
+            height: 6px;
+            margin-top: 6px;
+            border-radius: 999px;
+            background: var(--color-accent);
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="module-heading">
+        <!-- Header -->
+        <header class="brand-row">
+            <div class="brand">
+                <img
+                    src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                    alt="AlliedRx logo"
+                    class="brand-logo"
+                />
+                <div class="course-meta">
+                    <span class="course-name">Clinical Medical Assistant • Week 9</span>
+                    <div class="week-label">
+                        <span class="week-label-dot"></span>
+                        <span>Chapter 10: Advanced Pharmacology Math</span>
+                    </div>
+                </div>
+            </div>
+            <span class="badge-mode">Campus & Online</span>
+        </header>
+
+        <h1 id="module-heading">Advanced Drug Calculations & Table Analysis</h1>
+        <p class="module-subtitle">
+            Master IV drip rate calculations, complex dosage conversions, and medication table analysis 
+            to ensure absolute accuracy in medication administration.
+        </p>
+
+        <!-- Progress Tracker - 2 STEP ONLY -->
+        <div class="progress-tracker">
+            <div class="progress-step active" data-step="1">
+                <div class="step-circle">1</div>
+                <div class="step-label">IV Calculations</div>
+            </div>
+            <div class="progress-step" data-step="2">
+                <div class="step-circle">2</div>
+                <div class="step-label">Table Analysis</div>
+            </div>
+        </div>
+
+        <!-- Progress Summary -->
+        <div class="progress-summary">
+            <div class="summary-card">
+                <span class="summary-number" id="completed-count">0</span>
+                <span class="summary-label">Activities Completed</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="accuracy-rate">0%</span>
+                <span class="summary-label">Current Accuracy</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="time-spent">0:00</span>
+                <span class="summary-label">Time Spent</span>
+            </div>
+        </div>
+
+        <!-- Activity Grid - SINGLE COLUMN FOR 2 ACTIVITIES -->
+        <div class="activity-grid">
+            <!-- Activity 1: IV Drip Rate Calculations -->
+            <section class="activity-card" id="activity-1" data-activity="1" aria-label="Activity 1: IV Drip Rate Calculations">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 1</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">
+                    <span class="activity-icon">💧</span>
+                    IV Infusion & Drip Rate Calculations
+                </h3>
+                <p class="activity-description">
+                    Calculate IV drip rates using different drop factors and infusion times. 
+                    Practice identifying correct formulas and avoiding common calculation errors.
+                </p>
+
+                <!-- Scenario 1: IV Drip Rate -->
+                <div class="calculation-scenario">
+                    <div class="scenario-header">
+                        <div class="scenario-icon">🩸</div>
+                        <div class="scenario-info">
+                            <div class="scenario-name">IV Infusion Order</div>
+                            <div class="scenario-details">
+                                Order: Infuse 1000 mL Lactated Ringer's over 8 hours<br>
+                                Available: IV tubing with drop factor of 15 gtt/mL<br>
+                                <strong>Calculate the drip rate in gtt/min</strong>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="scenario-instruction">
+                        <strong>Formula to use:</strong> gtt/min = (Volume in mL × Drop Factor) ÷ (Time in minutes)<br>
+                        Remember to convert hours to minutes: 8 hours × 60 = 480 minutes
+                    </div>
+
+                    <div class="calculation-inputs">
+                        <div class="input-group">
+                            <label class="input-label">Volume to infuse (mL)</label>
+                            <input type="text" class="input-field" id="iv-volume" 
+                                   placeholder="Enter mL">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Drop factor (gtt/mL)</label>
+                            <input type="text" class="input-field" id="drop-factor" 
+                                   placeholder="Enter gtt/mL">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Time in minutes</label>
+                            <input type="text" class="input-field" id="time-minutes" 
+                                   placeholder="Calculate minutes">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Drip rate (gtt/min)</label>
+                            <input type="text" class="input-field" id="drip-rate" 
+                                   placeholder="Calculate gtt/min">
+                        </div>
+                    </div>
+
+                    <!-- Multiple Choice: Drop Factor Recognition -->
+                    <div class="mcq-container">
+                        <div class="mcq-question">
+                            Which IV tubing would deliver the SLOWEST drip rate for the same volume and time?
+                        </div>
+                        <div class="mcq-options">
+                            <div class="mcq-option" data-option="A">
+                                <div class="option-letter">A</div>
+                                <div class="option-text">Macrodrip: 10 gtt/mL</div>
+                            </div>
+                            <div class="mcq-option" data-option="B">
+                                <div class="option-letter">B</div>
+                                <div class="option-text">Macrodrip: 15 gtt/mL</div>
+                            </div>
+                            <div class="mcq-option" data-option="C">
+                                <div class="option-letter">C</div>
+                                <div class="option-text">Microdrip: 60 gtt/mL</div>
+                            </div>
+                            <div class="mcq-option" data-option="D">
+                                <div class="option-letter">D</div>
+                                <div class="option-text">Blood administration: 10 gtt/mL</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scenario 2: Pediatric IV Calculation -->
+                <div class="calculation-scenario">
+                    <div class="scenario-header">
+                        <div class="scenario-icon">👶</div>
+                        <div class="scenario-info">
+                            <div class="scenario-name">Pediatric IV Medication</div>
+                            <div class="scenario-details">
+                                Order: Vancomycin 15 mg/kg IV over 60 minutes for a child weighing 22 kg<br>
+                                Available: Vancomycin 500 mg vial, reconstitute with 10 mL sterile water<br>
+                                Final concentration: 50 mg/mL<br>
+                                <strong>Calculate: Total dose, volume to draw up, and infusion pump rate</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="scenario-instruction">
+                        <strong>Step-by-step:</strong> 1. Calculate total dose (mg), 2. Calculate volume to draw up (mL), 
+                        3. Calculate pump rate (mL/hr) for 60-minute infusion
+                    </div>
+
+                    <div class="calculation-inputs">
+                        <div class="input-group">
+                            <label class="input-label">Total dose (mg)</label>
+                            <input type="text" class="input-field" id="ped-dose-mg" 
+                                   placeholder="Calculate mg">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Volume to draw up (mL)</label>
+                            <input type="text" class="input-field" id="draw-up-ml" 
+                                   placeholder="Calculate mL">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Infusion pump rate (mL/hr)</label>
+                            <input type="text" class="input-field" id="pump-rate" 
+                                   placeholder="Calculate mL/hr">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Select syringe size</label>
+                            <select class="select-field" id="syringe-select">
+                                <option value="">Choose appropriate syringe</option>
+                                <option value="3ml">3 mL syringe</option>
+                                <option value="1ml">1 mL TB syringe (most accurate)</option>
+                                <option value="5ml">5 mL syringe</option>
+                                <option value="10ml">10 mL syringe</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Multiple Choice: IV Safety -->
+                    <div class="mcq-container">
+                        <div class="mcq-question">
+                            What is the MOST critical safety check when preparing a pediatric IV medication?
+                        </div>
+                        <div class="mcq-options">
+                            <div class="mcq-option" data-option="A">
+                                <div class="option-letter">A</div>
+                                <div class="option-text">Check expiration date of medication</div>
+                            </div>
+                            <div class="mcq-option" data-option="B">
+                                <div class="option-letter">B</div>
+                                <div class="option-text">Have another healthcare professional verify calculations</div>
+                            </div>
+                            <div class="mcq-option" data-option="C">
+                                <div class="option-letter">C</div>
+                                <div class="option-text">Use the correct size syringe</div>
+                            </div>
+                            <div class="mcq-option" data-option="D">
+                                <div class="option-letter">D</div>
+                                <div class="option-text">Label the syringe immediately</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tips Box -->
+                <div class="tips-box">
+                    <div class="tips-title">
+                        <span>💡</span> IV Calculation Safety Tips
+                    </div>
+                    <ul class="tips-list">
+                        <li><strong>Always convert time to minutes</strong> for drip rate calculations: Hours × 60 = minutes.</li>
+                        <li><strong>Know your tubing:</strong> Macrodrip = 10, 15, 20 gtt/mL. Microdrip = 60 gtt/mL (used for pediatrics/small volumes).</li>
+                        <li><strong>Double-check pediatric doses:</strong> Weight-based dosing requires verification by another healthcare professional.</li>
+                        <li><strong>Pump rates:</strong> mL/hr = Total volume ÷ Infusion time in hours. For 60 minutes = 1 hour.</li>
+                        <li><strong>Document:</strong> Always document calculations, verification, and administration details.</li>
+                    </ul>
+                </div>
+
+                <!-- Safety Warning -->
+                <div class="safety-warning">
+                    <div class="warning-icon">⚠️</div>
+                    <div class="warning-content">
+                        <div class="warning-title">IV CALCULATION ERRORS CAN BE FATAL</div>
+                        <div class="warning-text">
+                            • Pediatric and IV medications require <strong>two-person verification</strong> of all calculations.<br>
+                            • Know facility policies for <strong>high-alert medications</strong> (insulin, heparin, opioids).<br>
+                            • Document <strong>exact calculations</strong> and verification in medication administration record.<br>
+                            • <strong>NEVER</strong> administer an IV medication you haven't independently verified.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback-container" id="feedback-1">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        IV Calculations Mastered!
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Scenario 1 Solution:</strong><br>
+                        • Volume: 1000 mL<br>
+                        • Drop factor: 15 gtt/mL<br>
+                        • Time: 8 hours × 60 = <strong>480 minutes</strong><br>
+                        • Formula: (1000 mL × 15 gtt/mL) ÷ 480 minutes = <strong>31.25 gtt/min</strong><br>
+                        • Round to nearest whole number: <strong>31 gtt/min</strong><br><br>
+                        
+                        <strong>Drop Factor Multiple Choice:</strong><br>
+                        • <strong>Correct Answer: A (10 gtt/mL)</strong><br>
+                        • <strong>Why:</strong> Lower drop factor = fewer drops per mL = slower drip rate for same volume/time.<br>
+                        • Microdrip (60 gtt/mL) delivers the FASTEST rate - common error to think it's slowest.<br><br>
+                        
+                        <strong>Scenario 2 Solution:</strong><br>
+                        1. Total dose: 15 mg/kg × 22 kg = <strong>330 mg</strong><br>
+                        2. Volume to draw up: 330 mg ÷ 50 mg/mL = <strong>6.6 mL</strong><br>
+                        3. Pump rate: 6.6 mL ÷ 1 hour = <strong>6.6 mL/hr</strong> (set pump at 6.6 mL/hr)<br>
+                        4. <strong>Correct syringe:</strong> 10 mL syringe (allows accurate measurement of 6.6 mL)<br><br>
+                        
+                        <strong>IV Safety Multiple Choice:</strong><br>
+                        • <strong>Correct Answer: B (Two-person verification)</strong><br>
+                        • <strong>Why:</strong> While all options are important, two-person verification is CRITICAL for pediatric doses.<br>
+                        • This is a facility requirement for high-risk medications to prevent calculation errors.<br><br>
+                        
+                        <strong>Clinical Application:</strong> Always program infusion pumps with calculated rate, 
+                        then double-check against manual calculation. Document start time, rate, volume, and verification.
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity 2: Medication Table Analysis -->
+            <section class="activity-card" id="activity-2" data-activity="2" aria-label="Activity 2: Medication Table Analysis">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 2</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">
+                    <span class="activity-icon">📊</span>
+                    Medication Table Analysis & Complex Conversions
+                </h3>
+                <p class="activity-description">
+                    Analyze medication concentration tables and perform complex conversions between 
+                    measurement systems. Practice identifying correct information from reference tables.
+                </p>
+
+                <!-- Medication Concentration Table -->
+                <div class="table-container">
+                    <div class="scenario-instruction">
+                        <strong>Reference Table Analysis:</strong> Use the medication concentration table below to answer the questions.
+                        This table shows different reconstitution options for the same medication.
+                    </div>
+                    
+                    <table class="medication-table">
+                        <thead>
+                            <tr>
+                                <th>Medication</th>
+                                <th>Vial Size</th>
+                                <th>Diluent Volume</th>
+                                <th>Final Concentration</th>
+                                <th>Total Volume After Reconstitution</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Cefazolin</strong></td>
+                                <td>1 g</td>
+                                <td>2.5 mL sterile water</td>
+                                <td>330 mg/mL</td>
+                                <td>3 mL</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Cefazolin</strong></td>
+                                <td>1 g</td>
+                                <td>10 mL sterile water</td>
+                                <td>95 mg/mL</td>
+                                <td>10.5 mL</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Penicillin G</strong></td>
+                                <td>5 million units</td>
+                                <td>8 mL sterile water</td>
+                                <td>500,000 units/mL</td>
+                                <td>10 mL</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Ampicillin</strong></td>
+                                <td>500 mg</td>
+                                <td>1.8 mL sterile water</td>
+                                <td>250 mg/mL</td>
+                                <td>2 mL</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Gentamicin</strong></td>
+                                <td>80 mg</td>
+                                <td>1.5 mL sterile water</td>
+                                <td>40 mg/mL</td>
+                                <td>2 mL</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="table-question">
+                        Question 1: Dr. Angio orders Cefazolin 750 mg IM. Using the FIRST reconstitution option 
+                        (330 mg/mL), how many mL should Heather draw up?
+                    </div>
+                    
+                    <div class="calculation-inputs">
+                        <div class="input-group">
+                            <label class="input-label">Concentration from table (mg/mL)</label>
+                            <input type="text" class="input-field" id="table-concentration" 
+                                   placeholder="Enter mg/mL">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Ordered dose (mg)</label>
+                            <input type="text" class="input-field" id="ordered-dose" 
+                                   placeholder="Enter mg">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Volume to draw up (mL)</label>
+                            <input type="text" class="input-field" id="table-volume" 
+                                   placeholder="Calculate mL">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Select appropriate syringe</label>
+                            <select class="select-field" id="table-syringe">
+                                <option value="">Choose syringe based on volume</option>
+                                <option value="3ml">3 mL syringe</option>
+                                <option value="1ml">1 mL TB syringe</option>
+                                <option value="5ml">5 mL syringe</option>
+                                <option value="10ml">10 mL syringe</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="table-question">
+                        Question 2: If Heather uses the SECOND reconstitution option (95 mg/mL) for the same 
+                        750 mg dose, how many mL would she need to draw up?
+                    </div>
+                    
+                    <div class="calculation-inputs">
+                        <div class="input-group">
+                            <label class="input-label">Alternative concentration (mg/mL)</label>
+                            <input type="text" class="input-field" id="alt-concentration" 
+                                   value="95" readonly>
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Volume for 750 mg dose (mL)</label>
+                            <input type="text" class="input-field" id="alt-volume" 
+                                   placeholder="Calculate mL">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Why might a provider choose this option?</label>
+                            <select class="select-field" id="reason-select">
+                                <option value="">Select the most likely reason</option>
+                                <option value="less_pain">Lower concentration = less injection pain</option>
+                                <option value="faster_mix">Faster reconstitution time</option>
+                                <option value="cheaper">Less expensive diluent</option>
+                                <option value="stability">Longer stability after mixing</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Complex Conversion Scenario -->
+                <div class="calculation-scenario">
+                    <div class="scenario-header">
+                        <div class="scenario-icon">⚖️</div>
+                        <div class="scenario-info">
+                            <div class="scenario-name">Complex System Conversion</div>
+                            <div class="scenario-details">
+                                Order: Potassium chloride 20 mEq IV in 100 mL NS over 2 hours<br>
+                                Available: Potassium chloride 2 mEq/mL in 10 mL vial<br>
+                                <strong>Challenge:</strong> Provider writes order in grains (gr) instead of mEq<br>
+                                Conversion: 1 mEq KCl ≈ 75 mg ≈ 1.3 gr (approximate)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="scenario-instruction">
+                        <strong>Multi-step conversion:</strong> 1. Convert grains to mEq, 2. Calculate volume needed from vial, 
+                        3. Calculate drip rate if using 20 gtt/mL tubing
+                    </div>
+
+                    <div class="calculation-inputs">
+                        <div class="input-group">
+                            <label class="input-label">Convert 20 mEq to grains (gr)</label>
+                            <input type="text" class="input-field" id="convert-grains" 
+                                   placeholder="Calculate gr">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Volume from 2 mEq/mL vial (mL)</label>
+                            <input type="text" class="input-field" id="kcl-volume" 
+                                   placeholder="Calculate mL">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Total infusion volume (mL)</label>
+                            <input type="text" class="input-field" id="total-infusion" 
+                                   value="100" readonly>
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Drip rate with 20 gtt/mL tubing (gtt/min)</label>
+                            <input type="text" class="input-field" id="kcl-drip-rate" 
+                                   placeholder="Calculate gtt/min">
+                        </div>
+                    </div>
+
+                    <!-- Multiple Choice: Conversion Errors -->
+                    <div class="mcq-container">
+                        <div class="mcq-question">
+                            What is the MOST common error when converting between apothecary and metric systems?
+                        </div>
+                        <div class="mcq-options">
+                            <div class="mcq-option" data-option="A">
+                                <div class="option-letter">A</div>
+                                <div class="option-text">Confusing grains (gr) with grams (g)</div>
+                            </div>
+                            <div class="mcq-option" data-option="B">
+                                <div class="option-letter">B</div>
+                                <div class="option-text">Using approximate instead of exact conversions</div>
+                            </div>
+                            <div class="mcq-option" data-option="C">
+                                <div class="option-letter">C</div>
+                                <div class="option-text">Forgetting to document the conversion</div>
+                            </div>
+                            <div class="mcq-option" data-option="D">
+                                <div class="option-letter">D</div>
+                                <div class="option-text">Not verifying conversion with another professional</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tips Box -->
+                <div class="tips-box">
+                    <div class="tips-title">
+                        <span>💡</span> Table Analysis & Conversion Tips
+                    </div>
+                    <ul class="tips-list">
+                        <li><strong>Table reading:</strong> Always verify you're using the correct row and column. Highlight or circle needed information.</li>
+                        <li><strong>Concentration changes volume:</strong> Higher concentration = smaller volume to draw up. Consider injection site comfort.</li>
+                        <li><strong>Apothecary conversions:</strong> Grains (gr) are MUCH smaller than grams (g). 1 gr ≈ 65 mg, while 1 g = 1000 mg.</li>
+                        <li><strong>Document conversions:</strong> Write out your conversion steps in the medication record for verification.</li>
+                        <li><strong>Use reference charts:</strong> Keep conversion charts accessible. Don't rely on memory for complex conversions.</li>
+                    </ul>
+                </div>
+
+                <!-- Safety Warning -->
+                <div class="safety-warning">
+                    <div class="warning-icon">🚨</div>
+                    <div class="warning-content">
+                        <div class="warning-title">CRITICAL: POTASSIUM ADMINISTRATION</div>
+                        <div class="warning-text">
+                            • Potassium MUST be diluted and infused slowly to prevent cardiac arrest.<br>
+                            • <strong>NEVER</strong> give IV push potassium chloride.<br>
+                            • Maximum concentration: Usually 10 mEq/100 mL for peripheral lines.<br>
+                            • Maximum rate: Usually 10 mEq/hour unless critical care setting with cardiac monitoring.<br>
+                            • <strong>ALWAYS</strong> use an infusion pump for potassium administration.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback-container" id="feedback-2">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Table Analysis & Conversions Mastered!
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Table Analysis Solutions:</strong><br>
+                        <strong>Question 1 (330 mg/mL concentration):</strong><br>
+                        • Concentration: 330 mg/mL<br>
+                        • Ordered dose: 750 mg<br>
+                        • Calculation: 750 mg ÷ 330 mg/mL = <strong>2.27 mL</strong><br>
+                        • <strong>Correct syringe:</strong> 3 mL syringe (allows accurate measurement of 2.27 mL)<br><br>
+                        
+                        <strong>Question 2 (95 mg/mL concentration):</strong><br>
+                        • Concentration: 95 mg/mL<br>
+                        • Calculation: 750 mg ÷ 95 mg/mL = <strong>7.89 mL</strong><br>
+                        • <strong>Why choose this:</strong> Lower concentration = less injection pain<br>
+                        • <strong>Clinical reasoning:</strong> Higher volume but lower concentration may be preferred for IM injections to reduce tissue irritation.<br><br>
+                        
+                        <strong>Complex Conversion Solution:</strong><br>
+                        1. 20 mEq × 1.3 gr/mEq = <strong>26 grains (gr)</strong><br>
+                        2. Volume from vial: 20 mEq ÷ 2 mEq/mL = <strong>10 mL</strong> (entire vial)<br>
+                        3. Total volume: 100 mL NS + 10 mL KCl = <strong>110 mL total</strong><br>
+                        4. Time: 2 hours × 60 = 120 minutes<br>
+                        5. Drip rate: (110 mL × 20 gtt/mL) ÷ 120 min = <strong>18.33 gtt/min</strong> (round to 18 gtt/min)<br><br>
+                        
+                        <strong>Conversion Error Multiple Choice:</strong><br>
+                        • <strong>Correct Answer: A (Confusing grains with grams)</strong><br>
+                        • <strong>Why:</strong> This is a FATAL error: 1 grain = 65 mg, while 1 gram = 1000 mg. Giving grams instead of grains would be 15× overdose!<br>
+                        • Always double-check abbreviations: gr = grains, g = grams. Some facilities prohibit apothecary system use due to this risk.<br><br>
+                        
+                        <strong>Potassium Safety:</strong> This order (20 mEq/100 mL over 2 hours = 10 mEq/hour) is at maximum safe rate for peripheral line. 
+                        Requires cardiac monitoring if faster. Always use infusion pump and check facility protocols.
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn btn-secondary" id="reset-all-btn" aria-label="Reset all activities">
+                <span class="btn-icon">↻</span>
+                Reset All Activities
+            </button>
+            <button class="btn btn-secondary" id="check-answers-btn" aria-label="Check all answers">
+                <span class="btn-icon">✓</span>
+                Check All Answers
+            </button>
+            <button class="btn btn-primary" id="view-results-btn" aria-label="View final results">
+                <span class="btn-icon">📊</span>
+                View Final Results
+            </button>
+        </div>
+
+        <!-- Results Panel -->
+        <div class="results-panel" id="results-panel">
+            <div class="results-header">
+                <h2 class="results-title">Advanced Pharmacology Math Competency Results</h2>
+            </div>
+            <div class="score-display" id="final-score">0%</div>
+            
+            <div class="clinical-insights">
+                <h3 class="insights-title">
+                    <span>💉</span> IV & Complex Calculation Insights
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>IV Drip Rate Formula:</strong> gtt/min = (Volume × Drop Factor) ÷ Time in minutes. ALWAYS convert hours to minutes first. Remember: Microdrip (60 gtt/mL) delivers faster rate than macrodrip for same volume/time.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Table Analysis:</strong> Medication concentration tables provide options. Higher concentration = smaller volume (less injection pain but more tissue irritation). Lower concentration = larger volume (more comfortable injection). Choose based on patient factors and injection site.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>System Conversions:</strong> Apothecary (grains) to metric conversions are HIGH RISK. 1 grain ≠ 1 gram! 1 gr ≈ 65 mg, 1 g = 1000 mg. Confusing these can cause 15× overdose. Many facilities prohibit apothecary system use.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Potassium Safety:</strong> NEVER IV push. Always dilute (max 10 mEq/100 mL peripheral). Always use infusion pump. Max rate usually 10 mEq/hour without cardiac monitoring. Document dilution and rate verification.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="clinical-insights" style="margin-top: 20px;">
+                <h3 class="insights-title">
+                    <span>📋</span> Documentation & Verification Protocols
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Two-Person Verification:</strong> REQUIRED for: Pediatric doses, IV medications, high-alert medications (insulin, heparin, opioids), and ANY apothecary system conversions. Document both signatures.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Calculation Documentation:</strong> Write out formula used, conversion steps, and final answer in medication record. This allows retrospective verification and error detection.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Table Reference:</strong> Document which table/row was used for concentration information. Include lot number and expiration from actual vial used, not just reference table.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Error Reporting:</strong> Report ALL calculation errors or near-misses through facility incident reporting system. This improves system safety and prevents future errors.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="clinical-insights" style="margin-top: 20px; background: rgba(225, 112, 85, 0.05); border-left: 4px solid var(--color-error);">
+                <h3 class="insights-title" style="color: var(--color-error);">
+                    <span>⚠️</span> Critical Calculation Alerts
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot" style="background: var(--color-error);"></span>
+                        <span><strong>FATAL Errors:</strong> Confusing grains (gr) with grams (g) - 15× overdose potential. Confusing micrograms (mcg) with milligrams (mg) - 1000× overdose potential. Always double-check units.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot" style="background: var(--color-error);"></span>
+                        <span><strong>Pediatric Dosing:</strong> Weight MUST be in kilograms (kg), not pounds (lb). 1 kg = 2.2 lb. Formula: Weight in lb ÷ 2.2 = kg. Document both weights in record.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot" style="background: var(--color-error);"></span>
+                        <span><strong>IV Pump Programming:</strong> Program pump THEN independently verify against manual calculation. Two different methods reduce systematic error risk. Document both calculations.</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // State Management - 2 ACTIVITIES ONLY
+            const state = {
+                activities: {
+                    1: { completed: false, correct: 0, total: 16, score: 0 }, // 8 inputs + 2 MCQs + 6 calculation points
+                    2: { completed: false, correct: 0, total: 17, score: 0 }    // 9 inputs + 2 selects + 1 MCQ + 5 calculation points
+                },
+                startedAt: new Date(),
+                timeSpent: 0
+            };
+
+            // DOM Elements
+            const progressSteps = document.querySelectorAll('.progress-step');
+            const activityCards = document.querySelectorAll('.activity-card');
+            const completedCount = document.getElementById('completed-count');
+            const accuracyRate = document.getElementById('accuracy-rate');
+            const timeSpent = document.getElementById('time-spent');
+            const resetBtn = document.getElementById('reset-all-btn');
+            const checkBtn = document.getElementById('check-answers-btn');
+            const resultsBtn = document.getElementById('view-results-btn');
+            const resultsPanel = document.getElementById('results-panel');
+            const finalScore = document.getElementById('final-score');
+
+            // Timer for time spent
+            function updateTimer() {
+                const now = new Date();
+                const diff = Math.floor((now - state.startedAt) / 1000);
+                state.timeSpent = diff;
+                const minutes = Math.floor(diff / 60);
+                const seconds = diff % 60;
+                timeSpent.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            }
+            setInterval(updateTimer, 1000);
+
+            // Update Progress Summary
+            function updateProgressSummary() {
+                let completed = 0;
+                let totalCorrect = 0;
+                let totalItems = 0;
+
+                Object.values(state.activities).forEach(activity => {
+                    if (activity.completed) completed++;
+                    totalCorrect += activity.correct;
+                    totalItems += activity.total;
+                });
+
+                completedCount.textContent = completed;
+                const accuracy = totalItems > 0 ? Math.round((totalCorrect / totalItems) * 100) : 0;
+                accuracyRate.textContent = `${accuracy}%`;
+
+                // Update progress steps
+                progressSteps.forEach((step, index) => {
+                    if (index < completed) {
+                        step.classList.add('completed');
+                        step.classList.remove('active');
+                    } else if (index === completed) {
+                        step.classList.add('active');
+                        step.classList.remove('completed');
+                    } else {
+                        step.classList.remove('active', 'completed');
+                    }
+                });
+            }
+
+            // Activity 1: IV Calculations
+            function initActivity1() {
+                const inputs = {
+                    ivVolume: document.getElementById('iv-volume'),
+                    dropFactor: document.getElementById('drop-factor'),
+                    timeMinutes: document.getElementById('time-minutes'),
+                    dripRate: document.getElementById('drip-rate'),
+                    pedDoseMg: document.getElementById('ped-dose-mg'),
+                    drawUpMl: document.getElementById('draw-up-ml'),
+                    pumpRate: document.getElementById('pump-rate')
+                };
+                
+                const syringeSelect = document.getElementById('syringe-select');
+                const mcqOptions1 = document.querySelectorAll('#activity-1 .mcq-option:first-child');
+                const mcqOptions2 = document.querySelectorAll('#activity-1 .mcq-option:last-child');
+                const feedback = document.getElementById('feedback-1');
+                const status = document.querySelector('#activity-1 .activity-status');
+
+                const correctAnswers = {
+                    ivVolume: '1000',
+                    dropFactor: '15',
+                    timeMinutes: '480',
+                    dripRate: '31.25',
+                    pedDoseMg: '330',
+                    drawUpMl: '6.6',
+                    pumpRate: '6.6',
+                    syringeSelect: '10ml',
+                    mcq1: 'A',
+                    mcq2: 'B'
+                };
+
+                let correctInputs = 0;
+                let selectedMcq1 = null;
+                let selectedMcq2 = null;
+
+                // Setup input checking
+                function checkInputs() {
+                    correctInputs = 0;
+                    
+                    // Check text inputs
+                    Object.keys(inputs).forEach(key => {
+                        const input = inputs[key];
+                        const answer = input.value.trim();
+                        const correct = correctAnswers[key];
+                        
+                        // Allow rounding variations for drip rate
+                        if (key === 'dripRate') {
+                            if (answer === '31.25' || answer === '31' || answer === '31.3' || answer === '31.2') {
+                                input.classList.remove('incorrect');
+                                input.classList.add('correct');
+                                correctInputs++;
+                            } else if (answer !== '') {
+                                input.classList.remove('correct');
+                                input.classList.add('incorrect');
+                            } else {
+                                input.classList.remove('correct', 'incorrect');
+                            }
+                        } else {
+                            if (answer === correct) {
+                                input.classList.remove('incorrect');
+                                input.classList.add('correct');
+                                correctInputs++;
+                            } else if (answer !== '') {
+                                input.classList.remove('correct');
+                                input.classList.add('incorrect');
+                            } else {
+                                input.classList.remove('correct', 'incorrect');
+                            }
+                        }
+                    });
+
+                    // Check select
+                    if (syringeSelect.value === correctAnswers.syringeSelect) {
+                        syringeSelect.style.borderColor = 'var(--color-success)';
+                        syringeSelect.style.background = 'rgba(0, 184, 148, 0.05)';
+                        correctInputs++;
+                    } else if (syringeSelect.value !== '') {
+                        syringeSelect.style.borderColor = 'var(--color-error)';
+                        syringeSelect.style.background = 'rgba(225, 112, 85, 0.05)';
+                    } else {
+                        syringeSelect.style.borderColor = '';
+                        syringeSelect.style.background = '';
+                    }
+
+                    // Check MCQs
+                    let mcqCorrect = 0;
+                    if (selectedMcq1 === correctAnswers.mcq1) mcqCorrect++;
+                    if (selectedMcq2 === correctAnswers.mcq2) mcqCorrect++;
+                    
+                    // Check completion
+                    const allInputsFilled = correctInputs === 8; // 7 inputs + 1 select
+                    const allMcqAnswered = selectedMcq1 !== null && selectedMcq2 !== null;
+                    
+                    if (allInputsFilled && allMcqAnswered) {
+                        state.activities[1].completed = true;
+                        state.activities[1].correct = correctInputs + mcqCorrect;
+                        state.activities[1].score = Math.round((state.activities[1].correct / 16) * 100);
+                        
+                        status.textContent = 'Completed';
+                        status.style.color = '#00b894';
+                        document.querySelector('#activity-1').classList.add('completed');
+                        feedback.classList.add('show');
+                        
+                        updateProgressSummary();
+                    }
+                }
+
+                // Add event listeners to inputs
+                Object.values(inputs).forEach(input => {
+                    input.addEventListener('input', checkInputs);
+                });
+
+                syringeSelect.addEventListener('change', checkInputs);
+
+                // Setup MCQ 1
+                mcqOptions1.forEach(option => {
+                    option.addEventListener('click', function() {
+                        mcqOptions1.forEach(opt => opt.classList.remove('selected'));
+                        this.classList.add('selected');
+                        selectedMcq1 = this.dataset.option;
+                        checkInputs();
+                    });
+                });
+
+                // Setup MCQ 2
+                mcqOptions2.forEach(option => {
+                    option.addEventListener('click', function() {
+                        mcqOptions2.forEach(opt => opt.classList.remove('selected'));
+                        this.classList.add('selected');
+                        selectedMcq2 = this.dataset.option;
+                        checkInputs();
+                    });
+                });
+            }
+
+            // Activity 2: Table Analysis
+            function initActivity2() {
+                const inputs = {
+                    tableConcentration: document.getElementById('table-concentration'),
+                    orderedDose: document.getElementById('ordered-dose'),
+                    tableVolume: document.getElementById('table-volume'),
+                    altVolume: document.getElementById('alt-volume'),
+                    convertGrains: document.getElementById('convert-grains'),
+                    kclVolume: document.getElementById('kcl-volume'),
+                    kclDripRate: document.getElementById('kcl-drip-rate')
+                };
+                
+                const tableSyringe = document.getElementById('table-syringe');
+                const reasonSelect = document.getElementById('reason-select');
+                const mcqOptions = document.querySelectorAll('#activity-2 .mcq-option');
+                const feedback = document.getElementById('feedback-2');
+                const status = document.querySelector('#activity-2 .activity-status');
+
+                const correctAnswers = {
+                    tableConcentration: '330',
+                    orderedDose: '750',
+                    tableVolume: '2.27',
+                    altVolume: '7.89',
+                    convertGrains: '26',
+                    kclVolume: '10',
+                    kclDripRate: '18.33',
+                    tableSyringe: '3ml',
+                    reasonSelect: 'less_pain',
+                    mcq: 'A'
+                };
+
+                let correctInputs = 0;
+                let selectedMcq = null;
+
+                // Setup input checking
+                function checkInputs() {
+                    correctInputs = 0;
+                    
+                    // Check text inputs with rounding tolerance
+                    Object.keys(inputs).forEach(key => {
+                        const input = inputs[key];
+                        const answer = input.value.trim();
+                        const correct = correctAnswers[key];
+                        
+                        // Allow rounding variations
+                        let isCorrect = false;
+                        if (key === 'tableVolume' || key === 'altVolume') {
+                            const numAnswer = parseFloat(answer);
+                            const numCorrect = parseFloat(correct);
+                            if (!isNaN(numAnswer) && Math.abs(numAnswer - numCorrect) < 0.05) {
+                                isCorrect = true;
+                            }
+                        } else if (key === 'kclDripRate') {
+                            const numAnswer = parseFloat(answer);
+                            if (!isNaN(numAnswer) && (Math.abs(numAnswer - 18.33) < 0.1 || 
+                                                      Math.abs(numAnswer - 18) < 0.1)) {
+                                isCorrect = true;
+                            }
+                        } else {
+                            isCorrect = answer === correct;
+                        }
+                        
+                        if (isCorrect) {
+                            input.classList.remove('incorrect');
+                            input.classList.add('correct');
+                            correctInputs++;
+                        } else if (answer !== '') {
+                            input.classList.remove('correct');
+                            input.classList.add('incorrect');
+                        } else {
+                            input.classList.remove('correct', 'incorrect');
+                        }
+                    });
+
+                    // Check selects
+                    if (tableSyringe.value === correctAnswers.tableSyringe) {
+                        tableSyringe.style.borderColor = 'var(--color-success)';
+                        tableSyringe.style.background = 'rgba(0, 184, 148, 0.05)';
+                        correctInputs++;
+                    } else if (tableSyringe.value !== '') {
+                        tableSyringe.style.borderColor = 'var(--color-error)';
+                        tableSyringe.style.background = 'rgba(225, 112, 85, 0.05)';
+                    } else {
+                        tableSyringe.style.borderColor = '';
+                        tableSyringe.style.background = '';
+                    }
+
+                    if (reasonSelect.value === correctAnswers.reasonSelect) {
+                        reasonSelect.style.borderColor = 'var(--color-success)';
+                        reasonSelect.style.background = 'rgba(0, 184, 148, 0.05)';
+                        correctInputs++;
+                    } else if (reasonSelect.value !== '') {
+                        reasonSelect.style.borderColor = 'var(--color-error)';
+                        reasonSelect.style.background = 'rgba(225, 112, 85, 0.05)';
+                    } else {
+                        reasonSelect.style.borderColor = '';
+                        reasonSelect.style.background = '';
+                    }
+
+                    // Check MCQ
+                    let mcqCorrect = 0;
+                    if (selectedMcq === correctAnswers.mcq) mcqCorrect++;
+                    
+                    // Check completion
+                    const allInputsFilled = correctInputs === 10; // 7 inputs + 2 selects + 1 MCQ placeholder
+                    const mcqAnswered = selectedMcq !== null;
+                    
+                    if (allInputsFilled && mcqAnswered) {
+                        state.activities[2].completed = true;
+                        state.activities[2].correct = correctInputs + mcqCorrect;
+                        state.activities[2].score = Math.round((state.activities[2].correct / 17) * 100);
+                        
+                        status.textContent = 'Completed';
+                        status.style.color = '#00b894';
+                        document.querySelector('#activity-2').classList.add('completed');
+                        feedback.classList.add('show');
+                        
+                        updateProgressSummary();
+                    }
+                }
+
+                // Add event listeners
+                Object.values(inputs).forEach(input => {
+                    input.addEventListener('input', checkInputs);
+                });
+
+                tableSyringe.addEventListener('change', checkInputs);
+                reasonSelect.addEventListener('change', checkInputs);
+
+                // Setup MCQ
+                mcqOptions.forEach(option => {
+                    option.addEventListener('click', function() {
+                        mcqOptions.forEach(opt => opt.classList.remove('selected'));
+                        this.classList.add('selected');
+                        selectedMcq = this.dataset.option;
+                        checkInputs();
+                    });
+                });
+            }
+
+            // Reset All Activities
+            function resetAllActivities() {
+                // Reset state
+                state.activities = {
+                    1: { completed: false, correct: 0, total: 16, score: 0 },
+                    2: { completed: false, correct: 0, total: 17, score: 0 }
+                };
+                state.startedAt = new Date();
+
+                // Reset UI
+                activityCards.forEach(card => {
+                    card.classList.remove('completed');
+                    const status = card.querySelector('.activity-status');
+                    status.textContent = 'Not Started';
+                    status.style.color = '';
+                    const feedback = card.querySelector('.feedback-container');
+                    feedback.classList.remove('show');
+                });
+
+                // Reset Activity 1
+                const inputs1 = ['iv-volume', 'drop-factor', 'time-minutes', 'drip-rate', 
+                               'ped-dose-mg', 'draw-up-ml', 'pump-rate'];
+                inputs1.forEach(id => {
+                    const el = document.getElementById(id);
+                    el.value = '';
+                    el.classList.remove('correct', 'incorrect');
+                });
+                
+                document.getElementById('syringe-select').value = '';
+                document.getElementById('syringe-select').style.borderColor = '';
+                document.getElementById('syringe-select').style.background = '';
+                
+                document.querySelectorAll('#activity-1 .mcq-option').forEach(option => {
+                    option.classList.remove('selected');
+                });
+
+                // Reset Activity 2
+                const inputs2 = ['table-concentration', 'ordered-dose', 'table-volume', 
+                               'alt-volume', 'convert-grains', 'kcl-volume', 'kcl-drip-rate'];
+                inputs2.forEach(id => {
+                    const el = document.getElementById(id);
+                    el.value = '';
+                    el.classList.remove('correct', 'incorrect');
+                });
+                
+                document.getElementById('table-syringe').value = '';
+                document.getElementById('table-syringe').style.borderColor = '';
+                document.getElementById('table-syringe').style.background = '';
+                
+                document.getElementById('reason-select').value = '';
+                document.getElementById('reason-select').style.borderColor = '';
+                document.getElementById('reason-select').style.background = '';
+                
+                document.querySelectorAll('#activity-2 .mcq-option').forEach(option => {
+                    option.classList.remove('selected');
+                });
+
+                // Reset results
+                resultsPanel.classList.remove('show');
+
+                // Update progress
+                updateProgressSummary();
+            }
+
+            // Check All Answers
+            function checkAllAnswers() {
+                // Activity 1
+                if (!state.activities[1].completed) {
+                    const feedback = document.getElementById('feedback-1');
+                    const status = document.querySelector('#activity-1 .activity-status');
+                    
+                    // Fill correct answers
+                    document.getElementById('iv-volume').value = '1000';
+                    document.getElementById('iv-volume').classList.add('correct');
+                    document.getElementById('drop-factor').value = '15';
+                    document.getElementById('drop-factor').classList.add('correct');
+                    document.getElementById('time-minutes').value = '480';
+                    document.getElementById('time-minutes').classList.add('correct');
+                    document.getElementById('drip-rate').value = '31.25';
+                    document.getElementById('drip-rate').classList.add('correct');
+                    document.getElementById('ped-dose-mg').value = '330';
+                    document.getElementById('ped-dose-mg').classList.add('correct');
+                    document.getElementById('draw-up-ml').value = '6.6';
+                    document.getElementById('draw-up-ml').classList.add('correct');
+                    document.getElementById('pump-rate').value = '6.6';
+                    document.getElementById('pump-rate').classList.add('correct');
+                    document.getElementById('syringe-select').value = '10ml';
+                    document.getElementById('syringe-select').style.borderColor = 'var(--color-success)';
+                    document.getElementById('syringe-select').style.background = 'rgba(0, 184, 148, 0.05)';
+                    
+                    // Select correct MCQs
+                    document.querySelector('#activity-1 .mcq-option[data-option="A"]:first-child').classList.add('selected');
+                    document.querySelector('#activity-1 .mcq-option[data-option="B"]:last-child').classList.add('selected');
+                    
+                    state.activities[1].completed = true;
+                    state.activities[1].correct = 16;
+                    state.activities[1].score = 100;
+                    status.textContent = 'Completed';
+                    status.style.color = '#00b894';
+                    document.querySelector('#activity-1').classList.add('completed');
+                    feedback.classList.add('show');
+                }
+
+                // Activity 2
+                if (!state.activities[2].completed) {
+                    const feedback = document.getElementById('feedback-2');
+                    const status = document.querySelector('#activity-2 .activity-status');
+                    
+                    // Fill correct answers
+                    document.getElementById('table-concentration').value = '330';
+                    document.getElementById('table-concentration').classList.add('correct');
+                    document.getElementById('ordered-dose').value = '750';
+                    document.getElementById('ordered-dose').classList.add('correct');
+                    document.getElementById('table-volume').value = '2.27';
+                    document.getElementById('table-volume').classList.add('correct');
+                    document.getElementById('alt-volume').value = '7.89';
+                    document.getElementById('alt-volume').classList.add('correct');
+                    document.getElementById('convert-grains').value = '26';
+                    document.getElementById('convert-grains').classList.add('correct');
+                    document.getElementById('kcl-volume').value = '10';
+                    document.getElementById('kcl-volume').classList.add('correct');
+                    document.getElementById('kcl-drip-rate').value = '18.33';
+                    document.getElementById('kcl-drip-rate').classList.add('correct');
+                    document.getElementById('table-syringe').value = '3ml';
+                    document.getElementById('table-syringe').style.borderColor = 'var(--color-success)';
+                    document.getElementById('table-syringe').style.background = 'rgba(0, 184, 148, 0.05)';
+                    document.getElementById('reason-select').value = 'less_pain';
+                    document.getElementById('reason-select').style.borderColor = 'var(--color-success)';
+                    document.getElementById('reason-select').style.background = 'rgba(0, 184, 148, 0.05)';
+                    
+                    // Select correct MCQ
+                    document.querySelector('#activity-2 .mcq-option[data-option="A"]').classList.add('selected');
+                    
+                    state.activities[2].completed = true;
+                    state.activities[2].correct = 17;
+                    state.activities[2].score = 100;
+                    status.textContent = 'Completed';
+                    status.style.color = '#00b894';
+                    document.querySelector('#activity-2').classList.add('completed');
+                    feedback.classList.add('show');
+                }
+
+                updateProgressSummary();
+            }
+
+            // View Final Results
+            function viewFinalResults() {
+                let totalScore = 0;
+                let activityCount = 0;
+                
+                Object.values(state.activities).forEach(activity => {
+                    if (activity.completed) {
+                        totalScore += activity.score;
+                        activityCount++;
+                    }
+                });
+
+                const averageScore = activityCount > 0 ? Math.round(totalScore / activityCount) : 0;
+                finalScore.textContent = `${averageScore}%`;
+                resultsPanel.classList.add('show');
+                resultsPanel.scrollIntoView({ behavior: 'smooth' });
+            }
+
+            // Initialize activities
+            initActivity1();
+            initActivity2();
+
+            // Event listeners
+            resetBtn.addEventListener('click', resetAllActivities);
+            checkBtn.addEventListener('click', checkAllAnswers);
+            resultsBtn.addEventListener('click', viewFinalResults);
+
+            // Initial progress update
+            updateProgressSummary();
+        });
+    </script>
+</body>
+</html>
