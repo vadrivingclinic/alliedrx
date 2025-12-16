@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AlliedRx – Week 10 Objectives</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+    --color-primary: #af4bef;
+    --color-primary-soft: #d492ff;
+    --color-accent: #8380f0;
+    --color-success: #00b894;
+    --color-error: #e17055;
+    --color-bg: #f7f5fb;
+    --color-text: #2b2b2b;
+    --color-muted: #6c6880;
+    --radius-lg: 24px;
+    --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+    --shadow-hover: 0 25px 60px rgba(175, 75, 239, 0.25);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    width: 100%;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    padding: 24px;
+    background: radial-gradient(circle at top left, #ffffff 0, #f1ecff 40%, var(--color-bg) 100%);
+    color: var(--color-text);
+    -webkit-text-size-adjust: 100%;
+}
+
+@media (max-width: 600px) {
+    body { padding: 12px; }
+}
+
+.page {
+    width: 100%;
+    max-width: 1120px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-soft);
+    padding: 28px 30px 32px;
+    display: grid;
+    grid-template-columns: minmax(0, 3.1fr) minmax(0, 2.4fr);
+    gap: 28px;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 900px) {
+    .page {
+        grid-template-columns: 1fr;
+        padding: 22px;
+    }
+}
+
+@media (max-width: 480px) {
+    body { padding: 0; }
+    .page {
+        border-radius: 0;
+        box-shadow: none;
+        padding: 18px 14px 22px;
+    }
+}
+
+/* Header */
+.brand-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+    animation: fadeIn 0.6s ease-out 0.2s both;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.brand-logo {
+    height: 40px;
+    width: auto;
+    filter: drop-shadow(0 3px 8px rgba(0,0,0,0.2));
+    transition: transform 0.3s ease;
+}
+
+.brand-logo:hover { transform: scale(1.05); }
+
+.course-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.course-name {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--color-muted);
+}
+
+.week-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(175, 75, 239, 0.08);
+    font-size: 0.76rem;
+    color: var(--color-primary);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { background-color: rgba(175, 75, 239, 0.08); }
+    50% { background-color: rgba(175, 75, 239, 0.15); }
+}
+
+.week-label-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: var(--color-success);
+    animation: blink 1.5s infinite;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.badge-mode {
+    padding: 5px 10px;
+    border-radius: 999px;
+    background: rgba(12, 10, 24, 0.06);
+    border: 1px solid rgba(12, 10, 24, 0.08);
+    font-size: 0.74rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--color-muted);
+    transition: all 0.3s ease;
+}
+
+.badge-mode:hover {
+    background: rgba(175, 75, 239, 0.1);
+    border-color: var(--color-primary-soft);
+    color: var(--color-primary);
+}
+
+h1 {
+    font-size: clamp(2rem, 3vw, 2.4rem);
+    line-height: 1.05;
+    color: var(--color-primary);
+    margin-bottom: 6px;
+    animation: fadeInUp 0.6s ease-out 0.3s both;
+}
+
+.subtitle {
+    font-size: 0.98rem;
+    color: var(--color-muted);
+    max-width: 34rem;
+    margin-bottom: 18px;
+    animation: fadeInUp 0.6s ease-out 0.4s both;
+}
+
+/* Objectives List */
+.objectives-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.objective-card {
+    background: #08070a;
+    color: #fff;
+    border-radius: 18px;
+    padding: 10px 16px 14px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 16px 40px rgba(0,0,0,0.35);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.objective-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+    transition: left 0.7s ease;
+}
+
+.objective-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+}
+
+.objective-card:hover::before { left: 100%; }
+
+.objective-card.active {
+    background: linear-gradient(135deg, #0f172a, #1e1b4b);
+    border-left: 4px solid var(--color-accent);
+}
+
+.objective-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 999px;
+    background: #fff;
+    color: #111827;
+    font-weight: 700;
+    font-size: 1.05rem;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+}
+
+.objective-card:hover .objective-number {
+    background: var(--color-primary-soft);
+    transform: rotate(5deg);
+}
+
+.objective-main {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.objective-verb {
+    font-size: 0.98rem;
+    font-weight: 700;
+    color: var(--color-primary-soft);
+    transition: color 0.3s ease;
+}
+
+.objective-card:hover .objective-verb { color: #fff; }
+
+.objective-text {
+    font-size: 0.84rem;
+    color: #e5e7eb;
+    line-height: 1.4;
+}
+
+.objective-icon {
+    width: 26px;
+    height: 26px;
+    border-radius: 999px;
+    border: 1px solid rgba(250,250,250,0.16);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    background: linear-gradient(135deg, rgba(175,75,239,0.1), rgba(0,0,0,0.4));
+    transition: all 0.3s ease;
+}
+
+.objective-card:hover .objective-icon {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+    transform: scale(1.1);
+}
+
+/* Filter Buttons */
+.chapter-filter {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    padding: 8px 16px;
+    border-radius: 20px;
+    background: rgba(12,10,24,0.05);
+    border: 1px solid rgba(12,10,24,0.1);
+    color: var(--color-text);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.filter-btn:hover {
+    background: rgba(175,75,239,0.1);
+    border-color: var(--color-primary-soft);
+    color: var(--color-primary);
+}
+
+.filter-btn.active {
+    background: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+}
+
+/* Right Column */
+.objectives-header {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--color-text);
+    margin-bottom: 6px;
+}
+
+.section-tag {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--color-primary);
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.week-overview {
+    background: rgba(12,10,24,0.94);
+    border-radius: 18px;
+    padding: 16px 18px 18px;
+    color: #e5e7eb;
+    font-size: 0.88rem;
+    line-height: 1.7;
+    box-shadow: 0 18px 40px rgba(15,23,42,0.6);
+    margin-bottom: 16px;
+}
+
+.mini-heading {
+    font-size: 0.86rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: #c4b5fd;
+    font-weight: 600;
+    margin: 8px 0 10px;
+}
+
+.outcomes-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 0.86rem;
+    color: #f9fafb;
+}
+
+.outcomes-list li {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    transition: transform 0.3s ease;
+}
+
+.outcomes-list li:hover { transform: translateX(5px); }
+
+.dot {
+    width: 6px;
+    height: 6px;
+    margin-top: 6px;
+    border-radius: 999px;
+    background: var(--color-accent);
+    flex-shrink: 0;
+}
+
+.note-card {
+    margin-top: 14px;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.16);
+    background: rgba(15,23,42,0.7);
+    padding: 10px 12px;
+    font-size: 0.78rem;
+    color: #e5e7eb;
+    transition: all 0.3s ease;
+}
+
+.note-card:hover {
+    border-color: var(--color-primary-soft);
+    background: rgba(15,23,42,0.9);
+}
+
+.note-card strong { color: #fef3c7; }
+
+.case-study {
+    background: linear-gradient(135deg, rgba(131,128,240,0.1), rgba(175,75,239,0.1));
+    border-radius: 18px;
+    padding: 18px;
+    margin-top: 20px;
+    border: 1px solid rgba(131,128,240,0.2);
+}
+
+.case-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--color-accent);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.case-content {
+    font-size: 0.85rem;
+    color: #ffffff;
+    line-height: 1.5;
+}
+
+.case-content strong { color: #d492ff; }
+
+/* Progress Counter */
+.progress-counter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(175,75,239,0.05);
+    border-radius: 16px;
+    padding: 12px 18px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(175,75,239,0.1);
+}
+
+.counter-item { text-align: center; }
+
+.counter-number {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--color-primary);
+    display: block;
+}
+
+.counter-label {
+    font-size: 0.75rem;
+    color: var(--color-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+</style>
+</head>
+<body>
+<main class="page" aria-labelledby="week10-heading">
+
+<!-- LEFT COLUMN: Objectives -->
+<section class="column" aria-label="Week 10 objectives list">
+<header class="brand-row">
+    <div class="brand">
+        <img
+            src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+            alt="AlliedRx logo"
+            class="brand-logo"
+        />
+        <div class="course-meta">
+            <span class="course-name">Clinical Medical Assistant • CCMA</span>
+            <div class="week-label">
+                <span class="week-label-dot"></span>
+                <span>Week 10 — Medication Safety & Endocrinology</span>
+            </div>
+        </div>
+    </div>
+    <span class="badge-mode">Campus & Online</span>
+</header>
+
+<h1 id="week10-heading">Week 10 Objectives</h1>
+<p class="subtitle">
+    Master <strong>safe medication administration practices</strong> and  
+    <strong>endocrine system management</strong>, with a focus on diabetes care,  
+    patient coaching, and legal compliance in clinical settings.
+</p>
+
+<!-- Filter Buttons -->
+<div class="chapter-filter">
+    <button class="filter-btn active" data-filter="all">All Objectives</button>
+    <button class="filter-btn" data-filter="chapter11">Chapter 11: Administering Medications</button>
+    <button class="filter-btn" data-filter="chapter21">Chapter 21: Endocrinology</button>
+</div>
+
+<!-- Progress Counter -->
+<div class="progress-counter">
+    <div class="counter-item">
+        <span class="counter-number" id="total-objectives">21</span>
+        <span class="counter-label">Total Objectives</span>
+    </div>
+    <div class="counter-item">
+        <span class="counter-number">2</span>
+        <span class="counter-label">Chapters</span>
+    </div>
+    <div class="counter-item">
+        <span class="counter-number">14</span>
+        <span class="counter-label">Clinical Skills</span>
+    </div>
+</div>
+
+<!-- Objectives List -->
+<div class="objectives-list" id="objectives-container">
+
+    <!-- Chapter 11 Objectives -->
+    <article class="objective-card" data-chapter="chapter11">
+        <div class="objective-number">01</div>
+        <div class="objective-main">
+            <div class="objective-verb">Define & Pronounce</div>
+            <p class="objective-text">Define, spell, and pronounce key pharmacology terms: aqueous, bevel, induration, meniscus, polyuria, vasodilation, viscosity, wheal.</p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">📚</div>
+    </article>
+
+    <article class="objective-card" data-chapter="chapter11">
+        <div class="objective-number">02</div>
+        <div class="objective-main">
+            <div class="objective-verb">Follow & Analyze</div>
+            <p class="objective-text">Follow safety precautions in medication administration; analyze safety guidelines for specific patient populations.</p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">🛡️</div>
+    </article>
+
+    <article class="objective-card" data-chapter="chapter11">
+        <div class="objective-number">03</div>
+        <div class="objective-main">
+            <div class="objective-verb">Document</div>
+            <p class="objective-text">Document the administration of medication accurately in the health record, including dose, route, time, and patient response.</p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">📋</div>
+    </article>
+
+    <article class="objective-card" data-chapter="chapter11">
+        <div class="objective-number">04</div>
+        <div class="objective-main">
+            <div class="objective-verb">Summarize</div>
+            <p class="objective-text">Summarize patient assessment factors that can affect medication administration (e.g., age, renal function, allergies).</p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">🧾</div>
+    </article>
+
+    <article class="objective-card" data-chapter="chapter11">
+        <div class="objective-number">05</div>
+        <div class="objective-main">
+            <div class="objective-verb">Identify & Administer</div>
+            <p class="objective-text">Identify various drug forms and their administration guidelines; administer oral medications safely.</p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">💊</div>
+    </article>
+
+    <article class="objective-card" data-chapter="chapter11">
+        <div class="objective-number">06</div>
+        <div class="objective-main">
+            <div class="objective-verb">Specify & Follow</div>
+            <p class="objective-text">Specify parenteral administration equipment; follow OSHA guidelines in managing parenteral administration.</p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">💉</div>
+    </article>
+
+    <article class="objective-card" data-chapter="chapter11">
+        <div class="objective-number">07</div>
+        <div class="objective-main">
+            <div class="objective-verb">Describe & Demonstrate</div>
+            <p class="objective-text">Describe and demonstrate types and locations of parenteral administrations; use sharps containers properly.</p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">📍</div>
+    </article>
+
+    <article class="objective-card" data-chapter="chapter11">
+        <div class="objective-number">08</div>
+        <div class="objective-main">
+            <div class="objective-verb">Recognize</div>
+            <p class="objective-text">Recognize the medical assistant’s role in coaching patients about safe drug administration and encouraging compliance.</p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">👩‍🏫</div>
+    </article>
+
+    <article class="objective-card" data-chapter="chapter11">
+        <div class="objective-number">09</div>
+        <div class="objective-main">
+            <div class="objective-verb">Assess & Complete</div>
+            <p class="objective-text">Assess legal and ethical issues in drug administration; complete an incident report related to a medication error.</p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">⚖️</div>
+    </article>
+
+    <!-- Chapter 21 Objectives -->
+    <article class="objective-card" data-chapter="chapter21">
+        <div class="objective-number">10</div>
+        <div class="objective-main">
+            <div class="objective-verb">Define & Pronounce</div>
+            <p class="objective-text">Define, spell, and pronounce endocrinology terms: ACTH, FSH, GH, LH, PRL, gluconeogenesis, glycosuria, polydipsia.</p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">📖</div>
+    </article>
+
+    <article class="objective-card" data-chapter="chapter21">
+        <div class="objective-number">11</div>
+        <div class="objective-main">
+            <div class="objective-verb">Summarize</div>
+            <p class="objective-text">Summarize the anatomy and physiology of the endocrine system, including hormone-producing glands.</p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">🧠</div>
+    </article>
+
+    <article class="objective-card" data-chapter="chapter21">
+        <div class="objective-number">12</div>
+        <div class="objective-main">
+            <div class="objective-verb">Explain</div>
+            <p class="objective-text">Explain the mechanism of hormone action, including feedback loops and receptor interactions.</p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">🔬</div>
+    </article>
+
+    <article class="objective-card" data-chapter="chapter21">
+        <div class="objective-number">13</div>
+        <div class="objective-main">
+            <div class="objective-verb">Differentiate</div>
+            <p class="objective-text">Differentiate among diseases and disorders of the endocrine system (e.g., thyroid disorders, adrenal insufficiency).</p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">🩺</div>
+    </article>
+
+    <article class="objective-card" data-chapter="chapter21">
+        <div class="objective-number">14</div>
+        <div class="objective-main">
+            <div class="objective-verb">Describe</div>
+            <p class="objective-text">Describe the diagnostic criteria for diabetes mellitus, including lab values and clinical signs.</p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">🩸</div>
+    </article>
+
+    <article class="objective-card" data-chapter="chapter21">
+        <div class="objective-number">15</div>
+        <div class="objective-main">
+            <div class="objective-verb">Compare & Contrast</div>
+            <p class="objective-text">Compare and contrast prediabetes, type 1, type 2, and gestational diabetes.</p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">⚖️</div>
+    </article>
+
+    <article class="objective-card" data-chapter="chapter21">
+        <div class="objective-number">16</div>
+        <div class="objective-main">
+            <div class="objective-verb">Outline & Perform</div>
+            <p class="objective-text">Outline treatment plans for diabetes; perform blood glucose screening with a glucometer.</p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">📊</div>
+    </article>
+
+    <article class="objective-card" data-chapter="chapter21">
+        <div class="objective-number">17</div>
+        <div class="objective-main">
+            <div class="objective-verb">Identify & Describe</div>
+            <p class="objective-text">Identify characteristics of hypoglycemia and hyperglycemia; describe acute and chronic complications of diabetes.</p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">⚠️</div>
+    </article>
+
+    <article class="objective-card" data-chapter="chapter21">
+        <div class="objective-number">18</div>
+        <div class="objective-main">
+            <div class="objective-verb">Discuss & Summarize</div>
+            <p class="objective-text">Discuss follow-up for diabetic patients; summarize patient education approaches for diabetes management.</p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">🗣️</div>
+    </article>
+
+    <article class="objective-card" data-chapter="chapter21">
+        <div class="objective-number">19</div>
+        <div class="objective-main">
+            <div class="objective-verb">Discuss</div>
+            <p class="objective-text">Discuss legal and ethical issues in caring for patients with endocrine disorders.</p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">⚖️</div>
+    </article>
+
+</div>
+</section>
+
+<!-- RIGHT COLUMN: Overview & Case Studies -->
+<aside class="column" aria-label="Overview of this week's content">
+    <h2 class="objectives-header">Medication Safety & Diabetes Management</h2>
+    <p class="section-tag">Safety Protocols • Endocrine Disorders • Patient Coaching</p>
+
+    <div class="week-overview">
+        <p>
+            Week 10 integrates <strong>safe medication administration practices</strong> with  
+            <strong>comprehensive endocrine system care</strong>, emphasizing diabetes management,  
+            patient education, and clinical accountability.
+        </p>
+        <p>
+            These chapters connect because <strong>safe drug administration is critical</strong>  
+            for diabetic patients who may be on multiple medications (e.g., insulin, oral hypoglycemics).  
+            Understanding endocrine physiology helps medical assistants provide informed,  
+            empathetic coaching and recognize adverse drug-hormone interactions.
+        </p>
+
+        <!-- Case Study: Chapter 11 -->
+        <div class="case-study">
+            <div class="case-title">
+                <span>💼</span> Chapter 11 Case Study: Dorothy Gaston, CMA (AAMA)
+            </div>
+            <div class="case-content">
+                <strong>Setting:</strong> New primary care office of Dr. Anna Thau<br>
+                <strong>Role:</strong> Clinical medical assistant being interviewed for a medication administration role<br>
+                <strong>Focus:</strong> Implement safety guidelines, document accurately, coach patients on medication adherence,  
+                follow OSHA standards, and understand legal implications of drug administration.
+            </div>
+        </div>
+
+        <!-- Case Study: Chapter 21 -->
+        <div class="case-study">
+            <div class="case-title">
+                <span>🏥</span> Chapter 21 Case Study: Miguel Vasco, CMA (AAMA)
+            </div>
+            <div class="case-content">
+                <strong>Setting:</strong> Endocrinology & Internal Medicine practice<br>
+                <strong>Experience:</strong> 10-year CMA specializing in diabetes care<br>
+                <strong>Responsibilities:</strong> Coach newly diagnosed diabetic patients on glucose monitoring,  
+                lifestyle modifications, and complication prevention while providing empathetic,  
+                evidence-based education.
+            </div>
+        </div>
+
+        <p class="mini-heading">By the end of this week, you will be able to:</p>
+        <ul class="outcomes-list">
+            <li><span class="dot"></span><span>Administer oral and parenteral medications using established safety protocols.</span></li>
+            <li><span class="dot"></span><span>Document medication administration completely and accurately in the EHR.</span></li>
+            <li><span class="dot"></span><span>Perform blood glucose screening and interpret results in clinical context.</span></li>
+            <li><span class="dot"></span><span>Educate patients on diabetes self-management, including medication adherence.</span></li>
+            <li><span class="dot"></span><span>Recognize and respond to signs of hypoglycemia and hyperglycemia.</span></li>
+        </ul>
+
+        <div class="note-card">
+            <strong>Medication Safety Tip:</strong> Always use <strong>two patient identifiers</strong>  
+            before administering any medication. Verify the <strong>right patient, right drug, right dose,  
+            right route, and right time</strong>—every time.
+        </div>
+
+        <div class="note-card" style="margin-top:12px">
+            <strong>Diabetes Coaching Insight:</strong> Use the <strong>“Teach-Back” method</strong>  
+            when educating diabetic patients on glucometer use. Ask: <em>“Can you show me how you would check your blood sugar?”</em>  
+            to confirm understanding and technique.
+        </div>
+
+        <div class="note-card" style="margin-top:12px">
+            <strong>Legal Reminder:</strong> Medical assistants must <strong>know their state’s scope of practice</strong>  
+            regarding medication administration. Never perform a procedure or give a medication  
+            outside your legal and trained limits.
+        </div>
+    </div>
+</aside>
+
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Filter functionality
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const objectiveCards = document.querySelectorAll('.objective-card');
+
+    filterButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+            const filter = this.getAttribute('data-filter');
+
+            objectiveCards.forEach(card => {
+                if (filter === 'all') {
+                    card.style.display = 'grid';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                } else {
+                    if (card.getAttribute('data-chapter') === filter) {
+                        card.style.display = 'grid';
+                        setTimeout(() => {
+                            card.style.opacity = '1';
+                            card.style.transform = 'translateY(0)';
+                        }, 10);
+                    } else {
+                        card.style.opacity = '0';
+                        card.style.transform = 'translateY(10px)';
+                        setTimeout(() => card.style.display = 'none', 300);
+                    }
+                }
+            });
+        });
+    });
+
+    // Interactive cards
+    objectiveCards.forEach(card => {
+        card.addEventListener('click', function() {
+            this.classList.toggle('active');
+        });
+        card.setAttribute('tabindex', '0');
+        card.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                this.click();
+            }
+        });
+    });
+
+    // Animate counter
+    function animateCounter(element, target, duration) {
+        let start = 0;
+        const increment = target / (duration / 16);
+        const timer = setInterval(() => {
+            start += increment;
+            if (start >= target) {
+                element.textContent = target;
+                clearInterval(timer);
+            } else {
+                element.textContent = Math.floor(start);
+            }
+        }, 16);
+    }
+
+    setTimeout(() => {
+        const counterElement = document.getElementById('total-objectives');
+        animateCounter(counterElement, 21, 1000);
+    }, 1500);
+});
+</script>
+
+</body>
+</html>
