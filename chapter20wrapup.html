@@ -1,0 +1,1572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chapter 20 Wrap-Up — Assisting in Neurology & Mental Health</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-error: #e17055;
+            --color-warning: #fdcb6e;
+            --color-info: #0984e3;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
+            --color-dark: #0c0a18;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+            --shadow-card: 0 12px 30px rgba(15, 23, 42, 0.1);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        @keyframes checkmarkPop {
+            0% { transform: scale(0); opacity: 0; }
+            70% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            padding: 24px;
+            background: radial-gradient(circle at top left, #ffffff 0, #f3edff 40%, var(--color-bg) 100%);
+            color: var(--color-text);
+            -webkit-text-size-adjust: 100%;
+            animation: fadeIn 0.8s ease;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 12px; }
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1200px;
+            min-width: 320px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            gap: 32px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @media (max-width: 1024px) {
+            .page {
+                max-width: 900px;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .page {
+                grid-template-columns: 1fr;
+                padding: 22px;
+                gap: 24px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 0; }
+            .page {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 18px 14px 22px;
+                gap: 22px;
+            }
+        }
+
+        img, .page, .column, .card, .side-card, .completion-card {
+            max-width: 100%;
+        }
+
+        .column {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* Header / Branding */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            width: 100%;
+            animation: fadeInUp 0.6s ease;
+            grid-column: 1 / -1;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+        }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--color-success);
+            flex-shrink: 0;
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+        }
+
+        @media (max-width: 480px) {
+            .brand-row { flex-direction: column; align-items: flex-start; }
+            .badge-mode { margin-top: 6px; }
+        }
+
+        h1 {
+            font-size: clamp(1.9rem, 3vw, 2.3rem);
+            line-height: 1.05;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.7s ease 0.1s both;
+            grid-column: 1 / -1;
+        }
+
+        .subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 100%;
+            margin-bottom: 18px;
+            animation: fadeInUp 0.7s ease 0.2s both;
+            grid-column: 1 / -1;
+        }
+
+        .subtitle strong {
+            color: var(--color-primary);
+        }
+
+        /* Progress Tracker */
+        .progress-tracker {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin: 20px 0;
+            padding: 10px;
+            background: rgba(175, 75, 239, 0.05);
+            border-radius: var(--radius-lg);
+            grid-column: 1 / -1;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+            max-width: 200px;
+        }
+
+        .step-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(175, 75, 239, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--color-primary);
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.active .step-circle {
+            background: var(--color-primary);
+            color: white;
+            box-shadow: 0 8px 20px rgba(175, 75, 239, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        .step-label {
+            font-size: 0.85rem;
+            color: var(--color-muted);
+            text-align: center;
+            line-height: 1.3;
+        }
+
+        .progress-step.active .step-label {
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        /* Sections */
+        .section-label {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-primary);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--color-text);
+            line-height: 1.3;
+        }
+
+        .card {
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(15, 23, 42, 0.06);
+            padding: 18px 20px 20px;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, rgba(175, 75, 239, 0.04), rgba(255, 255, 255, 0.98));
+            animation: fadeInUp 0.6s ease;
+            width: 100%;
+        }
+
+        .card p {
+            font-size: 0.92rem;
+            line-height: 1.6;
+            color: var(--color-text);
+            margin-bottom: 12px;
+        }
+
+        .small {
+            font-size: 0.82rem;
+            color: var(--color-muted);
+            line-height: 1.5;
+        }
+
+        /* Quiz Styles */
+        .quiz-item {
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 1px dashed rgba(148, 163, 184, 0.7);
+        }
+
+        .quiz-question {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .quiz-options {
+            list-style: none;
+            padding-left: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            font-size: 0.9rem;
+        }
+
+        .quiz-options li {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            padding: 10px;
+            border-radius: var(--radius-sm);
+            transition: background-color 0.2s;
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+
+        .quiz-options li:hover {
+            background-color: rgba(175, 75, 239, 0.05);
+            border-color: rgba(175, 75, 239, 0.1);
+        }
+
+        .quiz-options input {
+            margin-top: 3px;
+            cursor: pointer;
+        }
+
+        .quiz-feedback {
+            font-size: 0.85rem;
+            margin-top: 8px;
+            min-height: 1.1em;
+            padding: 10px;
+            border-radius: var(--radius-sm);
+            display: none;
+            line-height: 1.4;
+        }
+
+        .quiz-feedback.correct {
+            color: var(--color-success);
+            background-color: rgba(0, 184, 148, 0.1);
+            border: 1px solid rgba(0, 184, 148, 0.2);
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .quiz-feedback.incorrect {
+            color: var(--color-error);
+            background-color: rgba(225, 112, 85, 0.1);
+            border: 1px solid rgba(225, 112, 85, 0.2);
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .btn {
+            border-radius: 999px;
+            border: none;
+            padding: 12px 24px;
+            margin-top: 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            cursor: pointer;
+            background: linear-gradient(135deg, var(--color-primary), #7c3aed);
+            color: #ffffff;
+            box-shadow: 0 10px 25px rgba(88, 28, 135, 0.35);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: inline-block;
+            min-width: 140px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(88, 28, 135, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 5px 12px rgba(88, 28, 135, 0.4);
+        }
+
+        /* Nervous System Matching */
+        .system-match-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .system-item {
+            padding: 14px 16px;
+            border-radius: var(--radius-md);
+            background: linear-gradient(135deg, var(--color-primary), #9d4edd);
+            border: 2px solid var(--color-primary-soft);
+            cursor: move;
+            user-select: none;
+            transition: all 0.3s ease;
+            color: white;
+            box-shadow: 0 6px 20px rgba(175, 75, 239, 0.25);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 80px;
+            text-align: center;
+        }
+
+        .system-item:hover {
+            transform: translateY(-3px);
+            border-color: white;
+            box-shadow: 0 12px 30px rgba(175, 75, 239, 0.35);
+            background: linear-gradient(135deg, #c95eff, var(--color-primary));
+        }
+
+        .system-item strong {
+            color: white;
+            display: block;
+            margin-bottom: 6px;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .system-item small {
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 0.85rem;
+            line-height: 1.4;
+            display: block;
+            opacity: 0.9;
+        }
+
+        /* Different purple shades for each system */
+        .system-item[data-type="cns"] {
+            background: linear-gradient(135deg, #af4bef, #8a2be2);
+            border-color: #d492ff;
+        }
+        
+        .system-item[data-type="pns"] {
+            background: linear-gradient(135deg, #9d4edd, #7b2cbf);
+            border-color: #c084fc;
+        }
+        
+        .system-item[data-type="autonomic"] {
+            background: linear-gradient(135deg, #8a3dc7, #6a1b9a);
+            border-color: #a855f7;
+        }
+        
+        .system-item[data-type="somatic"] {
+            background: linear-gradient(135deg, #7a2fb2, #5a189a);
+            border-color: #9333ea;
+        }
+
+        /* Match Zones */
+        .match-zone-container {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .match-zone-header {
+            color: var(--color-text);
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 12px;
+            text-align: center;
+            background: rgba(175, 75, 239, 0.08);
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            border: 1px solid rgba(175, 75, 239, 0.2);
+        }
+
+        .system-match-zone {
+            min-height: 90px;
+            border: 2px solid rgba(175, 75, 239, 0.3);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        .system-match-zone strong {
+            color: var(--color-text);
+            font-size: 0.95rem;
+            line-height: 1.4;
+            margin-bottom: 4px;
+            display: block;
+            font-weight: 700;
+        }
+
+        .system-match-zone .definition {
+            color: var(--color-muted);
+            font-size: 0.85rem;
+            line-height: 1.5;
+            opacity: 0.9;
+        }
+
+        .system-match-zone.correct {
+            border-color: var(--color-success);
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 0 0 2px rgba(0, 184, 148, 0.4), 0 4px 12px rgba(0, 184, 148, 0.2);
+        }
+
+        .system-match-zone.incorrect {
+            border-color: var(--color-error);
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 0 0 2px rgba(225, 112, 85, 0.4), 0 4px 12px rgba(225, 112, 85, 0.2);
+        }
+
+        .correct-match {
+            color: var(--color-success);
+            font-weight: 600;
+            margin-top: 8px;
+            display: none;
+            font-size: 0.9rem;
+            padding: 6px 12px;
+            background: rgba(0, 184, 148, 0.1);
+            border-radius: var(--radius-sm);
+            align-self: flex-start;
+            border: 1px solid rgba(0, 184, 148, 0.3);
+        }
+
+        .correct-match.show {
+            display: inline-block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* Disorder Comparison Grid */
+        .disorder-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .disorder-card {
+            background: linear-gradient(135deg, rgba(175, 75, 239, 0.08), rgba(255, 255, 255, 0.98));
+            border: 2px solid var(--color-primary-soft);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .disorder-card h4 {
+            color: var(--color-primary);
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        .disorder-card p {
+            font-size: 0.85rem;
+            color: var(--color-text);
+            line-height: 1.5;
+            margin-bottom: 8px;
+        }
+
+        .disorder-symptoms {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+            font-style: italic;
+            padding-top: 8px;
+            border-top: 1px dashed rgba(175, 75, 239, 0.3);
+        }
+
+        /* Diagnostic Procedures */
+        .procedure-list {
+            list-style: none;
+            margin: 15px 0;
+            padding: 0;
+        }
+
+        .procedure-list li {
+            padding: 10px 12px;
+            margin-bottom: 8px;
+            background: rgba(175, 75, 239, 0.05);
+            border-radius: var(--radius-sm);
+            border-left: 4px solid var(--color-primary);
+            font-size: 0.9rem;
+        }
+
+        .procedure-list li strong {
+            color: var(--color-primary);
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        /* Vocabulary Flashcards */
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        @media (max-width: 900px) {
+            .vocab-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .vocab-card {
+            border-radius: var(--radius-md);
+            padding: 14px 16px;
+            background: linear-gradient(135deg, rgba(12, 10, 24, 0.95), rgba(30, 25, 60, 0.98));
+            color: #f0f0f0;
+            font-size: 0.9rem;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .vocab-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .vocab-term {
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: #fef9c3;
+            font-size: 0.95rem;
+            line-height: 1.3;
+        }
+
+        .vocab-definition {
+            font-size: 0.86rem;
+            line-height: 1.5;
+            display: none;
+            color: #e5e7eb;
+        }
+
+        .vocab-card.active .vocab-definition {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .vocab-card::after {
+            content: "Tap to flip";
+            position: absolute;
+            right: 10px;
+            bottom: 8px;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #c4b5fd;
+            background: rgba(12, 10, 24, 0.8);
+            padding: 4px 8px;
+            border-radius: 4px;
+            border: 1px solid rgba(196, 181, 253, 0.3);
+        }
+
+        .vocab-card.active::after {
+            content: "Hide";
+            color: #a5b4fc;
+        }
+
+        /* Reflection */
+        textarea {
+            width: 100%;
+            min-height: 100px;
+            border-radius: var(--radius-sm);
+            border: 1px solid rgba(148, 163, 184, 0.7);
+            padding: 12px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            resize: vertical;
+            margin-top: 8px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            background: rgba(255, 255, 255, 0.05);
+            color: #f0f0f0;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(175, 75, 239, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        textarea::placeholder {
+            color: rgba(200, 200, 220, 0.6);
+        }
+
+        .checklist {
+            list-style: none;
+            margin-top: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        .checklist li {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 10px;
+            border-radius: var(--radius-sm);
+            transition: background-color 0.2s;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .checklist li:hover {
+            background-color: rgba(175, 75, 239, 0.1);
+        }
+
+        .checklist input {
+            margin-top: 3px;
+            cursor: pointer;
+            transform: scale(1.2);
+        }
+
+        .checklist label {
+            color: #e5e7eb;
+            line-height: 1.5;
+            flex: 1;
+        }
+
+        /* Right Column Cards */
+        .side-card {
+            background: linear-gradient(135deg, rgba(12, 10, 24, 0.95), rgba(30, 25, 60, 0.98));
+            color: #f0f0f0;
+            border-radius: var(--radius-md);
+            padding: 20px 22px 22px;
+            font-size: 0.92rem;
+            line-height: 1.6;
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.6);
+            margin-bottom: 20px;
+            animation: fadeInUp 0.6s ease;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            width: 100%;
+        }
+
+        .side-card p {
+            color: #e5e7eb;
+            margin-bottom: 14px;
+            line-height: 1.6;
+        }
+
+        .side-card strong {
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+        .side-subtitle {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #c4b5fd;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .side-list {
+            list-style: none;
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-size: 0.9rem;
+        }
+
+        .side-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            color: #e5e7eb;
+            line-height: 1.5;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            margin-top: 8px;
+            border-radius: 999px;
+            background: #a5b4fc;
+            flex-shrink: 0;
+        }
+
+        .completion-card {
+            border-radius: var(--radius-md);
+            border: 1px dashed rgba(148, 163, 184, 0.7);
+            padding: 18px 20px;
+            font-size: 0.88rem;
+            color: var(--color-text);
+            background: rgba(248, 250, 252, 0.95);
+            animation: fadeInUp 0.6s ease;
+            width: 100%;
+        }
+
+        .completion-card p {
+            color: var(--color-text);
+            margin-bottom: 12px;
+        }
+
+        .completion-card .side-list li {
+            color: var(--color-text);
+        }
+
+        /* Label improvements */
+        label.small {
+            color: #d1d5db;
+            display: block;
+            margin-top: 15px;
+            font-size: 0.88rem;
+            line-height: 1.5;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .system-match-container,
+            .disorder-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .system-match-zone {
+                min-height: 80px;
+                padding: 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .progress-tracker {
+                gap: 20px;
+            }
+            
+            .step-label {
+                font-size: 0.8rem;
+            }
+            
+            .btn {
+                padding: 10px 20px;
+                font-size: 0.85rem;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <!-- Progress Tracker -->
+        <div class="progress-tracker">
+            <div class="progress-step active" data-step="1">
+                <div class="step-circle">1</div>
+                <div class="step-label">Neurology Basics</div>
+            </div>
+            <div class="progress-step" data-step="2">
+                <div class="step-circle">2</div>
+                <div class="step-label">Diagnostics & Mental Health</div>
+            </div>
+        </div>
+
+        <!-- Header -->
+        <header class="brand-row">
+            <div class="brand">
+                <img
+                    src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                    alt="AlliedRx logo"
+                    class="brand-logo"
+                />
+                <div class="course-meta">
+                    <span class="course-name">Clinical Medical Assistant • Week 20</span>
+                    <div class="week-label">
+                        <span class="week-label-dot"></span>
+                        <span>Chapter 20: Neurology & Mental Health</span>
+                    </div>
+                </div>
+            </div>
+            <span class="badge-mode">Campus & Online</span>
+        </header>
+
+        <h1 id="wrapup-heading">Neurology & Mental Health Wrap-Up</h1>
+        <p class="subtitle">
+            Review key concepts from <strong>Chapter 20 — Assisting in Neurology and Mental Health</strong>. 
+            Master nervous system anatomy, common disorders, diagnostic procedures, and mental health considerations.
+        </p>
+
+        <!-- LEFT COLUMN -->
+        <section class="column">
+            <!-- ACTIVITY 1: Nervous System Matching -->
+            <section aria-label="Activity 1: Nervous System Matching">
+                <p class="section-label">Activity 1</p>
+                <h2 class="section-title">Nervous System Structures</h2>
+                <div class="card">
+                    <p class="small">
+                        Match each nervous system component to its correct description. Understanding these distinctions is essential for neurology practice.
+                    </p>
+
+                    <div class="system-match-container">
+                        <div class="system-item" draggable="true" data-type="cns" id="system1">
+                            <strong>Central Nervous System (CNS)</strong>
+                            <small>Brain and spinal cord</small>
+                        </div>
+                        <div class="system-item" draggable="true" data-type="pns" id="system2">
+                            <strong>Peripheral Nervous System (PNS)</strong>
+                            <small>Nerves outside CNS</small>
+                        </div>
+                        <div class="system-item" draggable="true" data-type="autonomic" id="system3">
+                            <strong>Autonomic Nervous System</strong>
+                            <small>Involuntary functions</small>
+                        </div>
+                        <div class="system-item" draggable="true" data-type="somatic" id="system4">
+                            <strong>Somatic Nervous System</strong>
+                            <small>Voluntary muscle control</small>
+                        </div>
+                    </div>
+
+                    <div class="match-zone-container">
+                        <p class="match-zone-header">Drag systems to match descriptions:</p>
+                        
+                        <div class="system-match-zone" id="zone-cns" data-correct="cns">
+                            <strong>Coordinates body activities, processes sensory information</strong>
+                            <div class="definition">Includes brain and spinal cord; processes and integrates information</div>
+                            <div class="correct-match" id="match1">✓ Correct: Central Nervous System</div>
+                        </div>
+                        
+                        <div class="system-match-zone" id="zone-pns" data-correct="pns">
+                            <strong>Connects CNS to limbs and organs</strong>
+                            <div class="definition">Includes cranial and spinal nerves; transmits signals to/from CNS</div>
+                            <div class="correct-match" id="match2">✓ Correct: Peripheral Nervous System</div>
+                        </div>
+                        
+                        <div class="system-match-zone" id="zone-autonomic" data-correct="autonomic">
+                            <strong>Controls involuntary body functions</strong>
+                            <div class="definition">Regulates heart rate, digestion, respiration (sympathetic & parasympathetic)</div>
+                            <div class="correct-match" id="match3">✓ Correct: Autonomic Nervous System</div>
+                        </div>
+                        
+                        <div class="system-match-zone" id="zone-somatic" data-correct="somatic">
+                            <strong>Controls voluntary muscle movements</strong>
+                            <div class="definition">Innervates skeletal muscles for conscious movement and reflexes</div>
+                            <div class="correct-match" id="match4">✓ Correct: Somatic Nervous System</div>
+                        </div>
+                    </div>
+
+                    <button class="btn" type="button" onclick="checkSystemMatches()" style="margin-top: 20px;" aria-label="Check system matching">Check Matches</button>
+                </div>
+            </section>
+
+            <!-- Common Neurological Disorders -->
+            <section aria-label="Neurological Disorders">
+                <p class="section-label">Clinical Knowledge</p>
+                <h2 class="section-title">Common Neurological Disorders</h2>
+                <div class="card">
+                    <p class="small">
+                        Review these common neurological conditions and their key characteristics:
+                    </p>
+
+                    <div class="disorder-grid">
+                        <div class="disorder-card">
+                            <h4>Cerebrovascular Accident (CVA/Stroke)</h4>
+                            <p>Interruption of blood flow to brain causing neurological deficits. Types: ischemic (87%) and hemorrhagic (13%).</p>
+                            <div class="disorder-symptoms">FAST: Facial droop, Arm weakness, Speech difficulty, Time to call 911</div>
+                        </div>
+                        <div class="disorder-card">
+                            <h4>Epilepsy</h4>
+                            <p>Chronic disorder characterized by recurrent seizures. Classified by seizure type: partial or generalized.</p>
+                            <div class="disorder-symptoms">Seizures, aura, postictal confusion, automatisms</div>
+                        </div>
+                        <div class="disorder-card">
+                            <h4>Multiple Sclerosis (MS)</h4>
+                            <p>Autoimmune disorder where immune system attacks myelin sheath of CNS nerves.</p>
+                            <div class="disorder-symptoms">Fatigue, numbness, vision problems, muscle weakness, coordination issues</div>
+                        </div>
+                        <div class="disorder-card">
+                            <h4>Parkinson's Disease</h4>
+                            <p>Progressive neurodegenerative disorder affecting movement control.</p>
+                            <div class="disorder-symptoms">Tremor, rigidity, bradykinesia, postural instability</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Neurology Quiz -->
+            <section aria-label="Neurology Quiz">
+                <p class="section-label">Knowledge Check</p>
+                <h2 class="section-title">Neurology Procedures Quiz</h2>
+                <div class="card" id="quiz-card">
+                    <p class="small">
+                        Test your understanding of neurological examination and diagnostic procedures.
+                    </p>
+
+                    <div class="quiz-item" data-answer="c">
+                        <p class="quiz-question">
+                            1. What diagnostic procedure records electrical activity of the brain?
+                        </p>
+                        <ul class="quiz-options">
+                            <li>
+                                <input type="radio" name="q1" value="a" id="q1a" />
+                                <label for="q1a">Electrocardiogram (ECG)</label>
+                            </li>
+                            <li>
+                                <input type="radio" name="q1" value="b" id="q1b" />
+                                <label for="q1b">Electromyogram (EMG)</label>
+                            </li>
+                            <li>
+                                <input type="radio" name="q1" value="c" id="q1c" />
+                                <label for="q1c">Electroencephalogram (EEG)</label>
+                            </li>
+                        </ul>
+                        <div class="quiz-feedback" id="q1-feedback"></div>
+                    </div>
+
+                    <div class="quiz-item" data-answer="a">
+                        <p class="quiz-question">
+                            2. Which is the key difference between encephalitis and meningitis?
+                        </p>
+                        <ul class="quiz-options">
+                            <li>
+                                <input type="radio" name="q2" value="a" id="q2a" />
+                                <label for="q2a">Encephalitis affects brain tissue; meningitis affects meninges</label>
+                            </li>
+                            <li>
+                                <input type="radio" name="q2" value="b" id="q2b" />
+                                <label for="q2b">Both conditions only affect the spinal cord</label>
+                            </li>
+                            <li>
+                                <input type="radio" name="q2" value="c" id="q2c" />
+                                <label for="q2c">Meningitis is always viral; encephalitis is always bacterial</label>
+                            </li>
+                        </ul>
+                        <div class="quiz-feedback" id="q2-feedback"></div>
+                    </div>
+
+                    <div class="quiz-item" data-answer="b">
+                        <p class="quiz-question">
+                            3. What is the primary purpose of a lumbar puncture (spinal tap)?
+                        </p>
+                        <ul class="quiz-options">
+                            <li>
+                                <input type="radio" name="q3" value="a" id="q3a" />
+                                <label for="q3a">To inject medication directly into spinal cord</label>
+                            </li>
+                            <li>
+                                <input type="radio" name="q3" value="b" id="q3b" />
+                                <label for="q3b">To collect cerebrospinal fluid for diagnostic testing</label>
+                            </li>
+                            <li>
+                                <input type="radio" name="q3" value="c" id="q3c" />
+                                <label for="q3c">To measure intracranial pressure only</label>
+                            </li>
+                        </ul>
+                        <div class="quiz-feedback" id="q3-feedback"></div>
+                    </div>
+
+                    <button class="btn" type="button" onclick="checkQuiz()" aria-label="Check quiz answers">Check Answers</button>
+                </div>
+            </section>
+        </section>
+
+        <!-- RIGHT COLUMN -->
+        <section class="column" aria-label="Activity 2: Diagnostics & Mental Health">
+            <!-- ACTIVITY 2: Mai's Scenario -->
+            <section>
+                <p class="section-label">Activity 2</p>
+                <h2 class="section-title">Mai's Neurology Practice Challenge</h2>
+                <div class="side-card">
+                    <p class="side-subtitle">Mai's Scenario</p>
+                    <p>
+                        Mai Lee works in Dr. Song's neurology practice and is training new staff while taking on more patient education responsibilities. 
+                        She must prepare patients for various neurological diagnostic procedures.
+                    </p>
+                    
+                    <!-- Diagnostic Procedures -->
+                    <div class="match-zone-container">
+                        <p class="match-zone-header" style="background: rgba(255, 255, 255, 0.1); color: white; border-color: rgba(255, 255, 255, 0.2);">
+                            Common Neurological Diagnostic Procedures:
+                        </p>
+                        
+                        <ul class="procedure-list">
+                            <li>
+                                <strong>Electroencephalogram (EEG)</strong>
+                                <div>Records brain's electrical activity. Preparation: Clean hair, avoid caffeine, may need sleep deprivation.</div>
+                            </li>
+                            <li>
+                                <strong>Lumbar Puncture (Spinal Tap)</strong>
+                                <div>Collects cerebrospinal fluid. Position: Lateral recumbent or sitting. Monitor for post-procedure headache.</div>
+                            </li>
+                            <li>
+                                <strong>CT Scan (Computed Tomography)</strong>
+                                <div>Cross-sectional brain imaging. May require contrast dye. Check for iodine allergies.</div>
+                            </li>
+                            <li>
+                                <strong>MRI (Magnetic Resonance Imaging)</strong>
+                                <div>Detailed brain imaging using magnets. Screen for metal implants. Claustrophobia considerations.</div>
+                            </li>
+                            <li>
+                                <strong>EMG/NCS (Electromyogram/Nerve Conduction)</strong>
+                                <div>Assesses muscle and nerve function. Minor discomfort from electrical stimulation.</div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <label class="small" for="scenario-notes" style="display:block;margin-top:18px;">
+                        A patient presents with new-onset seizure activity. What diagnostic procedures might Dr. Song order, and how would you prepare the patient?
+                    </label>
+                    <textarea 
+                        id="scenario-notes" 
+                        placeholder="Document your response including diagnostic tests, patient preparation, and education..."
+                        aria-label="Neurology scenario response"
+                        oninput="updateActivity2Progress()"
+                    ></textarea>
+                </div>
+            </section>
+
+            <!-- Mental Health Disorders -->
+            <section>
+                <p class="section-label">Mental Health Focus</p>
+                <h2 class="section-title">Common Mental Health Disorders</h2>
+                <div class="side-card">
+                    <p>
+                        Medical assistants in neurology often encounter patients with co-occurring mental health conditions:
+                    </p>
+                    
+                    <div class="disorder-grid" style="margin-top: 15px;">
+                        <div class="disorder-card" style="background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.2);">
+                            <h4 style="color: #c4b5fd;">Major Depressive Disorder</h4>
+                            <p style="color: #e5e7eb;">Persistent sadness, loss of interest, changes in sleep/appetite. Suicide risk assessment crucial.</p>
+                        </div>
+                        <div class="disorder-card" style="background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.2);">
+                            <h4 style="color: #c4b5fd;">Generalized Anxiety Disorder</h4>
+                            <p style="color: #e5e7eb;">Excessive worry, restlessness, muscle tension, sleep disturbance affecting daily functioning.</p>
+                        </div>
+                        <div class="disorder-card" style="background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.2);">
+                            <h4 style="color: #c4b5fd;">Bipolar Disorder</h4>
+                            <p style="color: #e5e7eb;">Cycling between depressive episodes and manic/hypomanic episodes with elevated mood/energy.</p>
+                        </div>
+                        <div class="disorder-card" style="background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.2);">
+                            <h4 style="color: #c4b5fd;">Post-Traumatic Stress Disorder</h4>
+                            <p style="color: #e5e7eb;">Following trauma: flashbacks, avoidance, hyperarousal, negative mood/cognition changes.</p>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 15px; padding: 12px; background: rgba(255, 255, 255, 0.05); border-radius: var(--radius-sm); border-left: 4px solid #c4b5fd;">
+                        <p style="color: #e5e7eb; margin-bottom: 0; font-size: 0.85rem;">
+                            <strong style="color: #ffffff;">Therapeutic Communication:</strong> Active listening, empathy, non-judgmental attitude, clear explanations, and maintaining appropriate boundaries are essential when working with mental health patients.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Neurology Vocabulary -->
+            <section>
+                <p class="section-label">Key Terminology</p>
+                <h2 class="section-title">Neurology Vocabulary</h2>
+                <div class="side-card">
+                    <p>
+                        Master these essential neurological terms for effective communication and documentation:
+                    </p>
+                    <div class="vocab-grid">
+                        <div class="vocab-card" onclick="toggleVocab(this)" tabindex="0" role="button" aria-label="Flip card to see definition of Ataxia">
+                            <div class="vocab-term">Ataxia</div>
+                            <div class="vocab-definition">
+                                Failure or irregularity of muscle actions and coordination; often seen in cerebellar disorders, MS, or stroke.
+                            </div>
+                        </div>
+                        <div class="vocab-card" onclick="toggleVocab(this)" tabindex="0" role="button" aria-label="Flip card to see definition of Aura">
+                            <div class="vocab-term">Aura</div>
+                            <div class="vocab-definition">
+                                Peculiar sensation preceding a more definite disturbance; commonly experienced before migraines or seizures.
+                            </div>
+                        </div>
+                        <div class="vocab-card" onclick="toggleVocab(this)" tabindex="0" role="button" aria-label="Flip card to see definition of Diplopia">
+                            <div class="vocab-term">Diplopia</div>
+                            <div class="vocab-definition">
+                                Double vision; can be monocular or binocular, often indicating cranial nerve pathology or muscle imbalance.
+                            </div>
+                        </div>
+                        <div class="vocab-card" onclick="toggleVocab(this)" tabindex="0" role="button" aria-label="Flip card to see definition of Blood-Brain Barrier">
+                            <div class="vocab-term">Blood-Brain Barrier</div>
+                            <div class="vocab-definition">
+                                Structure made of astrocyte glial cells that prevents/slows transfer of chemicals into CNS neurons; affects drug penetration.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Neurology Competency Checklist -->
+            <section>
+                <p class="section-label">Self-Assessment</p>
+                <h2 class="section-title">Neurology Competency Checklist</h2>
+                <div class="side-card">
+                    <p>
+                        Mark each item when you feel confident in these neurology and mental health skills:
+                    </p>
+                    <ul class="checklist" style="margin-top:12px;">
+                        <li>
+                            <input type="checkbox" id="check-anatomy" onclick="updateActivity2Progress()" />
+                            <label for="check-anatomy">I can differentiate between CNS, PNS, autonomic, and somatic nervous systems.</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="check-disorders" onclick="updateActivity2Progress()" />
+                            <label for="check-disorders">I can identify common neurological disorders and their symptoms.</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="check-procedures" onclick="updateActivity2Progress()" />
+                            <label for="check-procedures">I understand preparation for EEG, lumbar puncture, and other neuro diagnostics.</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="check-mentalhealth" onclick="updateActivity2Progress()" />
+                            <label for="check-mentalhealth">I recognize common mental health disorders and therapeutic communication techniques.</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="check-education" onclick="updateActivity2Progress()" />
+                            <label for="check-education">I can provide appropriate patient education for neurological conditions.</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="check-hipaa" onclick="updateActivity2Progress()" />
+                            <label for="check-hipaa">I understand HIPAA implications for neurology/mental health practice.</label>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Completion Reminder -->
+            <section>
+                <p class="section-label">Ready to Move Forward?</p>
+                <h2 class="section-title">Chapter 20 Completion</h2>
+                <div class="completion-card">
+                    <p>
+                        Before continuing, ensure you have:
+                    </p>
+                    <ul class="side-list" style="margin-top:10px;">
+                        <li>
+                            <span class="dot"></span>
+                            <span>Completed the <strong>Nervous System Matching</strong> activity</span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span>Reviewed all <strong>Neurological Disorders</strong> and their characteristics</span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span>Answered all <strong>Neurology Quiz</strong> questions correctly</span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span>Documented your response to <strong>Mai's Scenario</strong></span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span>Reviewed <strong>Mental Health Disorders</strong> and communication techniques</span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span>Mastered key <strong>Neurology Vocabulary</strong> terms</span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span>Completed your <strong>competency checklist</strong></span>
+                        </li>
+                    </ul>
+                    <p style="margin-top:10px;">
+                        When confident with neurology and mental health principles, mark this chapter complete and proceed.
+                    </p>
+                    <p class="small" style="margin-top:8px; color: var(--color-primary);">
+                        <strong>Remember:</strong> Therapeutic communication and empathy are crucial when working with neurological and mental health patients.
+                    </p>
+                </div>
+            </section>
+        </section>
+    </div>
+
+    <script>
+        // State management for 2 activities
+        const moduleState = {
+            activities: {
+                1: { completed: false, correct: 0, total: 4, score: 0 },
+                2: { completed: false }
+            },
+            startedAt: new Date(),
+            timeSpent: 0
+        };
+
+        // System matching for Activity 1
+        let draggedSystem = null;
+        
+        document.querySelectorAll('.system-item').forEach(item => {
+            item.addEventListener('dragstart', function(e) {
+                draggedSystem = this;
+                this.style.opacity = '0.5';
+                e.dataTransfer.setData('text/plain', this.id);
+            });
+            
+            item.addEventListener('dragend', function() {
+                this.style.opacity = '1';
+                draggedSystem = null;
+            });
+        });
+        
+        document.querySelectorAll('.system-match-zone').forEach(zone => {
+            zone.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                this.style.borderColor = 'var(--color-primary)';
+                this.style.boxShadow = '0 0 0 2px rgba(175, 75, 239, 0.2)';
+            });
+            
+            zone.addEventListener('dragleave', function() {
+                this.style.borderColor = '';
+                this.style.boxShadow = '';
+            });
+            
+            zone.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.style.borderColor = '';
+                this.style.boxShadow = '';
+                
+                if (draggedSystem) {
+                    const systemType = draggedSystem.getAttribute('data-type');
+                    const zoneId = this.id;
+                    
+                    // Remove any existing matches
+                    const existingMatch = this.querySelector('.system-item');
+                    if (existingMatch) {
+                        existingMatch.remove();
+                    }
+                    
+                    // Add the dragged item
+                    const clone = draggedSystem.cloneNode(true);
+                    clone.style.opacity = '1';
+                    clone.style.marginTop = '10px';
+                    clone.style.marginBottom = '10px';
+                    clone.draggable = false;
+                    this.appendChild(clone);
+                }
+            });
+        });
+        
+        function checkSystemMatches() {
+            const correctMatches = {
+                'zone-cns': 'cns',
+                'zone-pns': 'pns',
+                'zone-autonomic': 'autonomic',
+                'zone-somatic': 'somatic'
+            };
+            
+            let allCorrect = true;
+            let correctCount = 0;
+            
+            Object.keys(correctMatches).forEach(zoneId => {
+                const zone = document.getElementById(zoneId);
+                const item = zone.querySelector('.system-item');
+                const matchDiv = zone.querySelector('.correct-match');
+                
+                if (item && item.getAttribute('data-type') === correctMatches[zoneId]) {
+                    zone.classList.remove('incorrect');
+                    zone.classList.add('correct');
+                    matchDiv.classList.add('show');
+                    correctCount++;
+                    allCorrect = true;
+                } else {
+                    zone.classList.remove('correct');
+                    zone.classList.add('incorrect');
+                    if (matchDiv) matchDiv.classList.remove('show');
+                    allCorrect = false;
+                }
+            });
+            
+            // Update activity state
+            moduleState.activities[1].completed = true;
+            moduleState.activities[1].correct = correctCount;
+            moduleState.activities[1].score = Math.round((correctCount / 4) * 100);
+            
+            // Update progress tracker
+            updateProgressTracker();
+        }
+
+        // Quiz logic for Activity 1
+        function checkQuiz() {
+            const items = document.querySelectorAll('.quiz-item');
+            let correctCount = 0;
+            
+            items.forEach((item, index) => {
+                const correctAnswer = item.getAttribute('data-answer');
+                const name = `q${index + 1}`;
+                const selected = document.querySelector(`input[name="${name}"]:checked`);
+                const feedback = document.getElementById(`${name}-feedback`);
+                
+                if (!selected) {
+                    feedback.textContent = 'Please select an answer.';
+                    feedback.className = 'quiz-feedback incorrect';
+                    feedback.style.display = 'block';
+                    return;
+                }
+                
+                if (selected.value === correctAnswer) {
+                    feedback.textContent = getQuizFeedback(index, true);
+                    feedback.className = 'quiz-feedback correct';
+                    feedback.style.display = 'block';
+                    correctCount++;
+                    
+                    const selectedLabel = selected.closest('li');
+                    selectedLabel.style.backgroundColor = 'rgba(0, 184, 148, 0.1)';
+                } else {
+                    feedback.textContent = getQuizFeedback(index, false);
+                    feedback.className = 'quiz-feedback incorrect';
+                    feedback.style.display = 'block';
+                    
+                    const selectedLabel = selected.closest('li');
+                    selectedLabel.style.animation = 'shake 0.5s ease';
+                    selectedLabel.style.backgroundColor = 'rgba(225, 112, 85, 0.1)';
+                    
+                    // Highlight correct answer
+                    const correctInput = document.querySelector(`input[name="${name}"][value="${correctAnswer}"]`);
+                    if (correctInput) {
+                        const correctLabel = correctInput.closest('li');
+                        correctLabel.style.backgroundColor = 'rgba(0, 184, 148, 0.1)';
+                        correctLabel.style.border = '1px solid rgba(0, 184, 148, 0.3)';
+                    }
+                }
+            });
+            
+            // Update activity state
+            if (!moduleState.activities[1].completed) {
+                moduleState.activities[1].completed = true;
+                moduleState.activities[1].correct += correctCount;
+                moduleState.activities[1].score = Math.round((moduleState.activities[1].correct / 7) * 100);
+            }
+            
+            updateProgressTracker();
+            
+            // Show summary
+            if (correctCount === 3) {
+                showQuizCompletionMessage('Excellent! You understand key neurology concepts and diagnostic procedures.');
+            }
+        }
+        
+        function getQuizFeedback(questionIndex, isCorrect) {
+            const correctFeedbacks = [
+                '✓ Correct! EEG records brain electrical activity for seizure diagnosis.',
+                '✓ Correct! Encephalitis affects brain tissue; meningitis affects the meninges.',
+                '✓ Correct! Lumbar puncture collects CSF for infection, inflammation, or bleeding analysis.'
+            ];
+            
+            const incorrectFeedbacks = [
+                '✗ EEG records brain electrical activity; ECG records heart, EMG records muscles.',
+                '✗ Encephalitis = brain inflammation; Meningitis = meninges inflammation.',
+                '✗ Lumbar puncture primarily collects CSF for diagnostic testing of CNS conditions.'
+            ];
+            
+            return isCorrect ? correctFeedbacks[questionIndex] : incorrectFeedbacks[questionIndex];
+        }
+        
+        function showQuizCompletionMessage(message) {
+            const quizCard = document.getElementById('quiz-card');
+            const existingMessage = quizCard.querySelector('.completion-message');
+            
+            if (existingMessage) {
+                existingMessage.remove();
+            }
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'quiz-feedback correct';
+            messageDiv.style.marginTop = '15px';
+            messageDiv.style.padding = '12px';
+            messageDiv.textContent = message;
+            messageDiv.classList.add('completion-message');
+            
+            const button = quizCard.querySelector('.btn');
+            quizCard.insertBefore(messageDiv, button.nextSibling);
+        }
+
+        // Vocabulary flip functionality
+        function toggleVocab(card) {
+            card.classList.toggle('active');
+            
+            if (card.classList.contains('active')) {
+                card.style.transform = 'translateY(-3px)';
+                card.style.boxShadow = 'var(--shadow-hover)';
+            }
+        }
+
+        // Update progress tracker
+        function updateProgressTracker() {
+            const step2 = document.querySelector('[data-step="2"]');
+            
+            if (moduleState.activities[1].completed) {
+                step2.classList.add('active');
+            }
+        }
+
+        // Track Activity 2 progress
+        function updateActivity2Progress() {
+            const textarea = document.getElementById('scenario-notes');
+            const checkboxes = document.querySelectorAll('.side-card input[type="checkbox"]:checked');
+            
+            if (textarea.value.trim().length > 0 && checkboxes.length >= 4) {
+                moduleState.activities[2].completed = true;
+            }
+        }
+
+        // Track time spent
+        setInterval(() => {
+            moduleState.timeSpent++;
+        }, 1000);
+
+        // Initialize checklist interactions
+        document.querySelectorAll('.checklist input').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                if (this.checked) {
+                    const label = this.closest('li');
+                    label.style.textDecoration = 'line-through';
+                    label.style.opacity = '0.7';
+                }
+            });
+        });
+
+        // Keyboard accessibility for vocabulary cards
+        document.querySelectorAll('.vocab-card').forEach(card => {
+            card.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    toggleVocab(this);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
