@@ -1,0 +1,2136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AlliedRx -- Chapter 20: Mental Health - Module 3</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-error: #e17055;
+            --color-warning: #fdcb6e;
+            --color-info: #0984e3;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
+            --color-dark: #0c0a18;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+            --shadow-card: 0 12px 30px rgba(15, 23, 42, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(
+                circle at top left,
+                #ffffff 0,
+                #f1ecff 40%,
+                var(--color-bg) 100%
+            );
+            color: var(--color-text);
+            -webkit-text-size-adjust: 100%;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 12px;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes checkmarkPop {
+            0% { transform: scale(0); opacity: 0; }
+            70% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 5px rgba(175, 75, 239, 0.5); }
+            50% { box-shadow: 0 0 20px rgba(175, 75, 239, 0.8); }
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @media (max-width: 900px) {
+            .page { padding: 22px; }
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 0; }
+            .page {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 18px 14px 22px;
+            }
+        }
+
+        /* Header */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .brand-logo:hover { transform: scale(1.05); }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--color-success);
+            flex-shrink: 0;
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .badge-mode:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+        @media (max-width: 480px) {
+            .brand-row { flex-direction: column; align-items: flex-start; }
+            .badge-mode { margin-top: 6px; }
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 3vw, 2.2rem);
+            line-height: 1.1;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .module-subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 600px;
+            margin-bottom: 24px;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        /* Progress Tracker */
+        .progress-tracker {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            position: relative;
+            padding: 0 20px;
+        }
+
+        .progress-tracker::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 50px;
+            right: 50px;
+            height: 3px;
+            background: rgba(12, 10, 24, 0.08);
+            z-index: 1;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+
+        .step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--color-muted);
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.active .step-circle {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .progress-step.completed .step-circle {
+            background: var(--color-success);
+            border-color: var(--color-success);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.75rem;
+            color: var(--color-muted);
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .progress-step.active .step-label {
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        /* Progress Summary */
+        .progress-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+            animation: fadeInUp 0.6s ease-out 0.5s both;
+        }
+
+        @media (max-width: 600px) {
+            .progress-summary { grid-template-columns: 1fr; }
+        }
+
+        .summary-card {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            border: 1px solid rgba(12, 10, 24, 0.06);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-card);
+            border-color: var(--color-primary-soft);
+        }
+
+        .summary-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--color-primary);
+            display: block;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .summary-label {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Activity Grid */
+        .activity-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 900px) {
+            .activity-grid { grid-template-columns: 1fr; }
+        }
+
+        .activity-card {
+            background: white;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            padding: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .activity-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--color-primary);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .activity-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--color-primary-soft);
+        }
+
+        .activity-card:hover::before {
+            opacity: 1;
+        }
+
+        .activity-card.completed {
+            border-color: var(--color-success);
+        }
+
+        .activity-card.completed::before {
+            background: var(--color-success);
+            opacity: 1;
+        }
+
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .activity-number {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .activity-status {
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-muted);
+        }
+
+        .activity-card.completed .activity-status {
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--color-success);
+        }
+
+        .activity-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 8px;
+        }
+
+        .activity-description {
+            font-size: 0.9rem;
+            color: var(--color-muted);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        /* Case Study Components */
+        .case-study {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            position: relative;
+        }
+
+        .case-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .case-icon {
+            font-size: 1.5rem;
+            color: var(--color-primary);
+        }
+
+        .case-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+
+        .case-content {
+            font-size: 0.9rem;
+            color: var(--color-text);
+            line-height: 1.5;
+        }
+
+        .case-content strong {
+            color: var(--color-primary);
+        }
+
+        .symptom-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 15px 0;
+        }
+
+        .symptom-tag {
+            background: rgba(175, 75, 239, 0.1);
+            color: var(--color-primary);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .symptom-tag.positive {
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--color-success);
+        }
+
+        .symptom-tag.negative {
+            background: rgba(225, 112, 85, 0.1);
+            color: var(--color-error);
+        }
+
+        /* Disorder Comparison Grid */
+        .disorder-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .disorder-grid { grid-template-columns: 1fr; }
+        }
+
+        .disorder-card {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .disorder-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-card);
+        }
+
+        .disorder-card.selected {
+            border-color: var(--color-success);
+            background: rgba(0, 184, 148, 0.05);
+        }
+
+        .disorder-card.wrong {
+            border-color: var(--color-error);
+            background: rgba(225, 112, 85, 0.05);
+            animation: shake 0.5s ease;
+        }
+
+        .disorder-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(12, 10, 24, 0.08);
+        }
+
+        .disorder-criteria {
+            font-size: 0.8rem;
+            color: var(--color-text);
+            line-height: 1.4;
+        }
+
+        .disorder-criteria li {
+            margin-bottom: 4px;
+            padding-left: 15px;
+            position: relative;
+        }
+
+        .disorder-criteria li:before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: var(--color-primary);
+        }
+
+        /* Communication Challenge */
+        .communication-challenge {
+            background: rgba(131, 128, 240, 0.1);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--color-accent);
+        }
+
+        .challenge-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--color-accent);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .patient-statement {
+            background: white;
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin: 15px 0;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            font-style: italic;
+            color: var(--color-text);
+            font-size: 0.9rem;
+        }
+
+        .response-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .response-option {
+            background: white;
+            border-radius: var(--radius-sm);
+            padding: 12px 15px;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .response-option:hover {
+            background: rgba(175, 75, 239, 0.08);
+            border-color: var(--color-primary-soft);
+        }
+
+        .response-option.selected {
+            background: rgba(0, 184, 148, 0.1);
+            border-color: var(--color-success);
+        }
+
+        .response-option.wrong {
+            background: rgba(225, 112, 85, 0.1);
+            border-color: var(--color-error);
+            animation: shake 0.5s ease;
+        }
+
+        .response-text {
+            font-size: 0.85rem;
+            color: var(--color-text);
+        }
+
+        .response-type {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-top: 5px;
+        }
+
+        /* Ethical Dilemma */
+        .ethical-dilemma {
+            background: rgba(9, 132, 227, 0.1);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--color-info);
+        }
+
+        .dilemma-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--color-info);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dilemma-content {
+            font-size: 0.85rem;
+            color: var(--color-text);
+            line-height: 1.5;
+        }
+
+        /* HIPAA & Legal Considerations */
+        .legal-container {
+            background: rgba(253, 203, 110, 0.1);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--color-warning);
+        }
+
+        .legal-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--color-warning);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .legal-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .legal-grid { grid-template-columns: 1fr; }
+        }
+
+        .legal-card {
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+        }
+
+        .legal-scenario {
+            font-size: 0.8rem;
+            color: var(--color-text);
+            margin-bottom: 10px;
+            font-style: italic;
+        }
+
+        /* Question Components */
+        .question-container {
+            margin-bottom: 20px;
+        }
+
+        .question-text {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--color-text);
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .options-grid {
+            display: grid;
+            gap: 10px;
+        }
+
+        .option-item {
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: var(--radius-sm);
+            padding: 12px 15px;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .option-item:hover {
+            background: rgba(175, 75, 239, 0.08);
+            border-color: var(--color-primary-soft);
+        }
+
+        .option-item.selected {
+            background: rgba(0, 184, 148, 0.1);
+            border-color: var(--color-success);
+        }
+
+        .option-item.wrong {
+            background: rgba(225, 112, 85, 0.1);
+            border-color: var(--color-error);
+            animation: shake 0.5s ease;
+        }
+
+        .option-marker {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid rgba(12, 10, 24, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .option-item.selected .option-marker {
+            background: var(--color-success);
+            border-color: var(--color-success);
+            color: white;
+        }
+
+        .option-item.wrong .option-marker {
+            background: var(--color-error);
+            border-color: var(--color-error);
+            color: white;
+        }
+
+        .option-text {
+            flex: 1;
+            font-size: 0.9rem;
+        }
+
+        /* Inline Feedback */
+        .inline-feedback {
+            font-size: 0.8rem;
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin-top: 8px;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .inline-feedback.correct {
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--color-success);
+            border-left: 3px solid var(--color-success);
+            display: block;
+        }
+
+        .inline-feedback.incorrect {
+            background: rgba(225, 112, 85, 0.1);
+            color: var(--color-error);
+            border-left: 3px solid var(--color-error);
+            display: block;
+        }
+
+        .inline-feedback.fading {
+            opacity: 0;
+            transition: opacity 0.8s ease;
+        }
+
+        /* Pro Tips */
+        .pro-tip {
+            background: rgba(131, 128, 240, 0.1);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin-top: 15px;
+            border-left: 4px solid var(--color-accent);
+        }
+
+        .pro-tip-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--color-accent);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .pro-tip-content {
+            font-size: 0.8rem;
+            color: var(--color-text);
+            line-height: 1.4;
+        }
+
+        /* Safety Warning */
+        .safety-warning {
+            background: rgba(225, 112, 85, 0.1);
+            border: 2px solid var(--color-error);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin-top: 15px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .warning-icon {
+            font-size: 1.5rem;
+            color: var(--color-error);
+            flex-shrink: 0;
+        }
+
+        .warning-content {
+            flex: 1;
+        }
+
+        .warning-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--color-error);
+            margin-bottom: 5px;
+        }
+
+        .warning-text {
+            font-size: 0.85rem;
+            color: var(--color-text);
+        }
+
+        /* Feedback Container */
+        .feedback-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            margin-top: 20px;
+            display: none;
+        }
+
+        .feedback-container.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .feedback-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feedback-icon {
+            font-size: 1.2rem;
+        }
+
+        .feedback-icon.correct {
+            color: var(--color-success);
+        }
+
+        .feedback-icon.incorrect {
+            color: var(--color-error);
+        }
+
+        .feedback-content {
+            font-size: 0.85rem;
+            color: var(--color-text);
+            line-height: 1.5;
+        }
+
+        .feedback-content strong {
+            color: var(--color-primary);
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #9a3bd6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(175, 75, 239, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-text);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(12, 10, 24, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-icon {
+            font-size: 1.1em;
+        }
+
+        /* Results Panel */
+        .results-panel {
+            background: var(--color-dark);
+            color: white;
+            border-radius: var(--radius-md);
+            padding: 30px;
+            margin-top: 30px;
+            display: none;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .results-panel.show {
+            display: block;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .results-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .score-display {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--color-primary-soft);
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .clinical-insights {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .insights-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-primary-soft);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .insights-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .insights-list li {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            font-size: 0.9rem;
+            color: #e5e7eb;
+        }
+
+        .insight-dot {
+            width: 6px;
+            height: 6px;
+            margin-top: 6px;
+            border-radius: 999px;
+            background: var(--color-accent);
+            flex-shrink: 0;
+        }
+
+        /* Mandatory Reporting Box */
+        .reporting-box {
+            background: rgba(225, 112, 85, 0.1);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-top: 20px;
+            border: 2px dashed var(--color-error);
+        }
+
+        .reporting-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--color-error);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .reporting-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .reporting-item {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            font-size: 0.8rem;
+            color: var(--color-text);
+        }
+
+        .reporting-badge {
+            background: var(--color-error);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="module-heading">
+        <!-- Header -->
+        <header class="brand-row">
+            <div class="brand">
+                <img
+                    src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                    alt="AlliedRx logo"
+                    class="brand-logo"
+                />
+                <div class="course-meta">
+                    <span class="course-name">Clinical Medical Assistant • Week 9</span>
+                    <div class="week-label">
+                        <span class="week-label-dot"></span>
+                        <span>Chapter 20: Neurology & Mental Health</span>
+                    </div>
+                </div>
+            </div>
+            <span class="badge-mode">Campus &amp; Online</span>
+        </header>
+
+        <h1 id="module-heading">Mental Health, Communication & Legalities</h1>
+        <p class="module-subtitle">
+            Differentiate mental health disorders, apply therapeutic communication techniques, 
+            and navigate ethical/legal responsibilities in neurology and mental health practice.
+        </p>
+
+        <!-- Progress Tracker (2-Step Only) -->
+        <div class="progress-tracker">
+            <div class="progress-step active" data-step="1">
+                <div class="step-circle">1</div>
+                <div class="step-label">Disorder Recognition</div>
+            </div>
+            <div class="progress-step" data-step="2">
+                <div class="step-circle">2</div>
+                <div class="step-label">Ethical & Legal</div>
+            </div>
+        </div>
+
+        <!-- Progress Summary -->
+        <div class="progress-summary">
+            <div class="summary-card">
+                <span class="summary-number" id="completed-count">0</span>
+                <span class="summary-label">Activities Completed</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="accuracy-rate">0%</span>
+                <span class="summary-label">Current Accuracy</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="time-spent">0:00</span>
+                <span class="summary-label">Time Spent</span>
+            </div>
+        </div>
+
+        <!-- Activity Grid (2 Activities) -->
+        <div class="activity-grid">
+            <!-- Activity 1: Mental Health Disorder Recognition -->
+            <section class="activity-card" id="activity-1" data-activity="1">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 1</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">Mental Health Disorder Recognition & Differentiation</h3>
+                <p class="activity-description">
+                    Analyze patient vignettes to differentiate mental health disorders and understand 
+                    how symptoms impact patient interaction and care planning.
+                </p>
+
+                <!-- Case Study 1: Major Depressive Disorder -->
+                <div class="case-study">
+                    <div class="case-header">
+                        <div class="case-icon">😔</div>
+                        <div class="case-title">Case Study #1: Persistent Low Mood</div>
+                    </div>
+                    <div class="case-content">
+                        <strong>Patient:</strong> Sarah, 34-year-old female<br>
+                        <strong>Presenting Concern:</strong> "I haven't felt like myself for months"<br>
+                        <strong>Duration:</strong> Symptoms present for 5 months
+                    </div>
+                    
+                    <div class="symptom-list">
+                        <div class="symptom-tag negative">Persistent sadness</div>
+                        <div class="symptom-tag negative">Loss of interest in hobbies</div>
+                        <div class="symptom-tag negative">Anhedonia (inability to feel pleasure)</div>
+                        <div class="symptom-tag negative">Poor appetite</div>
+                        <div class="symptom-tag negative">Insomnia</div>
+                        <div class="symptom-tag negative">Fatigue</div>
+                        <div class="symptom-tag positive">No psychosis</div>
+                        <div class="symptom-tag positive">No mania history</div>
+                    </div>
+                </div>
+
+                <!-- Question 1: Disorder Identification -->
+                <div class="question-container">
+                    <div class="question-text">Based on the symptoms and duration, which disorder is MOST likely?</div>
+                    <div class="options-grid">
+                        <div class="option-item" data-option="correct" data-question="case1">
+                            <div class="option-marker">A</div>
+                            <div class="option-text">Major Depressive Disorder</div>
+                        </div>
+                        <div class="option-item" data-option="incorrect" data-question="case1">
+                            <div class="option-marker">B</div>
+                            <div class="option-text">Bipolar Disorder (depressive episode)</div>
+                        </div>
+                        <div class="option-item" data-option="incorrect" data-question="case1">
+                            <div class="option-marker">C</div>
+                            <div class="option-text">Adjustment Disorder</div>
+                        </div>
+                        <div class="option-item" data-option="incorrect" data-question="case1">
+                            <div class="option-marker">D</div>
+                            <div class="option-text">Generalized Anxiety Disorder</div>
+                        </div>
+                    </div>
+                    <div class="inline-feedback" id="feedback-case1"></div>
+                </div>
+
+                <!-- Case Study 2: Neurocognitive vs Mental Health -->
+                <div class="case-study">
+                    <div class="case-header">
+                        <div class="case-icon">🧠</div>
+                        <div class="case-title">Case Study #2: Cognitive Changes</div>
+                    </div>
+                    <div class="case-content">
+                        <strong>Patient:</strong> Robert, 72-year-old male<br>
+                        <strong>Presenting Concern:</strong> Memory problems noted by family<br>
+                        <strong>Timeline:</strong> Gradual decline over 2 years
+                    </div>
+                    
+                    <div class="symptom-list">
+                        <div class="symptom-tag negative">Memory loss (recent > remote)</div>
+                        <div class="symptom-tag negative">Disorientation to time/place</div>
+                        <div class="symptom-tag negative">Difficulty with complex tasks</div>
+                        <div class="symptom-tag positive">Fluctuating confusion</div>
+                        <div class="symptom-tag positive">Language problems</div>
+                        <div class="symptom-tag negative">No depressive symptoms</div>
+                        <div class="symptom-tag positive">Progressive decline</div>
+                    </div>
+                </div>
+
+                <!-- Question 2: Differential Diagnosis -->
+                <div class="question-container">
+                    <div class="question-text">This presentation suggests which type of disorder?</div>
+                    <div class="disorder-grid">
+                        <div class="disorder-card" data-disorder="dementia">
+                            <div class="disorder-title">Neurocognitive Disorder (Dementia)</div>
+                            <ul class="disorder-criteria">
+                                <li>Progressive cognitive decline</li>
+                                <li>Memory impairment + other deficits</li>
+                                <li>Interferes with daily function</li>
+                                <li>Not due to delirium</li>
+                            </ul>
+                        </div>
+                        <div class="disorder-card" data-disorder="depression">
+                            <div class="disorder-title">Depression with Cognitive Symptoms</div>
+                            <ul class="disorder-criteria">
+                                <li>"Pseudodementia" presentation</li>
+                                <li>Mood symptoms primary</li>
+                                <li>Cognitive complaints focus on failure</li>
+                                <li>Often responds to antidepressants</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="inline-feedback" id="feedback-case2"></div>
+                </div>
+
+                <!-- Disorder Comparison -->
+                <div class="question-container">
+                    <div class="question-text">Key distinguishing feature between Dementia and Depression-related cognitive symptoms?</div>
+                    <div class="options-grid">
+                        <div class="option-item" data-option="incorrect" data-question="differentiation">
+                            <div class="option-marker">A</div>
+                            <div class="option-text">Age of the patient</div>
+                        </div>
+                        <div class="option-item" data-option="correct" data-question="differentiation">
+                            <div class="option-marker">B</div>
+                            <div class="option-text">Presence of primary mood symptoms vs progressive cognitive decline</div>
+                        </div>
+                        <div class="option-item" data-option="incorrect" data-question="differentiation">
+                            <div class="option-marker">C</div>
+                            <div class="option-text">Response to medication</div>
+                        </div>
+                        <div class="option-item" data-option="incorrect" data-question="differentiation">
+                            <div class="option-marker">D</div>
+                            <div class="option-text">Family history of mental illness</div>
+                        </div>
+                    </div>
+                    <div class="inline-feedback" id="feedback-differentiation"></div>
+                </div>
+
+                <!-- Case Study 3: Anxiety Disorder -->
+                <div class="case-study">
+                    <div class="case-header">
+                        <div class="case-icon">😰</div>
+                        <div class="case-title">Case Study #3: Anxiety Presentation</div>
+                    </div>
+                    <div class="case-content">
+                        <strong>Patient:</strong> David, 28-year-old male<br>
+                        <strong>Presenting Concern:</strong> "I can't go to crowded places anymore"<br>
+                        <strong>Triggers:</strong> Shopping malls, public transportation, theaters
+                    </div>
+                    
+                    <div class="symptom-list">
+                        <div class="symptom-tag negative">Intense fear of crowds</div>
+                        <div class="symptom-tag negative">Avoidance behavior</div>
+                        <div class="symptom-tag negative">Panic attacks in feared situations</div>
+                        <div class="symptom-tag positive">No psychosis</div>
+                        <div class="symptom-tag positive">Insight preserved</div>
+                        <div class="symptom-tag negative">Significant functional impairment</div>
+                    </div>
+                </div>
+
+                <!-- Question 3: Specific Phobia vs Agoraphobia -->
+                <div class="question-container">
+                    <div class="question-text">This pattern of fear and avoidance is characteristic of:</div>
+                    <div class="options-grid">
+                        <div class="option-item" data-option="incorrect" data-question="anxiety">
+                            <div class="option-marker">A</div>
+                            <div class="option-text">Specific Phobia (crowds only)</div>
+                        </div>
+                        <div class="option-item" data-option="correct" data-question="anxiety">
+                            <div class="option-marker">B</div>
+                            <div class="option-text">Agoraphobia (fear of situations where escape might be difficult)</div>
+                        </div>
+                        <div class="option-item" data-option="incorrect" data-question="anxiety">
+                            <div class="option-marker">C</div>
+                            <div class="option-text">Social Anxiety Disorder</div>
+                        </div>
+                        <div class="option-item" data-option="incorrect" data-question="anxiety">
+                            <div class="option-marker">D</div>
+                            <div class="option-text">Generalized Anxiety Disorder</div>
+                        </div>
+                    </div>
+                    <div class="inline-feedback" id="feedback-anxiety"></div>
+                </div>
+
+                <!-- Pro Tip -->
+                <div class="pro-tip">
+                    <div class="pro-tip-title">💡 Clinical Assessment Tip</div>
+                    <div class="pro-tip-content">
+                        Always assess for <strong>safety risks</strong> in mental health presentations: suicidal ideation, 
+                        homicidal thoughts, self-harm behaviors, and ability to care for self. Use standardized screening 
+                        tools (PHQ-9 for depression, GAD-7 for anxiety) when available. Document specific quotes from 
+                        patients when reporting symptoms.
+                    </div>
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback-container" id="feedback-1">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Mental Health Recognition Complete!
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Key Differentiations:</strong><br>
+                        • <strong>Major Depressive Disorder:</strong> ≥2 weeks of depressed mood/anhedonia + other symptoms<br>
+                        • <strong>Dementia vs Depression:</strong> Progressive decline vs mood-related "pseudodementia"<br>
+                        • <strong>Agoraphobia:</strong> Fear of situations where escape might be difficult/help unavailable<br>
+                        • <strong>Anxiety Disorders:</strong> Excessive fear/anxiety that causes functional impairment<br><br>
+                        
+                        <strong>Impact on Patient Interaction:</strong><br>
+                        • <strong>Depression:</strong> May have psychomotor retardation, poor eye contact, flat affect<br>
+                        • <strong>Anxiety:</strong> May need longer appointments, clear explanations, reduced stimuli<br>
+                        • <strong>Dementia:</strong> Use simple language, repeat instructions, involve caregivers<br>
+                        • <strong>All patients:</strong> Maintain non-judgmental attitude, validate experiences, ensure safety<br><br>
+                        
+                        <strong>Screening & Documentation:</strong> Use validated tools, document specific behaviors/quotes, 
+                        assess risk factors, and collaborate with mental health professionals as needed.
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity 2: Therapeutic Communication & Legalities -->
+            <section class="activity-card" id="activity-2" data-activity="2">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 2</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">Therapeutic Communication & Legal/Ethical Responsibilities</h3>
+                <p class="activity-description">
+                    Practice therapeutic communication techniques and navigate complex ethical/legal 
+                    scenarios involving HIPAA, confidentiality limits, and mandatory reporting.
+                </p>
+
+                <!-- Communication Challenge -->
+                <div class="communication-challenge">
+                    <div class="challenge-title">💬 Therapeutic Communication Practice</div>
+                    <div class="patient-statement">
+                        "I'm so dizzy I can't work, and no one knows why! I've had all these tests and 
+                        they keep saying it's 'probably anxiety' but I know it's something serious. 
+                        I'm starting to think no one believes me."
+                    </div>
+                    
+                    <div class="question-container">
+                        <div class="question-text">Select the MOST therapeutic response:</div>
+                        <div class="response-options">
+                            <div class="response-option" data-option="incorrect" data-question="communication1">
+                                <div class="response-text">"Try not to worry so much. I'm sure the doctors know what they're doing."</div>
+                                <div class="response-type">Non-therapeutic: False reassurance</div>
+                            </div>
+                            <div class="response-option" data-option="correct" data-question="communication1">
+                                <div class="response-text">"It sounds really frustrating to have these symptoms without clear answers. Can you tell me more about what the dizziness feels like?"</div>
+                                <div class="response-type">Therapeutic: Empathy + Open-ended question</div>
+                            </div>
+                            <div class="response-option" data-option="incorrect" data-question="communication1">
+                                <div class="response-text">"My aunt had something similar and it turned out to be inner ear problems."</div>
+                                <div class="response-type">Non-therapeutic: Personal anecdote</div>
+                            </div>
+                            <div class="response-option" data-option="incorrect" data-question="communication1">
+                                <div class="response-text">"You need to trust your doctors. They went to medical school for this."</div>
+                                <div class="response-type">Non-therapeutic: Dismissive/patronizing</div>
+                            </div>
+                        </div>
+                        <div class="inline-feedback" id="feedback-communication1"></div>
+                    </div>
+                </div>
+
+                <!-- Communication Techniques Practice -->
+                <div class="question-container">
+                    <div class="question-text">Match each communication technique to its description:</div>
+                    <div class="legal-grid">
+                        <div class="legal-card">
+                            <div class="legal-scenario">"So what I'm hearing is that you're frustrated with the lack of diagnosis."</div>
+                            <div class="options-grid" style="gap: 5px; margin-top: 10px;">
+                                <div class="option-item" data-option="correct" data-question="reflection">
+                                    <div class="option-marker" style="width: 16px; height: 16px; font-size: 0.6rem;">A</div>
+                                    <div class="option-text" style="font-size: 0.75rem;">Reflection</div>
+                                </div>
+                                <div class="option-item" data-option="incorrect" data-question="reflection">
+                                    <div class="option-marker" style="width: 16px; height: 16px; font-size: 0.6rem;">B</div>
+                                    <div class="option-text" style="font-size: 0.75rem;">Clarification</div>
+                                </div>
+                            </div>
+                            <div class="inline-feedback" id="feedback-reflection" style="font-size: 0.7rem; margin-top: 5px;"></div>
+                        </div>
+
+                        <div class="legal-card">
+                            <div class="legal-scenario">"Can you help me understand what you mean when you say 'no one believes me'?"</div>
+                            <div class="options-grid" style="gap: 5px; margin-top: 10px;">
+                                <div class="option-item" data-option="incorrect" data-question="clarification">
+                                    <div class="option-marker" style="width: 16px; height: 16px; font-size: 0.6rem;">A</div>
+                                    <div class="option-text" style="font-size: 0.75rem;">Summarizing</div>
+                                </div>
+                                <div class="option-item" data-option="correct" data-question="clarification">
+                                    <div class="option-marker" style="width: 16px; height: 16px; font-size: 0.6rem;">B</div>
+                                    <div class="option-text" style="font-size: 0.75rem;">Clarification</div>
+                                </div>
+                            </div>
+                            <div class="inline-feedback" id="feedback-clarification" style="font-size: 0.7rem; margin-top: 5px;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ethical Dilemma: HIPAA & Confidentiality -->
+                <div class="ethical-dilemma">
+                    <div class="dilemma-title">⚖️ Ethical Dilemma Scenario</div>
+                    <div class="dilemma-content">
+                        <strong>Situation:</strong> Mai Lee is working with a patient, James, who was recently diagnosed with epilepsy. 
+                        During today's visit, James confides: "I'm terrified to tell the DMV about my diagnosis. I drive for a living 
+                        - it's how I support my family. I haven't had a seizure in months anyway. Please don't put this in my record."
+                    </div>
+                </div>
+
+                <!-- Question 1: Immediate Response -->
+                <div class="question-container">
+                    <div class="question-text">What should Mai's FIRST response be?</div>
+                    <div class="options-grid">
+                        <div class="option-item" data-option="incorrect" data-question="response1">
+                            <div class="option-marker">A</div>
+                            <div class="option-text">"I understand. I won't document it since you asked me not to."</div>
+                        </div>
+                        <div class="option-item" data-option="incorrect" data-question="response1">
+                            <div class="option-marker">B</div>
+                            <div class="option-text">"That's between you and the DMV. I don't need to know about it."</div>
+                        </div>
+                        <div class="option-item" data-option="correct" data-question="response1">
+                            <div class="option-marker">C</div>
+                            <div class="option-text">"I hear how worried you are about this. Let's talk about the safety concerns and what the laws require."</div>
+                        </div>
+                        <div class="option-item" data-option="incorrect" data-question="response1">
+                            <div class="option-marker">D</div>
+                            <div class="option-text">"I have to report this immediately. It's the law."</div>
+                        </div>
+                    </div>
+                    <div class="inline-feedback" id="feedback-response1"></div>
+                </div>
+
+                <!-- Question 2: Legal Responsibilities -->
+                <div class="question-container">
+                    <div class="question-text">What are Mai's legal/ethical responsibilities in this situation?</div>
+                    <div class="options-grid">
+                        <div class="option-item" data-option="incorrect" data-question="legal1">
+                            <div class="option-marker">A</div>
+                            <div class="option-text">Maintain complete confidentiality since James requested it</div>
+                        </div>
+                        <div class="option-item" data-option="correct" data-question="legal1">
+                            <div class="option-marker">B</div>
+                            <div class="option-text">Document the conversation, educate about risks, follow state reporting laws</div>
+                        </div>
+                        <div class="option-item" data-option="incorrect" data-question="legal1">
+                            <div class="option-marker">C</div>
+                            <div class="option-text">Only report if James has a seizure while driving</div>
+                        </div>
+                        <div class="option-item" data-option="incorrect" data-question="legal1">
+                            <div class="option-marker">D</div>
+                            <div class="option-text">Call the DMV immediately without telling James</div>
+                        </div>
+                    </div>
+                    <div class="inline-feedback" id="feedback-legal1"></div>
+                </div>
+
+                <!-- Mandatory Reporting Information -->
+                <div class="reporting-box">
+                    <div class="reporting-title">🚨 Mandatory Reporting Requirements</div>
+                    <div class="reporting-list">
+                        <div class="reporting-item">
+                            <div class="reporting-badge">REQUIRED</div>
+                            <div>Child abuse/neglect (all states)</div>
+                        </div>
+                        <div class="reporting-item">
+                            <div class="reporting-badge">STATE-SPECIFIC</div>
+                            <div>Elder abuse/dependent adult abuse</div>
+                        </div>
+                        <div class="reporting-item">
+                            <div class="reporting-badge">STATE-SPECIFIC</div>
+                            <div>Impaired drivers (epilepsy, dementia, etc.)</div>
+                        </div>
+                        <div class="reporting-item">
+                            <div class="reporting-badge">REQUIRED</div>
+                            <div>Threats of harm to self or others (Tarasoff duty)</div>
+                        </div>
+                        <div class="reporting-item">
+                            <div class="reporting-badge">NOT REQUIRED</div>
+                            <div>HIV status (protected by specific privacy laws)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- HIPAA Scenarios -->
+                <div class="legal-container">
+                    <div class="legal-title">📋 HIPAA Scenario Applications</div>
+                    
+                    <div class="question-container">
+                        <div class="question-text">Which scenario violates HIPAA?</div>
+                        <div class="legal-grid">
+                            <div class="legal-card">
+                                <div class="legal-scenario">Discussing a patient's depression diagnosis with another provider involved in their care</div>
+                                <div class="options-grid" style="gap: 5px; margin-top: 10px;">
+                                    <div class="option-item" data-option="incorrect" data-question="hipaa1">
+                                        <div class="option-marker" style="width: 16px; height: 16px; font-size: 0.6rem;">A</div>
+                                        <div class="option-text" style="font-size: 0.75rem;">Violation</div>
+                                    </div>
+                                    <div class="option-item" data-option="correct" data-question="hipaa1">
+                                        <div class="option-marker" style="width: 16px; height: 16px; font-size: 0.6rem;">B</div>
+                                        <div class="option-text" style="font-size: 0.75rem;">Permitted (treatment)</div>
+                                    </div>
+                                </div>
+                                <div class="inline-feedback" id="feedback-hipaa1" style="font-size: 0.7rem; margin-top: 5px;"></div>
+                            </div>
+
+                            <div class="legal-card">
+                                <div class="legal-scenario">Telling your spouse about an interesting dementia case without using patient's name</div>
+                                <div class="options-grid" style="gap: 5px; margin-top: 10px;">
+                                    <div class="option-item" data-option="correct" data-question="hipaa2">
+                                        <div class="option-marker" style="width: 16px; height: 16px; font-size: 0.6rem;">A</div>
+                                        <div class="option-text" style="font-size: 0.75rem;">Violation</div>
+                                    </div>
+                                    <div class="option-item" data-option="incorrect" data-question="hipaa2">
+                                        <div class="option-marker" style="width: 16px; height: 16px; font-size: 0.6rem;">B</div>
+                                        <div class="option-text" style="font-size: 0.75rem;">Permitted (no name)</div>
+                                    </div>
+                                </div>
+                                <div class="inline-feedback" id="feedback-hipaa2" style="font-size: 0.7rem; margin-top: 5px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Safety Warning -->
+                <div class="safety-warning">
+                    <div class="warning-icon">⚠️</div>
+                    <div class="warning-content">
+                        <div class="warning-title">TARASOFF DUTY TO WARN</div>
+                        <div class="warning-text">
+                            If a patient makes a specific threat against an identifiable person, healthcare providers 
+                            have a duty to warn the intended victim and/or law enforcement. This duty overrides 
+                            normal confidentiality rules. Document threats verbatim and follow facility protocols.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Patient Education Strategy -->
+                <div class="question-container">
+                    <div class="question-text">For James (epilepsy patient reluctant to report), which education strategy is MOST appropriate?</div>
+                    <div class="options-grid">
+                        <div class="option-item" data-option="incorrect" data-question="education">
+                            <div class="option-marker">A</div>
+                            <div class="option-text">"If you don't report it, that's your choice. We're not responsible."</div>
+                        </div>
+                        <div class="option-item" data-option="incorrect" data-question="education">
+                            <div class="option-marker">B</div>
+                            <div class="option-text">Provide written materials only about driving restrictions</div>
+                        </div>
+                        <div class="option-item" data-option="correct" data-question="education">
+                            <div class="option-marker">C</div>
+                            <div class="option-text">Discuss risks to self/others, state requirements, alternatives (public transit, ride-sharing), and document the conversation</div>
+                        </div>
+                        <div class="option-item" data-option="incorrect" data-question="education">
+                            <div class="option-marker">D</div>
+                            <div class="option-text">Schedule a family meeting to pressure him into reporting</div>
+                        </div>
+                    </div>
+                    <div class="inline-feedback" id="feedback-education"></div>
+                </div>
+
+                <!-- Pro Tip -->
+                <div class="pro-tip">
+                    <div class="pro-tip-title">💡 Documentation Strategy</div>
+                    <div class="pro-tip-content">
+                        When documenting sensitive conversations about legal/ethical issues: <strong>Quote the patient directly</strong> 
+                        (using quotation marks), document your education provided, note the patient's response, and record any 
+                        follow-up plans. Avoid judgmental language. Use objective, factual descriptions of behaviors and statements.
+                    </div>
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback-container" id="feedback-2">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Communication & Legal Competency Complete!
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Therapeutic Communication Techniques:</strong><br>
+                        • <strong>Active listening:</strong> Full attention, minimal encouragers<br>
+                        • <strong>Reflection:</strong> Paraphrase content/emotion ("Sounds like you're feeling...")<br>
+                        • <strong>Clarification:</strong> Ensure understanding ("Help me understand...")<br>
+                        • <strong>Empathy:</strong> Validate emotions without judgment<br>
+                        • <strong>Open-ended questions:</strong> Encourage elaboration ("Tell me more about...")<br><br>
+                        
+                        <strong>Legal/Ethical Framework:</strong><br>
+                        • <strong>HIPAA:</strong> Protects PHI, allows sharing for treatment/payment/operations<br>
+                        • <strong>Confidentiality limits:</strong> Danger to self/others, abuse reporting, court orders<br>
+                        • <strong>Tarasoff duty:</strong> Warn identifiable victims of specific threats<br>
+                        • <strong>State reporting:</strong> Varies for impaired drivers, elder abuse, infectious diseases<br><br>
+                        
+                        <strong>Patient Education Approach:</strong><br>
+                        • Provide accurate information about risks/requirements<br>
+                        • Discuss alternatives and resources<br>
+                        • Use teach-back method to verify understanding<br>
+                        • Document education provided and patient response<br>
+                        • Involve provider for complex legal/ethical decisions
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn btn-secondary" id="reset-all-btn">
+                <span class="btn-icon">↻</span>
+                Reset All Activities
+            </button>
+            <button class="btn btn-secondary" id="check-answers-btn">
+                <span class="btn-icon">✓</span>
+                Check All Answers
+            </button>
+            <button class="btn btn-primary" id="view-results-btn">
+                <span class="btn-icon">📊</span>
+                View Final Results
+            </button>
+        </div>
+
+        <!-- Results Panel -->
+        <div class="results-panel" id="results-panel">
+            <div class="results-header">
+                <h2 class="results-title">Mental Health & Legal Competency Results</h2>
+            </div>
+            <div class="score-display" id="final-score">0%</div>
+            
+            <div class="clinical-insights">
+                <h3 class="insights-title">
+                    <span>🩺</span> Clinical Proficiency Insights
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Disorder Differentiation:</strong> Major Depressive Disorder requires ≥2 weeks of depressed mood/anhedonia + other symptoms. 
+                        Dementia shows progressive cognitive decline. Anxiety disorders involve excessive fear causing impairment. 
+                        Always rule out medical causes first.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Therapeutic Communication:</strong> Use empathy statements, open-ended questions, reflection, and clarification. 
+                        Avoid false reassurance, personal anecdotes, and judgmental language. Match communication style to patient's 
+                        cognitive/emotional state.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Safety Assessment:</strong> Always screen for suicidal/homicidal ideation, self-harm, and ability to 
+                        care for self. Use standardized tools (PHQ-9, GAD-7) when available. Document specific quotes and behaviors.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Confidentiality Limits:</strong> HIPAA protects health information but has exceptions: danger to self/others, 
+                        abuse reporting (child/elder), court orders, certain public health risks. Know your state's specific reporting laws.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Tarasoff Duty:</strong> When a patient makes a specific threat against an identifiable person, you must 
+                        warn the intended victim and/or law enforcement. Document threats verbatim and follow facility protocols immediately.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="clinical-insights" style="margin-top: 20px;">
+                <h3 class="insights-title">
+                    <span>📋</span> Documentation & Legal Protocols
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Sensitive Conversation Documentation:</strong> Use direct quotes (in quotation marks), 
+                        document education provided, note patient response, record safety assessments. Maintain objective, 
+                        non-judgmental language. Include date, time, and your signature.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Mandatory Reporting Procedures:</strong> Know state requirements for child/elder abuse, 
+                        impaired drivers, infectious diseases. Report through proper channels (CPS, APS, DMV, health department). 
+                        Document what was reported, to whom, and when.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Patient Education Documentation:</strong> Record topics discussed, materials provided, 
+                        patient's demonstrated understanding (teach-back method), and any barriers to compliance. Note follow-up plans.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Ethical Decision Making:</strong> When faced with ethical dilemmas: 1) Identify the problem, 
+                        2) Gather relevant information, 3) Consider ethical principles (autonomy, beneficence, non-maleficence, justice), 
+                        4) Consult with supervisor/ethics committee, 5) Document the decision-making process.</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // State Management
+            const state = {
+                activities: {
+                    1: { completed: false, correct: 0, total: 7, score: 0 },
+                    2: { completed: false, correct: 0, total: 9, score: 0 }
+                },
+                startedAt: new Date(),
+                timeSpent: 0
+            };
+
+            // DOM Elements
+            const progressSteps = document.querySelectorAll('.progress-step');
+            const activityCards = document.querySelectorAll('.activity-card');
+            const completedCount = document.getElementById('completed-count');
+            const accuracyRate = document.getElementById('accuracy-rate');
+            const timeSpent = document.getElementById('time-spent');
+            const resetBtn = document.getElementById('reset-all-btn');
+            const checkBtn = document.getElementById('check-answers-btn');
+            const resultsBtn = document.getElementById('view-results-btn');
+            const resultsPanel = document.getElementById('results-panel');
+            const finalScore = document.getElementById('final-score');
+
+            // Timer for time spent
+            function updateTimer() {
+                const now = new Date();
+                const diff = Math.floor((now - state.startedAt) / 1000);
+                state.timeSpent = diff;
+                const minutes = Math.floor(diff / 60);
+                const seconds = diff % 60;
+                timeSpent.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            }
+            setInterval(updateTimer, 1000);
+
+            // Update Progress Summary
+            function updateProgressSummary() {
+                let completed = 0;
+                let totalCorrect = 0;
+                let totalItems = 0;
+
+                Object.values(state.activities).forEach(activity => {
+                    if (activity.completed) completed++;
+                    totalCorrect += activity.correct;
+                    totalItems += activity.total;
+                });
+
+                completedCount.textContent = completed;
+                const accuracy = totalItems > 0 ? Math.round((totalCorrect / totalItems) * 100) : 0;
+                accuracyRate.textContent = `${accuracy}%`;
+
+                // Update progress steps
+                progressSteps.forEach((step, index) => {
+                    const stepNum = index + 1;
+                    if (state.activities[stepNum]?.completed) {
+                        step.classList.add('completed');
+                        step.classList.remove('active');
+                    } else if (stepNum === 1 || (stepNum === 2 && state.activities[1].completed)) {
+                        step.classList.add('active');
+                        step.classList.remove('completed');
+                    } else {
+                        step.classList.remove('active', 'completed');
+                    }
+                });
+            }
+
+            // Show inline feedback
+            function showInlineFeedback(elementId, message, isCorrect) {
+                const feedbackEl = document.getElementById(elementId);
+                feedbackEl.textContent = message;
+                feedbackEl.className = `inline-feedback ${isCorrect ? 'correct' : 'incorrect'}`;
+                
+                if (isCorrect) {
+                    setTimeout(() => {
+                        feedbackEl.classList.add('fading');
+                        setTimeout(() => {
+                            feedbackEl.style.display = 'none';
+                            feedbackEl.classList.remove('fading');
+                        }, 800);
+                    }, 3000);
+                }
+            }
+
+            // Setup MCQ options
+            function setupMCQOptions() {
+                document.querySelectorAll('.option-item').forEach(option => {
+                    option.addEventListener('click', function() {
+                        if (this.closest('.activity-card').classList.contains('completed')) return;
+                        
+                        const questionNum = this.dataset.question;
+                        const isCorrect = this.dataset.option === 'correct';
+                        const allOptions = this.parentElement.querySelectorAll('.option-item');
+                        
+                        // Remove selections from this question
+                        allOptions.forEach(opt => {
+                            opt.classList.remove('selected', 'wrong');
+                        });
+                        
+                        // Mark selected
+                        this.classList.add(isCorrect ? 'selected' : 'wrong');
+                        
+                        // Show feedback
+                        const feedbackId = `feedback-${questionNum}`;
+                        let message = '';
+                        
+                        if (isCorrect) {
+                            message = '✓ Correct! ';
+                            switch(questionNum) {
+                                case 'case1': message += 'MDD: ≥2 weeks depressed mood/anhedonia + other symptoms.'; break;
+                                case 'differentiation': message += 'Primary mood symptoms vs progressive decline distinguishes depression from dementia.'; break;
+                                case 'anxiety': message += 'Agoraphobia: fear of situations where escape might be difficult.'; break;
+                                case 'response1': message += 'Start with empathy, then address safety/legal concerns.'; break;
+                                case 'legal1': message += 'Document, educate, follow state laws. Balance patient autonomy with public safety.'; break;
+                                case 'education': message += 'Comprehensive education includes risks, requirements, alternatives, and documentation.'; break;
+                                case 'reflection': message += 'Reflection: restating content/emotion to show understanding.'; break;
+                                case 'clarification': message += 'Clarification: seeking more information for better understanding.'; break;
+                                case 'hipaa1': message += 'Sharing for treatment purposes is permitted under HIPAA.'; break;
+                                case 'hipaa2': message += 'Even without names, discussing specific cases violates confidentiality.'; break;
+                            }
+                        } else {
+                            message = '✗ Incorrect. ';
+                            switch(questionNum) {
+                                case 'case1': message += 'Review diagnostic criteria for MDD vs other mood disorders.'; break;
+                                case 'differentiation': message += 'Consider which symptoms are primary vs secondary.'; break;
+                                case 'anxiety': message += 'Agoraphobia involves fear of situations where escape might be difficult.'; break;
+                                case 'response1': message += 'Start with therapeutic communication, then address concerns.'; break;
+                                case 'legal1': message += 'Consider balance between confidentiality and public safety.'; break;
+                                case 'education': message += 'Which approach addresses both patient concerns and legal requirements?'; break;
+                                case 'reflection': message += 'Reflection involves restating what the patient said.'; break;
+                                case 'clarification': message += 'Clarification seeks to better understand the patient\'s meaning.'; break;
+                                case 'hipaa1': message += 'HIPAA allows sharing for treatment purposes.'; break;
+                                case 'hipaa2': message += 'Discussing identifiable cases, even without names, violates confidentiality.'; break;
+                            }
+                        }
+                        
+                        showInlineFeedback(feedbackId, message, isCorrect);
+                    });
+                });
+            }
+
+            // Setup communication/response options
+            function setupResponseOptions() {
+                document.querySelectorAll('.response-option').forEach(option => {
+                    option.addEventListener('click', function() {
+                        if (this.closest('.activity-card').classList.contains('completed')) return;
+                        
+                        const questionNum = this.dataset.question;
+                        const isCorrect = this.dataset.option === 'correct';
+                        const allOptions = this.parentElement.querySelectorAll('.response-option');
+                        
+                        // Remove selections
+                        allOptions.forEach(opt => {
+                            opt.classList.remove('selected', 'wrong');
+                        });
+                        
+                        // Mark selected
+                        this.classList.add(isCorrect ? 'selected' : 'wrong');
+                        
+                        // Show feedback
+                        const feedbackId = `feedback-${questionNum}`;
+                        let message = '';
+                        
+                        if (isCorrect) {
+                            message = '✓ Correct! This response shows empathy, validates feelings, and uses an open-ended question to explore further.';
+                        } else {
+                            message = '✗ Incorrect. This response is non-therapeutic - it either gives false reassurance, shares personal experience, or dismisses the patient\'s concerns.';
+                        }
+                        
+                        showInlineFeedback(feedbackId, message, isCorrect);
+                    });
+                });
+            }
+
+            // Setup disorder card selection
+            function setupDisorderCards() {
+                document.querySelectorAll('.disorder-card').forEach(card => {
+                    card.addEventListener('click', function() {
+                        if (this.closest('.activity-card').classList.contains('completed')) return;
+                        
+                        const correctDisorder = 'dementia'; // Based on case study 2
+                        const selectedDisorder = this.dataset.disorder;
+                        const isCorrect = selectedDisorder === correctDisorder;
+                        const allCards = this.parentElement.querySelectorAll('.disorder-card');
+                        
+                        // Remove selections
+                        allCards.forEach(card => {
+                            card.classList.remove('selected', 'wrong');
+                        });
+                        
+                        // Mark selected
+                        this.classList.add(isCorrect ? 'selected' : 'wrong');
+                        
+                        // Show feedback
+                        const feedbackId = 'feedback-case2';
+                        let message = '';
+                        
+                        if (isCorrect) {
+                            message = '✓ Correct! Progressive cognitive decline with memory impairment suggests neurocognitive disorder/dementia. Depression would show primary mood symptoms.';
+                        } else {
+                            message = '✗ Incorrect. This case shows progressive cognitive decline over years, not mood-related "pseudodementia."';
+                        }
+                        
+                        showInlineFeedback(feedbackId, message, isCorrect);
+                    });
+                });
+            }
+
+            // Check activity completion
+            function checkActivityCompletion(activityNum) {
+                const activity = state.activities[activityNum];
+                const card = document.getElementById(`activity-${activityNum}`);
+                const status = card.querySelector('.activity-status');
+                const feedback = document.getElementById(`feedback-${activityNum}`);
+                
+                // Check Activity 1 completion
+                if (activityNum === 1) {
+                    const case1Correct = document.querySelector('#activity-1 .option-item[data-option="correct"][data-question="case1"].selected');
+                    const case2Correct = document.querySelector('#activity-1 .disorder-card.selected');
+                    const diffCorrect = document.querySelector('#activity-1 .option-item[data-option="correct"][data-question="differentiation"].selected');
+                    const anxietyCorrect = document.querySelector('#activity-1 .option-item[data-option="correct"][data-question="anxiety"].selected');
+                    
+                    if (case1Correct && case2Correct && diffCorrect && anxietyCorrect) {
+                        activity.completed = true;
+                        activity.correct = 7;
+                        activity.score = 100;
+                        status.textContent = 'Completed';
+                        status.style.color = '#00b894';
+                        card.classList.add('completed');
+                        feedback.classList.add('show');
+                        updateProgressSummary();
+                    }
+                }
+                
+                // Check Activity 2 completion
+                if (activityNum === 2) {
+                    const comm1Correct = document.querySelector('#activity-2 .response-option[data-option="correct"][data-question="communication1"].selected');
+                    const reflectionCorrect = document.querySelector('#activity-2 .option-item[data-option="correct"][data-question="reflection"].selected');
+                    const clarificationCorrect = document.querySelector('#activity-2 .option-item[data-option="correct"][data-question="clarification"].selected');
+                    const response1Correct = document.querySelector('#activity-2 .option-item[data-option="correct"][data-question="response1"].selected');
+                    const legal1Correct = document.querySelector('#activity-2 .option-item[data-option="correct"][data-question="legal1"].selected');
+                    const hipaa1Correct = document.querySelector('#activity-2 .option-item[data-option="correct"][data-question="hipaa1"].selected');
+                    const hipaa2Correct = document.querySelector('#activity-2 .option-item[data-option="correct"][data-question="hipaa2"].selected');
+                    const educationCorrect = document.querySelector('#activity-2 .option-item[data-option="correct"][data-question="education"].selected');
+                    
+                    if (comm1Correct && reflectionCorrect && clarificationCorrect && response1Correct && 
+                        legal1Correct && hipaa1Correct && hipaa2Correct && educationCorrect) {
+                        activity.completed = true;
+                        activity.correct = 9;
+                        activity.score = 100;
+                        status.textContent = 'Completed';
+                        status.style.color = '#00b894';
+                        card.classList.add('completed');
+                        feedback.classList.add('show');
+                        updateProgressSummary();
+                    }
+                }
+            }
+
+            // Initialize Activity 1
+            function initActivity1() {
+                setupMCQOptions();
+                setupDisorderCards();
+                
+                // Check completion on selection
+                document.querySelectorAll('#activity-1 .option-item, #activity-1 .disorder-card').forEach(element => {
+                    element.addEventListener('click', () => {
+                        setTimeout(() => checkActivityCompletion(1), 100);
+                    });
+                });
+            }
+
+            // Initialize Activity 2
+            function initActivity2() {
+                setupMCQOptions();
+                setupResponseOptions();
+                
+                // Check completion on selection
+                document.querySelectorAll('#activity-2 .option-item, #activity-2 .response-option').forEach(element => {
+                    element.addEventListener('click', () => {
+                        setTimeout(() => checkActivityCompletion(2), 100);
+                    });
+                });
+            }
+
+            // Reset All Activities
+            function resetAllActivities() {
+                // Reset state
+                Object.keys(state.activities).forEach(key => {
+                    state.activities[key] = {
+                        completed: false,
+                        correct: 0,
+                        total: parseInt(key) === 1 ? 7 : 9,
+                        score: 0
+                    };
+                });
+
+                // Reset UI
+                activityCards.forEach(card => {
+                    card.classList.remove('completed');
+                    const status = card.querySelector('.activity-status');
+                    status.textContent = 'Not Started';
+                    status.style.color = '';
+                    const feedback = card.querySelector('.feedback-container');
+                    feedback.classList.remove('show');
+                });
+
+                // Reset selections
+                document.querySelectorAll('.option-item, .response-option, .disorder-card').forEach(element => {
+                    element.classList.remove('selected', 'wrong');
+                });
+                
+                // Reset feedback
+                document.querySelectorAll('.inline-feedback').forEach(fb => {
+                    fb.textContent = '';
+                    fb.className = 'inline-feedback';
+                    fb.style.display = 'none';
+                });
+
+                // Reset results
+                resultsPanel.classList.remove('show');
+
+                // Update progress
+                updateProgressSummary();
+            }
+
+            // Check All Answers (Auto-complete)
+            function checkAllAnswers() {
+                // Activity 1
+                if (!state.activities[1].completed) {
+                    // Set correct answers
+                    document.querySelector('#activity-1 .option-item[data-option="correct"][data-question="case1"]').classList.add('selected');
+                    document.querySelector('#activity-1 .disorder-card[data-disorder="dementia"]').classList.add('selected');
+                    document.querySelector('#activity-1 .option-item[data-option="correct"][data-question="differentiation"]').classList.add('selected');
+                    document.querySelector('#activity-1 .option-item[data-option="correct"][data-question="anxiety"]').classList.add('selected');
+                    
+                    state.activities[1].completed = true;
+                    state.activities[1].correct = 7;
+                    state.activities[1].score = 100;
+                    
+                    const card1 = document.getElementById('activity-1');
+                    card1.querySelector('.activity-status').textContent = 'Completed';
+                    card1.querySelector('.activity-status').style.color = '#00b894';
+                    card1.classList.add('completed');
+                    document.getElementById('feedback-1').classList.add('show');
+                }
+
+                // Activity 2
+                if (!state.activities[2].completed) {
+                    // Set correct answers
+                    document.querySelector('#activity-2 .response-option[data-option="correct"][data-question="communication1"]').classList.add('selected');
+                    document.querySelector('#activity-2 .option-item[data-option="correct"][data-question="reflection"]').classList.add('selected');
+                    document.querySelector('#activity-2 .option-item[data-option="correct"][data-question="clarification"]').classList.add('selected');
+                    document.querySelector('#activity-2 .option-item[data-option="correct"][data-question="response1"]').classList.add('selected');
+                    document.querySelector('#activity-2 .option-item[data-option="correct"][data-question="legal1"]').classList.add('selected');
+                    document.querySelector('#activity-2 .option-item[data-option="correct"][data-question="hipaa1"]').classList.add('selected');
+                    document.querySelector('#activity-2 .option-item[data-option="correct"][data-question="hipaa2"]').classList.add('selected');
+                    document.querySelector('#activity-2 .option-item[data-option="correct"][data-question="education"]').classList.add('selected');
+                    
+                    state.activities[2].completed = true;
+                    state.activities[2].correct = 9;
+                    state.activities[2].score = 100;
+                    
+                    const card2 = document.getElementById('activity-2');
+                    card2.querySelector('.activity-status').textContent = 'Completed';
+                    card2.querySelector('.activity-status').style.color = '#00b894';
+                    card2.classList.add('completed');
+                    document.getElementById('feedback-2').classList.add('show');
+                }
+
+                updateProgressSummary();
+            }
+
+            // View Final Results
+            function viewFinalResults() {
+                let totalScore = 0;
+                let activityCount = 0;
+
+                Object.values(state.activities).forEach(activity => {
+                    if (activity.completed) {
+                        totalScore += activity.score;
+                        activityCount++;
+                    }
+                });
+
+                const averageScore = activityCount > 0 ? Math.round(totalScore / activityCount) : 0;
+                finalScore.textContent = `${averageScore}%`;
+                resultsPanel.classList.add('show');
+                resultsPanel.scrollIntoView({ behavior: 'smooth' });
+            }
+
+            // Initialize
+            initActivity1();
+            initActivity2();
+            updateProgressSummary();
+
+            // Event listeners
+            resetBtn.addEventListener('click', resetAllActivities);
+            checkBtn.addEventListener('click', checkAllAnswers);
+            resultsBtn.addEventListener('click', viewFinalResults);
+        });
+    </script>
+</body>
+</html>
