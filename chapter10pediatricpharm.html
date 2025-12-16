@@ -1,0 +1,2077 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AlliedRx -- Chapter 10: Pharmacology Math - Module 3</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-error: #e17055;
+            --color-warning: #fdcb6e;
+            --color-info: #0984e3;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
+            --color-dark: #0c0a18;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+            --shadow-card: 0 12px 30px rgba(15, 23, 42, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(
+                circle at top left,
+                #ffffff 0,
+                #f1ecff 40%,
+                var(--color-bg) 100%
+            );
+            color: var(--color-text);
+            -webkit-text-size-adjust: 100%;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 12px;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes checkmarkPop {
+            0% { transform: scale(0); opacity: 0; }
+            70% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 5px rgba(175, 75, 239, 0.5); }
+            50% { box-shadow: 0 0 20px rgba(175, 75, 239, 0.8); }
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @media (max-width: 900px) {
+            .page { padding: 22px; }
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 0; }
+            .page {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 18px 14px 22px;
+            }
+        }
+
+        /* Header */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .brand-logo:hover { transform: scale(1.05); }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--color-success);
+            flex-shrink: 0;
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .badge-mode:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+        @media (max-width: 480px) {
+            .brand-row { flex-direction: column; align-items: flex-start; }
+            .badge-mode { margin-top: 6px; }
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 3vw, 2.2rem);
+            line-height: 1.1;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .module-subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 600px;
+            margin-bottom: 24px;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        /* Progress Tracker */
+        .progress-tracker {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            position: relative;
+            padding: 0 20px;
+        }
+
+        .progress-tracker::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 50px;
+            right: 50px;
+            height: 3px;
+            background: rgba(12, 10, 24, 0.08);
+            z-index: 1;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+
+        .step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--color-muted);
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.active .step-circle {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .progress-step.completed .step-circle {
+            background: var(--color-success);
+            border-color: var(--color-success);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.75rem;
+            color: var(--color-muted);
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .progress-step.active .step-label {
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        /* Progress Summary */
+        .progress-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+            animation: fadeInUp 0.6s ease-out 0.5s both;
+        }
+
+        @media (max-width: 600px) {
+            .progress-summary { grid-template-columns: 1fr; }
+        }
+
+        .summary-card {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            border: 1px solid rgba(12, 10, 24, 0.06);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-card);
+            border-color: var(--color-primary-soft);
+        }
+
+        .summary-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--color-primary);
+            display: block;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .summary-label {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Activity Grid */
+        .activity-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 900px) {
+            .activity-grid { grid-template-columns: 1fr; }
+        }
+
+        .activity-card {
+            background: white;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            padding: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .activity-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--color-primary);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .activity-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--color-primary-soft);
+        }
+
+        .activity-card:hover::before {
+            opacity: 1;
+        }
+
+        .activity-card.completed {
+            border-color: var(--color-success);
+        }
+
+        .activity-card.completed::before {
+            background: var(--color-success);
+            opacity: 1;
+        }
+
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .activity-number {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .activity-status {
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-muted);
+        }
+
+        .activity-card.completed .activity-status {
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--color-success);
+        }
+
+        .activity-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 8px;
+        }
+
+        .activity-description {
+            font-size: 0.9rem;
+            color: var(--color-muted);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        /* Pediatric Case */
+        .pediatric-case {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+        }
+
+        .case-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+        }
+
+        .case-content {
+            font-size: 0.9rem;
+            color: var(--color-text);
+            line-height: 1.5;
+        }
+
+        .patient-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        @media (max-width: 480px) {
+            .patient-info { grid-template-columns: 1fr; }
+        }
+
+        .info-item {
+            background: rgba(12, 10, 24, 0.03);
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 4px;
+        }
+
+        /* Method Comparison */
+        .method-comparison {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .method-comparison { grid-template-columns: 1fr; }
+        }
+
+        .method-card {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .method-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-card);
+        }
+
+        .method-card.bsa {
+            border-color: rgba(9, 132, 227, 0.3);
+        }
+
+        .method-card.weight {
+            border-color: rgba(0, 184, 148, 0.3);
+        }
+
+        .method-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .method-formula {
+            font-family: monospace;
+            font-size: 0.8rem;
+            color: var(--color-text);
+            margin-bottom: 10px;
+            padding: 8px;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid rgba(12, 10, 24, 0.1);
+        }
+
+        /* Reconstitution Simulation */
+        .recon-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            position: relative;
+        }
+
+        .recon-vial {
+            width: 80px;
+            height: 120px;
+            background: linear-gradient(180deg, #ffffff 0%, #f8f8f8 100%);
+            border: 3px solid var(--color-primary);
+            border-radius: 8px;
+            position: relative;
+            margin: 0 auto 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .vial-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            text-align: center;
+            padding: 5px;
+        }
+
+        .vial-powder {
+            width: 40px;
+            height: 20px;
+            background: rgba(108, 104, 128, 0.3);
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+
+        .syringe {
+            width: 40px;
+            height: 100px;
+            background: white;
+            border: 2px solid var(--color-accent);
+            border-radius: 4px;
+            position: relative;
+            margin: 0 auto 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        .syringe-plunger {
+            width: 100%;
+            height: 30%;
+            background: var(--color-accent);
+            border-radius: 2px;
+        }
+
+        .syringe-label {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--color-accent);
+        }
+
+        .recon-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .recon-step {
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: var(--radius-sm);
+            padding: 12px 15px;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .recon-step:hover {
+            background: rgba(175, 75, 239, 0.08);
+            border-color: var(--color-primary-soft);
+            transform: translateX(5px);
+        }
+
+        .recon-step.selected {
+            background: rgba(0, 184, 148, 0.1);
+            border-color: var(--color-success);
+        }
+
+        .recon-step.wrong {
+            background: rgba(225, 112, 85, 0.1);
+            border-color: var(--color-error);
+            animation: shake 0.5s ease;
+        }
+
+        .step-number {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: rgba(12, 10, 24, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--color-text);
+            flex-shrink: 0;
+        }
+
+        .recon-step.selected .step-number {
+            background: var(--color-success);
+            color: white;
+        }
+
+        .step-text {
+            font-size: 0.85rem;
+            color: var(--color-text);
+            flex: 1;
+        }
+
+        /* Drug Table Analysis */
+        .drug-table-container {
+            overflow-x: auto;
+            margin-bottom: 20px;
+        }
+
+        .drug-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        .drug-table th {
+            background: rgba(175, 75, 239, 0.1);
+            color: var(--color-primary);
+            font-weight: 600;
+            text-align: left;
+            padding: 12px 15px;
+            border: 1px solid rgba(12, 10, 24, 0.1);
+        }
+
+        .drug-table td {
+            padding: 10px 15px;
+            border: 1px solid rgba(12, 10, 24, 0.1);
+        }
+
+        .drug-table tr:nth-child(even) {
+            background: rgba(12, 10, 24, 0.02);
+        }
+
+        .table-highlight {
+            background: rgba(253, 203, 110, 0.2) !important;
+        }
+
+        /* Question Components */
+        .question-container {
+            margin-bottom: 20px;
+        }
+
+        .question-text {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--color-text);
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .options-grid {
+            display: grid;
+            gap: 10px;
+        }
+
+        .option-item {
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: var(--radius-sm);
+            padding: 12px 15px;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .option-item:hover {
+            background: rgba(175, 75, 239, 0.08);
+            border-color: var(--color-primary-soft);
+        }
+
+        .option-item.selected {
+            background: rgba(0, 184, 148, 0.1);
+            border-color: var(--color-success);
+        }
+
+        .option-item.wrong {
+            background: rgba(225, 112, 85, 0.1);
+            border-color: var(--color-error);
+            animation: shake 0.5s ease;
+        }
+
+        .option-marker {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid rgba(12, 10, 24, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .option-item.selected .option-marker {
+            background: var(--color-success);
+            border-color: var(--color-success);
+            color: white;
+        }
+
+        .option-item.wrong .option-marker {
+            background: var(--color-error);
+            border-color: var(--color-error);
+            color: white;
+        }
+
+        .option-text {
+            flex: 1;
+            font-size: 0.9rem;
+        }
+
+        /* Input Fields */
+        .input-container {
+            margin-bottom: 15px;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--color-text);
+            margin-bottom: 8px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: var(--radius-sm);
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            font-size: 0.9rem;
+            color: var(--color-text);
+            transition: all 0.3s ease;
+            font-family: monospace;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(175, 75, 239, 0.1);
+        }
+
+        .input-field.correct {
+            border-color: var(--color-success);
+            background: rgba(0, 184, 148, 0.05);
+        }
+
+        .input-field.incorrect {
+            border-color: var(--color-error);
+            background: rgba(225, 112, 85, 0.05);
+        }
+
+        /* Inline Feedback */
+        .inline-feedback {
+            font-size: 0.8rem;
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin-top: 8px;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .inline-feedback.correct {
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--color-success);
+            border-left: 3px solid var(--color-success);
+            display: block;
+        }
+
+        .inline-feedback.incorrect {
+            background: rgba(225, 112, 85, 0.1);
+            color: var(--color-error);
+            border-left: 3px solid var(--color-error);
+            display: block;
+        }
+
+        .inline-feedback.fading {
+            opacity: 0;
+            transition: opacity 0.8s ease;
+        }
+
+        /* Formula Display */
+        .formula-display {
+            background: rgba(131, 128, 240, 0.1);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid var(--color-accent);
+        }
+
+        .formula-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--color-accent);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .formula-content {
+            font-family: monospace;
+            font-size: 0.9rem;
+            color: var(--color-text);
+            line-height: 1.6;
+        }
+
+        /* Safety Warning */
+        .safety-warning {
+            background: rgba(225, 112, 85, 0.1);
+            border: 2px solid var(--color-error);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin-top: 15px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .warning-icon {
+            font-size: 1.5rem;
+            color: var(--color-error);
+            flex-shrink: 0;
+        }
+
+        .warning-content {
+            flex: 1;
+        }
+
+        .warning-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--color-error);
+            margin-bottom: 5px;
+        }
+
+        .warning-text {
+            font-size: 0.85rem;
+            color: var(--color-text);
+        }
+
+        /* Pro Tips */
+        .pro-tip {
+            background: rgba(253, 203, 110, 0.1);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin-top: 15px;
+            border-left: 4px solid var(--color-warning);
+        }
+
+        .pro-tip-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--color-warning);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .pro-tip-content {
+            font-size: 0.8rem;
+            color: var(--color-text);
+            line-height: 1.4;
+        }
+
+        /* Feedback Container */
+        .feedback-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            margin-top: 20px;
+            display: none;
+        }
+
+        .feedback-container.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .feedback-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feedback-icon {
+            font-size: 1.2rem;
+        }
+
+        .feedback-icon.correct {
+            color: var(--color-success);
+        }
+
+        .feedback-icon.incorrect {
+            color: var(--color-error);
+        }
+
+        .feedback-content {
+            font-size: 0.85rem;
+            color: var(--color-text);
+            line-height: 1.5;
+        }
+
+        .feedback-content strong {
+            color: var(--color-primary);
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #9a3bd6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(175, 75, 239, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-text);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(12, 10, 24, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-icon {
+            font-size: 1.1em;
+        }
+
+        /* Results Panel */
+        .results-panel {
+            background: var(--color-dark);
+            color: white;
+            border-radius: var(--radius-md);
+            padding: 30px;
+            margin-top: 30px;
+            display: none;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .results-panel.show {
+            display: block;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .results-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .score-display {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--color-primary-soft);
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .clinical-insights {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .insights-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-primary-soft);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .insights-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .insights-list li {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            font-size: 0.9rem;
+            color: #e5e7eb;
+        }
+
+        .insight-dot {
+            width: 6px;
+            height: 6px;
+            margin-top: 6px;
+            border-radius: 999px;
+            background: var(--color-accent);
+            flex-shrink: 0;
+        }
+
+        /* Competency Quiz */
+        .quiz-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-top: 20px;
+            border: 2px solid var(--color-primary);
+        }
+
+        .quiz-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .quiz-question {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="module-heading">
+        <!-- Header -->
+        <header class="brand-row">
+            <div class="brand">
+                <img
+                    src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                    alt="AlliedRx logo"
+                    class="brand-logo"
+                />
+                <div class="course-meta">
+                    <span class="course-name">Clinical Medical Assistant • Week 9</span>
+                    <div class="week-label">
+                        <span class="week-label-dot"></span>
+                        <span>Chapter 10: Pharmacology Math</span>
+                    </div>
+                </div>
+            </div>
+            <span class="badge-mode">Campus &amp; Online</span>
+        </header>
+
+        <h1 id="module-heading">Special Applications: Pediatrics & Reconstitution</h1>
+        <p class="module-subtitle">
+            Master pediatric dosing calculations, reconstitution techniques, and table analysis. 
+            Apply special considerations for vulnerable patient populations.
+        </p>
+
+        <!-- Progress Tracker (2-Step Only) -->
+        <div class="progress-tracker">
+            <div class="progress-step active" data-step="1">
+                <div class="step-circle">1</div>
+                <div class="step-label">Pediatric Dosing</div>
+            </div>
+            <div class="progress-step" data-step="2">
+                <div class="step-circle">2</div>
+                <div class="step-label">Reconstitution & Tables</div>
+            </div>
+        </div>
+
+        <!-- Progress Summary -->
+        <div class="progress-summary">
+            <div class="summary-card">
+                <span class="summary-number" id="completed-count">0</span>
+                <span class="summary-label">Activities Completed</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="accuracy-rate">0%</span>
+                <span class="summary-label">Current Accuracy</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="time-spent">0:00</span>
+                <span class="summary-label">Time Spent</span>
+            </div>
+        </div>
+
+        <!-- Activity Grid (2 Activities) -->
+        <div class="activity-grid">
+            <!-- Activity 1: Pediatric Dose Calculation -->
+            <section class="activity-card" id="activity-1" data-activity="1">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 1</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">Pediatric Dose Calculation & Comparison</h3>
+                <p class="activity-description">
+                    Calculate pediatric doses using two different methods (BSA and weight-based), 
+                    compare results, and understand why pediatric dosing requires extra caution.
+                </p>
+
+                <!-- Pediatric Case -->
+                <div class="pediatric-case">
+                    <div class="case-title">👶 Pediatric Patient Case</div>
+                    <div class="case-content">
+                        <strong>Patient:</strong> Emma, a 4-year-old female with bacterial pneumonia<br>
+                        <strong>Medication:</strong> Amoxicillin (usual adult dose: 500mg every 8 hours)<br>
+                        <strong>Provider Order:</strong> Calculate appropriate pediatric dose
+                    </div>
+                    
+                    <div class="patient-info">
+                        <div class="info-item">
+                            <div class="info-label">Weight</div>
+                            <div>18 kg (40 lbs)</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Height</div>
+                            <div>102 cm (40 inches)</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">BSA (Calculated)</div>
+                            <div>0.68 m²</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Age</div>
+                            <div>4 years</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Method Comparison -->
+                <div class="method-comparison">
+                    <div class="method-card bsa">
+                        <div class="method-title">
+                            <span>📏</span>
+                            Body Surface Area (BSA) Method
+                        </div>
+                        <div class="method-formula">
+                            Child Dose = (Child's BSA ÷ 1.73 m²) × Adult Dose
+                        </div>
+                        <div class="question-container">
+                            <div class="question-text">Calculate using BSA method:</div>
+                            <div class="input-container">
+                                <label class="input-label">Child Dose = (0.68 m² ÷ 1.73 m²) × 500mg = 
+                                    <input type="text" class="input-field" id="bsa-dose-input" placeholder="Enter mg"> mg
+                                </label>
+                                <div class="inline-feedback" id="feedback-bsa"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="method-card weight">
+                        <div class="method-title">
+                            <span>⚖️</span>
+                            Weight-Based Method
+                        </div>
+                        <div class="method-formula">
+                            Child Dose = Weight (kg) × mg/kg (pediatric dosing guideline)
+                        </div>
+                        <div class="question-container">
+                            <div class="question-text">Amoxicillin pediatric guideline: 20-40 mg/kg/day divided every 8 hours</div>
+                            <div class="input-container">
+                                <label class="input-label">Calculate for 25 mg/kg/day: 18 kg × 25 mg/kg/day = 
+                                    <input type="text" class="input-field" id="daily-dose-input" placeholder="Enter mg/day"> mg/day
+                                </label>
+                                <div class="inline-feedback" id="feedback-daily"></div>
+                            </div>
+                            <div class="input-container">
+                                <label class="input-label">Per dose (÷ 3 doses/day): 
+                                    <input type="text" class="input-field" id="per-dose-input" placeholder="Enter mg/dose"> mg every 8 hours
+                                </label>
+                                <div class="inline-feedback" id="feedback-perdose"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Comparison Question -->
+                <div class="question-container">
+                    <div class="question-text">Which method yields a more conservative (safer) dose for this pediatric patient?</div>
+                    <div class="options-grid">
+                        <div class="option-item" data-option="correct" data-question="comparison">
+                            <div class="option-marker">A</div>
+                            <div class="option-text">BSA method (196.5mg) is more conservative than weight-based method (150mg)</div>
+                        </div>
+                        <div class="option-item" data-option="incorrect" data-question="comparison">
+                            <div class="option-marker">B</div>
+                            <div class="option-text">Weight-based method (150mg) is more conservative than BSA method (196.5mg)</div>
+                        </div>
+                        <div class="option-item" data-option="incorrect" data-question="comparison">
+                            <div class="option-marker">C</div>
+                            <div class="option-text">Both methods give the same dose</div>
+                        </div>
+                        <div class="option-item" data-option="incorrect" data-question="comparison">
+                            <div class="option-marker">D</div>
+                            <div class="option-text">Neither method is appropriate for pediatrics</div>
+                        </div>
+                    </div>
+                    <div class="inline-feedback" id="feedback-comparison"></div>
+                </div>
+
+                <!-- Safety Warning -->
+                <div class="safety-warning">
+                    <div class="warning-icon">⚠️</div>
+                    <div class="warning-content">
+                        <div class="warning-title">PEDIATRIC SAFETY ALERT</div>
+                        <div class="warning-text">
+                            Children are NOT small adults! Their metabolism, organ function, and body composition differ significantly. 
+                            Always use pediatric-specific dosing guidelines and double-check calculations. Consider using the 
+                            <strong>more conservative dose</strong> when methods give different results.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback-container" id="feedback-1">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Pediatric Dosing Mastered!
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Correct Calculations:</strong><br>
+                        • <strong>BSA Method:</strong> (0.68 ÷ 1.73) × 500mg = <strong>196.5mg</strong> every 8 hours<br>
+                        • <strong>Weight-Based Method:</strong> 18kg × 25mg/kg/day = 450mg/day ÷ 3 = <strong>150mg</strong> every 8 hours<br><br>
+                        
+                        <strong>Key Differences:</strong><br>
+                        • <strong>BSA Method:</strong> More accurate for medications that distribute in body water or fat<br>
+                        • <strong>Weight-Based:</strong> Simpler, commonly used for antibiotics and emergency drugs<br>
+                        • <strong>Age-Based:</strong> Sometimes used for vaccines and some medications<br><br>
+                        
+                        <strong>Clinical Decision:</strong> For this case, the weight-based method (150mg) is more conservative/safer. 
+                        However, the provider would consider infection severity, patient history, and local guidelines before deciding.
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity 2: Reconstitution & Table Analysis -->
+            <section class="activity-card" id="activity-2" data-activity="2">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 2</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">Reconstitution Simulation & Table Analysis</h3>
+                <p class="activity-description">
+                    Practice reconstituting powdered medications and analyze drug reference tables 
+                    to determine final concentrations and appropriate dilutions.
+                </p>
+
+                <!-- Reconstitution Simulation -->
+                <div class="recon-container">
+                    <div class="case-title">💉 Reconstitution Simulation: Cefazolin 1g vial</div>
+                    
+                    <div class="recon-vial">
+                        <div class="vial-label">Cefazolin<br>1g</div>
+                        <div class="vial-powder"></div>
+                        <div class="vial-label">Powder for<br>Injection</div>
+                    </div>
+
+                    <div class="recon-steps">
+                        <div class="recon-step" data-step="1">
+                            <div class="step-number">1</div>
+                            <div class="step-text">Read label: "Reconstitute with 2.5mL Sterile Water to yield 330mg/mL"</div>
+                        </div>
+                        <div class="recon-step" data-step="2">
+                            <div class="step-number">2</div>
+                            <div class="step-text">Calculate total volume after reconstitution</div>
+                        </div>
+                        <div class="recon-step" data-step="3">
+                            <div class="step-number">3</div>
+                            <div class="step-text">Draw up correct amount of diluent (sterile water)</div>
+                        </div>
+                        <div class="recon-step" data-step="4">
+                            <div class="step-number">4</div>
+                            <div class="step-text">Inject diluent into vial, aiming at side wall</div>
+                        </div>
+                        <div class="recon-step" data-step="5">
+                            <div class="step-number">5</div>
+                            <div class="step-text">Gently roll vial to mix (DO NOT SHAKE vigorously)</div>
+                        </div>
+                        <div class="recon-step" data-step="6">
+                            <div class="step-number">6</div>
+                            <div class="step-text">Calculate volume needed for ordered dose</div>
+                        </div>
+                    </div>
+
+                    <!-- Calculation Questions -->
+                    <div class="question-container">
+                        <div class="question-text">If reconstituted with 2.5mL diluent to yield 330mg/mL, what is the total volume in the vial?</div>
+                        <div class="input-container">
+                            <label class="input-label">Total volume = Total drug (1000mg) ÷ Concentration (330mg/mL) = 
+                                <input type="text" class="input-field" id="total-volume-input" placeholder="Enter mL"> mL
+                            </label>
+                            <div class="inline-feedback" id="feedback-totalvol"></div>
+                        </div>
+                    </div>
+
+                    <div class="question-container">
+                        <div class="question-text">Provider orders 500mg Cefazolin IM. How many mL should you draw up?</div>
+                        <div class="input-container">
+                            <label class="input-label">Volume = Dose (500mg) ÷ Concentration (330mg/mL) = 
+                                <input type="text" class="input-field" id="draw-volume-input" placeholder="Enter mL"> mL
+                            </label>
+                            <div class="inline-feedback" id="feedback-drawvol"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Drug Table Analysis -->
+                <div class="drug-table-container">
+                    <div class="case-title" style="margin-bottom: 10px;">📊 Drug Reference Table Analysis</div>
+                    <table class="drug-table">
+                        <thead>
+                            <tr>
+                                <th>Diluent Volume</th>
+                                <th>Approximate Concentration</th>
+                                <th>Total Volume</th>
+                                <th>Use Within</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2.5 mL</td>
+                                <td>330 mg/mL</td>
+                                <td>3.0 mL</td>
+                                <td>24 hours at room temp</td>
+                            </tr>
+                            <tr class="table-highlight">
+                                <td>8.6 mL</td>
+                                <td>100 mg/mL</td>
+                                <td>10.0 mL</td>
+                                <td>10 days refrigerated</td>
+                            </tr>
+                            <tr>
+                                <td>20.0 mL</td>
+                                <td>50 mg/mL</td>
+                                <td>21.0 mL</td>
+                                <td>10 days refrigerated</td>
+                            </tr>
+                            <tr>
+                                <td>50.0 mL</td>
+                                <td>20 mg/mL</td>
+                                <td>51.0 mL</td>
+                                <td>10 days refrigerated</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Table Analysis Questions -->
+                <div class="question-container">
+                    <div class="question-text">Based on the table, if you use 8.6mL of diluent, what is the final concentration?</div>
+                    <div class="options-grid">
+                        <div class="option-item" data-option="incorrect" data-question="table1">
+                            <div class="option-marker">A</div>
+                            <div class="option-text">330 mg/mL</div>
+                        </div>
+                        <div class="option-item" data-option="correct" data-question="table1">
+                            <div class="option-marker">B</div>
+                            <div class="option-text">100 mg/mL</div>
+                        </div>
+                        <div class="option-item" data-option="incorrect" data-question="table1">
+                            <div class="option-marker">C</div>
+                            <div class="option-text">50 mg/mL</div>
+                        </div>
+                        <div class="option-item" data-option="incorrect" data-question="table1">
+                            <div class="option-marker">D</div>
+                            <div class="option-text">20 mg/mL</div>
+                        </div>
+                    </div>
+                    <div class="inline-feedback" id="feedback-table1"></div>
+                </div>
+
+                <div class="question-container">
+                    <div class="question-text">For pediatric use requiring smaller doses, which dilution would be most appropriate?</div>
+                    <div class="options-grid">
+                        <div class="option-item" data-option="incorrect" data-question="table2">
+                            <div class="option-marker">A</div>
+                            <div class="option-text">2.5 mL diluent (330 mg/mL) - most concentrated</div>
+                        </div>
+                        <div class="option-item" data-option="incorrect" data-question="table2">
+                            <div class="option-marker">B</div>
+                            <div class="option-text">8.6 mL diluent (100 mg/mL) - moderate concentration</div>
+                        </div>
+                        <div class="option-item" data-option="correct" data-question="table2">
+                            <div class="option-marker">C</div>
+                            <div class="option-text">20.0 mL diluent (50 mg/mL) - easier to measure small doses accurately</div>
+                        </div>
+                        <div class="option-item" data-option="incorrect" data-question="table2">
+                            <div class="option-marker">D</div>
+                            <div class="option-text">All are equally appropriate</div>
+                        </div>
+                    </div>
+                    <div class="inline-feedback" id="feedback-table2"></div>
+                </div>
+
+                <!-- Pro Tip -->
+                <div class="pro-tip">
+                    <div class="pro-tip-title">💡 Reconstitution Pro Tip</div>
+                    <div class="pro-tip-content">
+                        <strong>Remember:</strong> The powder in the vial adds volume! When you add 2.5mL diluent to a 1g vial, 
+                        you get approximately 3.0mL total volume. Always check the manufacturer's instructions for exact 
+                        reconstitution volumes and resulting concentrations.
+                    </div>
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback-container" id="feedback-2">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Reconstitution & Analysis Complete!
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Reconstitution Calculations:</strong><br>
+                        1. Total volume = 1000mg ÷ 330mg/mL = <strong>3.03mL</strong> (approximately 3.0mL)<br>
+                        2. Volume for 500mg dose = 500mg ÷ 330mg/mL = <strong>1.52mL</strong><br><br>
+                        
+                        <strong>Table Analysis Insights:</strong><br>
+                        • <strong>8.6mL diluent</strong> yields <strong>100 mg/mL</strong> concentration<br>
+                        • <strong>Storage varies:</strong> More concentrated solutions often have shorter stability<br>
+                        • <strong>Pediatric considerations:</strong> Less concentrated solutions (50 mg/mL) allow for more accurate 
+                        measurement of small doses, reducing measurement errors<br><br>
+                        
+                        <strong>Clinical Application:</strong> Reconstitution skills are critical for antibiotics, vaccines, and 
+                        many emergency medications. Always label reconstituted medications with concentration, date/time, 
+                        and your initials.
+                    </div>
+                </div>
+
+                <!-- Competency Quiz -->
+                <div class="quiz-container">
+                    <div class="quiz-title">
+                        <span>📝</span>
+                        Final Competency Check
+                    </div>
+                    
+                    <div class="quiz-question">
+                        <div class="question-text">A 25kg child needs Amoxicillin 40 mg/kg/day divided every 8 hours. Calculate one dose:</div>
+                        <div class="input-container">
+                            <label class="input-label">One dose = 
+                                <input type="text" class="input-field" id="competency1-input" placeholder="Enter mg"> mg
+                            </label>
+                            <div class="inline-feedback" id="feedback-comp1"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="quiz-question">
+                        <div class="question-text">Reconstitute 500mg vial with 1.8mL to yield 250mg/mL. What volume for 375mg dose?</div>
+                        <div class="input-container">
+                            <label class="input-label">Volume = 
+                                <input type="text" class="input-field" id="competency2-input" placeholder="Enter mL"> mL
+                            </label>
+                            <div class="inline-feedback" id="feedback-comp2"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn btn-secondary" id="reset-all-btn">
+                <span class="btn-icon">↻</span>
+                Reset All Activities
+            </button>
+            <button class="btn btn-secondary" id="check-answers-btn">
+                <span class="btn-icon">✓</span>
+                Check All Answers
+            </button>
+            <button class="btn btn-primary" id="view-results-btn">
+                <span class="btn-icon">📊</span>
+                View Final Results
+            </button>
+        </div>
+
+        <!-- Results Panel -->
+        <div class="results-panel" id="results-panel">
+            <div class="results-header">
+                <h2 class="results-title">Special Applications Competency Results</h2>
+            </div>
+            <div class="score-display" id="final-score">0%</div>
+            
+            <div class="clinical-insights">
+                <h3 class="insights-title">
+                    <span>🩺</span> Pediatric & Reconstitution Mastery
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Pediatric Dosing Principles:</strong> Children have different pharmacokinetics - faster metabolism, 
+                        higher body water percentage, immature organ systems. Always use pediatric-specific references and 
+                        calculate based on weight or BSA, never age alone.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>BSA vs Weight-Based:</strong> BSA method (Mosteller formula: √[height(cm)×weight(kg)/3600]) is 
+                        more accurate for drugs with narrow therapeutic windows. Weight-based is standard for antibiotics. 
+                        When in doubt, use the more conservative dose.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Reconstitution Accuracy:</strong> Powder adds volume! Final volume = diluent volume + powder displacement. 
+                        Always roll, don't shake, to prevent foaming and protein denaturation. Label immediately with concentration, 
+                        date, time, and expiration.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Table Interpretation:</strong> Drug reference tables provide critical information: concentration options, 
+                        stability data, compatibility, and administration guidelines. Choose concentration based on dose accuracy needs 
+                        and storage requirements.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Measurement Precision:</strong> For small pediatric doses, use smaller syringes (1mL insulin syringes 
+                        for accuracy to 0.01mL). Less concentrated solutions allow more precise measurement of small volumes.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="clinical-insights" style="margin-top: 20px;">
+                <h3 class="insights-title">
+                    <span>📋</span> Documentation & Safety Protocols
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Double-Check System:</strong> All pediatric doses and reconstituted medications require 
+                        independent double-check by another qualified healthcare professional before administration.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Expiration Tracking:</strong> Reconstituted medications have short stability. Implement 
+                        a system to track expiration times (room temp vs refrigerated) and discard appropriately.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Competency Validation:</strong> Pediatric medication competency must be validated 
+                        separately from adult competencies. Include BSA calculations, weight-based dosing, and 
+                        reconstitution skills in annual competency assessments.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Parent Education:</strong> When parents administer medications at home, provide 
+                        clear instructions, demonstrate measurement, and use teach-back method. Provide oral syringes 
+                        for liquid medications.</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // State Management
+            const state = {
+                activities: {
+                    1: { completed: false, correct: 0, total: 7, score: 0 },
+                    2: { completed: false, correct: 0, total: 9, score: 0 }
+                },
+                startedAt: new Date(),
+                timeSpent: 0
+            };
+
+            // DOM Elements
+            const progressSteps = document.querySelectorAll('.progress-step');
+            const activityCards = document.querySelectorAll('.activity-card');
+            const completedCount = document.getElementById('completed-count');
+            const accuracyRate = document.getElementById('accuracy-rate');
+            const timeSpent = document.getElementById('time-spent');
+            const resetBtn = document.getElementById('reset-all-btn');
+            const checkBtn = document.getElementById('check-answers-btn');
+            const resultsBtn = document.getElementById('view-results-btn');
+            const resultsPanel = document.getElementById('results-panel');
+            const finalScore = document.getElementById('final-score');
+
+            // Timer for time spent
+            function updateTimer() {
+                const now = new Date();
+                const diff = Math.floor((now - state.startedAt) / 1000);
+                state.timeSpent = diff;
+                const minutes = Math.floor(diff / 60);
+                const seconds = diff % 60;
+                timeSpent.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            }
+            setInterval(updateTimer, 1000);
+
+            // Update Progress Summary
+            function updateProgressSummary() {
+                let completed = 0;
+                let totalCorrect = 0;
+                let totalItems = 0;
+
+                Object.values(state.activities).forEach(activity => {
+                    if (activity.completed) completed++;
+                    totalCorrect += activity.correct;
+                    totalItems += activity.total;
+                });
+
+                completedCount.textContent = completed;
+                const accuracy = totalItems > 0 ? Math.round((totalCorrect / totalItems) * 100) : 0;
+                accuracyRate.textContent = `${accuracy}%`;
+
+                // Update progress steps
+                progressSteps.forEach((step, index) => {
+                    const stepNum = index + 1;
+                    if (state.activities[stepNum]?.completed) {
+                        step.classList.add('completed');
+                        step.classList.remove('active');
+                    } else if (stepNum === 1 || (stepNum === 2 && state.activities[1].completed)) {
+                        step.classList.add('active');
+                        step.classList.remove('completed');
+                    } else {
+                        step.classList.remove('active', 'completed');
+                    }
+                });
+            }
+
+            // Show inline feedback
+            function showInlineFeedback(elementId, message, isCorrect) {
+                const feedbackEl = document.getElementById(elementId);
+                feedbackEl.textContent = message;
+                feedbackEl.className = `inline-feedback ${isCorrect ? 'correct' : 'incorrect'}`;
+                
+                if (isCorrect) {
+                    setTimeout(() => {
+                        feedbackEl.classList.add('fading');
+                        setTimeout(() => {
+                            feedbackEl.style.display = 'none';
+                            feedbackEl.classList.remove('fading');
+                        }, 800);
+                    }, 3000);
+                }
+            }
+
+            // Check input answer with delay
+            function setupInputWithFeedback(inputId, correctAnswer, feedbackId, feedbackMessage) {
+                const input = document.getElementById(inputId);
+                let timeout;
+                
+                input.addEventListener('input', function() {
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => {
+                        const userAnswer = this.value.trim();
+                        // Allow both exact matches and approximate (within 0.1 for decimals)
+                        let isCorrect = false;
+                        
+                        if (userAnswer.includes('.')) {
+                            const userNum = parseFloat(userAnswer);
+                            const correctNum = parseFloat(correctAnswer);
+                            isCorrect = Math.abs(userNum - correctNum) < 0.1;
+                        } else {
+                            isCorrect = userAnswer === correctAnswer;
+                        }
+                        
+                        this.className = `input-field ${isCorrect ? 'correct' : 'incorrect'}`;
+                        
+                        if (userAnswer) {
+                            if (isCorrect) {
+                                showInlineFeedback(feedbackId, '✓ Correct! ' + feedbackMessage, true);
+                            } else {
+                                showInlineFeedback(feedbackId, '✗ Incorrect. ' + feedbackMessage, false);
+                            }
+                        }
+                    }, 800);
+                });
+            }
+
+            // Setup MCQ options
+            function setupMCQOptions() {
+                document.querySelectorAll('.option-item').forEach(option => {
+                    option.addEventListener('click', function() {
+                        if (this.closest('.activity-card').classList.contains('completed')) return;
+                        
+                        const questionNum = this.dataset.question;
+                        const isCorrect = this.dataset.option === 'correct';
+                        const allOptions = this.parentElement.querySelectorAll('.option-item');
+                        
+                        // Remove selections from this question
+                        allOptions.forEach(opt => {
+                            opt.classList.remove('selected', 'wrong');
+                        });
+                        
+                        // Mark selected
+                        this.classList.add(isCorrect ? 'selected' : 'wrong');
+                        
+                        // Show feedback
+                        const feedbackId = `feedback-${questionNum}`;
+                        let message = '';
+                        
+                        if (isCorrect) {
+                            message = '✓ Correct! ';
+                            if (questionNum === 'comparison') message += 'The weight-based method gives a more conservative dose, which is often safer for pediatric patients.';
+                            else if (questionNum === 'table1') message += 'Correct! 8.6mL diluent yields 100 mg/mL concentration.';
+                            else if (questionNum === 'table2') message += 'Yes! Less concentrated solutions allow more accurate measurement of small pediatric doses.';
+                        } else {
+                            message = '✗ Incorrect. ';
+                            if (questionNum === 'comparison') message += 'Review the calculations: BSA method = 196.5mg, Weight-based = 150mg. Which is smaller?';
+                            else if (questionNum === 'table1') message += 'Check the highlighted row in the table.';
+                            else if (questionNum === 'table2') message += 'Consider which concentration would be easiest to measure small volumes accurately.';
+                        }
+                        
+                        showInlineFeedback(feedbackId, message, isCorrect);
+                    });
+                });
+            }
+
+            // Setup reconstitution steps
+            function setupReconSteps() {
+                document.querySelectorAll('.recon-step').forEach(step => {
+                    step.addEventListener('click', function() {
+                        if (this.closest('.activity-card').classList.contains('completed')) return;
+                        
+                        const allSteps = this.parentElement.querySelectorAll('.recon-step');
+                        const stepNum = parseInt(this.dataset.step);
+                        
+                        // Check if clicked in order
+                        let correctOrder = true;
+                        for (let i = 1; i < stepNum; i++) {
+                            if (!allSteps[i-1].classList.contains('selected')) {
+                                correctOrder = false;
+                                break;
+                            }
+                        }
+                        
+                        if (correctOrder) {
+                            this.classList.add('selected');
+                            this.classList.remove('wrong');
+                        } else {
+                            this.classList.add('wrong');
+                            setTimeout(() => {
+                                this.classList.remove('wrong');
+                            }, 500);
+                        }
+                    });
+                });
+            }
+
+            // Check activity completion
+            function checkActivityCompletion(activityNum) {
+                const activity = state.activities[activityNum];
+                const card = document.getElementById(`activity-${activityNum}`);
+                const status = card.querySelector('.activity-status');
+                const feedback = document.getElementById(`feedback-${activityNum}`);
+                
+                // Check Activity 1 completion
+                if (activityNum === 1) {
+                    const bsaInput = document.getElementById('bsa-dose-input');
+                    const dailyInput = document.getElementById('daily-dose-input');
+                    const perDoseInput = document.getElementById('per-dose-input');
+                    const comparisonCorrect = document.querySelector('#activity-1 .option-item[data-option="correct"][data-question="comparison"].selected');
+                    
+                    // Check approximate matches for decimal answers
+                    const bsaCorrect = bsaInput.value.trim() === '196.5' || bsaInput.value.trim() === '196.53' || bsaInput.value.trim() === '197';
+                    const dailyCorrect = dailyInput.value.trim() === '450';
+                    const perDoseCorrect = perDoseInput.value.trim() === '150';
+                    
+                    if (bsaCorrect && dailyCorrect && perDoseCorrect && comparisonCorrect) {
+                        activity.completed = true;
+                        activity.correct = 7; // 4 inputs + 1 MCQ + 2 calculation components
+                        activity.score = 100;
+                        status.textContent = 'Completed';
+                        status.style.color = '#00b894';
+                        card.classList.add('completed');
+                        feedback.classList.add('show');
+                        updateProgressSummary();
+                    }
+                }
+                
+                // Check Activity 2 completion
+                if (activityNum === 2) {
+                    const totalVolInput = document.getElementById('total-volume-input');
+                    const drawVolInput = document.getElementById('draw-volume-input');
+                    const table1Correct = document.querySelector('#activity-2 .option-item[data-option="correct"][data-question="table1"].selected');
+                    const table2Correct = document.querySelector('#activity-2 .option-item[data-option="correct"][data-question="table2"].selected');
+                    const comp1Input = document.getElementById('competency1-input');
+                    const comp2Input = document.getElementById('competency2-input');
+                    
+                    // Check approximate matches
+                    const totalVolCorrect = totalVolInput.value.trim() === '3.03' || totalVolInput.value.trim() === '3.0' || totalVolInput.value.trim() === '3';
+                    const drawVolCorrect = drawVolInput.value.trim() === '1.52' || drawVolInput.value.trim() === '1.5' || drawVolInput.value.trim() === '1.51';
+                    const comp1Correct = comp1Input.value.trim() === '333' || comp1Input.value.trim() === '333.3' || comp1Input.value.trim() === '333.33';
+                    const comp2Correct = comp2Input.value.trim() === '1.5' || comp2Input.value.trim() === '1.50';
+                    
+                    if (totalVolCorrect && drawVolCorrect && table1Correct && table2Correct && comp1Correct && comp2Correct) {
+                        activity.completed = true;
+                        activity.correct = 9;
+                        activity.score = 100;
+                        status.textContent = 'Completed';
+                        status.style.color = '#00b894';
+                        card.classList.add('completed');
+                        feedback.classList.add('show');
+                        updateProgressSummary();
+                    }
+                }
+            }
+
+            // Initialize Activity 1
+            function initActivity1() {
+                setupMCQOptions();
+                
+                // Setup input fields with feedback
+                setupInputWithFeedback('bsa-dose-input', '196.5', 'feedback-bsa', 
+                    '(0.68 ÷ 1.73) × 500mg = 196.5mg');
+                setupInputWithFeedback('daily-dose-input', '450', 'feedback-daily', 
+                    '18kg × 25mg/kg/day = 450mg/day');
+                setupInputWithFeedback('per-dose-input', '150', 'feedback-perdose', 
+                    '450mg/day ÷ 3 doses = 150mg every 8 hours');
+                
+                // Check completion on input
+                document.getElementById('bsa-dose-input').addEventListener('input', () => checkActivityCompletion(1));
+                document.getElementById('daily-dose-input').addEventListener('input', () => checkActivityCompletion(1));
+                document.getElementById('per-dose-input').addEventListener('input', () => checkActivityCompletion(1));
+            }
+
+            // Initialize Activity 2
+            function initActivity2() {
+                setupMCQOptions();
+                setupReconSteps();
+                
+                // Setup input fields with feedback
+                setupInputWithFeedback('total-volume-input', '3.03', 'feedback-totalvol', 
+                    '1000mg ÷ 330mg/mL = 3.03mL');
+                setupInputWithFeedback('draw-volume-input', '1.52', 'feedback-drawvol', 
+                    '500mg ÷ 330mg/mL = 1.52mL');
+                setupInputWithFeedback('competency1-input', '333.33', 'feedback-comp1', 
+                    '25kg × 40mg/kg/day = 1000mg/day ÷ 3 = 333.33mg/dose');
+                setupInputWithFeedback('competency2-input', '1.5', 'feedback-comp2', 
+                    '375mg ÷ 250mg/mL = 1.5mL');
+                
+                // Check completion on input
+                document.getElementById('total-volume-input').addEventListener('input', () => checkActivityCompletion(2));
+                document.getElementById('draw-volume-input').addEventListener('input', () => checkActivityCompletion(2));
+                document.getElementById('competency1-input').addEventListener('input', () => checkActivityCompletion(2));
+                document.getElementById('competency2-input').addEventListener('input', () => checkActivityCompletion(2));
+            }
+
+            // Reset All Activities
+            function resetAllActivities() {
+                // Reset state
+                Object.keys(state.activities).forEach(key => {
+                    state.activities[key] = {
+                        completed: false,
+                        correct: 0,
+                        total: parseInt(key) === 1 ? 7 : 9,
+                        score: 0
+                    };
+                });
+
+                // Reset UI
+                activityCards.forEach(card => {
+                    card.classList.remove('completed');
+                    const status = card.querySelector('.activity-status');
+                    status.textContent = 'Not Started';
+                    status.style.color = '';
+                    const feedback = card.querySelector('.feedback-container');
+                    feedback.classList.remove('show');
+                });
+
+                // Reset inputs and selections
+                document.querySelectorAll('.input-field').forEach(input => {
+                    input.value = '';
+                    input.className = 'input-field';
+                });
+                
+                document.querySelectorAll('.option-item, .recon-step').forEach(element => {
+                    element.classList.remove('selected', 'wrong');
+                });
+                
+                document.querySelectorAll('.inline-feedback').forEach(fb => {
+                    fb.textContent = '';
+                    fb.className = 'inline-feedback';
+                    fb.style.display = 'none';
+                });
+
+                // Reset results
+                resultsPanel.classList.remove('show');
+
+                // Update progress
+                updateProgressSummary();
+            }
+
+            // Check All Answers (Auto-complete)
+            function checkAllAnswers() {
+                // Activity 1
+                if (!state.activities[1].completed) {
+                    // Set correct answers
+                    document.getElementById('bsa-dose-input').value = '196.5';
+                    document.getElementById('bsa-dose-input').className = 'input-field correct';
+                    document.getElementById('daily-dose-input').value = '450';
+                    document.getElementById('daily-dose-input').className = 'input-field correct';
+                    document.getElementById('per-dose-input').value = '150';
+                    document.getElementById('per-dose-input').className = 'input-field correct';
+                    document.querySelector('#activity-1 .option-item[data-option="correct"][data-question="comparison"]').classList.add('selected');
+                    
+                    state.activities[1].completed = true;
+                    state.activities[1].correct = 7;
+                    state.activities[1].score = 100;
+                    
+                    const card1 = document.getElementById('activity-1');
+                    card1.querySelector('.activity-status').textContent = 'Completed';
+                    card1.querySelector('.activity-status').style.color = '#00b894';
+                    card1.classList.add('completed');
+                    document.getElementById('feedback-1').classList.add('show');
+                }
+
+                // Activity 2
+                if (!state.activities[2].completed) {
+                    // Set correct answers
+                    document.getElementById('total-volume-input').value = '3.03';
+                    document.getElementById('total-volume-input').className = 'input-field correct';
+                    document.getElementById('draw-volume-input').value = '1.52';
+                    document.getElementById('draw-volume-input').className = 'input-field correct';
+                    document.getElementById('competency1-input').value = '333.33';
+                    document.getElementById('competency1-input').className = 'input-field correct';
+                    document.getElementById('competency2-input').value = '1.5';
+                    document.getElementById('competency2-input').className = 'input-field correct';
+                    document.querySelector('#activity-2 .option-item[data-option="correct"][data-question="table1"]').classList.add('selected');
+                    document.querySelector('#activity-2 .option-item[data-option="correct"][data-question="table2"]').classList.add('selected');
+                    
+                    // Mark all recon steps as selected
+                    document.querySelectorAll('.recon-step').forEach(step => {
+                        step.classList.add('selected');
+                    });
+                    
+                    state.activities[2].completed = true;
+                    state.activities[2].correct = 9;
+                    state.activities[2].score = 100;
+                    
+                    const card2 = document.getElementById('activity-2');
+                    card2.querySelector('.activity-status').textContent = 'Completed';
+                    card2.querySelector('.activity-status').style.color = '#00b894';
+                    card2.classList.add('completed');
+                    document.getElementById('feedback-2').classList.add('show');
+                }
+
+                updateProgressSummary();
+            }
+
+            // View Final Results
+            function viewFinalResults() {
+                let totalScore = 0;
+                let activityCount = 0;
+
+                Object.values(state.activities).forEach(activity => {
+                    if (activity.completed) {
+                        totalScore += activity.score;
+                        activityCount++;
+                    }
+                });
+
+                const averageScore = activityCount > 0 ? Math.round(totalScore / activityCount) : 0;
+                finalScore.textContent = `${averageScore}%`;
+                resultsPanel.classList.add('show');
+                resultsPanel.scrollIntoView({ behavior: 'smooth' });
+            }
+
+            // Initialize
+            initActivity1();
+            initActivity2();
+            updateProgressSummary();
+
+            // Event listeners
+            resetBtn.addEventListener('click', resetAllActivities);
+            checkBtn.addEventListener('click', checkAllAnswers);
+            resultsBtn.addEventListener('click', viewFinalResults);
+
+            // Check completion on option selection and input
+            document.querySelectorAll('.option-item').forEach(option => {
+                option.addEventListener('click', function() {
+                    const activityNum = this.closest('.activity-card').dataset.activity;
+                    setTimeout(() => checkActivityCompletion(parseInt(activityNum)), 100);
+                });
+            });
+            
+            document.querySelectorAll('.input-field').forEach(input => {
+                input.addEventListener('input', function() {
+                    const activityNum = this.closest('.activity-card').dataset.activity;
+                    setTimeout(() => checkActivityCompletion(parseInt(activityNum)), 300);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
