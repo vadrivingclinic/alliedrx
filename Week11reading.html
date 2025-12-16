@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>AlliedRx -- Week 11 Reading Assignments</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-error: #e17055;
+            --color-warning: #fdcb6e;
+            --color-info: #0984e3;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
+            --color-dark: #0c0a18;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+            --shadow-card: 0 12px 30px rgba(15, 23, 42, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(
+                circle at top left,
+                #ffffff 0,
+                #f1ecff 40%,
+                var(--color-bg) 100%
+            );
+            color: var(--color-text);
+            -webkit-text-size-adjust: 100%;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 12px;
+            }
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1120px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px 30px;
+            display: grid;
+            grid-template-columns: minmax(0, 3.1fr) minmax(0, 2.4fr);
+            gap: 28px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        @media (max-width: 900px) {
+            .page {
+                grid-template-columns: 1fr;
+                padding: 22px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 0;
+            }
+            .page {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 18px 14px 22px;
+                gap: 22px;
+            }
+        }
+
+        img,
+        .page,
+        .column,
+        .reading-card,
+        .side-card {
+            max-width: 100%;
+        }
+
+        .column {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header / branding */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .brand-logo:hover {
+            transform: scale(1.05);
+        }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+            animation: pulse 3s infinite;
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--color-success);
+            flex-shrink: 0;
+            animation: blink 1.5s infinite;
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .badge-mode:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+        @media (max-width: 480px) {
+            .brand-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .badge-mode {
+                margin-top: 6px;
+            }
+        }
+
+        h1 {
+            font-size: clamp(2rem, 3vw, 2.4rem);
+            line-height: 1.05;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 34rem;
+            margin-bottom: 18px;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        .subtitle strong {
+            color: var(--color-primary);
+        }
+
+        /* Progress tracker */
+        .progress-container {
+            margin: 20px 0;
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: 16px;
+            padding: 16px 18px;
+            border: 1px solid rgba(12, 10, 24, 0.06);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .progress-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-text);
+        }
+
+        .progress-percent {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: rgba(12, 10, 24, 0.08);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+            border-radius: 4px;
+            width: 0%;
+            transition: width 1s ease-out;
+        }
+
+        /* Reading cards */
+        .reading-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 12px;
+        }
+
+        .reading-card {
+            border-radius: 18px;
+            padding: 14px 16px 14px;
+            border: 1px solid rgba(15, 23, 42, 0.06);
+            background: linear-gradient(
+                135deg,
+                rgba(175, 75, 239, 0.07),
+                rgba(255, 255, 255, 0.95)
+            );
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 12px;
+            align-items: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .reading-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.7s ease;
+        }
+
+        .reading-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--color-primary-soft);
+        }
+
+        .reading-card:hover::before {
+            left: 100%;
+        }
+
+        .reading-card.completed {
+            border-color: var(--color-success);
+            background: linear-gradient(
+                135deg,
+                rgba(0, 184, 148, 0.07),
+                rgba(255, 255, 255, 0.95)
+            );
+        }
+
+        @media (max-width: 600px) {
+            .reading-card {
+                grid-template-columns: 1fr;
+                align-items: flex-start;
+            }
+            .chapter-pill {
+                justify-self: flex-start;
+            }
+            .tag-time {
+                justify-self: flex-start;
+                margin-top: 6px;
+            }
+        }
+
+        .chapter-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px 11px;
+            border-radius: 999px;
+            background: #ffffff;
+            box-shadow: 0 6px 18px rgba(79, 70, 229, 0.16);
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .reading-card:hover .chapter-pill {
+            background: var(--color-primary);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .chapter-main {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .chapter-title {
+            font-size: 0.98rem;
+            font-weight: 700;
+            color: var(--color-text);
+            transition: color 0.3s ease;
+        }
+
+        .reading-card:hover .chapter-title {
+            color: var(--color-primary);
+        }
+
+        .chapter-text {
+            font-size: 0.84rem;
+            color: var(--color-muted);
+            line-height: 1.4;
+        }
+
+        .tag-time {
+            padding: 5px 8px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            font-size: 0.74rem;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .reading-card:hover .tag-time {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        /* Interactive checklist */
+        .checklist-heading {
+            font-size: 0.86rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-primary);
+            font-weight: 600;
+            margin-top: 24px;
+            margin-bottom: 12px;
+            animation: slideInRight 0.6s ease-out 0.6s both;
+        }
+
+        .checklist {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-size: 0.86rem;
+            color: var(--color-text);
+        }
+
+        .checklist li {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            padding: 8px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .checklist li:hover {
+            background: rgba(175, 75, 239, 0.05);
+            transform: translateX(5px);
+        }
+
+        .checklist li.completed {
+            opacity: 0.7;
+        }
+
+        .check-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 6px;
+            border: 2px solid rgba(148, 163, 184, 0.9);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.72rem;
+            color: rgba(148, 163, 184, 0.9);
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .checklist li:hover .check-dot {
+            border-color: var(--color-primary);
+        }
+
+        .checklist li.completed .check-dot {
+            background: var(--color-success);
+            border-color: var(--color-success);
+            color: white;
+        }
+
+        .reading-notes {
+            font-size: 0.85rem;
+            color: var(--color-muted);
+            line-height: 1.6;
+            margin-top: 16px;
+            animation: fadeIn 0.6s ease-out 0.7s both;
+        }
+
+        .reading-notes strong {
+            color: var(--color-text);
+        }
+
+        .complete-hint {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+            margin-top: 20px;
+            padding: 12px;
+            background: rgba(175, 75, 239, 0.05);
+            border-radius: 12px;
+            border-left: 3px solid var(--color-primary);
+            animation: fadeIn 0.6s ease-out 0.8s both;
+        }
+
+        /* Right column */
+        .section-tag {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-primary);
+            font-weight: 600;
+            margin-bottom: 10px;
+            animation: slideInRight 0.6s ease-out 0.5s both;
+        }
+
+        .side-heading {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--color-text);
+            margin-bottom: 10px;
+            animation: slideInRight 0.6s ease-out 0.6s both;
+        }
+
+        .side-card {
+            background: rgba(12, 10, 24, 0.94);
+            color: #e5e7eb;
+            border-radius: 18px;
+            padding: 16px 18px 18px;
+            font-size: 0.88rem;
+            line-height: 1.7;
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.6);
+            margin-bottom: 14px;
+            transition: transform 0.3s ease;
+            animation: slideInRight 0.6s ease-out 0.7s both;
+        }
+
+        .side-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .side-card strong {
+            color: #ffffff;
+        }
+
+        .side-subheading {
+            font-size: 0.86rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: #c4b5fd;
+            font-weight: 600;
+            margin: 14px 0 10px;
+        }
+
+        .side-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-size: 0.86rem;
+        }
+
+        .side-list li {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            transition: transform 0.3s ease;
+            padding: 4px 0;
+        }
+
+        .side-list li:hover {
+            transform: translateX(5px);
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            margin-top: 6px;
+            border-radius: 999px;
+            background: var(--color-accent);
+            flex-shrink: 0;
+            animation: pulse 2s infinite;
+        }
+
+        .side-list li:hover .dot {
+            background: var(--color-primary);
+            transform: scale(1.3);
+        }
+
+        .note-card {
+            margin-top: 14px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            background: rgba(15, 23, 42, 0.75);
+            padding: 12px 14px;
+            font-size: 0.8rem;
+            color: #e5e7eb;
+            transition: all 0.3s ease;
+        }
+
+        .note-card:hover {
+            border-color: var(--color-primary-soft);
+            background: rgba(15, 23, 42, 0.9);
+        }
+
+        .note-card strong {
+            color: #fef3c7;
+        }
+
+        /* Action buttons */
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 18px;
+            border-radius: 12px;
+            border: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #9a3bd6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(175, 75, 239, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-text);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(12, 10, 24, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-icon {
+            font-size: 1.1em;
+        }
+
+        /* Completion celebration */
+        .completion-celebration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .celebration-content {
+            background: white;
+            padding: 40px;
+            border-radius: var(--radius-lg);
+            text-align: center;
+            max-width: 500px;
+            animation: fadeInUp 0.5s ease;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+        }
+
+        .celebration-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        .celebration-title {
+            font-size: 1.8rem;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+        }
+
+        .celebration-text {
+            color: var(--color-muted);
+            margin-bottom: 20px;
+        }
+
+        .celebration-btn {
+            padding: 12px 24px;
+            background: var(--color-primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .celebration-btn:hover {
+            background: #9a3bd6;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="week11-reading-heading">
+        <!-- LEFT COLUMN: title + reading cards + checklist -->
+        <section class="column" aria-label="Week 11 reading assignments">
+            <header class="brand-row">
+                <div class="brand">
+                    <img
+                        src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                        alt="AlliedRx logo"
+                        class="brand-logo"
+                    />
+                    <div class="course-meta">
+                        <span class="course-name">Clinical Medical Assistant • Week 11</span>
+                        <div class="week-label">
+                            <span class="week-label-dot"></span>
+                            <span>Chapter 22 & 25: Pulmonary Medicine & ECG</span>
+                        </div>
+                    </div>
+                </div>
+                <span class="badge-mode">Campus &amp; Online</span>
+            </header>
+
+            <h1 id="week11-reading-heading">Week 11 Reading Assignments</h1>
+            <p class="subtitle">
+                This week, you'll master <strong>pulmonary system assessments</strong>
+                and <strong>electrocardiography procedures</strong> through two
+                comprehensive textbook chapters. These skills are critical for respiratory and cardiac patient care.
+            </p>
+
+            <!-- Progress tracker -->
+            <div class="progress-container">
+                <div class="progress-header">
+                    <span class="progress-title">Reading Progress</span>
+                    <span class="progress-percent" id="progress-percent">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+            </div>
+
+            <!-- Reading cards -->
+            <div class="reading-grid">
+                <!-- Chapter 22: Pulmonary Medicine -->
+                <article class="reading-card" id="chapter22-card" data-chapter="22">
+                    <div class="chapter-pill">Chapter 22</div>
+                    <div class="chapter-main">
+                        <div class="chapter-title">Assisting in Pulmonary Medicine</div>
+                        <p class="chapter-text">
+                            Focus on <strong>respiratory system anatomy</strong>,
+                            <strong>pulmonary diagnostic procedures</strong>,
+                            <strong>COPD management</strong>, and
+                            <strong>respiratory device training</strong>.
+                            Master spirometry testing, nebulizer treatments, and patient education.
+                        </p>
+                    </div>
+                    <div class="tag-time" id="chapter22-time">Est. 85–100 min</div>
+                </article>
+
+                <!-- Chapter 25: Electrocardiography -->
+                <article class="reading-card" id="chapter25-card" data-chapter="25">
+                    <div class="chapter-pill">Chapter 25</div>
+                    <div class="chapter-main">
+                        <div class="chapter-title">Principles of Electrocardiography</div>
+                        <p class="chapter-text">
+                            Study <strong>cardiac conduction system</strong>,
+                            <strong>ECG waveform interpretation</strong>,
+                            <strong>12-lead placement</strong>,
+                            <strong>arrhythmia recognition</strong>, and
+                            <strong>Holter monitoring</strong>.
+                            Learn accurate ECG recording and artifact troubleshooting.
+                        </p>
+                    </div>
+                    <div class="tag-time" id="chapter25-time">Est. 90–105 min</div>
+                </article>
+            </div>
+
+            <p class="reading-notes">
+                <strong>Textbook:</strong> Kinn's The Medical Assistant, 13th Edition
+            </p>
+
+            <!-- Interactive checklist -->
+            <p class="checklist-heading">How to maximize your reading effectiveness</p>
+            <ul class="checklist" id="reading-checklist">
+                <li data-index="0">
+                    <span class="check-dot">□</span>
+                    <span>Create flashcards for pulmonary terminology (bronchiectasis, hypercapnia, cilia) and cardiac terms (depolarization, systole, ischemia).</span>
+                </li>
+                <li data-index="1">
+                    <span class="check-dot">□</span>
+                    <span>Practice the steps for performing spirometry testing and interpreting basic pulmonary function results.</span>
+                </li>
+                <li data-index="2">
+                    <span class="check-dot">□</span>
+                    <span>Draw and label the cardiac conduction pathway from SA node through Purkinje fibers.</span>
+                </li>
+                <li data-index="3">
+                    <span class="check-dot">□</span>
+                    <span>Develop a patient education handout explaining what to expect during a 12-lead ECG procedure.</span>
+                </li>
+                <li data-index="4">
+                    <span class="check-dot">□</span>
+                    <span>Role-play teaching a patient with COPD how to properly use a metered-dose inhaler with spacer.</span>
+                </li>
+            </ul>
+
+            <!-- Action buttons -->
+            <div class="action-buttons">
+                <button class="btn btn-primary" id="mark-all-read">
+                    <span class="btn-icon">✓</span>
+                    Mark All as Read
+                </button>
+                <button class="btn btn-secondary" id="reset-progress">
+                    <span class="btn-icon">↺</span>
+                    Reset Progress
+                </button>
+            </div>
+
+            <p class="complete-hint">
+                Once you've completed both chapters and the checklist items, proceed to
+                the interactive modules for hands-on practice with pulmonary diagnostics
+                and electrocardiography skills.
+            </p>
+        </section>
+
+        <!-- RIGHT COLUMN: framing & why these readings matter -->
+        <aside class="column" aria-label="Why these readings are important">
+            <p class="section-tag">Clinical Application</p>
+            <h2 class="side-heading">Why Pulmonary Medicine + ECG Matter Together</h2>
+            <div class="side-card">
+                <p>
+                    <strong>Chapter 22 (Pulmonary Medicine)</strong> teaches you how to
+                    assess respiratory function, perform pulmonary diagnostics, manage chronic
+                    respiratory conditions, and educate patients on respiratory devices—skills
+                    essential for caring for patients with breathing difficulties in any clinical setting.
+                </p>
+                <p>
+                    <strong>Chapter 25 (Electrocardiography)</strong> shows you how to
+                    perform accurate ECG recordings, recognize cardiac rhythms, troubleshoot
+                    artifacts, and prepare patients for cardiac monitoring—critical skills for
+                    detecting and monitoring heart conditions.
+                </p>
+                <p class="side-subheading">Clinical Connections You'll Make:</p>
+                <ul class="side-list">
+                    <li>
+                        <span class="dot"></span>
+                        <span>Patients with pulmonary conditions like COPD often have concurrent cardiac issues requiring ECG monitoring (cardiopulmonary connection).</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span>Respiratory distress can affect cardiac rhythm, making ECG interpretation important in pulmonary emergencies.</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span>Many cardiac medications (like beta-blockers) affect both heart and lung function, requiring integrated assessment.</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span>Patient education skills for respiratory devices (inhalers) parallel those needed for cardiac device training (Holter monitors).</span>
+                    </li>
+                </ul>
+                <div class="note-card">
+                    <strong>Clinical Scenarios to Consider:</strong>
+                    <ul style="margin-top: 8px; padding-left: 20px;">
+                        <li><strong>Michael McGuire (Chapter 22):</strong> Assisting with pulmonary diagnostics in a community with occupation-related respiratory hazards</li>
+                        <li><strong>Martha Reyes (Chapter 25):</strong> Transitioning to cardiology practice and mastering ECG procedures for Dr. Lee's patients</li>
+                        <li>Performing spirometry on a patient with suspected COPD who also needs cardiac assessment</li>
+                        <li>Recognizing ECG changes in a patient experiencing respiratory distress</li>
+                    </ul>
+                </div>
+                <div class="note-card" style="margin-top: 12px;">
+                    <strong>Key Learning Objectives Integration:</strong>
+                    <ul style="margin-top: 8px; padding-left: 20px;">
+                        <li>Combine pulmonary assessment skills (Ch22 Obj 11) with cardiac monitoring (Ch25 Obj 7) for comprehensive patient evaluation</li>
+                        <li>Apply patient education techniques (Ch22 Obj 12) to both respiratory device training and ECG preparation (Ch25 Obj 12)</li>
+                        <li>Use diagnostic procedure skills from spirometry (Ch22) to ECG recording (Ch25) for multi-system assessment</li>
+                        <li>Implement legal/ethical considerations in both pulmonary documentation (Ch22) and cardiac testing (Ch25)</li>
+                    </ul>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <!-- Completion Celebration Modal -->
+    <div class="completion-celebration" id="celebration-modal">
+        <div class="celebration-content">
+            <div class="celebration-icon">🎉</div>
+            <h2 class="celebration-title">Reading Complete!</h2>
+            <p class="celebration-text">
+                Excellent work completing both Chapter 22 (Pulmonary Medicine) and
+                Chapter 25 (Electrocardiography). You've built strong skills in
+                respiratory assessment and cardiac monitoring procedures.
+            </p>
+            <p class="celebration-text">
+                You're now ready for the interactive modules where you'll apply these
+                concepts in simulated clinical scenarios with Michael McGuire and Martha Reyes.
+            </p>
+            <button class="celebration-btn" id="close-celebration">Continue to Modules</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // State management
+            let readingState = {
+                chapter22: false,
+                chapter25: false,
+                checklist: [false, false, false, false, false]
+            };
+
+            // DOM elements
+            const chapter22Card = document.getElementById('chapter22-card');
+            const chapter25Card = document.getElementById('chapter25-card');
+            const checklistItems = document.querySelectorAll('#reading-checklist li');
+            const progressFill = document.getElementById('progress-fill');
+            const progressPercent = document.getElementById('progress-percent');
+            const markAllBtn = document.getElementById('mark-all-read');
+            const resetBtn = document.getElementById('reset-progress');
+            const celebrationModal = document.getElementById('celebration-modal');
+            const closeCelebrationBtn = document.getElementById('close-celebration');
+
+            // Calculate progress
+            function calculateProgress() {
+                const totalItems = 7; // 2 chapters + 5 checklist items
+                let completed = 0;
+
+                if (readingState.chapter22) completed++;
+                if (readingState.chapter25) completed++;
+                readingState.checklist.forEach(item => {
+                    if (item) completed++;
+                });
+
+                const percentage = Math.round((completed / totalItems) * 100);
+
+                // Update progress bar
+                progressFill.style.width = `${percentage}%`;
+                progressPercent.textContent = `${percentage}%`;
+
+                // Update progress bar color based on completion
+                if (percentage === 100) {
+                    progressFill.style.background = 'linear-gradient(90deg, var(--color-success), #00d2a0)';
+                    progressPercent.style.color = 'var(--color-success)';
+                    showCelebration();
+                } else if (percentage >= 50) {
+                    progressFill.style.background = 'linear-gradient(90deg, var(--color-primary), var(--color-accent))';
+                    progressPercent.style.color = 'var(--color-primary)';
+                } else {
+                    progressFill.style.background = 'linear-gradient(90deg, var(--color-primary), var(--color-accent))';
+                    progressPercent.style.color = 'var(--color-primary)';
+                }
+
+                return percentage;
+            }
+
+            // Toggle chapter completion
+            function toggleChapter(chapter) {
+                const card = chapter === 22 ? chapter22Card : chapter25Card;
+                const isCompleted = chapter === 22 ? readingState.chapter22 : readingState.chapter25;
+
+                if (isCompleted) {
+                    // Mark as incomplete
+                    card.classList.remove('completed');
+                    if (chapter === 22) {
+                        readingState.chapter22 = false;
+                        document.getElementById('chapter22-time').textContent = 'Est. 85–100 min';
+                    } else {
+                        readingState.chapter25 = false;
+                        document.getElementById('chapter25-time').textContent = 'Est. 90–105 min';
+                    }
+                } else {
+                    // Mark as complete
+                    card.classList.add('completed');
+                    if (chapter === 22) {
+                        readingState.chapter22 = true;
+                        document.getElementById('chapter22-time').textContent = '✓ Completed';
+                    } else {
+                        readingState.chapter25 = true;
+                        document.getElementById('chapter25-time').textContent = '✓ Completed';
+                    }
+
+                    // Add animation
+                    card.style.transform = 'scale(1.02)';
+                    setTimeout(() => {
+                        card.style.transform = '';
+                    }, 300);
+                }
+
+                calculateProgress();
+            }
+
+            // Toggle checklist item
+            function toggleChecklistItem(index) {
+                const item = checklistItems[index];
+                const dot = item.querySelector('.check-dot');
+
+                readingState.checklist[index] = !readingState.checklist[index];
+
+                if (readingState.checklist[index]) {
+                    item.classList.add('completed');
+                    dot.textContent = '✓';
+                    dot.style.background = 'var(--color-success)';
+                    dot.style.borderColor = 'var(--color-success)';
+                    dot.style.color = 'white';
+                } else {
+                    item.classList.remove('completed');
+                    dot.textContent = '□';
+                    dot.style.background = '';
+                    dot.style.borderColor = 'rgba(148, 163, 184, 0.9)';
+                    dot.style.color = 'rgba(148, 163, 184, 0.9)';
+                }
+
+                calculateProgress();
+            }
+
+            // Mark all as read
+            function markAllAsRead() {
+                // Mark both chapters
+                readingState.chapter22 = true;
+                readingState.chapter25 = true;
+                chapter22Card.classList.add('completed');
+                chapter25Card.classList.add('completed');
+                document.getElementById('chapter22-time').textContent = '✓ Completed';
+                document.getElementById('chapter25-time').textContent = '✓ Completed';
+
+                // Mark all checklist items
+                readingState.checklist = [true, true, true, true, true];
+                checklistItems.forEach((item, index) => {
+                    item.classList.add('completed');
+                    const dot = item.querySelector('.check-dot');
+                    dot.textContent = '✓';
+                    dot.style.background = 'var(--color-success)';
+                    dot.style.borderColor = 'var(--color-success)';
+                    dot.style.color = 'white';
+                });
+
+                calculateProgress();
+
+                // Celebration animation
+                const cards = document.querySelectorAll('.reading-card');
+                cards.forEach(card => {
+                    card.style.transform = 'scale(1.05)';
+                    setTimeout(() => {
+                        card.style.transform = '';
+                    }, 300);
+                });
+            }
+
+            // Reset progress
+            function resetProgress() {
+                // Reset chapters
+                readingState.chapter22 = false;
+                readingState.chapter25 = false;
+                chapter22Card.classList.remove('completed');
+                chapter25Card.classList.remove('completed');
+                document.getElementById('chapter22-time').textContent = 'Est. 85–100 min';
+                document.getElementById('chapter25-time').textContent = 'Est. 90–105 min';
+
+                // Reset checklist
+                readingState.checklist = [false, false, false, false, false];
+                checklistItems.forEach((item, index) => {
+                    item.classList.remove('completed');
+                    const dot = item.querySelector('.check-dot');
+                    dot.textContent = '□';
+                    dot.style.background = '';
+                    dot.style.borderColor = 'rgba(148, 163, 184, 0.9)';
+                    dot.style.color = 'rgba(148, 163, 184, 0.9)';
+                });
+
+                calculateProgress();
+            }
+
+            // Show celebration modal
+            function showCelebration() {
+                setTimeout(() => {
+                    celebrationModal.style.display = 'flex';
+                }, 500);
+            }
+
+            // Close celebration modal
+            function closeCelebration() {
+                celebrationModal.style.display = 'none';
+            }
+
+            // Event listeners
+            chapter22Card.addEventListener('click', () => toggleChapter(22));
+            chapter25Card.addEventListener('click', () => toggleChapter(25));
+
+            chapter22Card.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    toggleChapter(22);
+                }
+            });
+
+            chapter25Card.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    toggleChapter(25);
+                }
+            });
+
+            checklistItems.forEach((item, index) => {
+                item.addEventListener('click', () => toggleChecklistItem(index));
+                item.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        toggleChecklistItem(index);
+                    }
+                });
+            });
+
+            markAllBtn.addEventListener('click', markAllAsRead);
+            resetBtn.addEventListener('click', resetProgress);
+            closeCelebrationBtn.addEventListener('click', closeCelebration);
+
+            // Close modal when clicking outside
+            celebrationModal.addEventListener('click', (e) => {
+                if (e.target === celebrationModal) {
+                    closeCelebration();
+                }
+            });
+
+            // Initialize with some progress for demo
+            setTimeout(() => {
+                // Mark first checklist item as completed for demo
+                toggleChecklistItem(0);
+            }, 1000);
+
+            // Add scroll animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Observe reading cards
+            const readingCards = document.querySelectorAll('.reading-card');
+            readingCards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                observer.observe(card);
+            });
+
+            // Observe checklist items with delay
+            checklistItems.forEach((item, index) => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateX(-20px)';
+                item.style.transition = `opacity 0.5s ease ${index * 0.1}s, transform 0.5s ease ${index * 0.1}s`;
+                observer.observe(item);
+            });
+        });
+    </script>
+</body>
+</html>
