@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AlliedRx -- Week 11 Objectives</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-error: #e17055;
+            --color-warning: #fdcb6e;
+            --color-info: #0984e3;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
+            --color-dark: #0c0a18;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+            --shadow-card: 0 12px 30px rgba(15, 23, 42, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(
+                circle at top left,
+                #ffffff 0,
+                #f1ecff 40%,
+                var(--color-bg) 100%
+            );
+            color: var(--color-text);
+            -webkit-text-size-adjust: 100%;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 12px;
+            }
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1120px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px;
+            display: grid;
+            grid-template-columns: minmax(0, 3.1fr) minmax(0, 2.4fr);
+            gap: 28px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        @keyframes heartBeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @keyframes breathe {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.05); opacity: 1; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        @media (max-width: 900px) {
+            .page {
+                grid-template-columns: 1fr;
+                padding: 22px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 0;
+            }
+            .page {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 18px 14px 22px;
+                gap: 22px;
+            }
+        }
+
+        /* Header */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .brand-logo:hover {
+            transform: scale(1.05);
+        }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+            animation: pulse 2s infinite;
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--color-success);
+            flex-shrink: 0;
+            animation: blink 1.5s infinite;
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .badge-mode:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+        @media (max-width: 480px) {
+            .brand-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .badge-mode {
+                margin-top: 6px;
+            }
+        }
+
+        h1 {
+            font-size: clamp(2rem, 3vw, 2.4rem);
+            line-height: 1.05;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 34rem;
+            margin-bottom: 18px;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        /* Objectives list */
+        .objectives-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .objective-card {
+            background: #08070a;
+            color: #ffffff;
+            border-radius: 18px;
+            padding: 10px 16px 14px;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .objective-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.7s ease;
+        }
+
+        .objective-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .objective-card:hover::before {
+            left: 100%;
+        }
+
+        .objective-card.active {
+            background: linear-gradient(135deg, #0f172a, #1e1b4b);
+            border-left: 4px solid var(--color-accent);
+        }
+
+        @media (max-width: 480px) {
+            .objective-card {
+                grid-template-columns: auto 1fr;
+                grid-template-rows: auto auto;
+            }
+            .objective-icon {
+                justify-self: flex-end;
+            }
+        }
+
+        .objective-number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 999px;
+            background: #ffffff;
+            color: #111827;
+            font-weight: 700;
+            font-size: 1.05rem;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .objective-card:hover .objective-number {
+            background: var(--color-primary-soft);
+            transform: rotate(5deg);
+        }
+
+        .objective-main {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .objective-verb {
+            font-size: 0.98rem;
+            font-weight: 700;
+            color: var(--color-primary-soft);
+            transition: color 0.3s ease;
+        }
+
+        .objective-card:hover .objective-verb {
+            color: #ffffff;
+        }
+
+        .objective-text {
+            font-size: 0.84rem;
+            color: #e5e7eb;
+            line-height: 1.4;
+        }
+
+        .objective-icon {
+            width: 26px;
+            height: 26px;
+            border-radius: 999px;
+            border: 1px solid rgba(250, 250, 250, 0.16);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: #f9fafb;
+            background: linear-gradient(135deg, rgba(175, 75, 239, 0.1), rgba(0, 0, 0, 0.4));
+            transition: all 0.3s ease;
+        }
+
+        .objective-card:hover .objective-icon {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+            transform: scale(1.1);
+        }
+
+        /* Special animated icons for this week */
+        .heart-icon {
+            animation: heartBeat 1.5s infinite;
+        }
+        
+        .lung-icon {
+            animation: breathe 2s infinite;
+        }
+
+        /* Emoji display section */
+        .emoji-display {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin: 25px 0;
+            padding: 20px;
+            background: rgba(12, 10, 24, 0.94);
+            border-radius: 18px;
+            border: 1px solid rgba(131, 128, 240, 0.2);
+        }
+
+        .emoji-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .emoji-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .emoji-icon {
+            font-size: 2.5rem;
+            animation: float 3s infinite;
+        }
+
+        .emoji-label {
+            font-size: 0.75rem;
+            color: #c4b5fd;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 600;
+        }
+
+        /* Filter buttons */
+        .chapter-filter {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border-radius: 20px;
+            background: rgba(12, 10, 24, 0.05);
+            border: 1px solid rgba(12, 10, 24, 0.1);
+            color: var(--color-text);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+        .filter-btn.active {
+            background: var(--color-primary);
+            color: white;
+            border-color: var(--color-primary);
+        }
+
+        /* Progress counter */
+        .progress-counter {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(175, 75, 239, 0.05);
+            border-radius: 16px;
+            padding: 12px 18px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(175, 75, 239, 0.1);
+        }
+
+        .counter-item {
+            text-align: center;
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .counter-item:nth-child(1) { animation-delay: 0.8s; }
+        .counter-item:nth-child(2) { animation-delay: 1s; }
+        .counter-item:nth-child(3) { animation-delay: 1.2s; }
+
+        .counter-number {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--color-primary);
+            display: block;
+        }
+
+        .counter-label {
+            font-size: 0.75rem;
+            color: var(--color-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Right column content */
+        .objectives-header {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--color-text);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.5s both;
+        }
+
+        .section-tag {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-primary);
+            font-weight: 600;
+            margin-bottom: 10px;
+            animation: fadeInUp 0.6s ease-out 0.6s both;
+        }
+
+        .week-overview {
+            background: rgba(12, 10, 24, 0.94);
+            border-radius: 18px;
+            padding: 16px 18px 18px;
+            color: #e5e7eb;
+            font-size: 0.88rem;
+            line-height: 1.7;
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.6);
+            margin-bottom: 16px;
+            animation: fadeInUp 0.6s ease-out 0.7s both;
+            transition: transform 0.3s ease;
+        }
+
+        .week-overview:hover {
+            transform: translateY(-2px);
+        }
+
+        .week-overview strong {
+            color: #ffffff;
+        }
+
+        .mini-heading {
+            font-size: 0.86rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: #c4b5fd;
+            font-weight: 600;
+            margin: 8px 0 10px;
+        }
+
+        .outcomes-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-size: 0.86rem;
+            color: #f9fafb;
+        }
+
+        .outcomes-list li {
+            display: flex;
+            gap: 8px;
+            align-items: flex-start;
+            transition: transform 0.3s ease;
+        }
+
+        .outcomes-list li:hover {
+            transform: translateX(5px);
+        }
+
+        .dot {
+            width: 6px;
+            height: 6px;
+            margin-top: 6px;
+            border-radius: 999px;
+            background: var(--color-accent);
+            flex-shrink: 0;
+            animation: pulse 2s infinite;
+        }
+
+        .note-card {
+            margin-top: 14px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            background: rgba(15, 23, 42, 0.7);
+            padding: 10px 12px;
+            font-size: 0.78rem;
+            color: #e5e7eb;
+            transition: all 0.3s ease;
+        }
+
+        .note-card:hover {
+            border-color: var(--color-primary-soft);
+            background: rgba(15, 23, 42, 0.9);
+        }
+
+        .note-card strong {
+            color: #fef3c7;
+        }
+
+        /* Case Study Box */
+        .case-study {
+            background: linear-gradient(135deg, rgba(131, 128, 240, 0.1), rgba(175, 75, 239, 0.1));
+            border-radius: 18px;
+            padding: 18px;
+            margin-top: 20px;
+            border: 1px solid rgba(131, 128, 240, 0.2);
+        }
+
+        .case-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--color-accent);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .case-content {
+            font-size: 0.85rem;
+            color: #ffffff;
+            line-height: 1.5;
+        }
+
+        .case-content strong {
+            color: #d492ff;
+        }
+
+        /* Interactive Learning Activities - DARKER BACKGROUND */
+        .interactive-section {
+            background: linear-gradient(135deg, #0c0a18, #1a1726);
+            border-radius: 18px;
+            padding: 22px 24px;
+            margin-top: 25px;
+            border: 1px solid rgba(131, 128, 240, 0.25);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .interactive-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+        }
+
+        .interactive-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #d492ff;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .interactive-content {
+            font-size: 0.85rem;
+            color: #e5e7eb;
+            line-height: 1.6;
+        }
+
+        .interactive-content strong {
+            color: #ffffff;
+        }
+
+        .interactive-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .interactive-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .interactive-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--color-primary-soft);
+            transform: translateY(-2px);
+        }
+
+        .interactive-emoji {
+            font-size: 1.3rem;
+        }
+
+        .interactive-text {
+            font-size: 0.8rem;
+            color: #c4b5fd;
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="week11-heading">
+        <!-- LEFT COLUMN: title + objective cards -->
+        <section class="column" aria-label="Week 11 objectives list">
+            <header class="brand-row">
+                <div class="brand">
+                    <div class="course-meta">
+                        <span class="course-name">Clinical Medical Assistant • CCMA</span>
+                        <div class="week-label">
+                            <span class="week-label-dot"></span>
+                            <span>Week 11 --- Pulmonary Medicine & Electrocardiography</span>
+                        </div>
+                    </div>
+                </div>
+                <span class="badge-mode">Campus & Online</span>
+            </header>
+
+            <h1 id="week11-heading">Week 11 Objectives</h1>
+            <p class="subtitle">
+                Master <strong>pulmonary assessment and treatment</strong> while developing 
+                <strong>electrocardiography expertise</strong> to provide comprehensive care for 
+                patients with respiratory and cardiac conditions.
+            </p>
+
+            <!-- Interactive filter buttons -->
+            <div class="chapter-filter">
+                <button class="filter-btn active" data-filter="all">All Objectives</button>
+                <button class="filter-btn" data-filter="chapter22">Chapter 22: Pulmonary Medicine</button>
+                <button class="filter-btn" data-filter="chapter25">Chapter 25: Electrocardiography</button>
+            </div>
+
+            <!-- Progress counter -->
+            <div class="progress-counter">
+                <div class="counter-item">
+                    <span class="counter-number" id="total-objectives">24</span>
+                    <span class="counter-label">Total Objectives</span>
+                </div>
+                <div class="counter-item">
+                    <span class="counter-number">2</span>
+                    <span class="counter-label">Chapters</span>
+                </div>
+                <div class="counter-item">
+                    <span class="counter-number">14</span>
+                    <span class="counter-label">Clinical Skills</span>
+                </div>
+            </div>
+
+            <div class="objectives-list" id="objectives-container">
+                <!-- Chapter 22: Pulmonary Medicine Objectives -->
+                <article class="objective-card" data-chapter="chapter22">
+                    <div class="objective-number">01</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Define & Pronounce</div>
+                        <p class="objective-text">
+                            Define, spell, and pronounce pulmonary terminology: bifurcates, bronchiectasis, cilia, hypercapnia, metastatic.
+                        </p>
+                    </div>
+                    <div class="objective-icon lung-icon" aria-hidden="true">📚</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter22">
+                    <div class="objective-number">02</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Describe</div>
+                        <p class="objective-text">
+                            Describe organs of respiratory system and their functions including airways, lungs, and accessory structures.
+                        </p>
+                    </div>
+                    <div class="objective-icon lung-icon" aria-hidden="true">🫁</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter22">
+                    <div class="objective-number">03</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Explain</div>
+                        <p class="objective-text">
+                            Explain process of ventilation including inspiration, expiration, and gas exchange at alveolar level.
+                        </p>
+                    </div>
+                    <div class="objective-icon lung-icon" aria-hidden="true">💨</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter22">
+                    <div class="objective-number">04</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Discuss & Document</div>
+                        <p class="objective-text">
+                            Discuss respiratory system defenses; use correct terminology when documenting in health records.
+                        </p>
+                    </div>
+                    <div class="objective-icon lung-icon" aria-hidden="true">📋</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter22">
+                    <div class="objective-number">05</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Describe</div>
+                        <p class="objective-text">
+                            Describe upper and lower respiratory infections including common cold, sinusitis, pneumonia, and allergic rhinitis.
+                        </p>
+                    </div>
+                    <div class="objective-icon lung-icon" aria-hidden="true">🦠</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter22">
+                    <div class="objective-number">06</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Explain</div>
+                        <p class="objective-text">
+                            Explain diagnosis and treatment of tuberculosis including testing protocols and isolation precautions.
+                        </p>
+                    </div>
+                    <div class="objective-icon lung-icon" aria-hidden="true">🔬</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter22">
+                    <div class="objective-number">07</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Summarize & Teach</div>
+                        <p class="objective-text">
+                            Summarize COPD disorders; teach patients to use peak flow meters; administer nebulizer treatments.
+                        </p>
+                    </div>
+                    <div class="objective-icon lung-icon" aria-hidden="true">🌬️</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter22">
+                    <div class="objective-number">08</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Detail</div>
+                        <p class="objective-text">
+                            Detail patient teaching for metered-dose inhaler use including proper technique and cleaning.
+                        </p>
+                    </div>
+                    <div class="objective-icon lung-icon" aria-hidden="true">💊</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter22">
+                    <div class="objective-number">09</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Discuss</div>
+                        <p class="objective-text">
+                            Discuss obstructive sleep apnea including causes, risk factors, complications, and treatment options.
+                        </p>
+                    </div>
+                    <div class="objective-icon lung-icon" aria-hidden="true">😴</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter22">
+                    <div class="objective-number">10</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Describe</div>
+                        <p class="objective-text">
+                            Describe cancers associated with pulmonary system including lung cancer types and metastasis patterns.
+                        </p>
+                    </div>
+                    <div class="objective-icon lung-icon" aria-hidden="true">🩺</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter22">
+                    <div class="objective-number">11</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Summarize</div>
+                        <p class="objective-text">
+                            Summarize medical assistant's role in assisting with pulmonary procedures and patient education.
+                        </p>
+                    </div>
+                    <div class="objective-icon lung-icon" aria-hidden="true">👩‍⚕️</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter22">
+                    <div class="objective-number">12</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Distinguish & Perform</div>
+                        <p class="objective-text">
+                            Distinguish among respiratory diagnostic procedures; perform spirometry, pulse oximetry, and sputum collection.
+                        </p>
+                    </div>
+                    <div class="objective-icon lung-icon" aria-hidden="true">📊</div>
+                </article>
+
+                <!-- Chapter 25: Electrocardiography Objectives -->
+                <article class="objective-card" data-chapter="chapter25">
+                    <div class="objective-number">13</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Define & Pronounce</div>
+                        <p class="objective-text">
+                            Define, spell, and pronounce ECG terminology: atria, ventricles, diastole, systole, ischemia, infarction.
+                        </p>
+                    </div>
+                    <div class="objective-icon heart-icon" aria-hidden="true">📚</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter25">
+                    <div class="objective-number">14</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Illustrate & Discuss</div>
+                        <p class="objective-text">
+                            Illustrate electrical conduction system through heart; discuss cardiac cycle and blood flow patterns.
+                        </p>
+                    </div>
+                    <div class="objective-icon heart-icon" aria-hidden="true">❤️</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter25">
+                    <div class="objective-number">15</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Explain</div>
+                        <p class="objective-text">
+                            Explain concepts of cardiac polarization, depolarization, and repolarization in electrical conduction.
+                        </p>
+                    </div>
+                    <div class="objective-icon heart-icon" aria-hidden="true">⚡</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter25">
+                    <div class="objective-number">16</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Identify</div>
+                        <p class="objective-text">
+                            Identify PQRST complex on ECG tracing and understand significance of each waveform component.
+                        </p>
+                    </div>
+                    <div class="objective-icon heart-icon" aria-hidden="true">📈</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter25">
+                    <div class="objective-number">17</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Summarize & Discuss</div>
+                        <p class="objective-text">
+                            Summarize properties of electrocardiograph; discuss features of ECG paper including speed and calibration.
+                        </p>
+                    </div>
+                    <div class="objective-icon heart-icon" aria-hidden="true">📄</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter25">
+                    <div class="objective-number">18</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Describe</div>
+                        <p class="objective-text">
+                            Describe electrical views of heart recorded by 12-lead electrocardiograph and electrode placement.
+                        </p>
+                    </div>
+                    <div class="objective-icon heart-icon" aria-hidden="true">🎯</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter25">
+                    <div class="objective-number">19</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Discuss & Perform</div>
+                        <p class="objective-text">
+                            Discuss process of recording ECG; perform accurate reading of electrical heart activity.
+                        </p>
+                    </div>
+                    <div class="objective-icon heart-icon" aria-hidden="true">🎥</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter25">
+                    <div class="objective-number">20</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Compare & Contrast</div>
+                        <p class="objective-text">
+                            Compare and contrast ECG artifacts and probable causes including patient movement and electrical interference.
+                        </p>
+                    </div>
+                    <div class="objective-icon heart-icon" aria-hidden="true">🔍</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter25">
+                    <div class="objective-number">21</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Interpret</div>
+                        <p class="objective-text">
+                            Interpret typical ECG tracings including rate, rhythm, intervals, and waveform morphology.
+                        </p>
+                    </div>
+                    <div class="objective-icon heart-icon" aria-hidden="true">📊</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter25">
+                    <div class="objective-number">22</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Describe</div>
+                        <p class="objective-text">
+                            Describe common ECG arrhythmias including atrial fibrillation, ventricular tachycardia, and heart blocks.
+                        </p>
+                    </div>
+                    <div class="objective-icon heart-icon" aria-hidden="true">💓</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter25">
+                    <div class="objective-number">23</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Summarize & Fit</div>
+                        <p class="objective-text">
+                            Summarize cardiac diagnostic tests; fit patient with Holter monitor and provide proper instructions.
+                        </p>
+                    </div>
+                    <div class="objective-icon heart-icon" aria-hidden="true">📱</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter25">
+                    <div class="objective-number">24</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Discuss</div>
+                        <p class="objective-text">
+                            Discuss patient education and legal/ethical issues involved when performing and interpreting ECGs.
+                        </p>
+                    </div>
+                    <div class="objective-icon heart-icon" aria-hidden="true">⚖️</div>
+                </article>
+            </div>
+
+            <!-- Emoji Display Section -->
+            <div class="emoji-display">
+                <div class="emoji-item">
+                    <div class="emoji-icon">🫁</div>
+                    <div class="emoji-label">Pulmonary</div>
+                </div>
+                <div class="emoji-item">
+                    <div class="emoji-icon">❤️</div>
+                    <div class="emoji-label">Cardiac</div>
+                </div>
+                <div class="emoji-item">
+                    <div class="emoji-icon">💨</div>
+                    <div class="emoji-label">Respiration</div>
+                </div>
+                <div class="emoji-item">
+                    <div class="emoji-icon">⚡</div>
+                    <div class="emoji-label">Conduction</div>
+                </div>
+                <div class="emoji-item">
+                    <div class="emoji-icon">📊</div>
+                    <div class="emoji-label">Diagnostics</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- RIGHT COLUMN: narrative + outcomes framing -->
+        <aside class="column" aria-label="Overview of this week's content">
+            <h2 class="objectives-header">Cardiopulmonary Assessment & Care</h2>
+            <p class="section-tag">Pulmonary Diagnostics • ECG Procedures • Respiratory Treatment</p>
+
+            <div class="week-overview">
+                <p>
+                    Week 11 combines <strong>comprehensive pulmonary medicine</strong> with 
+                    <strong>advanced electrocardiography skills</strong>. You'll develop expertise in 
+                    respiratory assessment and treatment while mastering ECG procedures, creating 
+                    essential competencies for managing patients with cardiopulmonary conditions.
+                </p>
+
+                <p>
+                    These chapters connect through <strong>cardiopulmonary interdependence</strong>. 
+                    Respiratory conditions affect cardiac function, while cardiac disorders impact 
+                    pulmonary status. Understanding both systems is essential for comprehensive 
+                    patient assessment and management of conditions like COPD with cardiac complications.
+                </p>
+
+                <!-- Case Study from Chapter 22 -->
+                <div class="case-study">
+                    <div class="case-title">
+                        <span>🏭</span> Chapter 22 Case Study: Michael McGuire, CMA (AAMA)
+                    </div>
+                    <div class="case-content">
+                        <strong>Practice:</strong> Primary care with high pulmonary disease volume<br>
+                        <strong>Community:</strong> Coal mining and construction industry exposure<br>
+                        <strong>Specialized Skills:</strong> Pulmonary diagnostic testing, COPD management, 
+                        occupational respiratory hazard assessment, electronic health record documentation
+                    </div>
+                </div>
+
+                <!-- Case Study from Chapter 25 -->
+                <div class="case-study">
+                    <div class="case-title">
+                        <span>❤️</span> Chapter 25 Case Study: Martha Reyes, CMA (AAMA)
+                    </div>
+                    <div class="case-content">
+                        <strong>Transition:</strong> Moving from family practice to cardiology specialty<br>
+                        <strong>New Responsibilities:</strong> Electrocardiography procedures, cardiac 
+                        diagnostic testing, arrhythmia recognition, patient preparation for cardiac studies
+                    </div>
+                </div>
+
+                <p class="mini-heading">By the end of this week, you will be able to:</p>
+                <ul class="outcomes-list">
+                    <li>
+                        <span class="dot"></span>
+                        <span>Perform comprehensive pulmonary function testing including spirometry and pulse oximetry.</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span>Administer respiratory treatments including nebulizer therapy and inhaler education.</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span>Perform accurate 12-lead ECG procedures with proper electrode placement.</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span>Recognize common cardiac arrhythmias and pulmonary disease patterns.</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span>Educate patients on cardiopulmonary disease management and treatment adherence.</span>
+                    </li>
+                </ul>
+
+                <div class="note-card">
+                    <strong>COPD Management:</strong> For COPD patients, teach <strong>pursed-lip breathing</strong> 
+                    to improve oxygen exchange. Use <strong>peak flow monitoring</strong> daily to track disease 
+                    progression. Administer bronchodilators <strong>15-30 minutes before meals</strong> to 
+                    improve breathing during eating. Always have rescue inhalers accessible.
+                </div>
+
+                <div class="note-card" style="margin-top: 12px;">
+                    <strong>ECG Electrode Placement:</strong> Use the <strong>"White on Right, Smoke over Fire"</strong> 
+                    mnemonic for limb leads: White (RA) on right arm, Black (LA) on left arm, 
+                    Red (LL) on left leg, Green (RL) on right leg. For chest leads, V1: 4th intercostal 
+                    space right sternal border; V2: 4th ICS left sternal border; V4: 5th ICS midclavicular line.
+                </div>
+
+                <div class="note-card" style="margin-top: 12px;">
+                    <strong>Pulse Oximetry Accuracy:</strong> For accurate SpO2 readings: 
+                    <strong>Clean probe site</strong> (remove nail polish), <strong>warm cold extremities</strong>, 
+                    <strong>position probe correctly</strong> (light source and detector opposite). 
+                    Normal range: 95-100%. Below 90% requires immediate intervention. 
+                    Remember: carbon monoxide poisoning gives false high readings.
+                </div>
+
+                <div class="note-card" style="margin-top: 12px;">
+                    <strong>ECG Artifact Reduction:</strong> Minimize artifacts by: 
+                    <strong>Cleaning skin</strong> with alcohol, <strong>shaving hairy areas</strong>, 
+                    <strong>ensuring good electrode contact</strong>, <strong>keeping patient still</strong>, 
+                    <strong>positioning limbs comfortably</strong>. Common artifacts: 60-cycle interference 
+                    (wiggly baseline), wandering baseline (poor contact), muscle tremor (jagged lines).
+                </div>
+            </div>
+
+            <!-- Interactive Learning Activities Section - DARKER BACKGROUND -->
+            <div class="interactive-section">
+                <div class="interactive-title">
+                    <span>🎯</span> Interactive Learning Focus
+                </div>
+                <div class="interactive-content">
+                    <strong>This Week's Clinical Emphasis:</strong> Master cardiopulmonary assessment through visual learning and practical mnemonics
+                </div>
+                
+                <div class="interactive-grid">
+                    <div class="interactive-item">
+                        <span class="interactive-emoji">🫁</span>
+                        <span class="interactive-text">Pulmonary Function</span>
+                    </div>
+                    <div class="interactive-item">
+                        <span class="interactive-emoji">❤️</span>
+                        <span class="interactive-text">Cardiac Rhythm</span>
+                    </div>
+                    <div class="interactive-item">
+                        <span class="interactive-emoji">💨</span>
+                        <span class="interactive-text">Respiration Rate</span>
+                    </div>
+                    <div class="interactive-item">
+                        <span class="interactive-emoji">⚡</span>
+                        <span class="interactive-text">ECG Patterns</span>
+                    </div>
+                </div>
+
+                <div class="interactive-content" style="margin-top: 15px;">
+                    <strong>Visual Learning Tools:</strong> 
+                    • ECG waveform interpretation charts<br>
+                    • Pulmonary anatomy diagrams<br>
+                    • Arrhythmia recognition guides<br>
+                    • Medication administration visuals
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Filter functionality
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const objectiveCards = document.querySelectorAll('.objective-card');
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Update active button
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+
+                    const filter = this.getAttribute('data-filter');
+
+                    // Filter cards
+                    objectiveCards.forEach(card => {
+                        if (filter === 'all') {
+                            card.style.display = 'grid';
+                            setTimeout(() => {
+                                card.style.opacity = '1';
+                                card.style.transform = 'translateY(0)';
+                            }, 10);
+                        } else {
+                            if (card.getAttribute('data-chapter') === filter) {
+                                card.style.display = 'grid';
+                                setTimeout(() => {
+                                    card.style.opacity = '1';
+                                    card.style.transform = 'translateY(0)';
+                                }, 10);
+                            } else {
+                                card.style.opacity = '0';
+                                card.style.transform = 'translateY(10px)';
+                                setTimeout(() => {
+                                    card.style.display = 'none';
+                                }, 300);
+                            }
+                        }
+                    });
+                });
+            });
+
+            // Interactive objective cards
+            objectiveCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    // Toggle active state
+                    this.classList.toggle('active');
+
+                    // Add subtle animation
+                    if (this.classList.contains('active')) {
+                        const icon = this.querySelector('.objective-icon');
+                        icon.style.transform = 'scale(1.2) rotate(10deg)';
+                        setTimeout(() => {
+                            icon.style.transform = 'scale(1.1)';
+                        }, 300);
+                    }
+                });
+
+                // Add keyboard navigation
+                card.setAttribute('tabindex', '0');
+                card.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        this.click();
+                    }
+                });
+            });
+
+            // Animate counter numbers
+            function animateCounter(element, target, duration) {
+                let start = 0;
+                const increment = target / (duration / 16);
+                const timer = setInterval(() => {
+                    start += increment;
+                    if (start >= target) {
+                        element.textContent = target;
+                        clearInterval(timer);
+                    } else {
+                        element.textContent = Math.floor(start);
+                    }
+                }, 16);
+            }
+
+            // Start counter animation after page load
+            setTimeout(() => {
+                const counterElement = document.getElementById('total-objectives');
+                animateCounter(counterElement, 24, 1000);
+            }, 1500);
+
+            // Add hover effect to outcomes list items
+            const outcomesItems = document.querySelectorAll('.outcomes-list li');
+            outcomesItems.forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    const dot = this.querySelector('.dot');
+                    dot.style.transform = 'scale(1.5)';
+                    dot.style.background = 'var(--color-primary)';
+                });
+                item.addEventListener('mouseleave', function() {
+                    const dot = this.querySelector('.dot');
+                    dot.style.transform = 'scale(1)';
+                    dot.style.background = 'var(--color-accent)';
+                });
+            });
+
+            // Add scroll animation for cards
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all objective cards
+            objectiveCards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                observer.observe(card);
+            });
+
+            // Add interactivity to case study boxes
+            const caseStudies = document.querySelectorAll('.case-study');
+            caseStudies.forEach(study => {
+                study.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-3px)';
+                    this.style.boxShadow = '0 12px 30px rgba(131, 128, 240, 0.2)';
+                });
+                study.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                    this.style.boxShadow = 'none';
+                });
+            });
+
+            // Add interactivity to emoji items
+            const emojiItems = document.querySelectorAll('.emoji-item');
+            emojiItems.forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    const emoji = this.querySelector('.emoji-icon');
+                    emoji.style.animation = 'none';
+                    setTimeout(() => {
+                        emoji.style.animation = 'float 3s infinite';
+                    }, 10);
+                });
+            });
+
+            // Add interactivity to interactive items
+            const interactiveItems = document.querySelectorAll('.interactive-item');
+            interactiveItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    this.style.transform = 'scale(0.98)';
+                    setTimeout(() => {
+                        this.style.transform = 'translateY(-2px)';
+                    }, 150);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
