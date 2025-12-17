@@ -622,13 +622,14 @@
 
         .option-category-content {
             min-height: 120px;
+            position: relative;
         }
 
         .dropped-option {
             background: rgba(0, 184, 148, 0.1);
             border-radius: 12px;
-            padding: 6px 10px;
-            margin: 4px 0;
+            padding: 8px 10px;
+            margin: 6px 0;
             font-size: 0.8rem;
             border-left: 3px solid var(--color-success);
             animation: fadeIn 0.3s ease;
@@ -771,8 +772,8 @@
         .placed-task {
             background: rgba(0, 184, 148, 0.1);
             border-radius: 8px;
-            padding: 6px 10px;
-            margin: 4px 0;
+            padding: 8px 10px;
+            margin: 6px 0;
             font-size: 0.75rem;
             border-left: 3px solid var(--color-success);
             animation: fadeIn 0.3s ease;
@@ -869,7 +870,7 @@
             border-left-color: var(--color-error);
         }
 
-        /* Feedback */
+        /* Enhanced Feedback System */
         .feedback-container {
             background: rgba(12, 10, 24, 0.02);
             border-radius: var(--radius-sm);
@@ -926,6 +927,59 @@
         .feedback-section:last-child {
             border-bottom: none;
             margin-bottom: 0;
+        }
+
+        /* Real-time Feedback Elements - UPDATED */
+        .item-feedback {
+            font-size: 0.75rem;
+            padding: 6px 8px;
+            border-radius: 6px;
+            margin-top: 4px;
+            display: block !important;
+            animation: fadeIn 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .item-feedback.correct {
+            background: rgba(0, 184, 148, 0.15);
+            color: var(--color-success);
+            border-left-color: var(--color-success);
+        }
+
+        .item-feedback.incorrect {
+            background: rgba(225, 112, 85, 0.15);
+            color: var(--color-error);
+            border-left-color: var(--color-error);
+            animation: shake 0.5s ease;
+        }
+
+        .item-feedback.tip {
+            background: rgba(253, 203, 110, 0.15);
+            color: #d35400;
+            border-left-color: #d35400;
+            display: block !important;
+        }
+
+        /* Progress Feedback */
+        .progress-feedback {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+            font-size: 0.8rem;
+            color: var(--color-muted);
+        }
+
+        .attempt-count {
+            background: rgba(12, 10, 24, 0.05);
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+
+        /* Role Feedback Areas */
+        .role-feedback {
+            min-height: 20px;
+            margin-top: 8px;
         }
 
         /* Action Buttons */
@@ -1008,6 +1062,32 @@
             color: var(--color-primary-soft);
             text-align: center;
             margin: 20px 0;
+        }
+
+        /* Score Breakdown */
+        .score-breakdown {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .score-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+        }
+
+        .score-label {
+            font-size: 0.8rem;
+            color: var(--color-primary-soft);
+            margin-bottom: 5px;
+        }
+
+        .score-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
         }
 
         .clinical-insights {
@@ -1210,7 +1290,7 @@
                     <!-- Items will be inserted here by JavaScript -->
                 </div>
 
-                <!-- Feedback -->
+                <!-- Activity 1 Feedback -->
                 <div class="feedback-container" id="feedback-1">
                     <div class="feedback-title">
                         <span class="feedback-icon correct">✓</span>
@@ -1223,8 +1303,8 @@
                             The SpO2 of 88% on home O2 represents significant deterioration (normally 92-94%).
                         </div>
                         
-                        <div class="feedback-section">
-                            <strong>🚨 Immediate Actions (Correct Selection):</strong><br>
+                        <div id="immediate-feedback" class="feedback-section">
+                            <strong>🚨 Immediate Actions Feedback:</strong><br>
                             • <strong>Increase oxygen to maintain SpO2 ≥ 92%</strong> - Critical first step for hypoxemia.<br>
                             • <strong>Administer nebulized bronchodilators</strong> - Address bronchospasm immediately.<br>
                             • <strong>Assess for pneumonia/CHF exacerbation</strong> - Recent pneumonia history increases risk.<br>
@@ -1232,8 +1312,8 @@
                             <strong>📌 Critical Thinking:</strong> In COPD patients with HF, balance bronchodilation (may increase HR) with cardiac stability.
                         </div>
                         
-                        <div class="feedback-section">
-                            <strong>📅 Short-Term Management (Next 1-2 weeks):</strong><br>
+                        <div id="shortterm-feedback" class="feedback-section">
+                            <strong>📅 Short-Term Management Feedback:</strong><br>
                             • <strong>Optimize diuretics with renal monitoring</strong> - Manage HF without dehydrating.<br>
                             • <strong>Pulmonary rehabilitation referral</strong> - Improves function and reduces readmissions.<br>
                             • <strong>Depression screening and treatment referral</strong> - PHQ-9 score 12 indicates moderate depression.<br>
@@ -1241,32 +1321,24 @@
                             <strong>💡 Interdisciplinary Approach:</strong> Coordinate with cardiology, pulmonology, psychiatry, and social work.
                         </div>
                         
-                        <div class="feedback-section">
-                            <strong>🗓️ Long-Term Plan (Ongoing):</strong><br>
+                        <div id="longterm-feedback" class="feedback-section">
+                            <strong>🗓️ Long-Term Plan Feedback:</strong><br>
                             • <strong>Smoking cessation reinforcement</strong> - Even if quit, relapse prevention is key.<br>
                             • <strong>Advance care planning discussion</strong> - Especially important with progressive disease.<br>
                             • <strong>Regular vaccination schedule</strong> - Pneumococcal, annual influenza, COVID-19.<br>
                             • <strong>Nutritional assessment and counseling</strong> - COPD patients often have muscle wasting.<br>
                             <strong>🏠 Home Care Focus:</strong> Home safety evaluation, medication management system, emergency response plan.
                         </div>
-                        
-                        <div class="feedback-section">
-                            <strong>⚠️ What NOT to Do:</strong><br>
-                            • <strong>High-dose opioids for dyspnea</strong> - Can suppress respiratory drive in COPD.<br>
-                            • <strong>Aggressive fluid restriction</strong> - Balance HF needs with medication absorption.<br>
-                            • <strong>Ignore depression</strong> - Depression reduces adherence and increases mortality.<br>
-                            • <strong>Discharge without follow-up</strong> - High risk for readmission within 30 days.<br>
-                            <strong>📊 Quality Metrics:</strong> 30-day readmission rates, vaccination rates, depression screening rates.
-                        </div>
-                        
-                        <div class="feedback-section">
-                            <strong>🌡️ Special Considerations for Complex COPD:</strong><br>
-                            1. <strong>Oxygen Titration:</strong> Target SpO2 88-92% in COPD with chronic hypercapnia.<br>
-                            2. <strong>Steroid Use:</strong> Short bursts only - long-term increases infection risk and osteoporosis.<br>
-                            3. <strong>Diuretic Management:</strong> Daily weights, adjust based on symptoms and renal function.<br>
-                            4. <strong>Palliative Integration:</strong> Not just end-of-life - symptom management throughout disease.<br>
-                            <strong>Clinical Pearl:</strong> "Start low, go slow, but start!" - Gradual optimization beats aggressive changes.
-                        </div>
+                    </div>
+                </div>
+
+                <!-- Progress Feedback for Activity 1 -->
+                <div class="progress-feedback" id="progress-1">
+                    <div>
+                        <span id="score-1">Score: 0/12 (0%)</span>
+                    </div>
+                    <div class="attempt-count">
+                        Attempts: <span id="attempts-1">0</span>
                     </div>
                 </div>
             </section>
@@ -1309,32 +1381,23 @@
                 <div class="communication-roleplay">
                     <div class="role-column">
                         <div class="role-header">Registered Nurse (RN)</div>
-                        <div class="role-tasks" id="rn-tasks">
-                            <!-- Tasks will be inserted here by JavaScript -->
-                        </div>
-                        <div class="task-placement empty" id="rn-placement" data-role="rn">
-                            <!-- Dragged tasks will appear here -->
-                        </div>
+                        <div class="role-tasks" id="rn-tasks"></div>
+                        <div class="task-placement empty" id="rn-placement" data-role="rn"></div>
+                        <div class="role-feedback" id="rn-feedback"></div>
                     </div>
                     
                     <div class="role-column">
                         <div class="role-header">Respiratory Therapist (RT)</div>
-                        <div class="role-tasks" id="rt-tasks">
-                            <!-- Tasks will be inserted here by JavaScript -->
-                        </div>
-                        <div class="task-placement empty" id="rt-placement" data-role="rt">
-                            <!-- Dragged tasks will appear here -->
-                        </div>
+                        <div class="role-tasks" id="rt-tasks"></div>
+                        <div class="task-placement empty" id="rt-placement" data-role="rt"></div>
+                        <div class="role-feedback" id="rt-feedback"></div>
                     </div>
                     
                     <div class="role-column">
                         <div class="role-header">Medical Assistant (MA)</div>
-                        <div class="role-tasks" id="ma-tasks">
-                            <!-- Tasks will be inserted here by JavaScript -->
-                        </div>
-                        <div class="task-placement empty" id="ma-placement" data-role="ma">
-                            <!-- Dragged tasks will appear here -->
-                        </div>
+                        <div class="role-tasks" id="ma-tasks"></div>
+                        <div class="task-placement empty" id="ma-placement" data-role="ma"></div>
+                        <div class="role-feedback" id="ma-feedback"></div>
                     </div>
                 </div>
 
@@ -1358,13 +1421,11 @@
                     </div>
                     <!-- Documentation Feedback -->
                     <div class="doc-feedback" id="doc-feedback">
-                        <div class="feedback-content" id="doc-feedback-content">
-                            <!-- Feedback will be inserted here by JavaScript -->
-                        </div>
+                        <div class="feedback-content" id="doc-feedback-content"></div>
                     </div>
                 </div>
 
-                <!-- Feedback -->
+                <!-- Activity 2 Feedback -->
                 <div class="feedback-container" id="feedback-2">
                     <div class="feedback-title">
                         <span class="feedback-icon correct">✓</span>
@@ -1379,54 +1440,45 @@
                             <strong>📌 Scope of Practice:</strong> Never perform tasks outside your scope or without proper training.
                         </div>
                         
-                        <div class="feedback-section">
-                            <strong>✅ RN Responsibilities (Correct Allocation):</strong><br>
+                        <div id="rn-feedback-section" class="feedback-section">
+                            <strong>✅ RN Responsibilities:</strong><br>
                             • <strong>Administer IV steroids per protocol</strong> - RN scope includes IV medication administration.<br>
                             • <strong>Notify provider of status change</strong> - Critical communication responsibility.<br>
                             • <strong>Assess pain and anxiety levels</strong> - Holistic patient assessment.<br>
-                            • <strong>Coordinate transfer if needed</strong> - Care coordination central to RN role.<br>
-                            <strong>📋 RN Documentation:</strong> Focus on assessment, interventions, patient response, and communication.
+                            • <strong>Coordinate transfer if needed</strong> - Care coordination central to RN role.
                         </div>
                         
-                        <div class="feedback-section">
-                            <strong>✅ RT Responsibilities (Correct Allocation):</strong><br>
+                        <div id="rt-feedback-section" class="feedback-section">
+                            <strong>✅ RT Responsibilities:</strong><br>
                             • <strong>Adjust oxygen to maintain target SpO2</strong> - RT scope for oxygen therapy.<br>
                             • <strong>Administer STAT nebulizer treatment</strong> - Respiratory treatments are RT domain.<br>
                             • <strong>Set up BiPAP if ordered</strong> - Non-invasive ventilation management.<br>
-                            • <strong>Obtain ABG if ordered</strong> - Arterial blood gas collection and analysis.<br>
-                            <strong>📋 RT Documentation:</strong> Focus on respiratory assessments, treatments given, equipment settings, patient tolerance.
+                            • <strong>Obtain ABG if ordered</strong> - Arterial blood gas collection and analysis.
                         </div>
                         
-                        <div class="feedback-section">
-                            <strong>✅ MA Responsibilities (Correct Allocation):</strong><br>
+                        <div id="ma-feedback-section" class="feedback-section">
+                            <strong>✅ MA Responsibilities:</strong><br>
                             • <strong>Obtain STAT EKG</strong> - Within MA scope with proper training.<br>
                             • <strong>Prepare crash cart and suction</strong> - Equipment preparation support.<br>
                             • <strong>Reinforce breathing techniques</strong> - Patient education reinforcement.<br>
-                            • <strong>Document vital signs every 15 min</strong> - Vital sign monitoring and documentation.<br>
-                            <strong>📋 MA Documentation:</strong> Focus on objective data (vitals), tasks performed, patient education provided.
+                            • <strong>Document vital signs every 15 min</strong> - Vital sign monitoring and documentation.
                         </div>
                         
-                        <div class="feedback-section">
-                            <strong>📝 Documentation Best Practices Analysis:</strong><br>
+                        <div id="doc-feedback-section" class="feedback-section">
+                            <strong>📝 Documentation Best Practices:</strong><br>
                             <strong>Correct Approach:</strong> <em>"Objective findings, actions taken, communication, and follow-up"</em><br>
-                            <strong>Why this works:</strong> Follows SBAR structure, includes objective data, documents communication, specifies follow-up.<br><br>
-                            
-                            <strong>Common Documentation Errors to Avoid:</strong><br>
-                            1. <strong>Vague statements:</strong> "Patient breathing better" → Use "RR decreased from 28 to 22, SpO2 improved to 92%".<br>
-                            2. <strong>Missing times:</strong> Always include exact times for assessments and interventions.<br>
-                            3. <strong>Opinions vs. facts:</strong> Document what you see/hear/measure, not interpretations.<br>
-                            4. <strong>Incomplete communication:</strong> Document who was notified, when, and their response.<br>
-                            <strong>Legal Principle:</strong> "If it wasn't documented, it wasn't done" AND "If it was documented poorly, it wasn't done well."
+                            <strong>Why this works:</strong> Follows SBAR structure, includes objective data, documents communication, specifies follow-up.
                         </div>
-                        
-                        <div class="feedback-section">
-                            <strong>🔍 Quality & Safety Considerations:</strong><br>
-                            • <strong>Closed-loop communication:</strong> Repeat back orders to ensure understanding.<br>
-                            • <strong>Handoff communication:</strong> Use I-PASS or SBAR for shift changes/transfers.<br>
-                            • <strong>Event reporting:</strong> Document near-misses and system issues for quality improvement.<br>
-                            • <strong>Patient/family communication:</strong> Document what was explained and their understanding.<br>
-                            <strong>🎯 Performance Indicators:</strong> Response times, communication accuracy, documentation completeness, patient outcomes.
-                        </div>
+                    </div>
+                </div>
+
+                <!-- Progress Feedback for Activity 2 -->
+                <div class="progress-feedback" id="progress-2">
+                    <div>
+                        <span id="score-2">Score: 0/16 (0%)</span>
+                    </div>
+                    <div class="attempt-count">
+                        Attempts: <span id="attempts-2">0</span>
                     </div>
                 </div>
             </section>
@@ -1454,6 +1506,18 @@
                 <h2 class="results-title">Advanced Clinical Skills Results</h2>
                 <div class="score-display" id="final-score">0%</div>
             </div>
+
+            <!-- Score Breakdown -->
+            <div class="score-breakdown">
+                <div class="score-item">
+                    <div class="score-label">Complex Case Management</div>
+                    <div class="score-value" id="activity1-score">0%</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-label">Interprofessional Communication</div>
+                    <div class="score-value" id="activity2-score">0%</div>
+                </div>
+            </div>
             
             <div class="clinical-insights">
                 <h3 class="insights-title">
@@ -1462,19 +1526,19 @@
                 <ul class="insights-list">
                     <li>
                         <span class="insight-dot"></span>
-                        <span><strong>Multimorbidity Management:</strong> COPD patients often have 3+ chronic conditions. Prioritize by acuity but address all comorbidities. Use STOPP/START criteria for medication review in elderly patients.</span>
+                        <span><strong>Multimorbidity Management:</strong> COPD patients often have 3+ chronic conditions. Prioritize by acuity but address all comorbidities.</span>
                     </li>
                     <li>
                         <span class="insight-dot"></span>
-                        <span><strong>Psychosocial Integration:</strong> Depression affects 40-60% of COPD patients. Screen with PHQ-2/9 at every visit. Social determinants (housing, finances, support) directly impact health outcomes.</span>
+                        <span><strong>Psychosocial Integration:</strong> Depression affects 40-60% of COPD patients. Screen with PHQ-2/9 at every visit.</span>
                     </li>
                     <li>
                         <span class="insight-dot"></span>
-                        <span><strong>Care Coordination:</strong> Use structured handoffs (I-PASS, SBAR). Document all communications. Schedule follow-up before discharge. High-risk patients need 7-day follow-up post-discharge.</span>
+                        <span><strong>Care Coordination:</strong> Use structured handoffs (I-PASS, SBAR). Document all communications.</span>
                     </li>
                     <li>
                         <span class="insight-dot"></span>
-                        <span><strong>Palliative Integration:</strong> Palliative care ≠ hospice. Refer early for symptom management. Discuss advance directives at diagnosis, not crisis. Document goals of care conversations.</span>
+                        <span><strong>Palliative Integration:</strong> Palliative care ≠ hospice. Refer early for symptom management.</span>
                     </li>
                 </ul>
             </div>
@@ -1486,19 +1550,19 @@
                 <ul class="insights-list">
                     <li>
                         <span class="insight-dot"></span>
-                        <span><strong>Role Clarity:</strong> Know scope of practice for each team member. Delegate appropriately using the "5 Rights": Right task, Right circumstance, Right person, Right direction, Right supervision.</span>
+                        <span><strong>Role Clarity:</strong> Know scope of practice for each team member. Delegate appropriately.</span>
                     </li>
                     <li>
                         <span class="insight-dot"></span>
-                        <span><strong>Communication Standards:</strong> Use SBAR for clinical updates, I-PASS for handoffs, "Check-back" for orders. Document all interprofessional communications including time, content, and response.</span>
+                        <span><strong>Communication Standards:</strong> Use SBAR for clinical updates, I-PASS for handoffs.</span>
                     </li>
                     <li>
                         <span class="insight-dot"></span>
-                        <span><strong>Rapid Response Teams:</strong> Know activation criteria (RR > 28, SpO2 < 90%, altered mental status). Have roles pre-assigned. Practice mock codes quarterly. Debrief after every event.</span>
+                        <span><strong>Rapid Response Teams:</strong> Know activation criteria. Have roles pre-assigned.</span>
                     </li>
                     <li>
                         <span class="insight-dot"></span>
-                        <span><strong>Quality Improvement:</strong> Track readmission rates, response times, communication errors. Use root cause analysis for adverse events. Implement PDSA cycles for process improvement.</span>
+                        <span><strong>Quality Improvement:</strong> Track readmission rates, response times, communication errors.</span>
                     </li>
                 </ul>
             </div>
@@ -1507,11 +1571,23 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // State Management for 2 ACTIVITIES ONLY
+            // State Management
             const state = {
                 activities: {
-                    1: { completed: false, correct: 0, total: 12, score: 0 },
-                    2: { completed: false, correct: 0, total: 16, score: 0 }
+                    1: { 
+                        completed: false, 
+                        correct: 0, 
+                        total: 12, 
+                        score: 0,
+                        attempts: 0
+                    },
+                    2: { 
+                        completed: false, 
+                        correct: 0, 
+                        total: 16, 
+                        score: 0,
+                        attempts: 0
+                    }
                 },
                 startedAt: new Date(),
                 timeSpent: 0,
@@ -1549,10 +1625,16 @@
             const resultsBtn = document.getElementById('view-results-btn');
             const resultsPanel = document.getElementById('results-panel');
             const finalScore = document.getElementById('final-score');
+            const activity1Score = document.getElementById('activity1-score');
+            const activity2Score = document.getElementById('activity2-score');
             const docFeedback = document.getElementById('doc-feedback');
             const docFeedbackContent = document.getElementById('doc-feedback-content');
+            const score1 = document.getElementById('score-1');
+            const attempts1 = document.getElementById('attempts-1');
+            const score2 = document.getElementById('score-2');
+            const attempts2 = document.getElementById('attempts-2');
 
-            // Timer for time spent
+            // Timer
             function updateTimer() {
                 const now = new Date();
                 const diff = Math.floor((now - state.startedAt) / 1000);
@@ -1591,9 +1673,165 @@
                         step.classList.remove('active', 'completed');
                     }
                 });
+
+                // Update individual activity scores
+                score1.textContent = `Score: ${state.activities[1].correct}/${state.activities[1].total} (${state.activities[1].score}%)`;
+                attempts1.textContent = state.activities[1].attempts;
+                score2.textContent = `Score: ${state.activities[2].correct}/${state.activities[2].total} (${state.activities[2].score}%)`;
+                attempts2.textContent = state.activities[2].attempts;
             }
 
-            // Shuffle array function
+            // Show feedback for Activity 1 items
+            function showItemFeedback(itemId, isCorrect, category) {
+                // Feedback messages for each item
+                const feedbackMessages = {
+                    'increase-oxygen': {
+                        correct: '✅ <strong>Correct!</strong> Priority #1: Hypoxemia requires immediate oxygen titration.',
+                        tip: '⚠️ <strong>Immediate Action:</strong> Always address airway first. Target SpO2 ≥ 92%.'
+                    },
+                    'nebulizers': {
+                        correct: '✅ <strong>Correct!</strong> Bronchodilators relieve bronchospasm immediately.',
+                        tip: '💡 <strong>Tip:</strong> Use short-acting beta agonists during acute exacerbations.'
+                    },
+                    'assess-pneumonia': {
+                        correct: '✅ <strong>Correct!</strong> Recent pneumonia increases recurrence risk.',
+                        tip: '🔍 <strong>Check:</strong> Assess for fever, increased sputum, crackles.'
+                    },
+                    'check-electrolytes': {
+                        correct: '✅ <strong>Correct!</strong> Diuretics can deplete K+ and Mg++.',
+                        tip: '⚡ <strong>Critical:</strong> Electrolyte imbalances affect cardiac function.'
+                    },
+                    'optimize-diuretics': {
+                        correct: '✅ <strong>Correct!</strong> Balance HF management without dehydration.',
+                        tip: '💧 <strong>Short-term:</strong> Optimize diuretics over 1-2 weeks.'
+                    },
+                    'pulmonary-rehab': {
+                        correct: '✅ <strong>Correct!</strong> Reduces hospital readmissions.',
+                        tip: '🏃‍♀️ <strong>Short-term:</strong> Refer during hospitalization.'
+                    },
+                    'depression-screening': {
+                        correct: '✅ <strong>Correct!</strong> PHQ-9 score of 12 requires intervention.',
+                        tip: '🧠 <strong>Impact:</strong> Depression reduces medication adherence.'
+                    },
+                    'social-work': {
+                        correct: '✅ <strong>Correct!</strong> Addresses social determinants of health.',
+                        tip: '🏠 <strong>Need:</strong> Living alone increases readmission risk.'
+                    },
+                    'smoking-cessation': {
+                        correct: '✅ <strong>Correct!</strong> Relapse prevention is ongoing.',
+                        tip: '🚭 <strong>Long-term:</strong> Continue counseling at every visit.'
+                    },
+                    'advance-care': {
+                        correct: '✅ <strong>Correct!</strong> Progressive disease requires planning.',
+                        tip: '📝 <strong>Long-term:</strong> Discuss advance directives early.'
+                    },
+                    'vaccinations': {
+                        correct: '✅ <strong>Correct!</strong> Prevents exacerbations in COPD.',
+                        tip: '💉 <strong>Long-term:</strong> Regular vaccines are essential.'
+                    },
+                    'nutrition-assessment': {
+                        correct: '✅ <strong>Correct!</strong> Addresses muscle wasting in COPD.',
+                        tip: '🍎 <strong>Long-term:</strong> Nutritional counseling improves quality of life.'
+                    }
+                };
+
+                const message = isCorrect ? feedbackMessages[itemId]?.correct : feedbackMessages[itemId]?.tip;
+                
+                if (message) {
+                    // Find the dropped item
+                    const droppedItem = document.querySelector(`.dropped-option[data-id="${itemId}"]`);
+                    if (droppedItem) {
+                        // Remove any existing feedback
+                        const existingFeedback = droppedItem.querySelector('.item-feedback');
+                        if (existingFeedback) {
+                            existingFeedback.remove();
+                        }
+                        
+                        // Create and append new feedback
+                        const feedbackDiv = document.createElement('div');
+                        feedbackDiv.className = `item-feedback ${isCorrect ? 'correct' : 'incorrect'}`;
+                        feedbackDiv.innerHTML = message;
+                        droppedItem.appendChild(feedbackDiv);
+                    }
+                }
+            }
+
+            // Show feedback for Activity 2 tasks
+            function showRoleFeedback(taskId, isCorrect, role) {
+                // Feedback messages for tasks
+                const feedbackMessages = {
+                    'iv-steroids': {
+                        correct: '✅ <strong>RN Scope:</strong> IV medication administration.',
+                        incorrect: '⚠️ IV steroids require RN administration.'
+                    },
+                    'notify-provider': {
+                        correct: '✅ <strong>RN Role:</strong> Coordinates communication.',
+                        incorrect: '⚠️ Provider notification is RN responsibility.'
+                    },
+                    'assess-pain': {
+                        correct: '✅ <strong>RN Assessment:</strong> Includes pain and anxiety.',
+                        incorrect: '⚠️ Pain assessment is RN responsibility.'
+                    },
+                    'coordinate-transfer': {
+                        correct: '✅ <strong>RN Coordination:</strong> Handoffs and transfers.',
+                        incorrect: '⚠️ Transfer coordination requires RN.'
+                    },
+                    'adjust-oxygen': {
+                        correct: '✅ <strong>RT Scope:</strong> Oxygen therapy management.',
+                        incorrect: '⚠️ Oxygen titration requires RT.'
+                    },
+                    'stat-nebulizer': {
+                        correct: '✅ <strong>RT Scope:</strong> Respiratory treatments.',
+                        incorrect: '⚠️ Nebulizer administration requires RT.'
+                    },
+                    'setup-bipap': {
+                        correct: '✅ <strong>RT Scope:</strong> Non-invasive ventilation.',
+                        incorrect: '⚠️ BiPAP setup requires RT expertise.'
+                    },
+                    'obtain-abg': {
+                        correct: '✅ <strong>RT Scope:</strong> Arterial blood gas.',
+                        incorrect: '⚠️ ABG requires specialized training.'
+                    },
+                    'stat-ekg': {
+                        correct: '✅ <strong>MA Scope:</strong> EKG acquisition.',
+                        incorrect: '⚠️ Acute management requires RN/RT first.'
+                    },
+                    'prepare-crash-cart': {
+                        correct: '✅ <strong>MA Role:</strong> Equipment preparation.',
+                        incorrect: '⚠️ MA prepares equipment, doesn\'t manage airway.'
+                    },
+                    'breathing-techniques': {
+                        correct: '✅ <strong>MA Role:</strong> Patient education.',
+                        incorrect: '⚠️ Teach after stabilization, not during crisis.'
+                    },
+                    'document-vitals': {
+                        correct: '✅ <strong>MA Role:</strong> Vital sign monitoring.',
+                        incorrect: '⚠️ MAs document vitals, RNs document assessment.'
+                    }
+                };
+
+                const message = isCorrect ? feedbackMessages[taskId]?.correct : feedbackMessages[taskId]?.incorrect;
+                
+                if (message) {
+                    // Find the placed task
+                    const placedTask = document.querySelector(`.placed-task[data-id="${taskId}"]`);
+                    if (placedTask) {
+                        // Remove any existing feedback
+                        const existingFeedback = placedTask.querySelector('.item-feedback');
+                        if (existingFeedback) {
+                            existingFeedback.remove();
+                        }
+                        
+                        // Create and append new feedback
+                        const feedbackDiv = document.createElement('div');
+                        feedbackDiv.className = `item-feedback ${isCorrect ? 'correct' : 'incorrect'}`;
+                        feedbackDiv.innerHTML = message;
+                        placedTask.appendChild(feedbackDiv);
+                    }
+                }
+            }
+
+            // Shuffle array
             function shuffleArray(array) {
                 const shuffled = [...array];
                 for (let i = shuffled.length - 1; i > 0; i--) {
@@ -1603,7 +1841,7 @@
                 return shuffled;
             }
 
-            // Activity 1: Complex Case Management Challenge
+            // Activity 1: Complex Case Management
             function initActivity1() {
                 const optionItemsPool = document.getElementById('option-items-pool');
                 const categories = document.querySelectorAll('.option-category');
@@ -1676,7 +1914,7 @@
                         const data = JSON.parse(e.dataTransfer.getData('text/plain'));
                         const targetCategory = this.dataset.category;
                         
-                        // Check if item already placed in any category
+                        // Check if item already placed
                         const existingItem = document.querySelector(`.dropped-option[data-id="${data.id}"]`);
                         if (existingItem) {
                             existingItem.remove();
@@ -1695,7 +1933,9 @@
                         const droppedDiv = document.createElement('div');
                         droppedDiv.className = `dropped-option ${isCorrect ? '' : 'incorrect'}`;
                         droppedDiv.dataset.id = data.id;
+                        droppedDiv.dataset.category = targetCategory;
                         droppedDiv.textContent = data.text;
+                        
                         this.querySelector('.option-category-content').appendChild(droppedDiv);
                         
                         // Hide original item
@@ -1707,10 +1947,18 @@
                         // Update state
                         state.caseSelections[targetCategory].push(data.id);
                         
+                        // Show immediate feedback
+                        showItemFeedback(data.id, isCorrect, targetCategory);
+                        
+                        // Increment attempts
+                        state.activities[1].attempts++;
+                        
+                        // Update score
+                        updateActivity1Score();
+                        
                         // Check completion
                         const totalPlaced = Object.values(state.caseSelections).reduce((sum, arr) => sum + arr.length, 0);
                         if (totalPlaced === 12) {
-                            // Calculate score
                             let correctCount = 0;
                             Object.keys(state.correctCaseSelections).forEach(category => {
                                 const correctItems = state.correctCaseSelections[category];
@@ -1735,7 +1983,24 @@
                 });
             }
 
-            // Activity 2: Interprofessional Communication Simulation
+            // Update Activity 1 score
+            function updateActivity1Score() {
+                let correctCount = 0;
+                Object.keys(state.correctCaseSelections).forEach(category => {
+                    const correctItems = state.correctCaseSelections[category];
+                    const placedItems = state.caseSelections[category];
+                    placedItems.forEach(item => {
+                        if (correctItems.includes(item)) correctCount++;
+                    });
+                });
+                
+                const currentScore = Math.round((correctCount / 12) * 100);
+                score1.textContent = `Score: ${correctCount}/12 (${currentScore}%)`;
+                state.activities[1].correct = correctCount;
+                state.activities[1].score = currentScore;
+            }
+
+            // Activity 2: Interprofessional Communication
             function initActivity2() {
                 const taskItemsPool = document.getElementById('task-items-pool');
                 const rolePlacements = document.querySelectorAll('.task-placement');
@@ -1759,31 +2024,31 @@
                     { id: 'document-vitals', text: 'Document vital signs every 15 min', role: 'ma' }
                 ];
 
-                // Documentation options with feedback
+                // Documentation options
                 const docOptions = [
                     { 
                         id: 'doc1', 
                         text: "Just document the basics: 'Patient had breathing trouble, we fixed it.'", 
                         correct: false,
-                        feedback: "❌ <strong>Why this is incorrect:</strong> This is dangerously vague. Documentation must be specific, objective, and complete. Missing details could lead to medical errors or legal liability."
+                        feedback: "❌ <strong>Incorrect:</strong> This is dangerously vague. Documentation must be specific, objective, and complete. Missing details could lead to medical errors or legal liability."
                     },
                     { 
                         id: 'doc2', 
                         text: "Document only what you did personally, not what others did.", 
                         correct: false,
-                        feedback: "❌ <strong>Why this is incorrect:</strong> You must document team actions you witnessed or participated in. The medical record should reflect the complete picture of care provided."
+                        feedback: "❌ <strong>Incorrect:</strong> You must document team actions you witnessed or participated in. The medical record should reflect the complete picture of care provided."
                     },
                     { 
                         id: 'doc3', 
                         text: "Objective findings, actions taken, communication, and follow-up", 
                         correct: true,
-                        feedback: "✅ <strong>Why this is correct:</strong> This follows SBAR structure, includes objective data, documents communication, and specifies follow-up. It's comprehensive, objective, and legally sound."
+                        feedback: "✅ <strong>Correct!</strong> This follows SBAR structure, includes objective data, documents communication, and specifies follow-up. It's comprehensive, objective, and legally sound."
                     },
                     { 
                         id: 'doc4', 
                         text: "Write a novel with every detail, no matter how minor.", 
                         correct: false,
-                        feedback: "❌ <strong>Why this is incorrect:</strong> While thoroughness is important, excessive documentation can obscure critical information. Focus on relevant clinical facts using clear, concise language."
+                        feedback: "❌ <strong>Incorrect:</strong> While thoroughness is important, excessive documentation can obscure critical information. Focus on relevant clinical facts using clear, concise language."
                     }
                 ];
 
@@ -1817,7 +2082,7 @@
                     docOptionsContainer.appendChild(div);
                 });
 
-                // Setup drag and drop for task items
+                // Setup drag and drop
                 const taskItemsAll = document.querySelectorAll('.task-item');
                 
                 taskItemsAll.forEach(item => {
@@ -1852,11 +2117,10 @@
                         const data = JSON.parse(e.dataTransfer.getData('text/plain'));
                         const targetRole = this.dataset.role;
                         
-                        // Check if task already placed in any role
+                        // Check if task already placed
                         const existingTask = document.querySelector(`.placed-task[data-id="${data.id}"]`);
                         if (existingTask) {
                             existingTask.remove();
-                            // Remove from state
                             Object.keys(state.teamAssignments).forEach(role => {
                                 const index = state.teamAssignments[role].indexOf(data.id);
                                 if (index > -1) {
@@ -1871,6 +2135,7 @@
                         const placedDiv = document.createElement('div');
                         placedDiv.className = `placed-task ${isCorrect ? '' : 'incorrect'}`;
                         placedDiv.dataset.id = data.id;
+                        placedDiv.dataset.role = targetRole;
                         placedDiv.textContent = data.text;
                         this.appendChild(placedDiv);
                         this.classList.remove('empty');
@@ -1884,6 +2149,15 @@
                         // Update state
                         state.teamAssignments[targetRole].push(data.id);
                         
+                        // Show immediate feedback
+                        showRoleFeedback(data.id, isCorrect, targetRole);
+                        
+                        // Increment attempts
+                        state.activities[2].attempts++;
+                        
+                        // Update score
+                        updateActivity2Score();
+                        
                         // Check completion
                         checkTeamCompletion();
                     });
@@ -1895,7 +2169,6 @@
                     option.addEventListener('click', function() {
                         if (state.activities[2].completed) return;
                         
-                        // Remove previous selections
                         docOptionsAll.forEach(opt => {
                             opt.classList.remove('selected', 'incorrect');
                         });
@@ -1908,7 +2181,6 @@
                             this.classList.add('incorrect');
                         }
                         
-                        // Show immediate feedback
                         docFeedbackContent.innerHTML = feedbackText;
                         docFeedback.className = `doc-feedback show ${isCorrect ? '' : 'incorrect'}`;
                         
@@ -1917,6 +2189,8 @@
                             correct: isCorrect,
                             feedback: feedbackText
                         };
+                        
+                        state.activities[2].attempts++;
                         
                         checkTeamCompletion();
                     });
@@ -1927,10 +2201,8 @@
                     const documentationAnswered = state.documentationAnswer !== null;
                     
                     if (totalTasksPlaced === 12 && documentationAnswered) {
-                        // Calculate score
                         let correctCount = 0;
                         
-                        // Check team assignments
                         Object.keys(state.correctTeamAssignments).forEach(role => {
                             const correctItems = state.correctTeamAssignments[role];
                             const placedItems = state.teamAssignments[role];
@@ -1939,7 +2211,6 @@
                             });
                         });
                         
-                        // Check documentation answer
                         if (state.documentationAnswer.correct) {
                             correctCount += 4;
                         }
@@ -1958,19 +2229,39 @@
                 }
             }
 
+            // Update Activity 2 score
+            function updateActivity2Score() {
+                let correctCount = 0;
+                
+                Object.keys(state.correctTeamAssignments).forEach(role => {
+                    const correctItems = state.correctTeamAssignments[role];
+                    const placedItems = state.teamAssignments[role];
+                    placedItems.forEach(item => {
+                        if (correctItems.includes(item)) correctCount++;
+                    });
+                });
+                
+                if (state.documentationAnswer && state.documentationAnswer.correct) {
+                    correctCount += 4;
+                }
+                
+                const currentScore = Math.round((correctCount / 16) * 100);
+                score2.textContent = `Score: ${correctCount}/16 (${currentScore}%)`;
+                state.activities[2].correct = correctCount;
+                state.activities[2].score = currentScore;
+            }
+
             // Reset All Activities
             function resetAllActivities() {
-                // Reset state
                 state.activities = {
-                    1: { completed: false, correct: 0, total: 12, score: 0 },
-                    2: { completed: false, correct: 0, total: 16, score: 0 }
+                    1: { completed: false, correct: 0, total: 12, score: 0, attempts: 0 },
+                    2: { completed: false, correct: 0, total: 16, score: 0, attempts: 0 }
                 };
                 state.caseSelections = { immediate: [], shortTerm: [], longTerm: [] };
                 state.teamAssignments = { rn: [], rt: [], ma: [] };
                 state.documentationAnswer = null;
                 state.startedAt = new Date();
                 
-                // Reset UI
                 activityCards.forEach(card => {
                     card.classList.remove('completed');
                     const status = card.querySelector('.activity-status');
@@ -1980,49 +2271,35 @@
                     feedback.classList.remove('show');
                 });
                 
-                // Reset Activity 1
-                const optionItemsPool = document.getElementById('option-items-pool');
-                optionItemsPool.innerHTML = '';
-                
+                document.getElementById('option-items-pool').innerHTML = '';
                 document.querySelectorAll('.option-category-content').forEach(content => {
                     content.innerHTML = '';
                 });
                 
-                // Reset Activity 2
-                const taskItemsPool = document.getElementById('task-items-pool');
-                taskItemsPool.innerHTML = '';
-                
+                document.getElementById('task-items-pool').innerHTML = '';
                 document.querySelectorAll('.task-placement').forEach(placement => {
                     placement.innerHTML = '';
                     placement.classList.add('empty');
                 });
                 
-                const docOptionsContainer = document.getElementById('doc-options');
-                docOptionsContainer.innerHTML = '';
-                
-                // Reset documentation feedback
+                document.getElementById('doc-options').innerHTML = '';
                 docFeedback.classList.remove('show', 'incorrect');
                 docFeedbackContent.innerHTML = '';
                 
-                // Reset results
                 resultsPanel.classList.remove('show');
                 
-                // Reinitialize activities
                 initActivity1();
                 initActivity2();
                 
-                // Update progress
                 updateProgressSummary();
             }
 
             // Check All Answers
             function checkAllAnswers() {
-                // Complete Activity 1 with perfect score for learning
                 if (!state.activities[1].completed) {
                     const feedback = document.getElementById('feedback-1');
                     const status = document.querySelector('#activity-1 .activity-status');
                     
-                    // Show all correct option placements
                     Object.keys(state.correctCaseSelections).forEach(category => {
                         const categoryElement = document.getElementById(`${category}-category`);
                         const content = categoryElement.querySelector('.option-category-content');
@@ -2033,7 +2310,14 @@
                             if (item) {
                                 const droppedDiv = document.createElement('div');
                                 droppedDiv.className = 'dropped-option';
+                                droppedDiv.dataset.id = itemId;
                                 droppedDiv.textContent = item.textContent;
+                                
+                                const feedbackDiv = document.createElement('div');
+                                feedbackDiv.className = 'item-feedback correct';
+                                feedbackDiv.innerHTML = '✅ <strong>Correct!</strong> This is the right category.';
+                                droppedDiv.appendChild(feedbackDiv);
+                                
                                 content.appendChild(droppedDiv);
                                 item.style.display = 'none';
                             }
@@ -2049,12 +2333,10 @@
                     feedback.classList.add('show');
                 }
                 
-                // Complete Activity 2 with perfect score for learning
                 if (!state.activities[2].completed) {
                     const feedback = document.getElementById('feedback-2');
                     const status = document.querySelector('#activity-2 .activity-status');
                     
-                    // Show correct team assignments
                     Object.keys(state.correctTeamAssignments).forEach(role => {
                         const placement = document.getElementById(`${role}-placement`);
                         placement.innerHTML = '';
@@ -2064,7 +2346,14 @@
                             if (item) {
                                 const placedDiv = document.createElement('div');
                                 placedDiv.className = 'placed-task';
+                                placedDiv.dataset.id = itemId;
                                 placedDiv.textContent = item.textContent;
+                                
+                                const feedbackDiv = document.createElement('div');
+                                feedbackDiv.className = 'item-feedback correct';
+                                feedbackDiv.innerHTML = '✅ <strong>Correct!</strong> This is the right role.';
+                                placedDiv.appendChild(feedbackDiv);
+                                
                                 placement.appendChild(placedDiv);
                                 item.style.display = 'none';
                             }
@@ -2072,11 +2361,9 @@
                         placement.classList.remove('empty');
                     });
                     
-                    // Select correct documentation option
                     const correctDocOption = document.querySelector('.doc-option[data-correct="true"]');
                     if (correctDocOption) {
                         correctDocOption.classList.add('selected');
-                        // Show feedback for correct answer
                         docFeedbackContent.innerHTML = correctDocOption.dataset.feedback;
                         docFeedback.className = 'doc-feedback show';
                     }
@@ -2107,11 +2394,13 @@
                 
                 const averageScore = activityCount > 0 ? Math.round(totalScore / activityCount) : 0;
                 finalScore.textContent = `${averageScore}%`;
+                activity1Score.textContent = `${state.activities[1].score}%`;
+                activity2Score.textContent = `${state.activities[2].score}%`;
                 resultsPanel.classList.add('show');
                 resultsPanel.scrollIntoView({ behavior: 'smooth' });
             }
 
-            // Initialize all activities
+            // Initialize
             initActivity1();
             initActivity2();
 
