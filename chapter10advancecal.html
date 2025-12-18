@@ -815,6 +815,76 @@
             color: var(--color-primary);
         }
 
+        /* Enhanced Feedback Styles */
+        .input-feedback {
+            font-size: 0.75rem;
+            margin-top: 4px;
+            padding: 6px 8px;
+            border-radius: 6px;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .input-feedback.correct {
+            background: rgba(0, 184, 148, 0.15);
+            color: var(--color-success);
+            border-left: 3px solid var(--color-success);
+            display: block;
+        }
+
+        .input-feedback.incorrect {
+            background: rgba(225, 112, 85, 0.15);
+            color: var(--color-error);
+            border-left: 3px solid var(--color-error);
+            display: block;
+            animation: shake 0.5s ease;
+        }
+
+        .input-feedback.tip {
+            background: rgba(253, 203, 110, 0.15);
+            color: #d35400;
+            border-left: 3px solid var(--color-warning);
+            display: block;
+        }
+
+        /* Real-time MCQ Feedback */
+        .mcq-feedback {
+            font-size: 0.75rem;
+            margin-top: 8px;
+            padding: 8px;
+            border-radius: 6px;
+            display: none;
+        }
+
+        .mcq-feedback.correct {
+            background: rgba(0, 184, 148, 0.15);
+            color: var(--color-success);
+            border-left: 3px solid var(--color-success);
+            display: block;
+        }
+
+        .mcq-feedback.incorrect {
+            background: rgba(225, 112, 85, 0.15);
+            color: var(--color-error);
+            border-left: 3px solid var(--color-error);
+            display: block;
+        }
+
+        /* Progress Tracking for Each Activity */
+        .activity-progress {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            font-size: 0.8rem;
+        }
+
+        .progress-count {
+            background: rgba(12, 10, 24, 0.05);
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+
         /* Action Buttons */
         .action-buttons {
             display: flex;
@@ -937,6 +1007,32 @@
             background: var(--color-accent);
             flex-shrink: 0;
         }
+
+        /* Common Errors Highlight */
+        .common-errors {
+            background: rgba(225, 112, 85, 0.08);
+            border-radius: var(--radius-sm);
+            padding: 12px;
+            margin: 15px 0;
+            border-left: 3px solid var(--color-error);
+        }
+
+        .errors-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--color-error);
+            margin-bottom: 8px;
+        }
+
+        .errors-list {
+            font-size: 0.8rem;
+            color: var(--color-text);
+            padding-left: 20px;
+        }
+
+        .errors-list li {
+            margin-bottom: 4px;
+        }
     </style>
 </head>
 <body>
@@ -1035,21 +1131,25 @@
                             <label class="input-label">Volume to infuse (mL)</label>
                             <input type="text" class="input-field" id="iv-volume" 
                                    placeholder="Enter mL">
+                            <div class="input-feedback" id="feedback-iv-volume"></div>
                         </div>
                         <div class="input-group">
                             <label class="input-label">Drop factor (gtt/mL)</label>
                             <input type="text" class="input-field" id="drop-factor" 
                                    placeholder="Enter gtt/mL">
+                            <div class="input-feedback" id="feedback-drop-factor"></div>
                         </div>
                         <div class="input-group">
                             <label class="input-label">Time in minutes</label>
                             <input type="text" class="input-field" id="time-minutes" 
                                    placeholder="Calculate minutes">
+                            <div class="input-feedback" id="feedback-time-minutes"></div>
                         </div>
                         <div class="input-group">
                             <label class="input-label">Drip rate (gtt/min)</label>
                             <input type="text" class="input-field" id="drip-rate" 
                                    placeholder="Calculate gtt/min">
+                            <div class="input-feedback" id="feedback-drip-rate"></div>
                         </div>
                     </div>
 
@@ -1076,6 +1176,7 @@
                                 <div class="option-text">Blood administration: 10 gtt/mL</div>
                             </div>
                         </div>
+                        <div class="mcq-feedback" id="feedback-mcq1"></div>
                     </div>
                 </div>
 
@@ -1104,16 +1205,19 @@
                             <label class="input-label">Total dose (mg)</label>
                             <input type="text" class="input-field" id="ped-dose-mg" 
                                    placeholder="Calculate mg">
+                            <div class="input-feedback" id="feedback-ped-dose-mg"></div>
                         </div>
                         <div class="input-group">
                             <label class="input-label">Volume to draw up (mL)</label>
                             <input type="text" class="input-field" id="draw-up-ml" 
                                    placeholder="Calculate mL">
+                            <div class="input-feedback" id="feedback-draw-up-ml"></div>
                         </div>
                         <div class="input-group">
                             <label class="input-label">Infusion pump rate (mL/hr)</label>
                             <input type="text" class="input-field" id="pump-rate" 
                                    placeholder="Calculate mL/hr">
+                            <div class="input-feedback" id="feedback-pump-rate"></div>
                         </div>
                         <div class="input-group">
                             <label class="input-label">Select syringe size</label>
@@ -1124,6 +1228,7 @@
                                 <option value="5ml">5 mL syringe</option>
                                 <option value="10ml">10 mL syringe</option>
                             </select>
+                            <div class="input-feedback" id="feedback-syringe-select"></div>
                         </div>
                     </div>
 
@@ -1150,6 +1255,7 @@
                                 <div class="option-text">Label the syringe immediately</div>
                             </div>
                         </div>
+                        <div class="mcq-feedback" id="feedback-mcq2"></div>
                     </div>
                 </div>
 
@@ -1214,6 +1320,12 @@
                         <strong>Clinical Application:</strong> Always program infusion pumps with calculated rate, 
                         then double-check against manual calculation. Document start time, rate, volume, and verification.
                     </div>
+                </div>
+
+                <!-- Progress Tracking -->
+                <div class="activity-progress">
+                    <div id="score-1">Score: 0/16 (0%)</div>
+                    <div class="progress-count">Correct: <span id="correct-count-1">0</span>/16</div>
                 </div>
             </section>
 
@@ -1298,16 +1410,19 @@
                             <label class="input-label">Concentration from table (mg/mL)</label>
                             <input type="text" class="input-field" id="table-concentration" 
                                    placeholder="Enter mg/mL">
+                            <div class="input-feedback" id="feedback-table-concentration"></div>
                         </div>
                         <div class="input-group">
                             <label class="input-label">Ordered dose (mg)</label>
                             <input type="text" class="input-field" id="ordered-dose" 
                                    placeholder="Enter mg">
+                            <div class="input-feedback" id="feedback-ordered-dose"></div>
                         </div>
                         <div class="input-group">
                             <label class="input-label">Volume to draw up (mL)</label>
                             <input type="text" class="input-field" id="table-volume" 
                                    placeholder="Calculate mL">
+                            <div class="input-feedback" id="feedback-table-volume"></div>
                         </div>
                         <div class="input-group">
                             <label class="input-label">Select appropriate syringe</label>
@@ -1318,6 +1433,7 @@
                                 <option value="5ml">5 mL syringe</option>
                                 <option value="10ml">10 mL syringe</option>
                             </select>
+                            <div class="input-feedback" id="feedback-table-syringe"></div>
                         </div>
                     </div>
 
@@ -1336,6 +1452,7 @@
                             <label class="input-label">Volume for 750 mg dose (mL)</label>
                             <input type="text" class="input-field" id="alt-volume" 
                                    placeholder="Calculate mL">
+                            <div class="input-feedback" id="feedback-alt-volume"></div>
                         </div>
                         <div class="input-group">
                             <label class="input-label">Why might a provider choose this option?</label>
@@ -1346,6 +1463,7 @@
                                 <option value="cheaper">Less expensive diluent</option>
                                 <option value="stability">Longer stability after mixing</option>
                             </select>
+                            <div class="input-feedback" id="feedback-reason-select"></div>
                         </div>
                     </div>
                 </div>
@@ -1375,11 +1493,13 @@
                             <label class="input-label">Convert 20 mEq to grains (gr)</label>
                             <input type="text" class="input-field" id="convert-grains" 
                                    placeholder="Calculate gr">
+                            <div class="input-feedback" id="feedback-convert-grains"></div>
                         </div>
                         <div class="input-group">
                             <label class="input-label">Volume from 2 mEq/mL vial (mL)</label>
                             <input type="text" class="input-field" id="kcl-volume" 
                                    placeholder="Calculate mL">
+                            <div class="input-feedback" id="feedback-kcl-volume"></div>
                         </div>
                         <div class="input-group">
                             <label class="input-label">Total infusion volume (mL)</label>
@@ -1390,6 +1510,7 @@
                             <label class="input-label">Drip rate with 20 gtt/mL tubing (gtt/min)</label>
                             <input type="text" class="input-field" id="kcl-drip-rate" 
                                    placeholder="Calculate gtt/min">
+                            <div class="input-feedback" id="feedback-kcl-drip-rate"></div>
                         </div>
                     </div>
 
@@ -1416,6 +1537,7 @@
                                 <div class="option-text">Not verifying conversion with another professional</div>
                             </div>
                         </div>
+                        <div class="mcq-feedback" id="feedback-mcq3"></div>
                     </div>
                 </div>
 
@@ -1483,6 +1605,12 @@
                         <strong>Potassium Safety:</strong> This order (20 mEq/100 mL over 2 hours = 10 mEq/hour) is at maximum safe rate for peripheral line. 
                         Requires cardiac monitoring if faster. Always use infusion pump and check facility protocols.
                     </div>
+                </div>
+
+                <!-- Progress Tracking -->
+                <div class="activity-progress">
+                    <div id="score-2">Score: 0/17 (0%)</div>
+                    <div class="progress-count">Correct: <span id="correct-count-2">0</span>/17</div>
                 </div>
             </section>
         </div>
@@ -1582,11 +1710,33 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // State Management - 2 ACTIVITIES ONLY
+            // State Management - 2 ACTIVITIES ONLY with enhanced tracking
             const state = {
                 activities: {
-                    1: { completed: false, correct: 0, total: 16, score: 0 }, // 8 inputs + 2 MCQs + 6 calculation points
-                    2: { completed: false, correct: 0, total: 17, score: 0 }    // 9 inputs + 2 selects + 1 MCQ + 5 calculation points
+                    1: { 
+                        completed: false, 
+                        correct: 0, 
+                        total: 16, 
+                        score: 0,
+                        items: {},
+                        progress: {
+                            inputs: 0,
+                            mcqs: 0,
+                            selects: 0
+                        }
+                    },
+                    2: { 
+                        completed: false, 
+                        correct: 0, 
+                        total: 17, 
+                        score: 0,
+                        items: {},
+                        progress: {
+                            inputs: 0,
+                            mcqs: 0,
+                            selects: 0
+                        }
+                    }
                 },
                 startedAt: new Date(),
                 timeSpent: 0
@@ -1603,6 +1753,10 @@
             const resultsBtn = document.getElementById('view-results-btn');
             const resultsPanel = document.getElementById('results-panel');
             const finalScore = document.getElementById('final-score');
+            const score1 = document.getElementById('score-1');
+            const correctCount1 = document.getElementById('correct-count-1');
+            const score2 = document.getElementById('score-2');
+            const correctCount2 = document.getElementById('correct-count-2');
 
             // Timer for time spent
             function updateTimer() {
@@ -1643,9 +1797,82 @@
                         step.classList.remove('active', 'completed');
                     }
                 });
+
+                // Update individual activity scores
+                score1.textContent = `Score: ${state.activities[1].correct}/${state.activities[1].total} (${state.activities[1].score}%)`;
+                correctCount1.textContent = state.activities[1].correct;
+                score2.textContent = `Score: ${state.activities[2].correct}/${state.activities[2].total} (${state.activities[2].score}%)`;
+                correctCount2.textContent = state.activities[2].correct;
             }
 
-            // Activity 1: IV Calculations
+            // Show feedback for input fields
+            function showInputFeedback(inputId, isCorrect, message, isTip = false) {
+                const input = document.getElementById(inputId);
+                const feedbackElement = document.getElementById(`feedback-${inputId}`);
+                
+                if (feedbackElement) {
+                    feedbackElement.className = `input-feedback ${isCorrect ? 'correct' : (isTip ? 'tip' : 'incorrect')}`;
+                    feedbackElement.innerHTML = message;
+                    feedbackElement.style.display = 'block';
+                }
+                
+                // Store in state
+                const activityCard = input.closest('.activity-card');
+                const activityNum = activityCard.dataset.activity;
+                state.activities[activityNum].items[inputId] = {
+                    correct: isCorrect,
+                    message: message
+                };
+            }
+
+            // Show feedback for MCQ options
+            function showMcqFeedback(optionElement, isCorrect, message) {
+                const container = optionElement.closest('.mcq-container');
+                const feedbackId = `feedback-${container.id || 'mcq' + Date.now()}`;
+                
+                // Create or update feedback element
+                let feedbackElement = container.querySelector('.mcq-feedback');
+                if (!feedbackElement) {
+                    feedbackElement = document.createElement('div');
+                    feedbackElement.className = 'mcq-feedback';
+                    container.appendChild(feedbackElement);
+                }
+                
+                feedbackElement.className = `mcq-feedback ${isCorrect ? 'correct' : 'incorrect'}`;
+                feedbackElement.innerHTML = message;
+                feedbackElement.style.display = 'block';
+                
+                // Store in state
+                const activityCard = optionElement.closest('.activity-card');
+                const activityNum = activityCard.dataset.activity;
+                const questionIndex = Array.from(container.parentNode.querySelectorAll('.mcq-container')).indexOf(container);
+                state.activities[activityNum].items[`mcq-${questionIndex}`] = {
+                    correct: isCorrect,
+                    message: message
+                };
+            }
+
+            // Show feedback for select fields
+            function showSelectFeedback(selectId, isCorrect, message) {
+                const select = document.getElementById(selectId);
+                const feedbackElement = document.getElementById(`feedback-${selectId}`);
+                
+                if (feedbackElement) {
+                    feedbackElement.className = `input-feedback ${isCorrect ? 'correct' : 'incorrect'}`;
+                    feedbackElement.innerHTML = message;
+                    feedbackElement.style.display = 'block';
+                }
+                
+                // Store in state
+                const activityCard = select.closest('.activity-card');
+                const activityNum = activityCard.dataset.activity;
+                state.activities[activityNum].items[selectId] = {
+                    correct: isCorrect,
+                    message: message
+                };
+            }
+
+            // Activity 1: IV Calculations with enhanced feedback
             function initActivity1() {
                 const inputs = {
                     ivVolume: document.getElementById('iv-volume'),
@@ -1658,8 +1885,8 @@
                 };
                 
                 const syringeSelect = document.getElementById('syringe-select');
-                const mcqOptions1 = document.querySelectorAll('#activity-1 .mcq-option:first-child');
-                const mcqOptions2 = document.querySelectorAll('#activity-1 .mcq-option:last-child');
+                const mcqOptions1 = document.querySelectorAll('#activity-1 .mcq-container:first-child .mcq-option');
+                const mcqOptions2 = document.querySelectorAll('#activity-1 .mcq-container:last-child .mcq-option');
                 const feedback = document.getElementById('feedback-1');
                 const status = document.querySelector('#activity-1 .activity-status');
 
@@ -1676,13 +1903,67 @@
                     mcq2: 'B'
                 };
 
-                let correctInputs = 0;
+                const feedbackMessages = {
+                    ivVolume: {
+                        correct: '✅ <strong>Correct!</strong> The order is for 1000 mL of Lactated Ringer\'s.',
+                        incorrect: '❌ <strong>Check the order:</strong> The scenario states "Infuse 1000 mL".',
+                        tip: '💡 <strong>Read carefully:</strong> The order specifies 1000 mL.'
+                    },
+                    dropFactor: {
+                        correct: '✅ <strong>Correct!</strong> The tubing has a drop factor of 15 gtt/mL.',
+                        incorrect: '❌ <strong>Check the scenario:</strong> Available tubing has drop factor of 15 gtt/mL.',
+                        tip: '💡 <strong>Tubing factor:</strong> Standard macrodrip tubing is often 15 gtt/mL.'
+                    },
+                    timeMinutes: {
+                        correct: '✅ <strong>Correct!</strong> 8 hours × 60 minutes/hour = 480 minutes.',
+                        incorrect: '❌ <strong>Conversion needed:</strong> 8 hours × 60 = ? minutes',
+                        tip: '💡 <strong>Remember:</strong> Always convert hours to minutes for drip rate calculations.'
+                    },
+                    dripRate: {
+                        correct: '✅ <strong>Correct calculation!</strong> (1000 × 15) ÷ 480 = 31.25 gtt/min',
+                        incorrect: '❌ <strong>Check formula:</strong> (Volume × Drop Factor) ÷ Time in minutes',
+                        tip: '💡 <strong>Formula:</strong> gtt/min = (Volume × Drop Factor) ÷ Time in minutes'
+                    },
+                    pedDoseMg: {
+                        correct: '✅ <strong>Correct!</strong> 15 mg/kg × 22 kg = 330 mg total dose.',
+                        incorrect: '❌ <strong>Calculation needed:</strong> 15 mg/kg × 22 kg = ? mg',
+                        tip: '💡 <strong>Pediatric dosing:</strong> Always multiply dose per kg by patient weight in kg.'
+                    },
+                    drawUpMl: {
+                        correct: '✅ <strong>Correct!</strong> 330 mg ÷ 50 mg/mL = 6.6 mL to draw up.',
+                        incorrect: '❌ <strong>Volume calculation:</strong> Dose ÷ Concentration = Volume',
+                        tip: '💡 <strong>Volume calculation:</strong> Dose (mg) ÷ Concentration (mg/mL) = Volume (mL)'
+                    },
+                    pumpRate: {
+                        correct: '✅ <strong>Correct!</strong> For 60-minute infusion: 6.6 mL ÷ 1 hour = 6.6 mL/hr.',
+                        incorrect: '❌ <strong>Pump rate:</strong> Volume ÷ Time in hours = mL/hr',
+                        tip: '💡 <strong>Pump rate:</strong> Total volume ÷ Infusion time in hours = mL/hr'
+                    },
+                    syringeSelect: {
+                        correct: '✅ <strong>Correct choice!</strong> 10 mL syringe allows accurate measurement of 6.6 mL.',
+                        incorrect: '❌ <strong>Syringe size matters:</strong> 6.6 mL requires a 10 mL syringe for accurate measurement.',
+                        tip: '💡 <strong>Syringe selection:</strong> Choose syringe that holds at least 2× the volume needed for accuracy.'
+                    },
+                    mcq1: {
+                        A: '✅ <strong>Correct!</strong> Lower drop factor (10 gtt/mL) means fewer drops per mL = slower rate.',
+                        B: '❌ <strong>Think carefully:</strong> 15 gtt/mL delivers more drops than 10 gtt/mL.',
+                        C: '❌ <strong>Common misconception:</strong> Microdrip (60 gtt/mL) delivers the FASTEST rate.',
+                        D: '❌ <strong>Consider:</strong> Blood administration tubing (10 gtt/mL) is same as option A.'
+                    },
+                    mcq2: {
+                        A: '❌ <strong>Important but not most critical:</strong> Expiration check is standard but not the MOST critical.',
+                        B: '✅ <strong>Correct!</strong> Two-person verification is CRITICAL for pediatric IV medications.',
+                        C: '❌ <strong>Accurate but not most critical:</strong> Syringe size affects accuracy but not safety as critically.',
+                        D: '❌ <strong>Good practice but...</strong> Labeling prevents errors but verification prevents harm.'
+                    }
+                };
+
                 let selectedMcq1 = null;
                 let selectedMcq2 = null;
 
-                // Setup input checking
+                // Setup input checking with real-time feedback
                 function checkInputs() {
-                    correctInputs = 0;
+                    let correctInputs = 0;
                     
                     // Check text inputs
                     Object.keys(inputs).forEach(key => {
@@ -1690,43 +1971,50 @@
                         const answer = input.value.trim();
                         const correct = correctAnswers[key];
                         
-                        // Allow rounding variations for drip rate
-                        if (key === 'dripRate') {
-                            if (answer === '31.25' || answer === '31' || answer === '31.3' || answer === '31.2') {
-                                input.classList.remove('incorrect');
-                                input.classList.add('correct');
-                                correctInputs++;
-                            } else if (answer !== '') {
-                                input.classList.remove('correct');
-                                input.classList.add('incorrect');
+                        if (answer !== '') {
+                            // Allow rounding variations for drip rate
+                            if (key === 'dripRate') {
+                                const numAnswer = parseFloat(answer);
+                                if (!isNaN(numAnswer) && 
+                                   (Math.abs(numAnswer - 31.25) < 0.1 || 
+                                    Math.abs(numAnswer - 31) < 0.1 ||
+                                    Math.abs(numAnswer - 31.3) < 0.1)) {
+                                    input.classList.remove('incorrect');
+                                    input.classList.add('correct');
+                                    showInputFeedback(input.id, true, feedbackMessages[key].correct);
+                                    correctInputs++;
+                                } else {
+                                    input.classList.remove('correct');
+                                    input.classList.add('incorrect');
+                                    showInputFeedback(input.id, false, feedbackMessages[key].tip || feedbackMessages[key].incorrect);
+                                }
                             } else {
-                                input.classList.remove('correct', 'incorrect');
-                            }
-                        } else {
-                            if (answer === correct) {
-                                input.classList.remove('incorrect');
-                                input.classList.add('correct');
-                                correctInputs++;
-                            } else if (answer !== '') {
-                                input.classList.remove('correct');
-                                input.classList.add('incorrect');
-                            } else {
-                                input.classList.remove('correct', 'incorrect');
+                                if (answer === correct) {
+                                    input.classList.remove('incorrect');
+                                    input.classList.add('correct');
+                                    showInputFeedback(input.id, true, feedbackMessages[key].correct);
+                                    correctInputs++;
+                                } else {
+                                    input.classList.remove('correct');
+                                    input.classList.add('incorrect');
+                                    showInputFeedback(input.id, false, feedbackMessages[key].incorrect || feedbackMessages[key].tip);
+                                }
                             }
                         }
                     });
 
                     // Check select
-                    if (syringeSelect.value === correctAnswers.syringeSelect) {
-                        syringeSelect.style.borderColor = 'var(--color-success)';
-                        syringeSelect.style.background = 'rgba(0, 184, 148, 0.05)';
-                        correctInputs++;
-                    } else if (syringeSelect.value !== '') {
-                        syringeSelect.style.borderColor = 'var(--color-error)';
-                        syringeSelect.style.background = 'rgba(225, 112, 85, 0.05)';
-                    } else {
-                        syringeSelect.style.borderColor = '';
-                        syringeSelect.style.background = '';
+                    if (syringeSelect.value !== '') {
+                        if (syringeSelect.value === correctAnswers.syringeSelect) {
+                            syringeSelect.style.borderColor = 'var(--color-success)';
+                            syringeSelect.style.background = 'rgba(0, 184, 148, 0.05)';
+                            showSelectFeedback('syringe-select', true, feedbackMessages.syringeSelect.correct);
+                            correctInputs++;
+                        } else {
+                            syringeSelect.style.borderColor = 'var(--color-error)';
+                            syringeSelect.style.background = 'rgba(225, 112, 85, 0.05)';
+                            showSelectFeedback('syringe-select', false, feedbackMessages.syringeSelect.incorrect);
+                        }
                     }
 
                     // Check MCQs
@@ -1734,14 +2022,16 @@
                     if (selectedMcq1 === correctAnswers.mcq1) mcqCorrect++;
                     if (selectedMcq2 === correctAnswers.mcq2) mcqCorrect++;
                     
+                    // Update state
+                    state.activities[1].correct = correctInputs + mcqCorrect;
+                    state.activities[1].score = Math.round((state.activities[1].correct / 16) * 100);
+                    
                     // Check completion
                     const allInputsFilled = correctInputs === 8; // 7 inputs + 1 select
                     const allMcqAnswered = selectedMcq1 !== null && selectedMcq2 !== null;
                     
                     if (allInputsFilled && allMcqAnswered) {
                         state.activities[1].completed = true;
-                        state.activities[1].correct = correctInputs + mcqCorrect;
-                        state.activities[1].score = Math.round((state.activities[1].correct / 16) * 100);
                         
                         status.textContent = 'Completed';
                         status.style.color = '#00b894';
@@ -1755,6 +2045,15 @@
                 // Add event listeners to inputs
                 Object.values(inputs).forEach(input => {
                     input.addEventListener('input', checkInputs);
+                    // Add step-by-step guidance on focus
+                    input.addEventListener('focus', function() {
+                        if (this.id === 'time-minutes' && !this.value) {
+                            showInputFeedback(this.id, false, feedbackMessages.timeMinutes.tip, true);
+                        }
+                        if (this.id === 'drip-rate' && !this.value) {
+                            showInputFeedback(this.id, false, feedbackMessages.dripRate.tip, true);
+                        }
+                    });
                 });
 
                 syringeSelect.addEventListener('change', checkInputs);
@@ -1762,9 +2061,21 @@
                 // Setup MCQ 1
                 mcqOptions1.forEach(option => {
                     option.addEventListener('click', function() {
-                        mcqOptions1.forEach(opt => opt.classList.remove('selected'));
+                        mcqOptions1.forEach(opt => {
+                            opt.classList.remove('selected', 'wrong');
+                            if (opt !== this && opt.classList.contains('selected')) {
+                                opt.classList.remove('selected');
+                            }
+                        });
+                        
                         this.classList.add('selected');
+                        const isCorrect = this.dataset.option === correctAnswers.mcq1;
+                        if (!isCorrect) {
+                            this.classList.add('wrong');
+                        }
+                        
                         selectedMcq1 = this.dataset.option;
+                        showMcqFeedback(this, isCorrect, feedbackMessages.mcq1[this.dataset.option]);
                         checkInputs();
                     });
                 });
@@ -1772,15 +2083,27 @@
                 // Setup MCQ 2
                 mcqOptions2.forEach(option => {
                     option.addEventListener('click', function() {
-                        mcqOptions2.forEach(opt => opt.classList.remove('selected'));
+                        mcqOptions2.forEach(opt => {
+                            opt.classList.remove('selected', 'wrong');
+                            if (opt !== this && opt.classList.contains('selected')) {
+                                opt.classList.remove('selected');
+                            }
+                        });
+                        
                         this.classList.add('selected');
+                        const isCorrect = this.dataset.option === correctAnswers.mcq2;
+                        if (!isCorrect) {
+                            this.classList.add('wrong');
+                        }
+                        
                         selectedMcq2 = this.dataset.option;
+                        showMcqFeedback(this, isCorrect, feedbackMessages.mcq2[this.dataset.option]);
                         checkInputs();
                     });
                 });
             }
 
-            // Activity 2: Table Analysis
+            // Activity 2: Table Analysis with enhanced feedback
             function initActivity2() {
                 const inputs = {
                     tableConcentration: document.getElementById('table-concentration'),
@@ -1811,12 +2134,65 @@
                     mcq: 'A'
                 };
 
-                let correctInputs = 0;
+                const feedbackMessages = {
+                    tableConcentration: {
+                        correct: '✅ <strong>Correct!</strong> First reconstitution option: 330 mg/mL.',
+                        incorrect: '❌ <strong>Check the table:</strong> First row shows concentration 330 mg/mL.',
+                        tip: '💡 <strong>Table reading:</strong> Look at the first row under "Final Concentration" column.'
+                    },
+                    orderedDose: {
+                        correct: '✅ <strong>Correct!</strong> Dr. Angio orders Cefazolin 750 mg.',
+                        incorrect: '❌ <strong>Read carefully:</strong> The order is for 750 mg.',
+                        tip: '💡 <strong>Order review:</strong> The question states "Cefazolin 750 mg".'
+                    },
+                    tableVolume: {
+                        correct: '✅ <strong>Correct calculation!</strong> 750 mg ÷ 330 mg/mL = 2.27 mL',
+                        incorrect: '❌ <strong>Formula:</strong> Dose ÷ Concentration = Volume',
+                        tip: '💡 <strong>Formula:</strong> Dose (mg) ÷ Concentration (mg/mL) = Volume (mL)'
+                    },
+                    altVolume: {
+                        correct: '✅ <strong>Correct!</strong> 750 mg ÷ 95 mg/mL = 7.89 mL',
+                        incorrect: '❌ <strong>Calculation:</strong> 750 ÷ 95 = ?',
+                        tip: '💡 <strong>Note:</strong> Lower concentration (95 mg/mL) requires larger volume for same dose.'
+                    },
+                    convertGrains: {
+                        correct: '✅ <strong>Correct conversion!</strong> 20 mEq × 1.3 gr/mEq = 26 grains',
+                        incorrect: '❌ <strong>Conversion:</strong> 20 × 1.3 = ?',
+                        tip: '💡 <strong>Conversion:</strong> Given conversion factor: 1 mEq ≈ 1.3 gr'
+                    },
+                    kclVolume: {
+                        correct: '✅ <strong>Correct!</strong> 20 mEq ÷ 2 mEq/mL = 10 mL (entire vial)',
+                        incorrect: '❌ <strong>Volume calculation:</strong> 20 ÷ 2 = ?',
+                        tip: '💡 <strong>Volume calculation:</strong> Dose (mEq) ÷ Concentration (mEq/mL)'
+                    },
+                    kclDripRate: {
+                        correct: '✅ <strong>Correct calculation!</strong> (110 mL × 20 gtt/mL) ÷ 120 min = 18.33 gtt/min',
+                        incorrect: '❌ <strong>Drip rate formula:</strong> (Total volume × Drop factor) ÷ Time in minutes',
+                        tip: '💡 <strong>Total volume:</strong> 100 mL NS + 10 mL KCl = 110 mL total'
+                    },
+                    tableSyringe: {
+                        correct: '✅ <strong>Correct choice!</strong> 3 mL syringe is appropriate for 2.27 mL.',
+                        incorrect: '❌ <strong>Consider volume:</strong> 2.27 mL is best measured with 3 mL syringe.',
+                        tip: '💡 <strong>Syringe selection:</strong> Choose syringe closest to but larger than needed volume.'
+                    },
+                    reasonSelect: {
+                        correct: '✅ <strong>Correct reasoning!</strong> Lower concentration causes less injection pain.',
+                        incorrect: '❌ <strong>Think clinically:</strong> Providers often choose lower concentrations for patient comfort.',
+                        tip: '💡 <strong>Clinical reasoning:</strong> Consider patient comfort and tissue tolerance.'
+                    },
+                    mcq: {
+                        A: '✅ <strong>Correct!</strong> Confusing grains (gr) with grams (g) is a FATAL 15× overdose error.',
+                        B: '❌ <strong>Consider:</strong> Approximate conversions are acceptable if documented.',
+                        C: '❌ <strong>Important but...</strong> Documentation is critical but not the MOST common error.',
+                        D: '❌ <strong>Good practice but...</strong> Verification prevents but doesn\'t cause the error.'
+                    }
+                };
+
                 let selectedMcq = null;
 
-                // Setup input checking
+                // Setup input checking with real-time feedback
                 function checkInputs() {
-                    correctInputs = 0;
+                    let correctInputs = 0;
                     
                     // Check text inputs with rounding tolerance
                     Object.keys(inputs).forEach(key => {
@@ -1824,73 +2200,80 @@
                         const answer = input.value.trim();
                         const correct = correctAnswers[key];
                         
-                        // Allow rounding variations
-                        let isCorrect = false;
-                        if (key === 'tableVolume' || key === 'altVolume') {
-                            const numAnswer = parseFloat(answer);
-                            const numCorrect = parseFloat(correct);
-                            if (!isNaN(numAnswer) && Math.abs(numAnswer - numCorrect) < 0.05) {
-                                isCorrect = true;
+                        if (answer !== '') {
+                            let isCorrect = false;
+                            
+                            // Allow rounding variations for certain calculations
+                            if (key === 'tableVolume' || key === 'altVolume') {
+                                const numAnswer = parseFloat(answer);
+                                const numCorrect = parseFloat(correct);
+                                if (!isNaN(numAnswer) && Math.abs(numAnswer - numCorrect) < 0.05) {
+                                    isCorrect = true;
+                                }
+                            } else if (key === 'kclDripRate') {
+                                const numAnswer = parseFloat(answer);
+                                if (!isNaN(numAnswer) && (Math.abs(numAnswer - 18.33) < 0.1 || 
+                                                          Math.abs(numAnswer - 18) < 0.1)) {
+                                    isCorrect = true;
+                                }
+                            } else {
+                                isCorrect = answer === correct;
                             }
-                        } else if (key === 'kclDripRate') {
-                            const numAnswer = parseFloat(answer);
-                            if (!isNaN(numAnswer) && (Math.abs(numAnswer - 18.33) < 0.1 || 
-                                                      Math.abs(numAnswer - 18) < 0.1)) {
-                                isCorrect = true;
+                            
+                            if (isCorrect) {
+                                input.classList.remove('incorrect');
+                                input.classList.add('correct');
+                                showInputFeedback(input.id, true, feedbackMessages[key].correct);
+                                correctInputs++;
+                            } else {
+                                input.classList.remove('correct');
+                                input.classList.add('incorrect');
+                                showInputFeedback(input.id, false, feedbackMessages[key].incorrect || feedbackMessages[key].tip);
                             }
-                        } else {
-                            isCorrect = answer === correct;
-                        }
-                        
-                        if (isCorrect) {
-                            input.classList.remove('incorrect');
-                            input.classList.add('correct');
-                            correctInputs++;
-                        } else if (answer !== '') {
-                            input.classList.remove('correct');
-                            input.classList.add('incorrect');
-                        } else {
-                            input.classList.remove('correct', 'incorrect');
                         }
                     });
 
                     // Check selects
-                    if (tableSyringe.value === correctAnswers.tableSyringe) {
-                        tableSyringe.style.borderColor = 'var(--color-success)';
-                        tableSyringe.style.background = 'rgba(0, 184, 148, 0.05)';
-                        correctInputs++;
-                    } else if (tableSyringe.value !== '') {
-                        tableSyringe.style.borderColor = 'var(--color-error)';
-                        tableSyringe.style.background = 'rgba(225, 112, 85, 0.05)';
-                    } else {
-                        tableSyringe.style.borderColor = '';
-                        tableSyringe.style.background = '';
+                    if (tableSyringe.value !== '') {
+                        if (tableSyringe.value === correctAnswers.tableSyringe) {
+                            tableSyringe.style.borderColor = 'var(--color-success)';
+                            tableSyringe.style.background = 'rgba(0, 184, 148, 0.05)';
+                            showSelectFeedback('table-syringe', true, feedbackMessages.tableSyringe.correct);
+                            correctInputs++;
+                        } else {
+                            tableSyringe.style.borderColor = 'var(--color-error)';
+                            tableSyringe.style.background = 'rgba(225, 112, 85, 0.05)';
+                            showSelectFeedback('table-syringe', false, feedbackMessages.tableSyringe.incorrect);
+                        }
                     }
 
-                    if (reasonSelect.value === correctAnswers.reasonSelect) {
-                        reasonSelect.style.borderColor = 'var(--color-success)';
-                        reasonSelect.style.background = 'rgba(0, 184, 148, 0.05)';
-                        correctInputs++;
-                    } else if (reasonSelect.value !== '') {
-                        reasonSelect.style.borderColor = 'var(--color-error)';
-                        reasonSelect.style.background = 'rgba(225, 112, 85, 0.05)';
-                    } else {
-                        reasonSelect.style.borderColor = '';
-                        reasonSelect.style.background = '';
+                    if (reasonSelect.value !== '') {
+                        if (reasonSelect.value === correctAnswers.reasonSelect) {
+                            reasonSelect.style.borderColor = 'var(--color-success)';
+                            reasonSelect.style.background = 'rgba(0, 184, 148, 0.05)';
+                            showSelectFeedback('reason-select', true, feedbackMessages.reasonSelect.correct);
+                            correctInputs++;
+                        } else {
+                            reasonSelect.style.borderColor = 'var(--color-error)';
+                            reasonSelect.style.background = 'rgba(225, 112, 85, 0.05)';
+                            showSelectFeedback('reason-select', false, feedbackMessages.reasonSelect.incorrect);
+                        }
                     }
 
                     // Check MCQ
                     let mcqCorrect = 0;
                     if (selectedMcq === correctAnswers.mcq) mcqCorrect++;
                     
+                    // Update state
+                    state.activities[2].correct = correctInputs + mcqCorrect;
+                    state.activities[2].score = Math.round((state.activities[2].correct / 17) * 100);
+                    
                     // Check completion
-                    const allInputsFilled = correctInputs === 10; // 7 inputs + 2 selects + 1 MCQ placeholder
+                    const allInputsFilled = correctInputs === 9; // 7 inputs + 2 selects
                     const mcqAnswered = selectedMcq !== null;
                     
                     if (allInputsFilled && mcqAnswered) {
                         state.activities[2].completed = true;
-                        state.activities[2].correct = correctInputs + mcqCorrect;
-                        state.activities[2].score = Math.round((state.activities[2].correct / 17) * 100);
                         
                         status.textContent = 'Completed';
                         status.style.color = '#00b894';
@@ -1904,6 +2287,18 @@
                 // Add event listeners
                 Object.values(inputs).forEach(input => {
                     input.addEventListener('input', checkInputs);
+                    // Add step-by-step guidance on focus
+                    input.addEventListener('focus', function() {
+                        if (this.id === 'table-volume' && !this.value) {
+                            showInputFeedback(this.id, false, feedbackMessages.tableVolume.tip, true);
+                        }
+                        if (this.id === 'convert-grains' && !this.value) {
+                            showInputFeedback(this.id, false, feedbackMessages.convertGrains.tip, true);
+                        }
+                        if (this.id === 'kcl-drip-rate' && !this.value) {
+                            showInputFeedback(this.id, false, feedbackMessages.kclDripRate.tip, true);
+                        }
+                    });
                 });
 
                 tableSyringe.addEventListener('change', checkInputs);
@@ -1912,9 +2307,21 @@
                 // Setup MCQ
                 mcqOptions.forEach(option => {
                     option.addEventListener('click', function() {
-                        mcqOptions.forEach(opt => opt.classList.remove('selected'));
+                        mcqOptions.forEach(opt => {
+                            opt.classList.remove('selected', 'wrong');
+                            if (opt !== this && opt.classList.contains('selected')) {
+                                opt.classList.remove('selected');
+                            }
+                        });
+                        
                         this.classList.add('selected');
+                        const isCorrect = this.dataset.option === correctAnswers.mcq;
+                        if (!isCorrect) {
+                            this.classList.add('wrong');
+                        }
+                        
                         selectedMcq = this.dataset.option;
+                        showMcqFeedback(this, isCorrect, feedbackMessages.mcq[this.dataset.option]);
                         checkInputs();
                     });
                 });
@@ -1924,8 +2331,8 @@
             function resetAllActivities() {
                 // Reset state
                 state.activities = {
-                    1: { completed: false, correct: 0, total: 16, score: 0 },
-                    2: { completed: false, correct: 0, total: 17, score: 0 }
+                    1: { completed: false, correct: 0, total: 16, score: 0, items: {}, progress: { inputs: 0, mcqs: 0, selects: 0 } },
+                    2: { completed: false, correct: 0, total: 17, score: 0, items: {}, progress: { inputs: 0, mcqs: 0, selects: 0 } }
                 };
                 state.startedAt = new Date();
 
@@ -1946,14 +2353,27 @@
                     const el = document.getElementById(id);
                     el.value = '';
                     el.classList.remove('correct', 'incorrect');
+                    const feedback = document.getElementById(`feedback-${id}`);
+                    if (feedback) {
+                        feedback.innerHTML = '';
+                        feedback.style.display = 'none';
+                    }
                 });
                 
                 document.getElementById('syringe-select').value = '';
                 document.getElementById('syringe-select').style.borderColor = '';
                 document.getElementById('syringe-select').style.background = '';
+                const syringeFeedback = document.getElementById('feedback-syringe-select');
+                if (syringeFeedback) {
+                    syringeFeedback.innerHTML = '';
+                    syringeFeedback.style.display = 'none';
+                }
                 
                 document.querySelectorAll('#activity-1 .mcq-option').forEach(option => {
-                    option.classList.remove('selected');
+                    option.classList.remove('selected', 'wrong');
+                });
+                document.querySelectorAll('#activity-1 .mcq-feedback').forEach(feedback => {
+                    feedback.remove();
                 });
 
                 // Reset Activity 2
@@ -1963,18 +2383,36 @@
                     const el = document.getElementById(id);
                     el.value = '';
                     el.classList.remove('correct', 'incorrect');
+                    const feedback = document.getElementById(`feedback-${id}`);
+                    if (feedback) {
+                        feedback.innerHTML = '';
+                        feedback.style.display = 'none';
+                    }
                 });
                 
                 document.getElementById('table-syringe').value = '';
                 document.getElementById('table-syringe').style.borderColor = '';
                 document.getElementById('table-syringe').style.background = '';
+                const tableSyringeFeedback = document.getElementById('feedback-table-syringe');
+                if (tableSyringeFeedback) {
+                    tableSyringeFeedback.innerHTML = '';
+                    tableSyringeFeedback.style.display = 'none';
+                }
                 
                 document.getElementById('reason-select').value = '';
                 document.getElementById('reason-select').style.borderColor = '';
                 document.getElementById('reason-select').style.background = '';
+                const reasonFeedback = document.getElementById('feedback-reason-select');
+                if (reasonFeedback) {
+                    reasonFeedback.innerHTML = '';
+                    reasonFeedback.style.display = 'none';
+                }
                 
                 document.querySelectorAll('#activity-2 .mcq-option').forEach(option => {
-                    option.classList.remove('selected');
+                    option.classList.remove('selected', 'wrong');
+                });
+                document.querySelectorAll('#activity-2 .mcq-feedback').forEach(feedback => {
+                    feedback.remove();
                 });
 
                 // Reset results
@@ -1992,27 +2430,33 @@
                     const status = document.querySelector('#activity-1 .activity-status');
                     
                     // Fill correct answers
-                    document.getElementById('iv-volume').value = '1000';
-                    document.getElementById('iv-volume').classList.add('correct');
-                    document.getElementById('drop-factor').value = '15';
-                    document.getElementById('drop-factor').classList.add('correct');
-                    document.getElementById('time-minutes').value = '480';
-                    document.getElementById('time-minutes').classList.add('correct');
-                    document.getElementById('drip-rate').value = '31.25';
-                    document.getElementById('drip-rate').classList.add('correct');
-                    document.getElementById('ped-dose-mg').value = '330';
-                    document.getElementById('ped-dose-mg').classList.add('correct');
-                    document.getElementById('draw-up-ml').value = '6.6';
-                    document.getElementById('draw-up-ml').classList.add('correct');
-                    document.getElementById('pump-rate').value = '6.6';
-                    document.getElementById('pump-rate').classList.add('correct');
+                    const correctAnswers1 = {
+                        'iv-volume': '1000',
+                        'drop-factor': '15',
+                        'time-minutes': '480',
+                        'drip-rate': '31.25',
+                        'ped-dose-mg': '330',
+                        'draw-up-ml': '6.6',
+                        'pump-rate': '6.6'
+                    };
+                    
+                    Object.entries(correctAnswers1).forEach(([id, value]) => {
+                        const el = document.getElementById(id);
+                        el.value = value;
+                        el.classList.add('correct');
+                        showInputFeedback(id, true, '✅ <strong>Correct answer shown for learning.</strong>');
+                    });
+                    
                     document.getElementById('syringe-select').value = '10ml';
                     document.getElementById('syringe-select').style.borderColor = 'var(--color-success)';
                     document.getElementById('syringe-select').style.background = 'rgba(0, 184, 148, 0.05)';
+                    showSelectFeedback('syringe-select', true, '✅ <strong>Correct syringe selection shown.</strong>');
                     
                     // Select correct MCQs
-                    document.querySelector('#activity-1 .mcq-option[data-option="A"]:first-child').classList.add('selected');
-                    document.querySelector('#activity-1 .mcq-option[data-option="B"]:last-child').classList.add('selected');
+                    document.querySelector('#activity-1 .mcq-container:first-child .mcq-option[data-option="A"]').classList.add('selected');
+                    document.querySelector('#activity-1 .mcq-container:last-child .mcq-option[data-option="B"]').classList.add('selected');
+                    showMcqFeedback(document.querySelector('#activity-1 .mcq-container:first-child .mcq-option[data-option="A"]'), true, '✅ <strong>Correct answer shown.</strong>');
+                    showMcqFeedback(document.querySelector('#activity-1 .mcq-container:last-child .mcq-option[data-option="B"]'), true, '✅ <strong>Correct answer shown.</strong>');
                     
                     state.activities[1].completed = true;
                     state.activities[1].correct = 16;
@@ -2029,29 +2473,36 @@
                     const status = document.querySelector('#activity-2 .activity-status');
                     
                     // Fill correct answers
-                    document.getElementById('table-concentration').value = '330';
-                    document.getElementById('table-concentration').classList.add('correct');
-                    document.getElementById('ordered-dose').value = '750';
-                    document.getElementById('ordered-dose').classList.add('correct');
-                    document.getElementById('table-volume').value = '2.27';
-                    document.getElementById('table-volume').classList.add('correct');
-                    document.getElementById('alt-volume').value = '7.89';
-                    document.getElementById('alt-volume').classList.add('correct');
-                    document.getElementById('convert-grains').value = '26';
-                    document.getElementById('convert-grains').classList.add('correct');
-                    document.getElementById('kcl-volume').value = '10';
-                    document.getElementById('kcl-volume').classList.add('correct');
-                    document.getElementById('kcl-drip-rate').value = '18.33';
-                    document.getElementById('kcl-drip-rate').classList.add('correct');
+                    const correctAnswers2 = {
+                        'table-concentration': '330',
+                        'ordered-dose': '750',
+                        'table-volume': '2.27',
+                        'alt-volume': '7.89',
+                        'convert-grains': '26',
+                        'kcl-volume': '10',
+                        'kcl-drip-rate': '18.33'
+                    };
+                    
+                    Object.entries(correctAnswers2).forEach(([id, value]) => {
+                        const el = document.getElementById(id);
+                        el.value = value;
+                        el.classList.add('correct');
+                        showInputFeedback(id, true, '✅ <strong>Correct answer shown for learning.</strong>');
+                    });
+                    
                     document.getElementById('table-syringe').value = '3ml';
                     document.getElementById('table-syringe').style.borderColor = 'var(--color-success)';
                     document.getElementById('table-syringe').style.background = 'rgba(0, 184, 148, 0.05)';
+                    showSelectFeedback('table-syringe', true, '✅ <strong>Correct syringe selection shown.</strong>');
+                    
                     document.getElementById('reason-select').value = 'less_pain';
                     document.getElementById('reason-select').style.borderColor = 'var(--color-success)';
                     document.getElementById('reason-select').style.background = 'rgba(0, 184, 148, 0.05)';
+                    showSelectFeedback('reason-select', true, '✅ <strong>Correct reasoning shown.</strong>');
                     
                     // Select correct MCQ
                     document.querySelector('#activity-2 .mcq-option[data-option="A"]').classList.add('selected');
+                    showMcqFeedback(document.querySelector('#activity-2 .mcq-option[data-option="A"]'), true, '✅ <strong>Correct answer shown.</strong>');
                     
                     state.activities[2].completed = true;
                     state.activities[2].correct = 17;
