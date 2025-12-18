@@ -1,0 +1,1868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AlliedRx -- Module 1: Cardiology Foundations</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-error: #e17055;
+            --color-warning: #fdcb6e;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
+            --color-dark: #0c0a18;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+            --shadow-card: 0 12px 30px rgba(15, 23, 42, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(
+                circle at top left,
+                #ffffff 0,
+                #f1ecff 40%,
+                var(--color-bg) 100%
+            );
+            color: var(--color-text);
+            line-height: 1.5;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 12px; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes checkmarkPop {
+            0% { transform: scale(0); opacity: 0; }
+            70% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @media (max-width: 900px) { .page { padding: 22px; } }
+        @media (max-width: 480px) { .page { padding: 18px 14px 22px; } }
+
+        /* Header */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .brand-logo:hover { transform: scale(1.05); }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--color-success);
+            flex-shrink: 0;
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .badge-mode:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 3vw, 2.2rem);
+            line-height: 1.1;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .module-subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 600px;
+            margin-bottom: 24px;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        /* Progress Summary */
+        .progress-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+            animation: fadeInUp 0.6s ease-out 0.5s both;
+        }
+
+        @media (max-width: 600px) {
+            .progress-summary { grid-template-columns: 1fr; }
+        }
+
+        .summary-card {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            border: 1px solid rgba(12, 10, 24, 0.06);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-card);
+            border-color: var(--color-primary-soft);
+        }
+
+        .summary-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--color-primary);
+            display: block;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .summary-label {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Activity Grid */
+        .activity-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 900px) {
+            .activity-grid { grid-template-columns: 1fr; }
+        }
+
+        .activity-card {
+            background: white;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            padding: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .activity-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--color-primary);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .activity-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--color-primary-soft);
+        }
+
+        .activity-card:hover::before { opacity: 1; }
+        .activity-card.completed { border-color: var(--color-success); }
+        .activity-card.completed::before {
+            background: var(--color-success);
+            opacity: 1;
+        }
+
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .activity-number {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .activity-status {
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-muted);
+        }
+
+        .activity-card.completed .activity-status {
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--color-success);
+        }
+
+        .activity-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 8px;
+        }
+
+        .activity-description {
+            font-size: 0.9rem;
+            color: var(--color-muted);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        /* Question Containers */
+        .question-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+        }
+
+        .question-text {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--color-text);
+            margin-bottom: 12px;
+        }
+
+        /* Answer Options - FIXED */
+        .answer-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .answer-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            background: white;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .answer-option:hover {
+            background: rgba(175, 75, 239, 0.05);
+            border-color: var(--color-primary-soft);
+        }
+
+        .answer-option.selected {
+            background: rgba(0, 184, 148, 0.1);
+            border-color: var(--color-success);
+        }
+
+        .answer-option.incorrect {
+            background: rgba(225, 112, 85, 0.1);
+            border-color: var(--color-error);
+            animation: shake 0.5s ease;
+        }
+
+        .answer-letter {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(12, 10, 24, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-text);
+            flex-shrink: 0;
+        }
+
+        .answer-option.selected .answer-letter {
+            background: var(--color-success);
+            color: white;
+        }
+
+        .answer-option.incorrect .answer-letter {
+            background: var(--color-error);
+            color: white;
+        }
+
+        .answer-text {
+            flex: 1;
+            font-size: 0.9rem;
+            color: var(--color-text);
+        }
+
+        /* Matching Activity - FIXED */
+        .matching-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .matching-container { grid-template-columns: 1fr; }
+        }
+
+        .matching-column {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .matching-item {
+            padding: 12px 15px;
+            background: white;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            border-radius: var(--radius-sm);
+            cursor: move;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .matching-item:hover {
+            background: rgba(175, 75, 239, 0.05);
+            border-color: var(--color-primary-soft);
+            transform: translateX(5px);
+        }
+
+        .matching-item.matched {
+            background: rgba(0, 184, 148, 0.1);
+            border-color: var(--color-success);
+            cursor: default;
+        }
+
+        .matching-item.incorrect {
+            background: rgba(225, 112, 85, 0.1);
+            border-color: var(--color-error);
+            animation: shake 0.5s ease;
+        }
+
+        /* Fill-in-the-Blank - FIXED FOR CLICK-TO-FILL */
+        .fill-blank-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+        }
+
+        .blank-text {
+            font-size: 0.95rem;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .blank-slot {
+            display: inline-block;
+            min-width: 100px;
+            padding: 5px 10px;
+            margin: 0 5px;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            border-radius: 6px;
+            background: white;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            min-height: 36px;
+        }
+
+        .blank-slot.empty {
+            background: rgba(12, 10, 24, 0.03);
+            color: var(--color-muted);
+        }
+
+        .blank-slot.filled {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+        }
+
+        .blank-slot.correct {
+            border-color: var(--color-success);
+            background: rgba(0, 184, 148, 0.1);
+        }
+
+        .blank-slot.incorrect {
+            border-color: var(--color-error);
+            background: rgba(225, 112, 85, 0.1);
+        }
+
+        .blank-slot.empty::after {
+            content: 'Click to fill';
+            font-size: 0.75rem;
+            color: var(--color-muted);
+            font-style: italic;
+        }
+
+        .blank-slot:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 3px 10px rgba(175, 75, 239, 0.1);
+        }
+
+        .word-bank {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+        }
+
+        .word-option {
+            padding: 8px 12px;
+            background: white;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+        }
+
+        .word-option:hover {
+            background: rgba(175, 75, 239, 0.05);
+            border-color: var(--color-primary-soft);
+            transform: translateY(-2px);
+        }
+
+        .word-option.used {
+            opacity: 0.5;
+            cursor: not-allowed;
+            text-decoration: line-through;
+        }
+
+        /* Sorting Activity - FIXED */
+        .sorting-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .sorting-container { grid-template-columns: 1fr; }
+        }
+
+        .sorting-column {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 2px dashed rgba(12, 10, 24, 0.1);
+            min-height: 200px;
+        }
+
+        .sorting-column-header {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sorting-item {
+            padding: 10px 12px;
+            background: white;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            border-radius: var(--radius-sm);
+            margin-bottom: 8px;
+            cursor: move;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .sorting-item:hover {
+            background: rgba(175, 75, 239, 0.05);
+            border-color: var(--color-primary-soft);
+            transform: translateX(5px);
+        }
+
+        .sorting-item.placed {
+            background: rgba(0, 184, 148, 0.1);
+            border-color: var(--color-success);
+        }
+
+        /* Feedback Boxes - ENHANCED */
+        .feedback-box {
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin-top: 15px;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .feedback-box.show { display: block; }
+        .feedback-correct {
+            background: rgba(0, 184, 148, 0.1);
+            border-left: 4px solid var(--color-success);
+        }
+
+        .feedback-incorrect {
+            background: rgba(225, 112, 85, 0.1);
+            border-left: 4px solid var(--color-error);
+        }
+
+        .feedback-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feedback-correct .feedback-title { color: var(--color-success); }
+        .feedback-incorrect .feedback-title { color: var(--color-error); }
+
+        .feedback-content {
+            font-size: 0.85rem;
+            color: var(--color-text);
+            line-height: 1.6;
+        }
+
+        .feedback-content strong { color: var(--color-primary); }
+
+        .correct-answer {
+            background: rgba(0, 184, 148, 0.15);
+            padding: 10px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 3px solid var(--color-success);
+        }
+
+        .clinical-tip {
+            background: rgba(253, 203, 110, 0.15);
+            padding: 10px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 3px solid var(--color-warning);
+        }
+
+        .clinical-tip strong { color: #d69e2e; }
+
+        /* Action Buttons - FIXED */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #9a3bd6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(175, 75, 239, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-text);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(12, 10, 24, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-icon { font-size: 1.1em; }
+
+        /* Results Panel */
+        .results-panel {
+            background: var(--color-dark);
+            color: white;
+            border-radius: var(--radius-md);
+            padding: 30px;
+            margin-top: 30px;
+            display: none;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .results-panel.show { display: block; }
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .results-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .score-display {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--color-primary-soft);
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .clinical-insights {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .insights-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-primary-soft);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .insights-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .insights-list li {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            font-size: 0.9rem;
+            color: #e5e7eb;
+        }
+
+        .insight-dot {
+            width: 6px;
+            height: 6px;
+            margin-top: 6px;
+            border-radius: 999px;
+            background: var(--color-accent);
+            flex-shrink: 0;
+        }
+
+        /* Dark Card */
+        .side-card {
+            background: rgba(12, 10, 24, 0.96);
+            color: #e5e7eb;
+            border-radius: var(--radius-md);
+            padding: 20px;
+            font-size: 0.88rem;
+            line-height: 1.7;
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.6);
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        .side-card strong { color: #ffffff; }
+        .side-subtitle {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #c4b5fd;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        /* Instructions Box */
+        .instructions-box {
+            background: rgba(131, 128, 240, 0.1);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid var(--color-accent);
+        }
+
+        .instructions-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--color-accent);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .instructions-content {
+            font-size: 0.85rem;
+            color: var(--color-text);
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="module-heading">
+        <!-- Header - FIXED: Changed badge to Campus & Online -->
+        <header class="brand-row">
+            <div class="brand">
+                <img
+                    src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                    alt="AlliedRx logo"
+                    class="brand-logo"
+                />
+                <div class="course-meta">
+                    <span class="course-name">Clinical Medical Assistant • Chapter 23</span>
+                    <div class="week-label">
+                        <span class="week-label-dot"></span>
+                        <span>Module 1: Heart Foundations & Risk Factors</span>
+                    </div>
+                </div>
+            </div>
+            <span class="badge-mode">Campus & Online</span>
+        </header>
+
+        <h1 id="module-heading">Cardiac Anatomy & Risk Factors</h1>
+        <p class="module-subtitle">
+            Master the vocabulary, structure, and risk factors of the cardiovascular system through interactive text-based activities.
+        </p>
+
+        <!-- Progress Summary -->
+        <div class="progress-summary">
+            <div class="summary-card">
+                <span class="summary-number" id="completed-count">0</span>
+                <span class="summary-label">Activities Completed</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="accuracy-rate">0%</span>
+                <span class="summary-label">Current Accuracy</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="time-spent">0:00</span>
+                <span class="summary-label">Time Spent</span>
+            </div>
+        </div>
+
+        <!-- Dark Card -->
+        <div class="side-card">
+            <p class="side-subtitle">💡 Why This Matters</p>
+            <p>As Adam prepares to work in cardiology, understanding <strong>normal anatomy and physiology</strong> is crucial. It allows him to:</p>
+            <ul style="margin-top: 10px; padding-left: 20px;">
+                <li>Explain conditions clearly to patients</li>
+                <li>Recognize abnormal findings during assessments</li>
+                <li>Understand medication actions and side effects</li>
+                <li>Prepare patients properly for diagnostic procedures</li>
+            </ul>
+        </div>
+
+        <!-- Activity Grid -->
+        <div class="activity-grid">
+            <!-- Activity 1: Vocabulary Matching -->
+            <section class="activity-card" id="activity-1" data-activity="1">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 1</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">Vocabulary Matching</h3>
+                <p class="activity-description">
+                    Match the cardiology terms with their correct definitions. This builds your foundational vocabulary for patient education.
+                </p>
+
+                <!-- Matching Activity -->
+                <div class="matching-container">
+                    <div class="matching-column" id="terms-column">
+                        <div class="matching-item draggable" data-term="ablation" draggable="true">ablation</div>
+                        <div class="matching-item draggable" data-term="chordae" draggable="true">chordae tendineae</div>
+                        <div class="matching-item draggable" data-term="ischemia" draggable="true">ischemia</div>
+                        <div class="matching-item draggable" data-term="occlude" draggable="true">occlude</div>
+                    </div>
+                    <div class="matching-column" id="defs-column">
+                        <div class="matching-item draggable" data-def="removal" draggable="true">removal of any body part</div>
+                        <div class="matching-item draggable" data-def="tendons" draggable="true">tendons anchoring heart valves</div>
+                        <div class="matching-item draggable" data-def="decreased" draggable="true">decreased oxygenated blood supply</div>
+                        <div class="matching-item draggable" data-def="block" draggable="true">to close off or block</div>
+                    </div>
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback-box" id="feedback-1">
+                    <div class="feedback-title">
+                        <span>✓</span>
+                        Feedback
+                    </div>
+                    <div class="feedback-content">
+                        <div class="correct-answer">
+                            <strong>Correct Matches:</strong><br>
+                            • ablation = removal of any body part<br>
+                            • chordae tendineae = tendons anchoring heart valves<br>
+                            • ischemia = decreased oxygenated blood supply<br>
+                            • occlude = to close off or block
+                        </div>
+                        <div class="clinical-tip">
+                            <strong>Clinical Application:</strong><br>
+                            When explaining procedures to patients:<br>
+                            • "Ablation" → "We'll remove the problematic tissue"<br>
+                            • "Ischemia" → "Your heart muscle isn't getting enough oxygen"<br>
+                            • "Occlude" → "The artery is blocked"
+                        </div>
+                        <p><strong>Key Takeaway:</strong> Accurate terminology builds patient trust and ensures clear communication with the healthcare team.</p>
+                    </div>
+                </div>
+
+                <!-- Buttons -->
+                <div style="display: flex; gap: 10px; margin-top: 15px;">
+                    <button class="btn btn-secondary check-activity-btn" data-activity="1">
+                        <span class="btn-icon">✓</span>
+                        Check Answer
+                    </button>
+                </div>
+            </section>
+
+            <!-- Activity 2: Fill-in-the-Blank - FIXED FOR CLICK-TO-FILL -->
+            <section class="activity-card" id="activity-2" data-activity="2">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 2</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">Heart Physiology Summary</h3>
+                <p class="activity-description">
+                    Complete the paragraph about blood flow through the heart using terms from the word bank.
+                </p>
+
+                <!-- Instructions Box -->
+                <div class="instructions-box">
+                    <div class="instructions-title">
+                        <span>📝</span>
+                        How to Complete This Activity
+                    </div>
+                    <div class="instructions-content">
+                        <strong>Step 1:</strong> Click any blank slot (highlighted area) to select it.<br>
+                        <strong>Step 2:</strong> Click a word from the word bank to fill the selected slot.<br>
+                        <strong>Step 3:</strong> Continue until all blanks are filled, then click "Check Answer".
+                    </div>
+                </div>
+
+                <!-- Fill-in-the-Blank Activity - FIXED: Now click-to-fill -->
+                <div class="fill-blank-container">
+                    <p class="blank-text">
+                        Blood enters the right <span class="blank-slot empty" data-answer="atrium" data-slot="1"></span> 
+                        from the body via the superior and inferior vena cava. It passes through the 
+                        <span class="blank-slot empty" data-answer="tricuspid" data-slot="2"></span> 
+                        valve into the right ventricle. The right ventricle pumps blood through the pulmonary valve 
+                        into the pulmonary artery to the lungs for oxygenation. Oxygenated blood returns to the left 
+                        <span class="blank-slot empty" data-answer="atrium" data-slot="3"></span>, 
+                        passes through the <span class="blank-slot empty" data-answer="mitral" data-slot="4"></span> 
+                        valve into the left ventricle, and is pumped through the aortic valve to the rest of the body.
+                    </p>
+
+                    <!-- Word Bank - Will be randomized by JavaScript -->
+                    <div class="word-bank" id="word-bank-2">
+                        <!-- Words will be inserted here by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback-box" id="feedback-2">
+                    <div class="feedback-title">
+                        <span>✓</span>
+                        Feedback
+                    </div>
+                    <div class="feedback-content">
+                        <div class="correct-answer">
+                            <strong>Completed Paragraph:</strong><br>
+                            Blood enters the right <strong>atrium</strong> from the body via the superior and inferior vena cava. It passes through the <strong>tricuspid</strong> valve into the right ventricle. The right ventricle pumps blood through the pulmonary valve into the pulmonary artery to the lungs for oxygenation. Oxygenated blood returns to the left <strong>atrium</strong>, passes through the <strong>mitral</strong> valve into the left ventricle, and is pumped through the aortic valve to the rest of the body.
+                        </div>
+                        <div class="clinical-tip">
+                            <strong>Memory Tip:</strong> "Try Before You Buy"<br>
+                            • <strong>T</strong>ricuspid (right side)<br>
+                            • <strong>B</strong>icuspid/Mitral (left side)<br>
+                            • <strong>Y</strong>ou remember the order!
+                        </div>
+                        <p><strong>Patient Education:</strong> Use simple analogies: "Think of your heart as a house with four rooms (chambers) and doors (valves) that only open one way."</p>
+                    </div>
+                </div>
+
+                <!-- Buttons -->
+                <div style="display: flex; gap: 10px; margin-top: 15px;">
+                    <button class="btn btn-secondary check-activity-btn" data-activity="2">
+                        <span class="btn-icon">✓</span>
+                        Check Answer
+                    </button>
+                </div>
+            </section>
+
+            <!-- Activity 3: Sorting Risk Factors -->
+            <section class="activity-card" id="activity-3" data-activity="3">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 3</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">Risk Factor Categorization</h3>
+                <p class="activity-description">
+                    Sort the risk factors into modifiable (can be changed) and non-modifiable (cannot be changed).
+                </p>
+
+                <!-- Sorting Activity -->
+                <div class="sorting-container">
+                    <div class="sorting-column" id="modifiable-column">
+                        <div class="sorting-column-header">
+                            <span>✨</span> Modifiable Risk Factors
+                        </div>
+                        <!-- Items will be dragged here -->
+                    </div>
+                    <div class="sorting-column" id="nonmodifiable-column">
+                        <div class="sorting-column-header">
+                            <span>📅</span> Non-Modifiable Risk Factors
+                        </div>
+                        <!-- Items will be dragged here -->
+                    </div>
+                </div>
+
+                <!-- Sorting Items -->
+                <div class="word-bank" id="sorting-items">
+                    <div class="sorting-item draggable" data-category="modifiable" draggable="true">Smoking</div>
+                    <div class="sorting-item draggable" data-category="nonmodifiable" draggable="true">Age (over 55 for men, 65 for women)</div>
+                    <div class="sorting-item draggable" data-category="modifiable" draggable="true">High cholesterol</div>
+                    <div class="sorting-item draggable" data-category="nonmodifiable" draggable="true">Family history of early heart disease</div>
+                    <div class="sorting-item draggable" data-category="modifiable" draggable="true">Physical inactivity</div>
+                    <div class="sorting-item draggable" data-category="modifiable" draggable="true">Uncontrolled diabetes</div>
+                    <div class="sorting-item draggable" data-category="nonmodifiable" draggable="true">Male gender</div>
+                    <div class="sorting-item draggable" data-category="modifiable" draggable="true">Obesity</div>
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback-box" id="feedback-3">
+                    <div class="feedback-title">
+                        <span>✓</span>
+                        Feedback
+                    </div>
+                    <div class="feedback-content">
+                        <div class="correct-answer">
+                            <strong>Correct Sorting:</strong><br>
+                            <strong>Modifiable:</strong> Smoking, High cholesterol, Physical inactivity, Uncontrolled diabetes, Obesity<br>
+                            <strong>Non-Modifiable:</strong> Age, Family history, Male gender
+                        </div>
+                        <div class="clinical-tip">
+                            <strong>Patient Education Focus:</strong><br>
+                            • Emphasize <strong>modifiable</strong> factors during counseling<br>
+                            • For <strong>non-modifiable</strong> factors, focus on increased monitoring<br>
+                            • "You can't change your family history, but you can control your blood pressure!"
+                        </div>
+                        <p><strong>Metabolic Syndrome:</strong> A cluster of modifiable factors (obesity, high BP, high blood sugar, abnormal cholesterol) that dramatically increases heart disease risk.</p>
+                    </div>
+                </div>
+
+                <!-- Buttons -->
+                <div style="display: flex; gap: 10px; margin-top: 15px;">
+                    <button class="btn btn-secondary check-activity-btn" data-activity="3">
+                        <span class="btn-icon">✓</span>
+                        Check Answer
+                    </button>
+                </div>
+            </section>
+
+            <!-- Activity 4: Multiple Choice Review -->
+            <section class="activity-card" id="activity-4" data-activity="4">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 4</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">Quick Knowledge Check</h3>
+                <p class="activity-description">
+                    Test your recall of key concepts from this module. Select the best answer.
+                </p>
+
+                <!-- Multiple Choice Question -->
+                <div class="question-container">
+                    <div class="question-text">
+                        Why is understanding normal cardiac anatomy essential for a medical assistant in cardiology?
+                    </div>
+                    <div class="answer-options">
+                        <div class="answer-option" data-answer="a">
+                            <div class="answer-letter">A</div>
+                            <div class="answer-text">To perform surgeries independently</div>
+                        </div>
+                        <div class="answer-option" data-answer="b">
+                            <div class="answer-letter">B</div>
+                            <div class="answer-text">To explain conditions and procedures to patients accurately</div>
+                        </div>
+                        <div class="answer-option" data-answer="c">
+                            <div class="answer-letter">C</div>
+                            <div class="answer-text">To replace the cardiologist during busy periods</div>
+                        </div>
+                        <div class="answer-option" data-answer="d">
+                            <div class="answer-letter">D</div>
+                            <div class="answer-text">To bill insurance at higher rates</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback-box" id="feedback-4">
+                    <div class="feedback-title">
+                        <span>✓</span>
+                        Feedback
+                    </div>
+                    <div class="feedback-content">
+                        <div class="correct-answer">
+                            <strong>Correct Answer: B. To explain conditions and procedures to patients accurately</strong>
+                        </div>
+                        <div class="clinical-tip">
+                            <strong>Adam's Role:</strong><br>
+                            As a medical assistant in cardiology, Adam will:<br>
+                            • Prepare patients for diagnostic tests (ECG, stress tests)<br>
+                            • Explain medication purposes and side effects<br>
+                            • Teach about risk factor modification<br>
+                            • Recognize when to alert the provider about symptoms
+                        </div>
+                        <p><strong>Key Takeaway:</strong> Medical assistants are vital patient educators. Clear explanations reduce anxiety and improve treatment adherence.</p>
+                    </div>
+                </div>
+
+                <!-- Buttons -->
+                <div style="display: flex; gap: 10px; margin-top: 15px;">
+                    <button class="btn btn-secondary check-activity-btn" data-activity="4">
+                        <span class="btn-icon">✓</span>
+                        Check Answer
+                    </button>
+                </div>
+            </section>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn btn-secondary" id="reset-all-btn">
+                <span class="btn-icon">↻</span>
+                Reset All Activities
+            </button>
+            <button class="btn btn-secondary" id="hint-all-btn">
+                <span class="btn-icon">💡</span>
+                Show Learning Tips
+            </button>
+            <button class="btn btn-primary" id="view-results-btn">
+                <span class="btn-icon">📊</span>
+                View Final Results
+            </button>
+        </div>
+
+        <!-- Results Panel -->
+        <div class="results-panel" id="results-panel">
+            <div class="results-header">
+                <h2 class="results-title">Module 1 Results</h2>
+                <div class="score-display" id="final-score">0%</div>
+            </div>
+            <div class="clinical-insights">
+                <h3 class="insights-title">
+                    <span>🩺</span> Cardiology Assistant Insights
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Vocabulary Mastery:</strong> Accurate terminology builds patient trust and ensures clear communication with the healthcare team.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Anatomy Understanding:</strong> Knowing normal structure helps you recognize when something is abnormal during patient assessments.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Risk Factor Education:</strong> Focus counseling on modifiable factors – this is where patients can make meaningful changes.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Metabolic Syndrome:</strong> Remember the cluster – obesity, hypertension, dyslipidemia, insulin resistance. Address together.</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="clinical-insights" style="margin-top: 20px;">
+                <h3 class="insights-title">
+                    <span>💬</span> Patient Education Phrases
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span>"Your heart has four chambers – think of them as rooms with doors that only open one way."</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span>"Ischemia means your heart muscle isn't getting enough oxygen-rich blood."</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span>"While you can't change your family history, you can control your blood pressure and cholesterol."</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span>"Small changes add up – walking 30 minutes daily can reduce your heart disease risk by 30%."</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // State Management
+            const state = {
+                activities: {
+                    1: { completed: false, correct: false, matches: [] },
+                    2: { completed: false, correct: false, slots: {} },
+                    3: { completed: false, correct: false, placed: { modifiable: [], nonmodifiable: [] } },
+                    4: { completed: false, correct: false, selected: null }
+                },
+                startedAt: new Date(),
+                timeSpent: 0,
+                activity2: {
+                    currentSelectedSlot: null,
+                    wordOptions: [
+                        { word: 'atrium', answer: 'atrium' },
+                        { word: 'tricuspid', answer: 'tricuspid' },
+                        { word: 'ventricle', answer: 'ventricle' },
+                        { word: 'mitral', answer: 'mitral' },
+                        { word: 'aortic', answer: 'aortic' },
+                        { word: 'pulmonary', answer: 'pulmonary' }
+                    ],
+                    slots: [
+                        { id: 1, answer: 'atrium', filled: false, value: '' },
+                        { id: 2, answer: 'tricuspid', filled: false, value: '' },
+                        { id: 3, answer: 'atrium', filled: false, value: '' },
+                        { id: 4, answer: 'mitral', filled: false, value: '' }
+                    ]
+                }
+            };
+
+            // DOM Elements
+            const activityCards = document.querySelectorAll('.activity-card');
+            const checkButtons = document.querySelectorAll('.check-activity-btn');
+            const answerOptions = document.querySelectorAll('.answer-option');
+            const completedCount = document.getElementById('completed-count');
+            const accuracyRate = document.getElementById('accuracy-rate');
+            const timeSpent = document.getElementById('time-spent');
+            const resetBtn = document.getElementById('reset-all-btn');
+            const hintBtn = document.getElementById('hint-all-btn');
+            const resultsBtn = document.getElementById('view-results-btn');
+            const resultsPanel = document.getElementById('results-panel');
+            const finalScore = document.getElementById('final-score');
+
+            // Timer for time spent
+            function updateTimer() {
+                const now = new Date();
+                const diff = Math.floor((now - state.startedAt) / 1000);
+                state.timeSpent = diff;
+                const minutes = Math.floor(diff / 60);
+                const seconds = diff % 60;
+                timeSpent.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            }
+            setInterval(updateTimer, 1000);
+
+            // Update Progress Summary
+            function updateProgressSummary() {
+                let completed = 0;
+                let correct = 0;
+                Object.values(state.activities).forEach(activity => {
+                    if (activity.completed) {
+                        completed++;
+                        if (activity.correct) correct++;
+                    }
+                });
+                
+                completedCount.textContent = completed;
+                const accuracy = completed > 0 ? Math.round((correct / completed) * 100) : 0;
+                accuracyRate.textContent = `${accuracy}%`;
+                
+                // Update activity status indicators
+                activityCards.forEach(card => {
+                    const activityId = card.dataset.activity;
+                    const activity = state.activities[activityId];
+                    const status = card.querySelector('.activity-status');
+                    
+                    if (activity.completed) {
+                        card.classList.add('completed');
+                        status.textContent = activity.correct ? 'Correct!' : 'Review Needed';
+                        status.style.color = activity.correct ? '#00b894' : '#e17055';
+                    } else {
+                        card.classList.remove('completed');
+                        status.textContent = 'Not Started';
+                        status.style.color = '';
+                    }
+                });
+            }
+
+            // ===== ACTIVITY 1: MATCHING =====
+            function initActivity1() {
+                const matchingItems = document.querySelectorAll('#activity-1 .matching-item');
+                const correctMatches = {
+                    'ablation': 'removal',
+                    'chordae': 'tendons',
+                    'ischemia': 'decreased',
+                    'occlude': 'block'
+                };
+                
+                let matchedPairs = [];
+                
+                // Setup drag and drop
+                matchingItems.forEach(item => {
+                    item.addEventListener('dragstart', function(e) {
+                        e.dataTransfer.setData('text/plain', this.dataset.term || this.dataset.def);
+                        this.style.opacity = '0.4';
+                    });
+                    
+                    item.addEventListener('dragend', function() {
+                        this.style.opacity = '1';
+                    });
+                    
+                    item.addEventListener('dragover', function(e) {
+                        e.preventDefault();
+                        if (!this.classList.contains('matched')) {
+                            this.style.backgroundColor = 'rgba(175, 75, 239, 0.1)';
+                        }
+                    });
+                    
+                    item.addEventListener('dragleave', function() {
+                        if (!this.classList.contains('matched')) {
+                            this.style.backgroundColor = '';
+                        }
+                    });
+                    
+                    item.addEventListener('drop', function(e) {
+                        e.preventDefault();
+                        const draggedData = e.dataTransfer.getData('text/plain');
+                        const thisData = this.dataset.term || this.dataset.def;
+                        
+                        // Check if this is a valid match
+                        if ((correctMatches[draggedData] === thisData) || 
+                            (correctMatches[thisData] === draggedData)) {
+                            
+                            // Mark both as matched
+                            const allItems = document.querySelectorAll('#activity-1 .matching-item');
+                            allItems.forEach(item => {
+                                const itemData = item.dataset.term || item.dataset.def;
+                                if (itemData === draggedData || itemData === thisData) {
+                                    item.classList.add('matched');
+                                    item.style.backgroundColor = 'rgba(0, 184, 148, 0.1)';
+                                    item.style.cursor = 'default';
+                                }
+                            });
+                            
+                            // Track the match
+                            if (!matchedPairs.includes(draggedData + '-' + thisData) && 
+                                !matchedPairs.includes(thisData + '-' + draggedData)) {
+                                matchedPairs.push(draggedData + '-' + thisData);
+                            }
+                        } else {
+                            // Incorrect match - shake effect
+                            this.style.backgroundColor = 'rgba(225, 112, 85, 0.1)';
+                            setTimeout(() => {
+                                if (!this.classList.contains('matched')) {
+                                    this.style.backgroundColor = '';
+                                }
+                            }, 500);
+                        }
+                    });
+                });
+                
+                // Check answer button for Activity 1
+                document.querySelector('#activity-1 .check-activity-btn').addEventListener('click', function() {
+                    const allItems = document.querySelectorAll('#activity-1 .matching-item');
+                    const matchedCount = document.querySelectorAll('#activity-1 .matching-item.matched').length;
+                    const isComplete = matchedCount === allItems.length;
+                    
+                    state.activities[1].completed = true;
+                    state.activities[1].correct = isComplete;
+                    
+                    const feedback = document.getElementById('feedback-1');
+                    feedback.classList.add('show');
+                    if (isComplete) {
+                        feedback.classList.add('feedback-correct');
+                        feedback.classList.remove('feedback-incorrect');
+                        feedback.querySelector('.feedback-title').innerHTML = '<span>✓</span> All Matches Correct!';
+                    } else {
+                        feedback.classList.add('feedback-incorrect');
+                        feedback.classList.remove('feedback-correct');
+                        feedback.querySelector('.feedback-title').innerHTML = '<span>✗</span> Some Matches Incorrect';
+                    }
+                    
+                    updateProgressSummary();
+                    feedback.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                });
+            }
+
+            // ===== ACTIVITY 2: FILL-IN-THE-BLANK - FIXED FOR CLICK-TO-FILL =====
+            function initActivity2() {
+                const wordBank = document.getElementById('word-bank-2');
+                const blankSlots = document.querySelectorAll('#activity-2 .blank-slot');
+                
+                // Randomize word options
+                const randomizedWords = [...state.activity2.wordOptions].sort(() => Math.random() - 0.5);
+                
+                // Create word options in the word bank
+                randomizedWords.forEach(wordObj => {
+                    const wordOption = document.createElement('div');
+                    wordOption.className = 'word-option';
+                    wordOption.dataset.word = wordObj.word;
+                    wordOption.dataset.answer = wordObj.answer;
+                    wordOption.textContent = wordObj.word;
+                    wordBank.appendChild(wordOption);
+                });
+                
+                // Slot click handler
+                blankSlots.forEach(slot => {
+                    slot.addEventListener('click', function() {
+                        // Clear previous selection
+                        blankSlots.forEach(s => {
+                            s.classList.remove('selected');
+                        });
+                        
+                        // Select this slot if it's empty
+                        if (this.classList.contains('empty')) {
+                            this.classList.add('selected');
+                            state.activity2.currentSelectedSlot = this;
+                            
+                            // Highlight available words
+                            document.querySelectorAll('#activity-2 .word-option').forEach(word => {
+                                word.style.transform = 'scale(1.05)';
+                                word.style.boxShadow = '0 0 10px rgba(175, 75, 239, 0.3)';
+                            });
+                        }
+                    });
+                });
+                
+                // Word option click handler
+                wordBank.addEventListener('click', function(e) {
+                    const wordOption = e.target.closest('.word-option');
+                    if (!wordOption || wordOption.classList.contains('used')) return;
+                    
+                    if (state.activity2.currentSelectedSlot) {
+                        // Fill the selected slot
+                        const slot = state.activity2.currentSelectedSlot;
+                        const word = wordOption.dataset.word;
+                        
+                        slot.textContent = word;
+                        slot.classList.remove('empty', 'selected');
+                        slot.classList.add('filled');
+                        slot.dataset.filledWith = word;
+                        
+                        // Mark word as used
+                        wordOption.classList.add('used');
+                        
+                        // Update state
+                        const slotId = slot.dataset.slot;
+                        const slotIndex = state.activity2.slots.findIndex(s => s.id == slotId);
+                        if (slotIndex !== -1) {
+                            state.activity2.slots[slotIndex].filled = true;
+                            state.activity2.slots[slotIndex].value = word;
+                        }
+                        
+                        // Reset selection
+                        state.activity2.currentSelectedSlot = null;
+                        
+                        // Reset word highlighting
+                        document.querySelectorAll('#activity-2 .word-option').forEach(word => {
+                            word.style.transform = '';
+                            word.style.boxShadow = '';
+                        });
+                    } else {
+                        // If no slot selected, highlight slots that match this word
+                        const answer = wordOption.dataset.answer;
+                        blankSlots.forEach(slot => {
+                            if (slot.dataset.answer === answer && slot.classList.contains('empty')) {
+                                slot.style.animation = 'pulse 1s';
+                                setTimeout(() => {
+                                    slot.style.animation = '';
+                                }, 1000);
+                            }
+                        });
+                    }
+                });
+                
+                // Check answer button for Activity 2
+                document.querySelector('#activity-2 .check-activity-btn').addEventListener('click', function() {
+                    const blankSlots = document.querySelectorAll('#activity-2 .blank-slot');
+                    let allCorrect = true;
+                    let allFilled = true;
+                    
+                    blankSlots.forEach(slot => {
+                        const userAnswer = slot.textContent.trim().toLowerCase();
+                        const correctAnswer = slot.dataset.answer.toLowerCase();
+                        
+                        // Reset styles
+                        slot.classList.remove('correct', 'incorrect');
+                        
+                        if (slot.classList.contains('empty')) {
+                            allFilled = false;
+                        } else if (userAnswer === correctAnswer) {
+                            slot.classList.add('correct');
+                        } else {
+                            slot.classList.add('incorrect');
+                            allCorrect = false;
+                        }
+                    });
+                    
+                    state.activities[2].completed = allFilled;
+                    state.activities[2].correct = allCorrect && allFilled;
+                    
+                    const feedback = document.getElementById('feedback-2');
+                    feedback.classList.add('show');
+                    
+                    if (!allFilled) {
+                        feedback.classList.add('feedback-incorrect');
+                        feedback.classList.remove('feedback-correct');
+                        feedback.querySelector('.feedback-title').innerHTML = '<span>✗</span> Incomplete';
+                        feedback.querySelector('.feedback-content').innerHTML = `
+                            <div class="clinical-tip">
+                                <strong>Please complete all blanks:</strong><br>
+                                Click on a blank slot, then click a word from the word bank to fill it.
+                            </div>
+                        `;
+                    } else if (allCorrect) {
+                        feedback.classList.add('feedback-correct');
+                        feedback.classList.remove('feedback-incorrect');
+                        feedback.querySelector('.feedback-title').innerHTML = '<span>✓</span> All Blanks Correct!';
+                        feedback.querySelector('.feedback-content').innerHTML = `
+                            <div class="correct-answer">
+                                <strong>Completed Paragraph:</strong><br>
+                                Blood enters the right <strong>atrium</strong> from the body via the superior and inferior vena cava. It passes through the <strong>tricuspid</strong> valve into the right ventricle. The right ventricle pumps blood through the pulmonary valve into the pulmonary artery to the lungs for oxygenation. Oxygenated blood returns to the left <strong>atrium</strong>, passes through the <strong>mitral</strong> valve into the left ventricle, and is pumped through the aortic valve to the rest of the body.
+                            </div>
+                            <div class="clinical-tip">
+                                <strong>Memory Tip:</strong> "Try Before You Buy"<br>
+                                • <strong>T</strong>ricuspid (right side)<br>
+                                • <strong>B</strong>icuspid/Mitral (left side)<br>
+                                • <strong>Y</strong>ou remember the order!
+                            </div>
+                            <p><strong>Patient Education:</strong> Use simple analogies: "Think of your heart as a house with four rooms (chambers) and doors (valves) that only open one way."</p>
+                        `;
+                    } else {
+                        feedback.classList.add('feedback-incorrect');
+                        feedback.classList.remove('feedback-correct');
+                        feedback.querySelector('.feedback-title').innerHTML = '<span>✗</span> Some Answers Incorrect';
+                        feedback.querySelector('.feedback-content').innerHTML = `
+                            <div class="correct-answer">
+                                <strong>Correct Answers:</strong><br>
+                                • Slot 1: <strong>atrium</strong><br>
+                                • Slot 2: <strong>tricuspid</strong><br>
+                                • Slot 3: <strong>atrium</strong><br>
+                                • Slot 4: <strong>mitral</strong>
+                            </div>
+                            <div class="clinical-tip">
+                                <strong>Remember:</strong> Blood flows from atria to ventricles, then out through valves. The tricuspid valve is on the right side, mitral/bicuspid on the left.
+                            </div>
+                        `;
+                    }
+                    
+                    updateProgressSummary();
+                    feedback.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                });
+            }
+
+            // ===== ACTIVITY 3: SORTING =====
+            function initActivity3() {
+                const sortingItems = document.querySelectorAll('#activity-3 .sorting-item');
+                const modifiableColumn = document.getElementById('modifiable-column');
+                const nonmodifiableColumn = document.getElementById('nonmodifiable-column');
+                
+                const correctCategories = {
+                    'Smoking': 'modifiable',
+                    'Age (over 55 for men, 65 for women)': 'nonmodifiable',
+                    'High cholesterol': 'modifiable',
+                    'Family history of early heart disease': 'nonmodifiable',
+                    'Physical inactivity': 'modifiable',
+                    'Uncontrolled diabetes': 'modifiable',
+                    'Male gender': 'nonmodifiable',
+                    'Obesity': 'modifiable'
+                };
+                
+                // Setup drag and drop
+                sortingItems.forEach(item => {
+                    item.addEventListener('dragstart', function(e) {
+                        e.dataTransfer.setData('text/plain', this.textContent);
+                        this.style.opacity = '0.4';
+                    });
+                    
+                    item.addEventListener('dragend', function() {
+                        this.style.opacity = '1';
+                    });
+                });
+                
+                // Column drop handlers
+                [modifiableColumn, nonmodifiableColumn].forEach(column => {
+                    column.addEventListener('dragover', function(e) {
+                        e.preventDefault();
+                        this.style.backgroundColor = 'rgba(175, 75, 239, 0.05)';
+                    });
+                    
+                    column.addEventListener('dragleave', function() {
+                        this.style.backgroundColor = '';
+                    });
+                    
+                    column.addEventListener('drop', function(e) {
+                        e.preventDefault();
+                        this.style.backgroundColor = '';
+                        
+                        const itemText = e.dataTransfer.getData('text/plain');
+                        const targetCategory = this.id === 'modifiable-column' ? 'modifiable' : 'nonmodifiable';
+                        const correctCategory = correctCategories[itemText];
+                        
+                        // Find the item
+                        const item = Array.from(sortingItems).find(i => i.textContent === itemText);
+                        if (item && !item.classList.contains('placed')) {
+                            // Create a placed item
+                            const placedItem = document.createElement('div');
+                            placedItem.className = 'sorting-item placed';
+                            placedItem.textContent = itemText;
+                            placedItem.style.marginBottom = '8px';
+                            placedItem.style.backgroundColor = targetCategory === correctCategory ? 
+                                'rgba(0, 184, 148, 0.1)' : 'rgba(225, 112, 85, 0.1)';
+                            
+                            this.appendChild(placedItem);
+                            item.style.display = 'none';
+                            item.classList.add('placed');
+                            
+                            // Track placement
+                            if (targetCategory === 'modifiable') {
+                                state.activities[3].placed.modifiable.push(itemText);
+                            } else {
+                                state.activities[3].placed.nonmodifiable.push(itemText);
+                            }
+                        }
+                    });
+                });
+                
+                // Check answer button for Activity 3
+                document.querySelector('#activity-3 .check-activity-btn').addEventListener('click', function() {
+                    let correctCount = 0;
+                    
+                    // Check modifiable items
+                    state.activities[3].placed.modifiable.forEach(item => {
+                        if (correctCategories[item] === 'modifiable') correctCount++;
+                    });
+                    
+                    // Check nonmodifiable items
+                    state.activities[3].placed.nonmodifiable.forEach(item => {
+                        if (correctCategories[item] === 'nonmodifiable') correctCount++;
+                    });
+                    
+                    const isComplete = correctCount === 8;
+                    state.activities[3].completed = true;
+                    state.activities[3].correct = isComplete;
+                    
+                    const feedback = document.getElementById('feedback-3');
+                    feedback.classList.add('show');
+                    if (isComplete) {
+                        feedback.classList.add('feedback-correct');
+                        feedback.classList.remove('feedback-incorrect');
+                        feedback.querySelector('.feedback-title').innerHTML = '<span>✓</span> Sorting Correct!';
+                    } else {
+                        feedback.classList.add('feedback-incorrect');
+                        feedback.classList.remove('feedback-correct');
+                        feedback.querySelector('.feedback-title').innerHTML = '<span>✗</span> Some Items Incorrect';
+                    }
+                    
+                    updateProgressSummary();
+                    feedback.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                });
+            }
+
+            // ===== ACTIVITY 4: MULTIPLE CHOICE =====
+            function initActivity4() {
+                const answerOptions = document.querySelectorAll('#activity-4 .answer-option');
+                
+                // Answer selection
+                answerOptions.forEach(option => {
+                    option.addEventListener('click', function() {
+                        // Clear previous selections
+                        answerOptions.forEach(opt => {
+                            opt.classList.remove('selected');
+                        });
+                        
+                        // Select this option
+                        this.classList.add('selected');
+                        state.activities[4].selected = this.dataset.answer;
+                    });
+                });
+                
+                // Check answer button for Activity 4
+                document.querySelector('#activity-4 .check-activity-btn').addEventListener('click', function() {
+                    const selectedOption = document.querySelector('#activity-4 .answer-option.selected');
+                    const isCorrect = selectedOption && selectedOption.dataset.answer === 'b';
+                    
+                    state.activities[4].completed = true;
+                    state.activities[4].correct = isCorrect;
+                    
+                    const feedback = document.getElementById('feedback-4');
+                    feedback.classList.add('show');
+                    
+                    if (isCorrect) {
+                        feedback.classList.add('feedback-correct');
+                        feedback.classList.remove('feedback-incorrect');
+                        feedback.querySelector('.feedback-title').innerHTML = '<span>✓</span> Correct!';
+                    } else {
+                        feedback.classList.add('feedback-incorrect');
+                        feedback.classList.remove('feedback-correct');
+                        feedback.querySelector('.feedback-title').innerHTML = '<span>✗</span> Incorrect';
+                        
+                        // Show correct answer
+                        const correctOption = document.querySelector('#activity-4 .answer-option[data-answer="b"]');
+                        correctOption.classList.add('selected');
+                    }
+                    
+                    updateProgressSummary();
+                    feedback.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                });
+            }
+
+            // Reset All Activities
+            resetBtn.addEventListener('click', function() {
+                // Reset state
+                Object.keys(state.activities).forEach(key => {
+                    state.activities[key] = { 
+                        completed: false, 
+                        correct: false,
+                        matches: [],
+                        answers: [],
+                        placed: { modifiable: [], nonmodifiable: [] },
+                        selected: null
+                    };
+                });
+                
+                state.activity2.currentSelectedSlot = null;
+                state.activity2.slots.forEach(slot => {
+                    slot.filled = false;
+                    slot.value = '';
+                });
+                
+                // Reset UI
+                activityCards.forEach(card => {
+                    card.classList.remove('completed');
+                    const status = card.querySelector('.activity-status');
+                    status.textContent = 'Not Started';
+                    status.style.color = '';
+                    
+                    // Hide feedback
+                    const feedback = card.querySelector('.feedback-box');
+                    feedback.classList.remove('show', 'feedback-correct', 'feedback-incorrect');
+                });
+                
+                // Reset Activity 1
+                document.querySelectorAll('#activity-1 .matching-item').forEach(item => {
+                    item.classList.remove('matched');
+                    item.style.backgroundColor = '';
+                    item.style.cursor = 'move';
+                    item.style.opacity = '1';
+                });
+                
+                // Reset Activity 2
+                document.querySelectorAll('#activity-2 .blank-slot').forEach(slot => {
+                    slot.textContent = '';
+                    slot.classList.remove('filled', 'selected', 'correct', 'incorrect');
+                    slot.classList.add('empty');
+                    delete slot.dataset.filledWith;
+                });
+                
+                // Reset Activity 2 word bank
+                const wordBank = document.getElementById('word-bank-2');
+                const wordOptions = wordBank.querySelectorAll('.word-option');
+                wordOptions.forEach(option => {
+                    option.classList.remove('used');
+                });
+                
+                // Reset Activity 3
+                document.querySelectorAll('#activity-3 .sorting-item').forEach(item => {
+                    item.style.display = '';
+                    item.classList.remove('placed');
+                });
+                document.getElementById('modifiable-column').innerHTML = `
+                    <div class="sorting-column-header">
+                        <span>✨</span> Modifiable Risk Factors
+                    </div>`;
+                document.getElementById('nonmodifiable-column').innerHTML = `
+                    <div class="sorting-column-header">
+                        <span>📅</span> Non-Modifiable Risk Factors
+                    </div>`;
+                
+                // Reset Activity 4
+                document.querySelectorAll('#activity-4 .answer-option').forEach(option => {
+                    option.classList.remove('selected');
+                });
+                
+                // Reset results panel
+                resultsPanel.classList.remove('show');
+                
+                // Update progress
+                updateProgressSummary();
+            });
+
+            // Show All Hints
+            hintBtn.addEventListener('click', function() {
+                // Show all feedback boxes
+                document.querySelectorAll('.feedback-box').forEach(feedback => {
+                    feedback.style.animation = 'pulse 2s infinite';
+                    setTimeout(() => {
+                        feedback.style.animation = '';
+                    }, 2000);
+                });
+                
+                // Scroll to first hint
+                document.querySelector('.feedback-box').scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+            });
+
+            // View Final Results
+            resultsBtn.addEventListener('click', function() {
+                let completed = 0;
+                let correct = 0;
+                Object.values(state.activities).forEach(activity => {
+                    if (activity.completed) {
+                        completed++;
+                        if (activity.correct) correct++;
+                    }
+                });
+                
+                const score = completed > 0 ? Math.round((correct / completed) * 100) : 0;
+                finalScore.textContent = `${score}%`;
+                resultsPanel.classList.add('show');
+                resultsPanel.scrollIntoView({ behavior: 'smooth' });
+            });
+
+            // Initialize all activities
+            initActivity1();
+            initActivity2();
+            initActivity3();
+            initActivity4();
+
+            // Initial progress update
+            updateProgressSummary();
+        });
+    </script>
+</body>
+</html>
