@@ -1,0 +1,1476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AlliedRx -- Chapter 26: Radiation Safety & Image Management</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        :root {
+            --color-primary: #af4bef; /* Purple - main brand color */
+            --color-primary-soft: #d492ff; /* Light purple */
+            --color-accent: #8380f0; /* Blue-purple accent */
+            --color-success: #00b894; /* Green for correct/success */
+            --color-error: #e17055; /* Red/Orange for errors */
+            --color-warning: #fdcb6e; /* Yellow for warnings */
+            --color-info: #0984e3; /* Blue for info */
+            --color-bg: #f7f5fb; /* Light background */
+            --color-text: #2b2b2b; /* Dark text */
+            --color-muted: #6c6880; /* Muted text */
+            --color-dark: #0c0a18; /* Dark background */
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+            --shadow-card: 0 12px 30px rgba(15, 23, 42, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(
+                circle at top left,
+                #ffffff 0,
+                #f1ecff 40%,
+                var(--color-bg) 100%
+            );
+            color: var(--color-text);
+            -webkit-text-size-adjust: 100%;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 12px; }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes checkmarkPop {
+            0% { transform: scale(0); opacity: 0; }
+            70% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        /* Main Container */
+        .page {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @media (max-width: 900px) { .page { padding: 22px; } }
+        @media (max-width: 480px) {
+            body { padding: 0; }
+            .page {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 18px 14px 22px;
+            }
+        }
+
+        /* Header */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .brand-logo:hover { transform: scale(1.05); }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--color-success);
+            flex-shrink: 0;
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .badge-mode:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+        @media (max-width: 480px) {
+            .brand-row { flex-direction: column; align-items: flex-start; }
+            .badge-mode { margin-top: 6px; }
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 3vw, 2.2rem);
+            line-height: 1.1;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .module-subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 600px;
+            margin-bottom: 24px;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        /* Progress Tracker (2-STEP ONLY) */
+        .progress-tracker {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            position: relative;
+            padding: 0 20px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .progress-tracker::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 50px;
+            right: 50px;
+            height: 3px;
+            background: rgba(12, 10, 24, 0.08);
+            z-index: 1;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+
+        .step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--color-muted);
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.active .step-circle {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .progress-step.completed .step-circle {
+            background: var(--color-success);
+            border-color: var(--color-success);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.75rem;
+            color: var(--color-muted);
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .progress-step.active .step-label {
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        /* Activity Grid (2 ACTIVITIES ONLY) */
+        .activity-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 900px) {
+            .activity-grid { grid-template-columns: 1fr; }
+        }
+
+        .activity-card {
+            background: white;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            padding: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .activity-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--color-primary);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .activity-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--color-primary-soft);
+        }
+
+        .activity-card:hover::before { opacity: 1; }
+
+        .activity-card.completed {
+            border-color: var(--color-success);
+        }
+
+        .activity-card.completed::before {
+            background: var(--color-success);
+            opacity: 1;
+        }
+
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .activity-number {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .activity-status {
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-muted);
+        }
+
+        .activity-card.completed .activity-status {
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--color-success);
+        }
+
+        .activity-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 8px;
+        }
+
+        .activity-description {
+            font-size: 0.9rem;
+            color: var(--color-muted);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        /* Activity 1: ALARA Principles & PPE Selection */
+        .radiation-zone {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .radiation-zone.hover {
+            border-color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.05);
+        }
+
+        .radiation-zone.empty::after {
+            content: 'Drag appropriate ALARA safety measures here';
+            color: var(--color-muted);
+            text-align: center;
+            font-size: 0.9rem;
+            margin: auto;
+        }
+
+        .ppe-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .ppe-item {
+            background: rgba(12, 10, 24, 0.05);
+            border-radius: 20px;
+            padding: 8px 15px;
+            font-size: 0.85rem;
+            cursor: grab;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .ppe-item:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            transform: translateY(-2px);
+        }
+
+        .ppe-item.dragging {
+            opacity: 0.7;
+            transform: scale(0.95);
+        }
+
+        .ppe-item.correct {
+            background: rgba(0, 184, 148, 0.1);
+            border-color: var(--color-success);
+        }
+
+        .ppe-item.incorrect {
+            background: rgba(225, 112, 85, 0.1);
+            border-color: var(--color-error);
+        }
+
+        /* Activity 2: Radiographic Positioning */
+        .positioning-scenario {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+        }
+
+        .scenario-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+        }
+
+        .scenario-description {
+            font-size: 0.9rem;
+            color: var(--color-text);
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .position-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .position-options { grid-template-columns: 1fr; }
+        }
+
+        .position-option {
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .position-option:hover {
+            background: rgba(175, 75, 239, 0.08);
+            border-color: var(--color-primary-soft);
+            transform: translateY(-2px);
+        }
+
+        .position-option.selected {
+            background: rgba(0, 184, 148, 0.1);
+            border-color: var(--color-success);
+        }
+
+        .position-option.wrong {
+            background: rgba(225, 112, 85, 0.1);
+            border-color: var(--color-error);
+            animation: shake 0.5s ease;
+        }
+
+        /* FIXED: Incorrect options stay red, don't get green selected class */
+        .position-option.incorrect-selected {
+            background: rgba(225, 112, 85, 0.15);
+            border-color: var(--color-error);
+        }
+
+        .position-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 5px;
+        }
+
+        .position-desc {
+            font-size: 0.8rem;
+            color: var(--color-text);
+        }
+
+        /* Safety Warning */
+        .safety-warning {
+            background: rgba(225, 112, 85, 0.1);
+            border: 2px solid var(--color-error);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin-top: 15px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            animation: pulse 2s infinite;
+        }
+
+        .warning-icon {
+            font-size: 1.5rem;
+            color: var(--color-error);
+            flex-shrink: 0;
+        }
+
+        .warning-content {
+            flex: 1;
+        }
+
+        .warning-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--color-error);
+            margin-bottom: 5px;
+        }
+
+        .warning-text {
+            font-size: 0.85rem;
+            color: var(--color-text);
+        }
+
+        /* Feedback */
+        .feedback-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            margin-top: 20px;
+            display: none;
+        }
+
+        .feedback-container.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .feedback-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feedback-icon {
+            font-size: 1.2rem;
+        }
+
+        .feedback-icon.correct {
+            color: var(--color-success);
+        }
+
+        .feedback-icon.incorrect {
+            color: var(--color-error);
+        }
+
+        .feedback-content {
+            font-size: 0.85rem;
+            color: var(--color-text);
+            line-height: 1.5;
+        }
+
+        .feedback-content strong {
+            color: var(--color-primary);
+        }
+
+        /* Pro Tip */
+        .pro-tip {
+            background: rgba(253, 203, 110, 0.1);
+            border-left: 4px solid var(--color-warning);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .pro-tip-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--color-warning);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .pro-tip-content {
+            font-size: 0.85rem;
+            color: var(--color-text);
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #9a3bd6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(175, 75, 239, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-text);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(12, 10, 24, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-icon {
+            font-size: 1.1em;
+        }
+
+        /* Results Panel */
+        .results-panel {
+            background: var(--color-dark);
+            color: white;
+            border-radius: var(--radius-md);
+            padding: 30px;
+            margin-top: 30px;
+            display: none;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .results-panel.show {
+            display: block;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .results-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .score-display {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--color-primary-soft);
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .clinical-insights {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .insights-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-primary-soft);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .insights-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .insights-list li {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            font-size: 0.9rem;
+            color: #e5e7eb;
+        }
+
+        .insight-dot {
+            width: 6px;
+            height: 6px;
+            margin-top: 6px;
+            border-radius: 999px;
+            background: var(--color-accent);
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="module-heading">
+        <!-- Header with Week 12/Chapter 26 -->
+        <header class="brand-row">
+            <div class="brand">
+                <img
+                    src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                    alt="AlliedRx logo"
+                    class="brand-logo"
+                />
+                <div class="course-meta">
+                    <span class="course-name">Clinical Medical Assistant • Week 12</span>
+                    <div class="week-label">
+                        <span class="week-label-dot"></span>
+                        <span>Chapter 26: Radiation Safety & Image Management</span>
+                    </div>
+                </div>
+            </div>
+            <span class="badge-mode">Campus & Online</span>
+        </header>
+
+        <h1 id="module-heading">Radiation Safety & Image Management</h1>
+        <p class="module-subtitle">
+            Master ALARA principles, radiographic positioning, patient safety protocols, and legal responsibilities 
+            for diagnostic imaging procedures in clinical practice.
+        </p>
+
+        <!-- Progress Tracker (2-STEP ONLY) -->
+        <div class="progress-tracker">
+            <div class="progress-step active" data-step="1">
+                <div class="step-circle">1</div>
+                <div class="step-label">ALARA & PPE Safety</div>
+            </div>
+            <div class="progress-step" data-step="2">
+                <div class="step-circle">2</div>
+                <div class="step-label">Radiographic Positioning</div>
+            </div>
+        </div>
+
+        <!-- Activity Grid (2 ACTIVITIES ONLY) -->
+        <div class="activity-grid">
+            <!-- Activity 1: ALARA Principles & PPE Selection -->
+            <section class="activity-card" id="activity-1" data-activity="1">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 1</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">ALARA Principles & PPE Selection</h3>
+                <p class="activity-description">
+                    Apply ALARA (As Low As Reasonably Achievable) principles by selecting appropriate 
+                    radiation safety measures and personal protective equipment for different clinical scenarios.
+                </p>
+
+                <!-- Scenario -->
+                <div class="positioning-scenario">
+                    <div class="scenario-title">Scenario: Chest X-Ray Preparation</div>
+                    <div class="scenario-description">
+                        Sara is preparing a 65-year-old patient for a routine PA chest x-ray. 
+                        The patient has no known allergies and is cooperative. Sara needs to ensure 
+                        radiation safety for both the patient and herself.
+                    </div>
+                </div>
+
+                <!-- Radiation Safety Zone -->
+                <div class="radiation-zone empty" id="radiation-zone"></div>
+
+                <!-- PPE Items -->
+                <div class="ppe-items">
+                    <div class="ppe-item draggable" data-correct="true" draggable="true">Lead apron (0.5mm Pb equivalent)</div>
+                    <div class="ppe-item draggable" data-correct="true" draggable="true">Thyroid shield</div>
+                    <div class="ppe-item draggable" data-correct="true" draggable="true">Lead gloves (if hands in primary beam)</div>
+                    <div class="ppe-item draggable" data-correct="false" draggable="true">Surgical mask</div>
+                    <div class="ppe-item draggable" data-correct="true" draggable="true">Position patient 6 feet from source</div>
+                    <div class="ppe-item draggable" data-correct="false" draggable="true">Sterile gloves</div>
+                    <div class="ppe-item draggable" data-correct="true" draggable="true">Collimate to area of interest</div>
+                    <div class="ppe-item draggable" data-correct="true" draggable="true">Use fastest exposure time possible</div>
+                </div>
+
+                <!-- Safety Warning -->
+                <div class="safety-warning" id="radiation-warning" style="display: none;">
+                    <div class="warning-icon">⚠️</div>
+                    <div class="warning-content">
+                        <div class="warning-title">Radiation Safety Violation!</div>
+                        <div class="warning-text">
+                            ALARA principles require minimizing time, maximizing distance, and using proper shielding. 
+                            Never compromise on lead protection when in the radiographic room during exposures.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pro Tip -->
+                <div class="pro-tip">
+                    <div class="pro-tip-title">
+                        <span>💡</span>
+                        Pro Tip: Pregnancy Precautions
+                    </div>
+                    <div class="pro-tip-content">
+                        <strong>Always</strong> ask female patients of childbearing age about possible pregnancy 
+                        before any radiographic procedure. Use the "10-day rule" for non-urgent abdominal/pelvic 
+                        imaging: schedule within 10 days after onset of menstruation when pregnancy is unlikely.
+                    </div>
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback-container" id="feedback-1">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        ALARA Principles Applied!
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Correct ALARA Measures for Chest X-Ray:</strong><br>
+                        1. <strong>Lead apron (0.5mm Pb equivalent)</strong> - Required for anyone remaining in room<br>
+                        2. <strong>Thyroid shield</strong> - Essential for thyroid protection<br>
+                        3. <strong>Lead gloves</strong> - Only if hands are in primary beam (not typically for chest)<br>
+                        4. <strong>Position patient 6 feet from source</strong> - Maximize distance when possible<br>
+                        5. <strong>Collimate to area of interest</strong> - Reduces scatter radiation<br>
+                        6. <strong>Use fastest exposure time possible</strong> - Minimizes radiation dose<br><br>
+                        
+                        <strong>Incorrect Items:</strong><br>
+                        • Surgical mask - Not needed for radiation protection<br>
+                        • Sterile gloves - Not a radiation safety measure<br><br>
+                        
+                        <strong>Clinical Insight:</strong> The annual occupational dose limit is 5,000 mrem (50 mSv). 
+                        A single chest x-ray gives about 10 mrem (0.1 mSv) to the patient.
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity 2: Radiographic Positioning -->
+            <section class="activity-card" id="activity-2" data-activity="2">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 2</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">Radiographic Positioning & Projections</h3>
+                <p class="activity-description">
+                    Select the correct radiographic position based on clinical indications. 
+                    Understand the differences between AP, PA, lateral, and oblique projections.
+                </p>
+
+                <!-- Scenario -->
+                <div class="positioning-scenario">
+                    <div class="scenario-title">Scenario: Suspected Wrist Fracture</div>
+                    <div class="scenario-description">
+                        A 28-year-old patient presents with acute wrist pain after a fall. 
+                        Dr. Swain orders a wrist series to rule out fracture. 
+                        Select the MOST appropriate initial projection for evaluating a suspected Colles' fracture.
+                    </div>
+                </div>
+
+                <!-- Positioning Options -->
+                <div class="position-options">
+                    <div class="position-option" data-correct="true" data-position="PA Wrist">
+                        <div class="position-label">PA Wrist (Posteroanterior)</div>
+                        <div class="position-desc">Patient's palm flat on cassette, beam enters posterior wrist, exits anterior</div>
+                    </div>
+                    <div class="position-option" data-correct="false" data-position="AP Wrist">
+                        <div class="position-label">AP Wrist (Anteroposterior)</div>
+                        <div class="position-desc">Patient's dorsum on cassette, beam enters anterior wrist, exits posterior</div>
+                    </div>
+                    <div class="position-option" data-correct="false" data-position="Lateral Chest">
+                        <div class="position-label">Lateral Chest</div>
+                        <div class="position-desc">Patient's side against cassette, beam enters opposite side</div>
+                    </div>
+                    <div class="position-option" data-correct="true" data-position="Lateral Wrist">
+                        <div class="position-label">Lateral Wrist</div>
+                        <div class="position-desc">Patient's thumb up, ulnar side against cassette, beam enters radial side</div>
+                    </div>
+                </div>
+
+                <!-- Additional Scenario -->
+                <div class="positioning-scenario" style="margin-top: 20px;">
+                    <div class="scenario-title">Scenario: Pre-employment Chest X-Ray</div>
+                    <div class="scenario-description">
+                        A 45-year-old applicant requires a pre-employment chest x-ray for hospital credentialing. 
+                        Select the STANDARD projection that minimizes cardiac magnification and provides best lung visualization.
+                    </div>
+                </div>
+
+                <div class="position-options">
+                    <div class="position-option" data-correct="false" data-position="AP Chest">
+                        <div class="position-label">AP Chest (Anteroposterior)</div>
+                        <div class="position-desc">Patient facing tube, back against cassette; magnifies heart, used for portable exams</div>
+                    </div>
+                    <div class="position-option" data-correct="true" data-position="PA Chest">
+                        <div class="position-label">PA Chest (Posteroanterior)</div>
+                        <div class="position-desc">Patient facing cassette, back to tube; minimizes heart magnification, standard for routine</div>
+                    </div>
+                    <div class="position-option" data-correct="false" data-position="Oblique Chest">
+                        <div class="position-label">Right Anterior Oblique (RAO)</div>
+                        <div class="position-desc">Patient rotated 45°, used for cardiac studies and esophageal visualization</div>
+                    </div>
+                    <div class="position-option" data-correct="false" data-position="Lateral Decubitus">
+                        <div class="position-label">Lateral Decubitus</div>
+                        <div class="position-desc">Patient lying on side, used to detect free air or fluid in pleural space</div>
+                    </div>
+                </div>
+
+                <!-- Documentation Standards -->
+                <div class="pro-tip">
+                    <div class="pro-tip-title">
+                        <span>📋</span>
+                        Documentation Standards
+                    </div>
+                    <div class="pro-tip-content">
+                        <strong>Essential elements for radiographic documentation:</strong><br>
+                        1. Patient identification (name, DOB, medical record number)<br>
+                        2. Date and time of examination<br>
+                        3. Projection/position (e.g., "PA Chest", "Lateral Wrist")<br>
+                        4. Technical factors (kVp, mAs, SID) if required by facility<br>
+                        5. Right/Left marker clearly visible on image<br>
+                        6. Pregnancy status documented for females 12-55 years<br>
+                        7. Clinical indication and ordering provider
+                    </div>
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback-container" id="feedback-2">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Positioning Mastered!
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Correct Selections:</strong><br>
+                        1. <strong>PA Wrist & Lateral Wrist</strong> - Standard wrist series includes both PA and lateral projections<br>
+                        2. <strong>PA Chest</strong> - Standard for routine chest exams; minimizes cardiac magnification<br><br>
+                        
+                        <strong>Key Positioning Principles:</strong><br>
+                        • <strong>PA vs AP:</strong> PA = beam enters posterior, exits anterior (better detail, less magnification)<br>
+                        • <strong>AP Chest</strong> is used for portable exams, ICU patients, and trauma<br>
+                        • <strong>Lateral projections</strong> provide depth information and are always paired with frontal view<br>
+                        • <strong>Oblique projections</strong> (45° rotation) visualize structures without superimposition<br><br>
+                        
+                        <strong>Clinical Application:</strong><br>
+                        For Colles' fracture (distal radius fracture with dorsal displacement), the lateral view is critical 
+                        to assess displacement and angulation. The PA view shows radial shortening and intra-articular extension.
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn btn-secondary" id="reset-all-btn">
+                <span class="btn-icon">↻</span>
+                Reset All Activities
+            </button>
+            <button class="btn btn-secondary" id="check-answers-btn">
+                <span class="btn-icon">✓</span>
+                Check All Answers
+            </button>
+            <button class="btn btn-primary" id="view-results-btn">
+                <span class="btn-icon">📊</span>
+                View Final Results
+            </button>
+        </div>
+
+        <!-- Results Panel -->
+        <div class="results-panel" id="results-panel">
+            <div class="results-header">
+                <h2 class="results-title">Radiation Safety & Image Management Results</h2>
+                <div class="score-display" id="final-score">0%</div>
+            </div>
+            
+            <div class="clinical-insights">
+                <h3 class="insights-title">
+                    <span>🩺</span> Clinical Proficiency Insights
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>ALARA Principle:</strong> As Low As Reasonably Achievable - The fundamental radiation safety principle. Time, Distance, and Shielding are the three key factors.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>PPE Requirements:</strong> Lead apron (0.5mm Pb eq), thyroid shield, and lead gloves when hands are in primary beam. Monitor badges must be worn at collar level outside lead.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Patient Education:</strong> Explain procedure simply, ensure understanding of breath-hold instructions, address claustrophobia concerns for MRI/CT, verify pregnancy status.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Positioning Accuracy:</strong> PA chest reduces heart magnification by 15% compared to AP. Proper positioning reduces repeats, minimizing patient radiation exposure.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Legal Responsibilities:</strong> Maintain radiation exposure records for 5 years (OSHA), ensure pregnancy screening, obtain informed consent for contrast studies.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="clinical-insights" style="margin-top: 20px;">
+                <h3 class="insights-title">
+                    <span>📋</span> Documentation & Compliance
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Image Management:</strong> PACS (Picture Archiving and Communication System) stores digital images. HIPAA compliance requires secure transmission and storage.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Contrast Media:</strong> Document type, amount, route, and lot number. Screen for allergies (iodine, shellfish) and renal function (eGFR >30 for IV contrast).</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Quality Control:</strong> Daily processor checks, weekly viewbox cleaning, monthly repeat analysis. Document equipment malfunctions and service reports.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Emergency Procedures:</strong> Know location of emergency shut-off, contrast reaction kit (epinephrine, antihistamines), and radiation safety officer contact.</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // State Management (2 activities only)
+            const state = {
+                activities: {
+                    1: { completed: false, correct: 0, total: 6, score: 0 }, // 6 correct PPE items
+                    2: { completed: false, correct: 0, total: 3, score: 0 }  // 3 correct selections (PA Wrist, Lateral Wrist, PA Chest)
+                },
+                startedAt: new Date(),
+                timeSpent: 0
+            };
+
+            // DOM Elements
+            const progressSteps = document.querySelectorAll('.progress-step');
+            const activityCards = document.querySelectorAll('.activity-card');
+            const resetBtn = document.getElementById('reset-all-btn');
+            const checkBtn = document.getElementById('check-answers-btn');
+            const resultsBtn = document.getElementById('view-results-btn');
+            const resultsPanel = document.getElementById('results-panel');
+            const finalScore = document.getElementById('final-score');
+            const radiationWarning = document.getElementById('radiation-warning');
+
+            // Timer for time spent
+            function updateTimer() {
+                const now = new Date();
+                const diff = Math.floor((now - state.startedAt) / 1000);
+                state.timeSpent = diff;
+                const minutes = Math.floor(diff / 60);
+                const seconds = diff % 60;
+                // Update display if element exists
+                const timeSpentEl = document.getElementById('time-spent');
+                if (timeSpentEl) {
+                    timeSpentEl.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                }
+            }
+            setInterval(updateTimer, 1000);
+
+            // Update Progress Summary
+            function updateProgressSummary() {
+                let completed = 0;
+                let totalCorrect = 0;
+                let totalItems = 0;
+
+                Object.values(state.activities).forEach(activity => {
+                    if (activity.completed) completed++;
+                    totalCorrect += activity.correct;
+                    totalItems += activity.total;
+                });
+
+                // Update progress steps
+                progressSteps.forEach((step, index) => {
+                    const stepNum = parseInt(step.dataset.step);
+                    if (state.activities[stepNum]?.completed) {
+                        step.classList.add('completed');
+                        step.classList.remove('active');
+                    } else if (stepNum === 1 && !state.activities[1].completed) {
+                        step.classList.add('active');
+                        step.classList.remove('completed');
+                    } else if (stepNum === 2 && state.activities[1].completed && !state.activities[2].completed) {
+                        step.classList.add('active');
+                        step.classList.remove('completed');
+                    } else {
+                        step.classList.remove('active', 'completed');
+                    }
+                });
+            }
+
+            // Activity 1: ALARA Principles & PPE Selection
+            function initActivity1() {
+                const ppeItems = document.querySelectorAll('#activity-1 .ppe-item');
+                const radiationZone = document.getElementById('radiation-zone');
+                const feedback = document.getElementById('feedback-1');
+                const status = document.querySelector('#activity-1 .activity-status');
+
+                let placedItems = 0;
+                let correctPlacements = 0;
+
+                // Setup drag and drop
+                ppeItems.forEach(item => {
+                    item.addEventListener('dragstart', function(e) {
+                        e.dataTransfer.setData('text/plain', JSON.stringify({
+                            text: this.textContent,
+                            correct: this.dataset.correct === 'true',
+                            id: this.textContent
+                        }));
+                        this.classList.add('dragging');
+                    });
+
+                    item.addEventListener('dragend', function() {
+                        this.classList.remove('dragging');
+                    });
+                });
+
+                radiationZone.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    this.classList.add('hover');
+                    this.classList.remove('empty');
+                });
+
+                radiationZone.addEventListener('dragleave', function() {
+                    this.classList.remove('hover');
+                });
+
+                radiationZone.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('hover');
+                    
+                    const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+                    
+                    // Check if item already placed
+                    const existingItems = Array.from(this.querySelectorAll('.ppe-item'));
+                    const alreadyPlaced = existingItems.some(div => div.textContent === data.text);
+                    
+                    if (!alreadyPlaced) {
+                        // Create and add item
+                        const div = document.createElement('div');
+                        div.textContent = data.text;
+                        div.className = 'ppe-item';
+                        div.classList.add(data.correct ? 'correct' : 'incorrect');
+                        div.style.cursor = 'default';
+                        div.style.pointerEvents = 'none';
+                        
+                        this.appendChild(div);
+                        
+                        // Hide original item
+                        const originalItem = Array.from(ppeItems).find(item => 
+                            item.textContent === data.text && item.style.display !== 'none'
+                        );
+                        if (originalItem) {
+                            originalItem.style.display = 'none';
+                            placedItems++;
+                            if (data.correct) correctPlacements++;
+                        }
+                        
+                        // Check completion (all 8 items placed)
+                        if (placedItems === 8) {
+                            state.activities[1].completed = true;
+                            state.activities[1].correct = correctPlacements;
+                            state.activities[1].score = Math.round((correctPlacements / 6) * 100); // 6 correct items max
+                            
+                            status.textContent = 'Completed';
+                            status.style.color = '#00b894';
+                            document.querySelector('#activity-1').classList.add('completed');
+                            feedback.classList.add('show');
+                            
+                            // Show warning if incorrect items were selected
+                            if (correctPlacements < 6) {
+                                radiationWarning.style.display = 'flex';
+                            }
+                            
+                            updateProgressSummary();
+                        }
+                    }
+                });
+            }
+
+            // Activity 2: Radiographic Positioning - FIXED VERSION
+            function initActivity2() {
+                const positionOptions = document.querySelectorAll('#activity-2 .position-option');
+                const feedback = document.getElementById('feedback-2');
+                const status = document.querySelector('#activity-2 .activity-status');
+
+                // Track selections
+                let selectedOptions = [];
+                let correctSelections = 0;
+                
+                // First scenario: Need both PA Wrist AND Lateral Wrist (multiple selection allowed for wrist)
+                // Second scenario: Need ONLY PA Chest (single selection for chest)
+                
+                // Track selections by scenario
+                let wristSelections = [];
+                let chestSelection = null;
+
+                positionOptions.forEach(option => {
+                    option.addEventListener('click', function() {
+                        if (state.activities[2].completed) return;
+                        
+                        const isCorrect = this.dataset.correct === 'true';
+                        const position = this.dataset.position;
+                        const isWrist = position.includes('Wrist');
+                        const isChest = position.includes('Chest');
+                        
+                        if (isWrist) {
+                            // Wrist scenario - toggle selection
+                            if (this.classList.contains('selected')) {
+                                // Deselect
+                                this.classList.remove('selected');
+                                wristSelections = wristSelections.filter(p => p !== position);
+                            } else {
+                                // Select - only add selected class if it's correct
+                                if (isCorrect) {
+                                    this.classList.add('selected');
+                                    wristSelections.push(position);
+                                } else {
+                                    // Incorrect option - show red, don't add to selections
+                                    this.classList.add('wrong');
+                                    setTimeout(() => {
+                                        this.classList.remove('wrong');
+                                    }, 1000); // Keep red for 1 second
+                                }
+                            }
+                        } else if (isChest) {
+                            // Chest scenario - single selection
+                            // First, deselect all chest options
+                            document.querySelectorAll('#activity-2 .position-option[data-position*="Chest"]').forEach(opt => {
+                                opt.classList.remove('selected', 'wrong');
+                            });
+                            
+                            if (isCorrect) {
+                                // Correct option - select it
+                                this.classList.add('selected');
+                                chestSelection = position;
+                            } else {
+                                // Incorrect option - show red, don't select
+                                this.classList.add('wrong');
+                                chestSelection = null;
+                                setTimeout(() => {
+                                    this.classList.remove('wrong');
+                                }, 1000); // Keep red for 1 second
+                            }
+                        }
+                        
+                        // Check completion conditions
+                        const hasPAWrist = wristSelections.includes('PA Wrist');
+                        const hasLateralWrist = wristSelections.includes('Lateral Wrist');
+                        const hasPAChest = chestSelection === 'PA Chest';
+                        
+                        const wristComplete = hasPAWrist && hasLateralWrist;
+                        const chestComplete = hasPAChest;
+                        
+                        // Calculate current correct count
+                        let currentCorrect = 0;
+                        if (hasPAWrist) currentCorrect++;
+                        if (hasLateralWrist) currentCorrect++;
+                        if (hasPAChest) currentCorrect++;
+                        
+                        // Update state
+                        state.activities[2].correct = currentCorrect;
+                        
+                        // Check if activity is complete
+                        if (wristComplete && chestComplete) {
+                            state.activities[2].completed = true;
+                            state.activities[2].score = Math.round((currentCorrect / 3) * 100);
+                            
+                            status.textContent = 'Completed';
+                            status.style.color = '#00b894';
+                            document.querySelector('#activity-2').classList.add('completed');
+                            feedback.classList.add('show');
+                            
+                            // Disable further clicks
+                            positionOptions.forEach(opt => {
+                                opt.style.cursor = 'default';
+                                opt.style.pointerEvents = 'none';
+                            });
+                            
+                            updateProgressSummary();
+                        }
+                    });
+                });
+            }
+
+            // Reset All Activities
+            function resetAllActivities() {
+                // Reset state
+                Object.keys(state.activities).forEach(key => {
+                    state.activities[key] = {
+                        completed: false,
+                        correct: 0,
+                        total: parseInt(key) === 1 ? 6 : 3,
+                        score: 0
+                    };
+                });
+
+                // Reset UI - Activity 1
+                const radiationZone = document.getElementById('radiation-zone');
+                radiationZone.innerHTML = '';
+                radiationZone.classList.add('empty');
+                
+                document.querySelectorAll('#activity-1 .ppe-item').forEach(item => {
+                    item.style.display = '';
+                    item.classList.remove('correct', 'incorrect', 'dragging');
+                });
+                
+                radiationWarning.style.display = 'none';
+                
+                const feedback1 = document.getElementById('feedback-1');
+                feedback1.classList.remove('show');
+                
+                const status1 = document.querySelector('#activity-1 .activity-status');
+                status1.textContent = 'Not Started';
+                status1.style.color = '';
+                document.querySelector('#activity-1').classList.remove('completed');
+
+                // Reset UI - Activity 2
+                document.querySelectorAll('#activity-2 .position-option').forEach(option => {
+                    option.classList.remove('selected', 'wrong');
+                    option.style.cursor = 'pointer';
+                    option.style.pointerEvents = 'auto';
+                });
+                
+                const feedback2 = document.getElementById('feedback-2');
+                feedback2.classList.remove('show');
+                
+                const status2 = document.querySelector('#activity-2 .activity-status');
+                status2.textContent = 'Not Started';
+                status2.style.color = '';
+                document.querySelector('#activity-2').classList.remove('completed');
+
+                // Reset results
+                resultsPanel.classList.remove('show');
+
+                // Update progress
+                updateProgressSummary();
+            }
+
+            // Check All Answers
+            function checkAllAnswers() {
+                // Activity 1
+                if (!state.activities[1].completed) {
+                    const feedback = document.getElementById('feedback-1');
+                    const status = document.querySelector('#activity-1 .activity-status');
+                    
+                    // Auto-select correct items
+                    const correctItems = document.querySelectorAll('#activity-1 .ppe-item[data-correct="true"]');
+                    const radiationZone = document.getElementById('radiation-zone');
+                    radiationZone.innerHTML = '';
+                    radiationZone.classList.remove('empty');
+                    
+                    correctItems.forEach(item => {
+                        const div = document.createElement('div');
+                        div.textContent = item.textContent;
+                        div.className = 'ppe-item correct';
+                        div.style.cursor = 'default';
+                        radiationZone.appendChild(div);
+                        item.style.display = 'none';
+                    });
+                    
+                    state.activities[1].completed = true;
+                    state.activities[1].correct = 6;
+                    state.activities[1].score = 100;
+                    status.textContent = 'Completed';
+                    status.style.color = '#00b894';
+                    document.querySelector('#activity-1').classList.add('completed');
+                    feedback.classList.add('show');
+                }
+
+                // Activity 2
+                if (!state.activities[2].completed) {
+                    const feedback = document.getElementById('feedback-2');
+                    const status = document.querySelector('#activity-2 .activity-status');
+                    
+                    // Select correct options only (not incorrect ones)
+                    document.querySelectorAll('#activity-2 .position-option[data-correct="true"]').forEach(option => {
+                        option.classList.add('selected');
+                    });
+                    
+                    state.activities[2].completed = true;
+                    state.activities[2].correct = 3;
+                    state.activities[2].score = 100;
+                    status.textContent = 'Completed';
+                    status.style.color = '#00b894';
+                    document.querySelector('#activity-2').classList.add('completed');
+                    feedback.classList.add('show');
+                }
+
+                updateProgressSummary();
+            }
+
+            // View Final Results
+            function viewFinalResults() {
+                let totalScore = 0;
+                let activityCount = 0;
+                
+                Object.values(state.activities).forEach(activity => {
+                    if (activity.completed) {
+                        totalScore += activity.score;
+                        activityCount++;
+                    }
+                });
+                
+                const averageScore = activityCount > 0 ? Math.round(totalScore / activityCount) : 0;
+                finalScore.textContent = `${averageScore}%`;
+                resultsPanel.classList.add('show');
+                
+                // Scroll to results
+                resultsPanel.scrollIntoView({ behavior: 'smooth' });
+            }
+
+            // Initialize activities
+            initActivity1();
+            initActivity2();
+
+            // Event listeners
+            resetBtn.addEventListener('click', resetAllActivities);
+            checkBtn.addEventListener('click', checkAllAnswers);
+            resultsBtn.addEventListener('click', viewFinalResults);
+
+            // Initial progress update
+            updateProgressSummary();
+        });
+    </script>
+</body>
+</html>
