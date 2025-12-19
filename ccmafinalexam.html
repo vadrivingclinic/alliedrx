@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>AlliedRx CCMA Final Exam Module</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-warning: #fdcb6e;
+            --color-error: #e17055;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
+            --radius-lg: 24px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(circle at top left, #ffffff 0%, #f1ecff 40%, var(--color-bg) 100%);
+            color: var(--color-text);
+            -webkit-text-size-adjust: 100%;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 12px;
+            }
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px 30px;
+            display: grid;
+            grid-template-columns: minmax(0, 3.1fr) minmax(0, 2.4fr);
+            gap: 28px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes successPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        @media (max-width: 900px) {
+            .page {
+                grid-template-columns: 1fr;
+                padding: 22px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 0;
+            }
+            .page {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 18px 14px 22px;
+                gap: 22px;
+            }
+        }
+
+        /* Header & branding */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .exam-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+            font-size: 0.76rem;
+            font-weight: 600;
+            color: white;
+            white-space: normal;
+            animation: pulse 3s infinite;
+        }
+
+        .exam-badge-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: white;
+            flex-shrink: 0;
+            animation: blink 1.5s infinite;
+        }
+
+        h1 {
+            font-size: clamp(2rem, 3vw, 2.4rem);
+            line-height: 1.05;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 34rem;
+            margin-bottom: 18px;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        /* Course cards */
+        .course-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .course-card {
+            border-radius: 18px;
+            padding: 18px 20px;
+            border: 2px solid rgba(175, 75, 239, 0.1);
+            background: linear-gradient(135deg, rgba(175, 75, 239, 0.05), rgba(255, 255, 255, 0.95));
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .course-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.7s ease;
+        }
+
+        .course-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--color-primary-soft);
+        }
+
+        .course-card:hover::before {
+            left: 100%;
+        }
+
+        .course-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .course-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--color-text);
+        }
+
+        .weeks-pill {
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.1);
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            white-space: nowrap;
+        }
+
+        .course-content {
+            font-size: 0.9rem;
+            color: var(--color-muted);
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+
+        .exam-details {
+            display: flex;
+            gap: 15px;
+            font-size: 0.8rem;
+            color: var(--color-muted);
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Exam info boxes */
+        .info-box {
+            background: rgba(175, 75, 239, 0.05);
+            border-radius: 16px;
+            padding: 16px 18px;
+            margin: 20px 0;
+            border: 1px solid rgba(175, 75, 239, 0.1);
+            animation: fadeInUp 0.6s ease-out 0.5s both;
+        }
+
+        .info-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-content {
+            font-size: 0.86rem;
+            color: var(--color-text);
+            line-height: 1.5;
+        }
+
+        /* Checklist */
+        .checklist-heading {
+            font-size: 0.86rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-primary);
+            font-weight: 600;
+            margin-top: 24px;
+            margin-bottom: 12px;
+        }
+
+        .checklist {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-size: 0.86rem;
+            color: var(--color-text);
+        }
+
+        .checklist li {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            padding: 10px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: rgba(12, 10, 24, 0.02);
+        }
+
+        .checklist li:hover {
+            background: rgba(175, 75, 239, 0.05);
+            transform: translateX(5px);
+        }
+
+        .checklist li.completed {
+            opacity: 0.8;
+            background: rgba(0, 184, 148, 0.05);
+        }
+
+        .check-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 6px;
+            border: 2px solid rgba(148, 163, 184, 0.9);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.72rem;
+            color: rgba(148, 163, 184, 0.9);
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .checklist li.completed .check-dot {
+            background: var(--color-success);
+            border-color: var(--color-success);
+            color: white;
+        }
+
+        /* Action buttons */
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 18px;
+            border-radius: 12px;
+            border: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #9a3bd6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(175, 75, 239, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-text);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(12, 10, 24, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* Right column */
+        .section-tag {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-primary);
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .side-heading {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--color-text);
+            margin-bottom: 10px;
+        }
+
+        .side-card {
+            background: rgba(12, 10, 24, 0.94);
+            color: #e5e7eb;
+            border-radius: 18px;
+            padding: 20px 22px;
+            font-size: 0.88rem;
+            line-height: 1.7;
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.6);
+            margin-bottom: 14px;
+            transition: transform 0.3s ease;
+        }
+
+        .side-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .side-card strong {
+            color: #ffffff;
+        }
+
+        .side-subheading {
+            font-size: 0.86rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: #d492ff;
+            font-weight: 600;
+            margin: 14px 0 10px;
+        }
+
+        .side-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-size: 0.86rem;
+        }
+
+        .side-list li {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            transition: transform 0.3s ease;
+            padding: 4px 0;
+        }
+
+        .side-list li:hover {
+            transform: translateX(5px);
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            margin-top: 6px;
+            border-radius: 999px;
+            background: var(--color-accent);
+            flex-shrink: 0;
+        }
+
+        .tip-card {
+            margin-top: 14px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            background: rgba(15, 23, 42, 0.75);
+            padding: 14px 16px;
+            font-size: 0.82rem;
+            color: #e5e7eb;
+            transition: all 0.3s ease;
+        }
+
+        .tip-card:hover {
+            border-color: var(--color-primary-soft);
+            background: rgba(15, 23, 42, 0.9);
+        }
+
+        /* Online exam specific */
+        .online-exam-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 999px;
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--color-success);
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        /* Completion celebration */
+        .completion-celebration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .celebration-content {
+            background: white;
+            padding: 40px;
+            border-radius: var(--radius-lg);
+            text-align: center;
+            max-width: 500px;
+            animation: fadeInUp 0.5s ease;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+        }
+
+        .celebration-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: successPulse 2s infinite;
+        }
+
+        .celebration-title {
+            font-size: 1.8rem;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+        }
+
+        .celebration-text {
+            color: var(--color-muted);
+            margin-bottom: 20px;
+        }
+
+        .celebration-btn {
+            padding: 12px 24px;
+            background: var(--color-primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .celebration-btn:hover {
+            background: #9a3bd6;
+            transform: scale(1.05);
+        }
+
+        /* Progress tracker */
+        .progress-container {
+            margin: 20px 0;
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: 16px;
+            padding: 16px 18px;
+            border: 1px solid rgba(12, 10, 24, 0.06);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .progress-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-text);
+        }
+
+        .progress-percent {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: rgba(12, 10, 24, 0.08);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+            border-radius: 4px;
+            width: 0%;
+            transition: width 1s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="final-exam-heading">
+        <!-- LEFT COLUMN: Exam info & preparation -->
+        <section class="column" aria-label="Final exam preparation">
+            <header class="brand-row">
+                <div class="brand">
+                    <img
+                        src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                        alt="AlliedRx logo"
+                        class="brand-logo"
+                    />
+                    <div class="course-meta">
+                        <span class="course-name">Clinical Medical Assistant • CCMA Certification</span>
+                        <div class="exam-badge">
+                            <span class="exam-badge-dot"></span>
+                            <span>Final Exam Week</span>
+                        </div>
+                    </div>
+                </div>
+                <span class="weeks-pill">Weeks 1-16</span>
+            </header>
+
+            <h1 id="final-exam-heading">CCMA Final Exam Preparation</h1>
+            <p class="subtitle">
+                This week, you'll take the final exams for both CCMA courses. 
+                <strong>Both exams are closed textbook and closed notes</strong>, covering all material from Weeks 1 through 16.
+                <span class="online-exam-badge">Online Exam</span>
+            </p>
+
+            <!-- Progress tracker -->
+            <div class="progress-container">
+                <div class="progress-header">
+                    <span class="progress-title">Preparation Progress</span>
+                    <span class="progress-percent" id="progress-percent">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+            </div>
+
+            <!-- Course cards -->
+            <div class="course-grid">
+                <article class="course-card" id="course1-card">
+                    <div class="course-header">
+                        <h3 class="course-title">Fundamentals of Medical Specialties</h3>
+                        <span class="weeks-pill">Weeks 1-9</span>
+                    </div>
+                    <p class="course-content">
+                        Comprehensive coverage of medical specialties including cardiology, pulmonology, gastroenterology, 
+                        endocrinology, neurology, orthopedics, dermatology, ophthalmology, and otolaryngology.
+                    </p>
+                    <div class="exam-details">
+                        <div class="detail-item">📚 <span>Closed Book</span></div>
+                        <div class="detail-item">💻 <span>Online Exam</span></div>
+                        <div class="detail-item">🎯 <span>Comprehensive</span></div>
+                    </div>
+                </article>
+
+                <article class="course-card" id="course2-card">
+                    <div class="course-header">
+                        <h3 class="course-title">Fundamentals of Medical Assisting</h3>
+                        <span class="weeks-pill">Weeks 10-15</span>
+                    </div>
+                    <p class="course-content">
+                        Clinical skills, administrative procedures, patient communication, medical law and ethics, 
+                        infection control, vital signs, medication administration, and diagnostic testing.
+                    </p>
+                    <div class="exam-details">
+                        <div class="detail-item">📚 <span>Closed Book</span></div>
+                        <div class="detail-item">💻 <span>Online Exam</span></div>
+                        <div class="detail-item">🎯 <span>Comprehensive</span></div>
+                    </div>
+                </article>
+            </div>
+
+            <!-- Exam info boxes -->
+            <div class="info-box">
+                <div class="info-title">📋 Exam Format & Rules</div>
+                <div class="info-content">
+                    <p><strong>Both final exams are:</strong></p>
+                    <ul style="margin-left: 20px; margin-top: 8px;">
+                        <li>Closed textbook and closed notes</li>
+                        <li>Online format - accessible from your learning portal</li>
+                        <li>Comprehensive (Weeks 1-16 material)</li>
+                        <li>Timed examinations</li>
+                        <li>Multiple choice, matching, and scenario-based questions</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <div class="info-title">💻 Online Exam Preparation Checklist</div>
+                <div class="info-content">
+                    <p><strong>Before starting your online exam:</strong></p>
+                    <ul style="margin-left: 20px; margin-top: 8px;">
+                        <li>Ensure stable internet connection</li>
+                        <li>Use a fully charged device or keep charger nearby</li>
+                        <li>Close all unnecessary applications and browser tabs</li>
+                        <li>Find a quiet, distraction-free environment</li>
+                        <li>Have your login credentials ready</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Preparation checklist -->
+            <p class="checklist-heading">Final Exam Preparation Checklist</p>
+            <ul class="checklist" id="prep-checklist">
+                <li data-index="0">
+                    <span class="check-dot">□</span>
+                    <span>Review all lecture notes and PowerPoint slides from Weeks 1-16</span>
+                </li>
+                <li data-index="1">
+                    <span class="check-dot">□</span>
+                    <span>Complete practice questions for each major topic area</span>
+                </li>
+                <li data-index="2">
+                    <span class="check-dot">□</span>
+                    <span>Create summary sheets for key concepts and procedures</span>
+                </li>
+                <li data-index="3">
+                    <span class="check-dot">□</span>
+                    <span>Review medical terminology, abbreviations, and symbols</span>
+                </li>
+                <li data-index="4">
+                    <span class="check-dot">□</span>
+                    <span>Practice calculating medication dosages and conversions</span>
+                </li>
+                <li data-index="5">
+                    <span class="check-dot">□</span>
+                    <span>Study infection control protocols and OSHA guidelines</span>
+                </li>
+                <li data-index="6">
+                    <span class="check-dot">□</span>
+                    <span>Review ethical scenarios and legal responsibilities</span>
+                </li>
+                <li data-index="7">
+                    <span class="check-dot">□</span>
+                    <span>Test your technology setup before exam day</span>
+                </li>
+            </ul>
+
+            <!-- Action buttons (Practice Exam button removed) -->
+            <div class="action-buttons">
+                <button class="btn btn-primary" id="mark-all-prepared">
+                    <span class="btn-icon">✓</span>
+                    Mark All as Prepared
+                </button>
+                <button class="btn btn-secondary" id="reset-prep">
+                    <span class="btn-icon">↺</span>
+                    Reset Preparation
+                </button>
+            </div>
+        </section>
+
+        <!-- RIGHT COLUMN: Strategies & tips -->
+        <aside class="column" aria-label="Exam strategies and success tips">
+            <p class="section-tag">Success Strategies</p>
+            <h2 class="side-heading">Online Exam Success Guide</h2>
+            
+            <div class="side-card">
+                <p>
+                    <strong>Online Exam Strategy:</strong> Test your technology in advance, ensure a quiet environment, 
+                    eliminate distractions, and have your materials organized before starting.
+                </p>
+                
+                <p class="side-subheading">Online Test-Taking Strategies:</p>
+                <ul class="side-list">
+                    <li>
+                        <span class="dot"></span>
+                        <span><strong>Technical Check:</strong> Test your internet connection and browser compatibility 30 minutes before exam time</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span><strong>Time Management:</strong> Monitor the timer, allocate time based on question points, flag difficult questions</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span><strong>Read Carefully:</strong> Look for keywords like "first," "best," "contraindicated," "priority" in online format</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span><strong>Save Frequently:</strong> If allowed, save your progress periodically to avoid losing work</span>
+                    </li>
+                </ul>
+
+                <div class="tip-card">
+                    <strong>Memory Aid for Medical Specialties:</strong>
+                    <ul style="margin-top: 8px; padding-left: 20px;">
+                        <li><strong>C</strong>ardiology: Heart sounds, EKGs, hypertension</li>
+                        <li><strong>P</strong>ulmonology: Spirometry, asthma, COPD care</li>
+                        <li><strong>G</strong>astroenterology: Digestive procedures, nutrition</li>
+                        <li><strong>E</strong>ndocrinology: Diabetes management, hormone disorders</li>
+                    </ul>
+                </div>
+
+                <div class="tip-card" style="margin-top: 12px;">
+                    <strong>Clinical Skills Review Focus:</strong>
+                    <ul style="margin-top: 8px; padding-left: 20px;">
+                        <li>Proper hand hygiene and PPE use</li>
+                        <li>Accurate vital signs measurement</li>
+                        <li>Medication administration rights (5 rights + 3 checks)</li>
+                        <li>Patient positioning for various procedures</li>
+                        <li>Infection control chain of infection</li>
+                    </ul>
+                </div>
+
+                <p class="side-subheading" style="margin-top: 16px;">Week 16 Final Exam Topics:</p>
+                <ul class="side-list">
+                    <li><span class="dot"></span><span>Comprehensive review of all course objectives</span></li>
+                    <li><span class="dot"></span><span>Integration of clinical and administrative skills</span></li>
+                    <li><span class="dot"></span><span>Critical thinking application to patient scenarios</span></li>
+                    <li><span class="dot"></span><span>Ethical decision-making in medical assisting</span></li>
+                </ul>
+            </div>
+
+            <div class="side-card">
+                <p class="side-subheading">Good Luck & Best Wishes!</p>
+                <p style="font-size: 1.1rem; text-align: center; margin: 15px 0; color: #d492ff;">
+                    You've worked hard through 16 weeks of intensive study. 
+                    Trust your preparation and knowledge.
+                </p>
+                <p style="text-align: center; font-size: 2rem; margin: 20px 0; color: var(--color-success);">
+                    100%
+                </p>
+                <p style="text-align: center; font-style: italic;">
+                    "The final exam is your opportunity to demonstrate the comprehensive 
+                    knowledge and skills you've developed as a future Clinical Medical Assistant."
+                </p>
+            </div>
+        </aside>
+    </main>
+
+    <!-- Completion Celebration Modal -->
+    <div class="completion-celebration" id="celebration-modal">
+        <div class="celebration-content">
+            <div class="celebration-icon">🏆</div>
+            <h2 class="celebration-title">Ready for Exam Success!</h2>
+            <p class="celebration-text">
+                Excellent preparation! You've completed all study tasks and are now 
+                fully prepared for your CCMA final exams.
+            </p>
+            <p class="celebration-text">
+                Remember: Read questions carefully, trust your first instinct, 
+                manage your time wisely, and ensure a stable internet connection.
+            </p>
+            <button class="celebration-btn" id="close-celebration">Continue to Exam Portal</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // State management
+            let prepState = {
+                course1Reviewed: false,
+                course2Reviewed: false,
+                checklist: [false, false, false, false, false, false, false, false]
+            };
+
+            // DOM elements
+            const course1Card = document.getElementById('course1-card');
+            const course2Card = document.getElementById('course2-card');
+            const checklistItems = document.querySelectorAll('#prep-checklist li');
+            const progressFill = document.getElementById('progress-fill');
+            const progressPercent = document.getElementById('progress-percent');
+            const markAllBtn = document.getElementById('mark-all-prepared');
+            const resetBtn = document.getElementById('reset-prep');
+            const celebrationModal = document.getElementById('celebration-modal');
+            const closeCelebrationBtn = document.getElementById('close-celebration');
+
+            // Calculate progress
+            function calculateProgress() {
+                const totalItems = 10; // 2 courses + 8 checklist items
+                let completed = 0;
+
+                if (prepState.course1Reviewed) completed++;
+                if (prepState.course2Reviewed) completed++;
+                
+                prepState.checklist.forEach(item => {
+                    if (item) completed++;
+                });
+
+                const percentage = Math.round((completed / totalItems) * 100);
+                
+                // Update progress bar
+                progressFill.style.width = `${percentage}%`;
+                progressPercent.textContent = `${percentage}%`;
+                
+                // Update progress bar color based on completion
+                if (percentage === 100) {
+                    progressFill.style.background = 'linear-gradient(90deg, var(--color-success), #00d2a0)';
+                    progressPercent.style.color = 'var(--color-success)';
+                    showCelebration();
+                } else if (percentage >= 75) {
+                    progressFill.style.background = 'linear-gradient(90deg, #00b894, var(--color-primary))';
+                    progressPercent.style.color = '#00b894';
+                } else if (percentage >= 50) {
+                    progressFill.style.background = 'linear-gradient(90deg, var(--color-warning), var(--color-primary))';
+                    progressPercent.style.color = 'var(--color-warning)';
+                } else {
+                    progressFill.style.background = 'linear-gradient(90deg, var(--color-primary), var(--color-accent))';
+                    progressPercent.style.color = 'var(--color-primary)';
+                }
+
+                return percentage;
+            }
+
+            // Toggle course review
+            function toggleCourse(course) {
+                const card = course === 1 ? course1Card : course2Card;
+                const isCompleted = course === 1 ? prepState.course1Reviewed : prepState.course2Reviewed;
+
+                if (isCompleted) {
+                    // Mark as incomplete
+                    card.style.borderColor = 'rgba(175, 75, 239, 0.1)';
+                    card.style.background = 'linear-gradient(135deg, rgba(175, 75, 239, 0.05), rgba(255, 255, 255, 0.95))';
+                    
+                    if (course === 1) {
+                        prepState.course1Reviewed = false;
+                    } else {
+                        prepState.course2Reviewed = false;
+                    }
+                } else {
+                    // Mark as complete
+                    card.style.borderColor = 'var(--color-success)';
+                    card.style.background = 'linear-gradient(135deg, rgba(0, 184, 148, 0.1), rgba(255, 255, 255, 0.95))';
+                    
+                    if (course === 1) {
+                        prepState.course1Reviewed = true;
+                    } else {
+                        prepState.course2Reviewed = true;
+                    }
+                    
+                    // Add animation
+                    card.style.transform = 'scale(1.02)';
+                    setTimeout(() => {
+                        card.style.transform = '';
+                    }, 300);
+                }
+
+                calculateProgress();
+            }
+
+            // Toggle checklist item
+            function toggleChecklistItem(index) {
+                const item = checklistItems[index];
+                const dot = item.querySelector('.check-dot');
+                
+                prepState.checklist[index] = !prepState.checklist[index];
+                
+                if (prepState.checklist[index]) {
+                    item.classList.add('completed');
+                    dot.textContent = '✓';
+                    dot.style.background = 'var(--color-success)';
+                    dot.style.borderColor = 'var(--color-success)';
+                    dot.style.color = 'white';
+                } else {
+                    item.classList.remove('completed');
+                    dot.textContent = '□';
+                    dot.style.background = '';
+                    dot.style.borderColor = 'rgba(148, 163, 184, 0.9)';
+                    dot.style.color = 'rgba(148, 163, 184, 0.9)';
+                }
+                
+                calculateProgress();
+            }
+
+            // Mark all as prepared
+            function markAllAsPrepared() {
+                // Mark both courses
+                prepState.course1Reviewed = true;
+                prepState.course2Reviewed = true;
+                
+                course1Card.style.borderColor = 'var(--color-success)';
+                course1Card.style.background = 'linear-gradient(135deg, rgba(0, 184, 148, 0.1), rgba(255, 255, 255, 0.95))';
+                
+                course2Card.style.borderColor = 'var(--color-success)';
+                course2Card.style.background = 'linear-gradient(135deg, rgba(0, 184, 148, 0.1), rgba(255, 255, 255, 0.95))';
+                
+                // Mark all checklist items
+                prepState.checklist = [true, true, true, true, true, true, true, true];
+                
+                checklistItems.forEach((item, index) => {
+                    item.classList.add('completed');
+                    const dot = item.querySelector('.check-dot');
+                    dot.textContent = '✓';
+                    dot.style.background = 'var(--color-success)';
+                    dot.style.borderColor = 'var(--color-success)';
+                    dot.style.color = 'white';
+                });
+                
+                calculateProgress();
+                
+                // Celebration animation
+                const cards = document.querySelectorAll('.course-card');
+                cards.forEach(card => {
+                    card.style.transform = 'scale(1.05)';
+                    setTimeout(() => {
+                        card.style.transform = '';
+                    }, 300);
+                });
+            }
+
+            // Reset preparation
+            function resetPreparation() {
+                // Reset courses
+                prepState.course1Reviewed = false;
+                prepState.course2Reviewed = false;
+                
+                course1Card.style.borderColor = 'rgba(175, 75, 239, 0.1)';
+                course1Card.style.background = 'linear-gradient(135deg, rgba(175, 75, 239, 0.05), rgba(255, 255, 255, 0.95))';
+                
+                course2Card.style.borderColor = 'rgba(175, 75, 239, 0.1)';
+                course2Card.style.background = 'linear-gradient(135deg, rgba(175, 75, 239, 0.05), rgba(255, 255, 255, 0.95))';
+                
+                // Reset checklist
+                prepState.checklist = [false, false, false, false, false, false, false, false];
+                
+                checklistItems.forEach((item, index) => {
+                    item.classList.remove('completed');
+                    const dot = item.querySelector('.check-dot');
+                    dot.textContent = '□';
+                    dot.style.background = '';
+                    dot.style.borderColor = 'rgba(148, 163, 184, 0.9)';
+                    dot.style.color = 'rgba(148, 163, 184, 0.9)';
+                });
+                
+                calculateProgress();
+            }
+
+            // Show celebration modal
+            function showCelebration() {
+                setTimeout(() => {
+                    celebrationModal.style.display = 'flex';
+                }, 500);
+            }
+
+            // Close celebration modal
+            function closeCelebration() {
+                celebrationModal.style.display = 'none';
+                // In a real implementation, this would redirect to exam portal
+                alert('This would redirect to the exam portal. Your exams will be available in your learning management system.');
+            }
+
+            // Event listeners
+            course1Card.addEventListener('click', () => toggleCourse(1));
+            course2Card.addEventListener('click', () => toggleCourse(2));
+            
+            course1Card.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    toggleCourse(1);
+                }
+            });
+            
+            course2Card.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    toggleCourse(2);
+                }
+            });
+
+            checklistItems.forEach((item, index) => {
+                item.addEventListener('click', () => toggleChecklistItem(index));
+                item.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        toggleChecklistItem(index);
+                    }
+                });
+            });
+
+            markAllBtn.addEventListener('click', markAllAsPrepared);
+            resetBtn.addEventListener('click', resetPreparation);
+            closeCelebrationBtn.addEventListener('click', closeCelebration);
+
+            // Close modal when clicking outside
+            celebrationModal.addEventListener('click', (e) => {
+                if (e.target === celebrationModal) {
+                    closeCelebration();
+                }
+            });
+
+            // Initialize with some progress for demo
+            setTimeout(() => {
+                // Mark first few items as completed for demo
+                toggleChecklistItem(0);
+                toggleChecklistItem(7); // Technology test
+            }, 1000);
+
+            // Add scroll animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Observe course cards
+            const courseCards = document.querySelectorAll('.course-card');
+            courseCards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                observer.observe(card);
+            });
+
+            // Observe checklist items with delay
+            checklistItems.forEach((item, index) => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateX(-20px)';
+                item.style.transition = `opacity 0.5s ease ${index * 0.1}s, transform 0.5s ease ${index * 0.1}s`;
+                observer.observe(item);
+            });
+        });
+    </script>
+</body>
+</html>
