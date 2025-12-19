@@ -1,0 +1,1296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AlliedRx - Chapter 29: Assisting in Blood Collection</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-error: #e17055;
+            --color-warning: #fdcb6e;
+            --color-info: #0984e3;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
+            --color-dark: #0c0a18;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+            --shadow-card: 0 12px 30px rgba(15, 23, 42, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 20px;
+            background: radial-gradient(circle at top left, #ffffff 0, #f1ecff 40%, var(--color-bg) 100%);
+            color: var(--color-text);
+            line-height: 1.5;
+        }
+
+        .page {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 24px;
+        }
+
+        /* Header */
+        .brand-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-logo {
+            height: 40px;
+            filter: drop-shadow(0 3px 8px rgba(0,0,0,0.2));
+        }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .course-name {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--color-muted);
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            background: rgba(175, 75, 239, 0.08);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: var(--color-primary);
+        }
+
+        .week-label-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--color-success);
+            border-radius: 50%;
+        }
+
+        .badge-mode {
+            padding: 4px 10px;
+            background: rgba(12, 10, 24, 0.06);
+            border-radius: 20px;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--color-muted);
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            color: var(--color-primary);
+            margin-bottom: 8px;
+        }
+
+        .module-subtitle {
+            color: var(--color-muted);
+            margin-bottom: 24px;
+            font-size: 0.9rem;
+        }
+
+        /* Progress Tracker */
+        .progress-tracker {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin: 30px auto;
+            max-width: 400px;
+            position: relative;
+        }
+
+        .progress-tracker::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 20%;
+            right: 20%;
+            height: 2px;
+            background: rgba(12, 10, 24, 0.1);
+            z-index: 1;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 2;
+            position: relative;
+        }
+
+        .step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .progress-step.active .step-circle {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+            color: white;
+        }
+
+        .progress-step.completed .step-circle {
+            background: var(--color-success);
+            border-color: var(--color-success);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.75rem;
+            color: var(--color-muted);
+        }
+
+        .progress-step.active .step-label {
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        /* Progress Summary */
+        .progress-summary {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .summary-card {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-md);
+            padding: 15px;
+            text-align: center;
+            border: 1px solid rgba(12, 10, 24, 0.06);
+        }
+
+        .summary-number {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--color-primary);
+            display: block;
+        }
+
+        .summary-label {
+            font-size: 0.75rem;
+            color: var(--color-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Activity Grid */
+        .activity-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .activity-card {
+            background: white;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            padding: 20px;
+        }
+
+        .activity-card.completed {
+            border-color: var(--color-success);
+        }
+
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .activity-number {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .activity-status {
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            background: rgba(12, 10, 24, 0.06);
+            border-radius: 12px;
+            color: var(--color-muted);
+        }
+
+        .activity-card.completed .activity-status {
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--color-success);
+        }
+
+        .activity-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .activity-description {
+            font-size: 0.9rem;
+            color: var(--color-muted);
+            margin-bottom: 20px;
+        }
+
+        /* Activity 1: Equipment Setup - SIMPLIFIED */
+        .equipment-container {
+            margin: 20px 0;
+        }
+
+        .setup-stations {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .station {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 2px dashed rgba(12, 10, 24, 0.1);
+            min-height: 150px;
+        }
+
+        .station-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .station-content {
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .equipment-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .equipment-option {
+            background: rgba(12, 10, 24, 0.05);
+            border-radius: 20px;
+            padding: 10px 16px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .equipment-option:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+        }
+
+        .equipment-option.used {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        /* Activity 2: Order of Draw - CLICK-BASED (NO DRAG) */
+        .order-instructions {
+            background: rgba(175, 75, 239, 0.05);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin: 20px 0;
+            border: 1px solid rgba(175, 75, 239, 0.1);
+            font-size: 0.9rem;
+        }
+
+        .order-sequence {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .sequence-step {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px;
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            border: 2px dashed rgba(12, 10, 24, 0.1);
+            min-height: 60px;
+        }
+
+        .step-number {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(12, 10, 24, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+            font-size: 0.9rem;
+        }
+
+        .tube-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .tube-option {
+            background: rgba(12, 10, 24, 0.05);
+            border-radius: 20px;
+            padding: 12px 18px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            border: 2px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .tube-option:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+        }
+
+        .tube-option.selected {
+            background: rgba(0, 184, 148, 0.1);
+            border-color: var(--color-success);
+        }
+
+        .tube-option.used {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .tube-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            border: 1px solid rgba(0,0,0,0.2);
+        }
+
+        /* Patient Scenarios */
+        .scenario-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin: 20px 0;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+        }
+
+        .scenario-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 8px;
+        }
+
+        .scenario-description {
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+        }
+
+        .scenario-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .option-btn {
+            padding: 12px 15px;
+            background: white;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            padding-left: 40px;
+        }
+
+        .option-btn:hover {
+            border-color: var(--color-primary-soft);
+            background: rgba(175, 75, 239, 0.05);
+        }
+
+        .option-btn.selected {
+            background: rgba(0, 184, 148, 0.1);
+            border-color: var(--color-success);
+        }
+
+        .option-btn.wrong {
+            background: rgba(225, 112, 85, 0.1);
+            border-color: var(--color-error);
+        }
+
+        .option-number {
+            position: absolute;
+            left: 12px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: rgba(12, 10, 24, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .option-btn.selected .option-number {
+            background: var(--color-success);
+            color: white;
+        }
+
+        /* Feedback */
+        .feedback-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin-top: 20px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            display: none;
+        }
+
+        .feedback-container.show {
+            display: block;
+        }
+
+        .feedback-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feedback-icon {
+            font-size: 1.2rem;
+        }
+
+        .feedback-icon.correct {
+            color: var(--color-success);
+        }
+
+        .feedback-content {
+            font-size: 0.85rem;
+        }
+
+        .error-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            margin: 5px 0;
+            font-size: 0.8rem;
+            color: var(--color-error);
+        }
+
+        .error-item::before {
+            content: "✗";
+            color: var(--color-error);
+        }
+
+        .success-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            margin: 5px 0;
+            font-size: 0.8rem;
+            color: var(--color-success);
+        }
+
+        .success-item::before {
+            content: "✓";
+            color: var(--color-success);
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: var(--radius-md);
+            border: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #9a3bd6;
+        }
+
+        .btn-secondary {
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-text);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(12, 10, 24, 0.1);
+        }
+
+        /* Results Panel */
+        .results-panel {
+            background: var(--color-dark);
+            color: white;
+            border-radius: var(--radius-md);
+            padding: 25px;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .results-panel.show {
+            display: block;
+        }
+
+        .results-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .score-display {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--color-primary-soft);
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .clinical-insights {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .insights-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--color-primary-soft);
+            margin-bottom: 10px;
+        }
+
+        .insights-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .insights-list li {
+            display: flex;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: #e5e7eb;
+        }
+
+        .insight-dot {
+            width: 6px;
+            height: 6px;
+            margin-top: 6px;
+            border-radius: 50%;
+            background: var(--color-accent);
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <!-- Header -->
+        <header class="brand-row">
+            <div class="brand">
+                <img src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png" alt="AlliedRx logo" class="brand-logo">
+                <div class="course-meta">
+                    <span class="course-name">Clinical Medical Assistant • Week 7</span>
+                    <div class="week-label">
+                        <span class="week-label-dot"></span>
+                        <span>Chapter 29: Assisting in Blood Collection</span>
+                    </div>
+                </div>
+            </div>
+            <span class="badge-mode">Campus &amp; Online</span>
+        </header>
+
+        <h1>Phlebotomy Fundamentals</h1>
+        <p class="module-subtitle">
+            Master essential blood collection skills through interactive practice with equipment selection, 
+            order of draw, and patient scenario decision-making.
+        </p>
+
+        <!-- Progress Tracker -->
+        <div class="progress-tracker">
+            <div class="progress-step active" data-step="1">
+                <div class="step-circle">1</div>
+                <div class="step-label">Equipment Setup</div>
+            </div>
+            <div class="progress-step" data-step="2">
+                <div class="step-circle">2</div>
+                <div class="step-label">Order & Scenarios</div>
+            </div>
+        </div>
+
+        <!-- Progress Summary -->
+        <div class="progress-summary">
+            <div class="summary-card">
+                <span class="summary-number" id="completed-count">0</span>
+                <span class="summary-label">Activities Completed</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="accuracy-rate">0%</span>
+                <span class="summary-label">Current Accuracy</span>
+            </div>
+        </div>
+
+        <!-- Activity Grid -->
+        <div class="activity-grid">
+            <!-- Activity 1: SIMPLIFIED - Click to place items -->
+            <section class="activity-card" id="activity-1">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 1</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">Venipuncture Equipment Setup</h3>
+                <p class="activity-description">
+                    Click equipment items to place them in the correct station: Routine Venipuncture or Pediatric/Capillary Setup.
+                </p>
+
+                <div class="equipment-container">
+                    <div class="setup-stations">
+                        <div class="station" id="routine-station">
+                            <div class="station-title">Routine Venipuncture</div>
+                            <div class="station-content" id="routine-content"></div>
+                        </div>
+                        <div class="station" id="pediatric-station">
+                            <div class="station-title">Pediatric/Capillary</div>
+                            <div class="station-content" id="pediatric-content"></div>
+                        </div>
+                    </div>
+
+                    <div class="equipment-options" id="equipment-options">
+                        <div class="equipment-option" data-category="routine">21G Safety Needle</div>
+                        <div class="equipment-option" data-category="pediatric">23G Butterfly Needle</div>
+                        <div class="equipment-option" data-category="routine">Tourniquet</div>
+                        <div class="equipment-option" data-category="both">Alcohol Prep Pad</div>
+                        <div class="equipment-option" data-category="routine">Evacuated Tubes</div>
+                        <div class="equipment-option" data-category="pediatric">Microtainer Tubes</div>
+                        <div class="equipment-option" data-category="pediatric">Lancet Device</div>
+                        <div class="equipment-option" data-category="both">Gauze Pads</div>
+                        <div class="equipment-option" data-category="both">Adhesive Bandage</div>
+                        <div class="equipment-option" data-category="routine">Needle Disposal</div>
+                        <div class="equipment-option" data-category="pediatric">Warming Device</div>
+                        <div class="equipment-option" data-category="pediatric">Pediatric Restraints</div>
+                    </div>
+                </div>
+
+                <div class="feedback-container" id="feedback-1">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Equipment Setup Complete!
+                    </div>
+                    <div class="feedback-content">
+                        <div id="equipment-feedback"></div>
+                        <p><strong>Key Learning Points:</strong></p>
+                        <p>• 21G needles are standard for adult venipuncture<br>
+                           • 23G butterfly needles are for fragile veins, elderly, and pediatric patients<br>
+                           • Microtainers and lancets are used for capillary puncture in children<br>
+                           • Warming devices increase blood flow for capillary draws</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity 2: SIMPLIFIED - Click to sequence -->
+            <section class="activity-card" id="activity-2">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 2</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">Order of Draw & Patient Scenarios</h3>
+                <p class="activity-description">
+                    Click tubes in the correct order of draw, then respond to patient scenarios.
+                </p>
+
+                <div class="order-instructions">
+                    <strong>Instructions:</strong> Click the tubes in the correct order from 1st to 5th.
+                    Correct order: Blood Culture → Light Blue → Gold/Red → Green → Lavender
+                </div>
+
+                <div class="order-sequence" id="order-sequence">
+                    <div class="sequence-step" data-step="1">
+                        <div class="step-number">1</div>
+                        <div class="step-content" id="step-1-content">First: Click correct tube</div>
+                    </div>
+                    <div class="sequence-step" data-step="2">
+                        <div class="step-number">2</div>
+                        <div class="step-content" id="step-2-content">Second: Click correct tube</div>
+                    </div>
+                    <div class="sequence-step" data-step="3">
+                        <div class="step-number">3</div>
+                        <div class="step-content" id="step-3-content">Third: Click correct tube</div>
+                    </div>
+                    <div class="sequence-step" data-step="4">
+                        <div class="step-number">4</div>
+                        <div class="step-content" id="step-4-content">Fourth: Click correct tube</div>
+                    </div>
+                    <div class="sequence-step" data-step="5">
+                        <div class="step-number">5</div>
+                        <div class="step-content" id="step-5-content">Fifth: Click correct tube</div>
+                    </div>
+                </div>
+
+                <div class="tube-options" id="tube-options">
+                    <div class="tube-option" data-order="1" data-test="Blood Culture">
+                        <div class="tube-color" style="background: #ff6b6b;"></div>
+                        <span>Blood Culture (Yellow)</span>
+                    </div>
+                    <div class="tube-option" data-order="2" data-test="Coagulation">
+                        <div class="tube-color" style="background: #4d96ff;"></div>
+                        <span>Light Blue (Coagulation)</span>
+                    </div>
+                    <div class="tube-option" data-order="3" data-test="Serum">
+                        <div class="tube-color" style="background: #ffd166;"></div>
+                        <span>Gold/Red (Serum)</span>
+                    </div>
+                    <div class="tube-option" data-order="4" data-test="Heparin">
+                        <div class="tube-color" style="background: #06d6a0;"></div>
+                        <span>Green (Heparin)</span>
+                    </div>
+                    <div class="tube-option" data-order="5" data-test="EDTA">
+                        <div class="tube-color" style="background: #9d4edd;"></div>
+                        <span>Lavender (EDTA)</span>
+                    </div>
+                </div>
+
+                <!-- Scenario 1 -->
+                <div class="scenario-container">
+                    <div class="scenario-title">Scenario 1: Elderly Patient with Fragile Veins</div>
+                    <div class="scenario-description">
+                        Mrs. Chen, 82 years old, needs a CBC and basic metabolic panel. 
+                        She has thin, fragile veins and is on anticoagulant therapy.
+                    </div>
+                    <div class="scenario-options">
+                        <button class="option-btn" data-scenario="1" data-answer="A">
+                            <span class="option-number">A</span>
+                            Use 21G needle, apply tourniquet tightly, collect all tubes rapidly
+                        </button>
+                        <button class="option-btn" data-scenario="1" data-answer="B">
+                            <span class="option-number">B</span>
+                            Use 23G butterfly needle, apply tourniquet loosely or omit, use gentle pressure
+                        </button>
+                        <button class="option-btn" data-scenario="1" data-answer="C">
+                            <span class="option-number">C</span>
+                            Use capillary puncture for all tests to avoid venipuncture
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Scenario 2 -->
+                <div class="scenario-container">
+                    <div class="scenario-title">Scenario 2: Pediatric Blood Draw</div>
+                    <div class="scenario-description">
+                        Liam, 3 years old, needs blood drawn for lead level testing only. 
+                        He is anxious and moving. Parents are present.
+                    </div>
+                    <div class="scenario-options">
+                        <button class="option-btn" data-scenario="2" data-answer="A">
+                            <span class="option-number">A</span>
+                            Have parent hold child tightly, use 21G needle for quick draw
+                        </button>
+                        <button class="option-btn" data-scenario="2" data-answer="B">
+                            <span class="option-number">B</span>
+                            Use capillary puncture with lancet, warm heel/finger first
+                        </button>
+                        <button class="option-btn" data-scenario="2" data-answer="C">
+                            <span class="option-number">C</span>
+                            Use 23G butterfly with distraction techniques
+                        </button>
+                    </div>
+                </div>
+
+                <div class="feedback-container" id="feedback-2">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Clinical Decision-Making Complete!
+                    </div>
+                    <div class="feedback-content">
+                        <div id="order-feedback"></div>
+                        <div id="scenario-feedback"></div>
+                        <p><strong>Clinical Reasoning Tips:</strong></p>
+                        <p>• Order of draw prevents contamination between tubes<br>
+                           • Always assess patient veins before selecting equipment<br>
+                           • Capillary puncture is less traumatic for pediatric single tests</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn btn-secondary" id="reset-all-btn">
+                ↻ Reset All Activities
+            </button>
+            <button class="btn btn-primary" id="view-results-btn">
+                📊 View Results
+            </button>
+        </div>
+
+        <!-- Results Panel -->
+        <div class="results-panel" id="results-panel">
+            <h2 class="results-title">Phlebotomy Fundamentals Results</h2>
+            <div class="score-display" id="final-score">0%</div>
+            
+            <div class="clinical-insights">
+                <h3 class="insights-title">Clinical Proficiency Insights</h3>
+                <ul class="insights-list">
+                    <li><span class="insight-dot"></span>Match needle size to patient characteristics</li>
+                    <li><span class="insight-dot"></span>Blood cultures first to prevent contamination</li>
+                    <li><span class="insight-dot"></span>Elderly patients require gentle technique</li>
+                    <li><span class="insight-dot"></span>Always use safety-engineered devices</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // State Management
+            const state = {
+                activities: {
+                    1: { completed: false, correct: 0, total: 12, score: 0 },
+                    2: { completed: false, correct: 0, total: 7, score: 0 }
+                },
+                currentActivity: 1
+            };
+
+            // DOM Elements
+            const completedCount = document.getElementById('completed-count');
+            const accuracyRate = document.getElementById('accuracy-rate');
+            const resetBtn = document.getElementById('reset-all-btn');
+            const resultsBtn = document.getElementById('view-results-btn');
+            const resultsPanel = document.getElementById('results-panel');
+            const finalScore = document.getElementById('final-score');
+
+            // Correct answers
+            const correctEquipment = {
+                'routine': ['21G Safety Needle', 'Tourniquet', 'Evacuated Tubes', 'Needle Disposal'],
+                'pediatric': ['23G Butterfly Needle', 'Microtainer Tubes', 'Lancet Device', 'Warming Device', 'Pediatric Restraints'],
+                'both': ['Alcohol Prep Pad', 'Gauze Pads', 'Adhesive Bandage']
+            };
+
+            const correctOrder = ['1', '2', '3', '4', '5']; // Tube order numbers
+            const correctScenarioAnswers = {
+                '1': 'B', // Elderly patient
+                '2': 'B'  // Pediatric
+            };
+
+            // Update Progress Summary
+            function updateProgressSummary() {
+                let completed = 0;
+                let totalCorrect = 0;
+                let totalItems = 0;
+
+                Object.values(state.activities).forEach(activity => {
+                    if (activity.completed) completed++;
+                    totalCorrect += activity.correct;
+                    totalItems += activity.total;
+                });
+
+                completedCount.textContent = completed;
+                const accuracy = totalItems > 0 ? Math.round((totalCorrect / totalItems) * 100) : 0;
+                accuracyRate.textContent = `${accuracy}%`;
+
+                // Update progress steps
+                document.querySelectorAll('.progress-step').forEach((step, index) => {
+                    if (index < completed) {
+                        step.classList.add('completed');
+                        step.classList.remove('active');
+                    } else if (index === completed) {
+                        step.classList.add('active');
+                        step.classList.remove('completed');
+                    } else {
+                        step.classList.remove('active', 'completed');
+                    }
+                });
+            }
+
+            // Activity 1: Equipment Setup - CLICK BASED
+            function initActivity1() {
+                const equipmentOptions = document.querySelectorAll('.equipment-option');
+                const routineContent = document.getElementById('routine-content');
+                const pediatricContent = document.getElementById('pediatric-content');
+                const feedback = document.getElementById('feedback-1');
+                const feedbackContent = document.getElementById('equipment-feedback');
+                const status = document.querySelector('#activity-1 .activity-status');
+
+                let placedItems = 0;
+                let correctPlacements = 0;
+                let errors = [];
+                let successes = [];
+
+                equipmentOptions.forEach(option => {
+                    option.addEventListener('click', function() {
+                        if (this.classList.contains('used')) return;
+
+                        const itemText = this.textContent;
+                        const category = this.dataset.category;
+                        
+                        // Determine which station to place in
+                        let targetStation;
+                        let isCorrect = false;
+                        
+                        if (category === 'routine') {
+                            targetStation = routineContent;
+                            isCorrect = correctEquipment.routine.includes(itemText);
+                        } else if (category === 'pediatric') {
+                            targetStation = pediatricContent;
+                            isCorrect = correctEquipment.pediatric.includes(itemText);
+                        } else if (category === 'both') {
+                            // Place in both stations (first click goes to routine, second to pediatric)
+                            if (!this.dataset.placed) {
+                                targetStation = routineContent;
+                                this.dataset.placed = 'routine';
+                                isCorrect = true;
+                            } else if (this.dataset.placed === 'routine') {
+                                targetStation = pediatricContent;
+                                this.dataset.placed = 'both';
+                                isCorrect = true;
+                            } else {
+                                return; // Already placed in both
+                            }
+                        }
+
+                        if (targetStation) {
+                            // Create placed item
+                            const placedDiv = document.createElement('div');
+                            placedDiv.textContent = itemText;
+                            placedDiv.style.padding = '6px 10px';
+                            placedDiv.style.margin = '4px 0';
+                            placedDiv.style.borderRadius = '8px';
+                            placedDiv.style.fontSize = '0.8rem';
+                            placedDiv.style.background = isCorrect ? 'rgba(0, 184, 148, 0.1)' : 'rgba(225, 112, 85, 0.1)';
+                            
+                            targetStation.appendChild(placedDiv);
+                            
+                            // Mark as used
+                            if (category !== 'both' || this.dataset.placed === 'both') {
+                                this.classList.add('used');
+                                placedItems++;
+                            }
+                            
+                            // Track correctness
+                            if (isCorrect) {
+                                correctPlacements++;
+                                successes.push(itemText);
+                            } else {
+                                // Determine correct station
+                                let correctStation = 'Unknown';
+                                if (correctEquipment.routine.includes(itemText)) correctStation = 'Routine Venipuncture';
+                                if (correctEquipment.pediatric.includes(itemText)) correctStation = 'Pediatric/Capillary';
+                                if (correctEquipment.both.includes(itemText)) correctStation = 'Both Stations';
+                                errors.push(`${itemText} should be in ${correctStation}`);
+                            }
+
+                            // Check completion
+                            if (placedItems === 12) {
+                                state.activities[1].completed = true;
+                                state.activities[1].correct = correctPlacements;
+                                state.activities[1].score = Math.round((correctPlacements / 12) * 100);
+                                
+                                status.textContent = 'Completed';
+                                status.style.color = '#00b894';
+                                document.getElementById('activity-1').classList.add('completed');
+                                feedback.classList.add('show');
+                                
+                                // Show feedback
+                                let feedbackHTML = '';
+                                if (errors.length > 0) {
+                                    feedbackHTML += '<div style="color: var(--color-error); margin-bottom: 10px;"><strong>Items to correct:</strong></div>';
+                                    errors.forEach(error => {
+                                        feedbackHTML += `<div class="error-item">${error}</div>`;
+                                    });
+                                }
+                                if (successes.length > 0) {
+                                    feedbackHTML += '<div style="color: var(--color-success); margin-top: 10px;"><strong>Correctly placed:</strong></div>';
+                                    successes.forEach(success => {
+                                        feedbackHTML += `<div class="success-item">${success}</div>`;
+                                    });
+                                }
+                                feedbackContent.innerHTML = feedbackHTML;
+                                
+                                updateProgressSummary();
+                            }
+                        }
+                    });
+                });
+            }
+
+            // Activity 2: Order of Draw - CLICK BASED
+            function initActivity2() {
+                const tubeOptions = document.querySelectorAll('.tube-option');
+                const scenarioButtons = document.querySelectorAll('.option-btn');
+                const feedback = document.getElementById('feedback-2');
+                const orderFeedback = document.getElementById('order-feedback');
+                const scenarioFeedback = document.getElementById('scenario-feedback');
+                const status = document.querySelector('#activity-2 .activity-status');
+
+                let currentStep = 1;
+                let orderCorrect = 0;
+                let scenarioCorrect = 0;
+                let orderErrors = [];
+                let scenarioErrors = [];
+
+                // Order of Draw - Click to sequence
+                tubeOptions.forEach(option => {
+                    option.addEventListener('click', function() {
+                        if (this.classList.contains('used')) return;
+                        
+                        const selectedOrder = this.dataset.order;
+                        const correctOrderForStep = currentStep.toString();
+                        
+                        // Check if correct
+                        const isCorrect = selectedOrder === correctOrderForStep;
+                        
+                        // Update the sequence step
+                        const stepContent = document.getElementById(`step-${currentStep}-content`);
+                        const tubeColor = this.querySelector('.tube-color').style.background;
+                        const tubeText = this.querySelector('span').textContent;
+                        
+                        stepContent.innerHTML = `<span style="display: inline-block; width: 20px; height: 20px; background: ${tubeColor}; border-radius: 4px; margin-right: 8px; vertical-align: middle;"></span>${tubeText}`;
+                        stepContent.style.color = isCorrect ? 'var(--color-success)' : 'var(--color-error)';
+                        
+                        // Mark tube as used
+                        this.classList.add('used');
+                        this.classList.add('selected');
+                        
+                        // Track results
+                        if (isCorrect) {
+                            orderCorrect++;
+                        } else {
+                            const correctTube = Array.from(tubeOptions).find(t => t.dataset.order === correctOrderForStep);
+                            if (correctTube) {
+                                orderErrors.push(`Step ${currentStep}: Should be ${correctTube.querySelector('span').textContent}, not ${tubeText}`);
+                            }
+                        }
+                        
+                        currentStep++;
+                        
+                        // Check if order complete
+                        if (currentStep > 5) {
+                            // Order of draw complete, now wait for scenarios
+                        }
+                    });
+                });
+
+                // Scenarios - Click to answer
+                scenarioButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        const scenario = this.dataset.scenario;
+                        const answer = this.dataset.answer;
+                        
+                        // Remove selection from other buttons in same scenario
+                        const otherButtons = document.querySelectorAll(`.option-btn[data-scenario="${scenario}"]`);
+                        otherButtons.forEach(btn => {
+                            btn.classList.remove('selected', 'wrong');
+                        });
+                        
+                        // Mark selected
+                        this.classList.add('selected');
+                        
+                        // Check if correct
+                        const isCorrect = correctScenarioAnswers[scenario] === answer;
+                        if (isCorrect) {
+                            scenarioCorrect++;
+                        } else {
+                            this.classList.add('wrong');
+                            const correctAnswer = correctScenarioAnswers[scenario];
+                            const correctText = Array.from(otherButtons).find(b => b.dataset.answer === correctAnswer)?.textContent || '';
+                            scenarioErrors.push(`Scenario ${scenario}: ${this.textContent.trim()} ✗ (Correct: ${correctText.trim()})`);
+                        }
+                        
+                        // Check if all complete
+                        if (currentStep > 5 && document.querySelectorAll('.option-btn.selected').length === 2) {
+                            state.activities[2].completed = true;
+                            state.activities[2].correct = orderCorrect + scenarioCorrect;
+                            state.activities[2].score = Math.round((state.activities[2].correct / 7) * 100);
+                            
+                            status.textContent = 'Completed';
+                            status.style.color = '#00b894';
+                            document.getElementById('activity-2').classList.add('completed');
+                            feedback.classList.add('show');
+                            
+                            // Show feedback
+                            let orderFeedbackHTML = '';
+                            if (orderErrors.length > 0) {
+                                orderFeedbackHTML += '<div style="color: var(--color-error); margin-bottom: 10px;"><strong>Order of draw errors:</strong></div>';
+                                orderErrors.forEach(error => {
+                                    orderFeedbackHTML += `<div class="error-item">${error}</div>`;
+                                });
+                            } else {
+                                orderFeedbackHTML += '<div style="color: var(--color-success); margin-bottom: 10px;">✓ <strong>Perfect order of draw!</strong></div>';
+                            }
+                            orderFeedback.innerHTML = orderFeedbackHTML;
+                            
+                            let scenarioFeedbackHTML = '';
+                            if (scenarioErrors.length > 0) {
+                                scenarioFeedbackHTML += '<div style="color: var(--color-error); margin-bottom: 10px;"><strong>Scenario errors:</strong></div>';
+                                scenarioErrors.forEach(error => {
+                                    scenarioFeedbackHTML += `<div class="error-item">${error}</div>`;
+                                });
+                            } else {
+                                scenarioFeedbackHTML += '<div style="color: var(--color-success); margin-bottom: 10px;">✓ <strong>Excellent clinical decisions!</strong></div>';
+                            }
+                            scenarioFeedback.innerHTML = scenarioFeedbackHTML;
+                            
+                            updateProgressSummary();
+                        }
+                    });
+                });
+            }
+
+            // Reset All Activities
+            function resetAllActivities() {
+                // Reset state
+                state.activities[1] = { completed: false, correct: 0, total: 12, score: 0 };
+                state.activities[2] = { completed: false, correct: 0, total: 7, score: 0 };
+
+                // Reset Activity 1
+                document.querySelectorAll('.equipment-option').forEach(option => {
+                    option.classList.remove('used');
+                    delete option.dataset.placed;
+                });
+                document.getElementById('routine-content').innerHTML = '';
+                document.getElementById('pediatric-content').innerHTML = '';
+                document.getElementById('feedback-1').classList.remove('show');
+                document.querySelector('#activity-1 .activity-status').textContent = 'Not Started';
+                document.getElementById('activity-1').classList.remove('completed');
+
+                // Reset Activity 2
+                document.querySelectorAll('.tube-option').forEach(option => {
+                    option.classList.remove('used', 'selected');
+                });
+                document.querySelectorAll('.sequence-step .step-content').forEach((content, index) => {
+                    content.textContent = `${['First', 'Second', 'Third', 'Fourth', 'Fifth'][index]}: Click correct tube`;
+                    content.style.color = '';
+                });
+                document.querySelectorAll('.option-btn').forEach(btn => {
+                    btn.classList.remove('selected', 'wrong');
+                });
+                document.getElementById('feedback-2').classList.remove('show');
+                document.querySelector('#activity-2 .activity-status').textContent = 'Not Started';
+                document.getElementById('activity-2').classList.remove('completed');
+
+                // Reset results
+                resultsPanel.classList.remove('show');
+
+                // Reset variables
+                if (window.currentStep) window.currentStep = 1;
+
+                // Update progress
+                updateProgressSummary();
+            }
+
+            // View Final Results
+            function viewFinalResults() {
+                let totalScore = 0;
+                let activityCount = 0;
+
+                Object.values(state.activities).forEach(activity => {
+                    if (activity.completed) {
+                        totalScore += activity.score;
+                        activityCount++;
+                    }
+                });
+
+                const averageScore = activityCount > 0 ? Math.round(totalScore / activityCount) : 0;
+                finalScore.textContent = `${averageScore}%`;
+                resultsPanel.classList.add('show');
+                resultsPanel.scrollIntoView({ behavior: 'smooth' });
+            }
+
+            // Initialize activities
+            initActivity1();
+            initActivity2();
+
+            // Event listeners
+            resetBtn.addEventListener('click', resetAllActivities);
+            resultsBtn.addEventListener('click', viewFinalResults);
+
+            // Initial progress update
+            updateProgressSummary();
+        });
+    </script>
+</body>
+</html>
