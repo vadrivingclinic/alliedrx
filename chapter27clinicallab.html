@@ -1,0 +1,1684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AlliedRx -- Week 13: Assisting in the Clinical Laboratory</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        /* ===== EXACT ALLIEDRx BRANDING ===== */
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-error: #e17055;
+            --color-warning: #fdcb6e;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
+            --color-dark: #0c0a18;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+            --shadow-card: 0 12px 30px rgba(15, 23, 42, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(circle at top left, #ffffff 0, #f1ecff 40%, var(--color-bg) 100%);
+            color: var(--color-text);
+            line-height: 1.5;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 12px; }
+        }
+
+        /* ===== MANDATORY ANIMATIONS ===== */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes checkmarkPop {
+            0% { transform: scale(0); opacity: 0; }
+            70% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        /* ===== MAIN CONTAINER ===== */
+        .page {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @media (max-width: 900px) {
+            .page { padding: 22px; }
+        }
+
+        @media (max-width: 480px) {
+            .page {
+                border-radius: var(--radius-md);
+                padding: 18px 14px 22px;
+            }
+        }
+
+        /* ===== EXACT HEADER TEMPLATE ===== */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .brand-logo:hover {
+            transform: scale(1.05);
+        }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--color-success);
+            flex-shrink: 0;
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .badge-mode:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 3vw, 2.2rem);
+            line-height: 1.1;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .module-subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 600px;
+            margin-bottom: 24px;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        /* ===== 2-STEP PROGRESS TRACKER ===== */
+        .progress-tracker {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            position: relative;
+            padding: 0 20px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .progress-tracker::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 50px;
+            right: 50px;
+            height: 3px;
+            background: rgba(12, 10, 24, 0.08);
+            z-index: 1;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+
+        .step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--color-muted);
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.active .step-circle {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .progress-step.completed .step-circle {
+            background: var(--color-success);
+            border-color: var(--color-success);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.75rem;
+            color: var(--color-muted);
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .progress-step.active .step-label {
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        /* ===== PROGRESS SUMMARY ===== */
+        .progress-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+            animation: fadeInUp 0.6s ease-out 0.5s both;
+        }
+
+        @media (max-width: 600px) {
+            .progress-summary {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .summary-card {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            border: 1px solid rgba(12, 10, 24, 0.06);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-card);
+            border-color: var(--color-primary-soft);
+        }
+
+        .summary-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--color-primary);
+            display: block;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .summary-label {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* ===== ACTIVITY GRID (2 ACTIVITIES ONLY) ===== */
+        .activity-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .activity-card {
+            background: white;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            padding: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .activity-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--color-primary);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .activity-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--color-primary-soft);
+        }
+
+        .activity-card:hover::before {
+            opacity: 1;
+        }
+
+        .activity-card.completed {
+            border-color: var(--color-success);
+        }
+
+        .activity-card.completed::before {
+            background: var(--color-success);
+            opacity: 1;
+        }
+
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .activity-number {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .activity-status {
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-muted);
+        }
+
+        .activity-card.completed .activity-status {
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--color-success);
+        }
+
+        .activity-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 8px;
+        }
+
+        .activity-description {
+            font-size: 0.9rem;
+            color: var(--color-muted);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        /* ===== ACTIVITY 1: DRAG-AND-DROP REGULATIONS ===== */
+        .regulations-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .regulations-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .agency-box {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 2px dashed rgba(12, 10, 24, 0.1);
+            min-height: 150px;
+            transition: all 0.3s ease;
+        }
+
+        .agency-box.hover {
+            border-color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.05);
+        }
+
+        .agency-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+            text-align: center;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(12, 10, 24, 0.08);
+        }
+
+        .regulation-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .regulation-item {
+            background: rgba(12, 10, 24, 0.05);
+            border-radius: 20px;
+            padding: 8px 15px;
+            font-size: 0.85rem;
+            cursor: grab;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .regulation-item:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            transform: translateY(-2px);
+        }
+
+        .regulation-item.dragging {
+            opacity: 0.7;
+            transform: scale(0.95);
+        }
+
+        .agency-content {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            min-height: 100px;
+        }
+
+        .matched-item {
+            background: rgba(0, 184, 148, 0.1);
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 0.8rem;
+            margin-bottom: 5px;
+            border-left: 3px solid var(--color-success);
+        }
+
+        .matched-item.incorrect {
+            background: rgba(225, 112, 85, 0.1);
+            border-left-color: var(--color-error);
+        }
+
+        /* ===== ACTIVITY 2: SAFETY INSPECTION ===== */
+        .safety-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .safety-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .lab-item {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            user-select: none;
+        }
+
+        .lab-item:hover {
+            background: rgba(175, 75, 239, 0.08);
+            border-color: var(--color-primary-soft);
+            transform: translateY(-2px);
+        }
+
+        .lab-item.selected {
+            background: rgba(0, 184, 148, 0.1);
+            border-color: var(--color-success);
+        }
+
+        .lab-item.incorrect {
+            background: rgba(225, 112, 85, 0.1);
+            border-color: var(--color-error);
+            animation: shake 0.5s ease;
+        }
+
+        .lab-icon {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .lab-text {
+            font-size: 0.85rem;
+            color: var(--color-text);
+        }
+
+        .lab-status {
+            font-size: 0.7rem;
+            margin-top: 5px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            background: rgba(12, 10, 24, 0.05);
+        }
+
+        .lab-item.selected .lab-status {
+            background: rgba(0, 184, 148, 0.2);
+            color: var(--color-success);
+        }
+
+        .lab-item.incorrect .lab-status {
+            background: rgba(225, 112, 85, 0.2);
+            color: var(--color-error);
+        }
+
+        /* ===== SAFETY WARNING ===== */
+        .safety-warning {
+            background: rgba(225, 112, 85, 0.1);
+            border: 2px solid var(--color-error);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin-top: 15px;
+            display: none;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .safety-warning.show {
+            display: flex;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .warning-icon {
+            font-size: 1.5rem;
+            color: var(--color-error);
+            flex-shrink: 0;
+        }
+
+        .warning-content {
+            flex: 1;
+        }
+
+        .warning-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--color-error);
+            margin-bottom: 5px;
+        }
+
+        .warning-text {
+            font-size: 0.85rem;
+            color: var(--color-text);
+        }
+
+        /* ===== FEEDBACK CONTAINERS ===== */
+        .feedback-container {
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin-top: 15px;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .feedback-container.show {
+            display: block;
+        }
+
+        .feedback-correct {
+            background: rgba(0, 184, 148, 0.1);
+            border-left: 4px solid var(--color-success);
+        }
+
+        .feedback-incorrect {
+            background: rgba(225, 112, 85, 0.1);
+            border-left: 4px solid var(--color-error);
+        }
+
+        .feedback-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feedback-correct .feedback-title {
+            color: var(--color-success);
+        }
+
+        .feedback-incorrect .feedback-title {
+            color: var(--color-error);
+        }
+
+        .feedback-content {
+            font-size: 0.85rem;
+            color: var(--color-text);
+            line-height: 1.6;
+        }
+
+        .feedback-content strong {
+            color: var(--color-primary);
+        }
+
+        .clinical-tip {
+            background: rgba(253, 203, 110, 0.15);
+            padding: 10px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 3px solid var(--color-warning);
+        }
+
+        .clinical-tip strong {
+            color: #d69e2e;
+        }
+
+        /* ===== DARK CARDS ===== */
+        .side-card {
+            background: rgba(12, 10, 24, 0.96);
+            color: #e5e7eb;
+            border-radius: var(--radius-md);
+            padding: 20px;
+            font-size: 0.88rem;
+            line-height: 1.7;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        .side-subtitle {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #c4b5fd;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .side-card strong {
+            color: #ffffff;
+        }
+
+        /* ===== ACTION BUTTONS ===== */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #9a3bd6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(175, 75, 239, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-text);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(12, 10, 24, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-icon {
+            font-size: 1.1em;
+        }
+
+        /* ===== RESULTS PANEL ===== */
+        .results-panel {
+            background: var(--color-dark);
+            color: white;
+            border-radius: var(--radius-md);
+            padding: 30px;
+            margin-top: 30px;
+            display: none;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .results-panel.show {
+            display: block;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .results-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .score-display {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--color-primary-soft);
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .clinical-insights {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .insights-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-primary-soft);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .insights-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .insights-list li {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            font-size: 0.9rem;
+            color: #e5e7eb;
+        }
+
+        .insight-dot {
+            width: 6px;
+            height: 6px;
+            margin-top: 6px;
+            border-radius: 999px;
+            background: var(--color-accent);
+            flex-shrink: 0;
+        }
+
+        /* ===== CORRECT/INCORRECT SUMMARY ===== */
+        .answer-summary {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: var(--radius-sm);
+            background: rgba(12, 10, 24, 0.02);
+        }
+
+        .correct-answer {
+            color: var(--color-success);
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .incorrect-answer {
+            color: var(--color-error);
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .summary-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 3px;
+            font-size: 0.85rem;
+        }
+
+        .summary-item.correct::before {
+            content: "✓";
+            color: var(--color-success);
+            font-weight: bold;
+        }
+
+        .summary-item.incorrect::before {
+            content: "✗";
+            color: var(--color-error);
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="module-heading">
+        <!-- EXACT ALLIEDRx HEADER TEMPLATE -->
+        <header class="brand-row">
+            <div class="brand">
+                <img src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                     alt="AlliedRx logo" class="brand-logo">
+                <div class="course-meta">
+                    <span class="course-name">Clinical Medical Assistant • Week 13</span>
+                    <div class="week-label">
+                        <span class="week-label-dot"></span>
+                        <span>Chapter 27: Assisting in the Clinical Laboratory</span>
+                    </div>
+                </div>
+            </div>
+            <span class="badge-mode">Campus & Online</span>
+        </header>
+
+        <h1 id="module-heading">Clinical Laboratory Competencies</h1>
+        <p class="module-subtitle">
+            Master regulatory compliance, safety protocols, and quality control procedures for the medical laboratory.
+            Follow Marsha's journey as she sets up her new practice laboratory.
+        </p>
+
+        <!-- 2-STEP PROGRESS TRACKER -->
+        <div class="progress-tracker">
+            <div class="progress-step active" data-step="1">
+                <div class="step-circle">1</div>
+                <div class="step-label">Regulations & Safety</div>
+            </div>
+            <div class="progress-step" data-step="2">
+                <div class="step-circle">2</div>
+                <div class="step-label">Specimen & Quality</div>
+            </div>
+        </div>
+
+        <!-- PROGRESS SUMMARY -->
+        <div class="progress-summary">
+            <div class="summary-card">
+                <span class="summary-number" id="completed-count">0</span>
+                <span class="summary-label">Activities Completed</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="accuracy-rate">0%</span>
+                <span class="summary-label">Current Accuracy</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="time-spent">0:00</span>
+                <span class="summary-label">Time Spent</span>
+            </div>
+        </div>
+
+        <!-- ACTIVITY GRID (2 ACTIVITIES ONLY) -->
+        <div class="activity-grid">
+            <!-- ACTIVITY 1: Regulations & Safety -->
+            <section class="activity-card" id="activity-1" data-activity="1" aria-label="Activity 1: Laboratory Regulations Matching">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 1</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">
+                    <span aria-hidden="true">🏛️</span>
+                    Laboratory Regulations Matching
+                </h3>
+                <p class="activity-description">
+                    Marsha needs to identify which agencies regulate different aspects of her new laboratory.
+                    Drag each requirement to the correct regulatory agency. Some may fit multiple agencies but have ONE primary answer.
+                </p>
+
+                <!-- Dark Card with Scenario -->
+                <div class="side-card">
+                    <p class="side-subtitle">Marsha's Scenario</p>
+                    <p>Marsha has 3 years experience as a CMA and is now setting up a new laboratory. She needs to ensure compliance with all regulations. <strong>Which agency handles each requirement?</strong></p>
+                </div>
+
+                <!-- Drag Items -->
+                <div class="regulation-items">
+                    <div class="regulation-item draggable" data-category="clia" draggable="true" aria-label="Drag to match: Categorizes tests as waived, moderate, or high complexity">Categorizes tests as waived, moderate, or high complexity</div>
+                    <div class="regulation-item draggable" data-category="osha" draggable="true" aria-label="Drag to match: Requires Safety Data Sheets for hazardous chemicals">Requires Safety Data Sheets for hazardous chemicals</div>
+                    <div class="regulation-item draggable" data-category="cdc" draggable="true" aria-label="Drag to match: Provides guidelines for infectious disease testing">Provides guidelines for infectious disease testing</div>
+                    <div class="regulation-item draggable" data-category="fda" draggable="true" aria-label="Drag to match: Approves new laboratory tests before marketing">Approves new laboratory tests before marketing</div>
+                    <div class="regulation-item draggable" data-category="clia" draggable="true" aria-label="Drag to match: Mandates competency assessment for testing personnel">Mandates competency assessment for testing personnel</div>
+                    <div class="regulation-item draggable" data-category="osha" draggable="true" aria-label="Drag to match: Sets standards for bloodborne pathogen protection">Sets standards for bloodborne pathogen protection</div>
+                </div>
+
+                <!-- Agency Drop Zones -->
+                <div class="regulations-container">
+                    <div class="agency-box" data-category="clia" id="clia-category">
+                        <div class="agency-title">CLIA</div>
+                        <div class="agency-content"></div>
+                    </div>
+                    <div class="agency-box" data-category="osha" id="osha-category">
+                        <div class="agency-title">OSHA</div>
+                        <div class="agency-content"></div>
+                    </div>
+                    <div class="agency-box" data-category="cdc" id="cdc-category">
+                        <div class="agency-title">CDC</div>
+                        <div class="agency-content"></div>
+                    </div>
+                    <div class="agency-box" data-category="fda" id="fda-category">
+                        <div class="agency-title">FDA</div>
+                        <div class="agency-content"></div>
+                    </div>
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback-container" id="feedback-1">
+                    <div class="feedback-title">
+                        <span aria-hidden="true">✓</span>
+                        Regulations Matched!
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Correct Matches:</strong><br>
+                        • <strong>CLIA:</strong> Test categorization and competency assessment<br>
+                        • <strong>OSHA:</strong> Safety Data Sheets and bloodborne pathogens<br>
+                        • <strong>CDC:</strong> Infectious disease testing guidelines<br>
+                        • <strong>FDA:</strong> Test approval before marketing<br><br>
+                        
+                        <div id="activity1-summary" class="answer-summary">
+                            <!-- Will be populated by JavaScript -->
+                        </div>
+                        
+                        <div class="clinical-tip">
+                            <strong>Marsha's Insight:</strong> CLIA categorizes tests by complexity (waived, moderate, high). 
+                            OSHA protects workers. CDC provides clinical guidelines. FDA ensures test accuracy and safety.
+                        </div>
+                        
+                        <p><strong>Documentation:</strong> Marsha must maintain CLIA certificate, OSHA training records, 
+                        and follow CDC/FDA guidelines for all laboratory testing.</p>
+                    </div>
+                </div>
+
+                <!-- Check Button -->
+                <button class="btn btn-secondary" id="check-activity-1" aria-label="Check answers for Activity 1">
+                    <span class="btn-icon">✓</span>
+                    Check Answers
+                </button>
+            </section>
+
+            <!-- ACTIVITY 2: Safety Inspection -->
+            <section class="activity-card" id="activity-2" data-activity="2" aria-label="Activity 2: Laboratory Safety Inspection">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 2</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">
+                    <span aria-hidden="true">⚠️</span>
+                    Laboratory Safety Inspection
+                </h3>
+                <p class="activity-description">
+                    Marsha is conducting her first safety inspection. Click on ALL safety violations (4 total).
+                    Be careful - some items are actually safe! Look for OSHA and CLIA violations.
+                </p>
+
+                <!-- Safety Grid -->
+                <div class="safety-grid">
+                    <!-- Violations (Click These) -->
+                    <div class="lab-item" data-item="unlabeled-chemical" data-type="violation" aria-label="Safety item: Unlabeled chemical bottle - Click if this is a violation">
+                        <span class="lab-icon" aria-hidden="true">🧪</span>
+                        <div class="lab-text">Unlabeled chemical bottle</div>
+                        <div class="lab-status">Click to inspect</div>
+                    </div>
+                    
+                    <div class="lab-item" data-item="food-in-fridge" data-type="violation" aria-label="Safety item: Yogurt in specimen refrigerator - Click if this is a violation">
+                        <span class="lab-icon" aria-hidden="true">🥛</span>
+                        <div class="lab-text">Yogurt in specimen refrigerator</div>
+                        <div class="lab-status">Click to inspect</div>
+                    </div>
+                    
+                    <div class="lab-item" data-item="unbalanced-centrifuge" data-type="violation" aria-label="Safety item: Unbalanced centrifuge - Click if this is a violation">
+                        <span class="lab-icon" aria-hidden="true">⚖️</span>
+                        <div class="lab-text">Unbalanced centrifuge</div>
+                        <div class="lab-status">Click to inspect</div>
+                    </div>
+                    
+                    <div class="lab-item" data-item="missing-extinguisher" data-type="violation" aria-label="Safety item: Missing fire extinguisher - Click if this is a violation">
+                        <span class="lab-icon" aria-hidden="true">🔥</span>
+                        <div class="lab-text">Missing fire extinguisher</div>
+                        <div class="lab-status">Click to inspect</div>
+                    </div>
+                    
+                    <!-- Safe Items (Can be clicked, will show as incorrect) -->
+                    <div class="lab-item" data-item="labeled-ethanol" data-type="safe" aria-label="Safety item: Properly labeled ethanol - This is safe, will be marked incorrect if clicked">
+                        <span class="lab-icon" aria-hidden="true">🏷️</span>
+                        <div class="lab-text">Properly labeled ethanol</div>
+                        <div class="lab-status">Click to inspect</div>
+                    </div>
+                    
+                    <div class="lab-item" data-item="eye-wash" data-type="safe" aria-label="Safety item: Functional eye wash station - This is safe, will be marked incorrect if clicked">
+                        <span class="lab-icon" aria-hidden="true">🚰</span>
+                        <div class="lab-text">Functional eye wash station</div>
+                        <div class="lab-status">Click to inspect</div>
+                    </div>
+                    
+                    <div class="lab-item" data-item="gloves-available" data-type="safe" aria-label="Safety item: Gloves available in all sizes - This is safe, will be marked incorrect if clicked">
+                        <span class="lab-icon" aria-hidden="true">🧤</span>
+                        <div class="lab-text">Gloves available in all sizes</div>
+                        <div class="lab-status">Click to inspect</div>
+                    </div>
+                    
+                    <div class="lab-item" data-item="biohazard-bin" data-type="safe" aria-label="Safety item: Biohazard bin ¾ full - This is safe, will be marked incorrect if clicked">
+                        <span class="lab-icon" aria-hidden="true">🗑️</span>
+                        <div class="lab-text">Biohazard bin ¾ full</div>
+                        <div class="lab-status">Click to inspect</div>
+                    </div>
+                </div>
+
+                <!-- Safety Warning -->
+                <div class="safety-warning" id="safety-warning">
+                    <div class="warning-icon">⚠️</div>
+                    <div class="warning-content">
+                        <div class="warning-title">Safety Violation Detected!</div>
+                        <div class="warning-text">
+                            Each violation represents a potential safety hazard or regulatory non-compliance.
+                            Unlabeled chemicals violate OSHA's Hazard Communication Standard. Food in specimen refrigerators
+                            violates CLIA requirements and creates contamination risk.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback-container" id="feedback-2">
+                    <div class="feedback-title">
+                        <span aria-hidden="true">✓</span>
+                        Safety Inspection Complete!
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Correct Violations Identified:</strong><br>
+                        1. <strong>Unlabeled chemical bottle</strong> - OSHA violation<br>
+                        2. <strong>Food in specimen refrigerator</strong> - CLIA violation<br>
+                        3. <strong>Unbalanced centrifuge</strong> - Safety hazard<br>
+                        4. <strong>Missing fire extinguisher</strong> - OSHA violation<br><br>
+                        
+                        <div id="activity2-summary" class="answer-summary">
+                            <!-- Will be populated by JavaScript -->
+                        </div>
+                        
+                        <div class="clinical-tip">
+                            <strong>Marsha's Action Plan:</strong><br>
+                            • Label all chemicals immediately<br>
+                            • Remove all food from laboratory refrigerators<br>
+                            • Balance centrifuge before each use<br>
+                            • Replace missing fire extinguisher<br>
+                            • Document corrective actions
+                        </div>
+                        
+                        <p><strong>OSHA Standards:</strong> All chemicals must be labeled with identity and hazards.
+                        Fire extinguishers must be accessible within 75 feet of any point in the laboratory.</p>
+                    </div>
+                </div>
+
+                <!-- Check Button -->
+                <button class="btn btn-secondary" id="check-activity-2" aria-label="Check answers for Activity 2">
+                    <span class="btn-icon">✓</span>
+                    Check Answers
+                </button>
+            </section>
+        </div>
+
+        <!-- ACTION BUTTONS -->
+        <div class="action-buttons">
+            <button class="btn btn-secondary" id="reset-all-btn" aria-label="Reset all activities">
+                <span class="btn-icon">↻</span>
+                Reset All Activities
+            </button>
+            <button class="btn btn-secondary" id="hint-btn" aria-label="Show hints for current activity">
+                <span class="btn-icon">💡</span>
+                Show Hints
+            </button>
+            <button class="btn btn-primary" id="view-results-btn" aria-label="View final results and score">
+                <span class="btn-icon">📊</span>
+                View Final Results
+            </button>
+        </div>
+
+        <!-- RESULTS PANEL -->
+        <div class="results-panel" id="results-panel">
+            <div class="results-header">
+                <h2 class="results-title">Laboratory Competency Results</h2>
+            </div>
+            
+            <div class="score-display" id="final-score">0%</div>
+            
+            <div class="clinical-insights">
+                <h3 class="insights-title">
+                    <span aria-hidden="true">🩺</span>
+                    Clinical Laboratory Insights
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Regulatory Compliance:</strong> CLIA categorizes tests by complexity: Waived (simple, low risk), 
+                        Moderate (requires training), High (requires specialized expertise). Always verify test categorization.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Safety First:</strong> OSHA requires accessible Safety Data Sheets (SDS) for all hazardous chemicals. 
+                        Eye wash stations must be tested weekly and accessible within 10 seconds.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Quality Control:</strong> Document daily QC procedures. Out-of-range QC requires corrective action 
+                        before patient testing. Maintain temperature logs for all laboratory equipment.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Specimen Integrity:</strong> Follow chain of custody for legal specimens. Document collection time, 
+                        handling, and storage conditions. Improper handling invalidates test results.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Documentation:</strong> Laboratory requisitions must include: Patient ID, test requested, 
+                        collection date/time, ordering provider, and clinical information. Missing information delays testing.</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="clinical-insights" style="margin-top: 20px;">
+                <h3 class="insights-title">
+                    <span aria-hidden="true">📋</span>
+                    Documentation & Compliance
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>CLIA Documentation:</strong> Maintain CLIA certificate, personnel competency records, 
+                        QC documentation, and proficiency testing results for 2 years minimum.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>OSHA Requirements:</strong> Document safety training annually, maintain SDS access, 
+                        record exposure incidents, and conduct regular safety inspections.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Patient Results:</strong> Report critical values to provider immediately and document 
+                        notification time, method, and person notified. Follow facility policies for normal/abnormal results.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Equipment Maintenance:</strong> Log calibration dates, maintenance, and repairs. 
+                        Document out-of-service equipment and alternative testing arrangements.</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // ===== STATE MANAGEMENT =====
+            const state = {
+                activities: {
+                    1: { completed: false, correct: 0, total: 6, score: 0 },
+                    2: { completed: false, correct: 0, total: 4, score: 0 }
+                },
+                startedAt: new Date(),
+                timeSpent: 0,
+                currentActivity: 1
+            };
+
+            // Correct answers
+            const correctMatches = {
+                clia: ['Categorizes tests as waived, moderate, or high complexity', 'Mandates competency assessment for testing personnel'],
+                osha: ['Requires Safety Data Sheets for hazardous chemicals', 'Sets standards for bloodborne pathogen protection'],
+                cdc: ['Provides guidelines for infectious disease testing'],
+                fda: ['Approves new laboratory tests before marketing']
+            };
+
+            const safetyViolations = ['unlabeled-chemical', 'food-in-fridge', 'unbalanced-centrifuge', 'missing-extinguisher'];
+
+            // ===== DOM ELEMENTS =====
+            const progressSteps = document.querySelectorAll('.progress-step');
+            const activityCards = document.querySelectorAll('.activity-card');
+            const completedCount = document.getElementById('completed-count');
+            const accuracyRate = document.getElementById('accuracy-rate');
+            const timeSpent = document.getElementById('time-spent');
+            const checkActivity1 = document.getElementById('check-activity-1');
+            const checkActivity2 = document.getElementById('check-activity-2');
+            const resetBtn = document.getElementById('reset-all-btn');
+            const hintBtn = document.getElementById('hint-btn');
+            const resultsBtn = document.getElementById('view-results-btn');
+            const resultsPanel = document.getElementById('results-panel');
+            const finalScore = document.getElementById('final-score');
+            const safetyWarning = document.getElementById('safety-warning');
+            const activity1Summary = document.getElementById('activity1-summary');
+            const activity2Summary = document.getElementById('activity2-summary');
+
+            // ===== TIMER =====
+            function updateTimer() {
+                const now = new Date();
+                const diff = Math.floor((now - state.startedAt) / 1000);
+                state.timeSpent = diff;
+                const minutes = Math.floor(diff / 60);
+                const seconds = diff % 60;
+                timeSpent.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            }
+            setInterval(updateTimer, 1000);
+
+            // ===== PROGRESS UPDATES =====
+            function updateProgressSummary() {
+                let completed = 0;
+                let totalCorrect = 0;
+                let totalItems = 0;
+
+                Object.values(state.activities).forEach(activity => {
+                    if (activity.completed) completed++;
+                    totalCorrect += activity.correct;
+                    totalItems += activity.total;
+                });
+
+                completedCount.textContent = completed;
+                const accuracy = totalItems > 0 ? Math.round((totalCorrect / totalItems) * 100) : 0;
+                accuracyRate.textContent = `${accuracy}%`;
+
+                // Update progress steps
+                progressSteps.forEach((step, index) => {
+                    if (index < completed) {
+                        step.classList.add('completed');
+                        step.classList.remove('active');
+                    } else if (index === completed) {
+                        step.classList.add('active');
+                        step.classList.remove('completed');
+                    } else {
+                        step.classList.remove('active', 'completed');
+                    }
+                });
+
+                // Update activity status
+                activityCards.forEach(card => {
+                    const activityId = card.dataset.activity;
+                    const activity = state.activities[activityId];
+                    const status = card.querySelector('.activity-status');
+
+                    if (activity.completed) {
+                        card.classList.add('completed');
+                        status.textContent = 'Completed';
+                        status.style.color = '#00b894';
+                    } else {
+                        card.classList.remove('completed');
+                        status.textContent = 'Not Started';
+                        status.style.color = '';
+                    }
+                });
+            }
+
+            // ===== ACTIVITY 1: DRAG AND DROP =====
+            const regulationItems = document.querySelectorAll('.regulation-item');
+            const agencyBoxes = document.querySelectorAll('.agency-box');
+            let placedItems = [];
+
+            // Setup drag and drop
+            regulationItems.forEach(item => {
+                item.addEventListener('dragstart', function(e) {
+                    e.dataTransfer.setData('text/plain', JSON.stringify({
+                        text: this.textContent,
+                        category: this.dataset.category,
+                        id: this.textContent
+                    }));
+                    this.classList.add('dragging');
+                });
+
+                item.addEventListener('dragend', function() {
+                    this.classList.remove('dragging');
+                });
+            });
+
+            agencyBoxes.forEach(box => {
+                box.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    this.classList.add('hover');
+                });
+
+                box.addEventListener('dragleave', function() {
+                    this.classList.remove('hover');
+                });
+
+                box.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('hover');
+                    
+                    const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+                    const targetCategory = this.dataset.category;
+                    
+                    // Check if item already exists in ANY box
+                    const existingItems = document.querySelectorAll('.matched-item');
+                    const alreadyPlaced = Array.from(existingItems).some(div => div.textContent === data.text);
+                    
+                    if (!alreadyPlaced) {
+                        const matchedDiv = document.createElement('div');
+                        matchedDiv.className = 'matched-item';
+                        matchedDiv.textContent = data.text;
+                        matchedDiv.setAttribute('data-original-category', data.category);
+                        matchedDiv.setAttribute('data-placed-category', targetCategory);
+                        
+                        this.querySelector('.agency-content').appendChild(matchedDiv);
+                        
+                        // Hide original item
+                        const originalItem = Array.from(regulationItems).find(item => 
+                            item.textContent === data.text && item.style.display !== 'none'
+                        );
+                        if (originalItem) {
+                            originalItem.style.display = 'none';
+                        }
+                        
+                        placedItems.push({
+                            text: data.text,
+                            originalCategory: data.category,
+                            placedCategory: targetCategory
+                        });
+                    }
+                });
+            });
+
+            // Check Activity 1 Answers
+            checkActivity1.addEventListener('click', function() {
+                if (state.activities[1].completed) return;
+
+                let correctCount = 0;
+                let totalPlaced = placedItems.length;
+
+                // Check if all items are placed
+                if (totalPlaced < 6) {
+                    alert(`Please place all 6 regulation items before checking answers. You have placed ${totalPlaced}/6.`);
+                    return;
+                }
+
+                // Clear previous summary
+                activity1Summary.innerHTML = '';
+                
+                // Create summary sections
+                const correctSection = document.createElement('div');
+                correctSection.className = 'correct-answer';
+                correctSection.textContent = 'Correct Matches:';
+                activity1Summary.appendChild(correctSection);
+                
+                const incorrectSection = document.createElement('div');
+                incorrectSection.className = 'incorrect-answer';
+                incorrectSection.textContent = 'Incorrect Matches:';
+                activity1Summary.appendChild(incorrectSection);
+
+                // Check each placed item
+                placedItems.forEach(item => {
+                    const isCorrect = item.originalCategory === item.placedCategory;
+                    
+                    if (isCorrect) {
+                        correctCount++;
+                        
+                        const summaryItem = document.createElement('div');
+                        summaryItem.className = 'summary-item correct';
+                        summaryItem.textContent = `${item.text} → ${item.placedCategory.toUpperCase()}`;
+                        correctSection.appendChild(summaryItem);
+                        
+                        // Mark as correct in UI
+                        const matchedItem = document.querySelector(`.matched-item[data-original-category="${item.originalCategory}"]`);
+                        if (matchedItem) {
+                            matchedItem.classList.add('matched-item');
+                            matchedItem.classList.remove('incorrect');
+                        }
+                    } else {
+                        const summaryItem = document.createElement('div');
+                        summaryItem.className = 'summary-item incorrect';
+                        summaryItem.textContent = `${item.text} → ${item.placedCategory.toUpperCase()} (Should be: ${item.originalCategory.toUpperCase()})`;
+                        incorrectSection.appendChild(summaryItem);
+                        
+                        // Mark as incorrect in UI
+                        const matchedItem = document.querySelector(`.matched-item[data-original-category="${item.originalCategory}"]`);
+                        if (matchedItem) {
+                            matchedItem.classList.add('incorrect');
+                        }
+                    }
+                });
+
+                state.activities[1].completed = true;
+                state.activities[1].correct = correctCount;
+                state.activities[1].score = Math.round((correctCount / 6) * 100);
+                
+                const feedback = document.getElementById('feedback-1');
+                if (correctCount === 6) {
+                    feedback.className = 'feedback-container feedback-correct show';
+                } else {
+                    feedback.className = 'feedback-container feedback-incorrect show';
+                }
+                
+                updateProgressSummary();
+                feedback.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            });
+
+            // ===== ACTIVITY 2: SAFETY INSPECTION =====
+            const labItems = document.querySelectorAll('.lab-item');
+            let selectedItems = [];
+
+            labItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    if (state.activities[2].completed) return;
+                    
+                    const itemId = this.dataset.item;
+                    const itemType = this.dataset.type;
+                    
+                    // Toggle selection
+                    if (this.classList.contains('selected')) {
+                        // Deselect
+                        this.classList.remove('selected', 'incorrect');
+                        this.querySelector('.lab-status').textContent = 'Click to inspect';
+                        selectedItems = selectedItems.filter(v => v.id !== itemId);
+                    } else {
+                        // Select
+                        this.classList.add('selected');
+                        selectedItems.push({
+                            id: itemId,
+                            type: itemType,
+                            element: this
+                        });
+                        
+                        // Update status text
+                        if (itemType === 'violation') {
+                            this.querySelector('.lab-status').textContent = 'Violation identified';
+                        } else {
+                            this.querySelector('.lab-status').textContent = 'Marked as violation (incorrect)';
+                        }
+                    }
+                });
+            });
+
+            // Check Activity 2 Answers
+            checkActivity2.addEventListener('click', function() {
+                if (state.activities[2].completed) return;
+                
+                if (selectedItems.length === 0) {
+                    alert('Please identify at least one safety violation.');
+                    return;
+                }
+                
+                let correctCount = 0;
+                
+                // Clear previous summary
+                activity2Summary.innerHTML = '';
+                
+                // Create summary sections
+                const correctSection = document.createElement('div');
+                correctSection.className = 'correct-answer';
+                correctSection.textContent = 'Correct Violations:';
+                activity2Summary.appendChild(correctSection);
+                
+                const incorrectSection = document.createElement('div');
+                incorrectSection.className = 'incorrect-answer';
+                incorrectSection.textContent = 'Incorrect Selections:';
+                activity2Summary.appendChild(incorrectSection);
+                
+                // Check each selected item
+                selectedItems.forEach(item => {
+                    if (item.type === 'violation') {
+                        correctCount++;
+                        
+                        const summaryItem = document.createElement('div');
+                        summaryItem.className = 'summary-item correct';
+                        summaryItem.textContent = `${item.element.querySelector('.lab-text').textContent}`;
+                        correctSection.appendChild(summaryItem);
+                        
+                        // Mark as correct in UI
+                        item.element.classList.remove('incorrect');
+                        item.element.querySelector('.lab-status').textContent = 'Correct violation';
+                    } else {
+                        const summaryItem = document.createElement('div');
+                        summaryItem.className = 'summary-item incorrect';
+                        summaryItem.textContent = `${item.element.querySelector('.lab-text').textContent} (This is actually safe)`;
+                        incorrectSection.appendChild(summaryItem);
+                        
+                        // Mark as incorrect in UI
+                        item.element.classList.add('incorrect');
+                        item.element.querySelector('.lab-status').textContent = 'Incorrect - this is safe';
+                    }
+                });
+                
+                // Check for missed violations
+                const missedViolations = [];
+                labItems.forEach(item => {
+                    const itemId = item.dataset.item;
+                    const itemType = item.dataset.type;
+                    
+                    if (itemType === 'violation' && !selectedItems.some(s => s.id === itemId)) {
+                        missedViolations.push({
+                            text: item.querySelector('.lab-text').textContent,
+                            element: item
+                        });
+                    }
+                });
+                
+                if (missedViolations.length > 0) {
+                    const missedSection = document.createElement('div');
+                    missedSection.className = 'incorrect-answer';
+                    missedSection.textContent = 'Missed Violations:';
+                    activity2Summary.appendChild(missedSection);
+                    
+                    missedViolations.forEach(violation => {
+                        const summaryItem = document.createElement('div');
+                        summaryItem.className = 'summary-item incorrect';
+                        summaryItem.textContent = `${violation.text} (You missed this violation)`;
+                        missedSection.appendChild(summaryItem);
+                        
+                        // Mark as missed in UI
+                        violation.element.classList.add('incorrect');
+                        violation.element.querySelector('.lab-status').textContent = 'Missed violation';
+                    });
+                }
+                
+                state.activities[2].completed = true;
+                state.activities[2].correct = correctCount;
+                state.activities[2].score = Math.round((correctCount / 4) * 100);
+                
+                const feedback = document.getElementById('feedback-2');
+                if (correctCount === 4 && selectedItems.length === 4) {
+                    feedback.className = 'feedback-container feedback-correct show';
+                } else {
+                    feedback.className = 'feedback-container feedback-incorrect show';
+                }
+                
+                updateProgressSummary();
+                feedback.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            });
+
+            // ===== RESET FUNCTIONALITY =====
+            resetBtn.addEventListener('click', function() {
+                // Reset state
+                state.activities = {
+                    1: { completed: false, correct: 0, total: 6, score: 0 },
+                    2: { completed: false, correct: 0, total: 4, score: 0 }
+                };
+                state.startedAt = new Date();
+                placedItems = [];
+                selectedItems = [];
+                
+                // Reset Activity 1
+                regulationItems.forEach(item => {
+                    item.style.display = '';
+                });
+                
+                agencyBoxes.forEach(box => {
+                    box.querySelector('.agency-content').innerHTML = '';
+                });
+                
+                document.getElementById('feedback-1').className = 'feedback-container';
+                activity1Summary.innerHTML = '';
+                
+                // Reset Activity 2
+                labItems.forEach(item => {
+                    item.classList.remove('selected', 'incorrect');
+                    item.querySelector('.lab-status').textContent = 'Click to inspect';
+                });
+                
+                document.getElementById('feedback-2').className = 'feedback-container';
+                activity2Summary.innerHTML = '';
+                safetyWarning.classList.remove('show');
+                
+                // Reset results
+                resultsPanel.classList.remove('show');
+                
+                // Update progress
+                updateProgressSummary();
+            });
+
+            // ===== HINTS =====
+            hintBtn.addEventListener('click', function() {
+                const currentActivity = state.currentActivity;
+                
+                if (currentActivity === 1) {
+                    // Highlight first correct match
+                    const firstItem = document.querySelector('.regulation-item[data-category="clia"]');
+                    if (firstItem) {
+                        firstItem.style.animation = 'pulse 2s infinite';
+                        setTimeout(() => {
+                            firstItem.style.animation = '';
+                        }, 3000);
+                    }
+                } else if (currentActivity === 2) {
+                    // Highlight first violation
+                    const firstViolation = document.querySelector('.lab-item[data-item="unlabeled-chemical"]');
+                    if (firstViolation) {
+                        firstViolation.style.animation = 'pulse 2s infinite';
+                        setTimeout(() => {
+                            firstViolation.style.animation = '';
+                        }, 3000);
+                    }
+                }
+            });
+
+            // ===== VIEW RESULTS =====
+            resultsBtn.addEventListener('click', function() {
+                let totalScore = 0;
+                let activityCount = 0;
+                
+                Object.values(state.activities).forEach(activity => {
+                    if (activity.completed) {
+                        totalScore += activity.score;
+                        activityCount++;
+                    }
+                });
+                
+                const averageScore = activityCount > 0 ? Math.round(totalScore / activityCount) : 0;
+                finalScore.textContent = `${averageScore}%`;
+                
+                resultsPanel.classList.add('show');
+                resultsPanel.scrollIntoView({ behavior: 'smooth' });
+            });
+
+            // ===== UPDATE CURRENT ACTIVITY =====
+            function updateCurrentActivity() {
+                if (!state.activities[1].completed) {
+                    state.currentActivity = 1;
+                } else if (!state.activities[2].completed) {
+                    state.currentActivity = 2;
+                } else {
+                    state.currentActivity = 0; // All completed
+                }
+            }
+
+            // Initialize
+            updateProgressSummary();
+        });
+    </script>
+</body>
+</html>
