@@ -1,0 +1,1533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AlliedRx -- Chapter 24: Assisting in Geriatrics</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-error: #e17055;
+            --color-warning: #fdcb6e;
+            --color-info: #0984e3;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
+            --color-dark: #0c0a18;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+            --shadow-card: 0 12px 30px rgba(15, 23, 42, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(circle at top left, #ffffff 0, #f1ecff 40%, var(--color-bg) 100%);
+            color: var(--color-text);
+            line-height: 1.5;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 12px;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        @keyframes checkmarkPop {
+            0% { transform: scale(0); opacity: 0; }
+            70% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 5px rgba(175, 75, 239, 0.5); }
+            50% { box-shadow: 0 0 20px rgba(175, 75, 239, 0.8); }
+        }
+
+        /* Main Container */
+        .page {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @media (max-width: 900px) {
+            .page {
+                padding: 22px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page {
+                border-radius: var(--radius-md);
+                padding: 18px 14px 22px;
+            }
+        }
+
+        /* Header */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .brand-logo:hover {
+            transform: scale(1.05);
+        }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--color-success);
+            flex-shrink: 0;
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .badge-mode:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 3vw, 2.2rem);
+            line-height: 1.1;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .module-subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 600px;
+            margin-bottom: 24px;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        /* 2-Step Progress Tracker */
+        .progress-tracker {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            position: relative;
+            padding: 0 20px;
+        }
+
+        .progress-tracker::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 50px;
+            right: 50px;
+            height: 3px;
+            background: rgba(12, 10, 24, 0.08);
+            z-index: 1;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+
+        .step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--color-muted);
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.active .step-circle {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .progress-step.completed .step-circle {
+            background: var(--color-success);
+            border-color: var(--color-success);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.75rem;
+            color: var(--color-muted);
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .progress-step.active .step-label {
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        /* Progress Summary */
+        .progress-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+            animation: fadeInUp 0.6s ease-out 0.5s both;
+        }
+
+        @media (max-width: 600px) {
+            .progress-summary {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .summary-card {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            border: 1px solid rgba(12, 10, 24, 0.06);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-card);
+            border-color: var(--color-primary-soft);
+        }
+
+        .summary-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--color-primary);
+            display: block;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .summary-label {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Activity Grid - Single Column */
+        .activity-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+
+        .activity-card {
+            background: white;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            padding: 24px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .activity-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--color-primary);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .activity-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--color-primary-soft);
+        }
+
+        .activity-card:hover::before {
+            opacity: 1;
+        }
+
+        .activity-card.completed {
+            border-color: var(--color-success);
+        }
+
+        .activity-card.completed::before {
+            background: var(--color-success);
+            opacity: 1;
+        }
+
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 18px;
+        }
+
+        .activity-number {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .activity-status {
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-muted);
+        }
+
+        .activity-card.completed .activity-status {
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--color-success);
+        }
+
+        .activity-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 10px;
+        }
+
+        .activity-description {
+            font-size: 0.95rem;
+            color: var(--color-muted);
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+
+        /* Activity 1: Age-Related Changes Matching */
+        .matching-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .category-column {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 18px;
+            border: 2px dashed rgba(12, 10, 24, 0.1);
+            min-height: 200px;
+        }
+
+        .category-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(12, 10, 24, 0.1);
+            text-align: center;
+        }
+
+        .match-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .match-item {
+            background: rgba(12, 10, 24, 0.05);
+            border-radius: 20px;
+            padding: 10px 16px;
+            font-size: 0.85rem;
+            cursor: grab;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            user-select: none;
+        }
+
+        .match-item:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            transform: translateY(-2px);
+        }
+
+        .match-item.dragging {
+            opacity: 0.7;
+            transform: scale(0.95);
+        }
+
+        .match-item.placed {
+            background: rgba(0, 184, 148, 0.1);
+            border-color: var(--color-success);
+            cursor: default;
+            margin-bottom: 8px;
+            width: 100%;
+        }
+
+        /* Activity 2: Geriatric Communication Scenario */
+        .scenario-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-bottom: 24px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+        }
+
+        .scenario-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 12px;
+        }
+
+        .scenario-text {
+            font-size: 0.95rem;
+            color: var(--color-text);
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .patient-profile {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            background: rgba(131, 128, 240, 0.08);
+            padding: 15px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 20px;
+        }
+
+        .profile-icon {
+            font-size: 1.5rem;
+            color: var(--color-accent);
+            flex-shrink: 0;
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-name {
+            font-weight: 600;
+            color: var(--color-text);
+            margin-bottom: 4px;
+        }
+
+        .profile-details {
+            font-size: 0.85rem;
+            color: var(--color-muted);
+        }
+
+        .communication-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .comm-option {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 15px;
+            background: white;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .comm-option:hover {
+            background: rgba(175, 75, 239, 0.05);
+            border-color: var(--color-primary-soft);
+        }
+
+        .comm-option.selected {
+            background: rgba(0, 184, 148, 0.1);
+            border-color: var(--color-success);
+        }
+
+        .comm-option.incorrect {
+            background: rgba(225, 112, 85, 0.1);
+            border-color: var(--color-error);
+            animation: shake 0.5s ease;
+        }
+
+        .comm-letter {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(12, 10, 24, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-text);
+            flex-shrink: 0;
+        }
+
+        .comm-option.selected .comm-letter {
+            background: var(--color-success);
+            color: white;
+        }
+
+        .comm-option.incorrect .comm-letter {
+            background: var(--color-error);
+            color: white;
+        }
+
+        .comm-text {
+            flex: 1;
+            font-size: 0.9rem;
+            color: var(--color-text);
+        }
+
+        /* Clinical Tip Box */
+        .clinical-tip {
+            background: rgba(253, 203, 110, 0.15);
+            border-radius: var(--radius-sm);
+            padding: 16px;
+            margin: 20px 0;
+            border-left: 4px solid var(--color-warning);
+        }
+
+        .tip-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #d69e2e;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tip-content {
+            font-size: 0.85rem;
+            color: var(--color-text);
+            line-height: 1.6;
+        }
+
+        /* Feedback Containers */
+        .feedback-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            margin-top: 20px;
+            display: none;
+        }
+
+        .feedback-container.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .feedback-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feedback-icon {
+            font-size: 1.2rem;
+        }
+
+        .feedback-icon.correct {
+            color: var(--color-success);
+        }
+
+        .feedback-icon.incorrect {
+            color: var(--color-error);
+        }
+
+        .feedback-content {
+            font-size: 0.9rem;
+            color: var(--color-text);
+            line-height: 1.6;
+        }
+
+        .feedback-content strong {
+            color: var(--color-primary);
+        }
+
+        /* Safety Warning */
+        .safety-warning {
+            background: rgba(225, 112, 85, 0.1);
+            border: 2px solid var(--color-error);
+            border-radius: var(--radius-sm);
+            padding: 16px;
+            margin-top: 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            animation: glow 2s infinite;
+        }
+
+        .warning-icon {
+            font-size: 1.5rem;
+            color: var(--color-error);
+            flex-shrink: 0;
+        }
+
+        .warning-content {
+            flex: 1;
+        }
+
+        .warning-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--color-error);
+            margin-bottom: 6px;
+        }
+
+        .warning-text {
+            font-size: 0.85rem;
+            color: var(--color-text);
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #9a3bd6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(175, 75, 239, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-text);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(12, 10, 24, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-icon {
+            font-size: 1.1em;
+        }
+
+        /* Results Panel */
+        .results-panel {
+            background: var(--color-dark);
+            color: white;
+            border-radius: var(--radius-md);
+            padding: 30px;
+            margin-top: 30px;
+            display: none;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .results-panel.show {
+            display: block;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .results-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .score-display {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--color-primary-soft);
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .clinical-insights {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .insights-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-primary-soft);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .insights-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .insights-list li {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            font-size: 0.9rem;
+            color: #e5e7eb;
+        }
+
+        .insight-dot {
+            width: 6px;
+            height: 6px;
+            margin-top: 6px;
+            border-radius: 999px;
+            background: var(--color-accent);
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="module-heading">
+        <!-- Header with Week 13/Chapter 24 -->
+        <header class="brand-row">
+            <div class="brand">
+                <img
+                    src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                    alt="AlliedRx logo"
+                    class="brand-logo"
+                />
+                <div class="course-meta">
+                    <span class="course-name">Clinical Medical Assistant • Week 13</span>
+                    <div class="week-label">
+                        <span class="week-label-dot"></span>
+                        <span>Chapter 24: Assisting in Geriatrics</span>
+                    </div>
+                </div>
+            </div>
+            <span class="badge-mode">Campus & Online</span>
+        </header>
+
+        <h1 id="module-heading">Geriatric Care & Communication</h1>
+        <p class="module-subtitle">
+            Master age-related changes and effective communication strategies for older adult patients. 
+            Apply clinical knowledge to optimize health and safety in geriatric care.
+        </p>
+
+        <!-- 2-Step Progress Tracker -->
+        <div class="progress-tracker">
+            <div class="progress-step active" data-step="1">
+                <div class="step-circle">1</div>
+                <div class="step-label">Age-Related Changes</div>
+            </div>
+            <div class="progress-step" data-step="2">
+                <div class="step-circle">2</div>
+                <div class="step-label">Communication Scenarios</div>
+            </div>
+        </div>
+
+        <!-- Progress Summary -->
+        <div class="progress-summary">
+            <div class="summary-card">
+                <span class="summary-number" id="completed-count">0</span>
+                <span class="summary-label">Activities Completed</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="accuracy-rate">0%</span>
+                <span class="summary-label">Current Accuracy</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="time-spent">0:00</span>
+                <span class="summary-label">Time Spent</span>
+            </div>
+        </div>
+
+        <!-- Activity Grid (2 Activities Only) -->
+        <div class="activity-grid">
+            <!-- Activity 1: Age-Related Changes Matching -->
+            <section class="activity-card" id="activity-1" data-activity="1" aria-label="Activity 1: Age-Related Changes Matching">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 1</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">
+                    <span class="activity-icon">🧠</span>
+                    Age-Related Changes Matching
+                </h3>
+                <p class="activity-description">
+                    Drag each age-related change to its correct body system category. 
+                    Understanding these changes is essential for providing appropriate geriatric care.
+                </p>
+
+                <!-- Clinical Tip -->
+                <div class="clinical-tip">
+                    <div class="tip-title">
+                        <span>💡</span>
+                        Clinical Insight
+                    </div>
+                    <div class="tip-content">
+                        <strong>Normal Aging vs. Disease:</strong> Distinguish between normal age-related changes (presbyopia, decreased skin elasticity) and pathological conditions (dementia, osteoporosis). This guides appropriate interventions and patient education.
+                    </div>
+                </div>
+
+                <!-- Matching Game -->
+                <div class="matching-container">
+                    <div class="category-column" data-category="nervous" id="nervous-category">
+                        <div class="category-title">Nervous System</div>
+                        <div class="category-content"></div>
+                    </div>
+                    <div class="category-column" data-category="sensory" id="sensory-category">
+                        <div class="category-title">Sensory Organs</div>
+                        <div class="category-content"></div>
+                    </div>
+                    <div class="category-column" data-category="musculoskeletal" id="musculoskeletal-category">
+                        <div class="category-title">Musculoskeletal</div>
+                        <div class="category-content"></div>
+                    </div>
+                </div>
+
+                <!-- Match Items -->
+                <div class="match-items">
+                    <div class="match-item draggable" data-category="nervous" draggable="true">Decreased reaction time</div>
+                    <div class="match-item draggable" data-category="sensory" draggable="true">Presbyopia (farsightedness)</div>
+                    <div class="match-item draggable" data-category="musculoskeletal" draggable="true">Decreased bone density</div>
+                    <div class="match-item draggable" data-category="nervous" draggable="true">Mild memory changes</div>
+                    <div class="match-item draggable" data-category="sensory" draggable="true">Presbycusis (hearing loss)</div>
+                    <div class="match-item draggable" data-category="musculoskeletal" draggable="true">Reduced muscle mass</div>
+                    <div class="match-item draggable" data-category="nervous" draggable="true">Decreased taste/smell</div>
+                    <div class="match-item draggable" data-category="sensory" draggable="true">Reduced tear production</div>
+                    <div class="match-item draggable" data-category="musculoskeletal" draggable="true">Joint stiffness</div>
+                </div>
+
+                <!-- Safety Warning -->
+                <div class="safety-warning" id="aging-warning" style="display: none;">
+                    <div class="warning-icon">⚠️</div>
+                    <div class="warning-content">
+                        <div class="warning-title">Fall Risk Alert!</div>
+                        <div class="warning-text">
+                            Combined nervous system changes (slower reaction time) and musculoskeletal changes (reduced bone density, muscle mass) significantly increase fall risk in older adults. Always assess home safety and recommend assistive devices.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback-container" id="feedback-1">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Age-Related Changes Mastered!
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Key Age-Related Changes by System:</strong><br><br>
+                        
+                        <strong>Nervous System:</strong><br>
+                        • Decreased reaction time & processing speed<br>
+                        • Mild memory changes (normal aging)<br>
+                        • Reduced taste/smell (olfactory changes)<br>
+                        <em>Clinical Application:</em> Allow extra time for tasks, repeat instructions, ensure adequate lighting.<br><br>
+                        
+                        <strong>Sensory Organs:</strong><br>
+                        • Presbyopia (lens stiffening) → need for reading glasses<br>
+                        • Presbycusis (high-frequency hearing loss)<br>
+                        • Reduced tear production (dry eyes)<br>
+                        <em>Clinical Application:</em> Face patient when speaking, provide written instructions, use artificial tears PRN.<br><br>
+                        
+                        <strong>Musculoskeletal:</strong><br>
+                        • Decreased bone density (osteopenia/osteoporosis)<br>
+                        • Reduced muscle mass (sarcopenia)<br>
+                        • Joint stiffness & decreased flexibility<br>
+                        <em>Clinical Application:</em> Fall prevention strategies, weight-bearing exercise, calcium/Vitamin D supplementation.
+                    </div>
+                </div>
+
+                <!-- Check Button -->
+                <button class="btn btn-secondary check-activity-btn" data-activity="1">
+                    <span class="btn-icon">✓</span>
+                    Check Answers
+                </button>
+            </section>
+
+            <!-- Activity 2: Geriatric Communication Scenario -->
+            <section class="activity-card" id="activity-2" data-activity="2" aria-label="Activity 2: Geriatric Communication Scenario">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 2</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">
+                    <span class="activity-icon">🗣️</span>
+                    Geriatric Communication Scenario
+                </h3>
+                <p class="activity-description">
+                    Select the MOST appropriate communication approach for this geriatric patient scenario. 
+                    Consider sensory changes, cognitive status, and patient dignity.
+                </p>
+
+                <!-- Scenario -->
+                <div class="scenario-container">
+                    <div class="scenario-title">Patient Scenario</div>
+                    <div class="scenario-text">
+                        You are medical assistant Bill Novelli. Mr. Henderson, an 82-year-old patient with mild hearing loss, 
+                        presbyopia, and early-stage osteoarthritis, has arrived for his routine blood pressure check. 
+                        He seems slightly confused about why he's here and keeps asking you to repeat instructions. 
+                        His daughter mentioned he's been more forgetful lately.
+                    </div>
+
+                    <div class="patient-profile">
+                        <div class="profile-icon">👨‍🦳</div>
+                        <div class="profile-info">
+                            <div class="profile-name">Mr. James Henderson, 82 years old</div>
+                            <div class="profile-details">
+                                • Mild bilateral hearing loss (high-frequency)<br>
+                                • Presbyopia (wears reading glasses)<br>
+                                • Early osteoarthritis in knees<br>
+                                • Daughter reports increased forgetfulness<br>
+                                • Takes medications for hypertension & arthritis
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Communication Options -->
+                <div class="communication-options">
+                    <div class="comm-option" data-option="A">
+                        <div class="comm-letter">A</div>
+                        <div class="comm-text">
+                            Speak quickly and efficiently to complete the vital signs check. 
+                            Give all instructions at once to save time.
+                        </div>
+                    </div>
+                    <div class="comm-option" data-option="B">
+                        <div class="comm-letter">B</div>
+                        <div class="comm-text">
+                            Speak loudly directly into his ear. Assume he needs help with everything 
+                            and assist without asking permission.
+                        </div>
+                    </div>
+                    <div class="comm-option" data-option="C">
+                        <div class="comm-text">
+                            Face him directly at eye level. Speak clearly at moderate pace. 
+                            Provide one instruction at a time. Verify understanding using teach-back method.
+                        </div>
+                    </div>
+                    <div class="comm-option" data-option="D">
+                        <div class="comm-text">
+                            Speak to his daughter instead, as she seems more competent. 
+                            Let her explain everything to her father.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Clinical Tip -->
+                <div class="clinical-tip">
+                    <div class="tip-title">
+                        <span>🩺</span>
+                        Communication Principles for Older Adults
+                    </div>
+                    <div class="tip-content">
+                        <strong>SPEAK Model:</strong> <br>
+                        • <strong>S</strong>it or stand at eye level<br>
+                        • <strong>P</strong>osition yourself facing the patient<br>
+                        • <strong>E</strong>liminate background noise<br>
+                        • <strong>A</strong>sk one question at a time<br>
+                        • <strong>K</strong>eep instructions simple & verify understanding
+                    </div>
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback-container" id="feedback-2">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Effective Geriatric Communication!
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Correct Answer: C</strong><br><br>
+                        
+                        <strong>Why This Approach Works:</strong><br>
+                        • <strong>Face-to-face:</strong> Allows lip-reading and visual cues for hearing-impaired patients<br>
+                        • <strong>Eye level:</strong> Maintains dignity and avoids intimidating posture<br>
+                        • <strong>Moderate pace:</strong> Accommodates slower processing speed<br>
+                        • <strong>One instruction at a time:</strong> Prevents cognitive overload<br>
+                        • <strong>Teach-back method:</strong> "Please tell me in your own words what we're going to do next"<br><br>
+                        
+                        <strong>Why Other Options Are Less Effective:</strong><br>
+                        • <strong>A (Rushed approach):</strong> Increases anxiety and errors<br>
+                        • <strong>B (Loud/patronizing):</strong> Violates dignity, may startle patient<br>
+                        • <strong>D (Excluding patient):</strong> Violates autonomy and may miss important information from patient<br><br>
+                        
+                        <strong>Documentation Note:</strong> Document any cognitive concerns using standardized tools like MMSE or MoCA if provider orders. Note communication strategies used successfully.
+                    </div>
+                </div>
+
+                <!-- Check Button -->
+                <button class="btn btn-secondary check-activity-btn" data-activity="2">
+                    <span class="btn-icon">✓</span>
+                    Check Answer
+                </button>
+            </section>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn btn-secondary" id="reset-all-btn">
+                <span class="btn-icon">↻</span>
+                Reset All Activities
+            </button>
+            <button class="btn btn-secondary" id="hint-all-btn">
+                <span class="btn-icon">💡</span>
+                Show Clinical Tips
+            </button>
+            <button class="btn btn-primary" id="view-results-btn">
+                <span class="btn-icon">📊</span>
+                View Final Results
+            </button>
+        </div>
+
+        <!-- Results Panel -->
+        <div class="results-panel" id="results-panel">
+            <div class="results-header">
+                <h2 class="results-title">Geriatric Care Proficiency Results</h2>
+                <div class="score-display" id="final-score">0%</div>
+            </div>
+            
+            <div class="clinical-insights">
+                <h3 class="insights-title">
+                    <span>🩺</span> Clinical Competency Insights
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Age-Related Changes:</strong> Normal aging involves gradual decline in all systems. Pathological changes require medical intervention. Always assess functional status rather than chronological age.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Communication Adjustments:</strong> Presbycusis affects high-frequency sounds first (consonants like s, f, th). Face patients, speak clearly, use written supplements, and verify understanding.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Fall Prevention:</strong> Multifactorial approach: medication review, vision check, home safety assessment, exercise for balance/strength, proper footwear, and assistive devices.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Screening Tools:</strong> Use validated tools: MMSE/MoCA for cognition, PHQ-9/GDS for depression, MUST for malnutrition. Document scores and follow protocols.</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="clinical-insights" style="margin-top: 20px;">
+                <h3 class="insights-title">
+                    <span>📋</span> Documentation & Community Resources
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Comprehensive Assessment:</strong> Document ADLs (Activities of Daily Living) and IADLs (Instrumental ADLs). Changes may indicate need for additional support services.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Community Resources:</strong> Know local services: Meals on Wheels, senior transportation, adult day care, home health, respite care, and caregiver support groups.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Legal Considerations:</strong> Document advance directives, healthcare proxy, and POLST forms. Respect patient autonomy while ensuring safety.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Medication Management:</strong> Older adults average 4-5 prescriptions. Document adherence, use pill organizers, conduct "brown bag" medication reviews, watch for polypharmacy.</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // State Management - Exactly 2 Activities
+            const state = {
+                activities: {
+                    1: { completed: false, correct: 0, total: 9, score: 0 },
+                    2: { completed: false, correct: 0, total: 4, score: 0 }
+                },
+                startedAt: new Date(),
+                timeSpent: 0
+            };
+
+            // DOM Elements
+            const progressSteps = document.querySelectorAll('.progress-step');
+            const activityCards = document.querySelectorAll('.activity-card');
+            const completedCount = document.getElementById('completed-count');
+            const accuracyRate = document.getElementById('accuracy-rate');
+            const timeSpent = document.getElementById('time-spent');
+            const resetBtn = document.getElementById('reset-all-btn');
+            const hintBtn = document.getElementById('hint-all-btn');
+            const resultsBtn = document.getElementById('view-results-btn');
+            const resultsPanel = document.getElementById('results-panel');
+            const finalScore = document.getElementById('final-score');
+            const checkButtons = document.querySelectorAll('.check-activity-btn');
+
+            // Timer for time spent
+            function updateTimer() {
+                const now = new Date();
+                const diff = Math.floor((now - state.startedAt) / 1000);
+                state.timeSpent = diff;
+                const minutes = Math.floor(diff / 60);
+                const seconds = diff % 60;
+                timeSpent.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            }
+            setInterval(updateTimer, 1000);
+
+            // Update Progress Summary
+            function updateProgressSummary() {
+                let completed = 0;
+                let totalCorrect = 0;
+                let totalItems = 0;
+
+                Object.values(state.activities).forEach(activity => {
+                    if (activity.completed) completed++;
+                    totalCorrect += activity.correct;
+                    totalItems += activity.total;
+                });
+
+                completedCount.textContent = completed;
+                const accuracy = totalItems > 0 ? Math.round((totalCorrect / totalItems) * 100) : 0;
+                accuracyRate.textContent = `${accuracy}%`;
+
+                // Update progress steps (2-step only)
+                progressSteps.forEach((step, index) => {
+                    const stepNumber = index + 1;
+                    if (stepNumber <= completed) {
+                        step.classList.add('completed');
+                        step.classList.remove('active');
+                    } else if (stepNumber === completed + 1) {
+                        step.classList.add('active');
+                        step.classList.remove('completed');
+                    } else {
+                        step.classList.remove('active', 'completed');
+                    }
+                });
+            }
+
+            // Activity 1: Age-Related Changes Matching
+            function initActivity1() {
+                const matchItems = document.querySelectorAll('#activity-1 .match-item.draggable');
+                const categoryColumns = document.querySelectorAll('#activity-1 .category-column');
+                const warning = document.getElementById('aging-warning');
+                const feedback = document.getElementById('feedback-1');
+                const status = document.querySelector('#activity-1 .activity-status');
+                const checkBtn = document.querySelector('#activity-1 .check-activity-btn');
+
+                // Correct matches by category
+                const correctMatches = {
+                    'nervous': ['Decreased reaction time', 'Mild memory changes', 'Decreased taste/smell'],
+                    'sensory': ['Presbyopia (farsightedness)', 'Presbycusis (hearing loss)', 'Reduced tear production'],
+                    'musculoskeletal': ['Decreased bone density', 'Reduced muscle mass', 'Joint stiffness']
+                };
+
+                let placedItems = 0;
+
+                // Setup drag and drop
+                matchItems.forEach(item => {
+                    item.addEventListener('dragstart', function(e) {
+                        e.dataTransfer.setData('text/plain', JSON.stringify({
+                            text: this.textContent,
+                            category: this.dataset.category
+                        }));
+                        this.classList.add('dragging');
+                    });
+
+                    item.addEventListener('dragend', function() {
+                        this.classList.remove('dragging');
+                    });
+                });
+
+                categoryColumns.forEach(column => {
+                    column.addEventListener('dragover', function(e) {
+                        e.preventDefault();
+                        this.classList.add('hover');
+                    });
+
+                    column.addEventListener('dragleave', function() {
+                        this.classList.remove('hover');
+                    });
+
+                    column.addEventListener('drop', function(e) {
+                        e.preventDefault();
+                        this.classList.remove('hover');
+                        const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+                        const targetCategory = this.dataset.category;
+
+                        // Check if item already placed
+                        const existingItems = Array.from(this.querySelectorAll('.match-item.placed'));
+                        const alreadyPlaced = existingItems.some(item => item.textContent === data.text);
+
+                        if (!alreadyPlaced) {
+                            // Create placed item
+                            const placedDiv = document.createElement('div');
+                            placedDiv.className = 'match-item placed';
+                            placedDiv.textContent = data.text;
+                            placedDiv.dataset.category = data.category;
+                            this.querySelector('.category-content').appendChild(placedDiv);
+
+                            // Hide original item
+                            const originalItem = Array.from(matchItems).find(item => 
+                                item.textContent === data.text && item.style.display !== 'none'
+                            );
+                            if (originalItem) {
+                                originalItem.style.display = 'none';
+                                placedItems++;
+                            }
+                        }
+                    });
+                });
+
+                // Check answers
+                checkBtn.addEventListener('click', function() {
+                    let correctPlacements = 0;
+                    
+                    categoryColumns.forEach(column => {
+                        const category = column.dataset.category;
+                        const placedItemsInColumn = Array.from(column.querySelectorAll('.match-item.placed'));
+                        
+                        placedItemsInColumn.forEach(item => {
+                            const itemText = item.textContent;
+                            if (correctMatches[category] && correctMatches[category].includes(itemText)) {
+                                correctPlacements++;
+                                item.style.background = 'rgba(0, 184, 148, 0.2)';
+                            } else {
+                                item.style.background = 'rgba(225, 112, 85, 0.2)';
+                            }
+                        });
+                    });
+
+                    // Update state
+                    state.activities[1].completed = true;
+                    state.activities[1].correct = correctPlacements;
+                    state.activities[1].score = Math.round((correctPlacements / 9) * 100);
+                    
+                    // Update UI
+                    status.textContent = 'Completed';
+                    status.style.color = '#00b894';
+                    document.querySelector('#activity-1').classList.add('completed');
+                    feedback.classList.add('show');
+                    
+                    // Show warning if not perfect
+                    if (correctPlacements < 9) {
+                        warning.style.display = 'flex';
+                    }
+                    
+                    updateProgressSummary();
+                    
+                    // Scroll feedback into view
+                    feedback.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                });
+            }
+
+            // Activity 2: Geriatric Communication Scenario
+            function initActivity2() {
+                const commOptions = document.querySelectorAll('#activity-2 .comm-option');
+                const feedback = document.getElementById('feedback-2');
+                const status = document.querySelector('#activity-2 .activity-status');
+                const checkBtn = document.querySelector('#activity-2 .check-activity-btn');
+                
+                const correctAnswer = 'C';
+                let selectedOption = null;
+
+                // Option selection
+                commOptions.forEach(option => {
+                    option.addEventListener('click', function() {
+                        if (state.activities[2].completed) return;
+                        
+                        // Clear previous selections
+                        commOptions.forEach(opt => {
+                            opt.classList.remove('selected', 'incorrect');
+                        });
+                        
+                        // Select this option
+                        this.classList.add('selected');
+                        selectedOption = this.dataset.option;
+                    });
+                });
+
+                // Check answer
+                checkBtn.addEventListener('click', function() {
+                    if (!selectedOption) {
+                        alert('Please select an answer first.');
+                        return;
+                    }
+                    
+                    const isCorrect = selectedOption === correctAnswer;
+                    
+                    // Update state
+                    state.activities[2].completed = true;
+                    state.activities[2].correct = isCorrect ? 1 : 0;
+                    state.activities[2].score = isCorrect ? 100 : 0;
+                    
+                    // Update UI
+                    status.textContent = 'Completed';
+                    status.style.color = isCorrect ? '#00b894' : '#e17055';
+                    document.querySelector('#activity-2').classList.add('completed');
+                    
+                    // Mark incorrect if wrong
+                    if (!isCorrect) {
+                        commOptions.forEach(opt => {
+                            if (opt.dataset.option === selectedOption) {
+                                opt.classList.add('incorrect');
+                            }
+                            if (opt.dataset.option === correctAnswer) {
+                                opt.classList.add('selected');
+                            }
+                        });
+                    }
+                    
+                    feedback.classList.add('show');
+                    updateProgressSummary();
+                    
+                    // Scroll feedback into view
+                    feedback.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                });
+            }
+
+            // Reset All Activities
+            function resetAllActivities() {
+                // Reset state
+                Object.keys(state.activities).forEach(key => {
+                    state.activities[key] = {
+                        completed: false,
+                        correct: 0,
+                        total: parseInt(key) === 1 ? 9 : 4,
+                        score: 0
+                    };
+                });
+
+                // Reset UI - Activity 1
+                const matchItems1 = document.querySelectorAll('#activity-1 .match-item');
+                const categories1 = document.querySelectorAll('#activity-1 .category-content');
+                const feedback1 = document.getElementById('feedback-1');
+                const warning1 = document.getElementById('aging-warning');
+                const status1 = document.querySelector('#activity-1 .activity-status');
+                
+                matchItems1.forEach(item => {
+                    item.style.display = '';
+                    item.classList.remove('dragging');
+                    if (item.classList.contains('placed')) {
+                        item.remove();
+                    }
+                });
+                
+                categories1.forEach(cat => cat.innerHTML = '');
+                feedback1.classList.remove('show');
+                warning1.style.display = 'none';
+                status1.textContent = 'Not Started';
+                status1.style.color = '';
+                document.querySelector('#activity-1').classList.remove('completed');
+
+                // Reset UI - Activity 2
+                const commOptions2 = document.querySelectorAll('#activity-2 .comm-option');
+                const feedback2 = document.getElementById('feedback-2');
+                const status2 = document.querySelector('#activity-2 .activity-status');
+                
+                commOptions2.forEach(opt => {
+                    opt.classList.remove('selected', 'incorrect');
+                });
+                
+                feedback2.classList.remove('show');
+                status2.textContent = 'Not Started';
+                status2.style.color = '';
+                document.querySelector('#activity-2').classList.remove('completed');
+
+                // Reset results panel
+                resultsPanel.classList.remove('show');
+
+                // Update progress
+                updateProgressSummary();
+            }
+
+            // Show Clinical Tips
+            function showClinicalTips() {
+                const tips = document.querySelectorAll('.clinical-tip');
+                tips.forEach(tip => {
+                    tip.style.animation = 'glow 2s infinite';
+                    setTimeout(() => {
+                        tip.style.animation = '';
+                    }, 2000);
+                });
+                
+                // Scroll to first tip
+                document.querySelector('.clinical-tip').scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+            }
+
+            // View Final Results
+            function viewFinalResults() {
+                let totalScore = 0;
+                let activityCount = 0;
+
+                Object.values(state.activities).forEach(activity => {
+                    if (activity.completed) {
+                        totalScore += activity.score;
+                        activityCount++;
+                    }
+                });
+
+                const averageScore = activityCount > 0 ? Math.round(totalScore / activityCount) : 0;
+                finalScore.textContent = `${averageScore}%`;
+                resultsPanel.classList.add('show');
+                
+                // Scroll to results
+                resultsPanel.scrollIntoView({ behavior: 'smooth' });
+            }
+
+            // Initialize activities
+            initActivity1();
+            initActivity2();
+
+            // Event listeners
+            resetBtn.addEventListener('click', resetAllActivities);
+            hintBtn.addEventListener('click', showClinicalTips);
+            resultsBtn.addEventListener('click', viewFinalResults);
+
+            // Initial progress update
+            updateProgressSummary();
+        });
+    </script>
+</body>
+</html>
