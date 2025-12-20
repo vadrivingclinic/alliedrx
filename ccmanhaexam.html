@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>AlliedRx CCMA • NHA Certification Exam</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-warning: #fdcb6e;
+            --color-error: #e17055;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
+            --radius-lg: 24px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(circle at top left, #ffffff 0%, #f1ecff 40%, var(--color-bg) 100%);
+            color: var(--color-text);
+            -webkit-text-size-adjust: 100%;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 12px;
+            }
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px 30px;
+            display: grid;
+            grid-template-columns: minmax(0, 3.1fr) minmax(0, 2.4fr);
+            gap: 28px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes successPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        @media (max-width: 900px) {
+            .page {
+                grid-template-columns: 1fr;
+                padding: 22px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 0;
+            }
+            .page {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 18px 14px 22px;
+                gap: 22px;
+            }
+        }
+
+        /* Header & branding */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .exam-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+            font-size: 0.76rem;
+            font-weight: 600;
+            color: white;
+            white-space: normal;
+            animation: pulse 3s infinite;
+        }
+
+        .exam-badge-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: white;
+            flex-shrink: 0;
+            animation: blink 1.5s infinite;
+        }
+
+        h1 {
+            font-size: clamp(2rem, 3vw, 2.4rem);
+            line-height: 1.05;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 34rem;
+            margin-bottom: 18px;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        /* Main content sections */
+        .section {
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-content {
+            background: rgba(175, 75, 239, 0.03);
+            border-radius: 16px;
+            padding: 18px 20px;
+            border: 1px solid rgba(175, 75, 239, 0.1);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--color-text);
+        }
+
+        /* Action boxes */
+        .action-box {
+            background: linear-gradient(135deg, rgba(175, 75, 239, 0.1), rgba(255, 255, 255, 0.95));
+            border-radius: 18px;
+            padding: 24px;
+            border: 2px solid var(--color-primary-soft);
+            text-align: center;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+        }
+
+        .action-box:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--color-primary);
+        }
+
+        .action-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 12px;
+        }
+
+        .action-text {
+            font-size: 0.95rem;
+            color: var(--color-text);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 20px;
+            margin: 20px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(to bottom, var(--color-primary), var(--color-accent));
+            border-radius: 3px;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 20px;
+            padding-left: 20px;
+        }
+
+        .timeline-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -8px;
+            top: 5px;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: var(--color-primary);
+            border: 3px solid white;
+            box-shadow: 0 0 0 2px var(--color-primary);
+        }
+
+        .timeline-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 5px;
+        }
+
+        .timeline-content {
+            font-size: 0.85rem;
+            color: var(--color-muted);
+            line-height: 1.5;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 12px 24px;
+            border-radius: 12px;
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #9a3bd6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(175, 75, 239, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-text);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(12, 10, 24, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* Right column */
+        .section-tag {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-primary);
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .side-heading {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--color-text);
+            margin-bottom: 10px;
+        }
+
+        .side-card {
+            background: rgba(12, 10, 24, 0.94);
+            color: #e5e7eb;
+            border-radius: 18px;
+            padding: 20px 22px;
+            font-size: 0.88rem;
+            line-height: 1.7;
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.6);
+            margin-bottom: 14px;
+            transition: transform 0.3s ease;
+        }
+
+        .side-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .side-card strong {
+            color: #ffffff;
+        }
+
+        .side-subheading {
+            font-size: 0.86rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: #d492ff;
+            font-weight: 600;
+            margin: 14px 0 10px;
+        }
+
+        .side-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-size: 0.86rem;
+        }
+
+        .side-list li {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            transition: transform 0.3s ease;
+            padding: 4px 0;
+        }
+
+        .side-list li:hover {
+            transform: translateX(5px);
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            margin-top: 6px;
+            border-radius: 999px;
+            background: var(--color-accent);
+            flex-shrink: 0;
+        }
+
+        .tip-card {
+            margin-top: 14px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            background: rgba(15, 23, 42, 0.75);
+            padding: 14px 16px;
+            font-size: 0.82rem;
+            color: #e5e7eb;
+            transition: all 0.3s ease;
+        }
+
+        .tip-card:hover {
+            border-color: var(--color-primary-soft);
+            background: rgba(15, 23, 42, 0.9);
+        }
+
+        /* Important note */
+        .important-note {
+            background: linear-gradient(135deg, rgba(253, 203, 110, 0.1), rgba(255, 255, 255, 0.95));
+            border: 2px solid var(--color-warning);
+            border-radius: 16px;
+            padding: 16px 18px;
+            margin: 20px 0;
+        }
+
+        .note-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #e17055;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .note-content {
+            font-size: 0.86rem;
+            color: var(--color-text);
+            line-height: 1.5;
+        }
+
+        /* CCMA specific styling */
+        .ccma-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.1);
+            color: var(--color-primary);
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .exam-feature {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin: 15px 0;
+            padding: 12px;
+            border-radius: 12px;
+            background: rgba(175, 75, 239, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .exam-feature:hover {
+            background: rgba(175, 75, 239, 0.1);
+            transform: translateX(5px);
+        }
+
+        .feature-icon {
+            font-size: 1.5rem;
+            color: var(--color-primary);
+            flex-shrink: 0;
+        }
+
+        .feature-content h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--color-text);
+            margin-bottom: 4px;
+        }
+
+        .feature-content p {
+            font-size: 0.85rem;
+            color: var(--color-muted);
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="nha-exam-heading">
+        <!-- LEFT COLUMN: Registration & information -->
+        <section class="column" aria-label="NHA Exam Information">
+            <header class="brand-row">
+                <div class="brand">
+                    <img
+                        src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                        alt="AlliedRx logo"
+                        class="brand-logo"
+                    />
+                    <div class="course-meta">
+                        <span class="course-name">Clinical Medical Assistant • National Certification</span>
+                        <div class="exam-badge">
+                            <span class="exam-badge-dot"></span>
+                            <span>NHA CCMA Exam</span>
+                        </div>
+                    </div>
+                </div>
+                <span class="ccma-badge">Required for Certification</span>
+            </header>
+
+            <h1 id="nha-exam-heading">NHA CCMA Exam Information</h1>
+            <p class="subtitle">
+                Complete your Clinical Medical Assistant certification by registering for and passing the 
+                National Healthcareer Association (NHA) CCMA exam.
+            </p>
+
+            <!-- Registration Section -->
+            <div class="section">
+                <h2 class="section-title">📝 Exam Registration Requirement</h2>
+                <div class="section-content">
+                    <p><strong>All CCMA students are required to register at <a href="https://www.nhanow.com" target="_blank" style="color: var(--color-primary); text-decoration: none; font-weight: 600;">www.nhanow.com</a> for their national certification exam.</strong></p>
+                    
+                    <div class="exam-feature">
+                        <div class="feature-icon">🎯</div>
+                        <div class="feature-content">
+                            <h4>Clinical Medical Assistant Certification</h4>
+                            <p>The NHA CCMA (Certified Clinical Medical Assistant) exam validates your skills in clinical procedures, patient care, and medical office administration.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="exam-feature">
+                        <div class="feature-icon">📋</div>
+                        <div class="feature-content">
+                            <h4>Exam Content Areas</h4>
+                            <p>Patient intake, clinical procedures, pharmacology, specimen collection, diagnostic testing, medical office administration, and legal/ethical guidelines.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Box -->
+            <div class="action-box">
+                <h3 class="action-title">Register for Your CCMA Exam</h3>
+                <p class="action-text">
+                    Secure your testing date to become a nationally certified Clinical Medical Assistant. 
+                    Early registration ensures preferred scheduling.
+                </p>
+                <a href="https://www.nhanow.com" target="_blank" class="btn btn-primary">
+                    <span>🌐</span>
+                    Register at NHAnow.com
+                </a>
+            </div>
+
+            <!-- Post-Exam Timeline -->
+            <div class="section">
+                <h2 class="section-title">📊 What to Expect After Your CCMA Exam</h2>
+                <div class="section-content">
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <h4 class="timeline-title">Exam Submission</h4>
+                            <p class="timeline-content">Your CCMA exam is submitted electronically to NHA for processing.</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h4 class="timeline-title">48 Business Hours</h4>
+                            <p class="timeline-content">Results available on your NHA account after being received by NHA.</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h4 class="timeline-title">Email Notification</h4>
+                            <p class="timeline-content">You'll receive an email when results are available in the certification portal.</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h4 class="timeline-title">View Results</h4>
+                            <p class="timeline-content">Log into your NHA account and click the Results tab to view your score.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Important Note -->
+            <div class="important-note">
+                <div class="note-title">⚠️ Important Confidentiality Notice</div>
+                <div class="note-content">
+                    <p><strong>For confidentiality, the notification email will not include your exam score.</strong> You must log into your NHA certification portal to view your results.</p>
+                    <p style="margin-top: 8px;">Keep your login credentials secure and check your email (including spam folder) for notifications.</p>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- RIGHT COLUMN: Tips & additional information -->
+        <aside class="column" aria-label="CCMA Exam preparation and tips">
+            <p class="section-tag">CCMA Exam Preparation</p>
+            <h2 class="side-heading">CCMA Exam Success Guide</h2>
+            
+            <div class="side-card">
+                <p>
+                    <strong>Preparing for your NHA CCMA certification exam</strong> requires mastery of both 
+                    clinical skills and administrative knowledge specific to medical assisting.
+                </p>
+                
+                <p class="side-subheading">Key Clinical Skills to Review:</p>
+                <ul class="side-list">
+                    <li>
+                        <span class="dot"></span>
+                        <span><strong>Patient Assessment:</strong> Vital signs, medical history, patient positioning</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span><strong>Clinical Procedures:</strong> Injections, venipuncture, EKG, spirometry</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span><strong>Specimen Collection:</strong> Blood, urine, throat cultures, wound cultures</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span><strong>Patient Education:</strong> Medication instructions, treatment plans, preventive care</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span><strong>Infection Control:</strong> Sterile technique, PPE, OSHA guidelines</span>
+                    </li>
+                </ul>
+
+                <div class="tip-card">
+                    <strong>Administrative Knowledge Areas:</strong>
+                    <ul style="margin-top: 8px; padding-left: 20px;">
+                        <li>Medical terminology and abbreviations</li>
+                        <li>Electronic health records (EHR) documentation</li>
+                        <li>Appointment scheduling and patient flow</li>
+                        <li>Medical coding basics (CPT, ICD-10)</li>
+                        <li>Insurance processing and billing procedures</li>
+                        <li>Legal and ethical guidelines (HIPAA, consent)</li>
+                    </ul>
+                </div>
+
+                <p class="side-subheading" style="margin-top: 16px;">Registration Checklist:</p>
+                <ul class="side-list">
+                    <li><span class="dot"></span><span>Create account at nhanow.com</span></li>
+                    <li><span class="dot"></span><span>Select "Clinical Medical Assistant" certification</span></li>
+                    <li><span class="dot"></span><span>Choose testing method (in-person or online proctored)</span></li>
+                    <li><span class="dot"></span><span>Select exam date, time, and location</span></li>
+                    <li><span class="dot"></span><span>Complete payment and save confirmation</span></li>
+                </ul>
+            </div>
+
+            <div class="side-card">
+                <p class="side-subheading">Understanding Your CCMA Results</p>
+                <p style="margin-bottom: 12px;">
+                    Your NHA score report provides detailed performance analysis:
+                </p>
+                <ul class="side-list">
+                    <li><span class="dot"></span><span><strong>Pass/Fail Status:</strong> Certification achievement</span></li>
+                    <li><span class="dot"></span><span><strong>Performance by Domain:</strong> Clinical vs. Administrative areas</span></li>
+                    <li><span class="dot"></span><span><strong>Detailed Breakdown:</strong> Specific skill areas within each domain</span></li>
+                    <li><span class="dot"></span><span><strong>Certification Details:</strong> Validity period and renewal requirements</span></li>
+                    <li><span class="dot"></span><span><strong>Retake Information:</strong> If needed, scheduling details</span></li>
+                </ul>
+
+                <div class="tip-card">
+                    <strong>After Passing Your CCMA Exam:</strong>
+                    <ul style="margin-top: 8px; padding-left: 20px;">
+                        <li>Digital badge available within 2-3 business days</li>
+                        <li>Physical certificate mailed within 2-3 weeks</li>
+                        <li>Update resume with "CCMA" credential</li>
+                        <li>Share certification with potential employers</li>
+                        <li>Plan for continuing education (10 CE credits every 2 years)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="action-box" style="background: linear-gradient(135deg, rgba(0, 184, 148, 0.1), rgba(255, 255, 255, 0.95)); border-color: rgba(0, 184, 148, 0.3); margin-top: 20px;">
+                <h3 class="action-title" style="color: var(--color-success);">Need Assistance?</h3>
+                <p class="action-text">
+                    Contact NHA Customer Support for registration help or questions about your 
+                    Clinical Medical Assistant certification.
+                </p>
+                <div style="font-size: 0.85rem; color: var(--color-muted); margin: 15px 0; padding: 12px; background: rgba(255, 255, 255, 0.5); border-radius: 8px;">
+                    <strong>NHA Support:</strong><br>
+                    📞 (800) 499-9092<br>
+                    📧 info@nhanow.com<br>
+                    ⏰ Mon-Fri, 8AM-8PM ET
+                </div>
+            </div>
+
+        </aside>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add hover effects to exam features
+            const examFeatures = document.querySelectorAll('.exam-feature');
+            examFeatures.forEach(feature => {
+                feature.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateX(5px)';
+                    this.style.background = 'rgba(175, 75, 239, 0.1)';
+                });
+                
+                feature.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateX(0)';
+                    this.style.background = 'rgba(175, 75, 239, 0.05)';
+                });
+            });
+
+            // Add click animation to action box
+            const actionBox = document.querySelector('.action-box');
+            actionBox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A' || e.target.parentElement.tagName === 'A') {
+                    this.style.transform = 'scale(0.98)';
+                    setTimeout(() => {
+                        this.style.transform = 'translateY(-4px)';
+                    }, 150);
+                }
+            });
+
+            // Add scroll animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Observe sections
+            const sections = document.querySelectorAll('.section, .side-card, .action-box, .exam-feature');
+            sections.forEach((section, index) => {
+                section.style.opacity = '0';
+                section.style.transform = 'translateY(20px)';
+                section.style.transition = `opacity 0.5s ease ${index * 0.1}s, transform 0.5s ease ${index * 0.1}s`;
+                observer.observe(section);
+            });
+
+            // Observe timeline items with delay
+            const timelineItems = document.querySelectorAll('.timeline-item');
+            timelineItems.forEach((item, index) => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateX(-20px)';
+                item.style.transition = `opacity 0.5s ease ${index * 0.2}s, transform 0.5s ease ${index * 0.2}s`;
+                observer.observe(item);
+            });
+
+            // Animate the main action button
+            setTimeout(() => {
+                const mainButton = document.querySelector('.action-box .btn');
+                if (mainButton) {
+                    mainButton.style.transform = 'scale(1.02)';
+                    setTimeout(() => {
+                        mainButton.style.transform = 'scale(1)';
+                    }, 300);
+                }
+            }, 1000);
+
+            // Add click tracking for analytics (optional)
+            const nhaLink = document.querySelector('a[href*="nhanow.com"]');
+            if (nhaLink) {
+                nhaLink.addEventListener('click', function() {
+                    console.log('NHA registration link clicked - would track in analytics');
+                    // In production, you would add analytics tracking here
+                });
+            }
+        });
+    </script>
+</body>
+</html>
