@@ -1,0 +1,1803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AlliedRx -- Chapter 29: Urinalysis Foundations</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-error: #e17055;
+            --color-warning: #fdcb6e;
+            --color-info: #0984e3;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
+            --color-dark: #0c0a18;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+            --shadow-card: 0 12px 30px rgba(15, 23, 42, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(
+                circle at top left,
+                #ffffff 0,
+                #f1ecff 40%,
+                var(--color-bg) 100%
+            );
+            color: var(--color-text);
+            -webkit-text-size-adjust: 100%;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 12px; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @media (max-width: 900px) { .page { padding: 22px; } }
+        @media (max-width: 480px) { 
+            body { padding: 0; }
+            .page { border-radius: 0; box-shadow: none; padding: 18px 14px 22px; }
+        }
+
+        /* Header */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0,0,0,0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .brand-logo:hover { transform: scale(1.05); }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--color-success);
+            flex-shrink: 0;
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .badge-mode:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+        @media (max-width: 480px) {
+            .brand-row { flex-direction: column; align-items: flex-start; }
+            .badge-mode { margin-top: 6px; }
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 3vw, 2.2rem);
+            line-height: 1.1;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .module-subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 600px;
+            margin-bottom: 24px;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        /* Progress Tracker (2-STEP ONLY) */
+        .progress-tracker {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            position: relative;
+            padding: 0 20px;
+            max-width: 400px;
+        }
+
+        .progress-tracker::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 25%;
+            right: 25%;
+            height: 3px;
+            background: rgba(12, 10, 24, 0.08);
+            z-index: 1;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+
+        .step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--color-muted);
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.active .step-circle {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .progress-step.completed .step-circle {
+            background: var(--color-success);
+            border-color: var(--color-success);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.75rem;
+            color: var(--color-muted);
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .progress-step.active .step-label {
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        /* Activity Grid (Single Column for 2 activities) */
+        .activity-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        @media (min-width: 769px) {
+            .activity-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        .activity-card {
+            background: white;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            padding: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .activity-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--color-primary);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .activity-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--color-primary-soft);
+        }
+
+        .activity-card:hover::before { opacity: 1; }
+
+        .activity-card.completed {
+            border-color: var(--color-success);
+        }
+
+        .activity-card.completed::before {
+            background: var(--color-success);
+            opacity: 1;
+        }
+
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .activity-number {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .activity-status {
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-muted);
+        }
+
+        .activity-card.completed .activity-status {
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--color-success);
+        }
+
+        .activity-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 8px;
+        }
+
+        .activity-description {
+            font-size: 0.9rem;
+            color: var(--color-muted);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        /* Scenario Styling */
+        .scenario-box {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--color-info);
+        }
+
+        .scenario-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--color-info);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .scenario-content {
+            font-size: 0.9rem;
+            color: var(--color-text);
+            line-height: 1.5;
+        }
+
+        .scenario-content strong {
+            color: var(--color-primary);
+        }
+
+        /* History Fact */
+        .history-fact {
+            background: rgba(253, 203, 110, 0.1);
+            border: 2px solid var(--color-warning);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .history-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--color-warning);
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .history-text {
+            font-size: 0.85rem;
+            color: var(--color-text);
+        }
+
+        /* Question Styling */
+        .question-box {
+            background: white;
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin: 15px 0;
+            border: 1px solid rgba(12, 10, 24, 0.1);
+        }
+
+        .question-text {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+        }
+
+        .answer-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .answer-option {
+            padding: 10px;
+            border-radius: var(--radius-sm);
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+        }
+
+        .answer-option:hover {
+            border-color: var(--color-primary-soft);
+            background: rgba(175, 75, 239, 0.05);
+        }
+
+        .answer-option.selected {
+            border-color: var(--color-success);
+            background: rgba(0, 184, 148, 0.1);
+            font-weight: 600;
+        }
+
+        .answer-option.wrong {
+            border-color: var(--color-error);
+            background: rgba(225, 112, 85, 0.1);
+            animation: shake 0.5s ease;
+        }
+
+        /* Sequence Builder - FIXED */
+        .sequence-builder {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .sequence-step {
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: var(--radius-sm);
+            padding: 12px;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            cursor: grab;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            user-select: none;
+        }
+
+        .sequence-step:hover {
+            border-color: var(--color-primary-soft);
+            background: rgba(175, 75, 239, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .sequence-step.dragging {
+            opacity: 0.5;
+            transform: scale(0.95);
+        }
+
+        .sequence-dropzone {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            border: 2px dashed rgba(12, 10, 24, 0.1);
+            min-height: 150px;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .sequence-dropzone.hover {
+            border-color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.05);
+        }
+
+        .sequence-dropzone.empty::after {
+            content: 'Drag steps here in correct order';
+            color: var(--color-muted);
+            text-align: center;
+            font-size: 0.9rem;
+            margin: auto;
+            display: block;
+            padding: 20px;
+        }
+
+        .dropped-step {
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: var(--radius-sm);
+            padding: 10px 12px;
+            margin-bottom: 8px;
+            border: 2px solid var(--color-primary-soft);
+            animation: slideInRight 0.3s ease;
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .dropped-step.correct {
+            border-color: var(--color-success);
+            background: rgba(0, 184, 148, 0.05);
+        }
+
+        .dropped-step.incorrect {
+            border-color: var(--color-error);
+            background: rgba(225, 112, 85, 0.05);
+        }
+
+        .step-number {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--color-primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .dropped-step.correct .step-number {
+            background: var(--color-success);
+        }
+
+        .dropped-step.incorrect .step-number {
+            background: var(--color-error);
+        }
+
+        .step-check {
+            margin-left: auto;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .step-check.correct {
+            color: var(--color-success);
+        }
+
+        .step-check.incorrect {
+            color: var(--color-error);
+        }
+
+        /* Matching Activity - FIXED */
+        .matching-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .matching-container { grid-template-columns: 1fr; }
+        }
+
+        .patient-column, .method-column {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .patient-item {
+            background: rgba(175, 75, 239, 0.05);
+            border-radius: var(--radius-sm);
+            padding: 12px;
+            border: 2px dashed var(--color-primary-soft);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .patient-item:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary);
+        }
+
+        .patient-item.selected {
+            background: rgba(175, 75, 239, 0.15);
+            border: 2px solid var(--color-primary);
+        }
+
+        .patient-item.matched {
+            cursor: default;
+            border: 2px solid var(--color-success);
+            background: rgba(0, 184, 148, 0.1);
+        }
+
+        .method-item {
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: var(--radius-sm);
+            padding: 12px;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .method-item:hover {
+            background: rgba(175, 75, 239, 0.05);
+            border-color: var(--color-primary-soft);
+        }
+
+        .method-item.selected {
+            background: rgba(175, 75, 239, 0.1);
+            border: 2px solid var(--color-primary);
+        }
+
+        .method-item.matched {
+            border-color: var(--color-success);
+            background: rgba(0, 184, 148, 0.1);
+            cursor: default;
+        }
+
+        .method-item.matched::after {
+            content: '✓';
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--color-success);
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        /* Immediate Feedback */
+        .immediate-feedback {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 10px 15px;
+            margin-top: 10px;
+            font-size: 0.85rem;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .immediate-feedback.show {
+            display: block;
+        }
+
+        .feedback-correct {
+            color: var(--color-success);
+            border-left: 3px solid var(--color-success);
+            padding-left: 10px;
+        }
+
+        .feedback-incorrect {
+            color: var(--color-error);
+            border-left: 3px solid var(--color-error);
+            padding-left: 10px;
+        }
+
+        /* Clinical Tip */
+        .clinical-tip {
+            background: rgba(0, 184, 148, 0.1);
+            border: 2px solid var(--color-success);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .tip-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--color-success);
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tip-text {
+            font-size: 0.85rem;
+            color: var(--color-text);
+        }
+
+        /* Activity Feedback */
+        .activity-feedback {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            margin-top: 20px;
+            display: none;
+        }
+
+        .activity-feedback.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .feedback-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feedback-icon {
+            font-size: 1.2rem;
+        }
+
+        .feedback-icon.correct { color: var(--color-success); }
+        .feedback-icon.incorrect { color: var(--color-error); }
+
+        .feedback-content {
+            font-size: 0.85rem;
+            color: var(--color-text);
+            line-height: 1.5;
+        }
+
+        .feedback-content strong { color: var(--color-primary); }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #9a3bd6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(175, 75, 239, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-text);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(12, 10, 24, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-icon { font-size: 1.1em; }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="module-heading">
+        <!-- Header with Week 14, Chapter 29 -->
+        <header class="brand-row">
+            <div class="brand">
+                <img
+                    src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                    alt="AlliedRx logo"
+                    class="brand-logo"
+                />
+                <div class="course-meta">
+                    <span class="course-name">Clinical Medical Assistant • Week 14</span>
+                    <div class="week-label">
+                        <span class="week-label-dot"></span>
+                        <span>Chapter 29: Assisting in the Analysis of Urine</span>
+                    </div>
+                </div>
+            </div>
+            <span class="badge-mode">Campus & Online</span>
+        </header>
+
+        <h1 id="module-heading">Foundations of Urinalysis & Specimen Collection</h1>
+        <p class="module-subtitle">
+            Master urinary system anatomy, urine formation, proper specimen collection techniques, 
+            and patient education for accurate urinalysis results.
+        </p>
+
+        <!-- Progress Tracker (2-STEP) -->
+        <div class="progress-tracker">
+            <div class="progress-step active" data-step="1">
+                <div class="step-circle">1</div>
+                <div class="step-label">Urinary System & Collection</div>
+            </div>
+            <div class="progress-step" data-step="2">
+                <div class="step-circle">2</div>
+                <div class="step-label">Patient Education</div>
+            </div>
+        </div>
+
+        <!-- Activity Grid -->
+        <div class="activity-grid">
+            <!-- Activity 1: Urinary System & Collection Methods -->
+            <section class="activity-card" id="activity-1" data-activity="1">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 1</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">Urinary System Fundamentals & Collection Methods</h3>
+                <p class="activity-description">
+                    Review urinary anatomy, understand urine formation, and select appropriate 
+                    collection methods for different clinical situations.
+                </p>
+
+                <!-- Clinical Scenario -->
+                <div class="scenario-box">
+                    <div class="scenario-title">🩺 Clinical Scenario: Rosa's Morning</div>
+                    <div class="scenario-content">
+                        <strong>Rosa Gonzales, MA (AAMA)</strong> works in Dr. Hill's busy practice. Today she needs to collect:
+                        <br>• <strong>Routine UA</strong> from Mr. Parks
+                        <br>• <strong>UA + Pregnancy test</strong> from Mrs. Carpenter
+                        <br>• <strong>UA + C&S</strong> from Ms. Hillman
+                        <br><br>Each requires different collection considerations and patient instructions.
+                    </div>
+                </div>
+
+                <!-- History Fact -->
+                <div class="history-fact">
+                    <div class="history-title">📜 Historical Note</div>
+                    <div class="history-text">
+                        <strong>Ancient Urinalysis:</strong> Centuries ago, urine was poured on ground to attract insects.
+                        If insects came, it indicated "honey urine" (glycosuria) - an early diabetes detection method.
+                        Today, we still check for glucose as part of routine UA.
+                    </div>
+                </div>
+
+                <!-- Question 1: Urine Formation Sequence -->
+                <div class="question-box">
+                    <div class="question-text">1. Drag the urine formation processes into the correct sequence:</div>
+                    <div class="sequence-dropzone empty" id="formation-dropzone"></div>
+                    
+                    <div class="sequence-builder" id="formation-steps">
+                        <div class="sequence-step" data-step="secretion" draggable="true">
+                            Active transport of substances into filtrate
+                        </div>
+                        <div class="sequence-step" data-step="filtration" draggable="true">
+                            Blood filtered through glomeruli
+                        </div>
+                        <div class="sequence-step" data-step="elimination" draggable="true">
+                            Urine excreted from body
+                        </div>
+                        <div class="sequence-step" data-step="reabsorption" draggable="true">
+                            Useful substances return to blood
+                        </div>
+                    </div>
+                    
+                    <!-- Immediate Feedback for Sequence -->
+                    <div class="immediate-feedback" id="formation-feedback"></div>
+                </div>
+
+                <!-- Question 2: Patient-Collection Matching -->
+                <div class="question-box">
+                    <div class="question-text">2. Match each patient with the appropriate collection method:</div>
+                    
+                    <div class="matching-container">
+                        <!-- Patient Column -->
+                        <div class="patient-column">
+                            <div class="patient-item" data-patient="mr-parks">
+                                <strong>Mr. Parks</strong><br>
+                                <small>Routine UA ordered</small>
+                            </div>
+                            <div class="patient-item" data-patient="mrs-carpenter">
+                                <strong>Mrs. Carpenter</strong><br>
+                                <small>UA + Pregnancy test</small>
+                            </div>
+                            <div class="patient-item" data-patient="ms-hillman">
+                                <strong>Ms. Hillman</strong><br>
+                                <small>UA + C&S ordered</small>
+                            </div>
+                            <div class="patient-item" data-patient="diabetic">
+                                <strong>Diabetic Patient</strong><br>
+                                <small>Glucose monitoring</small>
+                            </div>
+                        </div>
+                        
+                        <!-- Method Column -->
+                        <div class="method-column">
+                            <div class="method-item" data-method="first-morning">
+                                First morning void, clean container
+                            </div>
+                            <div class="method-item" data-method="pregnancy-test">
+                                First morning void (highest hCG), enzymatic reaction test
+                            </div>
+                            <div class="method-item" data-method="clean-catch">
+                                Clean-catch midstream, sterile container
+                            </div>
+                            <div class="method-item" data-method="24-hour">
+                                24-hour collection, refrigerated
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Immediate Feedback for Matching -->
+                    <div class="immediate-feedback" id="matching-feedback"></div>
+                </div>
+
+                <!-- Clinical Tip -->
+                <div class="clinical-tip">
+                    <div class="tip-title">💡 Collection Key Points</div>
+                    <div class="tip-text">
+                        • <strong>First morning void:</strong> Most concentrated, best for routine UA<br>
+                        • <strong>Clean-catch midstream:</strong> Essential for C&S to avoid contamination<br>
+                        • <strong>Sterile container:</strong> Required for culture specimens<br>
+                        • <strong>Proper labeling:</strong> Patient name, date, time, test ordered
+                    </div>
+                </div>
+
+                <!-- Activity Feedback -->
+                <div class="activity-feedback" id="feedback-1">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Urinary Fundamentals Mastered
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Correct Urine Formation Sequence:</strong><br>
+                        1. <strong>Filtration:</strong> Blood filtered through glomeruli (forms filtrate)<br>
+                        2. <strong>Reabsorption:</strong> Useful substances (glucose, amino acids) return to blood<br>
+                        3. <strong>Secretion:</strong> Active transport of waste into filtrate<br>
+                        4. <strong>Elimination:</strong> Urine excreted from body<br><br>
+                        
+                        <strong>Collection Method Matching:</strong><br>
+                        • <strong>Mr. Parks (Routine UA):</strong> First morning void, clean container<br>
+                        • <strong>Mrs. Carpenter (Pregnancy):</strong> First morning void (highest hCG concentration)<br>
+                        • <strong>Ms. Hillman (C&S):</strong> Clean-catch midstream, sterile container<br>
+                        • <strong>Diabetic monitoring:</strong> 24-hour collection for accurate glucose measurement<br><br>
+                        
+                        <strong>Clinical Application:</strong> Understanding these fundamentals ensures you collect the right specimen
+                        in the right way for accurate test results.
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity 2: Patient Education & Quality Assurance -->
+            <section class="activity-card" id="activity-2" data-activity="2">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 2</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">Patient Education & Quality Assurance</h3>
+                <p class="activity-description">
+                    Practice instructing patients on proper collection techniques and understand 
+                    quality assurance measures for accurate test results.
+                </p>
+
+                <!-- Scenario: Patient Instructions -->
+                <div class="scenario-box">
+                    <div class="scenario-title">🗣️ Patient Education Challenge</div>
+                    <div class="scenario-content">
+                        You need to instruct three different patients on urine collection. 
+                        Each requires specific instructions based on their test. Select the 
+                        most appropriate patient education for each scenario.
+                    </div>
+                </div>
+
+                <!-- Question 1: Clean-Catch Instructions Sequence -->
+                <div class="question-box">
+                    <div class="question-text">1. Ms. Hillman needs a clean-catch midstream for C&S. Drag the steps into correct order:</div>
+                    <div class="sequence-dropzone empty" id="clean-catch-dropzone"></div>
+                    
+                    <div class="sequence-builder" id="clean-catch-steps">
+                        <div class="sequence-step" data-step="wash-hands" draggable="true">
+                            Wash hands thoroughly with soap and water
+                        </div>
+                        <div class="sequence-step" data-step="clean-area" draggable="true">
+                            Clean genital area with provided wipes (front to back for females)
+                        </div>
+                        <div class="sequence-step" data-step="remove-lid" draggable="true">
+                            Remove lid from sterile container without touching inside
+                        </div>
+                        <div class="sequence-step" data-step="begin-urinate" draggable="true">
+                            Begin urinating into toilet, then catch midstream in container
+                        </div>
+                        <div class="sequence-step" data-step="finish-urinate" draggable="true">
+                            Finish urinating in toilet, secure lid, and wash hands
+                        </div>
+                        <div class="sequence-step" data-step="return-specimen" draggable="true">
+                            Return specimen immediately (within 1 hour or refrigerate)
+                        </div>
+                    </div>
+                    
+                    <!-- Immediate Feedback -->
+                    <div class="immediate-feedback" id="clean-catch-feedback"></div>
+                </div>
+
+                <!-- Question 2: 24-Hour Collection -->
+                <div class="question-box">
+                    <div class="question-text">2. A patient needs 24-hour urine collection for protein analysis. Which instructions are correct?</div>
+                    <div class="answer-options">
+                        <div class="answer-option" data-question="24hr" data-answer="correct">
+                            Discard first morning void, then collect all urine for next 24 hours including next morning's first void
+                        </div>
+                        <div class="answer-option" data-question="24hr" data-answer="wrong">
+                            Start collecting immediately and stop exactly 24 hours later
+                        </div>
+                        <div class="answer-option" data-question="24hr" data-answer="wrong">
+                            Collect random samples throughout the day for 24 hours
+                        </div>
+                        <div class="answer-option" data-question="24hr" data-answer="wrong">
+                            Collect only daytime urine for 24 hours, skip overnight
+                        </div>
+                    </div>
+                    
+                    <!-- Immediate Feedback -->
+                    <div class="immediate-feedback" id="24hr-feedback"></div>
+                </div>
+
+                <!-- Question 3: Quality Assurance -->
+                <div class="question-box">
+                    <div class="question-text">3. What quality assurance measures must Rosa follow to ensure accurate UA results?</div>
+                    <div class="answer-options">
+                        <div class="answer-option" data-question="qa" data-answer="wrong">
+                            Calibrate equipment monthly and trust manufacturer expiration dates
+                        </div>
+                        <div class="answer-option" data-question="qa" data-answer="correct">
+                            Perform daily controls on reagent strips, document results, check expiration dates
+                        </div>
+                        <div class="answer-option" data-question="qa" data-answer="wrong">
+                            Run controls only when opening new supplies, visual inspection is sufficient
+                        </div>
+                        <div class="answer-option" data-question="qa" data-answer="wrong">
+                            Quality control is the lab manager's responsibility, not the MA's
+                        </div>
+                    </div>
+                    
+                    <!-- Immediate Feedback -->
+                    <div class="immediate-feedback" id="qa-feedback"></div>
+                </div>
+
+                <!-- Question 4: Sensitivity & Rights -->
+                <div class="question-box">
+                    <div class="question-text">4. Mrs. Carpenter is tearful about her pregnancy test. How should Rosa show sensitivity?</div>
+                    <div class="answer-options">
+                        <div class="answer-option" data-question="sensitivity" data-answer="wrong">
+                            Quickly provide the result so she can process it privately
+                        </div>
+                        <div class="answer-option" data-question="sensitivity" data-answer="correct">
+                            Provide result factually, show empathy, maintain confidentiality, inform provider
+                        </div>
+                        <div class="answer-option" data-question="sensitivity" data-answer="wrong">
+                            Ask if she wants to discuss it with you since you collected the specimen
+                        </div>
+                        <div class="answer-option" data-question="sensitivity" data-answer="wrong">
+                            Document her emotional state and let the provider handle everything
+                        </div>
+                    </div>
+                    
+                    <!-- Immediate Feedback -->
+                    <div class="immediate-feedback" id="sensitivity-feedback"></div>
+                </div>
+
+                <!-- Clinical Tip -->
+                <div class="clinical-tip">
+                    <div class="tip-title">🔬 Quality Control Essentials</div>
+                    <div class="tip-text">
+                        • <strong>Daily controls:</strong> Required for CLIA-waived tests<br>
+                        • <strong>Documentation:</strong> Control results, lot numbers, expiration dates<br>
+                        • <strong>Patient reassurance:</strong> "We run controls daily to ensure your results are accurate"<br>
+                        • <strong>Proper storage:</strong> Reagent strips away from light, moisture, extreme temperatures
+                    </div>
+                </div>
+
+                <!-- Activity Feedback -->
+                <div class="activity-feedback" id="feedback-2">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Patient Education & QA Complete
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Clean-Catch Midstream Sequence:</strong><br>
+                        1. Wash hands thoroughly<br>
+                        2. Remove lid without touching inside<br>
+                        3. Clean genital area (front to back for females)<br>
+                        4. Begin urinating in toilet, catch midstream<br>
+                        5. Finish in toilet, secure lid, wash hands<br>
+                        6. Return within 1 hour or refrigerate<br><br>
+                        
+                        <strong>24-Hour Collection:</strong> Discard first void, collect all urine for next 24 hours including final first morning void. This ensures complete collection for accurate measurement.<br><br>
+                        
+                        <strong>Quality Assurance:</strong> Daily controls on reagent strips with documentation. This ensures accuracy and allows you to reassure patients of result reliability.<br><br>
+                        
+                        <strong>Patient Sensitivity:</strong> Provide results factually with empathy, maintain strict confidentiality, and inform the provider. Never counsel beyond your scope as an MA.<br><br>
+                        
+                        <strong>Key Learning:</strong> Proper patient education + rigorous quality control = accurate results + patient trust + professional credibility.
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn btn-secondary" id="reset-all-btn">
+                <span class="btn-icon">↻</span>
+                Reset All Activities
+            </button>
+            <button class="btn btn-secondary" id="check-answers-btn">
+                <span class="btn-icon">✓</span>
+                Check All Answers
+            </button>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // State Management (2 activities only)
+            const state = {
+                activities: {
+                    1: { completed: false, correct: 0, total: 2, score: 0 },
+                    2: { completed: false, correct: 0, total: 4, score: 0 }
+                },
+                startedAt: new Date(),
+                timeSpent: 0
+            };
+
+            // DOM Elements
+            const progressSteps = document.querySelectorAll('.progress-step');
+            const activityCards = document.querySelectorAll('.activity-card');
+            const resetBtn = document.getElementById('reset-all-btn');
+            const checkBtn = document.getElementById('check-answers-btn');
+
+            // Activity 1: Urinary System & Collection
+            function initActivity1() {
+                // Urine formation sequencing
+                const formationSteps = document.querySelectorAll('#formation-steps .sequence-step');
+                const formationDropzone = document.getElementById('formation-dropzone');
+                const formationFeedback = document.getElementById('formation-feedback');
+                const correctFormationOrder = ['filtration', 'reabsorption', 'secretion', 'elimination'];
+                let placedFormationSteps = [];
+                let draggedFormationStep = null;
+
+                // Patient-method matching
+                const patientItems = document.querySelectorAll('#activity-1 .patient-item');
+                const methodItems = document.querySelectorAll('#activity-1 .method-item');
+                const matchingFeedback = document.getElementById('matching-feedback');
+                
+                const correctMatches = {
+                    'mr-parks': 'first-morning',
+                    'mrs-carpenter': 'pregnancy-test',
+                    'ms-hillman': 'clean-catch',
+                    'diabetic': '24-hour'
+                };
+                
+                let selectedPatient = null;
+                let matchedPairs = {};
+                let totalMatches = 0;
+
+                // Activity feedback
+                const feedback1 = document.getElementById('feedback-1');
+                const status1 = document.querySelector('#activity-1 .activity-status');
+
+                // FIXED: Urine Formation Drag-and-Drop
+                formationSteps.forEach(step => {
+                    step.addEventListener('dragstart', function(e) {
+                        draggedFormationStep = this;
+                        this.classList.add('dragging');
+                        e.dataTransfer.setData('text/plain', this.dataset.step);
+                        e.dataTransfer.effectAllowed = 'move';
+                    });
+
+                    step.addEventListener('dragend', function() {
+                        this.classList.remove('dragging');
+                        draggedFormationStep = null;
+                    });
+                });
+
+                formationDropzone.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    e.dataTransfer.dropEffect = 'move';
+                    this.classList.add('hover');
+                    this.classList.remove('empty');
+                });
+
+                formationDropzone.addEventListener('dragleave', function() {
+                    this.classList.remove('hover');
+                });
+
+                formationDropzone.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('hover');
+
+                    const stepId = e.dataTransfer.getData('text/plain');
+                    
+                    // Check if step already placed
+                    if (placedFormationSteps.includes(stepId)) {
+                        formationFeedback.innerHTML = `<div class="feedback-incorrect">This step is already placed. Try another one.</div>`;
+                        formationFeedback.classList.add('show');
+                        return;
+                    }
+
+                    placedFormationSteps.push(stepId);
+
+                    // Create and add step to dropzone with immediate feedback
+                    const stepDiv = document.createElement('div');
+                    const correctPosition = correctFormationOrder.indexOf(stepId) + 1;
+                    const actualPosition = placedFormationSteps.length;
+                    
+                    const isCorrectPosition = (actualPosition === correctPosition);
+                    
+                    stepDiv.className = `dropped-step ${isCorrectPosition ? 'correct' : 'incorrect'}`;
+                    stepDiv.innerHTML = `
+                        <div class="step-number">${actualPosition}</div>
+                        <div>${draggedFormationStep.textContent}</div>
+                        <div class="step-check ${isCorrectPosition ? 'correct' : 'incorrect'}">
+                            ${isCorrectPosition ? '✓' : '✗'}
+                        </div>
+                    `;
+                    
+                    this.appendChild(stepDiv);
+
+                    // Hide original step
+                    draggedFormationStep.style.display = 'none';
+
+                    // Show immediate feedback
+                    if (isCorrectPosition) {
+                        const stepNames = {
+                            'filtration': 'Filtration',
+                            'reabsorption': 'Reabsorption', 
+                            'secretion': 'Secretion',
+                            'elimination': 'Elimination'
+                        };
+                        formationFeedback.innerHTML = `<div class="feedback-correct">Correct! "${stepNames[stepId]}" is step #${correctPosition} in urine formation.</div>`;
+                    } else {
+                        formationFeedback.innerHTML = `<div class="feedback-incorrect">Incorrect placement. This should be step #${correctPosition}.</div>`;
+                    }
+                    formationFeedback.classList.add('show');
+
+                    // Check completion
+                    if (placedFormationSteps.length === 4) {
+                        const allCorrect = placedFormationSteps.every((step, index) => step === correctFormationOrder[index]);
+                        
+                        if (allCorrect) {
+                            state.activities[1].correct += 1;
+                            formationFeedback.innerHTML = `<div class="feedback-correct">✓ Perfect! All steps in correct order. Urine formation sequence mastered.</div>`;
+                        } else {
+                            formationFeedback.innerHTML = `<div class="feedback-incorrect">Some steps are out of order. Review the correct sequence: Filtration → Reabsorption → Secretion → Elimination.</div>`;
+                        }
+                        
+                        checkActivity1Completion();
+                    }
+                });
+
+                // FIXED: Patient-Method Matching System
+                patientItems.forEach(item => {
+                    item.addEventListener('click', function() {
+                        if (state.activities[1].completed || this.classList.contains('matched')) return;
+                        
+                        // Remove previous selection
+                        patientItems.forEach(p => p.classList.remove('selected'));
+                        
+                        // Select this patient
+                        this.classList.add('selected');
+                        selectedPatient = this.dataset.patient;
+                        
+                        // Highlight available methods
+                        methodItems.forEach(m => {
+                            if (!m.classList.contains('matched')) {
+                                m.style.borderColor = 'var(--color-primary)';
+                                m.style.background = 'rgba(175, 75, 239, 0.05)';
+                            }
+                        });
+                    });
+                });
+
+                methodItems.forEach(item => {
+                    item.addEventListener('click', function() {
+                        if (state.activities[1].completed || this.classList.contains('matched') || !selectedPatient) return;
+                        
+                        const method = this.dataset.method;
+                        const isCorrect = (correctMatches[selectedPatient] === method);
+                        
+                        if (isCorrect) {
+                            // Correct match
+                            this.classList.add('matched');
+                            
+                            const patientElement = document.querySelector(`#activity-1 .patient-item[data-patient="${selectedPatient}"]`);
+                            patientElement.classList.add('matched');
+                            patientElement.classList.remove('selected');
+                            
+                            matchedPairs[selectedPatient] = method;
+                            totalMatches++;
+                            
+                            const patientNames = {
+                                'mr-parks': 'Mr. Parks',
+                                'mrs-carpenter': 'Mrs. Carpenter',
+                                'ms-hillman': 'Ms. Hillman',
+                                'diabetic': 'Diabetic Patient'
+                            };
+                            
+                            matchingFeedback.innerHTML = `<div class="feedback-correct">Correct! ${patientNames[selectedPatient]} needs ${method.replace('-', ' ')} collection.</div>`;
+                            matchingFeedback.classList.add('show');
+                            
+                            // Check if all matched
+                            if (totalMatches === 4) {
+                                state.activities[1].correct += 1;
+                                matchingFeedback.innerHTML = `<div class="feedback-correct">✓ Perfect matching! All patients correctly matched with their collection methods.</div>`;
+                                checkActivity1Completion();
+                            }
+                        } else {
+                            // Incorrect match
+                            this.style.borderColor = 'var(--color-error)';
+                            this.style.background = 'rgba(225, 112, 85, 0.1)';
+                            
+                            matchingFeedback.innerHTML = `<div class="feedback-incorrect">Incorrect match. Try again.</div>`;
+                            matchingFeedback.classList.add('show');
+                            
+                            setTimeout(() => {
+                                this.style.borderColor = '';
+                                this.style.background = '';
+                            }, 1000);
+                        }
+                        
+                        // Reset selection
+                        selectedPatient = null;
+                        patientItems.forEach(p => p.classList.remove('selected'));
+                        methodItems.forEach(m => {
+                            if (!m.classList.contains('matched')) {
+                                m.style.borderColor = '';
+                                m.style.background = '';
+                            }
+                        });
+                    });
+                });
+
+                function checkActivity1Completion() {
+                    const formationComplete = (placedFormationSteps.length === 4);
+                    const matchingComplete = (totalMatches === 4);
+                    
+                    if (formationComplete && matchingComplete) {
+                        const formationCorrect = placedFormationSteps.every((step, index) => step === correctFormationOrder[index]);
+                        const matchingCorrect = (totalMatches === 4);
+                        
+                        state.activities[1].completed = true;
+                        state.activities[1].score = Math.round(((formationCorrect ? 1 : 0) + (matchingCorrect ? 1 : 0)) / 2 * 100);
+                        
+                        status1.textContent = 'Completed';
+                        status1.style.color = '#00b894';
+                        document.querySelector('#activity-1').classList.add('completed');
+                        feedback1.classList.add('show');
+                        updateProgressSteps();
+                    }
+                }
+            }
+
+            // Activity 2: Patient Education & QA
+            function initActivity2() {
+                // Clean-catch sequencing
+                const cleanCatchSteps = document.querySelectorAll('#clean-catch-steps .sequence-step');
+                const cleanCatchDropzone = document.getElementById('clean-catch-dropzone');
+                const cleanCatchFeedback = document.getElementById('clean-catch-feedback');
+                const correctCleanCatchOrder = ['wash-hands', 'remove-lid', 'clean-area', 'begin-urinate', 'finish-urinate', 'return-specimen'];
+                let placedCleanCatchSteps = [];
+                let draggedCleanCatchStep = null;
+
+                // Multiple choice questions
+                const answerOptions = document.querySelectorAll('#activity-2 .answer-option');
+                
+                const feedbackElements = {
+                    '24hr': document.getElementById('24hr-feedback'),
+                    'qa': document.getElementById('qa-feedback'),
+                    'sensitivity': document.getElementById('sensitivity-feedback')
+                };
+                
+                const correctAnswers = {
+                    '24hr': 'correct',
+                    'qa': 'correct',
+                    'sensitivity': 'correct'
+                };
+                
+                let selectedAnswers = {};
+                let correctAnswerCount = 0;
+
+                // Activity feedback
+                const feedback2 = document.getElementById('feedback-2');
+                const status2 = document.querySelector('#activity-2 .activity-status');
+
+                // FIXED: Clean-Catch Drag-and-Drop
+                cleanCatchSteps.forEach(step => {
+                    step.addEventListener('dragstart', function(e) {
+                        draggedCleanCatchStep = this;
+                        this.classList.add('dragging');
+                        e.dataTransfer.setData('text/plain', this.dataset.step);
+                        e.dataTransfer.effectAllowed = 'move';
+                    });
+
+                    step.addEventListener('dragend', function() {
+                        this.classList.remove('dragging');
+                        draggedCleanCatchStep = null;
+                    });
+                });
+
+                cleanCatchDropzone.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    e.dataTransfer.dropEffect = 'move';
+                    this.classList.add('hover');
+                    this.classList.remove('empty');
+                });
+
+                cleanCatchDropzone.addEventListener('dragleave', function() {
+                    this.classList.remove('hover');
+                });
+
+                cleanCatchDropzone.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('hover');
+
+                    const stepId = e.dataTransfer.getData('text/plain');
+                    
+                    // Check if step already placed
+                    if (placedCleanCatchSteps.includes(stepId)) {
+                        cleanCatchFeedback.innerHTML = `<div class="feedback-incorrect">This step is already placed. Try another one.</div>`;
+                        cleanCatchFeedback.classList.add('show');
+                        return;
+                    }
+
+                    placedCleanCatchSteps.push(stepId);
+
+                    // Create and add step to dropzone with immediate feedback
+                    const stepDiv = document.createElement('div');
+                    const correctPosition = correctCleanCatchOrder.indexOf(stepId) + 1;
+                    const actualPosition = placedCleanCatchSteps.length;
+                    
+                    const isCorrectPosition = (actualPosition === correctPosition);
+                    
+                    stepDiv.className = `dropped-step ${isCorrectPosition ? 'correct' : 'incorrect'}`;
+                    stepDiv.innerHTML = `
+                        <div class="step-number">${actualPosition}</div>
+                        <div>${draggedCleanCatchStep.textContent}</div>
+                        <div class="step-check ${isCorrectPosition ? 'correct' : 'incorrect'}">
+                            ${isCorrectPosition ? '✓' : '✗'}
+                        </div>
+                    `;
+                    
+                    this.appendChild(stepDiv);
+
+                    // Hide original step
+                    draggedCleanCatchStep.style.display = 'none';
+
+                    // Show immediate feedback
+                    if (isCorrectPosition) {
+                        const stepNames = {
+                            'wash-hands': 'Wash hands',
+                            'remove-lid': 'Remove lid',
+                            'clean-area': 'Clean area',
+                            'begin-urinate': 'Begin urinating',
+                            'finish-urinate': 'Finish urinating',
+                            'return-specimen': 'Return specimen'
+                        };
+                        cleanCatchFeedback.innerHTML = `<div class="feedback-correct">Correct! "${stepNames[stepId]}" is step #${correctPosition} in clean-catch procedure.</div>`;
+                    } else {
+                        cleanCatchFeedback.innerHTML = `<div class="feedback-incorrect">Incorrect order. This should be step #${correctPosition}.</div>`;
+                    }
+                    cleanCatchFeedback.classList.add('show');
+
+                    // Check completion
+                    if (placedCleanCatchSteps.length === 6) {
+                        const allCorrect = placedCleanCatchSteps.every((step, index) => step === correctCleanCatchOrder[index]);
+                        
+                        if (allCorrect) {
+                            state.activities[2].correct += 1;
+                            cleanCatchFeedback.innerHTML = `<div class="feedback-correct">✓ Perfect sequence! All clean-catch steps in correct order.</div>`;
+                        } else {
+                            cleanCatchFeedback.innerHTML = `<div class="feedback-incorrect">Some steps out of order. Review: Wash hands → Remove lid → Clean area → Catch midstream → Finish & secure → Return promptly.</div>`;
+                        }
+                        
+                        checkActivity2Completion();
+                    }
+                });
+
+                // FIXED: Multiple Choice Questions
+                answerOptions.forEach(option => {
+                    option.addEventListener('click', function() {
+                        if (state.activities[2].completed) return;
+                        
+                        const question = this.dataset.question;
+                        const answer = this.dataset.answer;
+                        
+                        // Clear other options for this question
+                        document.querySelectorAll(`#activity-2 .answer-option[data-question="${question}"]`).forEach(opt => {
+                            opt.classList.remove('selected', 'wrong');
+                        });
+                        
+                        // Mark this option
+                        if (answer === 'correct') {
+                            this.classList.add('selected');
+                            selectedAnswers[question] = 'correct';
+                            correctAnswerCount++;
+                            
+                            // Show immediate feedback
+                            const feedbackText = {
+                                '24hr': 'Correct! 24-hour collection starts after discarding first void and includes next morning\'s first void for complete collection.',
+                                'qa': 'Correct! Daily controls with documentation ensure accuracy and allow patient reassurance.',
+                                'sensitivity': 'Correct! Provide facts + empathy, maintain confidentiality, inform provider - perfect MA response.'
+                            }[question];
+                            
+                            feedbackElements[question].innerHTML = `<div class="feedback-correct">${feedbackText}</div>`;
+                            feedbackElements[question].classList.add('show');
+                        } else {
+                            this.classList.add('wrong');
+                            selectedAnswers[question] = 'wrong';
+                            
+                            // Show correct answer
+                            const correctOption = document.querySelector(
+                                `#activity-2 .answer-option[data-question="${question}"][data-answer="correct"]`
+                            );
+                            correctOption.classList.add('selected');
+                            
+                            // Show immediate feedback
+                            const feedbackText = {
+                                '24hr': 'Incorrect. For 24-hour collection: Discard first void → collect ALL urine for 24 hours → include final morning void.',
+                                'qa': 'Incorrect. Daily controls are REQUIRED for CLIA-waived tests, not optional.',
+                                'sensitivity': 'Incorrect. As an MA, you provide results factually with empathy but refer counseling to provider.'
+                            }[question];
+                            
+                            feedbackElements[question].innerHTML = `<div class="feedback-incorrect">${feedbackText}</div>`;
+                            feedbackElements[question].classList.add('show');
+                        }
+                        
+                        // Check completion
+                        checkActivity2Completion();
+                    });
+                });
+
+                function checkActivity2Completion() {
+                    const cleanCatchComplete = (placedCleanCatchSteps.length === 6);
+                    const questionsComplete = (Object.keys(selectedAnswers).length === 3);
+                    
+                    if (cleanCatchComplete && questionsComplete) {
+                        const cleanCatchCorrect = placedCleanCatchSteps.every((step, index) => step === correctCleanCatchOrder[index]);
+                        const questionsCorrect = correctAnswerCount;
+                        
+                        state.activities[2].completed = true;
+                        state.activities[2].score = Math.round(((cleanCatchCorrect ? 1 : 0) + questionsCorrect) / 4 * 100);
+                        
+                        status2.textContent = 'Completed';
+                        status2.style.color = '#00b894';
+                        document.querySelector('#activity-2').classList.add('completed');
+                        feedback2.classList.add('show');
+                        updateProgressSteps();
+                    }
+                }
+            }
+
+            // Update progress steps
+            function updateProgressSteps() {
+                let completedCount = 0;
+                Object.values(state.activities).forEach(activity => {
+                    if (activity.completed) completedCount++;
+                });
+
+                progressSteps.forEach((step, index) => {
+                    if (index < completedCount) {
+                        step.classList.add('completed');
+                        step.classList.remove('active');
+                    } else if (index === completedCount) {
+                        step.classList.add('active');
+                        step.classList.remove('completed');
+                    } else {
+                        step.classList.remove('active', 'completed');
+                    }
+                });
+            }
+
+            // Reset All Activities
+            function resetAllActivities() {
+                // Reset state
+                Object.keys(state.activities).forEach(key => {
+                    state.activities[key] = { 
+                        completed: false, 
+                        correct: 0, 
+                        total: parseInt(key) === 1 ? 2 : 4, 
+                        score: 0 
+                    };
+                });
+
+                // Reset Activity 1
+                const formationDropzone = document.getElementById('formation-dropzone');
+                formationDropzone.innerHTML = '';
+                formationDropzone.classList.add('empty');
+                document.querySelectorAll('#formation-steps .sequence-step').forEach(step => {
+                    step.style.display = '';
+                    step.classList.remove('dragging');
+                });
+                document.getElementById('formation-feedback').classList.remove('show');
+                document.getElementById('formation-feedback').innerHTML = '';
+
+                document.querySelectorAll('#activity-1 .patient-item').forEach(item => {
+                    item.classList.remove('selected', 'matched');
+                });
+                document.querySelectorAll('#activity-1 .method-item').forEach(item => {
+                    item.classList.remove('selected', 'matched');
+                    item.style.borderColor = '';
+                    item.style.background = '';
+                });
+                document.getElementById('matching-feedback').classList.remove('show');
+                document.getElementById('matching-feedback').innerHTML = '';
+
+                const feedback1 = document.getElementById('feedback-1');
+                feedback1.classList.remove('show');
+                const status1 = document.querySelector('#activity-1 .activity-status');
+                status1.textContent = 'Not Started';
+                status1.style.color = '';
+                document.querySelector('#activity-1').classList.remove('completed');
+
+                // Reset Activity 2
+                const cleanCatchDropzone = document.getElementById('clean-catch-dropzone');
+                cleanCatchDropzone.innerHTML = '';
+                cleanCatchDropzone.classList.add('empty');
+                document.querySelectorAll('#clean-catch-steps .sequence-step').forEach(step => {
+                    step.style.display = '';
+                    step.classList.remove('dragging');
+                });
+                document.getElementById('clean-catch-feedback').classList.remove('show');
+                document.getElementById('clean-catch-feedback').innerHTML = '';
+
+                document.querySelectorAll('#activity-2 .answer-option').forEach(opt => {
+                    opt.classList.remove('selected', 'wrong');
+                });
+                
+                // Reset all feedback elements
+                Object.values({
+                    '24hr': document.getElementById('24hr-feedback'),
+                    'qa': document.getElementById('qa-feedback'),
+                    'sensitivity': document.getElementById('sensitivity-feedback')
+                }).forEach(feedback => {
+                    feedback.classList.remove('show');
+                    feedback.innerHTML = '';
+                });
+
+                const feedback2 = document.getElementById('feedback-2');
+                feedback2.classList.remove('show');
+                const status2 = document.querySelector('#activity-2 .activity-status');
+                status2.textContent = 'Not Started';
+                status2.style.color = '';
+                document.querySelector('#activity-2').classList.remove('completed');
+
+                // Reset progress
+                updateProgressSteps();
+            }
+
+            // Check All Answers
+            function checkAllAnswers() {
+                // Complete Activity 1 if not done
+                if (!state.activities[1].completed) {
+                    // Complete formation sequencing
+                    const correctFormationOrder = ['filtration', 'reabsorption', 'secretion', 'elimination'];
+                    const formationDropzone = document.getElementById('formation-dropzone');
+                    formationDropzone.innerHTML = '';
+                    formationDropzone.classList.remove('empty');
+                    
+                    correctFormationOrder.forEach((stepKey, index) => {
+                        const step = document.querySelector(`#formation-steps .sequence-step[data-step="${stepKey}"]`);
+                        const text = step.textContent;
+                        
+                        const stepDiv = document.createElement('div');
+                        stepDiv.className = 'dropped-step correct';
+                        stepDiv.innerHTML = `
+                            <div class="step-number">${index + 1}</div>
+                            <div>${text}</div>
+                            <div class="step-check correct">✓</div>
+                        `;
+                        formationDropzone.appendChild(stepDiv);
+                        
+                        step.style.display = 'none';
+                    });
+                    
+                    // Complete patient-method matching
+                    const correctMatches = {
+                        'mr-parks': 'first-morning',
+                        'mrs-carpenter': 'pregnancy-test',
+                        'ms-hillman': 'clean-catch',
+                        'diabetic': '24-hour'
+                    };
+                    
+                    Object.keys(correctMatches).forEach(patient => {
+                        const patientElement = document.querySelector(`#activity-1 .patient-item[data-patient="${patient}"]`);
+                        const methodElement = document.querySelector(`#activity-1 .method-item[data-method="${correctMatches[patient]}"]`);
+                        
+                        if (patientElement && methodElement) {
+                            patientElement.classList.add('matched');
+                            methodElement.classList.add('matched');
+                        }
+                    });
+                    
+                    state.activities[1].completed = true;
+                    state.activities[1].correct = 2;
+                    state.activities[1].score = 100;
+                    
+                    const status1 = document.querySelector('#activity-1 .activity-status');
+                    status1.textContent = 'Completed';
+                    status1.style.color = '#00b894';
+                    document.querySelector('#activity-1').classList.add('completed');
+                    document.getElementById('feedback-1').classList.add('show');
+                }
+
+                // Complete Activity 2 if not done
+                if (!state.activities[2].completed) {
+                    // Complete clean-catch sequencing
+                    const correctCleanCatchOrder = ['wash-hands', 'remove-lid', 'clean-area', 'begin-urinate', 'finish-urinate', 'return-specimen'];
+                    const cleanCatchDropzone = document.getElementById('clean-catch-dropzone');
+                    cleanCatchDropzone.innerHTML = '';
+                    cleanCatchDropzone.classList.remove('empty');
+                    
+                    correctCleanCatchOrder.forEach((stepKey, index) => {
+                        const step = document.querySelector(`#clean-catch-steps .sequence-step[data-step="${stepKey}"]`);
+                        const text = step.textContent;
+                        
+                        const stepDiv = document.createElement('div');
+                        stepDiv.className = 'dropped-step correct';
+                        stepDiv.innerHTML = `
+                            <div class="step-number">${index + 1}</div>
+                            <div>${text}</div>
+                            <div class="step-check correct">✓</div>
+                        `;
+                        cleanCatchDropzone.appendChild(stepDiv);
+                        
+                        step.style.display = 'none';
+                    });
+                    
+                    // Select correct multiple choice answers
+                    document.querySelectorAll('#activity-2 .answer-option[data-answer="correct"]').forEach(opt => {
+                        opt.classList.add('selected');
+                    });
+                    
+                    state.activities[2].completed = true;
+                    state.activities[2].correct = 4;
+                    state.activities[2].score = 100;
+                    
+                    const status2 = document.querySelector('#activity-2 .activity-status');
+                    status2.textContent = 'Completed';
+                    status2.style.color = '#00b894';
+                    document.querySelector('#activity-2').classList.add('completed');
+                    document.getElementById('feedback-2').classList.add('show');
+                }
+
+                updateProgressSteps();
+            }
+
+            // Initialize activities
+            initActivity1();
+            initActivity2();
+
+            // Event listeners
+            resetBtn.addEventListener('click', resetAllActivities);
+            checkBtn.addEventListener('click', checkAllAnswers);
+
+            // Initial progress update
+            updateProgressSteps();
+        });
+    </script>
+</body>
+</html>
