@@ -340,13 +340,15 @@
             }
         }
 
+        /* FIXED: Changed object-fit from "cover" to "contain" to show full images */
         .card-image {
             width: 140px;
             height: 180px;
-            object-fit: cover;
+            object-fit: contain; /* Changed from "cover" to "contain" */
             border-radius: 12px;
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
             flex-shrink: 0;
+            background-color: #f8f9fa; /* Added background for transparent images */
         }
 
         .card-details {
@@ -523,7 +525,7 @@
             color: var(--color-primary);
         }
 
-        /* Scrubs Options */
+        /* Scrubs Options - FIXED: Changed object-fit from "cover" to "contain" */
         .scrubs-options {
             display: flex;
             gap: 16px;
@@ -533,10 +535,11 @@
         .scrub-option {
             width: 120px;
             height: 160px;
-            object-fit: cover;
+            object-fit: contain; /* Changed from "cover" to "contain" */
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease;
+            background-color: #f8f9fa; /* Added background for transparent images */
         }
 
         .scrub-option:hover {
@@ -618,7 +621,7 @@
                 
                 <div class="card-footer">
                     <span class="card-tag">Essential for coursework</span>
-                    <a href="https://www.amazon.com/s?k=Mosby+Pharmacy+Technician+5th+Edition" 
+                    <a href="https://www.amazon.com/Mosbys-Pharmacy-Technician-Principles-Practice/dp/0323443567?crid=AU01OM6WNC73&keywords=Mosby%27s+Pharmacy+Technician,+5th+Edition&qid=1664549342&qu=eyJxc2MiOiIxLjE3IiwicXNhIjoiMC4wMCIsInFzcCI6IjAuMDAifQ%3D%3D&sprefix=mosby%27s+pharmacy+technician,+5th+edition,aps,107&sr=8-1&linkCode=sl1&tag=kryptoroses-20&linkId=df2c58c323c2ec44b94954c1a3f3549b&language=en_US" 
                        target="_blank" 
                        class="btn btn-primary">
                         <span class="btn-icon">📚</span>
@@ -662,7 +665,7 @@
                 
                 <div class="card-footer">
                     <span class="card-tag">Required for labs & clinicals</span>
-                    <a href="https://www.uniformadvantage.com/c/scrubs" 
+                    <a href="https://www.amazon.com/Adar-Indulgence-Jr-Womens-Scrub/dp/B079T86J4C?content-id=amzn1.sym.956040dd-7023-4fa0-9bf4-4201e95d0552:amzn1.sym.956040dd-7023-4fa0-9bf4-4201e95d0552&crid=2UC01JZN4H3JU&cv_ct_cx=Royal+Blue+Scrubs&keywords=Royal+Blue+Scrubs&pd_rd_i=B079T86J4C&pd_rd_r=de1a935e-1f9b-4f95-a97c-fa18d747d53f&pd_rd_w=12bRf&pd_rd_wg=ya7ZP&pf_rd_p=956040dd-7023-4fa0-9bf4-4201e95d0552&pf_rd_r=ZDQDS83VR6FFK0FV2V2S&psc=1&qid=1662586755&sprefix=royal+blue+scrubs,aps,105&sr=1-1-f06a3cb8-907c-4703-8a7e-33e464367a73-spons&smid=AY0XKCNU8FA37&spLa=ZW5jcnlwdGVkUXVhbGlmaWVyPUEyOVRFVkpDRE1GQktXJmVuY3J5cHRlZElkPUEwMzM3OTQzM1ZSRlhWTU5ZM1I2QyZlbmNyeXB0ZWRBZElkPUEwNTgwNTQxM0VVN0ZZVkE5VlhGVyZ3aWRnZXROYW1lPXNwX3NlYXJjaF90aGVtYXRpYyZhY3Rpb249Y2xpY2tSZWRpcmVjdCZkb05vdExvZ0NsaWNrPXRydWU%3D&linkCode=sl1&tag=kryptoroses-20&linkId=83fa2637b70715dfb454ea3fae84808d&language=en_US" 
                        target="_blank" 
                        class="btn btn-primary">
                         <span class="btn-icon">👕</span>
