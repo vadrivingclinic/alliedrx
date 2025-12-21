@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlliedRx - Pharmacy Technician Program Materials</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-warning: #fdcb6e;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(circle at top left, #ffffff 0, #f1ecff 40%, var(--color-bg) 100%);
+            color: var(--color-text);
+            line-height: 1.6;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 12px;
+            }
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1120px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 32px 36px 40px 36px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .page {
+                padding: 24px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 0;
+            }
+            .page {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 18px 16px 22px;
+            }
+        }
+
+        /* Header */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 46px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .brand-logo:hover {
+            transform: scale(1.05);
+        }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .program-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .badge-mode:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+        @media (max-width: 480px) {
+            .brand-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .badge-mode {
+                margin-top: 6px;
+            }
+        }
+
+        /* Page Title */
+        h1 {
+            font-size: clamp(2rem, 3vw, 2.4rem);
+            line-height: 1.05;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 34rem;
+            margin-bottom: 30px;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        .subtitle strong {
+            color: var(--color-primary);
+        }
+
+        /* Vendor Note */
+        .vendor-note {
+            background: rgba(175, 75, 239, 0.05);
+            border-left: 3px solid var(--color-primary);
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            font-size: 0.9rem;
+            color: var(--color-text);
+            animation: fadeInUp 0.6s ease-out 0.5s both;
+        }
+
+        .vendor-note i {
+            color: var(--color-primary);
+            margin-right: 10px;
+        }
+
+        /* Materials Grid */
+        .materials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .materials-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Material Card */
+        .material-card {
+            border-radius: 18px;
+            padding: 20px 22px;
+            border: 1px solid rgba(15, 23, 42, 0.06);
+            background: linear-gradient(135deg, rgba(175, 75, 239, 0.07), rgba(255, 255, 255, 0.95));
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.6s ease-out 0.6s both;
+        }
+
+        .material-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.7s ease;
+        }
+
+        .material-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--color-primary-soft);
+        }
+
+        .material-card:hover::before {
+            left: 100%;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .requirement-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px 12px;
+            border-radius: 999px;
+            background: #ffffff;
+            box-shadow: 0 6px 18px rgba(79, 70, 229, 0.16);
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .material-card:hover .requirement-pill {
+            background: var(--color-primary);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 4px;
+            transition: color 0.3s ease;
+        }
+
+        .material-card:hover .card-title {
+            color: var(--color-primary);
+        }
+
+        .card-subtitle {
+            font-size: 0.9rem;
+            color: var(--color-muted);
+            margin-bottom: 18px;
+        }
+
+        .card-content {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .card-content {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        .card-image {
+            width: 140px;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
+        }
+
+        .card-details {
+            flex: 1;
+        }
+
+        .card-description {
+            font-size: 0.9rem;
+            color: var(--color-text);
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .vendor-info {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+            padding: 8px 12px;
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: 8px;
+            border-left: 3px solid var(--color-success);
+            margin-top: 8px;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding-top: 18px;
+            border-top: 1px solid rgba(15, 23, 42, 0.06);
+        }
+
+        .card-tag {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            font-size: 0.74rem;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .material-card:hover .card-tag {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .btn {
+            padding: 10px 18px;
+            border-radius: 12px;
+            border: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #9a3bd6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(175, 75, 239, 0.3);
+        }
+
+        .btn-icon {
+            font-size: 1.1em;
+        }
+
+        /* Program Requirements Section */
+        .requirements-section {
+            margin: 40px 0 30px;
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: 16px;
+            padding: 24px 28px;
+            border: 1px solid rgba(12, 10, 24, 0.06);
+            animation: fadeInUp 0.6s ease-out 0.8s both;
+        }
+
+        .section-tag {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-primary);
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .section-heading {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--color-text);
+            margin-bottom: 16px;
+        }
+
+        .requirements-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            font-size: 0.86rem;
+            color: var(--color-text);
+        }
+
+        .requirements-list li {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            padding: 10px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .requirements-list li:hover {
+            background: rgba(175, 75, 239, 0.05);
+            transform: translateX(5px);
+        }
+
+        .check-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 6px;
+            border: 2px solid rgba(148, 163, 184, 0.9);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.72rem;
+            color: rgba(148, 163, 184, 0.9);
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .requirements-list li:hover .check-dot {
+            border-color: var(--color-primary);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px 0 0;
+            color: var(--color-muted);
+            font-size: 0.9rem;
+            margin-top: 40px;
+            border-top: 1px solid rgba(15, 23, 42, 0.06);
+            animation: fadeIn 0.6s ease-out 0.9s both;
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .contact-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--color-primary);
+            text-decoration: none;
+            transition: var(--transition);
+            padding: 8px 16px;
+            border-radius: 8px;
+        }
+
+        .contact-link:hover {
+            background: rgba(175, 75, 239, 0.05);
+            color: var(--color-primary);
+        }
+
+        /* Scrubs Options */
+        .scrubs-options {
+            display: flex;
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .scrub-option {
+            width: 120px;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .scrub-option:hover {
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 600px) {
+            .scrubs-options {
+                flex-direction: column;
+                align-items: center;
+            }
+            .scrub-option {
+                width: 100%;
+                max-width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="materials-heading">
+        <!-- Header -->
+        <header class="brand-row">
+            <div class="brand">
+                <img
+                    src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                    alt="AlliedRx logo"
+                    class="brand-logo"
+                />
+                <div class="course-meta">
+                    <span class="course-name">Pharmacy Technician • Campus & Distance Learning</span>
+                    <div class="program-label">
+                        <span>Required Program Materials</span>
+                    </div>
+                </div>
+            </div>
+            <span class="badge-mode">Campus &amp; Online</span>
+        </header>
+
+        <!-- Title -->
+        <h1 id="materials-heading">Pharmacy Technician Program Materials</h1>
+        <p class="subtitle">
+            Below are the required textbooks and supplies for the Pharmacy Technician program. 
+            These materials are essential for classroom instruction, hands-on labs, and clinical training.
+        </p>
+
+        <!-- Vendor Note -->
+        <div class="vendor-note">
+            <i class="fas fa-shopping-cart"></i>
+            <strong>Important:</strong> Materials can be purchased from any vendor of your choice. 
+            The links provided are for reference only to show examples of the required items.
+        </div>
+
+        <!-- Materials Grid -->
+        <div class="materials-grid">
+            <!-- Textbook Card -->
+            <article class="material-card" onclick="window.open('https://www.amazon.com/s?k=Mosby+Pharmacy+Technician+5th+Edition', '_blank')">
+                <div class="card-header">
+                    <div>
+                        <h2 class="card-title">Textbook</h2>
+                        <p class="card-subtitle">Mosby's Pharmacy Technician: Principles and Practice, 5th Edition</p>
+                    </div>
+                    <div class="requirement-pill">Required</div>
+                </div>
+                
+                <div class="card-content">
+                    <img src="https://raw.githubusercontent.com/yourusername/your-repo/main/Mosby's%20Pharmacy%20Technician%20Book%20Cover.jpg" 
+                         alt="Mosby's Pharmacy Technician 5th Edition Textbook" 
+                         class="card-image">
+                    
+                    <div class="card-details">
+                        <p class="card-description">
+                            This comprehensive 5th edition textbook provides essential knowledge for pharmacy technicians, covering key principles and practical applications in pharmacy practice. Includes practice questions, case studies, and updated regulations.
+                        </p>
+                        <div class="vendor-info">
+                            <i class="fas fa-check-circle"></i> Available from Amazon, Barnes & Noble, Elsevier, and other textbook retailers
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-footer">
+                    <span class="card-tag">Essential for coursework</span>
+                    <a href="https://www.amazon.com/s?k=Mosby+Pharmacy+Technician+5th+Edition" 
+                       target="_blank" 
+                       class="btn btn-primary">
+                        <span class="btn-icon">📚</span>
+                        View Example Options
+                    </a>
+                </div>
+            </article>
+
+            <!-- Scrubs Card -->
+            <article class="material-card" onclick="window.open('https://www.uniformadvantage.com/c/scrubs', '_blank')">
+                <div class="card-header">
+                    <div>
+                        <h2 class="card-title">Medical Scrubs</h2>
+                        <p class="card-subtitle">Professional attire for hands-on labs and clinicals</p>
+                    </div>
+                    <div class="requirement-pill">Required</div>
+                </div>
+                
+                <div class="card-content">
+                    <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+                        <div class="scrubs-options">
+                            <img src="https://raw.githubusercontent.com/yourusername/your-repo/main/51KaNEIS7jL._AC_SY445_SX342_QL70_FMwebp_.webp" 
+                                 alt="Scrub Option 1" 
+                                 class="scrub-option">
+                            
+                            <img src="https://raw.githubusercontent.com/yourusername/your-repo/main/Royal%20Blue%20Scrubs%20Male.webp" 
+                                 alt="Scrub Option 2" 
+                                 class="scrub-option">
+                        </div>
+                    </div>
+                    
+                    <div class="card-details">
+                        <p class="card-description">
+                            Professional medical scrubs are required for all hands-on laboratory sessions and clinical rotations. They provide appropriate attire for healthcare settings while ensuring comfort, mobility, and professional appearance.
+                        </p>
+                        <div class="vendor-info">
+                            <i class="fas fa-check-circle"></i> Available from Uniform Advantage, Scrubs & Beyond, Amazon, Walmart, and other retailers
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-footer">
+                    <span class="card-tag">Required for labs & clinicals</span>
+                    <a href="https://www.uniformadvantage.com/c/scrubs" 
+                       target="_blank" 
+                       class="btn btn-primary">
+                        <span class="btn-icon">👕</span>
+                        View Example Options
+                    </a>
+                </div>
+            </article>
+        </div>
+
+        <!-- Program Requirements -->
+        <section class="requirements-section">
+            <p class="section-tag">Program Requirements</p>
+            <h2 class="section-heading">Important Information</h2>
+            
+            <ul class="requirements-list">
+                <li>
+                    <span class="check-dot">✓</span>
+                    <span><strong>Textbook:</strong> Mosby's Pharmacy Technician: Principles and Practice, 5th Edition is required for all coursework and examinations.</span>
+                </li>
+                <li>
+                    <span class="check-dot">✓</span>
+                    <span><strong>Scrubs:</strong> Professional medical scrubs must be worn during all hands-on laboratory sessions and clinical rotations. Multiple pockets and comfortable, durable fabric are recommended.</span>
+                </li>
+                <li>
+                    <span class="check-dot">✓</span>
+                    <span><strong>Vendor Flexibility:</strong> Materials can be purchased from any vendor of your choice (Amazon, local bookstores, uniform retailers, etc.). The provided links are examples only.</span>
+                </li>
+                <li>
+                    <span class="check-dot">✓</span>
+                    <span><strong>Timeline:</strong> All required materials should be acquired before classes begin. Allow sufficient time for ordering and delivery.</span>
+                </li>
+            </ul>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>AlliedRx Pharmacy Technician Program</p>
+            <div class="contact-info">
+                <a href="mailto:enrollment@alliedrxtraining.com" class="contact-link">
+                    <i class="fas fa-envelope"></i> enrollment@alliedrxtraining.com
+                </a>
+            </div>
+        </footer>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add hover effect to material cards
+            const materialCards = document.querySelectorAll('.material-card');
+            
+            materialCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-4px)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+                
+                // Make entire card clickable (except button clicks)
+                card.addEventListener('click', function(e) {
+                    if (!e.target.closest('.btn')) {
+                        const link = this.querySelector('.btn');
+                        if (link) {
+                            link.click();
+                        }
+                    }
+                });
+            });
+            
+            // Add scroll animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+            
+            // Observe cards for animation
+            materialCards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                observer.observe(card);
+            });
+            
+            // Requirements list items
+            const requirementItems = document.querySelectorAll('.requirements-list li');
+            requirementItems.forEach((item, index) => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateX(-20px)';
+                item.style.transition = `opacity 0.5s ease ${index * 0.1}s, transform 0.5s ease ${index * 0.1}s`;
+                observer.observe(item);
+            });
+        });
+    </script>
+</body>
+</html>
