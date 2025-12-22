@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AlliedRx Pharmacy Tech — Week 2 Objectives</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --color-primary: #af4bef;
+      --color-primary-soft: #d492ff;
+      --color-accent: #8380f0;
+      --color-success: #00b894;
+      --color-error: #e17055;
+      --color-bg: #f7f5fb;
+      --color-text: #2b2b2b;
+      --color-muted: #6c6880;
+      --radius-lg: 24px;
+      --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+      --shadow-hover: 0 25px 60px rgba(175, 75, 239, 0.25);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      padding: 24px;
+      background: radial-gradient(circle at top left, #ffffff 0, #f1ecff 40%, var(--color-bg) 100%);
+      color: var(--color-text);
+      -webkit-text-size-adjust: 100%;
+    }
+
+    @media (max-width: 600px) {
+      body { padding: 12px; }
+    }
+
+    .page {
+      width: 100%;
+      max-width: 1120px;
+      margin: 0 auto;
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+      padding: 28px 30px 32px;
+      display: grid;
+      grid-template-columns: 1.8fr 1fr;
+      gap: 28px;
+      position: relative;
+      overflow: hidden;
+      animation: fadeInUp 0.8s ease-out;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 900px) {
+      .page {
+        grid-template-columns: 1fr;
+        padding: 22px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body { padding: 0; }
+      .page {
+        border-radius: 0;
+        box-shadow: none;
+        padding: 18px 14px 22px;
+        gap: 22px;
+      }
+    }
+
+    .column {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Header */
+    .brand-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+      width: 100%;
+      animation: fadeIn 0.6s ease-out 0.2s both;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .brand-logo {
+      height: 40px;
+      width: auto;
+      max-width: 100%;
+      filter: drop-shadow(0 3px 8px rgba(0,0,0,0.2));
+      transition: transform 0.3s ease;
+    }
+
+    .brand-logo:hover { transform: scale(1.05); }
+
+    .course-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      max-width: 100%;
+    }
+
+    .course-name {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--color-muted);
+      white-space: normal;
+    }
+
+    .week-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(175, 75, 239, 0.08);
+      font-size: 0.76rem;
+      color: var(--color-primary);
+      white-space: normal;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { background-color: rgba(175, 75, 239, 0.08); }
+      50% { background-color: rgba(175, 75, 239, 0.15); }
+    }
+
+    .week-label-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--color-success);
+      flex-shrink: 0;
+      animation: blink 1.5s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .badge-mode {
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: rgba(12, 10, 24, 0.06);
+      border: 1px solid rgba(12, 10, 24, 0.08);
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--color-muted);
+      white-space: nowrap;
+      transition: all 0.3s ease;
+    }
+
+    .badge-mode:hover {
+      background: rgba(175, 75, 239, 0.1);
+      border-color: var(--color-primary-soft);
+      color: var(--color-primary);
+    }
+
+    @media (max-width: 480px) {
+      .brand-row { flex-direction: column; align-items: flex-start; }
+      .badge-mode { margin-top: 6px; }
+    }
+
+    h1 {
+      font-size: clamp(2rem, 3vw, 2.4rem);
+      line-height: 1.05;
+      color: var(--color-primary);
+      margin-bottom: 6px;
+      animation: fadeInUp 0.6s ease-out 0.3s both;
+    }
+
+    .subtitle {
+      font-size: 0.98rem;
+      color: var(--color-muted);
+      max-width: 100%;
+      margin-bottom: 24px;
+      line-height: 1.5;
+      animation: fadeInUp 0.6s ease-out 0.4s both;
+    }
+
+    /* Objectives list */
+    .objectives-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .objective-card {
+      background: #0a0910;
+      color: #f0f0f0;
+      border-radius: 18px;
+      padding: 16px 20px 18px;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      min-height: 100px;
+    }
+
+    .objective-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+      transition: left 0.7s ease;
+    }
+
+    .objective-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .objective-card:hover::before { left: 100%; }
+
+    .objective-card.active {
+      background: linear-gradient(135deg, #0f172a, #1e1b4b);
+      border-left: 4px solid var(--color-accent);
+    }
+
+    @media (max-width: 480px) {
+      .objective-card {
+        grid-template-columns: auto 1fr;
+        grid-template-rows: auto auto;
+        padding: 14px 16px;
+      }
+      .objective-icon { justify-self: flex-end; }
+    }
+
+    .objective-number {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 999px;
+      background: #ffffff;
+      color: #111827;
+      font-weight: 700;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+      transition: all 0.3s ease;
+    }
+
+    .objective-card:hover .objective-number {
+      background: var(--color-primary-soft);
+      transform: rotate(5deg);
+    }
+
+    .objective-main {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .objective-verb {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #d492ff;
+      transition: color 0.3s ease;
+    }
+
+    .objective-card:hover .objective-verb { color: #ffffff; }
+
+    .objective-text {
+      font-size: 0.92rem;
+      color: #e0e0e0;
+      line-height: 1.5;
+    }
+
+    .objective-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      border: 1px solid rgba(250,250,250,0.16);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      color: #f9fafb;
+      background: linear-gradient(135deg, rgba(175,75,239,0.1), rgba(0,0,0,0.4));
+      transition: all 0.3s ease;
+    }
+
+    .objective-card:hover .objective-icon {
+      background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+      transform: scale(1.1);
+    }
+
+    /* Right column */
+    .objectives-header {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--color-text);
+      margin-bottom: 8px;
+      animation: fadeInUp 0.6s ease-out 0.5s both;
+    }
+
+    .section-tag {
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--color-primary);
+      font-weight: 600;
+      margin-bottom: 16px;
+      animation: fadeInUp 0.6s ease-out 0.6s both;
+    }
+
+    .week-overview {
+      background: #0c0a18;
+      border-radius: 18px;
+      padding: 20px 22px 24px;
+      color: #e0e0e0;
+      font-size: 0.9rem;
+      line-height: 1.7;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.6);
+      animation: fadeInUp 0.6s ease-out 0.7s both;
+      transition: transform 0.3s ease;
+      height: fit-content;
+    }
+
+    .week-overview:hover { transform: translateY(-2px); }
+
+    .week-overview strong { 
+      color: #ffffff; 
+      font-weight: 700;
+    }
+
+    .mini-heading {
+      font-size: 0.88rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: #c4b5fd;
+      font-weight: 600;
+      margin: 12px 0 10px;
+    }
+
+    .outcomes-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 0.88rem;
+      color: #f0f0f0;
+      margin-bottom: 16px;
+    }
+
+    .outcomes-list li {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      transition: transform 0.3s ease;
+    }
+
+    .outcomes-list li:hover { transform: translateX(5px); }
+
+    .dot {
+      width: 6px;
+      height: 6px;
+      margin-top: 7px;
+      border-radius: 999px;
+      background: var(--color-accent);
+      flex-shrink: 0;
+      animation: pulse 2s infinite;
+    }
+
+    .note-card {
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.16);
+      background: rgba(20, 18, 36, 0.8);
+      padding: 12px 14px;
+      font-size: 0.82rem;
+      color: #e0e0e0;
+      transition: all 0.3s ease;
+      margin-top: 12px;
+    }
+
+    .note-card:hover {
+      border-color: var(--color-primary-soft);
+      background: rgba(25, 23, 42, 0.9);
+    }
+
+    .note-card strong { 
+      color: #ffd966;
+      font-weight: 700;
+    }
+
+    /* Key Terms Box */
+    .terms-box {
+      background: linear-gradient(135deg, rgba(131,128,240,0.15), rgba(175,75,239,0.15));
+      border-radius: 18px;
+      padding: 20px;
+      margin-top: 24px;
+      border: 1px solid rgba(131,128,240,0.3);
+    }
+
+    .terms-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #a29bfe;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .terms-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      font-size: 0.85rem;
+      color: #f0f0f0;
+    }
+
+    .term-item {
+      padding: 8px 0;
+      border-bottom: 1px dashed rgba(255,255,255,0.15);
+    }
+
+    .term { 
+      font-weight: 600; 
+      color: #d492ff;
+      font-size: 0.9rem; 
+    }
+    .def { 
+      color: #e0e0e0;
+      margin-top: 4px; 
+      line-height: 1.4; 
+    }
+
+    /* Regulatory Agencies Box */
+    .agencies-box {
+      background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(240, 240, 255, 0.95));
+      border-radius: 18px;
+      padding: 18px;
+      margin-top: 20px;
+      border: 1px solid rgba(0,184,148,0.3);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .agencies-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--color-primary);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .agencies-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 0.85rem;
+      color: #333333;
+    }
+
+    .agency-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 10px;
+      border-bottom: 1px dashed rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+      border-radius: 8px;
+    }
+
+    .agency-item:hover {
+      background-color: rgba(175, 75, 239, 0.08);
+      transform: translateX(3px);
+    }
+
+    .agency-name { 
+      font-weight: 600; 
+      color: #222222;
+    }
+    .agency-role { 
+      color: #444444;
+      text-align: right; 
+      font-size: 0.8rem;
+      max-width: 50%;
+    }
+
+    /* Left column note card */
+    .left-note-card {
+      border-radius: 16px;
+      border: 1px solid rgba(175, 75, 239, 0.2);
+      background: rgba(175, 75, 239, 0.08);
+      padding: 14px 16px;
+      font-size: 0.82rem;
+      color: var(--color-text);
+      transition: all 0.3s ease;
+      margin-top: 20px;
+    }
+
+    .left-note-card:hover {
+      border-color: var(--color-primary-soft);
+      background: rgba(175, 75, 239, 0.12);
+    }
+
+    .left-note-card strong { 
+      color: #8a2be2;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+  <main class="page" aria-labelledby="week2-heading">
+    <!-- LEFT COLUMN: objectives -->
+    <section class="column" aria-label="Week 2 objectives list">
+      <header class="brand-row">
+        <div class="brand">
+          <img
+            src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+            alt="AlliedRx logo"
+            class="brand-logo"
+          />
+          <div class="course-meta">
+            <span class="course-name">Pharmacy Technician Program • PT5</span>
+            <div class="week-label">
+              <span class="week-label-dot"></span>
+              <span>Week 2 — Pharmacy Law, Ethics & Regulations</span>
+            </div>
+          </div>
+        </div>
+        <span class="badge-mode">Campus & Online</span>
+      </header>
+
+      <h1 id="week2-heading">Week 2 Objectives</h1>
+      <p class="subtitle">
+        Master federal drug laws, regulatory agencies, controlled substance handling, and ethical guidelines essential for pharmacy practice. Understand your legal responsibilities as a pharmacy technician.
+      </p>
+
+      <div class="objectives-list" id="objectives-container">
+        <article class="objective-card">
+          <div class="objective-number">01</div>
+          <div class="objective-main">
+            <div class="objective-verb">List</div>
+            <p class="objective-text">
+              List the history of federal drug laws in chronologic order from early regulations to modern pharmaceutical legislation.
+            </p>
+          </div>
+          <div class="objective-icon" aria-hidden="true">📜</div>
+        </article>
+
+        <article class="objective-card">
+          <div class="objective-number">02</div>
+          <div class="objective-main">
+            <div class="objective-verb">Describe</div>
+            <p class="objective-text">
+              Describe the implications of the Health Insurance Portability and Accountability Act (HIPAA) for pharmacy practice and patient privacy.
+            </p>
+          </div>
+          <div class="objective-icon" aria-hidden="true">🔒</div>
+        </article>
+
+        <article class="objective-card">
+          <div class="objective-number">03</div>
+          <div class="objective-main">
+            <div class="objective-verb">Explain</div>
+            <p class="objective-text">
+              Explain how the Patient Protection and Affordable Care Act (ACA) and the Drug Quality and Security Act (DQSA) have changed health care delivery.
+            </p>
+          </div>
+          <div class="objective-icon" aria-hidden="true">🏛️</div>
+        </article>
+
+        <article class="objective-card">
+          <div class="objective-number">04</div>
+          <div class="objective-main">
+            <div class="objective-verb">Define & Describe</div>
+            <p class="objective-text">
+              Define the functions of the FDA and DEA; describe the process for reporting drug problems or adverse reactions; explain the three classes of drug recalls.
+            </p>
+          </div>
+          <div class="objective-icon" aria-hidden="true">⚠️</div>
+        </article>
+
+        <article class="objective-card">
+          <div class="objective-number">05</div>
+          <div class="objective-main">
+            <div class="objective-verb">Describe & Explain</div>
+            <p class="objective-text">
+              Describe proper handling of controlled substances and explain necessary forms and regulations used for Schedule I-V medications.
+            </p>
+          </div>
+          <div class="objective-icon" aria-hidden="true">💊</div>
+        </article>
+
+        <article class="objective-card">
+          <div class="objective-number">06</div>
+          <div class="objective-main">
+            <div class="objective-verb">List & Explain</div>
+            <p class="objective-text">
+              List basic information in a drug monograph; explain boxed warnings and MedGuides; list and explain FDA pregnancy categories.
+            </p>
+          </div>
+          <div class="objective-icon" aria-hidden="true">📋</div>
+        </article>
+
+        <article class="objective-card">
+          <div class="objective-number">07</div>
+          <div class="objective-main">
+            <div class="objective-verb">List & Describe</div>
+            <p class="objective-text">
+              List who can prescribe medications; describe prescription orders and labels; perform DEA number verification.
+            </p>
+          </div>
+          <div class="objective-icon" aria-hidden="true">🖋️</div>
+        </article>
+
+        <article class="objective-card">
+          <div class="objective-number">08</div>
+          <div class="objective-main">
+            <div class="objective-verb">Describe & Explain</div>
+            <p class="objective-text">
+              Describe special prescribing programs and explain the purpose of risk management programs for prescription drugs.
+            </p>
+          </div>
+          <div class="objective-icon" aria-hidden="true">🎯</div>
+        </article>
+
+        <article class="objective-card">
+          <div class="objective-number">09</div>
+          <div class="objective-main">
+            <div class="objective-verb">Explain</div>
+            <p class="objective-text">
+              Explain the verification process for Internet pharmacies to ensure legitimacy and patient safety.
+            </p>
+          </div>
+          <div class="objective-icon" aria-hidden="true">🌐</div>
+        </article>
+
+        <article class="objective-card">
+          <div class="objective-number">10</div>
+          <div class="objective-main">
+            <div class="objective-verb">Explain</div>
+            <p class="objective-text">
+              Explain OSHA guidelines as they pertain to pharmacy workplace safety, including SDS requirements.
+            </p>
+          </div>
+          <div class="objective-icon" aria-hidden="true">🛡️</div>
+        </article>
+
+        <article class="objective-card">
+          <div class="objective-number">11</div>
+          <div class="objective-main">
+            <div class="objective-verb">Explain</div>
+            <p class="objective-text">
+              Explain the purpose of The Joint Commission in accrediting healthcare organizations and ensuring quality standards.
+            </p>
+          </div>
+          <div class="objective-icon" aria-hidden="true">⭐</div>
+        </article>
+
+        <article class="objective-card">
+          <div class="objective-number">12</div>
+          <div class="objective-main">
+            <div class="objective-verb">Explain & Discuss</div>
+            <p class="objective-text">
+              Explain why pharmacy technicians must be knowledgeable about the law when performing nondiscretionary duties, and discuss the differences between morals and ethics.
+            </p>
+          </div>
+          <div class="objective-icon" aria-hidden="true">⚖️</div>
+        </article>
+      </div>
+
+      <!-- Regulatory Agencies Box -->
+      <div class="agencies-box">
+        <div class="agencies-title"><span>🏛️</span> Key Regulatory Agencies</div>
+        <div class="agencies-list">
+          <div class="agency-item">
+            <span class="agency-name">FDA</span>
+            <span class="agency-role">Food & Drug Administration</span>
+          </div>
+          <div class="agency-item">
+            <span class="agency-name">DEA</span>
+            <span class="agency-role">Drug Enforcement Administration</span>
+          </div>
+          <div class="agency-item">
+            <span class="agency-name">OSHA</span>
+            <span class="agency-role">Occupational Safety & Health Admin</span>
+          </div>
+          <div class="agency-item">
+            <span class="agency-name">The Joint Commission</span>
+            <span class="agency-role">Healthcare accreditation</span>
+          </div>
+          <div class="agency-item">
+            <span class="agency-name">State BOP</span>
+            <span class="agency-role">Board of Pharmacy</span>
+          </div>
+          <div class="agency-item">
+            <span class="agency-name">USP</span>
+            <span class="agency-role">United States Pharmacopeia</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Additional content to fill left column -->
+      <div class="left-note-card">
+        <strong>📚 Chapter Source:</strong> This chapter is contributed by <strong>Karen Davis</strong> 
+        for <em>Mosby's Pharmacy Technician, 5th Edition</em>.
+      </div>
+    </section>
+
+    <!-- RIGHT COLUMN: overview & key terms -->
+    <aside class="column" aria-label="Overview of this week's content">
+      <h2 class="objectives-header">Legal & Ethical Foundations</h2>
+      <p class="section-tag">Federal Laws • Regulatory Agencies • Professional Ethics</p>
+
+      <div class="week-overview">
+        <p>
+          <strong>Week 2</strong> covers the <strong>critical legal and ethical frameworks</strong> that govern pharmacy practice. 
+          You'll learn about federal drug laws, regulatory agencies, controlled substance handling, and the ethical 
+          responsibilities of pharmacy technicians.
+        </p>
+        
+        <p class="mini-heading" style="margin-top: 16px;">⚖️ Legal Responsibility</p>
+        <div class="note-card">
+          <strong>Pharmacy technicians</strong> perform <strong>nondiscretionary tasks</strong> but must still understand 
+          pharmacy law thoroughly. Ignorance of the law is not a defense, and technicians can face legal consequences 
+          for violations, even if unintentional.
+        </div>
+
+        <p class="mini-heading">🎯 By the end of this week, you will be able to:</p>
+        <ul class="outcomes-list">
+          <li><span class="dot"></span><span>Navigate federal drug laws and understand their chronological development.</span></li>
+          <li><span class="dot"></span><span>Apply HIPAA regulations to protect patient privacy in pharmacy settings.</span></li>
+          <li><span class="dot"></span><span>Handle controlled substances with proper documentation and security protocols.</span></li>
+          <li><span class="dot"></span><span>Identify and report adverse drug reactions to the FDA using proper channels.</span></li>
+          <li><span class="dot"></span><span>Differentiate between Schedule I-V controlled substances and their corresponding requirements.</span></li>
+          <li><span class="dot"></span><span>Verify DEA numbers and identify potentially fraudulent prescriptions.</span></li>
+          <li><span class="dot"></span><span>Apply OSHA safety guidelines to maintain a secure pharmacy environment.</span></li>
+          <li><span class="dot"></span><span>Distinguish between personal morals and professional ethics in pharmacy practice.</span></li>
+        </ul>
+
+        <!-- Key Terms Box -->
+        <div class="terms-box">
+          <div class="terms-title"><span>📚</span> Key Terms & Definitions</div>
+          <div class="terms-grid">
+            <div class="term-item">
+              <div class="term">HIPAA</div>
+              <div class="def">Health Insurance Portability and Accountability Act - protects patient privacy and health information.</div>
+            </div>
+            <div class="term-item">
+              <div class="term">Controlled Substance</div>
+              <div class="def">Drugs regulated by the DEA, categorized into Schedules I-V based on abuse potential.</div>
+            </div>
+            <div class="term-item">
+              <div class="term">Boxed Warning</div>
+              <div class="def">Strongest FDA warning indicating significant risk of dangerous side effects (Black Box Warning).</div>
+            </div>
+            <div class="term-item">
+              <div class="term">NDC</div>
+              <div class="def">National Drug Code - 10-digit identifier for drug manufacturer, product, and package size.</div>
+            </div>
+            <div class="term-item">
+              <div class="term">PHI</div>
+              <div class="def">Protected Health Information - patient data protected under HIPAA regulations.</div>
+            </div>
+            <div class="term-item">
+              <div class="term">SDS</div>
+              <div class="def">Safety Data Sheet - OSHA-required document with chemical safety information.</div>
+            </div>
+            <div class="term-item">
+              <div class="term">Legend Drug</div>
+              <div class="def">Prescription medication requiring "Federal law prohibits dispensing without a prescription" label.</div>
+            </div>
+            <div class="term-item">
+              <div class="term">Drug Diversion</div>
+              <div class="def">Illegal channeling of prescription drugs from legitimate distribution to illegal use.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="note-card">
+          <strong>💡 HIPAA Tip:</strong> <strong>Never discuss patient information</strong> within earshot of others. 
+          When verifying prescriptions over the phone, confirm patient identity with <strong>at least two identifiers</strong> 
+          (name + date of birth OR name + phone number).
+        </div>
+
+        <div class="note-card" style="margin-top:12px;">
+          <strong>⚠️ Controlled Substance Security:</strong> Schedule II medications require <strong>separate, 
+          locked storage</strong> with limited access. Maintain accurate inventory records and report any 
+          discrepancies <strong>immediately to the pharmacist-in-charge</strong>.
+        </div>
+
+        <div class="note-card" style="margin-top:12px;">
+          <strong>🔍 DEA Number Verification:</strong> Valid DEA numbers follow a specific formula: 
+          First letter = registrant type (A, B, or M), second letter = first letter of last name. 
+          Use the <strong>DEA Number Verification Formula</strong> to check legitimacy: Add digits in positions 1, 3, 5, 
+          then add digits in positions 2, 4, 6 multiplied by 2. Sum should end with the digit in position 7.
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Interactive objective cards
+      const objectiveCards = document.querySelectorAll('.objective-card');
+      objectiveCards.forEach(card => {
+        card.addEventListener('click', function() {
+          this.classList.toggle('active');
+          if (this.classList.contains('active')) {
+            const icon = this.querySelector('.objective-icon');
+            icon.style.transform = 'scale(1.2) rotate(10deg)';
+            setTimeout(() => { icon.style.transform = 'scale(1.1)'; }, 300);
+          }
+        });
+        card.setAttribute('tabindex', '0');
+        card.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            this.click();
+          }
+        });
+      });
+
+      // Hover effects for outcomes list
+      const outcomesItems = document.querySelectorAll('.outcomes-list li');
+      outcomesItems.forEach(item => {
+        item.addEventListener('mouseenter', function() {
+          const dot = this.querySelector('.dot');
+          dot.style.transform = 'scale(1.5)';
+          dot.style.background = 'var(--color-primary)';
+        });
+        item.addEventListener('mouseleave', function() {
+          const dot = this.querySelector('.dot');
+          dot.style.transform = 'scale(1)';
+          dot.style.background = 'var(--color-accent)';
+        });
+      });
+
+      // Scroll animation for cards
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+          }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+      objectiveCards.forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        observer.observe(card);
+      });
+    });
+  </script>
+</body>
+</html>
