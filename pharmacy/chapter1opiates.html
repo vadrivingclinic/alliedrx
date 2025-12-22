@@ -1,0 +1,1904 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AlliedRx - Module 2: Revolution & The Opium Problem</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!-- Reuse the same CSS styles from Module 1 -->
+    <style>
+        /* All CSS from Module 1 - Keeping consistent styling */
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-error: #e17055;
+            --color-warning: #fdcb6e;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
+            --color-dark: #0c0a18;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+            --shadow-card: 0 12px 30px rgba(15, 23, 42, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(circle at top left, #ffffff 0, #f1ecff 40%, var(--color-bg) 100%);
+            color: var(--color-text);
+            -webkit-text-size-adjust: 100%;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 12px; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @media (max-width: 900px) {
+            .page { padding: 22px; }
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 0; }
+            .page {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 18px 14px 22px;
+            }
+        }
+
+        /* Header */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .brand-logo:hover { transform: scale(1.05); }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--color-success);
+            flex-shrink: 0;
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .badge-mode:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+        @media (max-width: 480px) {
+            .brand-row { flex-direction: column; align-items: flex-start; }
+            .badge-mode { margin-top: 6px; }
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 3vw, 2.2rem);
+            line-height: 1.1;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .module-subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 600px;
+            margin-bottom: 24px;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        /* Progress Tracker */
+        .progress-tracker {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            position: relative;
+            padding: 0 20px;
+        }
+
+        .progress-tracker::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 50px;
+            right: 50px;
+            height: 3px;
+            background: rgba(12, 10, 24, 0.08);
+            z-index: 1;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+
+        .step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--color-muted);
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.active .step-circle {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .progress-step.completed .step-circle {
+            background: var(--color-success);
+            border-color: var(--color-success);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.75rem;
+            color: var(--color-muted);
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .progress-step.active .step-label {
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        /* Progress Summary */
+        .progress-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+            animation: fadeInUp 0.6s ease-out 0.5s both;
+        }
+
+        .summary-card {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            border: 1px solid rgba(12, 10, 24, 0.06);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-card);
+            border-color: var(--color-primary-soft);
+        }
+
+        .summary-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--color-primary);
+            display: block;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .summary-label {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Activity Grid */
+        .activity-grid {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .activity-card {
+            background: white;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            padding: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .activity-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--color-primary);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .activity-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--color-primary-soft);
+        }
+
+        .activity-card:hover::before { opacity: 1; }
+
+        .activity-card.completed {
+            border-color: var(--color-success);
+        }
+
+        .activity-card.completed::before {
+            background: var(--color-success);
+            opacity: 1;
+        }
+
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .activity-number {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .activity-status {
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-muted);
+        }
+
+        .activity-card.completed .activity-status {
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--color-success);
+        }
+
+        .activity-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 10px;
+        }
+
+        .activity-description {
+            font-size: 0.9rem;
+            color: var(--color-muted);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        /* Matching Grid for Opium Family Tree */
+        .matching-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+            min-height: 300px;
+        }
+
+        @media (max-width: 600px) {
+            .matching-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .matching-column {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 2px dashed rgba(12, 10, 24, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .matching-column-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            text-align: center;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(12, 10, 24, 0.08);
+            margin-bottom: 10px;
+        }
+
+        .matching-item {
+            background: rgba(175, 75, 239, 0.08);
+            border-radius: var(--radius-sm);
+            padding: 12px 15px;
+            cursor: grab;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            user-select: none;
+            font-size: 0.85rem;
+            color: var(--color-text);
+        }
+
+        .matching-item:hover {
+            background: rgba(175, 75, 239, 0.15);
+            border-color: var(--color-primary-soft);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(175, 75, 239, 0.1);
+        }
+
+        .matching-item.dragging {
+            opacity: 0.7;
+            transform: scale(0.98);
+        }
+
+        .matching-item.matched {
+            background: rgba(0, 184, 148, 0.1);
+            border-color: var(--color-success);
+            cursor: default;
+        }
+
+        .matching-item.incorrect {
+            background: rgba(225, 112, 85, 0.1);
+            border-color: var(--color-error);
+            animation: shake 0.5s ease;
+        }
+
+        /* Match Area */
+        .match-area {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+            min-height: 200px;
+        }
+
+        @media (max-width: 900px) {
+            .match-area {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .match-area {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .match-pair {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .match-slot {
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 2px dashed rgba(12, 10, 24, 0.1);
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .match-slot.hover {
+            border-color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.05);
+        }
+
+        .match-slot.filled {
+            border: 2px solid var(--color-primary-soft);
+            background: rgba(175, 75, 239, 0.08);
+        }
+
+        .match-slot.correct {
+            border-color: var(--color-success);
+            background: rgba(0, 184, 148, 0.1);
+        }
+
+        .match-slot.incorrect {
+            border-color: var(--color-error);
+            background: rgba(225, 112, 85, 0.1);
+        }
+
+        .match-label {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+            text-align: center;
+            margin-top: 5px;
+        }
+
+        /* Timeline Dropzone */
+        .steps-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .step-item {
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            cursor: grab;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            user-select: none;
+        }
+
+        .step-item:hover {
+            background: rgba(175, 75, 239, 0.08);
+            border-color: var(--color-primary-soft);
+            transform: translateY(-2px);
+        }
+
+        .step-item.dragging {
+            opacity: 0.7;
+            transform: scale(0.98);
+        }
+
+        .step-item.placed {
+            background: rgba(0, 184, 148, 0.1);
+            border-color: var(--color-success);
+            cursor: default;
+        }
+
+        .step-number {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(12, 10, 24, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-text);
+            flex-shrink: 0;
+        }
+
+        .step-item.placed .step-number {
+            background: var(--color-success);
+            color: white;
+        }
+
+        .step-text {
+            font-size: 0.9rem;
+            color: var(--color-text);
+            flex: 1;
+        }
+
+        .steps-dropzone {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            border: 2px dashed rgba(12, 10, 24, 0.1);
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .steps-dropzone.hover {
+            border-color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.05);
+        }
+
+        .steps-dropzone.empty::after {
+            content: 'Drag items here in correct chronological order';
+            color: var(--color-muted);
+            text-align: center;
+            font-size: 0.9rem;
+            margin: auto;
+        }
+
+        /* Feedback */
+        .feedback-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            margin-top: 20px;
+            display: none;
+        }
+
+        .feedback-container.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .feedback-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feedback-icon {
+            font-size: 1.2rem;
+        }
+
+        .feedback-icon.correct { color: var(--color-success); }
+        .feedback-icon.incorrect { color: var(--color-error); }
+
+        .feedback-content {
+            font-size: 0.85rem;
+            color: var(--color-text);
+            line-height: 1.5;
+        }
+
+        .feedback-content strong { color: var(--color-primary); }
+
+        .correction-details {
+            background: rgba(225, 112, 85, 0.05);
+            border-left: 3px solid var(--color-error);
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+        }
+
+        /* War Matching Grid */
+        .war-matching-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .war-matching-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .war-item {
+            background: rgba(131, 128, 240, 0.08);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            cursor: grab;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            user-select: none;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .war-item:hover {
+            background: rgba(131, 128, 240, 0.15);
+            border-color: var(--color-accent);
+            transform: translateY(-2px);
+        }
+
+        .war-item.dragging {
+            opacity: 0.7;
+            transform: scale(0.98);
+        }
+
+        /* Comparison Table for Visual Feedback */
+        .comparison-table {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+        }
+
+        .comparison-column h4 {
+            font-size: 0.9rem;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid rgba(12, 10, 24, 0.1);
+        }
+
+        .comparison-item {
+            padding: 8px 12px;
+            margin: 5px 0;
+            border-radius: 6px;
+            font-size: 0.85rem;
+        }
+
+        .comparison-item.correct {
+            background: rgba(0, 184, 148, 0.1);
+            border-left: 3px solid var(--color-success);
+        }
+
+        .comparison-item.incorrect {
+            background: rgba(225, 112, 85, 0.1);
+            border-left: 3px solid var(--color-error);
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #9a3bd6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(175, 75, 239, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-text);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(12, 10, 24, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-icon { font-size: 1.1em; }
+
+        /* Results Panel */
+        .results-panel {
+            background: var(--color-dark);
+            color: white;
+            border-radius: var(--radius-md);
+            padding: 30px;
+            margin-top: 30px;
+            display: none;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .results-panel.show { display: block; }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .results-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .score-display {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--color-primary-soft);
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .clinical-insights {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .insights-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-primary-soft);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .insights-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .insights-list li {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            font-size: 0.9rem;
+            color: #e5e7eb;
+        }
+
+        .insight-dot {
+            width: 6px;
+            height: 6px;
+            margin-top: 6px;
+            border-radius: 999px;
+            background: var(--color-accent);
+            flex-shrink: 0;
+        }
+
+        /* Section separators */
+        .activity-section {
+            margin: 25px 0;
+            padding: 20px;
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+        }
+
+        .section-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="module-heading">
+        <!-- Header -->
+        <header class="brand-row">
+            <div class="brand">
+                <img
+                    src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                    alt="AlliedRx logo"
+                    class="brand-logo"
+                />
+                <div class="course-meta">
+                    <span class="course-name">Pharmacy Technician • Week 2</span>
+                    <div class="week-label">
+                        <span class="week-label-dot"></span>
+                        <span>Chapter 2: Revolution & The Opium Problem</span>
+                    </div>
+                </div>
+            </div>
+            <span class="badge-mode">Campus & Online</span>
+        </header>
+
+        <h1 id="module-heading">Revolution & The Opium Problem</h1>
+        <p class="module-subtitle">
+            Explore how wars and conflicts drove medical innovation, and trace the evolution of 
+            opioids from natural remedies to modern controlled substances.
+        </p>
+
+        <!-- Progress Tracker -->
+        <div class="progress-tracker">
+            <div class="progress-step active" data-step="1">
+                <div class="step-circle">1</div>
+                <div class="step-label">Opium Family</div>
+            </div>
+            <div class="progress-step" data-step="2">
+                <div class="step-circle">2</div>
+                <div class="step-label">War's Legacy</div>
+            </div>
+            <div class="progress-step" data-step="3">
+                <div class="step-circle">3</div>
+                <div class="step-label">Complete</div>
+            </div>
+        </div>
+
+        <!-- Progress Summary -->
+        <div class="progress-summary">
+            <div class="summary-card">
+                <span class="summary-number" id="completed-count">0</span>
+                <span class="summary-label">Activities Completed</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="accuracy-rate">0%</span>
+                <span class="summary-label">Current Accuracy</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="time-spent">0:00</span>
+                <span class="summary-label">Time Spent</span>
+            </div>
+        </div>
+
+        <!-- Activity Grid -->
+        <div class="activity-grid">
+            <!-- Activity 1: The Opium Family Tree -->
+            <section class="activity-card" id="activity-1" data-activity="1">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 1</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">The Opium Family Tree</h3>
+                <p class="activity-description">
+                    Understand the classification of opioid substances by matching terms with their definitions 
+                    and arranging them in chronological order of discovery/development.
+                </p>
+
+                <!-- Part A: Matching Opium Terms -->
+                <div class="activity-section">
+                    <div class="section-title">
+                        <span>🌿</span> Part A: Match the Terms
+                    </div>
+                    <p style="margin-bottom: 15px; font-size: 0.9rem; color: var(--color-muted);">
+                        Drag each term from the left column to match with its correct definition in the right column.
+                    </p>
+                    
+                    <!-- Matching Area -->
+                    <div class="match-area" id="opium-match-area">
+                        <div class="match-pair" data-pair="1">
+                            <div class="match-slot" data-type="term" id="slot-term-1">
+                                Drag term here
+                            </div>
+                            <div class="match-slot" data-type="definition" id="slot-def-1">
+                                Drag definition here
+                            </div>
+                            <div class="match-label">Pair 1</div>
+                        </div>
+                        <div class="match-pair" data-pair="2">
+                            <div class="match-slot" data-type="term" id="slot-term-2">
+                                Drag term here
+                            </div>
+                            <div class="match-slot" data-type="definition" id="slot-def-2">
+                                Drag definition here
+                            </div>
+                            <div class="match-label">Pair 2</div>
+                        </div>
+                        <div class="match-pair" data-pair="3">
+                            <div class="match-slot" data-type="term" id="slot-term-3">
+                                Drag term here
+                            </div>
+                            <div class="match-slot" data-type="definition" id="slot-def-3">
+                                Drag definition here
+                            </div>
+                            <div class="match-label">Pair 3</div>
+                        </div>
+                        <div class="match-pair" data-pair="4">
+                            <div class="match-slot" data-type="term" id="slot-term-4">
+                                Drag term here
+                            </div>
+                            <div class="match-slot" data-type="definition" id="slot-def-4">
+                                Drag definition here
+                            </div>
+                            <div class="match-label">Pair 4</div>
+                        </div>
+                    </div>
+
+                    <!-- Items to Drag -->
+                    <div class="matching-grid">
+                        <div class="matching-column" id="terms-column">
+                            <div class="matching-column-title">Terms</div>
+                            <div class="matching-item draggable" data-term="opium" draggable="true">Opium</div>
+                            <div class="matching-item draggable" data-term="opiate" draggable="true">Opiate</div>
+                            <div class="matching-item draggable" data-term="opioid" draggable="true">Opioid</div>
+                            <div class="matching-item draggable" data-term="synthetic" draggable="true">Synthetic Opioid</div>
+                        </div>
+                        <div class="matching-column" id="definitions-column">
+                            <div class="matching-column-title">Definitions</div>
+                            <div class="matching-item draggable" data-definition="opium" draggable="true">Natural sap of the poppy plant</div>
+                            <div class="matching-item draggable" data-definition="opiate" draggable="true">Natural derivatives like morphine and codeine</div>
+                            <div class="matching-item draggable" data-definition="opioid" draggable="true">Any substance that binds to opioid receptors</div>
+                            <div class="matching-item draggable" data-definition="synthetic" draggable="true">Fully lab-created (fentanyl, methadone)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Part B: Opium Timeline -->
+                <div class="activity-section">
+                    <div class="section-title">
+                        <span>⏳</span> Part B: Opium Timeline
+                    </div>
+                    <p style="margin-bottom: 15px; font-size: 0.9rem; color: var(--color-muted);">
+                        Drag these key developments into the correct chronological order from earliest to most recent.
+                    </p>
+                    
+                    <!-- Timeline Dropzone -->
+                    <div class="steps-dropzone empty" id="opium-timeline-dropzone"></div>
+                    
+                    <!-- Timeline Items -->
+                    <div class="steps-container" id="opium-timeline-items">
+                        <div class="step-item draggable" data-step="1" draggable="true">
+                            <div class="step-number">?</div>
+                            <div class="step-text">Opium used medicinally in ancient civilizations</div>
+                        </div>
+                        <div class="step-item draggable" data-step="2" draggable="true">
+                            <div class="step-number">?</div>
+                            <div class="step-text">Isolation of morphine from opium (1804)</div>
+                        </div>
+                        <div class="step-item draggable" data-step="3" draggable="true">
+                            <div class="step-number">?</div>
+                            <div class="step-text">Development of heroin as a "non-addictive" morphine substitute</div>
+                        </div>
+                        <div class="step-item draggable" data-step="4" draggable="true">
+                            <div class="step-number">?</div>
+                            <div class="step-text">Synthetic opioids created (fentanyl, methadone)</div>
+                        </div>
+                        <div class="step-item draggable" data-step="5" draggable="true">
+                            <div class="step-number">?</div>
+                            <div class="step-text">Opioid crisis leads to stricter regulations</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Corrective Feedback -->
+                <div class="feedback-container" id="feedback-1">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Opium Classification Analysis
+                    </div>
+                    <div class="feedback-content">
+                        <div id="part-a-feedback"></div>
+                        <div id="part-b-feedback" style="margin-top: 15px;"></div>
+                        <div class="correction-details" id="correction-details-1" style="display: none; margin-top: 15px;">
+                            <strong>Detailed Corrections:</strong><br>
+                            <span id="correction-text-1"></span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity 2: War's Medical Legacy -->
+            <section class="activity-card" id="activity-2" data-activity="2">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 2</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">War's Medical Legacy</h3>
+                <p class="activity-description">
+                    Match each war with its corresponding medical advancement. Understanding these connections 
+                    shows how conflict drives healthcare innovation.
+                </p>
+
+                <!-- War Matching Activity -->
+                <div class="activity-section">
+                    <div class="section-title">
+                        <span>⚕️</span> Match Wars to Medical Advances
+                    </div>
+                    
+                    <!-- Matching Area -->
+                    <div class="match-area" id="war-match-area">
+                        <div class="match-pair" data-pair="1">
+                            <div class="match-slot" data-type="war" id="slot-war-1">
+                                Drag war here
+                            </div>
+                            <div class="match-slot" data-type="advance" id="slot-advance-1">
+                                Drag advance here
+                            </div>
+                            <div class="match-label">Pair 1</div>
+                        </div>
+                        <div class="match-pair" data-pair="2">
+                            <div class="match-slot" data-type="war" id="slot-war-2">
+                                Drag war here
+                            </div>
+                            <div class="match-slot" data-type="advance" id="slot-advance-2">
+                                Drag advance here
+                            </div>
+                            <div class="match-label">Pair 2</div>
+                        </div>
+                        <div class="match-pair" data-pair="3">
+                            <div class="match-slot" data-type="war" id="slot-war-3">
+                                Drag war here
+                            </div>
+                            <div class="match-slot" data-type="advance" id="slot-advance-3">
+                                Drag advance here
+                            </div>
+                            <div class="match-label">Pair 3</div>
+                        </div>
+                        <div class="match-pair" data-pair="4">
+                            <div class="match-slot" data-type="war" id="slot-war-4">
+                                Drag war here
+                            </div>
+                            <div class="match-slot" data-type="advance" id="slot-advance-4">
+                                Drag advance here
+                            </div>
+                            <div class="match-label">Pair 4</div>
+                        </div>
+                    </div>
+
+                    <!-- Items to Drag -->
+                    <div class="war-matching-grid">
+                        <div class="matching-column">
+                            <div class="matching-column-title">Wars & Conflicts</div>
+                            <div class="war-item draggable" data-war="crimean" draggable="true">Crimean War (1853-1856)</div>
+                            <div class="war-item draggable" data-war="wwi" draggable="true">World War I (1914-1918)</div>
+                            <div class="war-item draggable" data-war="wwii" draggable="true">World War II (1939-1945)</div>
+                            <div class="war-item draggable" data-war="vietnam" draggable="true">Vietnam War (1955-1975)</div>
+                        </div>
+                        <div class="matching-column">
+                            <div class="matching-column-title">Medical Advances</div>
+                            <div class="war-item draggable" data-advance="sanitation" draggable="true">Sanitation & modern nursing (Nightingale)</div>
+                            <div class="war-item draggable" data-advance="sulfa" draggable="true">Sulfa drugs (early antibiotics)</div>
+                            <div class="war-item draggable" data-advance="penicillin" draggable="true">Penicillin mass production</div>
+                            <div class="war-item draggable" data-advance="trauma" draggable="true">Trauma & emergency medicine systems</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Corrective Feedback -->
+                <div class="feedback-container" id="feedback-2">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        War-Medicine Connections Analyzed
+                    </div>
+                    <div class="feedback-content">
+                        <div id="war-feedback-content"></div>
+                        <div class="correction-details" id="correction-details-2" style="display: none; margin-top: 15px;">
+                            <strong>Detailed Corrections:</strong><br>
+                            <span id="correction-text-2"></span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn btn-secondary" id="reset-all-btn">
+                <span class="btn-icon">↻</span>
+                Reset All Activities
+            </button>
+            <button class="btn btn-secondary" id="check-answers-btn">
+                <span class="btn-icon">✓</span>
+                Check All Answers
+            </button>
+            <button class="btn btn-primary" id="view-results-btn">
+                <span class="btn-icon">📊</span>
+                View Final Results
+            </button>
+        </div>
+
+        <!-- Results Panel -->
+        <div class="results-panel" id="results-panel">
+            <div class="results-header">
+                <h2 class="results-title">Revolution & Opium Proficiency</h2>
+                <div class="score-display" id="final-score">0%</div>
+            </div>
+            
+            <div class="clinical-insights">
+                <h3 class="insights-title">
+                    <span>💊</span> Pharmacy Technician Insights
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Controlled Substance Knowledge:</strong> Understanding the opium family tree is essential for safely handling Schedule II-V medications. Technicians must recognize natural opiates (morphine, codeine), semi-synthetics (oxycodone, hydrocodone), and full synthetics (fentanyl).</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Verification Protocols:</strong> The progression from unregulated opium to controlled substances highlights why verification is crucial. Technicians play a key role in checking prescriptions for validity, interactions, and appropriate dosing.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Historical Context:</strong> Knowing that penicillin was mass-produced during WWII helps explain antibiotic stewardship today. Similarly, understanding morphine's isolation in 1804 provides context for modern pain management protocols.</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="clinical-insights" style="margin-top: 20px;">
+                <h3 class="insights-title">
+                    <span>⚕️</span> Medical History Connections
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Conflict Drives Innovation:</strong> Each major war addressed specific medical challenges: Crimean → sanitation, WWI → infection control, WWII → mass antibiotic production, Vietnam → trauma systems.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Regulatory Evolution:</strong> The opium timeline shows how regulation follows crisis: from unregulated use → isolated alkaloids → "safe" substitutes → synthetic opioids → modern controls. This pattern continues today with new substances.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Team-Based Care Legacy:</strong> Florence Nightingale's Crimean War work established nursing as a profession. Today's pharmacy technicians continue this tradition of specialized support roles within healthcare teams.</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // State Management
+            const state = {
+                activities: {
+                    1: { 
+                        completed: false, 
+                        partA: { correct: 0, total: 4, matches: {} },
+                        partB: { correct: 0, total: 5, userOrder: [] },
+                        score: 0 
+                    },
+                    2: { 
+                        completed: false, 
+                        correct: 0, 
+                        total: 4, 
+                        score: 0, 
+                        matches: {} 
+                    }
+                },
+                startedAt: new Date(),
+                timeSpent: 0
+            };
+
+            // Correct Answers
+            const correctAnswers = {
+                // Activity 1 Part A: Term-Definition matches
+                opiumMatches: {
+                    'opium': 'Natural sap of the poppy plant',
+                    'opiate': 'Natural derivatives like morphine and codeine',
+                    'opioid': 'Any substance that binds to opioid receptors',
+                    'synthetic': 'Fully lab-created (fentanyl, methadone)'
+                },
+                
+                // Activity 1 Part B: Timeline order
+                opiumTimeline: ['1', '2', '3', '4', '5'], // Based on data-step values
+                
+                // Activity 2: War-Advance matches
+                warMatches: {
+                    'crimean': 'sanitation',
+                    'wwi': 'sulfa',
+                    'wwii': 'penicillin',
+                    'vietnam': 'trauma'
+                }
+            };
+
+            // DOM Elements
+            const progressSteps = document.querySelectorAll('.progress-step');
+            const activityCards = document.querySelectorAll('.activity-card');
+            const completedCount = document.getElementById('completed-count');
+            const accuracyRate = document.getElementById('accuracy-rate');
+            const timeSpentEl = document.getElementById('time-spent');
+            const resetBtn = document.getElementById('reset-all-btn');
+            const checkBtn = document.getElementById('check-answers-btn');
+            const resultsBtn = document.getElementById('view-results-btn');
+            const resultsPanel = document.getElementById('results-panel');
+            const finalScore = document.getElementById('final-score');
+
+            // Timer for time spent
+            function updateTimer() {
+                const now = new Date();
+                const diff = Math.floor((now - state.startedAt) / 1000);
+                state.timeSpent = diff;
+                const minutes = Math.floor(diff / 60);
+                const seconds = diff % 60;
+                timeSpentEl.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            }
+            setInterval(updateTimer, 1000);
+
+            // Update Progress Summary
+            function updateProgressSummary() {
+                let completed = 0;
+                let totalCorrect = 0;
+                let totalItems = 0;
+
+                Object.values(state.activities).forEach(activity => {
+                    if (activity.completed) completed++;
+                    
+                    if (activity.partA && activity.partB) {
+                        // Activity 1 has two parts
+                        totalCorrect += activity.partA.correct + activity.partB.correct;
+                        totalItems += activity.partA.total + activity.partB.total;
+                    } else {
+                        // Activity 2
+                        totalCorrect += activity.correct;
+                        totalItems += activity.total;
+                    }
+                });
+
+                completedCount.textContent = completed;
+                const accuracy = totalItems > 0 ? Math.round((totalCorrect / totalItems) * 100) : 0;
+                accuracyRate.textContent = `${accuracy}%`;
+
+                // Update progress steps
+                progressSteps.forEach((step, index) => {
+                    if (index < completed) {
+                        step.classList.add('completed');
+                        step.classList.remove('active');
+                    } else if (index === completed) {
+                        step.classList.add('active');
+                        step.classList.remove('completed');
+                    } else {
+                        step.classList.remove('active', 'completed');
+                    }
+                });
+            }
+
+            // Activity 1: Opium Family Tree
+            function initActivity1() {
+                // Part A: Term-Definition Matching
+                const draggableItemsA = document.querySelectorAll('#activity-1 .matching-item');
+                const matchSlotsA = document.querySelectorAll('#opium-match-area .match-slot');
+                const feedbackA = document.getElementById('part-a-feedback');
+                
+                // Part B: Timeline
+                const stepItemsB = document.querySelectorAll('#opium-timeline-items .step-item');
+                const dropzoneB = document.getElementById('opium-timeline-dropzone');
+                const feedbackB = document.getElementById('part-b-feedback');
+                
+                const overallFeedback = document.getElementById('feedback-1');
+                const status = document.querySelector('#activity-1 .activity-status');
+                const correctionDetails = document.getElementById('correction-details-1');
+                const correctionText = document.getElementById('correction-text-1');
+                
+                let placedMatches = {};
+                let timelineOrder = [];
+
+                // Part A Setup
+                draggableItemsA.forEach(item => {
+                    item.addEventListener('dragstart', function(e) {
+                        const type = this.dataset.term ? 'term' : 'definition';
+                        const id = this.dataset.term || this.dataset.definition;
+                        e.dataTransfer.setData('text/plain', JSON.stringify({
+                            type: type,
+                            id: id,
+                            text: this.textContent
+                        }));
+                        this.classList.add('dragging');
+                    });
+
+                    item.addEventListener('dragend', function() {
+                        this.classList.remove('dragging');
+                    });
+                });
+
+                matchSlotsA.forEach(slot => {
+                    slot.addEventListener('dragover', function(e) {
+                        e.preventDefault();
+                        if (!this.classList.contains('filled')) {
+                            this.classList.add('hover');
+                        }
+                    });
+
+                    slot.addEventListener('dragleave', function() {
+                        this.classList.remove('hover');
+                    });
+
+                    slot.addEventListener('drop', function(e) {
+                        e.preventDefault();
+                        this.classList.remove('hover');
+                        
+                        if (this.classList.contains('filled')) return;
+                        
+                        const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+                        const slotType = this.dataset.type;
+                        
+                        // Check if this type of item can go in this slot
+                        if (data.type !== slotType) {
+                            this.classList.add('incorrect');
+                            setTimeout(() => {
+                                this.classList.remove('incorrect');
+                            }, 500);
+                            return;
+                        }
+
+                        // Check if this item is already placed
+                        const alreadyPlaced = Array.from(matchSlotsA).some(slot =>
+                            slot.textContent.includes(data.text)
+                        );
+                        if (alreadyPlaced) return;
+
+                        // Place the item
+                        this.classList.add('filled');
+                        this.innerHTML = `<strong>${data.text}</strong>`;
+                        this.dataset.itemId = data.id;
+
+                        // Hide the original draggable item
+                        const originalItem = data.type === 'term'
+                            ? document.querySelector(`[data-term="${data.id}"]`)
+                            : document.querySelector(`[data-definition="${data.id}"]`);
+                        
+                        if (originalItem) {
+                            originalItem.style.display = 'none';
+                        }
+
+                        // Record the placement
+                        const pairNumber = this.closest('.match-pair').dataset.pair;
+                        if (!placedMatches[pairNumber]) {
+                            placedMatches[pairNumber] = {};
+                        }
+                        placedMatches[pairNumber][slotType] = data.id;
+
+                        // Check if all pairs are complete
+                        if (Object.keys(placedMatches).length === 4) {
+                            checkActivity1PartA();
+                        }
+                    });
+                });
+
+                // Part B Setup
+                stepItemsB.forEach(item => {
+                    item.addEventListener('dragstart', function(e) {
+                        e.dataTransfer.setData('text/plain', JSON.stringify({
+                            step: this.dataset.step,
+                            text: this.querySelector('.step-text').textContent
+                        }));
+                        this.classList.add('dragging');
+                    });
+
+                    item.addEventListener('dragend', function() {
+                        this.classList.remove('dragging');
+                    });
+                });
+
+                dropzoneB.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    this.classList.add('hover');
+                    this.classList.remove('empty');
+                });
+
+                dropzoneB.addEventListener('dragleave', function() {
+                    this.classList.remove('hover');
+                });
+
+                dropzoneB.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('hover');
+                    
+                    const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+                    
+                    if (!timelineOrder.includes(data.step)) {
+                        timelineOrder.push(data.step);
+                        state.activities[1].partB.userOrder = timelineOrder;
+                        
+                        const stepDiv = document.createElement('div');
+                        stepDiv.className = 'step-item placed';
+                        stepDiv.innerHTML = `
+                            <div class="step-number">${timelineOrder.length}</div>
+                            <div class="step-text">${data.text}</div>
+                        `;
+                        this.appendChild(stepDiv);
+
+                        const originalStep = document.querySelector(`#opium-timeline-items .step-item[data-step="${data.step}"]`);
+                        if (originalStep) {
+                            originalStep.style.display = 'none';
+                        }
+
+                        if (timelineOrder.length === 5) {
+                            checkActivity1PartB();
+                        }
+                    }
+                });
+
+                // Check Part A
+                function checkActivity1PartA() {
+                    let correctCount = 0;
+                    let correctionMessages = [];
+                    
+                    Object.keys(placedMatches).forEach(pairNumber => {
+                        const pair = placedMatches[pairNumber];
+                        if (pair.term && pair.definition) {
+                            const correctDefinition = correctAnswers.opiumMatches[pair.term];
+                            const isCorrect = pair.definition === pair.term;
+                            
+                            if (isCorrect) {
+                                correctCount++;
+                            } else {
+                                const termText = document.querySelector(`[data-term="${pair.term}"]`).textContent;
+                                const userDefText = document.querySelector(`[data-definition="${pair.definition}"]`).textContent;
+                                const correctDefText = document.querySelector(`[data-definition="${pair.term}"]`).textContent;
+                                
+                                // Specific feedback for common errors
+                                if (pair.term === 'opioid' && pair.definition !== 'opioid') {
+                                    correctionMessages.push(`• <strong>"Opioid"</strong> with "<strong>${userDefText}</strong>": That's incorrect. Opioid refers to any substance (natural, semi-synthetic, or fully synthetic) that binds to opioid receptors. Opium is the natural sap. This distinction is crucial for understanding medication classes in pharmacy today.`);
+                                } else {
+                                    correctionMessages.push(`• <strong>"${termText}"</strong> should match with "<strong>${correctDefText}</strong>" not "<strong>${userDefText}</strong>"`);
+                                }
+                            }
+                        }
+                    });
+                    
+                    state.activities[1].partA.correct = correctCount;
+                    
+                    // Update feedback
+                    if (correctCount === 4) {
+                        feedbackA.innerHTML = `<strong style="color: var(--color-success);">✓ Part A Complete:</strong> All terms matched correctly!`;
+                    } else {
+                        feedbackA.innerHTML = `<strong style="color: var(--color-error);">Part A Results:</strong> ${correctCount}/4 correct matches.`;
+                    }
+                    
+                    return { correctCount, correctionMessages };
+                }
+
+                // Check Part B
+                function checkActivity1PartB() {
+                    const correctOrder = correctAnswers.opiumTimeline;
+                    let correctCount = 0;
+                    let correctionMessages = [];
+                    
+                    timelineOrder.forEach((step, index) => {
+                        if (step === correctOrder[index]) {
+                            correctCount++;
+                        } else {
+                            const userText = document.querySelector(`#opium-timeline-items .step-item[data-step="${step}"] .step-text`).textContent;
+                            const correctText = document.querySelector(`#opium-timeline-items .step-item[data-step="${correctOrder[index]}"] .step-text`).textContent;
+                            
+                            // Specific feedback for timeline errors
+                            if (step === '4' && correctOrder[index] === '2') {
+                                correctionMessages.push(`• Position ${index + 1}: You placed "<strong>Synthetic opioids created</strong>" before "<strong>Isolation of morphine</strong>". Let's trace the scientific progression: First came natural opium → then isolation of its active ingredient morphine (an opiate) → much later came fully synthetic opioids. Understanding this timeline helps explain why regulations evolved gradually.`);
+                            } else {
+                                correctionMessages.push(`• Position ${index + 1}: You placed "<strong>${userText}</strong>" but it should be "<strong>${correctText}</strong>"`);
+                            }
+                        }
+                    });
+                    
+                    state.activities[1].partB.correct = correctCount;
+                    
+                    // Update feedback
+                    if (correctCount === 5) {
+                        feedbackB.innerHTML = `<strong style="color: var(--color-success);">✓ Part B Complete:</strong> Timeline sequenced correctly!`;
+                    } else {
+                        feedbackB.innerHTML = `<strong style="color: var(--color-error);">Timeline Results:</strong> ${correctCount}/5 in correct order.`;
+                    }
+                    
+                    return { correctCount, correctionMessages };
+                }
+
+                // Check entire Activity 1
+                function checkActivity1() {
+                    const partAResults = checkActivity1PartA();
+                    const partBResults = checkActivity1PartB();
+                    
+                    const totalCorrect = partAResults.correctCount + partBResults.correctCount;
+                    const totalItems = 4 + 5;
+                    
+                    state.activities[1].completed = true;
+                    state.activities[1].score = Math.round((totalCorrect / totalItems) * 100);
+                    
+                    status.textContent = 'Completed';
+                    status.style.color = '#00b894';
+                    document.querySelector('#activity-1').classList.add('completed');
+                    overallFeedback.classList.add('show');
+                    
+                    // Show correction details if there are errors
+                    const allCorrections = [...partAResults.correctionMessages, ...partBResults.correctionMessages];
+                    if (allCorrections.length > 0) {
+                        correctionDetails.style.display = 'block';
+                        correctionText.innerHTML = allCorrections.join('<br><br>');
+                    }
+                    
+                    updateProgressSummary();
+                }
+                
+                // Auto-check when both parts are complete
+                let checkInterval = setInterval(() => {
+                    if (Object.keys(placedMatches).length === 4 && timelineOrder.length === 5) {
+                        checkActivity1();
+                        clearInterval(checkInterval);
+                    }
+                }, 500);
+            }
+
+            // Activity 2: War's Medical Legacy
+            function initActivity2() {
+                const draggableItems = document.querySelectorAll('#activity-2 .war-item');
+                const matchSlots = document.querySelectorAll('#war-match-area .match-slot');
+                const feedbackContent = document.getElementById('war-feedback-content');
+                const overallFeedback = document.getElementById('feedback-2');
+                const status = document.querySelector('#activity-2 .activity-status');
+                const correctionDetails = document.getElementById('correction-details-2');
+                const correctionText = document.getElementById('correction-text-2');
+                
+                let placedMatches = {};
+
+                // Setup drag and drop
+                draggableItems.forEach(item => {
+                    item.addEventListener('dragstart', function(e) {
+                        const type = this.dataset.war ? 'war' : 'advance';
+                        const id = this.dataset.war || this.dataset.advance;
+                        e.dataTransfer.setData('text/plain', JSON.stringify({
+                            type: type,
+                            id: id,
+                            text: this.textContent
+                        }));
+                        this.classList.add('dragging');
+                    });
+
+                    item.addEventListener('dragend', function() {
+                        this.classList.remove('dragging');
+                    });
+                });
+
+                matchSlots.forEach(slot => {
+                    slot.addEventListener('dragover', function(e) {
+                        e.preventDefault();
+                        if (!this.classList.contains('filled')) {
+                            this.classList.add('hover');
+                        }
+                    });
+
+                    slot.addEventListener('dragleave', function() {
+                        this.classList.remove('hover');
+                    });
+
+                    slot.addEventListener('drop', function(e) {
+                        e.preventDefault();
+                        this.classList.remove('hover');
+                        
+                        if (this.classList.contains('filled')) return;
+                        
+                        const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+                        const slotType = this.dataset.type;
+                        
+                        // Check if this type of item can go in this slot
+                        if (data.type !== slotType) {
+                            this.classList.add('incorrect');
+                            setTimeout(() => {
+                                this.classList.remove('incorrect');
+                            }, 500);
+                            return;
+                        }
+
+                        // Check if this item is already placed
+                        const alreadyPlaced = Array.from(matchSlots).some(slot =>
+                            slot.textContent.includes(data.text)
+                        );
+                        if (alreadyPlaced) return;
+
+                        // Place the item
+                        this.classList.add('filled');
+                        this.innerHTML = `<strong>${data.text}</strong>`;
+                        this.dataset.itemId = data.id;
+
+                        // Hide the original draggable item
+                        const originalItem = data.type === 'war'
+                            ? document.querySelector(`[data-war="${data.id}"]`)
+                            : document.querySelector(`[data-advance="${data.id}"]`);
+                        
+                        if (originalItem) {
+                            originalItem.style.display = 'none';
+                        }
+
+                        // Record the placement
+                        const pairNumber = this.closest('.match-pair').dataset.pair;
+                        if (!placedMatches[pairNumber]) {
+                            placedMatches[pairNumber] = {};
+                        }
+                        placedMatches[pairNumber][slotType] = data.id;
+
+                        // Check if all pairs are complete
+                        if (Object.keys(placedMatches).length === 4) {
+                            checkActivity2();
+                        }
+                    });
+                });
+
+                // Check answers
+                function checkActivity2() {
+                    let correctCount = 0;
+                    let correctionMessages = [];
+                    
+                    Object.keys(placedMatches).forEach(pairNumber => {
+                        const pair = placedMatches[pairNumber];
+                        if (pair.war && pair.advance) {
+                            const isCorrect = correctAnswers.warMatches[pair.war] === pair.advance;
+                            
+                            if (isCorrect) {
+                                correctCount++;
+                            } else {
+                                const warText = document.querySelector(`[data-war="${pair.war}"]`).textContent;
+                                const advanceText = document.querySelector(`[data-advance="${pair.advance}"]`).textContent;
+                                const correctAdvanceId = correctAnswers.warMatches[pair.war];
+                                const correctAdvanceText = document.querySelector(`[data-advance="${correctAdvanceId}"]`).textContent;
+                                
+                                // Specific feedback for common errors
+                                if (pair.war === 'wwi' && pair.advance === 'penicillin') {
+                                    correctionMessages.push(`• <strong>World War I</strong> with "<strong>Penicillin</strong>": Not quite. Penicillin was discovered before WWII but was mass-produced during WWII. World War I actually saw the development of sulfa drugs (early antibiotics) by Gerhard Domagk. Each war drove different medical innovations based on the needs and technology of the time.`);
+                                } else if (pair.war === 'crimean' && pair.advance === 'trauma') {
+                                    correctionMessages.push(`• <strong>Crimean War</strong> with "<strong>Trauma systems</strong>": Good thought, but let's be specific. The Crimean War is most famous for Florence Nightingale's sanitation reforms. While triage has military origins, it was refined in later conflicts. Nightingale's work directly led to modern nursing and hospital hygiene standards.`);
+                                } else {
+                                    correctionMessages.push(`• <strong>${warText}</strong> should match with "<strong>${correctAdvanceText}</strong>" not "<strong>${advanceText}</strong>"`);
+                                }
+                            }
+                        }
+                    });
+                    
+                    state.activities[2].completed = true;
+                    state.activities[2].correct = correctCount;
+                    state.activities[2].score = Math.round((correctCount / 4) * 100);
+                    state.activities[2].matches = placedMatches;
+                    
+                    status.textContent = 'Completed';
+                    status.style.color = '#00b894';
+                    document.querySelector('#activity-2').classList.add('completed');
+                    overallFeedback.classList.add('show');
+                    
+                    // Update feedback
+                    if (correctCount === 4) {
+                        feedbackContent.innerHTML = `<strong style="color: var(--color-success);">✓ All matches correct!</strong> You've correctly identified how each war drove specific medical innovations.`;
+                    } else {
+                        feedbackContent.innerHTML = `<strong style="color: var(--color-error);">Results:</strong> ${correctCount}/4 correct matches.`;
+                    }
+                    
+                    // Show correction details if there are errors
+                    if (correctionMessages.length > 0) {
+                        correctionDetails.style.display = 'block';
+                        correctionText.innerHTML = correctionMessages.join('<br><br>');
+                    }
+                    
+                    updateProgressSummary();
+                }
+            }
+
+            // Reset All Activities
+            function resetAllActivities() {
+                // Reset state
+                state.activities = {
+                    1: { 
+                        completed: false, 
+                        partA: { correct: 0, total: 4, matches: {} },
+                        partB: { correct: 0, total: 5, userOrder: [] },
+                        score: 0 
+                    },
+                    2: { 
+                        completed: false, 
+                        correct: 0, 
+                        total: 4, 
+                        score: 0, 
+                        matches: {} 
+                    }
+                };
+                
+                state.startedAt = new Date();
+                state.timeSpent = 0;
+
+                // Reset UI
+                activityCards.forEach(card => {
+                    card.classList.remove('completed');
+                    const status = card.querySelector('.activity-status');
+                    status.textContent = 'Not Started';
+                    status.style.color = '';
+                    const feedback = card.querySelector('.feedback-container');
+                    feedback.classList.remove('show');
+                    const correctionDetails = card.querySelector('.correction-details');
+                    if (correctionDetails) correctionDetails.style.display = 'none';
+                });
+
+                // Reset Activity 1
+                const dropzone1 = document.getElementById('opium-timeline-dropzone');
+                dropzone1.innerHTML = '';
+                dropzone1.classList.add('empty');
+                
+                document.querySelectorAll('#opium-timeline-items .step-item').forEach(item => {
+                    item.style.display = '';
+                    item.classList.remove('placed');
+                });
+                
+                document.querySelectorAll('#activity-1 .matching-item').forEach(item => {
+                    item.style.display = '';
+                    item.classList.remove('dragging');
+                });
+                
+                document.querySelectorAll('#opium-match-area .match-slot').forEach(slot => {
+                    slot.classList.remove('filled', 'correct', 'incorrect', 'hover');
+                    slot.innerHTML = slot.dataset.type === 'term' ? 'Drag term here' : 'Drag definition here';
+                    delete slot.dataset.itemId;
+                });
+
+                // Reset Activity 2
+                document.querySelectorAll('#activity-2 .war-item').forEach(item => {
+                    item.style.display = '';
+                    item.classList.remove('dragging');
+                });
+                
+                document.querySelectorAll('#war-match-area .match-slot').forEach(slot => {
+                    slot.classList.remove('filled', 'correct', 'incorrect', 'hover');
+                    slot.innerHTML = slot.dataset.type === 'war' ? 'Drag war here' : 'Drag advance here';
+                    delete slot.dataset.itemId;
+                });
+
+                // Reset results
+                resultsPanel.classList.remove('show');
+
+                // Update progress
+                updateProgressSummary();
+            }
+
+            // Check All Answers
+            function checkAllAnswers() {
+                // Force check all activities
+                if (!state.activities[1].completed) {
+                    // Simulate correct answers for Activity 1
+                    state.activities[1].completed = true;
+                    state.activities[1].partA.correct = 4;
+                    state.activities[1].partB.correct = 5;
+                    state.activities[1].score = 100;
+                    
+                    document.querySelector('#activity-1 .activity-status').textContent = 'Completed';
+                    document.querySelector('#activity-1').classList.add('completed');
+                    document.querySelector('#feedback-1').classList.add('show');
+                    
+                    // Show correct feedback
+                    document.getElementById('part-a-feedback').innerHTML = `<strong style="color: var(--color-success);">✓ Part A Complete:</strong> All terms matched correctly!`;
+                    document.getElementById('part-b-feedback').innerHTML = `<strong style="color: var(--color-success);">✓ Part B Complete:</strong> Timeline sequenced correctly!`;
+                }
+
+                if (!state.activities[2].completed) {
+                    state.activities[2].completed = true;
+                    state.activities[2].correct = 4;
+                    state.activities[2].score = 100;
+                    
+                    document.querySelector('#activity-2 .activity-status').textContent = 'Completed';
+                    document.querySelector('#activity-2').classList.add('completed');
+                    document.querySelector('#feedback-2').classList.add('show');
+                    
+                    document.getElementById('war-feedback-content').innerHTML = `<strong style="color: var(--color-success);">✓ All matches correct!</strong> You've correctly identified how each war drove specific medical innovations.`;
+                }
+
+                updateProgressSummary();
+            }
+
+            // View Final Results
+            function viewFinalResults() {
+                let totalScore = 0;
+                let activityCount = 0;
+                
+                Object.values(state.activities).forEach(activity => {
+                    if (activity.completed) {
+                        totalScore += activity.score;
+                        activityCount++;
+                    }
+                });
+
+                const averageScore = activityCount > 0 ? Math.round(totalScore / activityCount) : 0;
+                finalScore.textContent = `${averageScore}%`;
+                resultsPanel.classList.add('show');
+                resultsPanel.scrollIntoView({ behavior: 'smooth' });
+            }
+
+            // Initialize all activities
+            initActivity1();
+            initActivity2();
+
+            // Event listeners
+            resetBtn.addEventListener('click', resetAllActivities);
+            checkBtn.addEventListener('click', checkAllAnswers);
+            resultsBtn.addEventListener('click', viewFinalResults);
+
+            // Initial progress update
+            updateProgressSummary();
+        });
+    </script>
+</body>
+</html>
