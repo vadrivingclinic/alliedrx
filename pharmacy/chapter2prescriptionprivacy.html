@@ -1,0 +1,2726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AlliedRx -- Module 2: Prescriptions, Privacy & Patient Protection</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-error: #e17055;
+            --color-warning: #fdcb6e;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
+            --color-dark: #0c0a18;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+            --shadow-card: 0 12px 30px rgba(15, 23, 42, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(circle at top left, #ffffff 0, #f1ecff 40%, var(--color-bg) 100%);
+            color: var(--color-text);
+            -webkit-text-size-adjust: 100%;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 12px; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes checkmarkPop {
+            0% { transform: scale(0); opacity: 0; }
+            70% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @media (max-width: 900px) {
+            .page { padding: 22px; }
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 0; }
+            .page {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 18px 14px 22px;
+            }
+        }
+
+        /* Header */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .brand-logo:hover { transform: scale(1.05); }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--color-success);
+            flex-shrink: 0;
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .badge-mode:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+        @media (max-width: 480px) {
+            .brand-row { flex-direction: column; align-items: flex-start; }
+            .badge-mode { margin-top: 6px; }
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 3vw, 2.2rem);
+            line-height: 1.1;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .module-subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 600px;
+            margin-bottom: 24px;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        /* Progress Tracker */
+        .progress-tracker {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            position: relative;
+            padding: 0 20px;
+        }
+
+        .progress-tracker::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 50px;
+            right: 50px;
+            height: 3px;
+            background: rgba(12, 10, 24, 0.08);
+            z-index: 1;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+
+        .step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--color-muted);
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.active .step-circle {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .progress-step.completed .step-circle {
+            background: var(--color-success);
+            border-color: var(--color-success);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.75rem;
+            color: var(--color-muted);
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .progress-step.active .step-label {
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        /* Progress Summary */
+        .progress-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+            animation: fadeInUp 0.6s ease-out 0.5s both;
+        }
+
+        .summary-card {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            border: 1px solid rgba(12, 10, 24, 0.06);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-card);
+            border-color: var(--color-primary-soft);
+        }
+
+        .summary-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--color-primary);
+            display: block;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .summary-label {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Activity Grid */
+        .activity-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 900px) {
+            .activity-grid { grid-template-columns: 1fr; }
+        }
+
+        .activity-card {
+            background: white;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            padding: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .activity-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--color-primary);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .activity-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--color-primary-soft);
+        }
+
+        .activity-card:hover::before { opacity: 1; }
+        .activity-card.completed { border-color: var(--color-success); }
+        .activity-card.completed::before { background: var(--color-success); opacity: 1; }
+
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .activity-number {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .activity-status {
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-muted);
+        }
+
+        .activity-card.completed .activity-status {
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--color-success);
+        }
+
+        .activity-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 8px;
+        }
+
+        .activity-description {
+            font-size: 0.9rem;
+            color: var(--color-muted);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        /* Activity 1: Drug Monograph Decoder - UPDATED */
+        .monograph-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            position: relative;
+        }
+
+        .monograph-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(12, 10, 24, 0.1);
+        }
+
+        .drug-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+
+        /* Visual Monograph Layout */
+        .monograph-visual {
+            background: white;
+            border-radius: var(--radius-sm);
+            border: 1px solid rgba(12, 10, 24, 0.1);
+            overflow: hidden;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .monograph-section {
+            padding: 18px;
+            border-bottom: 1px solid rgba(12, 10, 24, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .monograph-section:last-child {
+            border-bottom: none;
+        }
+
+        .monograph-section.identified {
+            background: rgba(0, 184, 148, 0.05);
+            border-left: 4px solid var(--color-success);
+        }
+
+        .warning-section {
+            background: rgba(225, 112, 85, 0.05);
+            border-left: 4px solid var(--color-error);
+        }
+
+        .pregnancy-section {
+            background: rgba(155, 89, 182, 0.05);
+        }
+
+        .medguide-section {
+            background: rgba(52, 152, 219, 0.05);
+        }
+
+        .rems-section {
+            background: rgba(253, 203, 110, 0.05);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+
+        .section-icon {
+            font-size: 1.2rem;
+        }
+
+        .section-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--color-text);
+            flex: 1;
+        }
+
+        .hotspot-btn {
+            padding: 6px 12px;
+            border-radius: 20px;
+            border: 2px solid var(--color-primary);
+            background: white;
+            color: var(--color-primary);
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .hotspot-btn:hover {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .hotspot-btn.identified {
+            background: var(--color-success);
+            border-color: var(--color-success);
+            color: white;
+            cursor: default;
+        }
+
+        .section-content {
+            font-size: 0.9rem;
+            color: var(--color-text);
+            line-height: 1.5;
+            padding-left: 32px;
+        }
+
+        .monograph-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+        }
+
+        @media (max-width: 768px) {
+            .monograph-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .monograph-column {
+            border-right: 1px solid rgba(12, 10, 24, 0.08);
+        }
+
+        .monograph-column:last-child {
+            border-right: none;
+        }
+
+        .pregnancy-category-display {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .category-x {
+            background: #9b59b6;
+            color: white;
+            padding: 8px 15px;
+            border-radius: var(--radius-sm);
+            font-weight: 700;
+            font-size: 1rem;
+            text-align: center;
+            min-width: 120px;
+        }
+
+        .category-desc {
+            flex: 1;
+            font-size: 0.85rem;
+            color: var(--color-muted);
+        }
+
+        /* Hotspot Progress */
+        .hotspot-progress {
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin-top: 20px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+        }
+
+        .progress-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        #hotspot-count {
+            background: var(--color-primary);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+        }
+
+        .progress-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .progress-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 12px;
+            background: rgba(12, 10, 24, 0.05);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .progress-item.identified {
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--color-success);
+            font-weight: 600;
+        }
+
+        /* Activity 2: Prescription Label Analysis */
+        .prescription-container {
+            background: white;
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .prescription-label {
+            background: #f8f9fa;
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            border: 2px solid #dee2e6;
+            font-family: 'Courier New', monospace;
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .label-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .pharmacy-name {
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+
+        .label-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 600px) {
+            .label-content { grid-template-columns: 1fr; }
+        }
+
+        .label-field {
+            margin-bottom: 8px;
+        }
+
+        .field-label {
+            font-weight: 600;
+            color: var(--color-muted);
+            font-size: 0.85rem;
+        }
+
+        .field-value {
+            font-weight: 600;
+            color: var(--color-text);
+        }
+
+        .sig-code {
+            background: rgba(175, 75, 239, 0.1);
+            padding: 8px;
+            border-radius: var(--radius-sm);
+            font-family: 'Courier New', monospace;
+            margin-top: 10px;
+        }
+
+        .label-hotspots {
+            margin-top: 20px;
+        }
+
+        .hotspot-item {
+            display: inline-block;
+            background: rgba(175, 75, 239, 0.1);
+            padding: 6px 12px;
+            margin: 5px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .hotspot-item:hover {
+            background: rgba(175, 75, 239, 0.2);
+            border-color: var(--color-primary-soft);
+        }
+
+        .hotspot-item.identified {
+            background: rgba(0, 184, 148, 0.1);
+            border-color: var(--color-success);
+        }
+
+        /* Activity 3: HIPAA Scenario Trainer */
+        .scenario-trainer {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+        }
+
+        .scenario-content {
+            background: white;
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+        }
+
+        .scenario-actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .scenario-actions { grid-template-columns: 1fr; }
+        }
+
+        .action-btn {
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        .action-btn:hover {
+            background: rgba(175, 75, 239, 0.08);
+            border-color: var(--color-primary-soft);
+            transform: translateY(-2px);
+        }
+
+        .action-btn.selected {
+            background: rgba(0, 184, 148, 0.1);
+            border-color: var(--color-success);
+        }
+
+        .action-btn.wrong {
+            background: rgba(225, 112, 85, 0.1);
+            border-color: var(--color-error);
+            animation: shake 0.5s ease;
+        }
+
+        .privacy-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            background: rgba(131, 128, 240, 0.1);
+            color: var(--color-accent);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        /* Activity 4: ACA & DQSA Impact Analysis */
+        .impact-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .impact-grid { grid-template-columns: 1fr; }
+        }
+
+        .impact-card {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .impact-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-card);
+        }
+
+        .impact-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .impact-description {
+            font-size: 0.85rem;
+            color: var(--color-text);
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .impact-match {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .law-item {
+            background: rgba(12, 10, 24, 0.05);
+            border-radius: 12px;
+            padding: 10px;
+            font-size: 0.85rem;
+            cursor: grab;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .law-item:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            transform: translateY(-2px);
+        }
+
+        .law-item.dragging {
+            opacity: 0.7;
+            transform: scale(0.95);
+        }
+
+        .impact-dropzone {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 2px dashed rgba(12, 10, 24, 0.1);
+            min-height: 100px;
+            margin-top: 10px;
+        }
+
+        .impact-dropzone.hover {
+            border-color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.05);
+        }
+
+        /* Activity 5: REMS & Internet Pharmacy Verification */
+        .rems-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+        }
+
+        .rems-drug {
+            background: white;
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 2px solid var(--color-warning);
+            position: relative;
+        }
+
+        .rems-alert {
+            position: absolute;
+            top: -10px;
+            right: 15px;
+            background: var(--color-warning);
+            color: var(--color-dark);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+
+        .verification-checklist {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .check-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: var(--radius-sm);
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .check-item:hover {
+            background: rgba(175, 75, 239, 0.08);
+            border-color: var(--color-primary-soft);
+        }
+
+        .check-item.selected {
+            background: rgba(0, 184, 148, 0.1);
+            border-color: var(--color-success);
+        }
+
+        .check-item.wrong {
+            background: rgba(225, 112, 85, 0.1);
+            border-color: var(--color-error);
+            animation: shake 0.5s ease;
+        }
+
+        .check-box {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            border: 2px solid rgba(12, 10, 24, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .check-item.selected .check-box {
+            background: var(--color-success);
+            border-color: var(--color-success);
+            color: white;
+        }
+
+        .check-item.wrong .check-box {
+            background: var(--color-error);
+            border-color: var(--color-error);
+            color: white;
+        }
+
+        .check-text {
+            font-size: 0.9rem;
+            color: var(--color-text);
+        }
+
+        .internet-pharmacy-warning {
+            background: rgba(225, 112, 85, 0.1);
+            border: 2px solid var(--color-error);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin-top: 15px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .warning-icon {
+            font-size: 1.5rem;
+            color: var(--color-error);
+            flex-shrink: 0;
+        }
+
+        .warning-content {
+            flex: 1;
+        }
+
+        .warning-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--color-error);
+            margin-bottom: 5px;
+        }
+
+        .warning-text {
+            font-size: 0.85rem;
+            color: var(--color-text);
+        }
+
+        /* Feedback */
+        .feedback-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            margin-top: 20px;
+            display: none;
+        }
+
+        .feedback-container.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .feedback-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feedback-icon {
+            font-size: 1.2rem;
+        }
+
+        .feedback-icon.correct { color: var(--color-success); }
+        .feedback-icon.incorrect { color: var(--color-error); }
+
+        .feedback-content {
+            font-size: 0.85rem;
+            color: var(--color-text);
+            line-height: 1.5;
+        }
+
+        .feedback-content strong { color: var(--color-primary); }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #9a3bd6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(175, 75, 239, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-text);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(12, 10, 24, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-icon {
+            font-size: 1.1em;
+        }
+
+        /* Results Panel */
+        .results-panel {
+            background: var(--color-dark);
+            color: white;
+            border-radius: var(--radius-md);
+            padding: 30px;
+            margin-top: 30px;
+            display: none;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .results-panel.show {
+            display: block;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .results-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .score-display {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--color-primary-soft);
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .patient-safety-insights {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .insights-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-primary-soft);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .insights-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .insights-list li {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            font-size: 0.9rem;
+            color: #e5e7eb;
+        }
+
+        .insight-dot {
+            width: 6px;
+            height: 6px;
+            margin-top: 6px;
+            border-radius: 999px;
+            background: var(--color-accent);
+            flex-shrink: 0;
+        }
+
+        /* Remember Box */
+        .remember-box {
+            background: rgba(253, 203, 110, 0.1);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid var(--color-warning);
+        }
+
+        .remember-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--color-warning);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .remember-text {
+            font-size: 0.85rem;
+            color: var(--color-text);
+        }
+
+        /* Pregnancy Categories Box */
+        .pregnancy-box {
+            background: rgba(131, 128, 240, 0.08);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin-top: 15px;
+            border-left: 4px solid var(--color-accent);
+        }
+
+        .pregnancy-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--color-accent);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .pregnancy-categories {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 600px) {
+            .pregnancy-categories { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        @media (max-width: 400px) {
+            .pregnancy-categories { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        .pregnancy-cat {
+            background: rgba(12, 10, 24, 0.05);
+            border-radius: var(--radius-sm);
+            padding: 10px;
+            text-align: center;
+            font-size: 0.8rem;
+        }
+
+        .pregnancy-cat.cat-a { border-top: 3px solid var(--color-success); }
+        .pregnancy-cat.cat-b { border-top: 3px solid #3498db; }
+        .pregnancy-cat.cat-c { border-top: 3px solid var(--color-warning); }
+        .pregnancy-cat.cat-d { border-top: 3px solid var(--color-error); }
+        .pregnancy-cat.cat-x { border-top: 3px solid #9b59b6; }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="module-heading">
+        <!-- Header -->
+        <header class="brand-row">
+            <div class="brand">
+                <img
+                    src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                    alt="AlliedRx logo"
+                    class="brand-logo"
+                />
+                <div class="course-meta">
+                    <span class="course-name">Pharmacy Technician • Week 2</span>
+                    <div class="week-label">
+                        <span class="week-label-dot"></span>
+                        <span>Chapter 2: Pharmacy Law & Ethics</span>
+                    </div>
+                </div>
+            </div>
+            <span class="badge-mode">Campus & Online</span>
+        </header>
+
+        <h1 id="module-heading">Prescriptions, Privacy & Patient Protection</h1>
+        <p class="module-subtitle">
+            Master prescription requirements, understand HIPAA privacy rules, learn about ACA/DQSA impacts, and verify internet pharmacies and REMS programs.
+        </p>
+
+        <!-- Progress Tracker -->
+        <div class="progress-tracker">
+            <div class="progress-step active" data-step="1">
+                <div class="step-circle">1</div>
+                <div class="step-label">Drug Monographs</div>
+            </div>
+            <div class="progress-step" data-step="2">
+                <div class="step-circle">2</div>
+                <div class="step-label">Prescription Labels</div>
+            </div>
+            <div class="progress-step" data-step="3">
+                <div class="step-circle">3</div>
+                <div class="step-label">HIPAA Scenarios</div>
+            </div>
+            <div class="progress-step" data-step="4">
+                <div class="step-circle">4</div>
+                <div class="step-label">ACA & DQSA</div>
+            </div>
+            <div class="progress-step" data-step="5">
+                <div class="step-circle">5</div>
+                <div class="step-label">REMS & Verification</div>
+            </div>
+        </div>
+
+        <!-- Progress Summary -->
+        <div class="progress-summary">
+            <div class="summary-card">
+                <span class="summary-number" id="completed-count">0</span>
+                <span class="summary-label">Activities Completed</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="accuracy-rate">0%</span>
+                <span class="summary-label">Current Accuracy</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="time-spent">0:00</span>
+                <span class="summary-label">Time Spent</span>
+            </div>
+        </div>
+
+        <!-- Activity Grid -->
+        <div class="activity-grid">
+            <!-- Activity 1: Drug Monograph Decoder - UPDATED VISUAL -->
+            <section class="activity-card" id="activity-1" data-activity="1">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 1</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">Drug Monograph Decoder</h3>
+                <p class="activity-description">
+                    Click hotspots on the drug monograph to identify key sections and understand pregnancy categories, boxed warnings, and MedGuides.
+                </p>
+
+                <!-- Drug Monograph -->
+                <div class="monograph-container">
+                    <div class="monograph-header">
+                        <div class="drug-name">Isotretinoin (Accutane®) Monograph</div>
+                        <div class="privacy-badge">
+                            <span>⚠️</span>
+                            Boxed Warning Required
+                        </div>
+                    </div>
+
+                    <!-- Visual Monograph Layout -->
+                    <div class="monograph-visual">
+                        <!-- Boxed Warning Section -->
+                        <div class="monograph-section warning-section" id="boxed-warning-section">
+                            <div class="section-header">
+                                <span class="section-icon">⚠️</span>
+                                <span class="section-title">BOXED WARNING</span>
+                                <button class="hotspot-btn" data-hotspot="boxed-warning">Click to Identify</button>
+                            </div>
+                            <div class="section-content">
+                                <strong>CONTRANDICATED IN PREGNANCY</strong><br>
+                                Isotretinoin must not be used by patients who are or may become pregnant. 
+                                Severe birth defects have been reported. Patients must use two forms of 
+                                contraception for 1 month before, during, and 1 month after therapy.
+                            </div>
+                        </div>
+
+                        <!-- Main Monograph Content -->
+                        <div class="monograph-content">
+                            <!-- Left Column -->
+                            <div class="monograph-column">
+                                <!-- Indications Section -->
+                                <div class="monograph-section" id="indications-section">
+                                    <div class="section-header">
+                                        <span class="section-icon">🎯</span>
+                                        <span class="section-title">INDICATIONS & USAGE</span>
+                                        <button class="hotspot-btn" data-hotspot="indications">Click to Identify</button>
+                                    </div>
+                                    <div class="section-content">
+                                        For the treatment of severe recalcitrant nodular acne in patients 
+                                        12 years of age and older who are unresponsive to conventional therapy.
+                                    </div>
+                                </div>
+
+                                <!-- Dosage Section -->
+                                <div class="monograph-section">
+                                    <div class="section-header">
+                                        <span class="section-icon">💊</span>
+                                        <span class="section-title">DOSAGE & ADMINISTRATION</span>
+                                    </div>
+                                    <div class="section-content">
+                                        Starting dose: 0.5 to 1 mg/kg/day in two divided doses.<br>
+                                        Maximum dose: 2 mg/kg/day.<br>
+                                        Treatment duration: 15-20 weeks.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Right Column -->
+                            <div class="monograph-column">
+                                <!-- Pregnancy Category Section -->
+                                <div class="monograph-section pregnancy-section" id="pregnancy-section">
+                                    <div class="section-header">
+                                        <span class="section-icon">🤰</span>
+                                        <span class="section-title">PREGNANCY CATEGORY</span>
+                                        <button class="hotspot-btn" data-hotspot="pregnancy-cat">Click to Identify</button>
+                                    </div>
+                                    <div class="section-content">
+                                        <div class="pregnancy-category-display">
+                                            <div class="category-x">CATEGORY X</div>
+                                            <div class="category-desc">Contraindicated in pregnancy. Risk of severe birth defects.</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Adverse Reactions Section -->
+                                <div class="monograph-section" id="adverse-section">
+                                    <div class="section-header">
+                                        <span class="section-icon">📋</span>
+                                        <span class="section-title">ADVERSE REACTIONS</span>
+                                        <button class="hotspot-btn" data-hotspot="adverse">Click to Identify</button>
+                                    </div>
+                                    <div class="section-content">
+                                        Common: Dry skin, lips, eyes; nosebleeds; joint pain.<br>
+                                        Serious: Depression, suicidal thoughts; elevated lipids; pancreatitis; hearing loss.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- MedGuide Section -->
+                        <div class="monograph-section medguide-section" id="medguide-section">
+                            <div class="section-header">
+                                <span class="section-icon">📄</span>
+                                <span class="section-title">MEDICATION GUIDE</span>
+                                <button class="hotspot-btn" data-hotspot="medguide">Click to Identify</button>
+                            </div>
+                            <div class="section-content">
+                                <strong>REQUIRED DISTRIBUTION:</strong> Pharmacist must provide Medication Guide with each prescription.<br>
+                                <strong>CONTENT:</strong> Information about birth defects, depression risks, and mandatory contraception.
+                            </div>
+                        </div>
+
+                        <!-- REMS Program Section -->
+                        <div class="monograph-section rems-section">
+                            <div class="section-header">
+                                <span class="section-icon">🛡️</span>
+                                <span class="section-title">iPLEDGE REMS PROGRAM</span>
+                            </div>
+                            <div class="section-content">
+                                All patients, prescribers, and pharmacies must enroll in iPLEDGE.<br>
+                                Requirements: Negative pregnancy tests, two forms of contraception, monthly counseling.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hotspot Progress -->
+                    <div class="hotspot-progress">
+                        <div class="progress-title">Identified Sections: <span id="hotspot-count">0</span>/5</div>
+                        <div class="progress-items">
+                            <div class="progress-item" data-hotspot="boxed-warning">⚠️ Boxed Warning</div>
+                            <div class="progress-item" data-hotspot="pregnancy-cat">🤰 Pregnancy Category</div>
+                            <div class="progress-item" data-hotspot="indications">🎯 Indications</div>
+                            <div class="progress-item" data-hotspot="adverse">📋 Adverse Reactions</div>
+                            <div class="progress-item" data-hotspot="medguide">📄 Medication Guide</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pregnancy Categories -->
+                <div class="pregnancy-box">
+                    <div class="pregnancy-title">
+                        <span>📚</span>
+                        FDA Pregnancy Categories (Being Phased Out)
+                    </div>
+                    <div class="remember-text">
+                        While transitioning to the Pregnancy & Lactation Labeling Rule (PLLR), you must still know the old categories:
+                    </div>
+                    <div class="pregnancy-categories">
+                        <div class="pregnancy-cat cat-a">
+                            <strong>Category A</strong><br>
+                            Safe in pregnancy
+                        </div>
+                        <div class="pregnancy-cat cat-b">
+                            <strong>Category B</strong><br>
+                            Probably safe
+                        </div>
+                        <div class="pregnancy-cat cat-c">
+                            <strong>Category C</strong><br>
+                            Risk not ruled out
+                        </div>
+                        <div class="pregnancy-cat cat-d">
+                            <strong>Category D</strong><br>
+                            Positive risk evidence
+                        </div>
+                        <div class="pregnancy-cat cat-x">
+                            <strong>Category X</strong><br>
+                            Contraindicated
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Remember Box -->
+                <div class="remember-box">
+                    <div class="remember-title">
+                        <span>💡</span>
+                        Remember!
+                    </div>
+                    <div class="remember-text">
+                        <strong>Boxed warnings</strong> are the FDA's strongest alert for serious risks. <strong>MedGuides</strong> are required for drugs with serious public health concerns. <strong>REMS programs</strong> like iPLEDGE have mandatory requirements for high-risk drugs.
+                    </div>
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback-container" id="feedback-1">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Monograph Mastered!
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Drug Monograph Key Sections:</strong><br>
+                        1. <strong>Boxed Warning</strong> ⚠️ - Strongest FDA alert for serious risks (isotretinoin birth defects)<br>
+                        2. <strong>Pregnancy Category</strong> 🤰 - X = Contraindicated in pregnancy<br>
+                        3. <strong>Indications</strong> 🎯 - Approved uses (severe recalcitrant nodular acne)<br>
+                        4. <strong>Adverse Reactions</strong> 📋 - Side effects and risks<br>
+                        5. <strong>Medication Guide</strong> 📄 - Required patient information sheet<br><br>
+                        <strong>Critical Information for Isotretinoin:</strong><br>
+                        • <strong>iPLEDGE REMS program</strong> - Mandatory for all stakeholders<br>
+                        • <strong>Monthly pregnancy tests</strong> required for females of childbearing potential<br>
+                        • <strong>Two forms of contraception</strong> mandatory<br>
+                        • <strong>Medication Guide</strong> must be provided with each prescription<br>
+                        • Prescriber, pharmacy, and patient must all be certified in iPLEDGE
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity 2: Prescription Label Analysis -->
+            <section class="activity-card" id="activity-2" data-activity="2">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 2</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">Prescription Label Analysis</h3>
+                <p class="activity-description">
+                    Analyze a prescription label to identify all required elements and verify the prescriber's DEA number. Click hotspots to identify key components.
+                </p>
+
+                <!-- Prescription Label -->
+                <div class="prescription-container">
+                    <div class="prescription-label">
+                        <div class="label-header">
+                            <div class="pharmacy-name">ALLIEDRX PHARMACY #123</div>
+                            <div class="privacy-badge">
+                                <span>📅</span>
+                                Fill: 03/15/2024
+                            </div>
+                        </div>
+                        
+                        <div class="label-content">
+                            <div>
+                                <div class="label-field">
+                                    <div class="field-label">Patient</div>
+                                    <div class="field-value">JANE DOE</div>
+                                </div>
+                                <div class="label-field">
+                                    <div class="field-label">Address</div>
+                                    <div class="field-value">123 MAIN ST, ANYTOWN, USA 12345</div>
+                                </div>
+                                <div class="label-field">
+                                    <div class="field-label">Rx #</div>
+                                    <div class="field-value">987654</div>
+                                </div>
+                                <div class="label-field">
+                                    <div class="field-label">Prescriber</div>
+                                    <div class="field-value">DR. ALEX SMITH, MD</div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="label-field">
+                                    <div class="field-label">DEA #</div>
+                                    <div class="field-value">BS1234563</div>
+                                </div>
+                                <div class="label-field">
+                                    <div class="field-label">Drug</div>
+                                    <div class="field-value">Lisinopril 10mg tablets</div>
+                                </div>
+                                <div class="label-field">
+                                    <div class="field-label">SIG</div>
+                                    <div class="field-value">Take 1 tablet by mouth daily</div>
+                                </div>
+                                <div class="label-field">
+                                    <div class="field-label">Quantity</div>
+                                    <div class="field-value">30 tablets</div>
+                                </div>
+                                <div class="label-field">
+                                    <div class="field-label">Refills</div>
+                                    <div class="field-value">3</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="sig-code">
+                            <strong>SIG Decoded:</strong> "Take 1 tablet by mouth daily" = 1 tab PO QD
+                        </div>
+                    </div>
+
+                    <!-- Label Hotspots -->
+                    <div class="label-hotspots">
+                        <div class="remember-box" style="margin-bottom: 15px;">
+                            <div class="remember-title">
+                                <span>🎯</span>
+                                Your Task
+                            </div>
+                            <div class="remember-text">
+                                Click to identify ALL required prescription label elements. Then verify the DEA number below.
+                            </div>
+                        </div>
+
+                        <div class="hotspot-item" data-element="patient-name">Patient Name</div>
+                        <div class="hotspot-item" data-element="patient-address">Patient Address</div>
+                        <div class="hotspot-item" data-element="rx-number">Rx Number</div>
+                        <div class="hotspot-item" data-element="drug-name">Drug Name & Strength</div>
+                        <div class="hotspot-item" data-element="directions">Directions for Use</div>
+                        <div class="hotspot-item" data-element="quantity">Quantity</div>
+                        <div class="hotspot-item" data-element="refills">Refills</div>
+                        <div class="hotspot-item" data-element="prescriber">Prescriber Name</div>
+                        <div class="hotspot-item" data-element="dea-number">DEA Number</div>
+                        <div class="hotspot-item" data-element="pharmacy-info">Pharmacy Info</div>
+                    </div>
+
+                    <!-- DEA Verification -->
+                    <div class="remember-box" style="margin-top: 20px;">
+                        <div class="remember-title">
+                            <span>🔍</span>
+                            DEA Number Verification
+                        </div>
+                        <div class="remember-text">
+                            <strong>DEA: BS1234563</strong><br>
+                            Formula: (1st+3rd+5th) + 2*(2nd+4th+6th) = last digit must match check digit (7th digit)<br>
+                            (1+3+5) + 2*(2+4+6) = 9 + 2*12 = 9 + 24 = <strong>33</strong> → check digit = <strong>3</strong> ✓
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback-container" id="feedback-2">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Prescription Analysis Complete!
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Required Prescription Label Elements:</strong><br>
+                        1. <strong>Patient name & address</strong> - Must match ID<br>
+                        2. <strong>Rx number</strong> - Pharmacy's unique identifier<br>
+                        3. <strong>Drug name, strength, dosage form</strong> - Exactly as prescribed<br>
+                        4. <strong>Directions for use (SIG)</strong> - In patient-friendly language<br>
+                        5. <strong>Quantity</strong> - Number of units dispensed<br>
+                        6. <strong>Refills authorized</strong> - Number and expiration date<br>
+                        7. <strong>Prescriber name</strong> - Who prescribed the medication<br>
+                        8. <strong>DEA number</strong> - For controlled substances only (C-II-V)<br>
+                        9. <strong>Pharmacy information</strong> - Name, address, phone<br><br>
+                        <strong>DEA Verification:</strong> BS1234563 = Valid ✓<br>
+                        • First letter B = hospital/clinic<br>
+                        • Second letter S = prescriber's last name starts with "S"<br>
+                        • Always verify DEA numbers for controlled substances!
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity 3: HIPAA Scenario Trainer -->
+            <section class="activity-card" id="activity-3" data-activity="3">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 3</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">HIPAA Scenario Trainer</h3>
+                <p class="activity-description">
+                    Navigate real-world pharmacy scenarios to identify HIPAA-compliant actions. Protect patient privacy while providing excellent care.
+                </p>
+
+                <!-- Scenario 1 -->
+                <div class="scenario-trainer">
+                    <div class="scenario-content">
+                        <div class="scenario-title">Scenario 1: Family Inquiry</div>
+                        <div class="scenario-text">
+                            A patient's spouse calls asking if their partner's prescription for a controlled substance is ready for pickup. They know the patient's name, date of birth, and address.
+                        </div>
+                        <div class="privacy-badge">
+                            <span>🔒</span>
+                            PHI Protection Required
+                        </div>
+                    </div>
+
+                    <div class="scenario-actions">
+                        <div class="action-btn" data-scenario="1" data-answer="wrong">
+                            Provide the information since it's family
+                        </div>
+                        <div class="action-btn" data-scenario="1" data-answer="correct">
+                            Verify you're speaking to the patient or authorized person first
+                        </div>
+                        <div class="action-btn" data-scenario="1" data-answer="wrong">
+                            Refuse to give any information
+                        </div>
+                        <div class="action-btn" data-scenario="1" data-answer="wrong">
+                            Say the prescription isn't ready even if it is
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scenario 2 -->
+                <div class="scenario-trainer">
+                    <div class="scenario-content">
+                        <div class="scenario-title">Scenario 2: Waiting Area Conversation</div>
+                        <div class="scenario-text">
+                            You're discussing a patient's medication side effects at the pharmacy counter. Another patient is waiting nearby and could potentially hear the conversation.
+                        </div>
+                        <div class="privacy-badge">
+                            <span>👂</span>
+                            Privacy Risk
+                        </div>
+                    </div>
+
+                    <div class="scenario-actions">
+                        <div class="action-btn" data-scenario="2" data-answer="wrong">
+                            Continue the conversation but speak softly
+                        </div>
+                        <div class="action-btn" data-scenario="2" data-answer="correct">
+                            Move to a private consultation area
+                        </div>
+                        <div class="action-btn" data-scenario="2" data-answer="wrong">
+                            Ask the waiting patient to step away
+                        </div>
+                        <div class="action-btn" data-scenario="2" data-answer="wrong">
+                            Write the information down instead
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scenario 3 -->
+                <div class="scenario-trainer">
+                    <div class="scenario-content">
+                        <div class="scenario-title">Scenario 3: Insurance Verification</div>
+                        <div class="scenario-text">
+                            An insurance company representative calls requesting information about a patient's medication history to process a claim.
+                        </div>
+                        <div class="privacy-badge">
+                            <span>🏥</span>
+                            Treatment/Payment/Operations
+                        </div>
+                    </div>
+
+                    <div class="scenario-actions">
+                        <div class="action-btn" data-scenario="3" data-answer="wrong">
+                            Provide all requested information
+                        </div>
+                        <div class="action-btn" data-scenario="3" data-answer="wrong">
+                            Refuse to provide any information
+                        </div>
+                        <div class="action-btn" data-scenario="3" data-answer="correct">
+                            Verify the caller's identity and provide minimum necessary information
+                        </div>
+                        <div class="action-btn" data-scenario="3" data-answer="wrong">
+                            Tell them to get the information from the patient
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Remember Box -->
+                <div class="remember-box">
+                    <div class="remember-title">
+                        <span>🛡️</span>
+                        HIPAA Protector Tip
+                    </div>
+                    <div class="remember-text">
+                        <strong>Minimum Necessary Rule:</strong> Only share the minimum PHI needed for the purpose. <strong>Verification Required:</strong> Always confirm identity before sharing information. <strong>Private Setting:</strong> Conduct sensitive conversations away from public areas.
+                    </div>
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback-container" id="feedback-3">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        HIPAA Scenarios Mastered!
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Key HIPAA Principles Applied:</strong><br>
+                        1. <strong>Verification Before Disclosure</strong> - Always confirm identity, even for family members<br>
+                        2. <strong>Private Consultations</strong> - Move sensitive conversations to private areas<br>
+                        3. <strong>Minimum Necessary Rule</strong> - Share only what's needed for the purpose<br><br>
+                        <strong>Permitted Disclosures Without Authorization:</strong><br>
+                        • <strong>Treatment</strong> - To healthcare providers involved in care<br>
+                        • <strong>Payment</strong> - To insurance companies for claims<br>
+                        • <strong>Healthcare Operations</strong> - Quality improvement, training<br><br>
+                        <strong>Always Required:</strong> Patient authorization for other disclosures, except in specific circumstances (public health, law enforcement with proper documentation).
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity 4: ACA & DQSA Impact Analysis -->
+            <section class="activity-card" id="activity-4" data-activity="4">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 4</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">ACA & DQSA Impact Analysis</h3>
+                <p class="activity-description">
+                    Match the impacts of the Affordable Care Act (ACA) and Drug Quality and Security Act (DQSA) to understand how they transformed healthcare and pharmacy practice.
+                </p>
+
+                <!-- Impact Cards -->
+                <div class="impact-grid">
+                    <div class="impact-card">
+                        <div class="impact-title">
+                            <span>🏥</span>
+                            Affordable Care Act (ACA)
+                        </div>
+                        <div class="impact-description">
+                            Also known as "Obamacare," this 2010 law expanded healthcare coverage and introduced significant pharmacy-related changes.
+                        </div>
+                        <div class="impact-dropzone" id="aca-dropzone">
+                            Drag ACA impacts here
+                        </div>
+                    </div>
+
+                    <div class="impact-card">
+                        <div class="impact-title">
+                            <span>💊</span>
+                            Drug Quality & Security Act (DQSA)
+                        </div>
+                        <div class="impact-description">
+                            This 2013 law enhanced drug supply chain security and compounding pharmacy regulations after the 2012 meningitis outbreak.
+                        </div>
+                        <div class="impact-dropzone" id="dqsa-dropzone">
+                            Drag DQSA impacts here
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Law Items -->
+                <div class="impact-match">
+                    <div class="law-item draggable" data-law="aca" draggable="true">
+                        Expanded Medicaid coverage
+                    </div>
+                    <div class="law-item draggable" data-law="aca" draggable="true">
+                        Created health insurance marketplaces
+                    </div>
+                    <div class="law-item draggable" data-law="aca" draggable="true">
+                        Required coverage of pre-existing conditions
+                    </div>
+                    <div class="law-item draggable" data-law="dqsa" draggable="true">
+                        Established track-and-trace requirements
+                    </div>
+                    <div class="law-item draggable" data-law="dqsa" draggable="true">
+                        Created new categories of compounding pharmacies
+                    </div>
+                    <div class="law-item draggable" data-law="dqsa" draggable="true">
+                        Required product identifiers (serial numbers)
+                    </div>
+                    <div class="law-item draggable" data-law="aca" draggable="true">
+                        Eliminated lifetime coverage limits
+                    </div>
+                    <div class="law-item draggable" data-law="dqsa" draggable="true">
+                        Enhanced FDA oversight of compounders
+                    </div>
+                </div>
+
+                <!-- Remember Box -->
+                <div class="remember-box">
+                    <div class="remember-title">
+                        <span>📈</span>
+                        Healthcare Transformation
+                    </div>
+                    <div class="remember-text">
+                        <strong>ACA</strong> focused on <strong>access and coverage</strong> - getting more people insured. <strong>DQSA</strong> focused on <strong>safety and security</strong> - ensuring drug quality in the supply chain. Both have dramatically changed pharmacy practice.
+                    </div>
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback-container" id="feedback-4">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Healthcare Laws Understood!
+                    </div>
+                    <div class="feedback-content">
+                        <strong>ACA (Affordable Care Act) Impacts:</strong><br>
+                        • Expanded Medicaid to more low-income individuals<br>
+                        • Created state health insurance marketplaces<br>
+                        • Prohibited denial for pre-existing conditions<br>
+                        • Eliminated annual/lifetime coverage limits<br>
+                        • Required essential health benefits coverage<br><br>
+                        <strong>DQSA (Drug Quality & Security Act) Impacts:</strong><br>
+                        • <strong>Track-and-trace system</strong> for drug distribution<br>
+                        • <strong>Product identifiers</strong> (serial numbers) on packages<br>
+                        • Created <strong>outsourcing facilities</strong> category for compounders<br>
+                        • Enhanced FDA authority over compounding pharmacies<br>
+                        • Response to 2012 fungal meningitis outbreak from contaminated steroids<br><br>
+                        <strong>Pharmacy Impact:</strong> More patients with coverage (ACA) + safer drug supply chain (DQSA) = better patient care.
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity 5: REMS & Internet Pharmacy Verification -->
+            <section class="activity-card" id="activity-5" data-activity="5">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 5</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">REMS & Internet Pharmacy Verification</h3>
+                <p class="activity-description">
+                    Identify Risk Evaluation and Mitigation Strategy (REMS) requirements and verify legitimate internet pharmacies using the VIPPS criteria.
+                </p>
+
+                <!-- REMS Example -->
+                <div class="rems-container">
+                    <div class="rems-drug">
+                        <div class="rems-alert">REMS REQUIRED</div>
+                        <div class="scenario-title">Clozapine (Clozaril®)</div>
+                        <div class="scenario-text">
+                            This antipsychotic medication has a REMS program due to risk of severe neutropenia (low white blood cell count).
+                        </div>
+                    </div>
+
+                    <div class="verification-checklist">
+                        <div class="check-item" data-rems="correct">
+                            <div class="check-box"></div>
+                            <div class="check-text">Baseline ANC (absolute neutrophil count) required</div>
+                        </div>
+                        <div class="check-item" data-rems="correct">
+                            <div class="check-box"></div>
+                            <div class="check-text">Weekly blood monitoring for first 6 months</div>
+                        </div>
+                        <div class="check-item" data-rems="wrong">
+                            <div class="check-box"></div>
+                            <div class="check-text">No special requirements - dispense like any other drug</div>
+                        </div>
+                        <div class="check-item" data-rems="correct">
+                            <div class="check-box"></div>
+                            <div class="check-text">Patient registry enrollment mandatory</div>
+                        </div>
+                        <div class="check-item" data-rems="wrong">
+                            <div class="check-box"></div>
+                            <div class="check-text">Only prescriber needs to be certified</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Internet Pharmacy Verification -->
+                <div class="scenario-trainer">
+                    <div class="scenario-content">
+                        <div class="scenario-title">Internet Pharmacy Verification</div>
+                        <div class="scenario-text">
+                            A patient asks about ordering medications from an online pharmacy. Which of these are signs of a legitimate VIPPS-accredited pharmacy?
+                        </div>
+                        <div class="privacy-badge">
+                            <span>🌐</span>
+                            VIPPS = Verified Internet Pharmacy Practice Sites
+                        </div>
+                    </div>
+
+                    <div class="verification-checklist">
+                        <div class="check-item" data-vip="correct">
+                            <div class="check-box"></div>
+                            <div class="check-text">Requires valid prescription from licensed prescriber</div>
+                        </div>
+                        <div class="check-item" data-vip="wrong">
+                            <div class="check-box"></div>
+                            <div class="check-text">Offers to prescribe without seeing a doctor</div>
+                        </div>
+                        <div class="check-item" data-vip="correct">
+                            <div class="check-box"></div>
+                            <div class="check-text">Provides physical address and phone number in USA</div>
+                        </div>
+                        <div class="check-item" data-vip="wrong">
+                            <div class="check-box"></div>
+                            <div class="check-text">Sells controlled substances without prescription</div>
+                        </div>
+                        <div class="check-item" data-vip="correct">
+                            <div class="check-box"></div>
+                            <div class="check-text">Licensed pharmacist available for consultation</div>
+                        </div>
+                        <div class="check-item" data-vip="correct">
+                            <div class="check-box"></div>
+                            <div class="check-text">Displays VIPPS seal and NABP verification</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Warning -->
+                <div class="internet-pharmacy-warning">
+                    <div class="warning-icon">⚠️</div>
+                    <div class="warning-content">
+                        <div class="warning-title">INTERNET PHARMACY RED FLAGS</div>
+                        <div class="warning-text">
+                            • No prescription required • Prices significantly lower than average • No U.S. address/phone • Ships from foreign countries • No licensed pharmacist consultation • Spam email promotions • Offers "miracle cures"
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback-container" id="feedback-5">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        REMS & Verification Complete!
+                    </div>
+                    <div class="feedback-content">
+                        <strong>REMS (Risk Evaluation & Mitigation Strategy):</strong><br>
+                        • FDA-required programs for drugs with serious risks<br>
+                        • Examples: Clozapine (neutropenia), Isotretinoin (birth defects), Opioids (addiction)<br>
+                        • Components: Medication guides, patient registries, prescriber/pharmacy certification<br>
+                        • Clozapine REMS: Mandatory ANC monitoring, patient registry, restricted distribution<br><br>
+                        <strong>Internet Pharmacy Verification (VIPPS):</strong><br>
+                        • <strong>VIPPS</strong> = Verified Internet Pharmacy Practice Sites (NABP accreditation)<br>
+                        • <strong>Legitimate signs:</strong> Requires valid Rx, U.S. licensed, pharmacist available, VIPPS seal<br>
+                        • <strong>Red flags:</strong> No Rx required, foreign shipments, miracle cures, spam emails<br>
+                        • <strong>Verify at:</strong> nabp.pharmacy - Check for VIPPS accreditation<br><br>
+                        <strong>Patient Safety First:</strong> Always verify online pharmacies and follow REMS requirements exactly.
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn btn-secondary" id="reset-all-btn">
+                <span class="btn-icon">↻</span>
+                Reset All Activities
+            </button>
+            <button class="btn btn-secondary" id="check-answers-btn">
+                <span class="btn-icon">✓</span>
+                Check All Answers
+            </button>
+            <button class="btn btn-primary" id="view-results-btn">
+                <span class="btn-icon">📊</span>
+                View Final Results
+            </button>
+        </div>
+
+        <!-- Results Panel -->
+        <div class="results-panel" id="results-panel">
+            <div class="results-header">
+                <h2 class="results-title">Patient Protection Proficiency Results</h2>
+                <div class="score-display" id="final-score">0%</div>
+            </div>
+
+            <div class="patient-safety-insights">
+                <h3 class="insights-title">
+                    <span>🛡️</span> Patient Safety & Privacy Insights
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Monograph Mastery:</strong> Always check boxed warnings and pregnancy categories. For Category X drugs like isotretinoin, verify negative pregnancy tests and contraception use through REMS programs like iPLEDGE.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Prescription Integrity:</strong> Every prescription label MUST include patient ID, drug details, clear directions, quantity, refills, prescriber info, and pharmacy contact. For controlled substances, always verify the DEA number using the standard formula.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>HIPAA in Practice:</strong> Verify identity before disclosing ANY PHI. Use private areas for consultations. Apply the "minimum necessary" rule - share only what's needed for treatment, payment, or operations.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Modern Healthcare Laws:</strong> ACA expanded coverage (more insured patients). DQSA enhanced safety (track-and-trace, compounding oversight). Together they've transformed pharmacy's role in healthcare delivery.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>REMS & Verification:</strong> REMS programs are NOT optional - they're FDA requirements for high-risk drugs. Internet pharmacies MUST be VIPPS-accredited. Teach patients to look for the VIPPS seal and verify at nabp.pharmacy.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="patient-safety-insights" style="margin-top: 20px;">
+                <h3 class="insights-title">
+                    <span>📋</span> Compliance & Documentation Requirements
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>REMS Documentation:</strong> Document all REMS requirements met - pregnancy tests, lab results, patient education, registry enrollment. Keep records for audit purposes.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>HIPAA Training:</strong> Document annual HIPAA training for all staff. Maintain logs of privacy incidents and corrective actions. Have Business Associate Agreements with vendors.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Prescription Verification:</strong> Implement double-check systems for high-risk prescriptions. Document DEA number verification for controlled substances. Use prescription monitoring programs (PMPs).</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Internet Pharmacy Resources:</strong> Provide patients with NABP's VIPPS verification website. Document counseling about internet pharmacy risks. Report suspicious online pharmacies to FDA.</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // State Management
+            const state = {
+                activities: {
+                    1: { completed: false, correct: 0, total: 5, score: 0 },
+                    2: { completed: false, correct: 0, total: 11, score: 0 }, // 10 hotspots + 1 DEA verification
+                    3: { completed: false, correct: 0, total: 3, score: 0 }, // 3 scenarios
+                    4: { completed: false, correct: 0, total: 8, score: 0 }, // 8 matches
+                    5: { completed: false, correct: 0, total: 11, score: 0 }  // 5 REMS + 6 VIPPS
+                },
+                startedAt: new Date(),
+                timeSpent: 0
+            };
+
+            // DOM Elements
+            const progressSteps = document.querySelectorAll('.progress-step');
+            const activityCards = document.querySelectorAll('.activity-card');
+            const completedCount = document.getElementById('completed-count');
+            const accuracyRate = document.getElementById('accuracy-rate');
+            const timeSpent = document.getElementById('time-spent');
+            const resetBtn = document.getElementById('reset-all-btn');
+            const checkBtn = document.getElementById('check-answers-btn');
+            const resultsBtn = document.getElementById('view-results-btn');
+            const resultsPanel = document.getElementById('results-panel');
+            const finalScore = document.getElementById('final-score');
+
+            // Timer for time spent
+            function updateTimer() {
+                const now = new Date();
+                const diff = Math.floor((now - state.startedAt) / 1000);
+                state.timeSpent = diff;
+                const minutes = Math.floor(diff / 60);
+                const seconds = diff % 60;
+                timeSpent.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            }
+            setInterval(updateTimer, 1000);
+
+            // Update Progress Summary
+            function updateProgressSummary() {
+                let completed = 0;
+                let totalCorrect = 0;
+                let totalItems = 0;
+
+                Object.values(state.activities).forEach(activity => {
+                    if (activity.completed) completed++;
+                    totalCorrect += activity.correct;
+                    totalItems += activity.total;
+                });
+
+                completedCount.textContent = completed;
+                const accuracy = totalItems > 0 ? Math.round((totalCorrect / totalItems) * 100) : 0;
+                accuracyRate.textContent = `${accuracy}%`;
+
+                // Update progress steps
+                progressSteps.forEach((step, index) => {
+                    if (index < completed) {
+                        step.classList.add('completed');
+                        step.classList.remove('active');
+                    } else if (index === completed) {
+                        step.classList.add('active');
+                        step.classList.remove('completed');
+                    } else {
+                        step.classList.remove('active', 'completed');
+                    }
+                });
+            }
+
+            // Activity 1: Drug Monograph Decoder - UPDATED
+            function initActivity1() {
+                const hotspotBtns = document.querySelectorAll('#activity-1 .hotspot-btn');
+                const progressItems = document.querySelectorAll('#activity-1 .progress-item');
+                const monographSections = document.querySelectorAll('#activity-1 .monograph-section');
+                const feedback = document.getElementById('feedback-1');
+                const status = document.querySelector('#activity-1 .activity-status');
+                const hotspotCount = document.getElementById('hotspot-count');
+
+                let hotspotsClicked = 0;
+                const totalHotspots = 5;
+
+                hotspotBtns.forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        if (state.activities[1].completed) return;
+                        
+                        if (!this.classList.contains('identified')) {
+                            this.classList.add('identified');
+                            hotspotsClicked++;
+                            
+                            // Update count
+                            hotspotCount.textContent = hotspotsClicked;
+                            
+                            // Highlight corresponding section
+                            const hotspot = this.dataset.hotspot;
+                            const section = document.getElementById(`${hotspot}-section`);
+                            if (section) {
+                                section.classList.add('identified');
+                            }
+                            
+                            // Highlight progress item
+                            progressItems.forEach(item => {
+                                if (item.dataset.hotspot === hotspot) {
+                                    item.classList.add('identified');
+                                }
+                            });
+                            
+                            // Check completion
+                            if (hotspotsClicked === totalHotspots) {
+                                state.activities[1].completed = true;
+                                state.activities[1].correct = totalHotspots;
+                                state.activities[1].score = 100;
+                                status.textContent = 'Completed';
+                                status.style.color = '#00b894';
+                                document.querySelector('#activity-1').classList.add('completed');
+                                feedback.classList.add('show');
+                                updateProgressSummary();
+                            }
+                        }
+                    });
+                });
+            }
+
+            // Activity 2: Prescription Label Analysis
+            function initActivity2() {
+                const hotspotItems = document.querySelectorAll('#activity-2 .hotspot-item');
+                const feedback = document.getElementById('feedback-2');
+                const status = document.querySelector('#activity-2 .activity-status');
+
+                const requiredElements = [
+                    'patient-name', 'patient-address', 'rx-number', 'drug-name',
+                    'directions', 'quantity', 'refills', 'prescriber',
+                    'dea-number', 'pharmacy-info'
+                ];
+
+                let identifiedElements = 0;
+                const totalElements = 11; // 10 hotspots + 1 DEA verification
+
+                hotspotItems.forEach(item => {
+                    item.addEventListener('click', function() {
+                        if (state.activities[2].completed) return;
+                        
+                        if (!this.classList.contains('identified')) {
+                            this.classList.add('identified');
+                            identifiedElements++;
+                            
+                            // Check completion
+                            if (identifiedElements === 10) {
+                                // Auto-verify DEA number
+                                state.activities[2].completed = true;
+                                state.activities[2].correct = totalElements; // All correct
+                                state.activities[2].score = 100;
+                                status.textContent = 'Completed';
+                                status.style.color = '#00b894';
+                                document.querySelector('#activity-2').classList.add('completed');
+                                feedback.classList.add('show');
+                                updateProgressSummary();
+                            }
+                        }
+                    });
+                });
+            }
+
+            // Activity 3: HIPAA Scenario Trainer
+            function initActivity3() {
+                const actionBtns = document.querySelectorAll('#activity-3 .action-btn');
+                const feedback = document.getElementById('feedback-3');
+                const status = document.querySelector('#activity-3 .activity-status');
+
+                const correctAnswers = {
+                    '1': 1, // Second button (index 1) is correct for scenario 1
+                    '2': 1, // Second button for scenario 2
+                    '3': 2  // Third button for scenario 3
+                };
+
+                let scenariosCompleted = 0;
+                let correctAnswersCount = 0;
+                const totalScenarios = 3;
+
+                actionBtns.forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        if (state.activities[3].completed) return;
+                        
+                        const scenario = this.dataset.scenario;
+                        const answerIndex = Array.from(this.parentElement.children).indexOf(this);
+                        const isCorrect = correctAnswers[scenario] === answerIndex;
+                        
+                        // Clear other buttons in this scenario
+                        const scenarioContainer = this.closest('.scenario-trainer');
+                        scenarioContainer.querySelectorAll('.action-btn').forEach(b => {
+                            b.classList.remove('selected', 'wrong');
+                            b.style.pointerEvents = 'none';
+                        });
+                        
+                        // Mark this button
+                        this.classList.add(isCorrect ? 'selected' : 'wrong');
+                        
+                        // Check if scenario was already counted
+                        if (!scenarioContainer.dataset.scored) {
+                            scenariosCompleted++;
+                            if (isCorrect) correctAnswersCount++;
+                            scenarioContainer.dataset.scored = 'true';
+                        }
+                        
+                        // Check completion
+                        if (scenariosCompleted === totalScenarios) {
+                            state.activities[3].completed = true;
+                            state.activities[3].correct = correctAnswersCount;
+                            state.activities[3].score = Math.round((correctAnswersCount / totalScenarios) * 100);
+                            status.textContent = 'Completed';
+                            status.style.color = '#00b894';
+                            document.querySelector('#activity-3').classList.add('completed');
+                            feedback.classList.add('show');
+                            updateProgressSummary();
+                        }
+                    });
+                });
+            }
+
+            // Activity 4: ACA & DQSA Impact Analysis
+            function initActivity4() {
+                const lawItems = document.querySelectorAll('#activity-4 .law-item');
+                const acaDropzone = document.getElementById('aca-dropzone');
+                const dqsaDropzone = document.getElementById('dqsa-dropzone');
+                const feedback = document.getElementById('feedback-4');
+                const status = document.querySelector('#activity-4 .activity-status');
+
+                const correctPlacements = {
+                    'Expanded Medicaid coverage': 'aca',
+                    'Created health insurance marketplaces': 'aca',
+                    'Required coverage of pre-existing conditions': 'aca',
+                    'Eliminated lifetime coverage limits': 'aca',
+                    'Established track-and-trace requirements': 'dqsa',
+                    'Created new categories of compounding pharmacies': 'dqsa',
+                    'Required product identifiers (serial numbers)': 'dqsa',
+                    'Enhanced FDA oversight of compounders': 'dqsa'
+                };
+
+                let placedItems = 0;
+                let correctPlacementsCount = 0;
+
+                // Setup drag and drop
+                lawItems.forEach(item => {
+                    item.addEventListener('dragstart', function(e) {
+                        e.dataTransfer.setData('text/plain', JSON.stringify({
+                            text: this.textContent,
+                            law: this.dataset.law
+                        }));
+                        this.classList.add('dragging');
+                    });
+
+                    item.addEventListener('dragend', function() {
+                        this.classList.remove('dragging');
+                    });
+                });
+
+                [acaDropzone, dqsaDropzone].forEach(dropzone => {
+                    dropzone.addEventListener('dragover', function(e) {
+                        e.preventDefault();
+                        this.classList.add('hover');
+                    });
+
+                    dropzone.addEventListener('dragleave', function() {
+                        this.classList.remove('hover');
+                    });
+
+                    dropzone.addEventListener('drop', function(e) {
+                        e.preventDefault();
+                        this.classList.remove('hover');
+
+                        const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+                        const targetLaw = this.id === 'aca-dropzone' ? 'aca' : 'dqsa';
+                        
+                        // Check if item already placed
+                        const existingItem = Array.from(this.querySelectorAll('.law-item'))
+                            .find(item => item.textContent === data.text);
+                        
+                        if (!existingItem) {
+                            // Check if placement is correct
+                            const isCorrect = correctPlacements[data.text] === targetLaw;
+                            
+                            const lawDiv = document.createElement('div');
+                            lawDiv.className = 'law-item';
+                            lawDiv.textContent = data.text;
+                            lawDiv.style.background = isCorrect ? 'rgba(0, 184, 148, 0.1)' : 'rgba(225, 112, 85, 0.1)';
+                            lawDiv.style.border = isCorrect ? '2px solid var(--color-success)' : '2px solid var(--color-error)';
+                            lawDiv.style.cursor = 'default';
+                            lawDiv.style.pointerEvents = 'none';
+                            
+                            this.appendChild(lawDiv);
+                            this.textContent = '';
+                            
+                            // Hide original item
+                            const originalItem = Array.from(lawItems).find(item => 
+                                item.textContent === data.text && item.style.display !== 'none'
+                            );
+                            
+                            if (originalItem) {
+                                originalItem.style.display = 'none';
+                                placedItems++;
+                                if (isCorrect) correctPlacementsCount++;
+                            }
+                            
+                            // Check completion
+                            if (placedItems === 8) {
+                                state.activities[4].completed = true;
+                                state.activities[4].correct = correctPlacementsCount;
+                                state.activities[4].score = Math.round((correctPlacementsCount / 8) * 100);
+                                status.textContent = 'Completed';
+                                status.style.color = '#00b894';
+                                document.querySelector('#activity-4').classList.add('completed');
+                                feedback.classList.add('show');
+                                updateProgressSummary();
+                            }
+                        }
+                    });
+                });
+            }
+
+            // Activity 5: REMS & Internet Pharmacy Verification
+            function initActivity5() {
+                const remsItems = document.querySelectorAll('#activity-5 .check-item[data-rems]');
+                const vippsItems = document.querySelectorAll('#activity-5 .check-item[data-vip]');
+                const feedback = document.getElementById('feedback-5');
+                const status = document.querySelector('#activity-5 .activity-status');
+
+                let remsAnswered = 0;
+                let remsCorrect = 0;
+                let vippsAnswered = 0;
+                let vippsCorrect = 0;
+
+                // REMS items
+                remsItems.forEach(item => {
+                    item.addEventListener('click', function() {
+                        if (state.activities[5].completed) return;
+                        
+                        const isCorrect = this.dataset.rems === 'correct';
+                        
+                        // Clear other selections in REMS section
+                        if (!this.classList.contains('selected') && !this.classList.contains('wrong')) {
+                            this.classList.add(isCorrect ? 'selected' : 'wrong');
+                            remsAnswered++;
+                            if (isCorrect) remsCorrect++;
+                            
+                            checkActivity5Completion();
+                        }
+                    });
+                });
+
+                // VIPPS items
+                vippsItems.forEach(item => {
+                    item.addEventListener('click', function() {
+                        if (state.activities[5].completed) return;
+                        
+                        const isCorrect = this.dataset.vip === 'correct';
+                        
+                        // Clear other selections in VIPPS section
+                        if (!this.classList.contains('selected') && !this.classList.contains('wrong')) {
+                            this.classList.add(isCorrect ? 'selected' : 'wrong');
+                            vippsAnswered++;
+                            if (isCorrect) vippsCorrect++;
+                            
+                            checkActivity5Completion();
+                        }
+                    });
+                });
+
+                function checkActivity5Completion() {
+                    if (remsAnswered === 5 && vippsAnswered === 6) {
+                        const totalCorrect = remsCorrect + vippsCorrect;
+                        
+                        state.activities[5].completed = true;
+                        state.activities[5].correct = totalCorrect;
+                        state.activities[5].score = Math.round((totalCorrect / 11) * 100);
+                        status.textContent = 'Completed';
+                        status.style.color = '#00b894';
+                        document.querySelector('#activity-5').classList.add('completed');
+                        feedback.classList.add('show');
+                        updateProgressSummary();
+                    }
+                }
+            }
+
+            // Reset All Activities
+            function resetAllActivities() {
+                // Reset state
+                Object.keys(state.activities).forEach(key => {
+                    state.activities[key] = {
+                        completed: false,
+                        correct: 0,
+                        total: parseInt(key) === 1 ? 5 : parseInt(key) === 2 ? 11 : 
+                               parseInt(key) === 3 ? 3 : parseInt(key) === 4 ? 8 : 11,
+                        score: 0
+                    };
+                });
+
+                state.startedAt = new Date();
+                state.timeSpent = 0;
+
+                // Reset UI
+                activityCards.forEach(card => {
+                    card.classList.remove('completed');
+                    const status = card.querySelector('.activity-status');
+                    status.textContent = 'Not Started';
+                    status.style.color = '';
+                    const feedback = card.querySelector('.feedback-container');
+                    feedback.classList.remove('show');
+                });
+
+                // Reset Activity 1
+                document.querySelectorAll('#activity-1 .hotspot-btn').forEach(btn => {
+                    btn.classList.remove('identified');
+                });
+                document.querySelectorAll('#activity-1 .monograph-section').forEach(section => {
+                    section.classList.remove('identified');
+                });
+                document.querySelectorAll('#activity-1 .progress-item').forEach(item => {
+                    item.classList.remove('identified');
+                });
+                document.getElementById('hotspot-count').textContent = '0';
+
+                // Reset Activity 2
+                document.querySelectorAll('#activity-2 .hotspot-item').forEach(item => {
+                    item.classList.remove('identified');
+                });
+
+                // Reset Activity 3
+                document.querySelectorAll('#activity-3 .action-btn').forEach(btn => {
+                    btn.classList.remove('selected', 'wrong');
+                    btn.style.pointerEvents = 'auto';
+                    btn.closest('.scenario-trainer')?.removeAttribute('data-scored');
+                });
+
+                // Reset Activity 4
+                document.querySelectorAll('#activity-4 .law-item').forEach(item => {
+                    item.style.display = '';
+                    item.classList.remove('dragging');
+                });
+                document.getElementById('aca-dropzone').innerHTML = 'Drag ACA impacts here';
+                document.getElementById('dqsa-dropzone').innerHTML = 'Drag DQSA impacts here';
+                document.querySelectorAll('#activity-4 .impact-dropzone').forEach(dz => {
+                    dz.classList.remove('hover');
+                });
+
+                // Reset Activity 5
+                document.querySelectorAll('#activity-5 .check-item').forEach(item => {
+                    item.classList.remove('selected', 'wrong');
+                });
+
+                // Reset results
+                resultsPanel.classList.remove('show');
+
+                // Update progress
+                updateProgressSummary();
+            }
+
+            // Check All Answers
+            function checkAllAnswers() {
+                // Activity 1
+                if (!state.activities[1].completed) {
+                    const feedback = document.getElementById('feedback-1');
+                    const status = document.querySelector('#activity-1 .activity-status');
+                    
+                    // Activate all hotspots
+                    document.querySelectorAll('#activity-1 .hotspot-btn').forEach(btn => {
+                        btn.classList.add('identified');
+                    });
+                    document.querySelectorAll('#activity-1 .monograph-section').forEach(section => {
+                        if (section.id.includes('-section')) {
+                            section.classList.add('identified');
+                        }
+                    });
+                    document.querySelectorAll('#activity-1 .progress-item').forEach(item => {
+                        item.classList.add('identified');
+                    });
+                    document.getElementById('hotspot-count').textContent = '5';
+                    
+                    state.activities[1].completed = true;
+                    state.activities[1].correct = 5;
+                    state.activities[1].score = 100;
+                    status.textContent = 'Completed';
+                    status.style.color = '#00b894';
+                    document.querySelector('#activity-1').classList.add('completed');
+                    feedback.classList.add('show');
+                }
+
+                // Activity 2
+                if (!state.activities[2].completed) {
+                    const feedback = document.getElementById('feedback-2');
+                    const status = document.querySelector('#activity-2 .activity-status');
+                    
+                    // Identify all hotspots
+                    document.querySelectorAll('#activity-2 .hotspot-item').forEach(item => {
+                        item.classList.add('identified');
+                    });
+                    
+                    state.activities[2].completed = true;
+                    state.activities[2].correct = 11;
+                    state.activities[2].score = 100;
+                    status.textContent = 'Completed';
+                    status.style.color = '#00b894';
+                    document.querySelector('#activity-2').classList.add('completed');
+                    feedback.classList.add('show');
+                }
+
+                // Activity 3
+                if (!state.activities[3].completed) {
+                    const feedback = document.getElementById('feedback-3');
+                    const status = document.querySelector('#activity-3 .activity-status');
+                    
+                    // Select correct answers
+                    const correctIndices = {1: 1, 2: 1, 3: 2};
+                    
+                    document.querySelectorAll('#activity-3 .scenario-trainer').forEach((trainer, index) => {
+                        const scenarioNum = index + 1;
+                        const correctIndex = correctIndices[scenarioNum];
+                        const correctBtn = trainer.querySelectorAll('.action-btn')[correctIndex];
+                        if (correctBtn) {
+                            correctBtn.classList.add('selected');
+                        }
+                        trainer.querySelectorAll('.action-btn').forEach(btn => {
+                            btn.style.pointerEvents = 'none';
+                        });
+                    });
+                    
+                    state.activities[3].completed = true;
+                    state.activities[3].correct = 3;
+                    state.activities[3].score = 100;
+                    status.textContent = 'Completed';
+                    status.style.color = '#00b894';
+                    document.querySelector('#activity-3').classList.add('completed');
+                    feedback.classList.add('show');
+                }
+
+                // Activity 4
+                if (!state.activities[4].completed) {
+                    const feedback = document.getElementById('feedback-4');
+                    const status = document.querySelector('#activity-4 .activity-status');
+                    
+                    // Place all items correctly
+                    const correctPlacements = {
+                        'aca': [
+                            'Expanded Medicaid coverage',
+                            'Created health insurance marketplaces',
+                            'Required coverage of pre-existing conditions',
+                            'Eliminated lifetime coverage limits'
+                        ],
+                        'dqsa': [
+                            'Established track-and-trace requirements',
+                            'Created new categories of compounding pharmacies',
+                            'Required product identifiers (serial numbers)',
+                            'Enhanced FDA oversight of compounders'
+                        ]
+                    };
+                    
+                    // Clear dropzones
+                    document.getElementById('aca-dropzone').innerHTML = '';
+                    document.getElementById('dqsa-dropzone').innerHTML = '';
+                    
+                    // Add items to correct dropzones
+                    Object.keys(correctPlacements).forEach(law => {
+                        const dropzone = document.getElementById(`${law}-dropzone`);
+                        correctPlacements[law].forEach(text => {
+                            const div = document.createElement('div');
+                            div.className = 'law-item';
+                            div.textContent = text;
+                            div.style.background = 'rgba(0, 184, 148, 0.1)';
+                            div.style.border = '2px solid var(--color-success)';
+                            div.style.cursor = 'default';
+                            div.style.pointerEvents = 'none';
+                            dropzone.appendChild(div);
+                        });
+                    });
+                    
+                    // Hide all original items
+                    document.querySelectorAll('#activity-4 .law-item').forEach(item => {
+                        item.style.display = 'none';
+                    });
+                    
+                    state.activities[4].completed = true;
+                    state.activities[4].correct = 8;
+                    state.activities[4].score = 100;
+                    status.textContent = 'Completed';
+                    status.style.color = '#00b894';
+                    document.querySelector('#activity-4').classList.add('completed');
+                    feedback.classList.add('show');
+                }
+
+                // Activity 5
+                if (!state.activities[5].completed) {
+                    const feedback = document.getElementById('feedback-5');
+                    const status = document.querySelector('#activity-5 .activity-status');
+                    
+                    // Select correct REMS items
+                    document.querySelectorAll('#activity-5 .check-item[data-rems="correct"]').forEach(item => {
+                        item.classList.add('selected');
+                    });
+                    
+                    // Select correct VIPPS items
+                    document.querySelectorAll('#activity-5 .check-item[data-vip="correct"]').forEach(item => {
+                        item.classList.add('selected');
+                    });
+                    
+                    // Mark incorrect items as wrong
+                    document.querySelectorAll('#activity-5 .check-item[data-rems="wrong"], #activity-5 .check-item[data-vip="wrong"]').forEach(item => {
+                        item.classList.add('wrong');
+                    });
+                    
+                    state.activities[5].completed = true;
+                    state.activities[5].correct = 11;
+                    state.activities[5].score = 100;
+                    status.textContent = 'Completed';
+                    status.style.color = '#00b894';
+                    document.querySelector('#activity-5').classList.add('completed');
+                    feedback.classList.add('show');
+                }
+
+                updateProgressSummary();
+            }
+
+            // View Final Results
+            function viewFinalResults() {
+                let totalScore = 0;
+                let activityCount = 0;
+
+                Object.values(state.activities).forEach(activity => {
+                    if (activity.completed) {
+                        totalScore += activity.score;
+                        activityCount++;
+                    }
+                });
+
+                const averageScore = activityCount > 0 ? Math.round(totalScore / activityCount) : 0;
+                finalScore.textContent = `${averageScore}%`;
+                resultsPanel.classList.add('show');
+                resultsPanel.scrollIntoView({ behavior: 'smooth' });
+            }
+
+            // Initialize all activities
+            initActivity1();
+            initActivity2();
+            initActivity3();
+            initActivity4();
+            initActivity5();
+
+            // Event listeners
+            resetBtn.addEventListener('click', resetAllActivities);
+            checkBtn.addEventListener('click', checkAllAnswers);
+            resultsBtn.addEventListener('click', viewFinalResults);
+
+            // Initial progress update
+            updateProgressSummary();
+        });
+    </script>
+</body>
+</html>
