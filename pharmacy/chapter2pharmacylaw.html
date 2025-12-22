@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AlliedRx - Module 1: Pharmacy Law Foundations</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* AlliedRx Brand Colors */
+        :root {
+            --allied-primary: #af4bef;
+            --allied-primary-light: #d492ff;
+            --allied-secondary: #8380f0;
+            --allied-success: #00b894;
+            --allied-warning: #fdcb6e;
+            --allied-error: #e17055;
+            --allied-dark: #0c0a18;
+            --allied-light: #f7f5fb;
+            --allied-text: #2b2b2b;
+            --allied-muted: #6c6880;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--allied-light);
+            color: var(--allied-text);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .module-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(12, 10, 24, 0.08);
+            overflow: hidden;
+        }
+
+        /* Header - Match Module 1 styling */
+        .module-header {
+            background: linear-gradient(135deg, var(--allied-primary), var(--allied-secondary));
+            color: white;
+            padding: 25px 30px;
+        }
+
+        .brand-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .brand-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .course-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            opacity: 0.9;
+        }
+
+        .chapter-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+
+        .chapter-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--allied-success);
+            border-radius: 50%;
+        }
+
+        .module-title {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .module-subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+            max-width: 800px;
+        }
+
+        .progress-tracker {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            padding: 0 20px;
+            margin: 30px 0;
+        }
+
+        .progress-tracker::before {
+            content: '';
+            position: absolute;
+            top: 14px;
+            left: 50px;
+            right: 50px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.2);
+            z-index: 1;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+
+        .step-circle {
+            width: 30px;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.active .step-circle {
+            background: white;
+            color: var(--allied-primary);
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .step-label {
+            font-size: 0.75rem;
+            text-align: center;
+            opacity: 0.8;
+        }
+
+        /* Activity Navigation */
+        .activity-nav {
+            display: flex;
+            background: var(--allied-light);
+            border-bottom: 1px solid rgba(12, 10, 24, 0.08);
+        }
+
+        .activity-tab {
+            flex: 1;
+            padding: 15px;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: var(--allied-muted);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .activity-tab.active {
+            color: var(--allied-primary);
+            border-bottom-color: var(--allied-primary);
+            background: rgba(175, 75, 239, 0.05);
+        }
+
+        /* Activity Content */
+        .activity-content {
+            padding: 30px;
+            min-height: 500px;
+        }
+
+        .activity-pane {
+            display: none;
+        }
+
+        .activity-pane.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .activity-title {
+            color: var(--allied-primary);
+            margin-bottom: 20px;
+            font-size: 1.4rem;
+        }
+
+        .activity-description {
+            color: var(--allied-muted);
+            margin-bottom: 25px;
+            max-width: 800px;
+        }
+
+        /* Activity 1: Law Timeline */
+        .timeline-exercise {
+            background: rgba(175, 75, 239, 0.05);
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 20px;
+        }
+
+        .timeline-instructions {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--allied-primary);
+        }
+
+        .law-items {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .law-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            cursor: grab;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .law-item:hover {
+            transform: translateX(5px);
+            border-color: var(--allied-primary-light);
+            box-shadow: 0 4px 12px rgba(175, 75, 239, 0.1);
+        }
+
+        .law-year {
+            background: var(--allied-primary-light);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .law-details {
+            flex: 1;
+        }
+
+        .law-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .law-description {
+            font-size: 0.9rem;
+            color: var(--allied-muted);
+        }
+
+        .timeline-dropzone {
+            min-height: 300px;
+            background: white;
+            border: 2px dashed rgba(12, 10, 24, 0.15);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .timeline-dropzone.empty::after {
+            content: 'Drag laws here in chronological order';
+            color: var(--allied-muted);
+            text-align: center;
+            display: block;
+            margin-top: 120px;
+            font-size: 0.95rem;
+        }
+
+        .timeline-slot {
+            background: rgba(175, 75, 239, 0.08);
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .position-number {
+            background: var(--allied-primary);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .check-answers-btn {
+            background: var(--allied-primary);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            display: block;
+            margin: 25px auto 0;
+            transition: all 0.3s ease;
+        }
+
+        .check-answers-btn:hover {
+            background: #9a3bd6;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(175, 75, 239, 0.2);
+        }
+
+        /* Activity 2: HIPAA Scenarios */
+        .scenario-container {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid rgba(12, 10, 24, 0.1);
+            padding: 25px;
+            margin-top: 20px;
+        }
+
+        .scenario-text {
+            margin-bottom: 25px;
+            line-height: 1.8;
+        }
+
+        .options-grid {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .option-card {
+            background: rgba(175, 75, 239, 0.05);
+            border: 2px solid rgba(175, 75, 239, 0.2);
+            border-radius: 8px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--allied-primary-light);
+        }
+
+        .option-card.selected {
+            background: rgba(0, 184, 148, 0.1);
+            border-color: var(--allied-success);
+        }
+
+        .option-card.incorrect {
+            background: rgba(225, 112, 85, 0.1);
+            border-color: var(--allied-error);
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .option-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .option-letter {
+            background: var(--allied-primary-light);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .option-card.selected .option-letter {
+            background: var(--allied-success);
+        }
+
+        .option-card.incorrect .option-letter {
+            background: var(--allied-error);
+        }
+
+        /* Activity 3: Policy Calculator */
+        .calculator-container {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 20px;
+        }
+
+        .policy-slider {
+            margin-bottom: 25px;
+        }
+
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .slider-title {
+            font-weight: 600;
+            color: var(--allied-primary);
+        }
+
+        .slider-value {
+            font-weight: 600;
+            color: var(--allied-primary);
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            -webkit-appearance: none;
+            background: rgba(175, 75, 239, 0.2);
+            border-radius: 3px;
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            background: var(--allied-primary);
+            border-radius: 50%;
+            cursor: pointer;
+            border: 3px solid white;
+            box-shadow: 0 2px 6px rgba(175, 75, 239, 0.3);
+        }
+
+        .impact-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .impact-card {
+            text-align: center;
+            padding: 20px;
+            background: rgba(175, 75, 239, 0.05);
+            border-radius: 8px;
+            border-top: 3px solid var(--allied-primary);
+        }
+
+        .impact-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--allied-primary);
+            margin: 10px 0;
+        }
+
+        .impact-label {
+            font-size: 0.9rem;
+            color: var(--allied-muted);
+        }
+
+        /* Feedback System */
+        .feedback-banner {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 350px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(12, 10, 24, 0.15);
+            border-left: 4px solid var(--allied-primary);
+            z-index: 1000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+
+        .feedback-banner.show {
+            transform: translateX(0);
+        }
+
+        .feedback-header {
+            padding: 15px;
+            background: rgba(175, 75, 239, 0.1);
+            border-radius: 12px 12px 0 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .feedback-icon {
+            font-size: 1.2rem;
+        }
+
+        .feedback-content {
+            padding: 15px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .feedback-message {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+
+        .feedback-correct {
+            background: rgba(0, 184, 148, 0.1);
+            border-left: 3px solid var(--allied-success);
+        }
+
+        .feedback-incorrect {
+            background: rgba(225, 112, 85, 0.1);
+            border-left: 3px solid var(--allied-error);
+        }
+
+        /* Score Display */
+        .score-display {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(12, 10, 24, 0.1);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .score-value {
+            color: var(--allied-primary);
+            font-size: 1.2rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .module-wrapper {
+                border-radius: 0;
+            }
+            
+            .module-header {
+                padding: 20px;
+            }
+            
+            .activity-nav {
+                flex-direction: column;
+            }
+            
+            .impact-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .feedback-banner {
+                width: calc(100% - 40px);
+                right: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="score-display">
+        <span>Score:</span>
+        <span class="score-value" id="score">0</span>
+    </div>
+
+    <div class="module-wrapper">
+        <!-- Header -->
+        <div class="module-header">
+            <div class="brand-row">
+                <div class="brand-info">
+                    <div>
+                        <div class="course-label">Pharmacy Technician</div>
+                        <div class="chapter-tag">
+                            <span class="chapter-dot"></span>
+                            <span>Chapter 2: Pharmacy Law & Ethics</span>
+                        </div>
+                    </div>
+                </div>
+                <div style="font-size: 0.9rem; opacity: 0.9;">Module 1 of 3</div>
+            </div>
+            
+            <h1 class="module-title">Federal Drug Laws & Regulations</h1>
+            <p class="module-subtitle">
+                Master the key federal drug laws, understand HIPAA implications, and learn how healthcare legislation affects pharmacy practice.
+            </p>
+            
+            <div class="progress-tracker">
+                <div class="progress-step active">
+                    <div class="step-circle">1</div>
+                    <div class="step-label">Law Timeline</div>
+                </div>
+                <div class="progress-step">
+                    <div class="step-circle">2</div>
+                    <div class="step-label">HIPAA Scenarios</div>
+                </div>
+                <div class="progress-step">
+                    <div class="step-circle">3</div>
+                    <div class="step-label">Policy Impact</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Activity Navigation -->
+        <div class="activity-nav">
+            <button class="activity-tab active" data-activity="1">Activity 1: Law Timeline</button>
+            <button class="activity-tab" data-activity="2">Activity 2: HIPAA Scenarios</button>
+            <button class="activity-tab" data-activity="3">Activity 3: Policy Calculator</button>
+        </div>
+
+        <!-- Activity Content -->
+        <div class="activity-content">
+            <!-- Activity 1: Law Timeline -->
+            <div class="activity-pane active" id="activity-1">
+                <h2 class="activity-title">Arrange Federal Drug Laws in Order</h2>
+                <p class="activity-description">
+                    Drag these landmark federal drug laws into the correct chronological order from earliest to most recent.
+                    Understanding this timeline is essential for knowing how pharmacy regulation has evolved.
+                </p>
+                
+                <div class="timeline-exercise">
+                    <div class="timeline-instructions">
+                        <strong>Instructions:</strong> Drag each law from the list below and drop it into the timeline area in the correct order.
+                    </div>
+                    
+                    <div class="law-items">
+                        <div class="law-item" draggable="true" data-law="pure-food" data-year="1906">
+                            <div class="law-year">1906</div>
+                            <div class="law-details">
+                                <div class="law-name">Pure Food and Drug Act</div>
+                                <div class="law-description">First major federal drug law - prohibited adulterated/misbranded drugs</div>
+                            </div>
+                        </div>
+                        
+                        <div class="law-item" draggable="true" data-law="fdca" data-year="1938">
+                            <div class="law-year">1938</div>
+                            <div class="law-details">
+                                <div class="law-name">Food, Drug, and Cosmetic Act (FDCA)</div>
+                                <div class="law-description">Required safety testing before marketing - response to Elixir Sulfanilamide</div>
+                            </div>
+                        </div>
+                        
+                        <div class="law-item" draggable="true" data-law="durham" data-year="1951">
+                            <div class="law-year">1951</div>
+                            <div class="law-details">
+                                <div class="law-name">Durham-Humphrey Amendment</div>
+                                <div class="law-description">Created prescription-only drug category (legend drugs)</div>
+                            </div>
+                        </div>
+                        
+                        <div class="law-item" draggable="true" data-law="csa" data-year="1970">
+                            <div class="law-year">1970</div>
+                            <div class="law-details">
+                                <div class="law-name">Controlled Substances Act (CSA)</div>
+                                <div class="law-description">Created 5 schedules for controlled substances</div>
+                            </div>
+                        </div>
+                        
+                        <div class="law-item" draggable="true" data-law="hipaa" data-year="1996">
+                            <div class="law-year">1996</div>
+                            <div class="law-details">
+                                <div class="law-name">HIPAA</div>
+                                <div class="law-description">Health Insurance Portability and Accountability Act</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-dropzone empty" id="timeline-dropzone">
+                        <!-- Timeline slots will be added here -->
+                    </div>
+                    
+                    <button class="check-answers-btn" id="check-timeline">Check Timeline Order</button>
+                </div>
+            </div>
+
+            <!-- Activity 2: HIPAA Scenarios -->
+            <div class="activity-pane" id="activity-2">
+                <h2 class="activity-title">Identify HIPAA Violations</h2>
+                <p class="activity-description">
+                    Read each scenario and select whether it represents a HIPAA violation or compliant behavior.
+                    Understanding these distinctions is crucial for protecting patient privacy.
+                </p>
+                
+                <div class="scenario-container">
+                    <div class="scenario-text">
+                        <strong>Scenario 1:</strong> A pharmacy technician is processing prescriptions when a family member calls asking about the medications for their elderly parent. The technician recognizes the voice and provides the information over the phone without verifying identity.
+                    </div>
+                    
+                    <div class="options-grid">
+                        <div class="option-card" data-scenario="1" data-answer="violation">
+                            <div class="option-header">
+                                <div class="option-letter">A</div>
+                                <div style="font-weight: 600;">HIPAA Violation</div>
+                            </div>
+                            <div style="font-size: 0.9rem; color: var(--allied-muted);">
+                                Cannot disclose PHI without proper verification, even if caller sounds familiar
+                            </div>
+                        </div>
+                        
+                        <div class="option-card" data-scenario="1" data-answer="compliant">
+                            <div class="option-header">
+                                <div class="option-letter">B</div>
+                                <div style="font-weight: 600;">Compliant Behavior</div>
+                            </div>
+                            <div style="font-size: 0.9rem; color: var(--allied-muted);">
+                                Family members can access information if they sound legitimate
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="scenario-container" style="margin-top: 25px;">
+                    <div class="scenario-text">
+                        <strong>Scenario 2:</strong> A pharmacist needs to discuss a patient's complex medication regimen with another pharmacist for consultation. They step into a private office and close the door before having the conversation.
+                    </div>
+                    
+                    <div class="options-grid">
+                        <div class="option-card" data-scenario="2" data-answer="violation">
+                            <div class="option-header">
+                                <div class="option-letter">A</div>
+                                <div style="font-weight: 600;">HIPAA Violation</div>
+                            </div>
+                            <div style="font-size: 0.9rem; color: var(--allied-muted);">
+                                Discussing patient information with colleagues always requires written consent
+                            </div>
+                        </div>
+                        
+                        <div class="option-card" data-scenario="2" data-answer="compliant">
+                            <div class="option-header">
+                                <div class="option-letter">B</div>
+                                <div style="font-weight: 600;">Compliant Behavior</div>
+                            </div>
+                            <div style="font-size: 0.9rem; color: var(--allied-muted);">
+                                Private consultation for treatment purposes is permitted under HIPAA
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="check-answers-btn" style="margin-top: 30px;" id="check-scenarios">Check Answers</button>
+            </div>
+
+            <!-- Activity 3: Policy Calculator -->
+            <div class="activity-pane" id="activity-3">
+                <h2 class="activity-title">Healthcare Policy Impact Calculator</h2>
+                <p class="activity-description">
+                    Adjust healthcare policies and see their real-time impact on key pharmacy metrics. 
+                    This helps understand how legislation affects practice.
+                </p>
+                
+                <div class="calculator-container">
+                    <div class="policy-slider">
+                        <div class="slider-header">
+                            <div class="slider-title">Medicaid Expansion</div>
+                            <div class="slider-value" id="medicaid-value">0%</div>
+                        </div>
+                        <input type="range" min="0" max="100" value="0" class="policy-slider-input" id="medicaid-slider">
+                        <div style="font-size: 0.85rem; color: var(--allied-muted); margin-top: 5px;">
+                            Percentage of eligible population covered
+                        </div>
+                    </div>
+                    
+                    <div class="policy-slider">
+                        <div class="slider-header">
+                            <div class="slider-title">Medicare Part D "Donut Hole" Coverage</div>
+                            <div class="slider-value" id="donut-value">0%</div>
+                        </div>
+                        <input type="range" min="0" max="100" value="0" class="policy-slider-input" id="donut-slider">
+                        <div style="font-size: 0.85rem; color: var(--allied-muted); margin-top: 5px;">
+                            How much of the coverage gap is filled
+                        </div>
+                    </div>
+                    
+                    <div class="policy-slider">
+                        <div class="slider-header">
+                            <div class="slider-title">Drug Supply Chain Security</div>
+                            <div class="slider-value" id="security-value">Basic</div>
+                        </div>
+                        <input type="range" min="0" max="100" value="0" class="policy-slider-input" id="security-slider">
+                        <div style="font-size: 0.85rem; color: var(--allied-muted); margin-top: 5px;">
+                            Track-and-trace requirements under DQSA
+                        </div>
+                    </div>
+                    
+                    <div class="impact-grid">
+                        <div class="impact-card">
+                            <div>👥 Insured Patients</div>
+                            <div class="impact-value" id="impact-insured">84%</div>
+                            <div class="impact-label">With prescription coverage</div>
+                        </div>
+                        
+                        <div class="impact-card">
+                            <div>💰 Out-of-Pocket Cost</div>
+                            <div class="impact-value" id="impact-cost">$1,250</div>
+                            <div class="impact-label">Average annual cost per patient</div>
+                        </div>
+                        
+                        <div class="impact-card">
+                            <div>⚕️ Medication Safety</div>
+                            <div class="impact-value" id="impact-safety">78%</div>
+                            <div class="impact-label">Drug supply chain integrity</div>
+                        </div>
+                    </div>
+                    
+                    <button class="check-answers-btn" id="check-policy">Analyze Policy Impact</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feedback Banner -->
+    <div class="feedback-banner" id="feedback-banner">
+        <div class="feedback-header">
+            <div class="feedback-icon">💡</div>
+            <div>
+                <div style="font-weight: 600;">Feedback</div>
+                <div style="font-size: 0.85rem; opacity: 0.8;">Learning guidance</div>
+            </div>
+        </div>
+        <div class="feedback-content" id="feedback-content">
+            <!-- Feedback messages will appear here -->
+        </div>
+    </div>
+
+    <script>
+        // State Management
+        let state = {
+            score: 0,
+            currentActivity: 1,
+            activity1: {
+                placedLaws: [],
+                correctOrder: ['pure-food', 'fdca', 'durham', 'csa', 'hipaa']
+            },
+            activity2: {
+                answers: {},
+                correctAnswers: {
+                    '1': 'violation',
+                    '2': 'compliant'
+                }
+            },
+            activity3: {
+                metrics: {
+                    insured: 84,
+                    cost: 1250,
+                    safety: 78
+                }
+            }
+        };
+
+        // DOM Elements
+        const scoreElement = document.getElementById('score');
+        const feedbackBanner = document.getElementById('feedback-banner');
+        const feedbackContent = document.getElementById('feedback-content');
+
+        // Navigation
+        document.querySelectorAll('.activity-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                const activityId = tab.dataset.activity;
+                
+                // Update tabs
+                document.querySelectorAll('.activity-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                // Update progress steps
+                document.querySelectorAll('.progress-step').forEach((step, index) => {
+                    step.classList.remove('active');
+                    if (index + 1 === parseInt(activityId)) {
+                        step.classList.add('active');
+                    }
+                });
+                
+                // Show activity
+                document.querySelectorAll('.activity-pane').forEach(pane => pane.classList.remove('active'));
+                document.getElementById(`activity-${activityId}`).classList.add('active');
+                
+                state.currentActivity = parseInt(activityId);
+                showFeedback(`Now on Activity ${activityId}: ${tab.textContent}`, 'info');
+            });
+        });
+
+        // Feedback System
+        function showFeedback(message, type = 'info') {
+            const feedbackDiv = document.createElement('div');
+            feedbackDiv.className = `feedback-message feedback-${type}`;
+            feedbackDiv.textContent = message;
+            
+            feedbackContent.appendChild(feedbackDiv);
+            feedbackBanner.classList.add('show');
+            
+            // Auto-scroll
+            feedbackContent.scrollTop = feedbackContent.scrollHeight;
+            
+            // Auto-remove after 5 seconds for info messages
+            if (type === 'info') {
+                setTimeout(() => {
+                    feedbackDiv.style.opacity = '0';
+                    feedbackDiv.style.transition = 'opacity 0.5s ease';
+                    setTimeout(() => {
+                        if (feedbackDiv.parentNode === feedbackContent) {
+                            feedbackContent.removeChild(feedbackDiv);
+                        }
+                        if (feedbackContent.children.length === 0) {
+                            feedbackBanner.classList.remove('show');
+                        }
+                    }, 500);
+                }, 5000);
+            }
+        }
+
+        // Update Score
+        function updateScore(points, reason) {
+            state.score += points;
+            scoreElement.textContent = state.score;
+            
+            const type = points > 0 ? 'correct' : 'incorrect';
+            showFeedback(`${points > 0 ? '+' : ''}${points} points: ${reason}`, type);
+        }
+
+        // Activity 1: Law Timeline
+        const lawItems = document.querySelectorAll('.law-item');
+        const dropzone = document.getElementById('timeline-dropzone');
+
+        lawItems.forEach(item => {
+            item.addEventListener('dragstart', (e) => {
+                e.dataTransfer.setData('text/plain', item.dataset.law);
+            });
+        });
+
+        dropzone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropzone.style.borderColor = 'var(--allied-primary-light)';
+        });
+
+        dropzone.addEventListener('dragleave', () => {
+            dropzone.style.borderColor = 'rgba(12, 10, 24, 0.15)';
+        });
+
+        dropzone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropzone.style.borderColor = 'rgba(12, 10, 24, 0.15)';
+            dropzone.classList.remove('empty');
+            
+            const lawId = e.dataTransfer.getData('text/plain');
+            
+            // Check if already placed
+            if (!state.activity1.placedLaws.includes(lawId)) {
+                state.activity1.placedLaws.push(lawId);
+                
+                // Find the law item
+                const lawItem = document.querySelector(`[data-law="${lawId}"]`);
+                
+                // Create timeline slot
+                const slot = document.createElement('div');
+                slot.className = 'timeline-slot';
+                slot.innerHTML = `
+                    <div class="position-number">${state.activity1.placedLaws.length}</div>
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600;">${lawItem.querySelector('.law-name').textContent}</div>
+                        <div style="font-size: 0.9rem; color: var(--allied-muted);">
+                            ${lawItem.querySelector('.law-description').textContent}
+                        </div>
+                    </div>
+                `;
+                
+                dropzone.appendChild(slot);
+                
+                // Hide original item
+                lawItem.style.display = 'none';
+                
+                showFeedback(`Added: ${lawItem.querySelector('.law-name').textContent}`, 'info');
+            }
+        });
+
+        document.getElementById('check-timeline').addEventListener('click', () => {
+            const placed = state.activity1.placedLaws;
+            const correct = state.activity1.correctOrder;
+            
+            if (placed.length < 5) {
+                showFeedback('Please place all 5 laws in the timeline before checking answers.', 'incorrect');
+                return;
+            }
+            
+            let correctCount = 0;
+            let feedback = '';
+            
+            placed.forEach((lawId, index) => {
+                if (lawId === correct[index]) {
+                    correctCount++;
+                }
+            });
+            
+            if (correctCount === 5) {
+                const points = 100;
+                updateScore(points, 'Perfect timeline order!');
+                feedback = 'Excellent! You have correctly sequenced all major federal drug laws. This timeline shows how pharmacy regulation evolved from basic safety concerns to comprehensive privacy and control systems.';
+                showFeedback(feedback, 'correct');
+            } else {
+                const points = correctCount * 20;
+                updateScore(points, `${correctCount}/5 laws in correct order`);
+                
+                feedback = `You placed ${correctCount} of 5 laws correctly. Here's the correct order:\n`;
+                feedback += '1. Pure Food and Drug Act (1906)\n';
+                feedback += '2. Food, Drug, and Cosmetic Act (1938)\n';
+                feedback += '3. Durham-Humphrey Amendment (1951)\n';
+                feedback += '4. Controlled Substances Act (1970)\n';
+                feedback += '5. HIPAA (1996)';
+                showFeedback(feedback, 'incorrect');
+            }
+        });
+
+        // Activity 2: HIPAA Scenarios
+        document.querySelectorAll('.option-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const scenario = card.dataset.scenario;
+                const answer = card.dataset.answer;
+                
+                // Remove selections from same scenario
+                document.querySelectorAll(`[data-scenario="${scenario}"]`).forEach(c => {
+                    c.classList.remove('selected', 'incorrect');
+                });
+                
+                // Select this card
+                card.classList.add('selected');
+                
+                // Store answer
+                state.activity2.answers[scenario] = answer;
+            });
+        });
+
+        document.getElementById('check-scenarios').addEventListener('click', () => {
+            const answers = state.activity2.answers;
+            const correct = state.activity2.correctAnswers;
+            
+            if (Object.keys(answers).length < 2) {
+                showFeedback('Please answer both scenarios before checking.', 'incorrect');
+                return;
+            }
+            
+            let correctCount = 0;
+            let feedback = 'Scenario Analysis:\n\n';
+            
+            Object.keys(answers).forEach(scenario => {
+                const isCorrect = answers[scenario] === correct[scenario];
+                
+                if (isCorrect) {
+                    correctCount++;
+                    feedback += `✅ Scenario ${scenario}: Correct! `;
+                } else {
+                    // Mark incorrect card
+                    document.querySelector(`[data-scenario="${scenario}"][data-answer="${answers[scenario]}"]`).classList.add('incorrect');
+                    feedback += `❌ Scenario ${scenario}: Incorrect. `;
+                }
+                
+                if (scenario === '1') {
+                    feedback += 'HIPAA requires identity verification before disclosing PHI, even to family members.\n';
+                } else {
+                    feedback += 'HIPAA permits private consultations between healthcare providers for treatment purposes.\n';
+                }
+            });
+            
+            const points = correctCount * 50;
+            updateScore(points, `${correctCount}/2 scenarios correct`);
+            showFeedback(feedback, correctCount === 2 ? 'correct' : 'incorrect');
+        });
+
+        // Activity 3: Policy Calculator
+        const sliders = ['medicaid', 'donut', 'security'];
+        
+        sliders.forEach(sliderId => {
+            const slider = document.getElementById(`${sliderId}-slider`);
+            const valueDisplay = document.getElementById(`${sliderId}-value`);
+            
+            slider.addEventListener('input', () => {
+                const value = parseInt(slider.value);
+                
+                if (sliderId === 'security') {
+                    if (value < 33) {
+                        valueDisplay.textContent = 'Basic';
+                    } else if (value < 66) {
+                        valueDisplay.textContent = 'Enhanced';
+                    } else {
+                        valueDisplay.textContent = 'Comprehensive';
+                    }
+                } else {
+                    valueDisplay.textContent = `${value}%`;
+                }
+                
+                updatePolicyMetrics();
+            });
+        });
+
+        function updatePolicyMetrics() {
+            const medicaid = parseInt(document.getElementById('medicaid-slider').value) / 100;
+            const donut = parseInt(document.getElementById('donut-slider').value) / 100;
+            const security = parseInt(document.getElementById('security-slider').value) / 100;
+            
+            // Calculate impacts
+            let insured = 84 + (medicaid * 10); // Medicaid expansion increases coverage
+            insured = Math.min(95, insured); // Cap at 95%
+            
+            let cost = 1250 - (donut * 600); // Donut hole coverage reduces costs
+            cost = Math.max(650, cost); // Minimum $650
+            
+            let safety = 78 + (security * 20); // Better security increases safety
+            safety = Math.min(98, safety); // Cap at 98%
+            
+            // Update displays
+            document.getElementById('impact-insured').textContent = `${Math.round(insured)}%`;
+            document.getElementById('impact-cost').textContent = `$${Math.round(cost)}`;
+            document.getElementById('impact-safety').textContent = `${Math.round(safety)}%`;
+            
+            // Store metrics
+            state.activity3.metrics = { insured, cost, safety };
+        }
+
+        document.getElementById('check-policy').addEventListener('click', () => {
+            const metrics = state.activity3.metrics;
+            
+            // Calculate score based on balance
+            const insuredScore = metrics.insured - 84; // Points for increasing coverage
+            const costScore = 1250 - metrics.cost; // Points for reducing costs
+            const safetyScore = metrics.safety - 78; // Points for increasing safety
+            
+            const totalScore = Math.round((insuredScore + costScore + safetyScore) / 3);
+            
+            updateScore(totalScore, `Policy impact: ${totalScore} points`);
+            
+            let feedback = 'Your policy settings create:\n\n';
+            feedback += `• ${Math.round(metrics.insured)}% insured population\n`;
+            feedback += `• $${Math.round(metrics.cost)} average out-of-pocket costs\n`;
+            feedback += `• ${Math.round(metrics.safety)}% medication safety\n\n`;
+            
+            if (totalScore > 80) {
+                feedback += 'Excellent balance! Your policies maximize coverage while maintaining safety and affordability.';
+            } else if (totalScore > 40) {
+                feedback += 'Good balance. Consider adjusting to better serve all patient needs.';
+            } else {
+                feedback += 'Review needed. Your policies heavily favor one area over others.';
+            }
+            
+            showFeedback(feedback, totalScore > 60 ? 'correct' : 'warning');
+        });
+
+        // Initialize
+        showFeedback('Welcome to Module 1: Federal Drug Laws & Regulations. Complete all 3 activities to master pharmacy law foundations.', 'info');
+    </script>
+</body>
+</html>
