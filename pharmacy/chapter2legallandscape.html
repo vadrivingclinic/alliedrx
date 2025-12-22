@@ -1,0 +1,2604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AlliedRx -- Module 1: The Legal Landscape & Regulatory Agencies</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-error: #e17055;
+            --color-warning: #fdcb6e;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
+            --color-dark: #0c0a18;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+            --shadow-card: 0 12px 30px rgba(15, 23, 42, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(circle at top left, #ffffff 0, #f1ecff 40%, var(--color-bg) 100%);
+            color: var(--color-text);
+            -webkit-text-size-adjust: 100%;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 12px; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes checkmarkPop {
+            0% { transform: scale(0); opacity: 0; }
+            70% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @media (max-width: 900px) {
+            .page { padding: 22px; }
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 0; }
+            .page {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 18px 14px 22px;
+            }
+        }
+
+        /* Header */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .brand-logo:hover { transform: scale(1.05); }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--color-success);
+            flex-shrink: 0;
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .badge-mode:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+        @media (max-width: 480px) {
+            .brand-row { flex-direction: column; align-items: flex-start; }
+            .badge-mode { margin-top: 6px; }
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 3vw, 2.2rem);
+            line-height: 1.1;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .module-subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 600px;
+            margin-bottom: 24px;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        /* Progress Tracker */
+        .progress-tracker {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            position: relative;
+            padding: 0 20px;
+        }
+
+        .progress-tracker::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 50px;
+            right: 50px;
+            height: 3px;
+            background: rgba(12, 10, 24, 0.08);
+            z-index: 1;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+
+        .step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--color-muted);
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.active .step-circle {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .progress-step.completed .step-circle {
+            background: var(--color-success);
+            border-color: var(--color-success);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.75rem;
+            color: var(--color-muted);
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .progress-step.active .step-label {
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        /* Progress Summary */
+        .progress-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+            animation: fadeInUp 0.6s ease-out 0.5s both;
+        }
+
+        .summary-card {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            border: 1px solid rgba(12, 10, 24, 0.06);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-card);
+            border-color: var(--color-primary-soft);
+        }
+
+        .summary-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--color-primary);
+            display: block;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .summary-label {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Activity Grid */
+        .activity-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 900px) {
+            .activity-grid { grid-template-columns: 1fr; }
+        }
+
+        .activity-card {
+            background: white;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            padding: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .activity-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--color-primary);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .activity-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--color-primary-soft);
+        }
+
+        .activity-card:hover::before { opacity: 1; }
+        .activity-card.completed { border-color: var(--color-success); }
+        .activity-card.completed::before { background: var(--color-success); opacity: 1; }
+
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .activity-number {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .activity-status {
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-muted);
+        }
+
+        .activity-card.completed .activity-status {
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--color-success);
+        }
+
+        .activity-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 8px;
+        }
+
+        .activity-description {
+            font-size: 0.9rem;
+            color: var(--color-muted);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        /* Activity 1: Timeline */
+        .timeline-container {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 50px;
+            right: 50px;
+            top: 40px;
+            height: 3px;
+            background: var(--color-primary);
+            z-index: 1;
+        }
+
+        .timeline-decades {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding: 0 10px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .decade-label {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+            font-weight: 600;
+        }
+
+        .timeline-dropzone {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 25px 15px 15px;
+            border: 2px dashed rgba(12, 10, 24, 0.1);
+            min-height: 220px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .timeline-dropzone.hover {
+            border-color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.05);
+        }
+
+        .timeline-dropzone.empty::after {
+            content: 'Drag federal drug laws to their correct decade on the timeline';
+            color: var(--color-muted);
+            text-align: center;
+            font-size: 0.9rem;
+            margin: auto;
+        }
+
+        .timeline-slot {
+            min-height: 50px;
+            border-radius: var(--radius-sm);
+            border: 2px dashed rgba(12, 10, 24, 0.1);
+            padding: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .law-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .law-item {
+            background: rgba(12, 10, 24, 0.05);
+            border-radius: 20px;
+            padding: 10px 16px;
+            font-size: 0.85rem;
+            cursor: grab;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+        }
+
+        .law-item:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            transform: translateY(-2px);
+        }
+
+        .law-item.dragging {
+            opacity: 0.7;
+            transform: scale(0.95);
+        }
+
+        .law-tooltip {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--color-dark);
+            color: white;
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 100;
+        }
+
+        .law-item:hover .law-tooltip { opacity: 1; }
+
+        /* Activity 2: Agency Match & Recall Quiz */
+        .match-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .match-container { grid-template-columns: 1fr; }
+        }
+
+        .agency-column {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 2px dashed rgba(12, 10, 24, 0.1);
+            min-height: 200px;
+        }
+
+        .agency-item {
+            background: rgba(175, 75, 239, 0.1);
+            border-radius: 12px;
+            padding: 10px;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .agency-item:hover {
+            background: rgba(175, 75, 239, 0.2);
+            border-color: var(--color-primary-soft);
+        }
+
+        .description-item {
+            background: rgba(131, 128, 240, 0.1);
+            border-radius: 12px;
+            padding: 10px;
+            margin-bottom: 10px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .description-item:hover {
+            background: rgba(131, 128, 240, 0.2);
+            border-color: var(--color-accent);
+        }
+
+        .scenario-box {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+        }
+
+        .scenario-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+        }
+
+        .scenario-text {
+            font-size: 0.9rem;
+            color: var(--color-text);
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .quiz-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        @media (max-width: 480px) {
+            .quiz-options { grid-template-columns: 1fr; }
+        }
+
+        .quiz-option {
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: var(--radius-sm);
+            padding: 12px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+
+        .quiz-option:hover {
+            background: rgba(175, 75, 239, 0.08);
+            border-color: var(--color-primary-soft);
+        }
+
+        .quiz-option.selected { background: rgba(0, 184, 148, 0.1); border-color: var(--color-success); }
+        .quiz-option.wrong { background: rgba(225, 112, 85, 0.1); border-color: var(--color-error); animation: shake 0.5s ease; }
+
+        .quick-law-box {
+            background: rgba(253, 203, 110, 0.1);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--color-warning);
+        }
+
+        .quick-law-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--color-warning);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .quick-law-text {
+            font-size: 0.85rem;
+            color: var(--color-text);
+        }
+
+        /* Activity 3: Controlled Substance Scheduler */
+        .schedule-container {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 900px) {
+            .schedule-container { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        @media (max-width: 600px) {
+            .schedule-container { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 400px) {
+            .schedule-container { grid-template-columns: 1fr; }
+        }
+
+        .schedule-box {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 2px dashed rgba(12, 10, 24, 0.1);
+            min-height: 180px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .schedule-box.hover {
+            border-color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.05);
+        }
+
+        .schedule-box.c-i { border-left: 4px solid var(--color-error); }
+        .schedule-box.c-ii { border-left: 4px solid #e170aa; }
+        .schedule-box.c-iii { border-left: 4px solid #f39c12; }
+        .schedule-box.c-iv { border-left: 4px solid #3498db; }
+        .schedule-box.c-v { border-left: 4px solid var(--color-success); }
+
+        .schedule-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+            text-align: center;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(12, 10, 24, 0.08);
+        }
+
+        .schedule-content {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .drug-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .drug-item {
+            background: rgba(12, 10, 24, 0.05);
+            border-radius: 20px;
+            padding: 8px 15px;
+            font-size: 0.85rem;
+            cursor: grab;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+        }
+
+        .drug-item:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            transform: translateY(-2px);
+        }
+
+        .drug-item.dragging {
+            opacity: 0.7;
+            transform: scale(0.95);
+        }
+
+        .security-tip {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--color-dark);
+            color: white;
+            padding: 6px 10px;
+            border-radius: var(--radius-sm);
+            font-size: 0.7rem;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 100;
+        }
+
+        .drug-item:hover .security-tip { opacity: 1; }
+
+        /* Activity 4: OSHA & TJC Safety Check */
+        .agency-quiz-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .agency-quiz-grid { grid-template-columns: 1fr; }
+        }
+
+        .agency-statement {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+        }
+
+        .statement-text {
+            font-size: 0.9rem;
+            color: var(--color-text);
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .agency-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .agency-btn {
+            flex: 1;
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            border: 2px solid transparent;
+            background: rgba(12, 10, 24, 0.05);
+            color: var(--color-text);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .agency-btn:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+        }
+
+        .agency-btn.selected.osha {
+            background: rgba(131, 128, 240, 0.2);
+            border-color: var(--color-accent);
+            color: var(--color-accent);
+        }
+
+        .agency-btn.selected.tjc {
+            background: rgba(0, 184, 148, 0.2);
+            border-color: var(--color-success);
+            color: var(--color-success);
+        }
+
+        .agency-btn.wrong {
+            background: rgba(225, 112, 85, 0.2);
+            border-color: var(--color-error);
+            color: var(--color-error);
+            animation: shake 0.5s ease;
+        }
+
+        .clinical-connection {
+            background: rgba(175, 75, 239, 0.08);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin-top: 15px;
+            border-left: 4px solid var(--color-primary);
+        }
+
+        .connection-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .connection-text {
+            font-size: 0.85rem;
+            color: var(--color-text);
+        }
+
+        /* Activity 5: DEA Number Validator */
+        .deaa-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+        }
+
+        .deaa-scenario {
+            margin-bottom: 20px;
+        }
+
+        .form-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .form-options { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 400px) {
+            .form-options { grid-template-columns: 1fr; }
+        }
+
+        .form-option {
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .form-option:hover {
+            background: rgba(175, 75, 239, 0.08);
+            border-color: var(--color-primary-soft);
+        }
+
+        .form-option.selected {
+            background: rgba(0, 184, 148, 0.1);
+            border-color: var(--color-success);
+        }
+
+        .form-option.wrong {
+            background: rgba(225, 112, 85, 0.1);
+            border-color: var(--color-error);
+            animation: shake 0.5s ease;
+        }
+
+        .form-number {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 5px;
+        }
+
+        .form-desc {
+            font-size: 0.8rem;
+            color: var(--color-text);
+        }
+
+        .calculator-box {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+        }
+
+        .dea-number-display {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--color-primary);
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+        }
+
+        .formula-steps {
+            background: white;
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            text-align: left;
+        }
+
+        .formula-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+        }
+
+        .formula-text {
+            font-size: 0.85rem;
+            color: var(--color-text);
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        .calc-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .calc-btn {
+            padding: 10px 20px;
+            border-radius: var(--radius-sm);
+            border: 2px solid var(--color-primary);
+            background: white;
+            color: var(--color-primary);
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .calc-btn:hover {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .validation-result {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: var(--radius-sm);
+            display: none;
+        }
+
+        .validation-result.valid {
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--color-success);
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .validation-result.invalid {
+            background: rgba(225, 112, 85, 0.1);
+            color: var(--color-error);
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .did-you-know {
+            background: rgba(131, 128, 240, 0.08);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin-top: 15px;
+            border-left: 4px solid var(--color-accent);
+        }
+
+        .dyn-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--color-accent);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dyn-text {
+            font-size: 0.85rem;
+            color: var(--color-text);
+        }
+
+        /* Safety Warning */
+        .safety-warning {
+            background: rgba(225, 112, 85, 0.1);
+            border: 2px solid var(--color-error);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin-top: 15px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .warning-icon {
+            font-size: 1.5rem;
+            color: var(--color-error);
+            flex-shrink: 0;
+        }
+
+        .warning-content {
+            flex: 1;
+        }
+
+        .warning-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--color-error);
+            margin-bottom: 5px;
+        }
+
+        .warning-text {
+            font-size: 0.85rem;
+            color: var(--color-text);
+        }
+
+        /* Feedback */
+        .feedback-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            margin-top: 20px;
+            display: none;
+        }
+
+        .feedback-container.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .feedback-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feedback-icon {
+            font-size: 1.2rem;
+        }
+
+        .feedback-icon.correct { color: var(--color-success); }
+        .feedback-icon.incorrect { color: var(--color-error); }
+
+        .feedback-content {
+            font-size: 0.85rem;
+            color: var(--color-text);
+            line-height: 1.5;
+        }
+
+        .feedback-content strong { color: var(--color-primary); }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #9a3bd6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(175, 75, 239, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-text);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(12, 10, 24, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-icon {
+            font-size: 1.1em;
+        }
+
+        /* Results Panel */
+        .results-panel {
+            background: var(--color-dark);
+            color: white;
+            border-radius: var(--radius-md);
+            padding: 30px;
+            margin-top: 30px;
+            display: none;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .results-panel.show {
+            display: block;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .results-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .score-display {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--color-primary-soft);
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .legal-insights {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .insights-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-primary-soft);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .insights-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .insights-list li {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            font-size: 0.9rem;
+            color: #e5e7eb;
+        }
+
+        .insight-dot {
+            width: 6px;
+            height: 6px;
+            margin-top: 6px;
+            border-radius: 999px;
+            background: var(--color-accent);
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="module-heading">
+        <!-- Header -->
+        <header class="brand-row">
+            <div class="brand">
+                <img
+                    src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                    alt="AlliedRx logo"
+                    class="brand-logo"
+                />
+                <div class="course-meta">
+                    <span class="course-name">Pharmacy Technician • Week 2</span>
+                    <div class="week-label">
+                        <span class="week-label-dot"></span>
+                        <span>Chapter 2: Pharmacy Law & Ethics</span>
+                    </div>
+                </div>
+            </div>
+            <span class="badge-mode">Campus & Online</span>
+        </header>
+
+        <h1 id="module-heading">The Legal Landscape & Regulatory Agencies</h1>
+        <p class="module-subtitle">
+            Master the timeline of federal drug laws, identify key regulatory agencies, and understand drug recalls and controlled substance handling.
+        </p>
+
+        <!-- Progress Tracker -->
+        <div class="progress-tracker">
+            <div class="progress-step active" data-step="1">
+                <div class="step-circle">1</div>
+                <div class="step-label">Law Timeline</div>
+            </div>
+            <div class="progress-step" data-step="2">
+                <div class="step-circle">2</div>
+                <div class="step-label">Agencies & Recalls</div>
+            </div>
+            <div class="progress-step" data-step="3">
+                <div class="step-circle">3</div>
+                <div class="step-label">Controlled Substances</div>
+            </div>
+            <div class="progress-step" data-step="4">
+                <div class="step-circle">4</div>
+                <div class="step-label">Safety Agencies</div>
+            </div>
+            <div class="progress-step" data-step="5">
+                <div class="step-circle">5</div>
+                <div class="step-label">DEA Validation</div>
+            </div>
+        </div>
+
+        <!-- Progress Summary -->
+        <div class="progress-summary">
+            <div class="summary-card">
+                <span class="summary-number" id="completed-count">0</span>
+                <span class="summary-label">Activities Completed</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="accuracy-rate">0%</span>
+                <span class="summary-label">Current Accuracy</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="time-spent">0:00</span>
+                <span class="summary-label">Time Spent</span>
+            </div>
+        </div>
+
+        <!-- Activity Grid -->
+        <div class="activity-grid">
+            <!-- Activity 1: Federal Drug Law Timeline -->
+            <section class="activity-card" id="activity-1" data-activity="1">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 1</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">Federal Drug Law Timeline</h3>
+                <p class="activity-description">
+                    Drag the major federal drug laws into the correct chronological order. Understanding this history is key to understanding today's regulations.
+                </p>
+
+                <!-- Timeline -->
+                <div class="timeline-container">
+                    <div class="timeline-line"></div>
+                    <div class="timeline-decades">
+                        <div class="decade-label">1900s</div>
+                        <div class="decade-label">1930s</div>
+                        <div class="decade-label">1970s</div>
+                        <div class="decade-label">1990s</div>
+                    </div>
+                    <div class="timeline-dropzone empty" id="timeline-dropzone">
+                        <div class="timeline-slot" data-decade="1900"></div>
+                        <div class="timeline-slot" data-decade="1930"></div>
+                        <div class="timeline-slot" data-decade="1970"></div>
+                        <div class="timeline-slot" data-decade="1990"></div>
+                    </div>
+                </div>
+
+                <!-- Law Items -->
+                <div class="law-items">
+                    <div class="law-item draggable" data-law="pure-food" data-decade="1900" draggable="true">
+                        Pure Food & Drug Act (1906)
+                        <div class="law-tooltip">First major consumer protection law 🛡️</div>
+                    </div>
+                    <div class="law-item draggable" data-law="fdc-act" data-decade="1930" draggable="true">
+                        Food, Drug & Cosmetic Act (1938)
+                        <div class="law-tooltip">Required proof of safety before marketing 💊</div>
+                    </div>
+                    <div class="law-item draggable" data-law="csa" data-decade="1970" draggable="true">
+                        Controlled Substances Act (1970)
+                        <div class="law-tooltip">Created drug schedules I-V ⚖️</div>
+                    </div>
+                    <div class="law-item draggable" data-law="poison-packaging" data-decade="1970" draggable="true">
+                        Poison Prevention Packaging Act (1970)
+                        <div class="law-tooltip">Required child-resistant packaging 👶</div>
+                    </div>
+                    <div class="law-item draggable" data-law="osha" data-decade="1970" draggable="true">
+                        Occupational Safety & Health Act (1970)
+                        <div class="law-tooltip">Created workplace safety standards 🏭</div>
+                    </div>
+                    <div class="law-item draggable" data-law="hipaa" data-decade="1990" draggable="true">
+                        HIPAA (1996)
+                        <div class="law-tooltip">Protected patient health information 🔒</div>
+                    </div>
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback-container" id="feedback-1">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Timeline Mastered!
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Correct Chronological Order:</strong><br>
+                        1. <strong>Pure Food & Drug Act (1906)</strong> - First consumer protection law<br>
+                        2. <strong>Food, Drug & Cosmetic Act (1938)</strong> - Required safety proof<br>
+                        3. <strong>Controlled Substances Act (1970)</strong> - Created drug schedules<br>
+                        4. <strong>Poison Prevention Packaging Act (1970)</strong> - Child-safe packaging<br>
+                        5. <strong>Occupational Safety & Health Act (1970)</strong> - Workplace safety<br>
+                        6. <strong>HIPAA (1996)</strong> - Protected health information<br><br>
+                        <strong>Key Insight:</strong> Each law built upon previous ones, creating today's comprehensive regulatory framework.
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity 2: Agency Match & Recall Quiz -->
+            <section class="activity-card" id="activity-2" data-activity="2">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 2</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">Agency Match-Up & Recall Rundown</h3>
+                <p class="activity-description">
+                    Match agencies to their functions, then test your knowledge on drug recalls and controlled substance rules.
+                </p>
+
+                <!-- Quick Law Check -->
+                <div class="quick-law-box">
+                    <div class="quick-law-title">
+                        <span>⚖️</span>
+                        Quick Law Check
+                    </div>
+                    <div class="quick-law-text">
+                        Remember: The DEA regulates controlled substances (C-I to C-V), while the FDA oversees drug safety and manufacturing.
+                    </div>
+                </div>
+
+                <!-- Agency Matching -->
+                <div class="match-container">
+                    <div class="agency-column" id="agency-column">
+                        <div class="agency-item" data-agency="fda">FDA</div>
+                        <div class="agency-item" data-agency="dea">DEA</div>
+                        <div class="agency-item" data-agency="osha">OSHA</div>
+                        <div class="agency-item" data-agency="bop">State BOP</div>
+                    </div>
+                    <div class="agency-column" id="desc-column">
+                        <div class="description-item" data-agency="fda">Ensures drug safety & efficacy</div>
+                        <div class="description-item" data-agency="dea">Regulates controlled substances</div>
+                        <div class="description-item" data-agency="osha">Workplace safety standards</div>
+                        <div class="description-item" data-agency="bop">Licenses pharmacists & pharmacies</div>
+                    </div>
+                </div>
+
+                <!-- Scenario Quiz -->
+                <div class="scenario-box">
+                    <div class="scenario-title">Scenario: Controlled Substance Discrepancy</div>
+                    <div class="scenario-text">
+                        You're inventorying a Schedule II substance and find a count discrepancy. Your first action is to:
+                    </div>
+                    <div class="quiz-options">
+                        <div class="quiz-option" data-answer="correct">Report to pharmacist-in-charge immediately</div>
+                        <div class="quiz-option" data-answer="wrong">Adjust the count to match records</div>
+                        <div class="quiz-option" data-answer="wrong">Wait until next inventory</div>
+                        <div class="quiz-option" data-answer="wrong">Document it privately</div>
+                    </div>
+                </div>
+
+                <div class="scenario-box">
+                    <div class="scenario-title">Scenario: Drug Recall Classification</div>
+                    <div class="scenario-text">
+                        A drug is recalled because a mislabeling could cause temporary health issues. This is a:
+                    </div>
+                    <div class="quiz-options">
+                        <div class="quiz-option" data-answer="wrong">Class I Recall</div>
+                        <div class="quiz-option" data-answer="correct">Class II Recall</div>
+                        <div class="quiz-option" data-answer="wrong">Class III Recall</div>
+                        <div class="quiz-option" data-answer="wrong">Market Withdrawal</div>
+                    </div>
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback-container" id="feedback-2">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Agencies & Recalls Understood!
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Agency Functions:</strong><br>
+                        • <strong>FDA</strong>: Drug safety, efficacy, manufacturing<br>
+                        • <strong>DEA</strong>: Controlled substances enforcement<br>
+                        • <strong>OSHA</strong>: Workplace safety (SDS, bloodborne pathogens)<br>
+                        • <strong>State BOP</strong>: Pharmacy practice regulation<br><br>
+                        <strong>Recall Classes:</strong><br>
+                        • <strong>Class I</strong>: Dangerous/defective - serious health consequences<br>
+                        • <strong>Class II</strong>: Temporary/reversible health issues<br>
+                        • <strong>Class III</strong>: Minor violation - unlikely to cause adverse effects<br><br>
+                        <strong>Critical:</strong> All controlled substance discrepancies must be reported immediately!
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity 3: Controlled Substance Scheduler -->
+            <section class="activity-card" id="activity-3" data-activity="3">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 3</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">Controlled Substance Scheduler</h3>
+                <p class="activity-description">
+                    Sort drug examples and handling requirements into the correct DEA schedule (C-I to C-V). Understanding schedules is crucial for daily pharmacy operations.
+                </p>
+
+                <!-- Schedule Boxes -->
+                <div class="schedule-container">
+                    <div class="schedule-box c-i" data-schedule="1" id="schedule-1">
+                        <div class="schedule-title">Schedule I</div>
+                        <div class="schedule-content"></div>
+                    </div>
+                    <div class="schedule-box c-ii" data-schedule="2" id="schedule-2">
+                        <div class="schedule-title">Schedule II</div>
+                        <div class="schedule-content"></div>
+                    </div>
+                    <div class="schedule-box c-iii" data-schedule="3" id="schedule-3">
+                        <div class="schedule-title">Schedule III</div>
+                        <div class="schedule-content"></div>
+                    </div>
+                    <div class="schedule-box c-iv" data-schedule="4" id="schedule-4">
+                        <div class="schedule-title">Schedule IV</div>
+                        <div class="schedule-content"></div>
+                    </div>
+                    <div class="schedule-box c-v" data-schedule="5" id="schedule-5">
+                        <div class="schedule-title">Schedule V</div>
+                        <div class="schedule-content"></div>
+                    </div>
+                </div>
+
+                <!-- Drug Items -->
+                <div class="drug-items">
+                    <div class="drug-item draggable" data-schedule="1" draggable="true">
+                        Heroin
+                        <div class="security-tip">No accepted medical use</div>
+                    </div>
+                    <div class="drug-item draggable" data-schedule="2" draggable="true">
+                        Oxycodone
+                        <div class="security-tip">High abuse potential</div>
+                    </div>
+                    <div class="drug-item draggable" data-schedule="3" draggable="true">
+                        Testosterone
+                        <div class="security-tip">Moderate abuse potential</div>
+                    </div>
+                    <div class="drug-item draggable" data-schedule="4" draggable="true">
+                        Xanax
+                        <div class="security-tip">Low abuse potential</div>
+                    </div>
+                    <div class="drug-item draggable" data-schedule="5" draggable="true">
+                        Lyrica
+                        <div class="security-tip">Limited abuse potential</div>
+                    </div>
+                    <div class="drug-item draggable" data-schedule="2" draggable="true">
+                        Fentanyl
+                        <div class="security-tip">No refills allowed</div>
+                    </div>
+                    <div class="drug-item draggable" data-schedule="4" draggable="true">
+                        Ambien
+                        <div class="security-tip">Max 5 refills in 6 months</div>
+                    </div>
+                    <div class="drug-item draggable" data-schedule="5" draggable="true">
+                        Cough syrup with codeine
+                        <div class="security-tip">May be OTC in some states</div>
+                    </div>
+                </div>
+
+                <!-- Safety Warning -->
+                <div class="safety-warning" id="scheduling-warning" style="display: none;">
+                    <div class="warning-icon">⚠️</div>
+                    <div class="warning-content">
+                        <div class="warning-title">Scheduling Error!</div>
+                        <div class="warning-text">
+                            Mis-scheduling controlled substances can lead to serious legal consequences, including license revocation and criminal charges.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback-container" id="feedback-3">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Schedules Mastered!
+                    </div>
+                    <div class="feedback-content">
+                        <strong>DEA Schedule Overview:</strong><br>
+                        • <strong>Schedule I</strong>: No accepted medical use, high abuse (Heroin, LSD, Marijuana*)<br>
+                        • <strong>Schedule II</strong>: High abuse, severe dependence (Oxycodone, Fentanyl, Adderall)<br>
+                        • <strong>Schedule III</strong>: Moderate abuse (Testosterone, Ketamine, Tylenol with Codeine)<br>
+                        • <strong>Schedule IV</strong>: Low abuse (Xanax, Ambien, Valium)<br>
+                        • <strong>Schedule V</strong>: Limited abuse (Lyrica, Lomotil, some cough preparations)<br><br>
+                        <strong>Key Regulations:</strong><br>
+                        • C-II: No refills, written Rx required (except emergencies)<br>
+                        • C-III-V: Max 5 refills within 6 months<br>
+                        • C-V: Some may be OTC depending on state law<br>
+                        <em>*Note: Marijuana remains Schedule I federally despite state laws.</em>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity 4: OSHA & TJC Safety Check -->
+            <section class="activity-card" id="activity-4" data-activity="4">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 4</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">Workplace Safety & Compliance</h3>
+                <p class="activity-description">
+                    Identify which agency—OSHA or The Joint Commission (TJC)—is primarily responsible for various pharmacy safety and quality standards.
+                </p>
+
+                <!-- Agency Quiz -->
+                <div class="agency-quiz-grid">
+                    <div class="agency-statement">
+                        <div class="statement-text">
+                            Requires a Safety Data Sheet (SDS) for hazardous chemicals.
+                        </div>
+                        <div class="agency-buttons">
+                            <button class="agency-btn" data-agency="osha">OSHA</button>
+                            <button class="agency-btn" data-agency="tjc">TJC</button>
+                        </div>
+                    </div>
+                    <div class="agency-statement">
+                        <div class="statement-text">
+                            Conducts unannounced surveys for hospital accreditation.
+                        </div>
+                        <div class="agency-buttons">
+                            <button class="agency-btn" data-agency="osha">OSHA</button>
+                            <button class="agency-btn" data-agency="tjc">TJC</button>
+                        </div>
+                    </div>
+                    <div class="agency-statement">
+                        <div class="statement-text">
+                            Mandates a written Exposure Control Plan for bloodborne pathogens.
+                        </div>
+                        <div class="agency-buttons">
+                            <button class="agency-btn" data-agency="osha">OSHA</button>
+                            <button class="agency-btn" data-agency="tjc">TJC</button>
+                        </div>
+                    </div>
+                    <div class="agency-statement">
+                        <div class="statement-text">
+                            Sets standards for medication storage and security.
+                        </div>
+                        <div class="agency-buttons">
+                            <button class="agency-btn" data-agency="osha">OSHA</button>
+                            <button class="agency-btn" data-agency="tjc">TJC</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Clinical Connection -->
+                <div class="clinical-connection">
+                    <div class="connection-title">
+                        <span>🩺</span>
+                        Clinical Connection
+                    </div>
+                    <div class="connection-text">
+                        <strong>OSHA protects employee safety.</strong> TJC ensures <strong>patient safety and quality of care.</strong> Both are essential! Proper hazardous drug handling, for example, satisfies both OSHA's employee protection standards and TJC's patient safety requirements.
+                    </div>
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback-container" id="feedback-4">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Safety Agencies Clarified!
+                    </div>
+                    <div class="feedback-content">
+                        <strong>OSHA (Occupational Safety & Health Administration):</strong><br>
+                        • Focus: <strong>Employee workplace safety</strong><br>
+                        • Key Requirements: SDS sheets, Exposure Control Plans, PPE, hazard communication<br>
+                        • Enforcement: Fines and citations for violations<br><br>
+                        <strong>TJC (The Joint Commission):</strong><br>
+                        • Focus: <strong>Patient safety & quality of care</strong><br>
+                        • Key Requirements: Medication management, infection control, patient rights<br>
+                        • Enforcement: Accreditation status (required for Medicare/Medicaid reimbursement)<br><br>
+                        <strong>Practical Tip:</strong> While their focuses differ, compliance with both is essential for safe, effective, and legally compliant pharmacy practice.
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity 5: DEA Number Validator -->
+            <section class="activity-card" id="activity-5" data-activity="5">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 5</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">DEA Number Validator</h3>
+                <p class="activity-description">
+                    Practice the critical skill of verifying a DEA number and identifying the correct form for a controlled substance order.
+                </p>
+
+                <div class="deaa-container">
+                    <!-- Form Selection -->
+                    <div class="deaa-scenario">
+                        <div class="scenario-title">Scenario: Schedule II Order</div>
+                        <div class="scenario-text">
+                            Your pharmacy needs to order Schedule II drugs from a wholesaler. Which DEA form is required?
+                        </div>
+                    </div>
+
+                    <div class="form-options">
+                        <div class="form-option" data-form="106">
+                            <div class="form-number">Form 106</div>
+                            <div class="form-desc">Report of Theft or Loss</div>
+                        </div>
+                        <div class="form-option" data-form="222">
+                            <div class="form-number">Form 222</div>
+                            <div class="form-desc">Order for Schedule II</div>
+                        </div>
+                        <div class="form-option" data-form="41">
+                            <div class="form-number">Form 41</div>
+                            <div class="form-desc">Registrant's Inventory</div>
+                        </div>
+                    </div>
+
+                    <!-- DEA Number Calculator -->
+                    <div class="calculator-box">
+                        <div class="dea-number-display" id="dea-number">AB1234563</div>
+                        
+                        <div class="formula-steps">
+                            <div class="formula-title">DEA Number Verification Formula:</div>
+                            <div class="formula-text">
+                                1. Add: 1st + 3rd + 5th digits<br>
+                                2. Add: 2nd + 4th + 6th digits, then multiply by 2<br>
+                                3. Add both sums together<br>
+                                4. Last digit of total must match check digit (7th digit)
+                            </div>
+                            <div class="formula-text">
+                                For <strong>AB1234563</strong>:<br>
+                                (1+3+5) + 2*(2+4+6) = 9 + 2*12 = 9 + 24 = <strong>33</strong><br>
+                                Last digit is <strong>3</strong> ✓ Check digit is <strong>3</strong> ✓
+                            </div>
+                        </div>
+
+                        <div class="calc-buttons">
+                            <button class="calc-btn" id="validate-btn">Validate This DEA #</button>
+                            <button class="calc-btn" id="new-dea-btn">Generate New DEA #</button>
+                        </div>
+
+                        <div class="validation-result" id="validation-result"></div>
+                    </div>
+                </div>
+
+                <!-- Did You Know -->
+                <div class="did-you-know">
+                    <div class="dyn-title">
+                        <span>🤔</span>
+                        Did You Know?
+                    </div>
+                    <div class="dyn-text">
+                        A prescriber's DEA number follows a specific format: First letter = license type (A, B, or M), Second letter = first letter of last name. For example, <strong>AB1234563</strong> indicates the registrant's last name starts with "B".
+                    </div>
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback-container" id="feedback-5">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        DEA Procedures Mastered!
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Key DEA Forms:</strong><br>
+                        • <strong>Form 222</strong>: Required for ordering Schedule II substances (now largely electronic as CSOS)<br>
+                        • <strong>Form 106</strong>: Report lost/stolen controlled substances<br>
+                        • <strong>Form 41</strong>: Destroy unwanted controlled substances<br><br>
+                        <strong>DEA Number Verification:</strong><br>
+                        • Always verify prescriber DEA numbers - fake numbers are common in fraud<br>
+                        • Formula: (1st+3rd+5th) + 2*(2nd+4th+6th). Last digit of sum = check digit<br>
+                        • Example: AB1234563 → (1+3+5) + 2*(2+4+6) = 9 + 24 = 33 → check digit = 3 ✓<br><br>
+                        <strong>Critical Safety Step:</strong> Validating DEA numbers prevents diversion and protects your pharmacy's license.
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn btn-secondary" id="reset-all-btn">
+                <span class="btn-icon">↻</span>
+                Reset All Activities
+            </button>
+            <button class="btn btn-secondary" id="check-answers-btn">
+                <span class="btn-icon">✓</span>
+                Check All Answers
+            </button>
+            <button class="btn btn-primary" id="view-results-btn">
+                <span class="btn-icon">📊</span>
+                View Final Results
+            </button>
+        </div>
+
+        <!-- Results Panel -->
+        <div class="results-panel" id="results-panel">
+            <div class="results-header">
+                <h2 class="results-title">Legal & Regulatory Proficiency Results</h2>
+                <div class="score-display" id="final-score">0%</div>
+            </div>
+
+            <div class="legal-insights">
+                <h3 class="insights-title">
+                    <span>⚖️</span> Legal & Regulatory Insights
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Historical Context:</strong> Each drug law was a response to public health crises. The 1906 Act addressed patent medicines, the 1938 Act followed the Elixir Sulfanilamide tragedy, and the 1970 CSA addressed drug abuse epidemics.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Agency Jurisdiction:</strong> FDA = safety/efficacy, DEA = controlled substances, OSHA = employee safety, TJC = patient care quality. Know which agency governs each aspect of pharmacy practice.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Controlled Substance Hierarchy:</strong> Schedule I (no medical use) to V (limited abuse). C-II has the strictest controls: no refills, written Rx required (except emergencies), and special inventory requirements.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Recall Protocols:</strong> Class I (remove immediately), Class II (remove promptly), Class III (may not require removal). Always follow manufacturer and FDA guidance exactly.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Verification Culture:</strong> Always verify DEA numbers, check recall lists daily, and double-check controlled substance counts. These verifications protect patients and your license.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="legal-insights" style="margin-top: 20px;">
+                <h3 class="insights-title">
+                    <span>📋</span> Compliance Documentation
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Record Retention:</strong> Controlled substance records must be kept for 2 years (federal minimum), but many states require longer. Know your state's specific requirements.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Training Documentation:</strong> Document all staff training on controlled substances, HIPAA, and safety procedures. This is evidence of due diligence during inspections.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Inspection Preparedness:</strong> DEA inspections can be unannounced. Maintain organized logs of all C-II transactions, discrepancy reports, and destruction records.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Quality Indicators:</strong> Monitor controlled substance discrepancy rates, recall response times, and training completion rates as quality metrics.</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // State Management
+            const state = {
+                activities: {
+                    1: { completed: false, correct: 0, total: 6, score: 0 },
+                    2: { completed: false, correct: 0, total: 12, score: 0 }, // 4 matches + 8 quiz questions
+                    3: { completed: false, correct: 0, total: 8, score: 0 },
+                    4: { completed: false, correct: 0, total: 4, score: 0 },
+                    5: { completed: false, correct: 0, total: 2, score: 0 }
+                },
+                startedAt: new Date(),
+                timeSpent: 0
+            };
+
+            // DOM Elements
+            const progressSteps = document.querySelectorAll('.progress-step');
+            const activityCards = document.querySelectorAll('.activity-card');
+            const completedCount = document.getElementById('completed-count');
+            const accuracyRate = document.getElementById('accuracy-rate');
+            const timeSpent = document.getElementById('time-spent');
+            const resetBtn = document.getElementById('reset-all-btn');
+            const checkBtn = document.getElementById('check-answers-btn');
+            const resultsBtn = document.getElementById('view-results-btn');
+            const resultsPanel = document.getElementById('results-panel');
+            const finalScore = document.getElementById('final-score');
+            const validateBtn = document.getElementById('validate-btn');
+            const newDeaBtn = document.getElementById('new-dea-btn');
+            const validationResult = document.getElementById('validation-result');
+            const deaNumber = document.getElementById('dea-number');
+
+            // Timer for time spent
+            function updateTimer() {
+                const now = new Date();
+                const diff = Math.floor((now - state.startedAt) / 1000);
+                state.timeSpent = diff;
+                const minutes = Math.floor(diff / 60);
+                const seconds = diff % 60;
+                timeSpent.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            }
+            setInterval(updateTimer, 1000);
+
+            // Update Progress Summary
+            function updateProgressSummary() {
+                let completed = 0;
+                let totalCorrect = 0;
+                let totalItems = 0;
+
+                Object.values(state.activities).forEach(activity => {
+                    if (activity.completed) completed++;
+                    totalCorrect += activity.correct;
+                    totalItems += activity.total;
+                });
+
+                completedCount.textContent = completed;
+                const accuracy = totalItems > 0 ? Math.round((totalCorrect / totalItems) * 100) : 0;
+                accuracyRate.textContent = `${accuracy}%`;
+
+                // Update progress steps
+                progressSteps.forEach((step, index) => {
+                    if (index < completed) {
+                        step.classList.add('completed');
+                        step.classList.remove('active');
+                    } else if (index === completed) {
+                        step.classList.add('active');
+                        step.classList.remove('completed');
+                    } else {
+                        step.classList.remove('active', 'completed');
+                    }
+                });
+            }
+
+            // Activity 1: Timeline Drag-and-Drop
+            function initActivity1() {
+                const lawItems = document.querySelectorAll('#activity-1 .law-item');
+                const dropzone = document.getElementById('timeline-dropzone');
+                const timelineSlots = dropzone.querySelectorAll('.timeline-slot');
+                const feedback = document.getElementById('feedback-1');
+                const status = document.querySelector('#activity-1 .activity-status');
+
+                const correctPlacements = {
+                    'pure-food': '1900',
+                    'fdc-act': '1930',
+                    'csa': '1970',
+                    'poison-packaging': '1970',
+                    'osha': '1970',
+                    'hipaa': '1990'
+                };
+
+                let placedItems = 0;
+                let correctCount = 0;
+
+                // Setup drag and drop
+                lawItems.forEach(item => {
+                    item.addEventListener('dragstart', function(e) {
+                        e.dataTransfer.setData('text/plain', JSON.stringify({
+                            law: this.dataset.law,
+                            text: this.textContent.trim().split('\n')[0],
+                            decade: this.dataset.decade
+                        }));
+                        this.classList.add('dragging');
+                    });
+
+                    item.addEventListener('dragend', function() {
+                        this.classList.remove('dragging');
+                    });
+                });
+
+                timelineSlots.forEach(slot => {
+                    slot.addEventListener('dragover', function(e) {
+                        e.preventDefault();
+                        this.style.backgroundColor = 'rgba(175, 75, 239, 0.1)';
+                        this.style.borderColor = 'var(--color-primary)';
+                    });
+
+                    slot.addEventListener('dragleave', function() {
+                        this.style.backgroundColor = '';
+                        this.style.borderColor = '';
+                    });
+
+                    slot.addEventListener('drop', function(e) {
+                        e.preventDefault();
+                        this.style.backgroundColor = '';
+                        this.style.borderColor = '';
+
+                        const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+                        const targetDecade = this.dataset.decade;
+                        
+                        // Check if slot is empty
+                        if (this.children.length === 0) {
+                            // Check if placement is correct
+                            const isCorrect = correctPlacements[data.law] === targetDecade;
+                            
+                            const lawDiv = document.createElement('div');
+                            lawDiv.className = 'law-item placed';
+                            lawDiv.textContent = data.text;
+                            lawDiv.style.background = isCorrect ? 'rgba(0, 184, 148, 0.1)' : 'rgba(225, 112, 85, 0.1)';
+                            lawDiv.style.border = isCorrect ? '2px solid var(--color-success)' : '2px solid var(--color-error)';
+                            lawDiv.style.cursor = 'default';
+                            
+                            this.appendChild(lawDiv);
+                            
+                            // Hide original item
+                            const originalItem = document.querySelector(`#activity-1 .law-item[data-law="${data.law}"]`);
+                            if (originalItem) {
+                                originalItem.style.display = 'none';
+                                placedItems++;
+                                if (isCorrect) correctCount++;
+                            }
+                            
+                            // Check completion
+                            if (placedItems === 6) {
+                                state.activities[1].completed = true;
+                                state.activities[1].correct = correctCount;
+                                state.activities[1].score = Math.round((correctCount / 6) * 100);
+                                status.textContent = 'Completed';
+                                status.style.color = '#00b894';
+                                document.querySelector('#activity-1').classList.add('completed');
+                                feedback.classList.add('show');
+                                updateProgressSummary();
+                            }
+                        }
+                    });
+                });
+            }
+
+            // Activity 2: Agency Match & Recall Quiz
+            function initActivity2() {
+                const agencyItems = document.querySelectorAll('#activity-2 .agency-item');
+                const descItems = document.querySelectorAll('#activity-2 .description-item');
+                const quizOptions = document.querySelectorAll('#activity-2 .quiz-option');
+                const feedback = document.getElementById('feedback-2');
+                const status = document.querySelector('#activity-2 .activity-status');
+
+                const correctMatches = {
+                    'fda': 'Ensures drug safety & efficacy',
+                    'dea': 'Regulates controlled substances',
+                    'osha': 'Workplace safety standards',
+                    'bop': 'Licenses pharmacists & pharmacies'
+                };
+
+                const correctAnswers = {
+                    'scenario1': 'Report to pharmacist-in-charge immediately',
+                    'scenario2': 'Class II Recall'
+                };
+
+                let matchesMade = 0;
+                let correctMatchesCount = 0;
+                let quizAnswers = { scenario1: null, scenario2: null };
+
+                // Agency Matching
+                agencyItems.forEach(agency => {
+                    agency.addEventListener('click', function() {
+                        if (state.activities[2].completed) return;
+                        
+                        const agencyType = this.dataset.agency;
+                        const selectedDesc = document.querySelector(`#activity-2 .description-item[data-agency="${agencyType}"]`);
+                        
+                        if (selectedDesc && !this.classList.contains('matched')) {
+                            this.classList.add('matched');
+                            selectedDesc.classList.add('matched');
+                            
+                            matchesMade++;
+                            if (correctMatches[agencyType] === selectedDesc.textContent) {
+                                correctMatchesCount++;
+                                this.style.background = 'rgba(0, 184, 148, 0.2)';
+                                selectedDesc.style.background = 'rgba(0, 184, 148, 0.2)';
+                            } else {
+                                this.style.background = 'rgba(225, 112, 85, 0.2)';
+                                selectedDesc.style.background = 'rgba(225, 112, 85, 0.2)';
+                            }
+                            
+                            checkActivity2Completion();
+                        }
+                    });
+                });
+
+                // Quiz Questions
+                quizOptions.forEach(option => {
+                    option.addEventListener('click', function() {
+                        if (state.activities[2].completed) return;
+                        
+                        const scenario = this.closest('.scenario-box');
+                        const scenarioIndex = Array.from(document.querySelectorAll('#activity-2 .scenario-box')).indexOf(scenario);
+                        const answerKey = `scenario${scenarioIndex + 1}`;
+                        
+                        // Clear previous selection in this scenario
+                        scenario.querySelectorAll('.quiz-option').forEach(opt => {
+                            opt.classList.remove('selected', 'wrong');
+                        });
+                        
+                        // Mark this option
+                        const isCorrect = this.dataset.answer === 'correct';
+                        this.classList.add(isCorrect ? 'selected' : 'wrong');
+                        
+                        if (!isCorrect) {
+                            this.classList.add('wrong');
+                            // Show correct answer
+                            scenario.querySelectorAll('.quiz-option').forEach(opt => {
+                                if (opt.dataset.answer === 'correct') {
+                                    opt.classList.add('selected');
+                                }
+                            });
+                        }
+                        
+                        quizAnswers[answerKey] = isCorrect;
+                        checkActivity2Completion();
+                    });
+                });
+
+                function checkActivity2Completion() {
+                    const allMatched = matchesMade === 4;
+                    const allQuizAnswered = quizAnswers.scenario1 !== null && quizAnswers.scenario2 !== null;
+                    
+                    if (allMatched && allQuizAnswered) {
+                        const quizCorrect = (quizAnswers.scenario1 ? 1 : 0) + (quizAnswers.scenario2 ? 1 : 0);
+                        const totalCorrect = correctMatchesCount + quizCorrect;
+                        
+                        state.activities[2].completed = true;
+                        state.activities[2].correct = totalCorrect;
+                        state.activities[2].score = Math.round((totalCorrect / 12) * 100);
+                        status.textContent = 'Completed';
+                        status.style.color = '#00b894';
+                        document.querySelector('#activity-2').classList.add('completed');
+                        feedback.classList.add('show');
+                        updateProgressSummary();
+                    }
+                }
+            }
+
+            // Activity 3: Controlled Substance Scheduler
+            function initActivity3() {
+                const drugItems = document.querySelectorAll('#activity-3 .drug-item');
+                const scheduleBoxes = document.querySelectorAll('#activity-3 .schedule-box');
+                const warning = document.getElementById('scheduling-warning');
+                const feedback = document.getElementById('feedback-3');
+                const status = document.querySelector('#activity-3 .activity-status');
+
+                const correctSchedules = {
+                    'Heroin': '1',
+                    'Oxycodone': '2',
+                    'Testosterone': '3',
+                    'Xanax': '4',
+                    'Lyrica': '5',
+                    'Fentanyl': '2',
+                    'Ambien': '4',
+                    'Cough syrup with codeine': '5'
+                };
+
+                let placedItems = 0;
+                let correctPlacements = 0;
+
+                // Setup drag and drop
+                drugItems.forEach(item => {
+                    item.addEventListener('dragstart', function(e) {
+                        e.dataTransfer.setData('text/plain', JSON.stringify({
+                            drug: this.textContent.trim().split('\n')[0],
+                            schedule: this.dataset.schedule
+                        }));
+                        this.classList.add('dragging');
+                    });
+
+                    item.addEventListener('dragend', function() {
+                        this.classList.remove('dragging');
+                    });
+                });
+
+                scheduleBoxes.forEach(box => {
+                    box.addEventListener('dragover', function(e) {
+                        e.preventDefault();
+                        this.classList.add('hover');
+                    });
+
+                    box.addEventListener('dragleave', function() {
+                        this.classList.remove('hover');
+                    });
+
+                    box.addEventListener('drop', function(e) {
+                        e.preventDefault();
+                        this.classList.remove('hover');
+
+                        const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+                        const targetSchedule = this.dataset.schedule;
+
+                        // Check if drug already placed
+                        const existingDrug = Array.from(this.querySelectorAll('.schedule-content div'))
+                            .find(div => div.textContent === data.drug);
+                        
+                        if (!existingDrug) {
+                            // Check if placement is correct
+                            const isCorrect = correctSchedules[data.drug] === targetSchedule;
+                            
+                            const drugDiv = document.createElement('div');
+                            drugDiv.textContent = data.drug;
+                            drugDiv.style.padding = '6px 10px';
+                            drugDiv.style.margin = '4px 0';
+                            drugDiv.style.background = isCorrect ? 
+                                (targetSchedule === '1' ? 'rgba(225, 112, 85, 0.1)' :
+                                 targetSchedule === '2' ? 'rgba(225, 112, 170, 0.1)' :
+                                 targetSchedule === '3' ? 'rgba(243, 156, 18, 0.1)' :
+                                 targetSchedule === '4' ? 'rgba(52, 152, 219, 0.1)' :
+                                 'rgba(0, 184, 148, 0.1)') : 
+                                'rgba(225, 112, 85, 0.2)';
+                            drugDiv.style.borderRadius = '8px';
+                            drugDiv.style.fontSize = '0.8rem';
+                            drugDiv.style.border = isCorrect ? '1px solid transparent' : '1px solid var(--color-error)';
+                            
+                            this.querySelector('.schedule-content').appendChild(drugDiv);
+                            
+                            // Hide original item
+                            const originalItem = Array.from(drugItems).find(item => 
+                                item.textContent.trim().split('\n')[0] === data.drug && 
+                                item.style.display !== 'none'
+                            );
+                            
+                            if (originalItem) {
+                                originalItem.style.display = 'none';
+                                placedItems++;
+                                if (isCorrect) correctPlacements++;
+                            }
+                            
+                            // Check completion
+                            if (placedItems === 8) {
+                                state.activities[3].completed = true;
+                                state.activities[3].correct = correctPlacements;
+                                state.activities[3].score = Math.round((correctPlacements / 8) * 100);
+                                status.textContent = 'Completed';
+                                status.style.color = '#00b894';
+                                document.querySelector('#activity-3').classList.add('completed');
+                                feedback.classList.add('show');
+                                
+                                if (correctPlacements < 8) {
+                                    warning.style.display = 'flex';
+                                }
+                                
+                                updateProgressSummary();
+                            }
+                        }
+                    });
+                });
+            }
+
+            // Activity 4: OSHA & TJC Safety Check
+            function initActivity4() {
+                const agencyButtons = document.querySelectorAll('#activity-4 .agency-btn');
+                const feedback = document.getElementById('feedback-4');
+                const status = document.querySelector('#activity-4 .activity-status');
+
+                const correctAnswers = {
+                    0: 'osha',  // SDS sheets
+                    1: 'tjc',   // Accreditation surveys
+                    2: 'osha',  // Exposure Control Plan
+                    3: 'tjc'    // Medication storage standards
+                };
+
+                let answered = 0;
+                let correctAnswersCount = 0;
+
+                agencyButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        if (state.activities[4].completed) return;
+                        
+                        const statement = this.closest('.agency-statement');
+                        const statementIndex = Array.from(document.querySelectorAll('#activity-4 .agency-statement')).indexOf(statement);
+                        const selectedAgency = this.dataset.agency;
+                        const isCorrect = correctAnswers[statementIndex] === selectedAgency;
+                        
+                        // Clear other buttons in this statement
+                        statement.querySelectorAll('.agency-btn').forEach(btn => {
+                            btn.classList.remove('selected', 'wrong');
+                        });
+                        
+                        // Mark this button
+                        this.classList.add(isCorrect ? 'selected' : 'wrong');
+                        if (isCorrect) {
+                            this.classList.add(selectedAgency);
+                        }
+                        
+                        // Prevent further changes to this statement
+                        statement.querySelectorAll('.agency-btn').forEach(btn => {
+                            btn.style.pointerEvents = 'none';
+                        });
+                        
+                        answered++;
+                        if (isCorrect) correctAnswersCount++;
+                        
+                        if (answered === 4) {
+                            state.activities[4].completed = true;
+                            state.activities[4].correct = correctAnswersCount;
+                            state.activities[4].score = Math.round((correctAnswersCount / 4) * 100);
+                            status.textContent = 'Completed';
+                            status.style.color = '#00b894';
+                            document.querySelector('#activity-4').classList.add('completed');
+                            feedback.classList.add('show');
+                            updateProgressSummary();
+                        }
+                    });
+                });
+            }
+
+            // Activity 5: DEA Number Validator
+            function initActivity5() {
+                const formOptions = document.querySelectorAll('#activity-5 .form-option');
+                const feedback = document.getElementById('feedback-5');
+                const status = document.querySelector('#activity-5 .activity-status');
+
+                // Sample DEA numbers for validation
+                const sampleDEANumbers = [
+                    'AB1234563', // Valid
+                    'BB9876542', // Valid
+                    'XX1111119', // Invalid
+                    'MM5555550'  // Valid
+                ];
+
+                let currentDEAIndex = 0;
+                let formSelected = false;
+                let formCorrect = false;
+                let deaValidated = false;
+                let deaCorrect = false;
+
+                // Form Selection
+                formOptions.forEach(option => {
+                    option.addEventListener('click', function() {
+                        if (state.activities[5].completed) return;
+                        
+                        // Clear previous selection
+                        formOptions.forEach(opt => opt.classList.remove('selected', 'wrong'));
+                        
+                        const selectedForm = this.dataset.form;
+                        formSelected = true;
+                        formCorrect = selectedForm === '222';
+                        
+                        this.classList.add(formCorrect ? 'selected' : 'wrong');
+                        
+                        checkActivity5Completion();
+                    });
+                });
+
+                // DEA Number Validation
+                function validateDEANumber(number) {
+                    // Format: LetterLetterDigitDigitDigitDigitDigitDigitDigit
+                    // Validation formula: 
+                    // 1. Sum of 1st, 3rd, 5th digits
+                    // 2. Sum of 2nd, 4th, 6th digits, multiplied by 2
+                    // 3. Add both sums
+                    // 4. Last digit of total must match check digit (7th digit)
+                    
+                    const digits = number.slice(2).split('').map(Number);
+                    if (digits.length !== 7) return false;
+                    
+                    const sum1 = digits[0] + digits[2] + digits[4];
+                    const sum2 = (digits[1] + digits[3] + digits[5]) * 2;
+                    const total = sum1 + sum2;
+                    const lastDigit = total % 10;
+                    
+                    return lastDigit === digits[6];
+                }
+
+                validateBtn.addEventListener('click', function() {
+                    if (state.activities[5].completed) return;
+                    
+                    const currentNumber = deaNumber.textContent;
+                    const isValid = validateDEANumber(currentNumber);
+                    deaValidated = true;
+                    deaCorrect = isValid;
+                    
+                    validationResult.textContent = isValid ? '✅ DEA Number is VALID' : '❌ DEA Number is INVALID';
+                    validationResult.className = `validation-result ${isValid ? 'valid' : 'invalid'}`;
+                    
+                    checkActivity5Completion();
+                });
+
+                newDeaBtn.addEventListener('click', function() {
+                    currentDEAIndex = (currentDEAIndex + 1) % sampleDEANumbers.length;
+                    deaNumber.textContent = sampleDEANumbers[currentDEAIndex];
+                    validationResult.className = 'validation-result';
+                    validationResult.textContent = '';
+                    deaValidated = false;
+                });
+
+                function checkActivity5Completion() {
+                    if (formSelected && deaValidated) {
+                        const totalCorrect = (formCorrect ? 1 : 0) + (deaCorrect ? 1 : 0);
+                        
+                        state.activities[5].completed = true;
+                        state.activities[5].correct = totalCorrect;
+                        state.activities[5].score = Math.round((totalCorrect / 2) * 100);
+                        status.textContent = 'Completed';
+                        status.style.color = '#00b894';
+                        document.querySelector('#activity-5').classList.add('completed');
+                        feedback.classList.add('show');
+                        updateProgressSummary();
+                    }
+                }
+            }
+
+            // Reset All Activities
+            function resetAllActivities() {
+                // Reset state
+                Object.keys(state.activities).forEach(key => {
+                    state.activities[key] = {
+                        completed: false,
+                        correct: 0,
+                        total: parseInt(key) === 1 ? 6 : parseInt(key) === 2 ? 12 : 
+                               parseInt(key) === 3 ? 8 : parseInt(key) === 4 ? 4 : 2,
+                        score: 0
+                    };
+                });
+
+                state.startedAt = new Date();
+                state.timeSpent = 0;
+
+                // Reset UI
+                activityCards.forEach(card => {
+                    card.classList.remove('completed');
+                    const status = card.querySelector('.activity-status');
+                    status.textContent = 'Not Started';
+                    status.style.color = '';
+                    const feedback = card.querySelector('.feedback-container');
+                    feedback.classList.remove('show');
+                });
+
+                // Reset Activity 1
+                document.querySelectorAll('#activity-1 .law-item').forEach(item => {
+                    item.style.display = '';
+                    item.classList.remove('dragging');
+                });
+                document.querySelectorAll('#activity-1 .timeline-slot').forEach(slot => {
+                    slot.innerHTML = '';
+                    slot.style.backgroundColor = '';
+                    slot.style.borderColor = '';
+                });
+
+                // Reset Activity 2
+                document.querySelectorAll('#activity-2 .agency-item, #activity-2 .description-item').forEach(item => {
+                    item.classList.remove('matched');
+                    item.style.background = '';
+                    item.style.pointerEvents = 'auto';
+                });
+                document.querySelectorAll('#activity-2 .quiz-option').forEach(option => {
+                    option.classList.remove('selected', 'wrong');
+                });
+
+                // Reset Activity 3
+                document.querySelectorAll('#activity-3 .drug-item').forEach(item => {
+                    item.style.display = '';
+                    item.classList.remove('dragging');
+                });
+                document.querySelectorAll('#activity-3 .schedule-content').forEach(content => {
+                    content.innerHTML = '';
+                });
+                document.getElementById('scheduling-warning').style.display = 'none';
+
+                // Reset Activity 4
+                document.querySelectorAll('#activity-4 .agency-btn').forEach(btn => {
+                    btn.classList.remove('selected', 'wrong', 'osha', 'tjc');
+                    btn.style.pointerEvents = 'auto';
+                });
+
+                // Reset Activity 5
+                document.querySelectorAll('#activity-5 .form-option').forEach(opt => {
+                    opt.classList.remove('selected', 'wrong');
+                });
+                document.getElementById('validation-result').className = 'validation-result';
+                document.getElementById('validation-result').textContent = '';
+                deaNumber.textContent = 'AB1234563';
+
+                // Reset results
+                resultsPanel.classList.remove('show');
+
+                // Update progress
+                updateProgressSummary();
+            }
+
+            // Check All Answers
+            function checkAllAnswers() {
+                // Activity 1
+                if (!state.activities[1].completed) {
+                    const feedback = document.getElementById('feedback-1');
+                    const status = document.querySelector('#activity-1 .activity-status');
+                    state.activities[1].completed = true;
+                    state.activities[1].correct = 6;
+                    state.activities[1].score = 100;
+                    status.textContent = 'Completed';
+                    status.style.color = '#00b894';
+                    document.querySelector('#activity-1').classList.add('completed');
+                    feedback.classList.add('show');
+                }
+
+                // Activity 2
+                if (!state.activities[2].completed) {
+                    const feedback = document.getElementById('feedback-2');
+                    const status = document.querySelector('#activity-2 .activity-status');
+                    
+                    // Auto-match agencies
+                    document.querySelectorAll('#activity-2 .agency-item').forEach(agency => {
+                        const agencyType = agency.dataset.agency;
+                        const desc = document.querySelector(`#activity-2 .description-item[data-agency="${agencyType}"]`);
+                        if (desc) {
+                            agency.classList.add('matched');
+                            desc.classList.add('matched');
+                            agency.style.background = 'rgba(0, 184, 148, 0.2)';
+                            desc.style.background = 'rgba(0, 184, 148, 0.2)';
+                        }
+                    });
+                    
+                    // Auto-select correct quiz answers
+                    document.querySelectorAll('#activity-2 .quiz-option[data-answer="correct"]').forEach(option => {
+                        option.classList.add('selected');
+                    });
+                    
+                    state.activities[2].completed = true;
+                    state.activities[2].correct = 12;
+                    state.activities[2].score = 100;
+                    status.textContent = 'Completed';
+                    status.style.color = '#00b894';
+                    document.querySelector('#activity-2').classList.add('completed');
+                    feedback.classList.add('show');
+                }
+
+                // Activity 3
+                if (!state.activities[3].completed) {
+                    const feedback = document.getElementById('feedback-3');
+                    const status = document.querySelector('#activity-3 .activity-status');
+                    
+                    // Place drugs in correct schedules
+                    const correctPlacements = {
+                        'Heroin': '1',
+                        'Oxycodone': '2',
+                        'Testosterone': '3',
+                        'Xanax': '4',
+                        'Lyrica': '5',
+                        'Fentanyl': '2',
+                        'Ambien': '4',
+                        'Cough syrup with codeine': '5'
+                    };
+                    
+                    Object.keys(correctPlacements).forEach(drug => {
+                        const scheduleBox = document.querySelector(`#activity-3 .schedule-box[data-schedule="${correctPlacements[drug]}"]`);
+                        if (scheduleBox) {
+                            const drugDiv = document.createElement('div');
+                            drugDiv.textContent = drug;
+                            drugDiv.style.padding = '6px 10px';
+                            drugDiv.style.margin = '4px 0';
+                            drugDiv.style.background = 'rgba(0, 184, 148, 0.1)';
+                            drugDiv.style.borderRadius = '8px';
+                            drugDiv.style.fontSize = '0.8rem';
+                            scheduleBox.querySelector('.schedule-content').appendChild(drugDiv);
+                        }
+                    });
+                    
+                    // Hide all drug items
+                    document.querySelectorAll('#activity-3 .drug-item').forEach(item => {
+                        item.style.display = 'none';
+                    });
+                    
+                    state.activities[3].completed = true;
+                    state.activities[3].correct = 8;
+                    state.activities[3].score = 100;
+                    status.textContent = 'Completed';
+                    status.style.color = '#00b894';
+                    document.querySelector('#activity-3').classList.add('completed');
+                    feedback.classList.add('show');
+                }
+
+                // Activity 4
+                if (!state.activities[4].completed) {
+                    const feedback = document.getElementById('feedback-4');
+                    const status = document.querySelector('#activity-4 .activity-status');
+                    
+                    // Select correct answers
+                    const correctAnswers = {0: 'osha', 1: 'tjc', 2: 'osha', 3: 'tjc'};
+                    
+                    document.querySelectorAll('#activity-4 .agency-statement').forEach((statement, index) => {
+                        const correctBtn = statement.querySelector(`.agency-btn[data-agency="${correctAnswers[index]}"]`);
+                        if (correctBtn) {
+                            correctBtn.classList.add('selected', correctAnswers[index]);
+                        }
+                        statement.querySelectorAll('.agency-btn').forEach(btn => {
+                            btn.style.pointerEvents = 'none';
+                        });
+                    });
+                    
+                    state.activities[4].completed = true;
+                    state.activities[4].correct = 4;
+                    state.activities[4].score = 100;
+                    status.textContent = 'Completed';
+                    status.style.color = '#00b894';
+                    document.querySelector('#activity-4').classList.add('completed');
+                    feedback.classList.add('show');
+                }
+
+                // Activity 5
+                if (!state.activities[5].completed) {
+                    const feedback = document.getElementById('feedback-5');
+                    const status = document.querySelector('#activity-5 .activity-status');
+                    
+                    // Select correct form
+                    document.querySelector('#activity-5 .form-option[data-form="222"]').classList.add('selected');
+                    
+                    // Validate DEA number
+                    validationResult.textContent = '✅ DEA Number is VALID';
+                    validationResult.className = 'validation-result valid';
+                    
+                    state.activities[5].completed = true;
+                    state.activities[5].correct = 2;
+                    state.activities[5].score = 100;
+                    status.textContent = 'Completed';
+                    status.style.color = '#00b894';
+                    document.querySelector('#activity-5').classList.add('completed');
+                    feedback.classList.add('show');
+                }
+
+                updateProgressSummary();
+            }
+
+            // View Final Results
+            function viewFinalResults() {
+                let totalScore = 0;
+                let activityCount = 0;
+
+                Object.values(state.activities).forEach(activity => {
+                    if (activity.completed) {
+                        totalScore += activity.score;
+                        activityCount++;
+                    }
+                });
+
+                const averageScore = activityCount > 0 ? Math.round(totalScore / activityCount) : 0;
+                finalScore.textContent = `${averageScore}%`;
+                resultsPanel.classList.add('show');
+                resultsPanel.scrollIntoView({ behavior: 'smooth' });
+            }
+
+            // Initialize all activities
+            initActivity1();
+            initActivity2();
+            initActivity3();
+            initActivity4();
+            initActivity5();
+
+            // Event listeners
+            resetBtn.addEventListener('click', resetAllActivities);
+            checkBtn.addEventListener('click', checkAllAnswers);
+            resultsBtn.addEventListener('click', viewFinalResults);
+
+            // Initial progress update
+            updateProgressSummary();
+        });
+    </script>
+</body>
+</html>
