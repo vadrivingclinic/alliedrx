@@ -1614,6 +1614,11 @@
                             (1+3+5) + 2*(2+4+6) = 9 + 2*12 = 9 + 24 = <strong>33</strong> → check digit = <strong>3</strong> ✓
                         </div>
                     </div>
+                    
+                    <!-- Check Activity 2 Button -->
+                    <button class="btn btn-secondary" id="check-activity-2" style="margin-top: 20px; width: 100%;">
+                        <span class="btn-icon">✓</span> Check Activity 2 Answers
+                    </button>
                 </div>
 
                 <!-- Feedback -->
@@ -1837,6 +1842,11 @@
                         Enhanced FDA oversight of compounders
                     </div>
                 </div>
+                
+                <!-- Check Activity 4 Button -->
+                <button class="btn btn-secondary" id="check-activity-4" style="margin-top: 20px; width: 100%;">
+                    <span class="btn-icon">✓</span> Check Activity 4 Answers
+                </button>
 
                 <!-- Remember Box -->
                 <div class="remember-box">
@@ -1957,6 +1967,11 @@
                             <div class="check-text">Displays VIPPS seal and NABP verification</div>
                         </div>
                     </div>
+                    
+                    <!-- Check Activity 5 Button -->
+                    <button class="btn btn-secondary" id="check-activity-5" style="margin-top: 20px; width: 100%;">
+                        <span class="btn-icon">✓</span> Check Activity 5 Answers
+                    </button>
                 </div>
 
                 <!-- Warning -->
@@ -2075,11 +2090,11 @@
             // State Management
             const state = {
                 activities: {
-                    1: { completed: false, correct: 0, total: 5, score: 0 },
-                    2: { completed: false, correct: 0, total: 11, score: 0 }, // 10 hotspots + 1 DEA verification
-                    3: { completed: false, correct: 0, total: 3, score: 0 }, // 3 scenarios
-                    4: { completed: false, correct: 0, total: 8, score: 0 }, // 8 matches
-                    5: { completed: false, correct: 0, total: 11, score: 0 }  // 5 REMS + 6 VIPPS
+                    1: { completed: false, correct: 0, total: 5, score: 0, wrongAnswers: [] },
+                    2: { completed: false, correct: 0, total: 10, score: 0, wrongAnswers: [] },
+                    3: { completed: false, correct: 0, total: 3, score: 0, wrongAnswers: [] },
+                    4: { completed: false, correct: 0, total: 8, score: 0, wrongAnswers: [] },
+                    5: { completed: false, correct: 0, total: 11, score: 0, wrongAnswers: [] }
                 },
                 startedAt: new Date(),
                 timeSpent: 0
@@ -2138,7 +2153,7 @@
                 });
             }
 
-            // Activity 1: Drug Monograph Decoder - UPDATED
+            // Activity 1: Drug Monograph Decoder - ENHANCED FEEDBACK
             function initActivity1() {
                 const hotspotBtns = document.querySelectorAll('#activity-1 .hotspot-btn');
                 const progressItems = document.querySelectorAll('#activity-1 .progress-item');
@@ -2149,6 +2164,7 @@
 
                 let hotspotsClicked = 0;
                 const totalHotspots = 5;
+                let missedHotspots = [];
 
                 hotspotBtns.forEach(btn => {
                     btn.addEventListener('click', function() {
@@ -2174,28 +2190,131 @@
                                     item.classList.add('identified');
                                 }
                             });
-                            
-                            // Check completion
-                            if (hotspotsClicked === totalHotspots) {
-                                state.activities[1].completed = true;
-                                state.activities[1].correct = totalHotspots;
-                                state.activities[1].score = 100;
-                                status.textContent = 'Completed';
-                                status.style.color = '#00b894';
-                                document.querySelector('#activity-1').classList.add('completed');
-                                feedback.classList.add('show');
-                                updateProgressSummary();
-                            }
                         }
                     });
                 });
+
+                // Add check button for this activity
+                const checkActivity1Btn = document.createElement('button');
+                checkActivity1Btn.className = 'btn btn-secondary';
+                checkActivity1Btn.style.marginTop = '15px';
+                checkActivity1Btn.innerHTML = '<span class="btn-icon">✓</span> Check Activity 1';
+                checkActivity1Btn.addEventListener('click', checkActivity1Answers);
+                document.querySelector('#activity-1 .monograph-container').appendChild(checkActivity1Btn);
+
+                function checkActivity1Answers() {
+                    if (state.activities[1].completed) return;
+                    
+                    // Check which hotspots were missed
+                    missedHotspots = [];
+                    hotspotBtns.forEach(btn => {
+                        if (!btn.classList.contains('identified')) {
+                            missedHotspots.push(btn.dataset.hotspot);
+                        }
+                    });
+                    
+                    if (missedHotspots.length === 0) {
+                        state.activities[1].completed = true;
+                        state.activities[1].correct = totalHotspots;
+                        state.activities[1].score = 100;
+                        status.textContent = 'Completed';
+                        status.style.color = '#00b894';
+                        document.querySelector('#activity-1').classList.add('completed');
+                        
+                        // Show success feedback
+                        feedback.innerHTML = `
+                            <div class="feedback-title">
+                                <span class="feedback-icon correct">✓</span>
+                                Monograph Mastered! 5/5 Correct
+                            </div>
+                            <div class="feedback-content">
+                                <strong>Excellent! You identified all 5 key sections:</strong><br>
+                                1. <strong>Boxed Warning</strong> ⚠️ - Strongest FDA alert for serious risks<br>
+                                2. <strong>Pregnancy Category</strong> 🤰 - X = Contraindicated in pregnancy<br>
+                                3. <strong>Indications</strong> 🎯 - Approved uses<br>
+                                4. <strong>Adverse Reactions</strong> 📋 - Side effects and risks<br>
+                                5. <strong>Medication Guide</strong> 📄 - Required patient information sheet<br><br>
+                                <strong>Critical Information for Isotretinoin:</strong> iPLEDGE REMS program, monthly pregnancy tests, two forms of contraception required.
+                            </div>
+                        `;
+                    } else {
+                        // Track wrong answers
+                        state.activities[1].wrongAnswers = missedHotspots.map(h => ({
+                            hotspot: h,
+                            name: getHotspotName(h),
+                            description: getHotspotDescription(h)
+                        }));
+                        
+                        // Show feedback with missed hotspots
+                        const missedList = missedHotspots.map(hotspot => {
+                            return `• <strong>${getHotspotName(hotspot)}</strong> - ${getHotspotDescription(hotspot)}`;
+                        }).join('<br>');
+                        
+                        const correctCount = totalHotspots - missedHotspots.length;
+                        feedback.innerHTML = `
+                            <div class="feedback-title">
+                                <span class="feedback-icon incorrect">✗</span>
+                                ${correctCount}/5 Correct - Review Needed
+                            </div>
+                            <div class="feedback-content">
+                                <strong>You missed these key sections:</strong><br>
+                                ${missedList}<br><br>
+                                <strong>Reminder:</strong> All 5 sections must be identified. Click the "Click to Identify" buttons on the monograph.
+                            </div>
+                        `;
+                        
+                        // Pulse animation for missed sections
+                        missedHotspots.forEach(hotspot => {
+                            const btn = document.querySelector(`[data-hotspot="${hotspot}"]`);
+                            const section = document.getElementById(`${hotspot}-section`);
+                            if (btn && section) {
+                                btn.style.animation = 'pulse 0.5s ease 3';
+                                section.style.animation = 'pulse 0.5s ease 3';
+                            }
+                        });
+                        
+                        // Update state
+                        state.activities[1].completed = true;
+                        state.activities[1].correct = correctCount;
+                        state.activities[1].score = Math.round((correctCount / totalHotspots) * 100);
+                        status.textContent = 'Completed';
+                        status.style.color = '#00b894';
+                        document.querySelector('#activity-1').classList.add('completed');
+                    }
+                    
+                    feedback.classList.add('show');
+                    updateProgressSummary();
+                }
+
+                function getHotspotName(hotspot) {
+                    const names = {
+                        'boxed-warning': 'Boxed Warning',
+                        'pregnancy-cat': 'Pregnancy Category',
+                        'indications': 'Indications & Usage',
+                        'adverse': 'Adverse Reactions',
+                        'medguide': 'Medication Guide'
+                    };
+                    return names[hotspot] || hotspot;
+                }
+
+                function getHotspotDescription(hotspot) {
+                    const descriptions = {
+                        'boxed-warning': 'Strongest FDA warning for serious risks like birth defects',
+                        'pregnancy-cat': 'Category X means contraindicated in pregnancy',
+                        'indications': 'Shows what conditions the drug is approved to treat',
+                        'adverse': 'Lists common and serious side effects',
+                        'medguide': 'Patient information sheet required by FDA'
+                    };
+                    return descriptions[hotspot] || '';
+                }
             }
 
-            // Activity 2: Prescription Label Analysis
+            // Activity 2: Prescription Label Analysis - ENHANCED FEEDBACK
             function initActivity2() {
                 const hotspotItems = document.querySelectorAll('#activity-2 .hotspot-item');
                 const feedback = document.getElementById('feedback-2');
                 const status = document.querySelector('#activity-2 .activity-status');
+                const checkBtn = document.getElementById('check-activity-2');
 
                 const requiredElements = [
                     'patient-name', 'patient-address', 'rx-number', 'drug-name',
@@ -2203,8 +2322,21 @@
                     'dea-number', 'pharmacy-info'
                 ];
 
+                const elementNames = {
+                    'patient-name': 'Patient Name',
+                    'patient-address': 'Patient Address',
+                    'rx-number': 'Rx Number',
+                    'drug-name': 'Drug Name & Strength',
+                    'directions': 'Directions for Use',
+                    'quantity': 'Quantity',
+                    'refills': 'Refills Authorized',
+                    'prescriber': 'Prescriber Name',
+                    'dea-number': 'DEA Number',
+                    'pharmacy-info': 'Pharmacy Information'
+                };
+
                 let identifiedElements = 0;
-                const totalElements = 11; // 10 hotspots + 1 DEA verification
+                let missedElements = [];
 
                 hotspotItems.forEach(item => {
                     item.addEventListener('click', function() {
@@ -2213,25 +2345,109 @@
                         if (!this.classList.contains('identified')) {
                             this.classList.add('identified');
                             identifiedElements++;
-                            
-                            // Check completion
-                            if (identifiedElements === 10) {
-                                // Auto-verify DEA number
-                                state.activities[2].completed = true;
-                                state.activities[2].correct = totalElements; // All correct
-                                state.activities[2].score = 100;
-                                status.textContent = 'Completed';
-                                status.style.color = '#00b894';
-                                document.querySelector('#activity-2').classList.add('completed');
-                                feedback.classList.add('show');
-                                updateProgressSummary();
-                            }
                         }
                     });
                 });
+
+                checkBtn.addEventListener('click', checkActivity2Answers);
+
+                function checkActivity2Answers() {
+                    if (state.activities[2].completed) return;
+                    
+                    // Check which elements were missed
+                    missedElements = [];
+                    hotspotItems.forEach(item => {
+                        if (!item.classList.contains('identified')) {
+                            missedElements.push(item.dataset.element);
+                        }
+                    });
+                    
+                    if (missedElements.length === 0) {
+                        state.activities[2].completed = true;
+                        state.activities[2].correct = 10;
+                        state.activities[2].score = 100;
+                        status.textContent = 'Completed';
+                        status.style.color = '#00b894';
+                        document.querySelector('#activity-2').classList.add('completed');
+                        
+                        feedback.innerHTML = `
+                            <div class="feedback-title">
+                                <span class="feedback-icon correct">✓</span>
+                                Perfect! 10/10 Correct
+                            </div>
+                            <div class="feedback-content">
+                                <strong>Excellent! You identified all required prescription label elements:</strong><br><br>
+                                <strong>All 10 Elements Correct:</strong><br>
+                                1. Patient Name<br>
+                                2. Patient Address<br>
+                                3. Rx Number<br>
+                                4. Drug Name & Strength<br>
+                                5. Directions for Use<br>
+                                6. Quantity<br>
+                                7. Refills Authorized<br>
+                                8. Prescriber Name<br>
+                                9. DEA Number<br>
+                                10. Pharmacy Information<br><br>
+                                <strong>DEA Verification:</strong> BS1234563 = Valid ✓
+                            </div>
+                        `;
+                    } else {
+                        // Track wrong answers
+                        state.activities[2].wrongAnswers = missedElements.map(el => ({
+                            element: el,
+                            name: elementNames[el]
+                        }));
+                        
+                        const correctCount = 10 - missedElements.length;
+                        const missedList = missedElements.map(el => 
+                            `• <strong>${elementNames[el]}</strong>`
+                        ).join('<br>');
+                        
+                        feedback.innerHTML = `
+                            <div class="feedback-title">
+                                <span class="feedback-icon incorrect">✗</span>
+                                ${correctCount}/10 Correct - Missing Elements
+                            </div>
+                            <div class="feedback-content">
+                                <strong>You missed these required elements:</strong><br>
+                                ${missedList}<br><br>
+                                <strong>All prescription labels MUST include:</strong><br>
+                                • Patient name & address<br>
+                                • Drug name, strength, dosage form<br>
+                                • Directions for use (SIG)<br>
+                                • Quantity<br>
+                                • Refills authorized<br>
+                                • Prescriber name<br>
+                                • DEA number (for controlled substances)<br>
+                                • Pharmacy information<br>
+                                • Rx number<br><br>
+                                Click on all the highlighted elements above to identify them.
+                            </div>
+                        `;
+                        
+                        // Highlight missed elements
+                        missedElements.forEach(el => {
+                            const item = document.querySelector(`[data-element="${el}"]`);
+                            if (item) {
+                                item.style.animation = 'pulse 0.5s ease 3';
+                                item.style.border = '2px solid var(--color-error)';
+                            }
+                        });
+                        
+                        state.activities[2].completed = true;
+                        state.activities[2].correct = correctCount;
+                        state.activities[2].score = Math.round((correctCount / 10) * 100);
+                        status.textContent = 'Completed';
+                        status.style.color = '#00b894';
+                        document.querySelector('#activity-2').classList.add('completed');
+                    }
+                    
+                    feedback.classList.add('show');
+                    updateProgressSummary();
+                }
             }
 
-            // Activity 3: HIPAA Scenario Trainer
+            // Activity 3: HIPAA Scenario Trainer - ENHANCED FEEDBACK
             function initActivity3() {
                 const actionBtns = document.querySelectorAll('#activity-3 .action-btn');
                 const feedback = document.getElementById('feedback-3');
@@ -2243,9 +2459,42 @@
                     '3': 2  // Third button for scenario 3
                 };
 
+                const scenarioDetails = {
+                    '1': {
+                        title: "Family Inquiry",
+                        correct: "Verify you're speaking to the patient or authorized person first",
+                        explanation: "Always verify identity before disclosing ANY PHI, even to family members.",
+                        wrongChoices: [
+                            "Provide the information since it's family",
+                            "Refuse to give any information", 
+                            "Say the prescription isn't ready even if it is"
+                        ]
+                    },
+                    '2': {
+                        title: "Waiting Area Conversation",
+                        correct: "Move to a private consultation area",
+                        explanation: "Always conduct sensitive conversations in private areas to protect patient confidentiality.",
+                        wrongChoices: [
+                            "Continue the conversation but speak softly",
+                            "Ask the waiting patient to step away",
+                            "Write the information down instead"
+                        ]
+                    },
+                    '3': {
+                        title: "Insurance Verification",
+                        correct: "Verify the caller's identity and provide minimum necessary information",
+                        explanation: "For payment purposes, verify identity and share only minimum necessary information.",
+                        wrongChoices: [
+                            "Provide all requested information",
+                            "Refuse to provide any information",
+                            "Tell them to get the information from the patient"
+                        ]
+                    }
+                };
+
                 let scenariosCompleted = 0;
                 let correctAnswersCount = 0;
-                const totalScenarios = 3;
+                let wrongAnswers = [];
 
                 actionBtns.forEach(btn => {
                     btn.addEventListener('click', function() {
@@ -2265,6 +2514,17 @@
                         // Mark this button
                         this.classList.add(isCorrect ? 'selected' : 'wrong');
                         
+                        // Track wrong answers
+                        if (!isCorrect) {
+                            const correctBtn = scenarioContainer.querySelectorAll('.action-btn')[correctAnswers[scenario]];
+                            wrongAnswers.push({
+                                scenario: parseInt(scenario),
+                                selected: this.textContent.trim(),
+                                correct: correctBtn ? correctBtn.textContent.trim() : '',
+                                explanation: scenarioDetails[scenario].explanation
+                            });
+                        }
+                        
                         // Check if scenario was already counted
                         if (!scenarioContainer.dataset.scored) {
                             scenariosCompleted++;
@@ -2273,27 +2533,84 @@
                         }
                         
                         // Check completion
-                        if (scenariosCompleted === totalScenarios) {
-                            state.activities[3].completed = true;
-                            state.activities[3].correct = correctAnswersCount;
-                            state.activities[3].score = Math.round((correctAnswersCount / totalScenarios) * 100);
-                            status.textContent = 'Completed';
-                            status.style.color = '#00b894';
-                            document.querySelector('#activity-3').classList.add('completed');
-                            feedback.classList.add('show');
-                            updateProgressSummary();
+                        if (scenariosCompleted === 3) {
+                            showActivity3Feedback();
                         }
                     });
                 });
+
+                function showActivity3Feedback() {
+                    state.activities[3].completed = true;
+                    state.activities[3].correct = correctAnswersCount;
+                    state.activities[3].score = Math.round((correctAnswersCount / 3) * 100);
+                    state.activities[3].wrongAnswers = wrongAnswers;
+                    status.textContent = 'Completed';
+                    status.style.color = '#00b894';
+                    document.querySelector('#activity-3').classList.add('completed');
+                    
+                    if (wrongAnswers.length === 0) {
+                        // Perfect score
+                        feedback.innerHTML = `
+                            <div class="feedback-title">
+                                <span class="feedback-icon correct">✓</span>
+                                Perfect! 3/3 HIPAA Scenarios Correct
+                            </div>
+                            <div class="feedback-content">
+                                <strong>Excellent HIPAA Compliance!</strong><br><br>
+                                <strong>All scenarios handled correctly:</strong><br>
+                                1. <strong>Family Inquiry:</strong> ✓ Verify identity before disclosure<br>
+                                2. <strong>Waiting Area:</strong> ✓ Move to private consultation area<br>
+                                3. <strong>Insurance Call:</strong> ✓ Verify identity + minimum necessary<br><br>
+                                <strong>Key HIPAA Principles Applied:</strong><br>
+                                • Verification before disclosure<br>
+                                • Privacy in consultations<br>
+                                • Minimum necessary rule
+                            </div>
+                        `;
+                    } else {
+                        // Show wrong answers with corrections
+                        let wrongDetails = '';
+                        wrongAnswers.forEach(item => {
+                            wrongDetails += `
+                                <div style="margin-bottom: 15px; padding: 10px; background: rgba(225, 112, 85, 0.05); border-radius: var(--radius-sm);">
+                                    <strong>Scenario ${item.scenario}: ${scenarioDetails[item.scenario].title}</strong><br>
+                                    <span style="color: var(--color-error);">❌ <strong>Your choice:</strong> "${item.selected}"</span><br>
+                                    <span style="color: var(--color-success);">✅ <strong>Correct answer:</strong> "${item.correct}"</span><br>
+                                    <em>${item.explanation}</em>
+                                </div>
+                            `;
+                        });
+                        
+                        feedback.innerHTML = `
+                            <div class="feedback-title">
+                                <span class="feedback-icon incorrect">✗</span>
+                                ${correctAnswersCount}/3 Correct - Review Needed
+                            </div>
+                            <div class="feedback-content">
+                                <strong>Incorrect Selections:</strong><br><br>
+                                ${wrongDetails}
+                                <strong>Key HIPAA Rules to Remember:</strong><br>
+                                • <strong>Always verify identity</strong> before disclosing PHI<br>
+                                • <strong>Use private areas</strong> for sensitive conversations<br>
+                                • <strong>Apply "minimum necessary" rule</strong> - share only what's needed<br>
+                                • Family members need patient authorization or must be verified as authorized representatives
+                            </div>
+                        `;
+                    }
+                    
+                    feedback.classList.add('show');
+                    updateProgressSummary();
+                }
             }
 
-            // Activity 4: ACA & DQSA Impact Analysis
+            // Activity 4: ACA & DQSA Impact Analysis - ENHANCED FEEDBACK
             function initActivity4() {
                 const lawItems = document.querySelectorAll('#activity-4 .law-item');
                 const acaDropzone = document.getElementById('aca-dropzone');
                 const dqsaDropzone = document.getElementById('dqsa-dropzone');
                 const feedback = document.getElementById('feedback-4');
                 const status = document.querySelector('#activity-4 .activity-status');
+                const checkBtn = document.getElementById('check-activity-4');
 
                 const correctPlacements = {
                     'Expanded Medicaid coverage': 'aca',
@@ -2306,8 +2623,20 @@
                     'Enhanced FDA oversight of compounders': 'dqsa'
                 };
 
+                const lawDescriptions = {
+                    'Expanded Medicaid coverage': 'ACA expanded Medicaid eligibility to more low-income individuals',
+                    'Created health insurance marketplaces': 'ACA created state-based health insurance exchanges',
+                    'Required coverage of pre-existing conditions': 'ACA prohibited denial of coverage for pre-existing conditions',
+                    'Eliminated lifetime coverage limits': 'ACA removed annual and lifetime coverage limits',
+                    'Established track-and-trace requirements': 'DQSA created drug supply chain tracking system',
+                    'Created new categories of compounding pharmacies': 'DQSA established "outsourcing facilities" category',
+                    'Required product identifiers (serial numbers)': 'DQSA mandated unique identifiers on drug packages',
+                    'Enhanced FDA oversight of compounders': 'DQSA gave FDA more authority over compounding pharmacies'
+                };
+
                 let placedItems = 0;
                 let correctPlacementsCount = 0;
+                let wrongPlacements = [];
 
                 // Setup drag and drop
                 lawItems.forEach(item => {
@@ -2368,51 +2697,150 @@
                             if (originalItem) {
                                 originalItem.style.display = 'none';
                                 placedItems++;
-                                if (isCorrect) correctPlacementsCount++;
-                            }
-                            
-                            // Check completion
-                            if (placedItems === 8) {
-                                state.activities[4].completed = true;
-                                state.activities[4].correct = correctPlacementsCount;
-                                state.activities[4].score = Math.round((correctPlacementsCount / 8) * 100);
-                                status.textContent = 'Completed';
-                                status.style.color = '#00b894';
-                                document.querySelector('#activity-4').classList.add('completed');
-                                feedback.classList.add('show');
-                                updateProgressSummary();
+                                
+                                if (isCorrect) {
+                                    correctPlacementsCount++;
+                                } else {
+                                    wrongPlacements.push({
+                                        item: data.text,
+                                        placedIn: targetLaw === 'aca' ? 'ACA' : 'DQSA',
+                                        belongsTo: correctPlacements[data.text] === 'aca' ? 'ACA' : 'DQSA',
+                                        description: lawDescriptions[data.text]
+                                    });
+                                }
                             }
                         }
                     });
                 });
+
+                checkBtn.addEventListener('click', checkActivity4Answers);
+
+                function checkActivity4Answers() {
+                    if (state.activities[4].completed) return;
+                    
+                    if (placedItems === 8) {
+                        state.activities[4].completed = true;
+                        state.activities[4].correct = correctPlacementsCount;
+                        state.activities[4].score = Math.round((correctPlacementsCount / 8) * 100);
+                        state.activities[4].wrongAnswers = wrongPlacements;
+                        status.textContent = 'Completed';
+                        status.style.color = '#00b894';
+                        document.querySelector('#activity-4').classList.add('completed');
+                        
+                        if (wrongPlacements.length === 0) {
+                            // Perfect score
+                            feedback.innerHTML = `
+                                <div class="feedback-title">
+                                    <span class="feedback-icon correct">✓</span>
+                                    Perfect! 8/8 Matches Correct
+                                </div>
+                                <div class="feedback-content">
+                                    <strong>Excellent! All impacts correctly matched:</strong><br><br>
+                                    <strong>ACA (Affordable Care Act):</strong><br>
+                                    • Expanded Medicaid coverage<br>
+                                    • Created health insurance marketplaces<br>
+                                    • Required coverage of pre-existing conditions<br>
+                                    • Eliminated lifetime coverage limits<br><br>
+                                    <strong>DQSA (Drug Quality & Security Act):</strong><br>
+                                    • Established track-and-trace requirements<br>
+                                    • Created new categories of compounding pharmacies<br>
+                                    • Required product identifiers (serial numbers)<br>
+                                    • Enhanced FDA oversight of compounders<br><br>
+                                    <strong>Remember:</strong> ACA = Access & Coverage, DQSA = Safety & Security
+                                </div>
+                            `;
+                        } else {
+                            // Show wrong placements
+                            let wrongDetails = '';
+                            wrongPlacements.forEach(item => {
+                                wrongDetails += `
+                                    <div style="margin-bottom: 10px; padding: 8px; background: rgba(225, 112, 85, 0.05); border-radius: var(--radius-sm);">
+                                        <strong>"${item.item}"</strong><br>
+                                        <span style="color: var(--color-error);">❌ You placed in: ${item.placedIn}</span><br>
+                                        <span style="color: var(--color-success);">✅ Belongs to: ${item.belongsTo}</span><br>
+                                        <em>${item.description}</em>
+                                    </div>
+                                `;
+                            });
+                            
+                            feedback.innerHTML = `
+                                <div class="feedback-title">
+                                    <span class="feedback-icon incorrect">✗</span>
+                                    ${correctPlacementsCount}/8 Correct - ${wrongPlacements.length} Errors
+                                </div>
+                                <div class="feedback-content">
+                                    <strong>Incorrect Placements:</strong><br><br>
+                                    ${wrongDetails}<br>
+                                    <strong>Quick Guide:</strong><br>
+                                    • <strong>ACA impacts:</strong> Insurance, coverage, access to care<br>
+                                    • <strong>DQSA impacts:</strong> Drug safety, supply chain, compounding<br>
+                                    • ACA = 2010, "Obamacare"<br>
+                                    • DQSA = 2013, response to meningitis outbreak
+                                </div>
+                            `;
+                        }
+                        
+                        feedback.classList.add('show');
+                        updateProgressSummary();
+                    } else {
+                        alert('Please place all 8 items before checking answers.');
+                    }
+                }
             }
 
-            // Activity 5: REMS & Internet Pharmacy Verification
+            // Activity 5: REMS & Internet Pharmacy Verification - ENHANCED FEEDBACK
             function initActivity5() {
                 const remsItems = document.querySelectorAll('#activity-5 .check-item[data-rems]');
                 const vippsItems = document.querySelectorAll('#activity-5 .check-item[data-vip]');
                 const feedback = document.getElementById('feedback-5');
                 const status = document.querySelector('#activity-5 .activity-status');
+                const checkBtn = document.getElementById('check-activity-5');
+
+                const remsAnswers = {
+                    'Baseline ANC (absolute neutrophil count) required': true,
+                    'Weekly blood monitoring for first 6 months': true,
+                    'No special requirements - dispense like any other drug': false,
+                    'Patient registry enrollment mandatory': true,
+                    'Only prescriber needs to be certified': false
+                };
+
+                const vippsAnswers = {
+                    'Requires valid prescription from licensed prescriber': true,
+                    'Offers to prescribe without seeing a doctor': false,
+                    'Provides physical address and phone number in USA': true,
+                    'Sells controlled substances without prescription': false,
+                    'Licensed pharmacist available for consultation': true,
+                    'Displays VIPPS seal and NABP verification': true
+                };
 
                 let remsAnswered = 0;
                 let remsCorrect = 0;
                 let vippsAnswered = 0;
                 let vippsCorrect = 0;
+                
+                let wrongRemsSelections = [];
+                let wrongVippsSelections = [];
 
                 // REMS items
                 remsItems.forEach(item => {
                     item.addEventListener('click', function() {
                         if (state.activities[5].completed) return;
                         
-                        const isCorrect = this.dataset.rems === 'correct';
+                        const text = this.querySelector('.check-text').textContent.trim();
+                        const isCorrect = remsAnswers[text];
                         
-                        // Clear other selections in REMS section
                         if (!this.classList.contains('selected') && !this.classList.contains('wrong')) {
                             this.classList.add(isCorrect ? 'selected' : 'wrong');
                             remsAnswered++;
-                            if (isCorrect) remsCorrect++;
                             
-                            checkActivity5Completion();
+                            if (isCorrect) {
+                                remsCorrect++;
+                            } else {
+                                wrongRemsSelections.push({
+                                    text: text,
+                                    correct: isCorrect
+                                });
+                            }
                         }
                     });
                 });
@@ -2422,32 +2850,125 @@
                     item.addEventListener('click', function() {
                         if (state.activities[5].completed) return;
                         
-                        const isCorrect = this.dataset.vip === 'correct';
+                        const text = this.querySelector('.check-text').textContent.trim();
+                        const isCorrect = vippsAnswers[text];
                         
-                        // Clear other selections in VIPPS section
                         if (!this.classList.contains('selected') && !this.classList.contains('wrong')) {
                             this.classList.add(isCorrect ? 'selected' : 'wrong');
                             vippsAnswered++;
-                            if (isCorrect) vippsCorrect++;
                             
-                            checkActivity5Completion();
+                            if (isCorrect) {
+                                vippsCorrect++;
+                            } else {
+                                wrongVippsSelections.push({
+                                    text: text,
+                                    correct: isCorrect
+                                });
+                            }
                         }
                     });
                 });
 
-                function checkActivity5Completion() {
+                checkBtn.addEventListener('click', checkActivity5Answers);
+
+                function checkActivity5Answers() {
+                    if (state.activities[5].completed) return;
+                    
                     if (remsAnswered === 5 && vippsAnswered === 6) {
                         const totalCorrect = remsCorrect + vippsCorrect;
+                        const wrongAnswers = [...wrongRemsSelections, ...wrongVippsSelections];
                         
                         state.activities[5].completed = true;
                         state.activities[5].correct = totalCorrect;
                         state.activities[5].score = Math.round((totalCorrect / 11) * 100);
+                        state.activities[5].wrongAnswers = wrongAnswers;
                         status.textContent = 'Completed';
                         status.style.color = '#00b894';
                         document.querySelector('#activity-5').classList.add('completed');
-                        feedback.classList.add('show');
-                        updateProgressSummary();
+                        
+                        showActivity5Feedback(totalCorrect, wrongAnswers);
+                    } else {
+                        alert('Please answer all 11 items before checking answers.');
                     }
+                }
+
+                function showActivity5Feedback(totalCorrect, wrongAnswers) {
+                    if (wrongAnswers.length === 0) {
+                        // Perfect score
+                        feedback.innerHTML = `
+                            <div class="feedback-title">
+                                <span class="feedback-icon correct">✓</span>
+                                Perfect! 11/11 Correct
+                            </div>
+                            <div class="feedback-content">
+                                <strong>Excellent understanding of REMS and VIPPS!</strong><br><br>
+                                <strong>REMS Requirements for Clozapine:</strong><br>
+                                ✓ Baseline ANC required<br>
+                                ✓ Weekly blood monitoring<br>
+                                ✓ Patient registry enrollment<br>
+                                ✓ BOTH prescriber AND pharmacy must be certified<br>
+                                ✓ NOT dispensed like regular drugs<br><br>
+                                <strong>VIPPS Verification Signs:</strong><br>
+                                ✓ Requires valid prescription<br>
+                                ✓ US address/phone<br>
+                                ✓ Licensed pharmacist available<br>
+                                ✓ VIPPS seal displayed<br>
+                                ✓ Does NOT offer prescriptions without doctor<br>
+                                ✓ Does NOT sell controlled substances without Rx<br><br>
+                                Excellent identification of legitimate pharmacy practices!
+                            </div>
+                        `;
+                    } else {
+                        // Show wrong answers
+                        let wrongDetails = '';
+                        
+                        if (wrongRemsSelections.length > 0) {
+                            wrongDetails += `
+                                <strong>Incorrect REMS Selections:</strong><br>
+                                ${wrongRemsSelections.map(item => 
+                                    `<span style="color: var(--color-error);">❌ "${item.text}"</span>`
+                                ).join('<br>')}
+                                <br><br>
+                            `;
+                        }
+                        
+                        if (wrongVippsSelections.length > 0) {
+                            wrongDetails += `
+                                <strong>Incorrect VIPPS Selections:</strong><br>
+                                ${wrongVippsSelections.map(item => 
+                                    `<span style="color: var(--color-error);">❌ "${item.text}"</span>`
+                                ).join('<br>')}
+                                <br><br>
+                            `;
+                        }
+                        
+                        feedback.innerHTML = `
+                            <div class="feedback-title">
+                                <span class="feedback-icon incorrect">✗</span>
+                                ${totalCorrect}/11 Correct - ${wrongAnswers.length} Errors
+                            </div>
+                            <div class="feedback-content">
+                                ${wrongDetails}
+                                <strong>Key Points to Remember:</strong><br>
+                                <strong>REMS (Clozapine):</strong><br>
+                                • Baseline ANC required<br>
+                                • Weekly blood monitoring for 6 months<br>
+                                • Patient registry enrollment mandatory<br>
+                                • Both prescriber AND pharmacy must be certified<br>
+                                • NOT dispensed like regular drugs<br><br>
+                                <strong>VIPPS (Legitimate Online Pharmacies):</strong><br>
+                                • Requires valid prescription from licensed prescriber<br>
+                                • Provides physical address and phone number in USA<br>
+                                • Licensed pharmacist available for consultation<br>
+                                • Displays VIPPS seal and NABP verification<br>
+                                • Does NOT offer prescriptions without seeing doctor<br>
+                                • Does NOT sell controlled substances without prescription
+                            </div>
+                        `;
+                    }
+                    
+                    feedback.classList.add('show');
+                    updateProgressSummary();
                 }
             }
 
@@ -2458,9 +2979,10 @@
                     state.activities[key] = {
                         completed: false,
                         correct: 0,
-                        total: parseInt(key) === 1 ? 5 : parseInt(key) === 2 ? 11 : 
+                        total: parseInt(key) === 1 ? 5 : parseInt(key) === 2 ? 10 : 
                                parseInt(key) === 3 ? 3 : parseInt(key) === 4 ? 8 : 11,
-                        score: 0
+                        score: 0,
+                        wrongAnswers: []
                     };
                 });
 
@@ -2492,6 +3014,8 @@
                 // Reset Activity 2
                 document.querySelectorAll('#activity-2 .hotspot-item').forEach(item => {
                     item.classList.remove('identified');
+                    item.style.animation = '';
+                    item.style.border = '';
                 });
 
                 // Reset Activity 3
@@ -2526,166 +3050,31 @@
 
             // Check All Answers
             function checkAllAnswers() {
-                // Activity 1
-                if (!state.activities[1].completed) {
-                    const feedback = document.getElementById('feedback-1');
-                    const status = document.querySelector('#activity-1 .activity-status');
+                // Trigger check for each activity
+                document.querySelectorAll('[id^="check-activity-"]').forEach(btn => {
+                    btn.click();
+                });
+                
+                // Show comprehensive feedback after checking
+                setTimeout(() => {
+                    let totalErrors = 0;
+                    let activityErrors = [];
                     
-                    // Activate all hotspots
-                    document.querySelectorAll('#activity-1 .hotspot-btn').forEach(btn => {
-                        btn.classList.add('identified');
-                    });
-                    document.querySelectorAll('#activity-1 .monograph-section').forEach(section => {
-                        if (section.id.includes('-section')) {
-                            section.classList.add('identified');
+                    Object.keys(state.activities).forEach(activityNum => {
+                        const activity = state.activities[activityNum];
+                        if (activity.completed && activity.score < 100) {
+                            totalErrors++;
+                            const wrongCount = activity.total - activity.correct;
+                            activityErrors.push(`Activity ${activityNum}: ${wrongCount} error(s) - ${activity.score}%`);
                         }
                     });
-                    document.querySelectorAll('#activity-1 .progress-item').forEach(item => {
-                        item.classList.add('identified');
-                    });
-                    document.getElementById('hotspot-count').textContent = '5';
                     
-                    state.activities[1].completed = true;
-                    state.activities[1].correct = 5;
-                    state.activities[1].score = 100;
-                    status.textContent = 'Completed';
-                    status.style.color = '#00b894';
-                    document.querySelector('#activity-1').classList.add('completed');
-                    feedback.classList.add('show');
-                }
-
-                // Activity 2
-                if (!state.activities[2].completed) {
-                    const feedback = document.getElementById('feedback-2');
-                    const status = document.querySelector('#activity-2 .activity-status');
-                    
-                    // Identify all hotspots
-                    document.querySelectorAll('#activity-2 .hotspot-item').forEach(item => {
-                        item.classList.add('identified');
-                    });
-                    
-                    state.activities[2].completed = true;
-                    state.activities[2].correct = 11;
-                    state.activities[2].score = 100;
-                    status.textContent = 'Completed';
-                    status.style.color = '#00b894';
-                    document.querySelector('#activity-2').classList.add('completed');
-                    feedback.classList.add('show');
-                }
-
-                // Activity 3
-                if (!state.activities[3].completed) {
-                    const feedback = document.getElementById('feedback-3');
-                    const status = document.querySelector('#activity-3 .activity-status');
-                    
-                    // Select correct answers
-                    const correctIndices = {1: 1, 2: 1, 3: 2};
-                    
-                    document.querySelectorAll('#activity-3 .scenario-trainer').forEach((trainer, index) => {
-                        const scenarioNum = index + 1;
-                        const correctIndex = correctIndices[scenarioNum];
-                        const correctBtn = trainer.querySelectorAll('.action-btn')[correctIndex];
-                        if (correctBtn) {
-                            correctBtn.classList.add('selected');
-                        }
-                        trainer.querySelectorAll('.action-btn').forEach(btn => {
-                            btn.style.pointerEvents = 'none';
-                        });
-                    });
-                    
-                    state.activities[3].completed = true;
-                    state.activities[3].correct = 3;
-                    state.activities[3].score = 100;
-                    status.textContent = 'Completed';
-                    status.style.color = '#00b894';
-                    document.querySelector('#activity-3').classList.add('completed');
-                    feedback.classList.add('show');
-                }
-
-                // Activity 4
-                if (!state.activities[4].completed) {
-                    const feedback = document.getElementById('feedback-4');
-                    const status = document.querySelector('#activity-4 .activity-status');
-                    
-                    // Place all items correctly
-                    const correctPlacements = {
-                        'aca': [
-                            'Expanded Medicaid coverage',
-                            'Created health insurance marketplaces',
-                            'Required coverage of pre-existing conditions',
-                            'Eliminated lifetime coverage limits'
-                        ],
-                        'dqsa': [
-                            'Established track-and-trace requirements',
-                            'Created new categories of compounding pharmacies',
-                            'Required product identifiers (serial numbers)',
-                            'Enhanced FDA oversight of compounders'
-                        ]
-                    };
-                    
-                    // Clear dropzones
-                    document.getElementById('aca-dropzone').innerHTML = '';
-                    document.getElementById('dqsa-dropzone').innerHTML = '';
-                    
-                    // Add items to correct dropzones
-                    Object.keys(correctPlacements).forEach(law => {
-                        const dropzone = document.getElementById(`${law}-dropzone`);
-                        correctPlacements[law].forEach(text => {
-                            const div = document.createElement('div');
-                            div.className = 'law-item';
-                            div.textContent = text;
-                            div.style.background = 'rgba(0, 184, 148, 0.1)';
-                            div.style.border = '2px solid var(--color-success)';
-                            div.style.cursor = 'default';
-                            div.style.pointerEvents = 'none';
-                            dropzone.appendChild(div);
-                        });
-                    });
-                    
-                    // Hide all original items
-                    document.querySelectorAll('#activity-4 .law-item').forEach(item => {
-                        item.style.display = 'none';
-                    });
-                    
-                    state.activities[4].completed = true;
-                    state.activities[4].correct = 8;
-                    state.activities[4].score = 100;
-                    status.textContent = 'Completed';
-                    status.style.color = '#00b894';
-                    document.querySelector('#activity-4').classList.add('completed');
-                    feedback.classList.add('show');
-                }
-
-                // Activity 5
-                if (!state.activities[5].completed) {
-                    const feedback = document.getElementById('feedback-5');
-                    const status = document.querySelector('#activity-5 .activity-status');
-                    
-                    // Select correct REMS items
-                    document.querySelectorAll('#activity-5 .check-item[data-rems="correct"]').forEach(item => {
-                        item.classList.add('selected');
-                    });
-                    
-                    // Select correct VIPPS items
-                    document.querySelectorAll('#activity-5 .check-item[data-vip="correct"]').forEach(item => {
-                        item.classList.add('selected');
-                    });
-                    
-                    // Mark incorrect items as wrong
-                    document.querySelectorAll('#activity-5 .check-item[data-rems="wrong"], #activity-5 .check-item[data-vip="wrong"]').forEach(item => {
-                        item.classList.add('wrong');
-                    });
-                    
-                    state.activities[5].completed = true;
-                    state.activities[5].correct = 11;
-                    state.activities[5].score = 100;
-                    status.textContent = 'Completed';
-                    status.style.color = '#00b894';
-                    document.querySelector('#activity-5').classList.add('completed');
-                    feedback.classList.add('show');
-                }
-
-                updateProgressSummary();
+                    if (totalErrors > 0) {
+                        alert(`Found ${totalErrors} activities with errors:\n\n${activityErrors.join('\n')}\n\nReview the feedback for each activity to see what needs correction.`);
+                    } else {
+                        alert('All activities completed perfectly! Ready to view final results.');
+                    }
+                }, 1000);
             }
 
             // View Final Results
@@ -2699,6 +3088,12 @@
                         activityCount++;
                     }
                 });
+
+                // Check if all activities are completed
+                if (activityCount < 5) {
+                    alert('Please complete all 5 activities before viewing final results.');
+                    return;
+                }
 
                 const averageScore = activityCount > 0 ? Math.round(totalScore / activityCount) : 0;
                 finalScore.textContent = `${averageScore}%`;
