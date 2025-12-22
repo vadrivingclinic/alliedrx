@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Week 1 Wrap-Up -- History of Medicine & Pharmacy</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d9b8ff;
+            --color-accent: #8380f0;
+            --color-bg: #f7f5fb;
+            --color-text: #1e2030;
+            --color-muted: #727089;
+            --radius-lg: 24px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(circle at top left, #ffffff 0, #f3edff 40%, var(--color-bg) 100%);
+            color: var(--color-text);
+            -webkit-text-size-adjust: 100%;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 12px; }
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1120px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px 30px;
+            display: grid;
+            grid-template-columns: minmax(0, 3.1fr) minmax(0, 2.4fr);
+            gap: 28px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @media (max-width: 900px) {
+            .page {
+                grid-template-columns: 1fr;
+                padding: 22px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 0; }
+            .page {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 18px 14px 22px;
+                gap: 22px;
+            }
+            h1 { font-size: 1.7rem; }
+            .section-title { font-size: 1rem; }
+        }
+
+        img, .page, .column, .card, .side-card, .completion-card {
+            max-width: 100%;
+        }
+
+        .column {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header / branding */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+        }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: #00b894;
+            flex-shrink: 0;
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+        }
+
+        @media (max-width: 480px) {
+            .brand-row { flex-direction: column; align-items: flex-start; }
+            .badge-mode { margin-top: 6px; }
+        }
+
+        h1 {
+            font-size: clamp(1.9rem, 3vw, 2.3rem);
+            line-height: 1.05;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+        }
+
+        .subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 36rem;
+            margin-bottom: 18px;
+        }
+
+        .subtitle strong {
+            color: var(--color-primary);
+        }
+
+        /* Sections */
+        .section-label {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-primary);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--color-text);
+        }
+
+        .card {
+            border-radius: 18px;
+            border: 1px solid rgba(15, 23, 42, 0.06);
+            padding: 14px 16px 16px;
+            margin-bottom: 14px;
+            background: linear-gradient(135deg, rgba(175, 75, 239, 0.06), rgba(255, 255, 255, 0.98));
+        }
+
+        .card + .card { margin-top: 6px; }
+
+        .card p {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--color-text);
+        }
+
+        .small {
+            font-size: 0.82rem;
+            color: var(--color-muted);
+        }
+
+        /* Quiz styles */
+        .quiz-item {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px dashed rgba(148, 163, 184, 0.7);
+        }
+
+        .quiz-question {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .quiz-options {
+            list-style: none;
+            padding-left: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            font-size: 0.88rem;
+        }
+
+        .quiz-options li {
+            display: flex;
+            align-items: flex-start;
+            gap: 6px;
+        }
+
+        .quiz-options input {
+            margin-top: 3px;
+            cursor: pointer;
+        }
+
+        .quiz-feedback {
+            font-size: 0.82rem;
+            margin-top: 5px;
+            min-height: 1.1em;
+        }
+
+        .quiz-feedback.correct { color: #15803d; }
+        .quiz-feedback.incorrect { color: #b91c1c; }
+
+        .btn {
+            border-radius: 999px;
+            border: none;
+            padding: 7px 14px;
+            margin-top: 10px;
+            font-size: 0.84rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            cursor: pointer;
+            background: linear-gradient(135deg, var(--color-primary), #7c3aed);
+            color: #ffffff;
+            box-shadow: 0 10px 25px rgba(88, 28, 135, 0.35);
+            transition: transform 0.05s ease, box-shadow 0.05s ease;
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 5px 12px rgba(88, 28, 135, 0.4);
+        }
+
+        /* Vocabulary */
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+            margin-top: 4px;
+        }
+
+        @media (max-width: 900px) {
+            .vocab-grid { grid-template-columns: 1fr; }
+        }
+
+        .vocab-card {
+            border-radius: 14px;
+            padding: 10px 12px;
+            background: rgba(12, 10, 24, 0.94);
+            color: #e5e7eb;
+            font-size: 0.86rem;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .vocab-term {
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: #fef9c3;
+        }
+
+        .vocab-definition {
+            font-size: 0.82rem;
+            line-height: 1.5;
+            display: none;
+        }
+
+        .vocab-card.active .vocab-definition { display: block; }
+
+        .vocab-card::after {
+            content: "Tap to flip";
+            position: absolute;
+            right: 10px;
+            bottom: 8px;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #a5b4fc;
+        }
+
+        .vocab-card.active::after { content: "Hide"; }
+
+        /* Reflection */
+        textarea {
+            width: 100%;
+            min-height: 80px;
+            border-radius: 12px;
+            border: 1px solid rgba(148, 163, 184, 0.7);
+            padding: 10px 11px;
+            font-family: inherit;
+            font-size: 0.88rem;
+            resize: vertical;
+            margin-top: 6px;
+        }
+
+        textarea:focus {
+            outline: 2px solid var(--color-primary-soft);
+            border-color: var(--color-primary);
+        }
+
+        .checklist {
+            list-style: none;
+            margin-top: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            font-size: 0.86rem;
+        }
+
+        .checklist li {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .checklist input { margin-top: 2px; }
+
+        /* Right column cards */
+        .side-card {
+            background: rgba(12, 10, 24, 0.96);
+            color: #e5e7eb;
+            border-radius: 18px;
+            padding: 16px 18px 18px;
+            font-size: 0.88rem;
+            line-height: 1.7;
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.6);
+            margin-bottom: 16px;
+        }
+
+        .side-card strong { color: #ffffff; }
+
+        .side-subtitle {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #c4b5fd;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .side-list {
+            list-style: none;
+            margin-top: 6px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            font-size: 0.86rem;
+        }
+
+        .side-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 7px;
+        }
+
+        .dot {
+            width: 6px;
+            height: 6px;
+            margin-top: 7px;
+            border-radius: 999px;
+            background: #a5b4fc;
+            flex-shrink: 0;
+        }
+
+        .completion-card {
+            border-radius: 18px;
+            border: 1px dashed rgba(148, 163, 184, 0.7);
+            padding: 12px 14px;
+            font-size: 0.84rem;
+            color: var(--color-muted);
+            background: rgba(248, 250, 252, 0.9);
+        }
+
+        /* Timeline */
+        .timeline {
+            margin-top: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .timeline-item {
+            padding: 8px 10px;
+            border-left: 3px solid var(--color-primary);
+            background: rgba(175, 75, 239, 0.05);
+            border-radius: 0 8px 8px 0;
+            font-size: 0.85rem;
+        }
+
+        .timeline-period {
+            font-weight: 600;
+            color: var(--color-primary);
+        }
+
+        /* Important People Grid */
+        .people-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .person-card {
+            background: rgba(175, 75, 239, 0.08);
+            border-radius: 12px;
+            padding: 10px;
+            font-size: 0.82rem;
+        }
+
+        .person-name {
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 4px;
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="wrapup-heading">
+        <!-- LEFT COLUMN -->
+        <section class="column">
+            <header class="brand-row">
+                <div class="brand">
+                    <img
+                        src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                        alt="AlliedRx logo"
+                        class="brand-logo"
+                    />
+                    <div class="course-meta">
+                        <span class="course-name">Pharmacy Technician Program • Mosby's 5th Edition</span>
+                        <div class="week-label">
+                            <span class="week-label-dot"></span>
+                            <span>Week 1 — Chapter 1: History of Medicine & Pharmacy</span>
+                        </div>
+                    </div>
+                </div>
+                <span class="badge-mode">Interactive Review</span>
+            </header>
+
+            <h1 id="wrapup-heading">From Ancient Remedies to Modern Pharmacy Practice</h1>
+            <p class="subtitle">
+                Use this page to review <strong>Chapter 1 — History of Medicine and Pharmacy</strong> from Mosby's Pharmacy Technician 5th Edition. 
+                Trace medical evolution, understand pharmacy foundations, and prepare for your role as an AlliedRx pharmacy technician.
+            </p>
+
+            <!-- QUICK SELF-CHECK QUIZ -->
+            <section aria-label="quick self check">
+                <p class="section-label">Step 1</p>
+                <h2 class="section-title">Quick Self-Check</h2>
+                <div class="card" id="quiz-card">
+                    <p class="small">
+                        Answer these questions to assess your understanding of Chapter 1 concepts, then select 
+                        <strong>Check answers</strong> to identify areas for review.
+                    </p>
+
+                    <div class="quiz-item" data-answer="b">
+                        <p class="quiz-question">
+                            1. In ancient medicine, what was the primary purpose of trephining?
+                        </p>
+                        <ul class="quiz-options">
+                            <li><input type="radio" name="q1" value="a" id="q1a" /><label for="q1a">To reduce fever by releasing heat</label></li>
+                            <li><input type="radio" name="q1" value="b" id="q1b" /><label for="q1b">To make an opening in the skull to allow disease to leave the body</label></li>
+                            <li><input type="radio" name="q1" value="c" id="q1c" /><label for="q1c">To administer herbal remedies directly to the brain</label></li>
+                        </ul>
+                        <div class="quiz-feedback" id="q1-feedback"></div>
+                    </div>
+
+                    <div class="quiz-item" data-answer="c">
+                        <p class="quiz-question">
+                            2. What is the main difference between the Caduceus and the Staff of Asclepius?
+                        </p>
+                        <ul class="quiz-options">
+                            <li><input type="radio" name="q2" value="a" id="q2a" /><label for="q2a">The Caduceus has one snake, the Staff has two</label></li>
+                            <li><input type="radio" name="q2" value="b" id="q2b" /><label for="q2b">The Staff of Asclepius includes a winged hat</label></li>
+                            <li><input type="radio" name="q2" value="c" id="q2c" /><label for="q2c">The Staff of Asclepius has one snake and no wings; the Caduceus has two snakes and wings</label></li>
+                        </ul>
+                        <div class="quiz-feedback" id="q2-feedback"></div>
+                    </div>
+
+                    <div class="quiz-item" data-answer="a">
+                        <p class="quiz-question">
+                            3. Laudanum, widely used in the 1800s, was primarily composed of:
+                        </p>
+                        <ul class="quiz-options">
+                            <li><input type="radio" name="q3" value="a" id="q3a" /><label for="q3a">Opium mixed with alcohol</label></li>
+                            <li><input type="radio" name="q3" value="b" id="q3b" /><label for="q3b">Willow bark extract in wine</label></li>
+                            <li><input type="radio" name="q3" value="c" id="q3c" /><label for="q3c">Digitalis leaves in whiskey</label></li>
+                        </ul>
+                        <div class="quiz-feedback" id="q3-feedback"></div>
+                    </div>
+
+                    <div class="quiz-item" data-answer="c">
+                        <p class="quiz-question">
+                            4. Which statement BEST describes the evolution of pharmacy practice over the past century?
+                        </p>
+                        <ul class="quiz-options">
+                            <li><input type="radio" name="q4" value="a" id="q4a" /><label for="q4a">Pharmacists have become less involved in patient care</label></li>
+                            <li><input type="radio" name="q4" value="b" id="q4b" /><label for="q4b">The role has remained largely unchanged since the 1920s</label></li>
+                            <li><input type="radio" name="q4" value="c" id="q4c" /><label for="q4c">Pharmacy has shifted from primarily compounding to clinical patient care with expanded technician roles</label></li>
+                        </ul>
+                        <div class="quiz-feedback" id="q4-feedback"></div>
+                    </div>
+
+                    <button class="btn" type="button" onclick="checkQuiz()">Check answers</button>
+                </div>
+            </section>
+
+            <!-- VOCABULARY FLASHCARDS -->
+            <section aria-label="vocabulary practice">
+                <p class="section-label">Step 2</p>
+                <h2 class="section-title">Key Terminology Mastery</h2>
+                <div class="card">
+                    <p class="small">
+                        Select each card to reveal definitions from Chapter 1. Practice explaining terms in your own words 
+                        as if teaching a new AlliedRx pharmacy technician student.
+                    </p>
+                    <div class="vocab-grid">
+                        <div class="vocab-card" onclick="toggleVocab(this)">
+                            <div class="vocab-term">Apothecary</div>
+                            <div class="vocab-definition">Historical term for pharmacist; also referred to the shop where medicines were prepared and sold. The predecessor to modern pharmacies.</div>
+                        </div>
+                        <div class="vocab-card" onclick="toggleVocab(this)">
+                            <div class="vocab-term">Bloodletting</div>
+                            <div class="vocab-definition">Ancient medical practice of withdrawing blood to treat illness, based on the humor theory of balancing bodily fluids.</div>
+                        </div>
+                        <div class="vocab-card" onclick="toggleVocab(this)">
+                            <div class="vocab-term">Laudanum</div>
+                            <div class="vocab-definition">A tincture of opium (approximately 10% opium powder in alcohol) widely used as a painkiller and "cure-all" in the 18th-19th centuries.</div>
+                        </div>
+                        <div class="vocab-card" onclick="toggleVocab(this)">
+                            <div class="vocab-term">Opiate vs. Opioid</div>
+                            <div class="vocab-definition"><strong>Opiate:</strong> Natural alkaloids from opium poppy (morphine, codeine). <strong>Opioid:</strong> All substances (natural, semi-synthetic, synthetic) that bind to opioid receptors.</div>
+                        </div>
+                        <div class="vocab-card" onclick="toggleVocab(this)">
+                            <div class="vocab-term">Pharmacy Technician</div>
+                            <div class="vocab-definition">Healthcare professional who assists pharmacists with prescription preparation, inventory management, and patient service under pharmacist supervision.</div>
+                        </div>
+                        <div class="vocab-card" onclick="toggleVocab(this)">
+                            <div class="vocab-term">PTCB</div>
+                            <div class="vocab-definition">Pharmacy Technician Certification Board - National organization that develops and administers the PTCE certification exam for pharmacy technicians.</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- HISTORICAL TIMELINE -->
+            <section aria-label="historical timeline">
+                <p class="section-label">Historical Context</p>
+                <h2 class="section-title">Medicine & Pharmacy Evolution</h2>
+                <div class="card">
+                    <p class="small">Key milestones that shaped modern healthcare and pharmacy practice:</p>
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <span class="timeline-period">Ancient Times (Pre-1700s):</span> 
+                            Trephining, bloodletting, herbal remedies. Hippocrates establishes medical ethics.
+                        </div>
+                        <div class="timeline-item">
+                            <span class="timeline-period">1700s-1800s:</span> 
+                            Laudanum widespread. Scientific method applied to medicine. First pharmacies established in colonial America.
+                        </div>
+                        <div class="timeline-item">
+                            <span class="timeline-period">1928:</span> 
+                            Alexander Fleming discovers penicillin, revolutionizing infection treatment.
+                        </div>
+                        <div class="timeline-item">
+                            <span class="timeline-period">Mid-20th Century:</span> 
+                            Formalization of pharmacy education. Development of synthetic drugs. Hospital pharmacy expansion.
+                        </div>
+                        <div class="timeline-item">
+                            <span class="timeline-period">1970s-Present:</span> 
+                            Clinical pharmacy emerges. Technician roles formalized. Computerization of pharmacy practice. Specialty pharmacies develop.
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- RIGHT COLUMN -->
+        <aside class="column" aria-label="apply it to pharmacy practice">
+            <!-- PHARMACY SCENARIO -->
+            <section>
+                <p class="section-label">Apply it</p>
+                <h2 class="section-title">Connecting History to Your Practice</h2>
+                <div class="side-card">
+                    <p class="side-subtitle">Pharmacy Scenario</p>
+                    <p>
+                        During your AlliedRx internship, an elderly patient mentions they remember when pharmacists 
+                        compounded most medications themselves. They ask how pharmacy has changed since "the old days" 
+                        and why modern practices are different.
+                    </p>
+                    <p class="side-subtitle" style="margin-top:12px;">Reflection Prompts</p>
+                    <ul class="side-list">
+                        <li><span class="dot"></span><span>How would you explain the shift from compounding to clinical pharmacy in terms patients can understand?</span></li>
+                        <li><span class="dot"></span><span>What safety lessons from historical practices (like laudanum use) inform today's controlled substance regulations?</span></li>
+                        <li><span class="dot"></span><span>How does understanding pharmacy history help you appreciate your role as a modern technician?</span></li>
+                    </ul>
+                    <label class="small" for="pharmacy-reflection" style="display:block;margin-top:10px;">
+                        Document your thoughts on applying historical knowledge:
+                    </label>
+                    <textarea id="pharmacy-reflection" placeholder="Consider: How does knowing about apothecaries and historical treatments help you understand modern pharmacy regulations, safety protocols, and your professional responsibilities as an AlliedRx technician?"></textarea>
+                </div>
+            </section>
+
+            <!-- IMPORTANT PEOPLE -->
+            <section>
+                <p class="section-label">Key Figures</p>
+                <h2 class="section-title">Historical Contributors</h2>
+                <div class="side-card">
+                    <p>Match these figures with their contributions to medicine and pharmacy:</p>
+                    <div class="people-grid">
+                        <div class="person-card">
+                            <div class="person-name">Hippocrates</div>
+                            <div>Greek physician; "father of medicine"; established ethical standards</div>
+                        </div>
+                        <div class="person-card">
+                            <div class="person-name">Alexander Fleming</div>
+                            <div>Discovered penicillin, the first antibiotic (1928)</div>
+                        </div>
+                        <div class="person-card">
+                            <div class="person-name">Louis Pasteur</div>
+                            <div>Developed vaccines; invented pasteurization; germ theory</div>
+                        </div>
+                        <div class="person-card">
+                            <div class="person-name">Florence Nightingale</div>
+                            <div>Improved hospital sanitation; reduced infection rates</div>
+                        </div>
+                        <div class="person-card">
+                            <div class="person-name">Gerhard Domagk</div>
+                            <div>Developed first synthetic antibiotics (sulfonamides)</div>
+                        </div>
+                        <div class="person-card">
+                            <div class="person-name">Watson & Crick</div>
+                            <div>Discovered DNA structure (double helix, 1953)</div>
+                        </div>
+                    </div>
+                    <p style="margin-top:10px; font-size:0.82rem; color:#a5b4fc;">
+                        <strong>Study Tip:</strong> Create flashcards with these names on one side and contributions on the other.
+                    </p>
+                </div>
+            </section>
+
+            <!-- READINESS CHECKLIST -->
+            <section>
+                <p class="section-label">Step 3</p>
+                <h2 class="section-title">Chapter 1 Competency Checklist</h2>
+                <div class="side-card">
+                    <p>
+                        Mark each item when you can confidently discuss or describe the concept:
+                    </p>
+                    <ul class="checklist" style="margin-top:10px;">
+                        <li><input type="checkbox" id="obj1" /><label for="obj1">I can describe ancient medical beliefs and common treatments (440 BC - AD 1600)</label></li>
+                        <li><input type="checkbox" id="obj2" /><label for="obj2">I can differentiate between opiates and opioids with examples</label></li>
+                        <li><input type="checkbox" id="obj3" /><label for="obj3">I can list at least three major advances in drug therapy and vaccinations</label></li>
+                        <li><input type="checkbox" id="obj4" /><label for="obj4">I understand the historical role of apothecaries vs. modern pharmacists</label></li>
+                        <li><input type="checkbox" id="obj5" /><label for="obj5">I can describe how pharmacy practice has changed over the past 100 years</label></li>
+                        <li><input type="checkbox" id="obj6" /><label for="obj6">I know the role of PTCB in pharmacy technician certification</label></li>
+                        <li><input type="checkbox" id="obj7" /><label for="obj7">I can identify key historical figures and their contributions</label></li>
+                    </ul>
+                    <p class="small" style="margin-top:8px; color:#a5b4fc;">
+                        <strong>AlliedRx Focus:</strong> These foundational concepts will support your success throughout the Pharmacy Technician Program.
+                    </p>
+                </div>
+            </section>
+
+            <!-- COMPLETION REMINDER -->
+            <section>
+                <p class="section-label">Step 4</p>
+                <h2 class="section-title">Ready for Chapter 2?</h2>
+                <div class="completion-card">
+                    <p>Before proceeding to Chapter 2, verify you have:</p>
+                    <ul class="side-list" style="margin-top:8px;">
+                        <li><span class="dot"></span><span>Completed the <strong>Self-Check Quiz</strong> and reviewed incorrect answers</span></li>
+                        <li><span class="dot"></span><span>Mastered all <strong>Chapter 1 terminology</strong> through flashcards</span></li>
+                        <li><span class="dot"></span><span>Reflected on <strong>historical connections</strong> to modern pharmacy practice</span></li>
+                        <li><span class="dot"></span><span>Checked off items in your <strong>Competency Checklist</strong></span></li>
+                        <li><span class="dot"></span><span>Reviewed <strong>key historical figures</strong> and their contributions</span></li>
+                    </ul>
+                    <p style="margin-top:8px;">
+                        Chapter 1 provides essential historical context for your pharmacy career. When confident with these concepts, 
+                        proceed to <strong>Chapter 2: Pharmacy Law, Ethics, and Regulatory Agencies</strong> in your AlliedRx program.
+                    </p>
+                </div>
+            </section>
+        </aside>
+    </main>
+
+    <script>
+        // Quiz logic
+        function checkQuiz() {
+            const items = document.querySelectorAll('.quiz-item');
+            items.forEach((item, index) => {
+                const correct = item.getAttribute('data-answer');
+                const name = 'q' + (index + 1);
+                const selected = document.querySelector('input[name="' + name + '"]:checked');
+                const feedback = document.getElementById(name + '-feedback');
+                
+                if (!selected) {
+                    feedback.textContent = 'Please select an answer.';
+                    feedback.className = 'quiz-feedback';
+                    return;
+                }
+                
+                if (selected.value === correct) {
+                    feedback.textContent = 'Correct! Your understanding is solid.';
+                    feedback.className = 'quiz-feedback correct';
+                } else {
+                    feedback.textContent = 'Review this concept in Chapter 1.';
+                    feedback.className = 'quiz-feedback incorrect';
+                }
+            });
+        }
+
+        // Vocabulary flip
+        function toggleVocab(card) {
+            card.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
