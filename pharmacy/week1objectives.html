@@ -52,7 +52,7 @@
       box-shadow: var(--shadow-soft);
       padding: 28px 30px 32px;
       display: grid;
-      grid-template-columns: minmax(0, 3.1fr) minmax(0, 2.4fr);
+      grid-template-columns: 1.8fr 1fr;
       gap: 28px;
       position: relative;
       overflow: hidden;
@@ -202,32 +202,35 @@
     .subtitle {
       font-size: 0.98rem;
       color: var(--color-muted);
-      max-width: 34rem;
-      margin-bottom: 18px;
+      max-width: 100%;
+      margin-bottom: 24px;
+      line-height: 1.5;
       animation: fadeInUp 0.6s ease-out 0.4s both;
     }
 
-    /* Objectives list */
+    /* Objectives list - Improved readability */
     .objectives-list {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 16px;
+      margin-bottom: 24px;
     }
 
     .objective-card {
-      background: #08070a;
-      color: #ffffff;
+      background: #0a0910;
+      color: #f0f0f0;
       border-radius: 18px;
-      padding: 10px 16px 14px;
+      padding: 16px 20px 18px;
       display: grid;
       grid-template-columns: auto 1fr auto;
       align-items: center;
-      gap: 12px;
+      gap: 16px;
       box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
       transition: all 0.3s ease;
       cursor: pointer;
       position: relative;
       overflow: hidden;
+      min-height: 100px;
     }
 
     .objective-card::before {
@@ -257,6 +260,7 @@
       .objective-card {
         grid-template-columns: auto 1fr;
         grid-template-rows: auto auto;
+        padding: 14px 16px;
       }
       .objective-icon { justify-self: flex-end; }
     }
@@ -265,13 +269,13 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 40px;
-      height: 40px;
+      width: 48px;
+      height: 48px;
       border-radius: 999px;
       background: #ffffff;
       color: #111827;
       font-weight: 700;
-      font-size: 1.05rem;
+      font-size: 1.2rem;
       flex-shrink: 0;
       transition: all 0.3s ease;
     }
@@ -284,33 +288,33 @@
     .objective-main {
       display: flex;
       flex-direction: column;
-      gap: 2px;
+      gap: 6px;
     }
 
     .objective-verb {
-      font-size: 0.98rem;
+      font-size: 1.05rem;
       font-weight: 700;
-      color: var(--color-primary-soft);
+      color: #d492ff;
       transition: color 0.3s ease;
     }
 
     .objective-card:hover .objective-verb { color: #ffffff; }
 
     .objective-text {
-      font-size: 0.84rem;
-      color: #e5e7eb;
-      line-height: 1.4;
+      font-size: 0.92rem;
+      color: #e0e0e0;
+      line-height: 1.5;
     }
 
     .objective-icon {
-      width: 26px;
-      height: 26px;
+      width: 32px;
+      height: 32px;
       border-radius: 999px;
       border: 1px solid rgba(250,250,250,0.16);
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.7rem;
+      font-size: 0.85rem;
       color: #f9fafb;
       background: linear-gradient(135deg, rgba(175,75,239,0.1), rgba(0,0,0,0.4));
       transition: all 0.3s ease;
@@ -321,63 +325,67 @@
       transform: scale(1.1);
     }
 
-    /* Right column */
+    /* Right column - Improved readability */
     .objectives-header {
-      font-size: 1.3rem;
+      font-size: 1.4rem;
       font-weight: 800;
       color: var(--color-text);
-      margin-bottom: 6px;
+      margin-bottom: 8px;
       animation: fadeInUp 0.6s ease-out 0.5s both;
     }
 
     .section-tag {
-      font-size: 0.8rem;
+      font-size: 0.82rem;
       text-transform: uppercase;
       letter-spacing: 0.14em;
       color: var(--color-primary);
       font-weight: 600;
-      margin-bottom: 10px;
+      margin-bottom: 16px;
       animation: fadeInUp 0.6s ease-out 0.6s both;
     }
 
     .week-overview {
-      background: rgba(12, 10, 24, 0.94);
+      background: #0c0a18;
       border-radius: 18px;
-      padding: 16px 18px 18px;
-      color: #e5e7eb;
-      font-size: 0.88rem;
+      padding: 20px 22px 24px;
+      color: #e0e0e0;
+      font-size: 0.9rem;
       line-height: 1.7;
       box-shadow: 0 18px 40px rgba(15, 23, 42, 0.6);
-      margin-bottom: 16px;
       animation: fadeInUp 0.6s ease-out 0.7s both;
       transition: transform 0.3s ease;
+      height: fit-content;
     }
 
     .week-overview:hover { transform: translateY(-2px); }
 
-    .week-overview strong { color: #ffffff; }
+    .week-overview strong { 
+      color: #ffffff; 
+      font-weight: 700;
+    }
 
     .mini-heading {
-      font-size: 0.86rem;
+      font-size: 0.88rem;
       text-transform: uppercase;
       letter-spacing: 0.14em;
       color: #c4b5fd;
       font-weight: 600;
-      margin: 8px 0 10px;
+      margin: 12px 0 10px;
     }
 
     .outcomes-list {
       list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      font-size: 0.86rem;
-      color: #f9fafb;
+      gap: 10px;
+      font-size: 0.88rem;
+      color: #f0f0f0;
+      margin-bottom: 16px;
     }
 
     .outcomes-list li {
       display: flex;
-      gap: 8px;
+      gap: 10px;
       align-items: flex-start;
       transition: transform 0.3s ease;
     }
@@ -387,7 +395,7 @@
     .dot {
       width: 6px;
       height: 6px;
-      margin-top: 6px;
+      margin-top: 7px;
       border-radius: 999px;
       background: var(--color-accent);
       flex-shrink: 0;
@@ -395,37 +403,40 @@
     }
 
     .note-card {
-      margin-top: 14px;
       border-radius: 16px;
       border: 1px solid rgba(255,255,255,0.16);
-      background: rgba(15,23,42,0.7);
-      padding: 10px 12px;
-      font-size: 0.78rem;
-      color: #e5e7eb;
+      background: rgba(20, 18, 36, 0.8);
+      padding: 12px 14px;
+      font-size: 0.82rem;
+      color: #e0e0e0;
       transition: all 0.3s ease;
+      margin-top: 12px;
     }
 
     .note-card:hover {
       border-color: var(--color-primary-soft);
-      background: rgba(15,23,42,0.9);
+      background: rgba(25, 23, 42, 0.9);
     }
 
-    .note-card strong { color: #fef3c7; }
+    .note-card strong { 
+      color: #ffd966;
+      font-weight: 700;
+    }
 
     /* Key Terms Box */
     .terms-box {
-      background: linear-gradient(135deg, rgba(131,128,240,0.1), rgba(175,75,239,0.1));
+      background: linear-gradient(135deg, rgba(131,128,240,0.15), rgba(175,75,239,0.15));
       border-radius: 18px;
-      padding: 18px;
-      margin-top: 20px;
-      border: 1px solid rgba(131,128,240,0.2);
+      padding: 20px;
+      margin-top: 24px;
+      border: 1px solid rgba(131,128,240,0.3);
     }
 
     .terms-title {
-      font-size: 0.9rem;
+      font-size: 0.95rem;
       font-weight: 700;
-      color: var(--color-accent);
-      margin-bottom: 10px;
+      color: #a29bfe;
+      margin-bottom: 12px;
       display: flex;
       align-items: center;
       gap: 8px;
@@ -433,22 +444,100 @@
 
     .terms-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 10px;
+      grid-template-columns: 1fr;
+      gap: 12px;
       font-size: 0.85rem;
-      color: #ffffff;
+      color: #f0f0f0;
     }
 
     .term-item {
-      padding: 6px 0;
-      border-bottom: 1px dashed rgba(255,255,255,0.1);
+      padding: 8px 0;
+      border-bottom: 1px dashed rgba(255,255,255,0.15);
     }
 
-    .term { font-weight: 600; color: #d492ff; }
-    .def { color: #e5e7eb; margin-top: 2px; }
+    .term { 
+      font-weight: 600; 
+      color: #d492ff;
+      font-size: 0.9rem; 
+    }
+    .def { 
+      color: #e0e0e0;
+      margin-top: 4px; 
+      line-height: 1.4; 
+    }
 
-    @media (max-width: 600px) {
-      .terms-grid { grid-template-columns: 1fr; }
+    /* Historical Figures - DARK TEXT VERSION */
+    .figures-box {
+      background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(240, 240, 255, 0.95));
+      border-radius: 18px;
+      padding: 18px;
+      margin-top: 20px;
+      border: 1px solid rgba(131,128,240,0.3);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .figures-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--color-primary);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .figures-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 0.85rem;
+      color: #333333;
+    }
+
+    .figure-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 10px;
+      border-bottom: 1px dashed rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+      border-radius: 8px;
+    }
+
+    .figure-item:hover {
+      background-color: rgba(175, 75, 239, 0.08);
+      transform: translateX(3px);
+    }
+
+    .figure-name { 
+      font-weight: 600; 
+      color: #222222;
+    }
+    .figure-role { 
+      color: #444444;
+      text-align: right; 
+      font-size: 0.8rem;
+    }
+
+    /* Left column note card */
+    .left-note-card {
+      border-radius: 16px;
+      border: 1px solid rgba(175, 75, 239, 0.2);
+      background: rgba(175, 75, 239, 0.08);
+      padding: 14px 16px;
+      font-size: 0.82rem;
+      color: var(--color-text);
+      transition: all 0.3s ease;
+      margin-top: 20px;
+    }
+
+    .left-note-card:hover {
+      border-color: var(--color-primary-soft);
+      background: rgba(175, 75, 239, 0.12);
+    }
+
+    .left-note-card strong { 
+      color: #8a2be2;
+      font-weight: 700;
     }
   </style>
 </head>
@@ -464,7 +553,7 @@
             class="brand-logo"
           />
           <div class="course-meta">
-            <span class="course-name">Pharmacy Technician Program • Week 1</span>
+            <span class="course-name">Pharmacy Technician Program • PT5</span>
             <div class="week-label">
               <span class="week-label-dot"></span>
               <span>Week 1 — History of Medicine & Pharmacy</span>
@@ -476,7 +565,8 @@
 
       <h1 id="week1-heading">Week 1 Objectives</h1>
       <p class="subtitle">
-        Explore the evolution of medicine and pharmacy from ancient practices to modern advancements, and understand the foundational role of pharmacy technicians in healthcare.
+        Explore the evolution of medicine and pharmacy from ancient practices to modern advancements. 
+        Understand the historical context that shaped today's pharmacy profession and your role as a technician.
       </p>
 
       <div class="objectives-list" id="objectives-container">
@@ -485,7 +575,9 @@
           <div class="objective-main">
             <div class="objective-verb">Discuss & Describe</div>
             <p class="objective-text">
-              Discuss ancient beliefs of illness & medicine (440 BC–AD 1600); list common ancient treatments; describe 18th–19th century medicine & war impacts; differentiate opiates vs. opioids.
+              Discuss ancient beliefs of illness & medicine (440 BC–AD 1600), including practices like bloodletting and trephining. 
+              List common ancient treatments that prevailed in Western civilization. Describe 18th–19th century medicine and identify 
+              influences that major wars had on medicine. Differentiate between opiates and opioids, and describe the wide use of opium and problems surrounding its use.
             </p>
           </div>
           <div class="objective-icon" aria-hidden="true">📜</div>
@@ -496,7 +588,8 @@
           <div class="objective-main">
             <div class="objective-verb">Discuss</div>
             <p class="objective-text">
-              Discuss advances in drug therapy and vaccinations throughout history.
+              Discuss advances in drug therapy and vaccinations throughout history, from early herbal remedies to 
+              modern pharmaceuticals and immunization programs that have transformed public health.
             </p>
           </div>
           <div class="objective-icon" aria-hidden="true">💉</div>
@@ -507,11 +600,51 @@
           <div class="objective-main">
             <div class="objective-verb">Identify & Describe</div>
             <p class="objective-text">
-              Identify the role of early pharmacists; describe the first U.S. pharmacies & technicians; list major changes in pharmacy over 100 years; identify current trends for technicians.
+              Identify the role that early pharmacists (apothecaries) played in society. Describe how the first 
+              pharmacies began in the United States and the emergence of the first pharmacy technicians. List major 
+              ways pharmacy has changed over the past 100 years and identify important current trends in pharmacy 
+              in relation to pharmacy technicians.
             </p>
           </div>
           <div class="objective-icon" aria-hidden="true">⚗️</div>
         </article>
+      </div>
+
+      <!-- Historical Figures moved to left column - NOW WITH DARK TEXT -->
+      <div class="figures-box">
+        <div class="figures-title"><span>👥</span> Important Historical Figures</div>
+        <div class="figures-list">
+          <div class="figure-item">
+            <span class="figure-name">Hippocrates</span>
+            <span class="figure-role">Father of Medicine</span>
+          </div>
+          <div class="figure-item">
+            <span class="figure-name">Alexander Fleming</span>
+            <span class="figure-role">Discovered penicillin</span>
+          </div>
+          <div class="figure-item">
+            <span class="figure-name">Louis Pasteur</span>
+            <span class="figure-role">Vaccines & pasteurization</span>
+          </div>
+          <div class="figure-item">
+            <span class="figure-name">Florence Nightingale</span>
+            <span class="figure-role">Modern nursing founder</span>
+          </div>
+          <div class="figure-item">
+            <span class="figure-name">Gregor Mendel</span>
+            <span class="figure-role">Father of genetics</span>
+          </div>
+          <div class="figure-item">
+            <span class="figure-name">Paracelsus</span>
+            <span class="figure-role">Physician & scientist</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Additional content to fill left column -->
+      <div class="left-note-card">
+        <strong>📚 Chapter Source:</strong> This chapter is revised from a version contributed by <strong>Bobbi Steelman</strong> 
+        for the previous edition of <em>Mosby's Pharmacy Technician</em>.
       </div>
     </section>
 
@@ -522,16 +655,18 @@
 
       <div class="week-overview">
         <p>
-          Week 1 introduces the <strong>historical journey of medicine and pharmacy</strong>, from ancient practices like bloodletting and trephining to the scientific advancements of the 19th and 20th centuries.
+          <strong>Week 1</strong> introduces the <strong>historical journey of medicine and pharmacy</strong>, 
+          from ancient practices like bloodletting and trephining to the scientific advancements of the 
+          19th and 20th centuries that established modern healthcare.
         </p>
-        <p>
-          Understanding this history helps pharmacy technicians appreciate <strong>the evolution of drug therapy, pharmacy practice, and the technician's role</strong> in today’s healthcare team.
-        </p>
-
-        <p class="mini-heading">📖 Chapter Scenario</p>
+        
+        <p class="mini-heading" style="margin-top: 16px;">📖 Chapter Scenario</p>
         <div class="note-card">
-          <strong>Kelly</strong> is a new pharmacy technician student. She begins her studies by learning about the history of pharmacy. <strong>Why is this important?</strong><br><br>
-          By studying history, Kelly will understand how pharmacy evolved from herbalism and apothecaries to a regulated, patient-centered profession. This foundation helps her appreciate safety standards, ethical practice, and her future role in medication safety.
+          <strong>Kelly</strong> is a new pharmacy technician student. She begins her studies by learning 
+          about the history of pharmacy. <strong>Why is this important?</strong><br><br>
+          By studying history, Kelly will understand how pharmacy evolved from herbalism and apothecaries 
+          to a regulated, patient-centered profession. This foundation helps her appreciate safety standards, 
+          ethical practice, and her future role in medication safety.
         </div>
 
         <p class="mini-heading">🎯 By the end of this week, you will be able to:</p>
@@ -547,23 +682,51 @@
         <div class="terms-box">
           <div class="terms-title"><span>📚</span> Key Terms & Definitions</div>
           <div class="terms-grid">
-            <div class="term-item"><div class="term">Apothecary</div><div class="def">Latin term for pharmacist; also a place where drugs are sold.</div></div>
-            <div class="term-item"><div class="term">Bloodletting</div><div class="def">The practice of draining blood; believed to release illness.</div></div>
-            <div class="term-item"><div class="term">Caduceus</div><div class="def">Staff with two entwined snakes and wings; often confused as the medical symbol.</div></div>
-            <div class="term-item"><div class="term">Laudanum</div><div class="def">A mixture of opium and alcohol used to treat illnesses through the 1800s.</div></div>
-            <div class="term-item"><div class="term">Pharmacy Technician</div><div class="def">Assists pharmacists by filling prescriptions and performing nondiscretionary tasks.</div></div>
-            <div class="term-item"><div class="term">PTCB</div><div class="def">Pharmacy Technician Certification Board—issues the national certification exam.</div></div>
-            <div class="term-item"><div class="term">Staff of Asclepius</div><div class="def">The true symbol of medicine; a wingless staff with one snake.</div></div>
-            <div class="term-item"><div class="term">Trephining</div><div class="def">Making an opening in the head to allow disease to leave the body.</div></div>
+            <div class="term-item">
+              <div class="term">Apothecary</div>
+              <div class="def">Latin term for pharmacist; also a place where drugs are sold.</div>
+            </div>
+            <div class="term-item">
+              <div class="term">Bloodletting</div>
+              <div class="def">The practice of draining blood; believed to release illness.</div>
+            </div>
+            <div class="term-item">
+              <div class="term">Caduceus</div>
+              <div class="def">Staff with two entwined snakes and wings; often confused as the medical symbol.</div>
+            </div>
+            <div class="term-item">
+              <div class="term">Laudanum</div>
+              <div class="def">A mixture of opium and alcohol used to treat illnesses through the 1800s.</div>
+            </div>
+            <div class="term-item">
+              <div class="term">Pharmacy Technician</div>
+              <div class="def">Assists pharmacists by filling prescriptions and performing nondiscretionary tasks.</div>
+            </div>
+            <div class="term-item">
+              <div class="term">PTCB</div>
+              <div class="def">Pharmacy Technician Certification Board—issues the national certification exam.</div>
+            </div>
+            <div class="term-item">
+              <div class="term">Staff of Asclepius</div>
+              <div class="def">The true symbol of medicine; a wingless staff with one snake.</div>
+            </div>
+            <div class="term-item">
+              <div class="term">Trephining</div>
+              <div class="def">Making an opening in the head to allow disease to leave the body.</div>
+            </div>
           </div>
         </div>
 
         <div class="note-card">
-          <strong>💡 Historical Insight:</strong> The <strong>Hippocratic Oath</strong>, written around 400 BC, laid the foundation for medical ethics—including confidentiality, patient welfare, and professional conduct—principles that still guide healthcare today.
+          <strong>💡 Historical Insight:</strong> The <strong>Hippocratic Oath</strong>, written around 400 BC, 
+          laid the foundation for medical ethics—including confidentiality, patient welfare, and professional 
+          conduct—principles that still guide healthcare today.
         </div>
 
         <div class="note-card" style="margin-top:12px;">
-          <strong>🕰️ Pharmacy Evolution:</strong> The first U.S. pharmacy opened in <strong>1729 in Philadelphia</strong>. Over the past 100 years, pharmacy shifted from compounding to dispensing, and now to <strong>medication therapy management and patient education</strong>.
+          <strong>🕰️ Pharmacy Evolution:</strong> The first U.S. pharmacy opened in <strong>1729 in Philadelphia</strong>. 
+          Over the past 100 years, pharmacy shifted from compounding to dispensing, and now to 
+          <strong>medication therapy management and patient education</strong>.
         </div>
       </div>
     </aside>
