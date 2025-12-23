@@ -1,0 +1,1926 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>AlliedRx -- Neuro/Cardiac Drug Study Module</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-error: #e17055;
+            --color-warning: #fdcb6e;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
+            --color-dark: #0c0a18;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+            --shadow-card: 0 12px 30px rgba(15, 23, 42, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(circle at top left, #ffffff 0, #f1ecff 40%, var(--color-bg) 100%);
+            color: var(--color-text);
+            -webkit-text-size-adjust: 100%;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 12px; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes checkmarkPop {
+            0% { transform: scale(0); opacity: 0; }
+            70% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @media (max-width: 900px) { .page { padding: 22px; } }
+        @media (max-width: 480px) { 
+            body { padding: 0; }
+            .page { border-radius: 0; box-shadow: none; padding: 18px 14px 22px; }
+        }
+
+        /* Header */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .brand-logo:hover { transform: scale(1.05); }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--color-success);
+            flex-shrink: 0;
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .badge-mode:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+        @media (max-width: 480px) {
+            .brand-row { flex-direction: column; align-items: flex-start; }
+            .badge-mode { margin-top: 6px; }
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 3vw, 2.2rem);
+            line-height: 1.1;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .module-subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 600px;
+            margin-bottom: 24px;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        /* Progress Tracker */
+        .progress-tracker {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            position: relative;
+            padding: 0 20px;
+        }
+
+        .progress-tracker::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 50px;
+            right: 50px;
+            height: 3px;
+            background: rgba(12, 10, 24, 0.08);
+            z-index: 1;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+
+        .step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--color-muted);
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.active .step-circle {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .progress-step.completed .step-circle {
+            background: var(--color-success);
+            border-color: var(--color-success);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.75rem;
+            color: var(--color-muted);
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .progress-step.active .step-label {
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        /* Progress Summary */
+        .progress-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+            animation: fadeInUp 0.6s ease-out 0.5s both;
+        }
+
+        .summary-card {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            border: 1px solid rgba(12, 10, 24, 0.06);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-card);
+            border-color: var(--color-primary-soft);
+        }
+
+        .summary-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--color-primary);
+            display: block;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .summary-label {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Activity Grid */
+        .activity-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .activity-card {
+            background: white;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            padding: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .activity-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--color-primary);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .activity-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--color-primary-soft);
+        }
+
+        .activity-card:hover::before {
+            opacity: 1;
+        }
+
+        .activity-card.completed {
+            border-color: var(--color-success);
+        }
+
+        .activity-card.completed::before {
+            background: var(--color-success);
+            opacity: 1;
+        }
+
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .activity-number {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .activity-status {
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-muted);
+        }
+
+        .activity-card.completed .activity-status {
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--color-success);
+        }
+
+        .activity-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 12px;
+        }
+
+        .activity-description {
+            font-size: 0.95rem;
+            color: var(--color-muted);
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        /* Drug Information Cards */
+        .drug-category-container {
+            margin-bottom: 30px;
+            animation: fadeInUp 0.6s ease-out 0.6s both;
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--color-primary-soft);
+        }
+
+        .category-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--color-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .category-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+
+        .category-description {
+            font-size: 0.9rem;
+            color: var(--color-muted);
+            margin-bottom: 20px;
+            padding-left: 52px;
+        }
+
+        /* Drug Matching Grid */
+        .drug-matching-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 768px) {
+            .drug-matching-grid { grid-template-columns: 1fr; }
+        }
+
+        .drug-card {
+            background: white;
+            border-radius: var(--radius-md);
+            border: 2px solid rgba(175, 75, 239, 0.1);
+            padding: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .drug-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-card);
+            border-color: var(--color-primary-soft);
+        }
+
+        .drug-card.completed {
+            border-color: var(--color-success);
+        }
+
+        .drug-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .drug-type {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: white;
+            background: var(--color-primary);
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .drug-status {
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-muted);
+        }
+
+        .drug-card.completed .drug-status {
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--color-success);
+        }
+
+        .drug-match-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .drug-column {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .column-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            text-align: center;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(12, 10, 24, 0.08);
+        }
+
+        .drug-item {
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: var(--radius-sm);
+            padding: 12px;
+            text-align: center;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--color-text);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            user-select: none;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .drug-item:hover {
+            background: rgba(175, 75, 239, 0.08);
+            border-color: var(--color-primary-soft);
+        }
+
+        .drug-item.selected {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+        }
+
+        .drug-item.correct {
+            background: rgba(0, 184, 148, 0.1);
+            border-color: var(--color-success);
+            color: var(--color-success);
+            cursor: default;
+        }
+
+        .drug-item.incorrect {
+            background: rgba(225, 112, 85, 0.1);
+            border-color: var(--color-error);
+            color: var(--color-error);
+            animation: shake 0.5s ease;
+        }
+
+        /* Flashcard Activity */
+        .flashcard-container {
+            perspective: 1000px;
+            height: 250px;
+            margin: 20px 0;
+        }
+
+        .flashcard {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s;
+            cursor: pointer;
+            border-radius: var(--radius-md);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .flashcard-front, .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: var(--radius-md);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+        }
+
+        .flashcard-front {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+            color: white;
+        }
+
+        .flashcard-back {
+            background: white;
+            color: var(--color-text);
+            transform: rotateY(180deg);
+            border: 2px solid var(--color-primary-soft);
+        }
+
+        .flashcard-drug {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .flashcard-type {
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        .flashcard-hint {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .flashcard-answer {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .flashcard-description {
+            font-size: 0.9rem;
+            text-align: center;
+            line-height: 1.4;
+            color: var(--color-muted);
+        }
+
+        .flashcard-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .flashcard-btn {
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            border: 2px solid var(--color-primary);
+            background: white;
+            color: var(--color-primary);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .flashcard-btn:hover {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        /* Quiz Activity */
+        .quiz-container {
+            margin: 20px 0;
+        }
+
+        .quiz-question {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--color-text);
+            margin-bottom: 15px;
+            padding: 15px;
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            border-left: 4px solid var(--color-primary);
+        }
+
+        .quiz-options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .quiz-option {
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: var(--radius-sm);
+            padding: 12px 15px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .quiz-option:hover {
+            background: rgba(175, 75, 239, 0.08);
+            border-color: var(--color-primary-soft);
+        }
+
+        .quiz-option.selected.correct {
+            background: rgba(0, 184, 148, 0.1);
+            border-color: var(--color-success);
+            color: var(--color-success);
+        }
+
+        .quiz-option.selected.incorrect {
+            background: rgba(225, 112, 85, 0.1);
+            border-color: var(--color-error);
+            color: var(--color-error);
+        }
+
+        /* Clinical Tips */
+        .clinical-tip {
+            background: rgba(175, 75, 239, 0.08);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin: 20px 0;
+            border-left: 4px solid var(--color-primary);
+        }
+
+        .tip-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tip-content {
+            font-size: 0.85rem;
+            color: var(--color-text);
+        }
+
+        /* Warning Box */
+        .warning-box {
+            background: rgba(225, 112, 85, 0.1);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin: 20px 0;
+            border-left: 4px solid var(--color-error);
+        }
+
+        .warning-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--color-error);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .warning-content {
+            font-size: 0.85rem;
+            color: var(--color-text);
+        }
+
+        /* Feedback */
+        .feedback-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            margin-top: 25px;
+            display: none;
+        }
+
+        .feedback-container.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .feedback-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .feedback-icon {
+            font-size: 1.3rem;
+        }
+
+        .feedback-icon.correct {
+            color: var(--color-success);
+        }
+
+        .feedback-icon.incorrect {
+            color: var(--color-error);
+        }
+
+        .feedback-content {
+            font-size: 0.9rem;
+            color: var(--color-text);
+            line-height: 1.6;
+        }
+
+        .feedback-content strong {
+            color: var(--color-primary);
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #9a3bd6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(175, 75, 239, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-text);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(12, 10, 24, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-icon {
+            font-size: 1.1em;
+        }
+
+        /* Results Panel */
+        .results-panel {
+            background: var(--color-dark);
+            color: white;
+            border-radius: var(--radius-md);
+            padding: 30px;
+            margin-top: 30px;
+            display: none;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .results-panel.show {
+            display: block;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .results-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .score-display {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--color-primary-soft);
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .clinical-insights {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .insights-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-primary-soft);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .insights-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .insights-list li {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            font-size: 0.9rem;
+            color: #e5e7eb;
+        }
+
+        .insight-dot {
+            width: 6px;
+            height: 6px;
+            margin-top: 6px;
+            border-radius: 999px;
+            background: var(--color-accent);
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="module-heading">
+        <!-- Header -->
+        <header class="brand-row">
+            <div class="brand">
+                <img
+                    src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                    alt="AlliedRx logo"
+                    class="brand-logo"
+                />
+                <div class="course-meta">
+                    <span class="course-name">Pharmacy Technician • Study Module</span>
+                    <div class="week-label">
+                        <span class="week-label-dot"></span>
+                        <span>Neuro/Cardiac Drug Classification</span>
+                    </div>
+                </div>
+            </div>
+            <span class="badge-mode">Study Module</span>
+        </header>
+
+        <h1 id="module-heading">Neuro/Cardiac Drug Familiarity</h1>
+        <p class="module-subtitle">
+            Master essential brand and generic drug pairs for Seizure medications, Erectile Dysfunction drugs,
+            and Anti-Arrhythmic agents. Learn indications, classifications, and proper drug identification techniques.
+        </p>
+
+        <!-- Progress Tracker -->
+        <div class="progress-tracker">
+            <div class="progress-step active" data-step="1">
+                <div class="step-circle">1</div>
+                <div class="step-label">Study Pairs</div>
+            </div>
+            <div class="progress-step" data-step="2">
+                <div class="step-circle">2</div>
+                <div class="step-label">Flashcards</div>
+            </div>
+            <div class="progress-step" data-step="3">
+                <div class="step-circle">3</div>
+                <div class="step-label">Quiz</div>
+            </div>
+            <div class="progress-step" data-step="4">
+                <div class="step-circle">4</div>
+                <div class="step-label">Review</div>
+            </div>
+        </div>
+
+        <!-- Progress Summary -->
+        <div class="progress-summary">
+            <div class="summary-card">
+                <span class="summary-number" id="completed-count">0</span>
+                <span class="summary-label">Activities Completed</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="accuracy-rate">0%</span>
+                <span class="summary-label">Current Accuracy</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="time-spent">0:00</span>
+                <span class="summary-label">Study Time</span>
+            </div>
+        </div>
+
+        <!-- Activity Grid -->
+        <div class="activity-grid">
+            <!-- Activity 1: Drug Matching -->
+            <section class="activity-card" id="activity-1" data-activity="1">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 1</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">Brand-Generic Matching Challenge</h3>
+                <p class="activity-description">
+                    Match each brand name drug with its correct generic equivalent. 
+                    Click on a brand name, then click on its matching generic name.
+                </p>
+
+                <!-- Seizure Drugs -->
+                <div class="drug-category-container">
+                    <div class="category-header">
+                        <div class="category-icon">🧠</div>
+                        <h2 class="category-title">Seizure Drugs (Anticonvulsants)</h2>
+                    </div>
+                    <p class="category-description">
+                        <strong>Indication:</strong> Epileptic Patients. These medications help control seizures
+                        by stabilizing electrical activity in the brain.
+                    </p>
+                    
+                    <div class="drug-matching-grid">
+                        <div class="drug-card" id="seizure-card">
+                            <div class="drug-header">
+                                <span class="drug-type">Anticonvulsants</span>
+                                <span class="drug-status" id="seizure-status">Match Pairs</span>
+                            </div>
+                            <div class="drug-match-container">
+                                <div class="drug-column">
+                                    <div class="column-title">Brand Name</div>
+                                    <div class="drug-item" data-brand="Neurontin" data-generic="Gabapentin">Neurontin</div>
+                                    <div class="drug-item" data-brand="Lamictal" data-generic="Lamotrigine">Lamictal</div>
+                                    <div class="drug-item" data-brand="Depakote" data-generic="Divalproex">Depakote</div>
+                                    <div class="drug-item" data-brand="Dilantin" data-generic="Phenytoin">Dilantin</div>
+                                </div>
+                                <div class="drug-column">
+                                    <div class="column-title">Generic Name</div>
+                                    <div class="drug-item" data-generic="Gabapentin" data-brand="Neurontin">Gabapentin</div>
+                                    <div class="drug-item" data-generic="Lamotrigine" data-brand="Lamictal">Lamotrigine</div>
+                                    <div class="drug-item" data-generic="Divalproex" data-brand="Depakote">Divalproex</div>
+                                    <div class="drug-item" data-generic="Phenytoin" data-brand="Dilantin">Phenytoin</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Erectile Dysfunction Drugs -->
+                <div class="drug-category-container">
+                    <div class="category-header">
+                        <div class="category-icon">❤️</div>
+                        <h2 class="category-title">Erectile Dysfunction Drugs</h2>
+                    </div>
+                    <p class="category-description">
+                        <strong>Indication:</strong> Erectile Dysfunction. These medications work by increasing
+                        blood flow to the penis to facilitate erection.
+                    </p>
+                    
+                    <div class="drug-matching-grid">
+                        <div class="drug-card" id="ed-card">
+                            <div class="drug-header">
+                                <span class="drug-type">ED Medications</span>
+                                <span class="drug-status" id="ed-status">Match Pairs</span>
+                            </div>
+                            <div class="drug-match-container">
+                                <div class="drug-column">
+                                    <div class="column-title">Brand Name</div>
+                                    <div class="drug-item" data-brand="Viagra" data-generic="Sildenafil">Viagra</div>
+                                    <div class="drug-item" data-brand="Cialis" data-generic="Tadalafil">Cialis</div>
+                                </div>
+                                <div class="drug-column">
+                                    <div class="column-title">Generic Name</div>
+                                    <div class="drug-item" data-generic="Sildenafil" data-brand="Viagra">Sildenafil</div>
+                                    <div class="drug-item" data-generic="Tadalafil" data-brand="Cialis">Tadalafil</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Anti-Arrhythmic Agents -->
+                <div class="drug-category-container">
+                    <div class="category-header">
+                        <div class="category-icon">💓</div>
+                        <h2 class="category-title">Anti-Arrhythmic Agents</h2>
+                    </div>
+                    <p class="category-description">
+                        <strong>Indication:</strong> Cardiac Arrhythmias. These medications help regulate
+                        abnormal heart rhythms by affecting the electrical conduction system of the heart.
+                    </p>
+                    
+                    <div class="drug-matching-grid">
+                        <div class="drug-card" id="cardiac-card">
+                            <div class="drug-header">
+                                <span class="drug-type">Anti-Arrhythmics</span>
+                                <span class="drug-status" id="cardiac-status">Match Pairs</span>
+                            </div>
+                            <div class="drug-match-container">
+                                <div class="drug-column">
+                                    <div class="column-title">Brand Name</div>
+                                    <div class="drug-item" data-brand="Pacerone" data-generic="Amiodarone">Pacerone</div>
+                                    <div class="drug-item" data-brand="Lanoxin" data-generic="Digoxin">Lanoxin</div>
+                                    <div class="drug-item" data-brand="Quinaglute" data-generic="Quinidine">Quinaglute</div>
+                                    <div class="drug-item" data-brand="Norpace" data-generic="Disopyramide">Norpace</div>
+                                    <div class="drug-item" data-brand="Xylocaine" data-generic="Lidocaine">Xylocaine</div>
+                                </div>
+                                <div class="drug-column">
+                                    <div class="column-title">Generic Name</div>
+                                    <div class="drug-item" data-generic="Amiodarone" data-brand="Pacerone">Amiodarone</div>
+                                    <div class="drug-item" data-generic="Digoxin" data-brand="Lanoxin">Digoxin</div>
+                                    <div class="drug-item" data-generic="Quinidine" data-brand="Quinaglute">Quinidine</div>
+                                    <div class="drug-item" data-generic="Disopyramide" data-brand="Norpace">Disopyramide</div>
+                                    <div class="drug-item" data-generic="Lidocaine" data-brand="Xylocaine">Lidocaine</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="clinical-tip">
+                    <div class="tip-title">💡 Pharmacy Tech Tip</div>
+                    <div class="tip-content">
+                        Always verify drug names carefully. Many drugs have similar names but treat 
+                        completely different conditions. For example, Lamictal (lamotrigine) for seizures 
+                        vs. Lamisil (terbinafine) for fungal infections. When in doubt, ask the pharmacist 
+                        or check reliable drug references.
+                    </div>
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback-container" id="feedback-1">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        All Matches Complete!
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Key Points Remembered:</strong><br>
+                        • <strong>Neurontin = Gabapentin</strong> - Also used for neuropathic pain<br>
+                        • <strong>Lamictal = Lamotrigine</strong> - Black box warning for serious rash<br>
+                        • <strong>Viagra = Sildenafil</strong> - First PDE5 inhibitor approved for ED<br>
+                        • <strong>Cialis = Tadalafil</strong> - Longer duration of action (36 hours)<br>
+                        • <strong>Pacerone = Amiodarone</strong> - Requires regular thyroid and lung monitoring<br>
+                        • <strong>Lanoxin = Digoxin</strong> - Narrow therapeutic index, requires blood monitoring<br><br>
+                        
+                        <strong>Common Confusions:</strong><br>
+                        • Don't confuse Dilantin (phenytoin) with Ditropan (oxybutynin)<br>
+                        • Don't confuse Neurontin (gabapentin) with Noroxin (norfloxacin)<br>
+                        • Always verify spelling: Amiodarone vs. Amlodipine (different classes)
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity 2: Flashcard Practice -->
+            <section class="activity-card" id="activity-2" data-activity="2">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 2</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">Flashcard Drug Recall</h3>
+                <p class="activity-description">
+                    Practice recalling generic names from brand names and vice versa. 
+                    Click the card to flip it and test your knowledge.
+                </p>
+
+                <div class="flashcard-container">
+                    <div class="flashcard" id="flashcard">
+                        <div class="flashcard-front">
+                            <div class="flashcard-drug" id="flashcard-front-text">Neurontin</div>
+                            <div class="flashcard-type">Brand Name</div>
+                            <div class="flashcard-hint">Click to reveal generic name</div>
+                        </div>
+                        <div class="flashcard-back">
+                            <div class="flashcard-answer" id="flashcard-back-text">Gabapentin</div>
+                            <div class="flashcard-type">Generic Equivalent</div>
+                            <div class="flashcard-description">
+                                Anticonvulsant<br>
+                                Also used for neuropathic pain
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flashcard-controls">
+                    <button class="flashcard-btn" id="prev-card">← Previous</button>
+                    <button class="flashcard-btn" id="next-card">Next →</button>
+                </div>
+
+                <div class="warning-box">
+                    <div class="warning-title">⚠️ Critical Safety Points</div>
+                    <div class="warning-content">
+                        • <strong>Phenytoin (Dilantin):</strong> Narrow therapeutic index, requires blood level monitoring<br>
+                        • <strong>Amiodarone (Pacerone):</strong> Can cause pulmonary fibrosis and thyroid dysfunction<br>
+                        • <strong>Digoxin (Lanoxin):</strong> Toxicity signs: nausea, vision changes, confusion<br>
+                        • <strong>Lamotrigine (Lamictal):</strong> Risk of Stevens-Johnson syndrome, titrate dose slowly
+                    </div>
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback-container" id="feedback-2">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Flashcard Practice Complete!
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Memory Techniques:</strong><br>
+                        • Use <strong>mnemonics</strong>: "Neurons need GABA" (Neurontin = Gabapentin)<br>
+                        • Note <strong>drug class patterns</strong>: Most seizure drugs end in -tin or -ine<br>
+                        • Create <strong>visual associations</strong>: Viagra (blue pill) = Sildenafil<br><br>
+                        
+                        <strong>Clinical Significance:</strong><br>
+                        • <strong>Seizure drugs:</strong> Never stop abruptly - risk of withdrawal seizures<br>
+                        • <strong>ED drugs:</strong> Contraindicated with nitrates (risk of severe hypotension)<br>
+                        • <strong>Anti-arrhythmics:</strong> Many have narrow therapeutic windows requiring monitoring
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity 3: Quiz -->
+            <section class="activity-card" id="activity-3" data-activity="3">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 3</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">Drug Classification Quiz</h3>
+                <p class="activity-description">
+                    Test your knowledge of drug classifications, indications, 
+                    and proper usage scenarios for neuro/cardiac medications.
+                </p>
+
+                <div class="quiz-container" id="quiz-container">
+                    <!-- Questions will be inserted here by JavaScript -->
+                </div>
+
+                <div class="clinical-tip">
+                    <div class="tip-title">📋 Documentation Requirements</div>
+                    <div class="tip-content">
+                        • <strong>Blood level monitoring required:</strong> Phenytoin, Digoxin, Valproic acid<br>
+                        • <strong>Black box warnings:</strong> Lamotrigine (rash), Amiodarone (pulmonary toxicity)<br>
+                        • <strong>REMS programs:</strong> Some medications may have Risk Evaluation and Mitigation Strategies<br>
+                        • <strong>Patient counseling:</strong> Always discuss proper administration and side effects
+                    </div>
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback-container" id="feedback-3">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Quiz Completed!
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Essential Knowledge Verified:</strong><br>
+                        • <strong>Seizure Drugs:</strong> Must be taken consistently, never missed<br>
+                        • <strong>ED Medications:</strong> Take 30-60 minutes before sexual activity<br>
+                        • <strong>Anti-Arrhythmics:</strong> Many require EKG monitoring during initiation<br>
+                        • <strong>Drug Interactions:</strong> Always check for interactions with other medications<br><br>
+                        
+                        <strong>Common Errors to Avoid:</strong><br>
+                        • Don't confuse seizure drugs with similar-sounding medications<br>
+                        • Always verify indication before dispensing<br>
+                        • Check for contraindications (e.g., ED drugs with nitrates)<br>
+                        • Monitor for therapeutic drug levels when applicable
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn btn-secondary" id="reset-all-btn">
+                <span class="btn-icon">↻</span>
+                Reset All Activities
+            </button>
+            <button class="btn btn-secondary" id="check-answers-btn">
+                <span class="btn-icon">✓</span>
+                Check All Answers
+            </button>
+            <button class="btn btn-primary" id="view-results-btn">
+                <span class="btn-icon">📊</span>
+                View Study Results
+            </button>
+        </div>
+
+        <!-- Results Panel -->
+        <div class="results-panel" id="results-panel">
+            <div class="results-header">
+                <h2 class="results-title">Study Module Results</h2>
+                <div class="score-display" id="final-score">0%</div>
+            </div>
+            
+            <div class="clinical-insights">
+                <h3 class="insights-title">
+                    <span>🧠</span> Neuro/Cardiac Drug Knowledge
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Seizure Medications:</strong> All require gradual titration and should never be discontinued abruptly. 
+                        Common side effects include dizziness, drowsiness, and potential for drug interactions.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>ED Medications:</strong> PDE5 inhibitors are contraindicated with nitrates. 
+                        Duration of action varies: Sildenafil (4-6 hours), Tadalafil (up to 36 hours).</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Anti-Arrhythmics:</strong> Many have narrow therapeutic indices requiring blood monitoring. 
+                        Amiodarone has the longest half-life (up to 100 days) and requires multiple organ monitoring.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="clinical-insights" style="margin-top: 20px;">
+                <h3 class="insights-title">
+                    <span>🏥</span> Clinical Application & Safety
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Therapeutic Monitoring:</strong> Phenytoin, digoxin, and valproic acid require regular 
+                        blood level monitoring. Document levels and adjust doses per protocol.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Patient Education:</strong> Seizure medications must be taken consistently. 
+                        ED medications should be taken as directed before activity. Anti-arrhythmics may require 
+                        regular EKGs and blood tests.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Safety Checks:</strong> Always verify indication, check for contraindications, 
+                        review drug interactions, and confirm appropriate dosing for age and renal/hepatic function.</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // State Management
+            const state = {
+                activities: {
+                    1: { completed: false, correct: 0, total: 11, score: 0 },
+                    2: { completed: false, correct: 0, total: 11, score: 0 },
+                    3: { completed: false, correct: 0, total: 5, score: 0 }
+                },
+                startedAt: new Date(),
+                timeSpent: 0,
+                currentStep: 0,
+                flashcardIndex: 0,
+                selectedBrand: null,
+                selectedGeneric: null,
+                matchedPairs: []
+            };
+
+            // Drug Data
+            const drugData = [
+                // Seizure Drugs
+                { brand: 'Neurontin', generic: 'Gabapentin', type: 'Seizure', class: 'Anticonvulsant' },
+                { brand: 'Lamictal', generic: 'Lamotrigine', type: 'Seizure', class: 'Anticonvulsant' },
+                { brand: 'Depakote', generic: 'Divalproex', type: 'Seizure', class: 'Anticonvulsant' },
+                { brand: 'Dilantin', generic: 'Phenytoin', type: 'Seizure', class: 'Anticonvulsant' },
+                // ED Drugs
+                { brand: 'Viagra', generic: 'Sildenafil', type: 'ED', class: 'PDE5 Inhibitor' },
+                { brand: 'Cialis', generic: 'Tadalafil', type: 'ED', class: 'PDE5 Inhibitor' },
+                // Anti-Arrhythmics
+                { brand: 'Pacerone', generic: 'Amiodarone', type: 'Cardiac', class: 'Anti-Arrhythmic' },
+                { brand: 'Lanoxin', generic: 'Digoxin', type: 'Cardiac', class: 'Anti-Arrhythmic' },
+                { brand: 'Quinaglute', generic: 'Quinidine', type: 'Cardiac', class: 'Anti-Arrhythmic' },
+                { brand: 'Norpace', generic: 'Disopyramide', type: 'Cardiac', class: 'Anti-Arrhythmic' },
+                { brand: 'Xylocaine', generic: 'Lidocaine', type: 'Cardiac', class: 'Anti-Arrhythmic' }
+            ];
+
+            // Quiz Questions
+            const quizQuestions = [
+                {
+                    question: "Which medication is used for epilepsy and has a black box warning for serious rash?",
+                    options: ["Gabapentin", "Lamotrigine", "Phenytoin", "Divalproex"],
+                    correct: 1,
+                    explanation: "Lamotrigine (Lamictal) has a black box warning for Stevens-Johnson syndrome."
+                },
+                {
+                    question: "What is the brand name for Sildenafil?",
+                    options: ["Cialis", "Viagra", "Levitra", "Stendra"],
+                    correct: 1,
+                    explanation: "Sildenafil is the generic name for Viagra, the first PDE5 inhibitor approved for ED."
+                },
+                {
+                    question: "Which anti-arrhythmic requires regular thyroid and lung function monitoring?",
+                    options: ["Digoxin", "Amiodarone", "Quinidine", "Lidocaine"],
+                    correct: 1,
+                    explanation: "Amiodarone (Pacerone) can cause thyroid dysfunction and pulmonary fibrosis."
+                },
+                {
+                    question: "Which seizure medication has a narrow therapeutic index requiring blood level monitoring?",
+                    options: ["Gabapentin", "Lamotrigine", "Phenytoin", "All of the above"],
+                    correct: 2,
+                    explanation: "Phenytoin (Dilantin) has a narrow therapeutic index and requires regular blood level monitoring."
+                },
+                {
+                    question: "Which ED medication has the longest duration of action?",
+                    options: ["Sildenafil (Viagra)", "Tadalafil (Cialis)", "Vardenafil (Levitra)", "Avanafil (Stendra)"],
+                    correct: 1,
+                    explanation: "Tadalafil (Cialis) has a duration of action up to 36 hours, compared to 4-6 hours for sildenafil."
+                }
+            ];
+
+            // DOM Elements
+            const progressSteps = document.querySelectorAll('.progress-step');
+            const activityCards = document.querySelectorAll('.activity-card');
+            const completedCount = document.getElementById('completed-count');
+            const accuracyRate = document.getElementById('accuracy-rate');
+            const timeSpent = document.getElementById('time-spent');
+            const resetBtn = document.getElementById('reset-all-btn');
+            const checkBtn = document.getElementById('check-answers-btn');
+            const resultsBtn = document.getElementById('view-results-btn');
+            const resultsPanel = document.getElementById('results-panel');
+            const finalScore = document.getElementById('final-score');
+            const flashcard = document.getElementById('flashcard');
+            const flashcardFrontText = document.getElementById('flashcard-front-text');
+            const flashcardBackText = document.getElementById('flashcard-back-text');
+            const prevCardBtn = document.getElementById('prev-card');
+            const nextCardBtn = document.getElementById('next-card');
+            const quizContainer = document.getElementById('quiz-container');
+
+            // Timer for time spent
+            function updateTimer() {
+                const now = new Date();
+                const diff = Math.floor((now - state.startedAt) / 1000);
+                state.timeSpent = diff;
+                const minutes = Math.floor(diff / 60);
+                const seconds = diff % 60;
+                timeSpent.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            }
+            setInterval(updateTimer, 1000);
+
+            // Update Progress Summary
+            function updateProgressSummary() {
+                let completed = 0;
+                let totalCorrect = 0;
+                let totalItems = 0;
+                
+                Object.values(state.activities).forEach(activity => {
+                    if (activity.completed) completed++;
+                    totalCorrect += activity.correct;
+                    totalItems += activity.total;
+                });
+                
+                completedCount.textContent = completed;
+                const accuracy = totalItems > 0 ? Math.round((totalCorrect / totalItems) * 100) : 0;
+                accuracyRate.textContent = `${accuracy}%`;
+                
+                // Update progress steps
+                progressSteps.forEach((step, index) => {
+                    if (index < completed) {
+                        step.classList.add('completed');
+                        step.classList.remove('active');
+                    } else if (index === completed) {
+                        step.classList.add('active');
+                        step.classList.remove('completed');
+                    } else {
+                        step.classList.remove('active', 'completed');
+                    }
+                });
+            }
+
+            // Activity 1: Drug Matching
+            function initActivity1() {
+                const drugItems = document.querySelectorAll('.drug-item');
+                const feedback = document.getElementById('feedback-1');
+                const status = document.querySelector('#activity-1 .activity-status');
+                const seizureStatus = document.getElementById('seizure-status');
+                const edStatus = document.getElementById('ed-status');
+                const cardiacStatus = document.getElementById('cardiac-status');
+                
+                let selectedBrand = null;
+                let selectedGeneric = null;
+                
+                drugItems.forEach(item => {
+                    item.addEventListener('click', function() {
+                        if (state.activities[1].completed) return;
+                        
+                        const isBrand = this.closest('.drug-column:first-child');
+                        const isGeneric = this.closest('.drug-column:last-child');
+                        
+                        if (isBrand) {
+                            // Clicked a brand name
+                            if (selectedBrand === this) {
+                                // Deselect
+                                this.classList.remove('selected');
+                                selectedBrand = null;
+                            } else {
+                                // Clear previous brand selection
+                                if (selectedBrand) {
+                                    selectedBrand.classList.remove('selected');
+                                }
+                                // Select new brand
+                                this.classList.add('selected');
+                                selectedBrand = this;
+                                
+                                // Check if matching generic is already selected
+                                const expectedGeneric = this.dataset.generic;
+                                if (selectedGeneric && selectedGeneric.dataset.generic === expectedGeneric) {
+                                    // Correct match!
+                                    selectedBrand.classList.remove('selected');
+                                    selectedBrand.classList.add('correct');
+                                    selectedGeneric.classList.remove('selected');
+                                    selectedGeneric.classList.add('correct');
+                                    
+                                    const matchId = `${selectedBrand.dataset.brand}-${selectedGeneric.dataset.generic}`;
+                                    if (!state.matchedPairs.includes(matchId)) {
+                                        state.matchedPairs.push(matchId);
+                                        state.activities[1].correct++;
+                                        
+                                        // Update card status
+                                        const card = selectedBrand.closest('.drug-card');
+                                        const matchedCount = card.querySelectorAll('.drug-item.correct').length;
+                                        
+                                        if (card.id === 'seizure-card') {
+                                            seizureStatus.textContent = `${matchedCount/2}/4 Pairs`;
+                                        } else if (card.id === 'ed-card') {
+                                            edStatus.textContent = `${matchedCount/2}/2 Pairs`;
+                                        } else if (card.id === 'cardiac-card') {
+                                            cardiacStatus.textContent = `${matchedCount/2}/5 Pairs`;
+                                        }
+                                    }
+                                    
+                                    selectedBrand = null;
+                                    selectedGeneric = null;
+                                    checkActivity1Completion();
+                                } else if (selectedGeneric) {
+                                    // Wrong match - show error
+                                    selectedBrand.classList.add('incorrect');
+                                    selectedGeneric.classList.add('incorrect');
+                                    
+                                    setTimeout(() => {
+                                        selectedBrand.classList.remove('selected', 'incorrect');
+                                        selectedGeneric.classList.remove('selected', 'incorrect');
+                                        selectedBrand = null;
+                                        selectedGeneric = null;
+                                    }, 1000);
+                                }
+                            }
+                        } else if (isGeneric) {
+                            // Clicked a generic name
+                            if (selectedGeneric === this) {
+                                // Deselect
+                                this.classList.remove('selected');
+                                selectedGeneric = null;
+                            } else {
+                                // Clear previous generic selection
+                                if (selectedGeneric) {
+                                    selectedGeneric.classList.remove('selected');
+                                }
+                                // Select new generic
+                                this.classList.add('selected');
+                                selectedGeneric = this;
+                                
+                                // Check if matching brand is already selected
+                                const expectedBrand = this.dataset.brand;
+                                if (selectedBrand && selectedBrand.dataset.brand === expectedBrand) {
+                                    // Correct match!
+                                    selectedBrand.classList.remove('selected');
+                                    selectedBrand.classList.add('correct');
+                                    selectedGeneric.classList.remove('selected');
+                                    selectedGeneric.classList.add('correct');
+                                    
+                                    const matchId = `${selectedBrand.dataset.brand}-${selectedGeneric.dataset.generic}`;
+                                    if (!state.matchedPairs.includes(matchId)) {
+                                        state.matchedPairs.push(matchId);
+                                        state.activities[1].correct++;
+                                        
+                                        // Update card status
+                                        const card = selectedBrand.closest('.drug-card');
+                                        const matchedCount = card.querySelectorAll('.drug-item.correct').length;
+                                        
+                                        if (card.id === 'seizure-card') {
+                                            seizureStatus.textContent = `${matchedCount/2}/4 Pairs`;
+                                        } else if (card.id === 'ed-card') {
+                                            edStatus.textContent = `${matchedCount/2}/2 Pairs`;
+                                        } else if (card.id === 'cardiac-card') {
+                                            cardiacStatus.textContent = `${matchedCount/2}/5 Pairs`;
+                                        }
+                                    }
+                                    
+                                    selectedBrand = null;
+                                    selectedGeneric = null;
+                                    checkActivity1Completion();
+                                } else if (selectedBrand) {
+                                    // Wrong match - show error
+                                    selectedBrand.classList.add('incorrect');
+                                    selectedGeneric.classList.add('incorrect');
+                                    
+                                    setTimeout(() => {
+                                        selectedBrand.classList.remove('selected', 'incorrect');
+                                        selectedGeneric.classList.remove('selected', 'incorrect');
+                                        selectedBrand = null;
+                                        selectedGeneric = null;
+                                    }, 1000);
+                                }
+                            }
+                        }
+                    });
+                });
+                
+                function checkActivity1Completion() {
+                    if (state.matchedPairs.length === drugData.length) {
+                        state.activities[1].completed = true;
+                        state.activities[1].score = Math.round((state.activities[1].correct / drugData.length) * 100);
+                        status.textContent = 'Completed';
+                        status.style.color = '#00b894';
+                        document.querySelector('#activity-1').classList.add('completed');
+                        feedback.classList.add('show');
+                        updateProgressSummary();
+                    }
+                }
+            }
+
+            // Activity 2: Flashcards
+            function initActivity2() {
+                const feedback = document.getElementById('feedback-2');
+                const status = document.querySelector('#activity-2 .activity-status');
+                let flipCount = 0;
+                
+                function updateFlashcard() {
+                    const drug = drugData[state.flashcardIndex];
+                    // Randomly show brand or generic on front
+                    if (Math.random() > 0.5) {
+                        flashcardFrontText.textContent = drug.brand;
+                        flashcardBackText.textContent = drug.generic;
+                        document.querySelector('.flashcard-type').textContent = 'Brand Name';
+                    } else {
+                        flashcardFrontText.textContent = drug.generic;
+                        flashcardBackText.textContent = drug.brand;
+                        document.querySelector('.flashcard-type').textContent = 'Generic Name';
+                    }
+                    
+                    // Update description on back
+                    const description = document.querySelector('.flashcard-description');
+                    description.textContent = `${drug.class}\n${drug.type === 'Seizure' ? 'Used for epilepsy' : drug.type === 'ED' ? 'Used for erectile dysfunction' : 'Used for cardiac arrhythmias'}`;
+                    
+                    // Reset card orientation
+                    flashcard.classList.remove('flipped');
+                }
+                
+                // Click card to flip
+                flashcard.addEventListener('click', function() {
+                    this.classList.toggle('flipped');
+                    
+                    // Count flips as engagement
+                    if (!state.activities[2].completed) {
+                        flipCount++;
+                        if (flipCount >= drugData.length * 3) {
+                            state.activities[2].completed = true;
+                            state.activities[2].correct = drugData.length;
+                            state.activities[2].score = 100;
+                            status.textContent = 'Completed';
+                            status.style.color = '#00b894';
+                            document.querySelector('#activity-2').classList.add('completed');
+                            feedback.classList.add('show');
+                            updateProgressSummary();
+                        }
+                    }
+                });
+                
+                prevCardBtn.addEventListener('click', function() {
+                    state.flashcardIndex = (state.flashcardIndex - 1 + drugData.length) % drugData.length;
+                    updateFlashcard();
+                });
+                
+                nextCardBtn.addEventListener('click', function() {
+                    state.flashcardIndex = (state.flashcardIndex + 1) % drugData.length;
+                    updateFlashcard();
+                });
+                
+                // Initialize first card
+                updateFlashcard();
+            }
+
+            // Activity 3: Quiz
+            function initActivity3() {
+                const feedback = document.getElementById('feedback-3');
+                const status = document.querySelector('#activity-3 .activity-status');
+                let selectedAnswers = new Array(quizQuestions.length).fill(null);
+                let questionsAnswered = 0;
+                
+                // Create quiz questions
+                quizQuestions.forEach((q, index) => {
+                    const questionDiv = document.createElement('div');
+                    questionDiv.className = 'quiz-question';
+                    questionDiv.textContent = `${index + 1}. ${q.question}`;
+                    quizContainer.appendChild(questionDiv);
+                    
+                    const optionsDiv = document.createElement('div');
+                    optionsDiv.className = 'quiz-options';
+                    
+                    q.options.forEach((option, optIndex) => {
+                        const optionDiv = document.createElement('div');
+                        optionDiv.className = 'quiz-option';
+                        optionDiv.textContent = option;
+                        optionDiv.dataset.questionIndex = index;
+                        optionDiv.dataset.optionIndex = optIndex;
+                        
+                        optionDiv.addEventListener('click', function() {
+                            if (state.activities[3].completed) return;
+                            
+                            // If already answered this question, don't allow changing
+                            if (selectedAnswers[index] !== null) return;
+                            
+                            // Clear any previous selection for this question
+                            const prevSelected = optionsDiv.querySelector('.selected');
+                            if (prevSelected) {
+                                prevSelected.classList.remove('selected');
+                            }
+                            
+                            // Select new option
+                            this.classList.add('selected');
+                            selectedAnswers[index] = optIndex;
+                            
+                            // Mark as correct or incorrect immediately
+                            if (optIndex === q.correct) {
+                                this.classList.add('correct');
+                                state.activities[3].correct++;
+                            } else {
+                                this.classList.add('incorrect');
+                                // Also show the correct answer
+                                const correctOption = optionsDiv.querySelector(`[data-option-index="${q.correct}"]`);
+                                if (correctOption) {
+                                    correctOption.classList.add('correct');
+                                }
+                            }
+                            
+                            questionsAnswered++;
+                            
+                            // Check completion
+                            if (questionsAnswered === quizQuestions.length) {
+                                state.activities[3].completed = true;
+                                state.activities[3].score = Math.round((state.activities[3].correct / quizQuestions.length) * 100);
+                                status.textContent = 'Completed';
+                                status.style.color = '#00b894';
+                                document.querySelector('#activity-3').classList.add('completed');
+                                feedback.classList.add('show');
+                                updateProgressSummary();
+                            }
+                        });
+                        
+                        optionsDiv.appendChild(optionDiv);
+                    });
+                    
+                    quizContainer.appendChild(optionsDiv);
+                    if (index < quizQuestions.length - 1) {
+                        quizContainer.appendChild(document.createElement('hr'));
+                    }
+                });
+            }
+
+            // Reset All Activities
+            function resetAllActivities() {
+                // Reset state
+                Object.keys(state.activities).forEach(key => {
+                    state.activities[key] = {
+                        completed: false,
+                        correct: 0,
+                        total: parseInt(key) === 1 ? 11 : parseInt(key) === 2 ? 11 : 5,
+                        score: 0
+                    };
+                });
+                
+                state.matchedPairs = [];
+                state.selectedBrand = null;
+                state.selectedGeneric = null;
+                state.flashcardIndex = 0;
+                
+                // Reset UI
+                activityCards.forEach(card => {
+                    card.classList.remove('completed');
+                    const status = card.querySelector('.activity-status');
+                    status.textContent = 'Not Started';
+                    status.style.color = '';
+                    const feedback = card.querySelector('.feedback-container');
+                    feedback.classList.remove('show');
+                });
+                
+                // Reset Activity 1
+                document.querySelectorAll('.drug-item').forEach(item => {
+                    item.classList.remove('selected', 'correct', 'incorrect');
+                    item.style.cursor = 'pointer';
+                });
+                document.getElementById('seizure-status').textContent = 'Match Pairs';
+                document.getElementById('ed-status').textContent = 'Match Pairs';
+                document.getElementById('cardiac-status').textContent = 'Match Pairs';
+                
+                // Reset Activity 2
+                flashcard.classList.remove('flipped');
+                state.flashcardIndex = 0;
+                updateFlashcard();
+                
+                // Reset Activity 3
+                quizContainer.innerHTML = '';
+                
+                // Reset results
+                resultsPanel.classList.remove('show');
+                
+                // Update progress
+                updateProgressSummary();
+                
+                // Reinitialize activities
+                setTimeout(() => {
+                    initActivity1();
+                    initActivity2();
+                    initActivity3();
+                }, 100);
+            }
+
+            // Check All Answers
+            function checkAllAnswers() {
+                // Complete Activity 1
+                if (!state.activities[1].completed) {
+                    const feedback = document.getElementById('feedback-1');
+                    const status = document.querySelector('#activity-1 .activity-status');
+                    state.activities[1].completed = true;
+                    state.activities[1].correct = drugData.length;
+                    state.activities[1].score = 100;
+                    status.textContent = 'Completed';
+                    status.style.color = '#00b894';
+                    document.querySelector('#activity-1').classList.add('completed');
+                    feedback.classList.add('show');
+                    
+                    // Mark all as correct
+                    document.querySelectorAll('.drug-item').forEach(item => {
+                        item.classList.remove('selected', 'incorrect');
+                        item.classList.add('correct');
+                        item.style.cursor = 'default';
+                    });
+                    document.getElementById('seizure-status').textContent = '4/4 Pairs';
+                    document.getElementById('ed-status').textContent = '2/2 Pairs';
+                    document.getElementById('cardiac-status').textContent = '5/5 Pairs';
+                }
+                
+                // Complete Activity 2
+                if (!state.activities[2].completed) {
+                    const feedback = document.getElementById('feedback-2');
+                    const status = document.querySelector('#activity-2 .activity-status');
+                    state.activities[2].completed = true;
+                    state.activities[2].correct = drugData.length;
+                    state.activities[2].score = 100;
+                    status.textContent = 'Completed';
+                    status.style.color = '#00b894';
+                    document.querySelector('#activity-2').classList.add('completed');
+                    feedback.classList.add('show');
+                }
+                
+                // Complete Activity 3
+                if (!state.activities[3].completed) {
+                    const feedback = document.getElementById('feedback-3');
+                    const status = document.querySelector('#activity-3 .activity-status');
+                    
+                    // Select all correct answers and show incorrect ones
+                    quizQuestions.forEach((q, qIndex) => {
+                        const questionOptions = document.querySelectorAll(`[data-question-index="${qIndex}"]`);
+                        questionOptions.forEach(option => {
+                            const optIndex = parseInt(option.dataset.optionIndex);
+                            if (optIndex === q.correct) {
+                                option.classList.add('selected', 'correct');
+                                state.activities[3].correct++;
+                            }
+                        });
+                    });
+                    
+                    state.activities[3].completed = true;
+                    state.activities[3].score = 100;
+                    status.textContent = 'Completed';
+                    status.style.color = '#00b894';
+                    document.querySelector('#activity-3').classList.add('completed');
+                    feedback.classList.add('show');
+                }
+                
+                updateProgressSummary();
+            }
+
+            // View Final Results
+            function viewFinalResults() {
+                let totalScore = 0;
+                let activityCount = 0;
+                
+                Object.values(state.activities).forEach(activity => {
+                    if (activity.completed) {
+                        totalScore += activity.score;
+                        activityCount++;
+                    }
+                });
+                
+                const averageScore = activityCount > 0 ? Math.round(totalScore / activityCount) : 0;
+                finalScore.textContent = `${averageScore}%`;
+                resultsPanel.classList.add('show');
+                
+                // Scroll to results
+                resultsPanel.scrollIntoView({ behavior: 'smooth' });
+            }
+
+            // Initialize all activities
+            initActivity1();
+            initActivity2();
+            initActivity3();
+
+            // Event listeners
+            resetBtn.addEventListener('click', resetAllActivities);
+            checkBtn.addEventListener('click', checkAllAnswers);
+            resultsBtn.addEventListener('click', viewFinalResults);
+
+            // Initial progress update
+            updateProgressSummary();
+        });
+    </script>
+</body>
+</html>
