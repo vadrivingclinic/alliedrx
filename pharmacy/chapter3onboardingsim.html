@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AlliedRx - Module 1: Onboarding Simulator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <style>
+        /* All CSS from your original sample - maintaining consistent branding */
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-error: #e17055;
+            --color-warning: #fdcb6e;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
+            --color-dark: #0c0a18;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+            --shadow-card: 0 12px 30px rgba(15, 23, 42, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(
+                circle at top left,
+                #ffffff 0,
+                #f1ecff 40%,
+                var(--color-bg) 100%
+            );
+            color: var(--color-text);
+            -webkit-text-size-adjust: 100%;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 12px; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Page Layout */
+        .page {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @media (max-width: 900px) {
+            .page { padding: 22px; }
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 0; }
+            .page {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 18px 14px 22px;
+            }
+        }
+
+        /* Header */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .brand-logo:hover { transform: scale(1.05); }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--color-success);
+            flex-shrink: 0;
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .badge-mode:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+        @media (max-width: 480px) {
+            .brand-row { flex-direction: column; align-items: flex-start; }
+            .badge-mode { margin-top: 6px; }
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 3vw, 2.2rem);
+            line-height: 1.1;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .module-subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 600px;
+            margin-bottom: 24px;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        /* Progress Tracker */
+        .progress-tracker {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            position: relative;
+            padding: 0 20px;
+        }
+
+        .progress-tracker::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 50px;
+            right: 50px;
+            height: 3px;
+            background: rgba(12, 10, 24, 0.08);
+            z-index: 1;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+
+        .step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--color-muted);
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.active .step-circle {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .progress-step.completed .step-circle {
+            background: var(--color-success);
+            border-color: var(--color-success);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.75rem;
+            color: var(--color-muted);
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .progress-step.active .step-label {
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        /* Scenario Styles */
+        .scenario-container {
+            margin-bottom: 30px;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .scenario-header {
+            background: rgba(175, 75, 239, 0.08);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--color-primary);
+        }
+
+        .scenario-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 8px;
+        }
+
+        .scenario-description {
+            font-size: 0.95rem;
+            color: var(--color-text);
+            line-height: 1.6;
+        }
+
+        .scenario-description strong {
+            color: var(--color-primary);
+        }
+
+        .scenario-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, rgba(175, 75, 239, 0.1) 0%, rgba(131, 128, 240, 0.1) 100%);
+            border-radius: var(--radius-md);
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-primary);
+            font-size: 1rem;
+        }
+
+        /* Choice Cards */
+        .choices-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .choice-card {
+            background: white;
+            border-radius: var(--radius-md);
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .choice-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--color-primary-soft);
+        }
+
+        .choice-card.selected {
+            border-color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.05);
+            box-shadow: 0 10px 25px rgba(175, 75, 239, 0.1);
+        }
+
+        .choice-card.correct {
+            border-color: var(--color-success);
+            background: rgba(0, 184, 148, 0.05);
+        }
+
+        .choice-card.incorrect {
+            border-color: var(--color-error);
+            background: rgba(225, 112, 85, 0.05);
+        }
+
+        .choice-letter {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 30px;
+            height: 30px;
+            background: rgba(175, 75, 239, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--color-primary);
+            font-size: 0.9rem;
+        }
+
+        .choice-content {
+            padding-right: 40px;
+        }
+
+        .choice-text {
+            font-size: 0.95rem;
+            color: var(--color-text);
+            line-height: 1.6;
+        }
+
+        /* Text Input */
+        .text-input-container {
+            margin: 25px 0;
+        }
+
+        .text-input-label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+        }
+
+        .text-input {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            border-radius: var(--radius-md);
+            font-family: inherit;
+            font-size: 0.95rem;
+            color: var(--color-text);
+            background: rgba(12, 10, 24, 0.02);
+            resize: vertical;
+            transition: all 0.3s ease;
+        }
+
+        .text-input:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            background: white;
+            box-shadow: 0 5px 15px rgba(175, 75, 239, 0.1);
+        }
+
+        /* Feedback */
+        .feedback-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-md);
+            padding: 25px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            margin-top: 30px;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .feedback-container.show {
+            display: block;
+        }
+
+        .feedback-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .feedback-icon {
+            font-size: 1.5rem;
+            color: var(--color-success);
+        }
+
+        .feedback-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+
+        .feedback-content {
+            font-size: 0.95rem;
+            color: var(--color-text);
+            line-height: 1.6;
+        }
+
+        .feedback-content strong {
+            color: var(--color-primary);
+        }
+
+        .competency-highlight {
+            background: rgba(0, 184, 148, 0.1);
+            border-left: 4px solid var(--color-success);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+        }
+
+        /* Results Panel */
+        .results-panel {
+            background: var(--color-dark);
+            color: white;
+            border-radius: var(--radius-md);
+            padding: 30px;
+            margin-top: 30px;
+            display: none;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .results-panel.show {
+            display: block;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .results-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .score-display {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--color-primary-soft);
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .clinical-insights {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .insights-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-primary-soft);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .insights-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .insights-list li {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            font-size: 0.9rem;
+            color: #e5e7eb;
+        }
+
+        .insight-dot {
+            width: 6px;
+            height: 6px;
+            margin-top: 6px;
+            border-radius: 999px;
+            background: var(--color-accent);
+            flex-shrink: 0;
+        }
+
+        /* Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #9a3bd6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(175, 75, 239, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-text);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(12, 10, 24, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-icon {
+            font-size: 1.1em;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        /* Navigation */
+        .scenario-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(12, 10, 24, 0.1);
+        }
+
+        /* Reflection Container */
+        .reflection-container {
+            background: rgba(175, 75, 239, 0.05);
+            border-radius: var(--radius-md);
+            padding: 25px;
+            margin: 30px 0;
+            border: 2px solid rgba(175, 75, 239, 0.2);
+        }
+
+        .reflection-prompt {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="module-heading">
+        <!-- Header -->
+        <header class="brand-row">
+            <div class="brand">
+                <img
+                    src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                    alt="AlliedRx logo"
+                    class="brand-logo"
+                />
+                <div class="course-meta">
+                    <span class="course-name">Pharmacy Technician • Onboarding Simulation</span>
+                    <div class="week-label">
+                        <span class="week-label-dot"></span>
+                        <span>Module 1: Your First Week in Three Settings</span>
+                    </div>
+                </div>
+            </div>
+            <span class="badge-mode">Branching Scenario</span>
+        </header>
+
+        <h1 id="module-heading">Onboarding Simulator: Your First Week</h1>
+        <p class="module-subtitle">
+            Experience the critical first week decisions of a pharmacy technician across three different practice settings. Your choices shape your learning path and outcomes.
+        </p>
+
+        <!-- Progress Tracker -->
+        <div class="progress-tracker">
+            <div class="progress-step active" data-step="1">
+                <div class="step-circle">1</div>
+                <div class="step-label">Community</div>
+            </div>
+            <div class="progress-step" data-step="2">
+                <div class="step-circle">2</div>
+                <div class="step-label">Hospital</div>
+            </div>
+            <div class="progress-step" data-step="3">
+                <div class="step-circle">3</div>
+                <div class="step-label">Closed-Door</div>
+            </div>
+            <div class="progress-step" data-step="4">
+                <div class="step-circle">4</div>
+                <div class="step-label">Reflection</div>
+            </div>
+        </div>
+
+        <!-- Scenario Container -->
+        <div class="scenario-container" id="scenario-container">
+            <!-- Scenario 1 will be loaded here dynamically -->
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn btn-secondary" id="reset-btn">
+                <span class="btn-icon">↻</span>
+                Restart Simulation
+            </button>
+            <button class="btn btn-primary" id="continue-btn" disabled>
+                <span class="btn-icon">→</span>
+                Continue
+            </button>
+            <button class="btn btn-primary" id="view-results-btn" style="display: none;">
+                <span class="btn-icon">📊</span>
+                View Final Reflection
+            </button>
+        </div>
+
+        <!-- Results Panel -->
+        <div class="results-panel" id="results-panel">
+            <div class="results-header">
+                <h2 class="results-title">Your Onboarding Journey Complete</h2>
+                <div class="score-display" id="final-score">100%</div>
+            </div>
+            
+            <div class="clinical-insights">
+                <h3 class="insights-title">
+                    <span>🎯</span> Core Competencies Demonstrated
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Communication & Customer Service:</strong> You effectively balanced patient concerns with appropriate role boundaries, demonstrating when to escalate to a pharmacist.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Clinical Prioritization:</strong> You correctly identified sterile aseptic technique as the foundational competency in IV room settings, showing understanding of risk hierarchy.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Adaptability:</strong> Your reflection shows recognition of how core competencies apply differently across practice settings.</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="clinical-insights" style="margin-top: 20px;">
+                <h3 class="insights-title">
+                    <span>💼</span> Pharmacy Technician Application
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Setting-Specific Expertise:</strong> Each pharmacy environment requires different prioritization of the same core skills. Community pharmacy emphasizes communication, while hospital focuses on technical precision.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Professional Growth:</strong> Successful technicians recognize that learning continues beyond certification. Your ability to reflect on different settings shows readiness for career advancement.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Patient Safety Mindset:</strong> Across all scenarios, you demonstrated awareness that patient safety is the ultimate priority, whether through accurate communication or precise technical work.</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // State Management
+            const state = {
+                currentScenario: 1,
+                choices: {
+                    scenario1: null,
+                    scenario2: null,
+                    scenario2Justification: '',
+                    scenario3: null,
+                    reflection: ''
+                },
+                score: 0,
+                completed: false
+            };
+
+            // DOM Elements
+            const scenarioContainer = document.getElementById('scenario-container');
+            const continueBtn = document.getElementById('continue-btn');
+            const resetBtn = document.getElementById('reset-btn');
+            const viewResultsBtn = document.getElementById('view-results-btn');
+            const resultsPanel = document.getElementById('results-panel');
+            const progressSteps = document.querySelectorAll('.progress-step');
+
+            // Scenario Data
+            const scenarios = {
+                1: {
+                    title: "Scenario 1: The Anxious Customer",
+                    setting: "Community Pharmacy - Drop-off Window",
+                    description: "Welcome to your first week! Your training begins in a large Community Pharmacy. At the drop-off window, a patient becomes upset about their unexpectedly high copay for a maintenance medication. They're raising their voice and other customers are starting to look over.",
+                    instruction: "How do you initially respond?",
+                    image: "Community Pharmacy Drop-off",
+                    choices: [
+                        {
+                            id: 'A',
+                            text: "\"I just handle the technical tasks. Let me get the pharmacist for you.\"",
+                            feedback: {
+                                title: "Understanding Role Limits",
+                                content: "This response shows awareness of your scope of practice. <strong>Correct Action:</strong> As a technician, you should not discuss copay alternatives or make clinical decisions. However, this approach could be perceived as dismissive. <br><br><div class='competency-highlight'><strong>Competency Highlight:</strong> Knowing when to escalate to a pharmacist demonstrates understanding of role boundaries, a critical patient safety concept.</div>"
+                            }
+                        },
+                        {
+                            id: 'B',
+                            text: "\"I can see you're frustrated. Let me check if there's a generic or a discount card I can apply first, then we can talk to the pharmacist together.\"",
+                            feedback: {
+                                title: "Collaborative Problem-Solving",
+                                content: "Excellent balance of empathy, initiative, and professional boundaries. <strong>Best Practice:</strong> You acknowledged the patient's frustration, used your technical knowledge to explore options, and appropriately involved the pharmacist. <br><br><div class='competency-highlight'><strong>Competency Highlight:</strong> This demonstrates Core Objective #1 (communication) and #8 (collaborative practice) by working within your scope while contributing to patient care.</div>"
+                            }
+                        }
+                    ]
+                },
+                2: {
+                    title: "Scenario 2: The Inpatient IV Room",
+                    setting: "Hospital Pharmacy - Sterile Compounding Area",
+                    description: "Now you are shadowing in the Hospital IV Room. The lead technician is showing you a Total Parenteral Nutrition (TPN) label with multiple additives. You recall that TPN requires extreme precision - errors can cause serious harm or death.",
+                    instruction: "What is your PRIMARY competency concern when observing this process?",
+                    image: "Hospital IV Room - TPN Preparation",
+                    choices: [
+                        {
+                            id: 'A',
+                            text: "Accuracy & Attention to Detail",
+                            feedback: {
+                                title: "Critical Priority Identified",
+                                content: "<strong>Correct:</strong> In sterile compounding, especially with high-risk preparations like TPN, accuracy is paramount. A single error in calculation, measurement, or ingredient can be life-threatening. <br><br><strong>Why this is primary:</strong> While all competencies are important, accuracy errors cannot be corrected after administration. This aligns with USP Chapter <797> standards for high-risk compounding."
+                            }
+                        },
+                        {
+                            id: 'B',
+                            text: "Sterile Aseptic Technique",
+                            feedback: {
+                                title: "Fundamental Competency",
+                                content: "<strong>Important but not primary for this specific concern:</strong> Sterile technique is absolutely fundamental and required for all IV preparations. However, with TPN specifically, the complexity of formulations makes <strong>accuracy</strong> the highest immediate risk. <br><br><strong>Clinical Context:</strong> A sterile preparation with the wrong ingredients is still dangerous. Both competencies are essential, but accuracy takes precedence in high-risk formulations."
+                            }
+                        },
+                        {
+                            id: 'C',
+                            text: "Time Management",
+                            feedback: {
+                                title: "Important Secondary Consideration",
+                                content: "<strong>Valid but not primary:</strong> Time management is important in hospital settings where multiple STAT orders may arrive. However, in sterile compounding, <strong>accuracy and sterility must never be compromised for speed</strong>. <br><br><strong>Best Practice:</strong> The correct approach is to maintain accuracy first, then develop efficiency through practice and standardization without sacrificing quality."
+                            }
+                        }
+                    ],
+                    justificationPrompt: "Briefly justify why you prioritized this competency over the others (2-3 sentences):"
+                },
+                3: {
+                    title: "Scenario 3: Closed-Door Pharmacy Inventory",
+                    setting: "Closed-Door/Long-Term Care Pharmacy",
+                    description: "Your rotation continues to a closed-door pharmacy serving nursing homes. You're tasked with checking expiration dates on controlled substance inventory. You notice a discrepancy: the perpetual inventory shows 30 tablets of oxycodone 5mg, but the physical count shows 28.",
+                    instruction: "What is your immediate next action?",
+                    image: "Closed-Door Pharmacy - Inventory Control",
+                    choices: [
+                        {
+                            id: 'A',
+                            text: "Re-count carefully, then document the discrepancy and immediately notify your supervising pharmacist.",
+                            feedback: {
+                                title: "Proper Protocol Followed",
+                                content: "<strong>Correct Procedure:</strong> This follows DEA and pharmacy board requirements for controlled substance discrepancies. <br><br><strong>Key Steps:</strong> 1) Verify count, 2) Document immediately, 3) Notify supervisor. <br><br><div class='competency-highlight'><strong>Regulatory Knowledge:</strong> Controlled substances require immediate documentation of any discrepancy - delaying notification could be considered diversion.</div>"
+                            }
+                        },
+                        {
+                            id: 'B',
+                            text: "Assume it's a counting error from the previous shift and adjust the perpetual inventory to match your count.",
+                            feedback: {
+                                title: "Protocol Violation",
+                                content: "<strong>Incorrect - Serious Error:</strong> Never adjust controlled substance records without investigation and supervisor approval. <br><br><strong>Why this matters:</strong> This could mask diversion, violate DEA requirements, and put your license at risk. All discrepancies must be documented and investigated per pharmacy policy and federal law."
+                            }
+                        },
+                        {
+                            id: 'C',
+                            text: "Wait until the end of your shift and mention it casually to the pharmacist when they're less busy.",
+                            feedback: {
+                                title: "Delayed Reporting Risk",
+                                content: "<strong>Incorrect - Timing is Critical:</strong> Controlled substance discrepancies require <strong>immediate</strong> notification. <br><br><strong>Risk Created:</strong> Delaying reporting could allow the issue to worsen or evidence to be lost. It also fails to meet the 'immediately' requirement in most pharmacy controlled substance policies.</div>"
+                            }
+                        }
+                    ]
+                },
+                4: {
+                    title: "Final Reflection",
+                    setting: "Synthesizing Your Experience",
+                    description: "You've completed your virtual week across three different pharmacy settings. Each environment presented unique challenges while drawing on the same core competencies.",
+                    reflectionPrompt: "Based on your virtual week, describe in your own words:<br><br>1) One competency that is <strong>universal</strong> across all settings<br>2) One duty that <strong>changed dramatically</strong> between settings",
+                    placeholder: "Example: Communication is universal - whether explaining a copay, clarifying an order, or reporting a discrepancy. However, technical tasks like sterile compounding are dramatically different in hospital vs community settings..."
+                }
+            };
+
+            // Initialize the first scenario
+            loadScenario(1);
+
+            // Event Listeners
+            continueBtn.addEventListener('click', continueToNext);
+            resetBtn.addEventListener('click', resetSimulation);
+            viewResultsBtn.addEventListener('click', showFinalResults);
+
+            // Functions
+            function loadScenario(scenarioNumber) {
+                const scenario = scenarios[scenarioNumber];
+                if (!scenario) return;
+
+                // Update progress tracker
+                updateProgressTracker(scenarioNumber);
+
+                // Build scenario HTML
+                let html = `
+                    <div class="scenario-header">
+                        <h2 class="scenario-title">${scenario.title}</h2>
+                        <div class="scenario-description">
+                            <strong>Setting:</strong> ${scenario.setting}<br><br>
+                            ${scenario.description}
+                        </div>
+                    </div>
+                `;
+
+                if (scenarioNumber !== 4) {
+                    // Regular scenario with choices
+                    html += `
+                        <div class="scenario-image">
+                            🏥 ${scenario.image}
+                        </div>
+                        <div class="scenario-description" style="font-size: 1.1rem; font-weight: 600; color: var(--color-primary);">
+                            ${scenario.instruction}
+                        </div>
+                        <div class="choices-grid" id="choices-grid">
+                    `;
+
+                    scenario.choices.forEach(choice => {
+                        const isSelected = state.choices[`scenario${scenarioNumber}`] === choice.id;
+                        html += `
+                            <div class="choice-card ${isSelected ? 'selected' : ''}" data-choice="${choice.id}">
+                                <div class="choice-letter">${choice.id}</div>
+                                <div class="choice-content">
+                                    <div class="choice-text">${choice.text}</div>
+                                </div>
+                            </div>
+                        `;
+                    });
+
+                    html += `</div>`;
+
+                    // Add justification input for scenario 2
+                    if (scenarioNumber === 2) {
+                        html += `
+                            <div class="text-input-container" id="justification-container" style="display: none;">
+                                <label class="text-input-label">${scenario.justificationPrompt}</label>
+                                <textarea class="text-input" id="justification-input" placeholder="Type your justification here...">${state.choices.scenario2Justification}</textarea>
+                            </div>
+                        `;
+                    }
+
+                    // Add feedback container
+                    html += `
+                        <div class="feedback-container" id="feedback-container">
+                            <div class="feedback-header">
+                                <div class="feedback-icon">✓</div>
+                                <div class="feedback-title" id="feedback-title"></div>
+                            </div>
+                            <div class="feedback-content" id="feedback-content"></div>
+                        </div>
+                    `;
+                } else {
+                    // Final reflection scenario
+                    html += `
+                        <div class="reflection-container">
+                            <div class="reflection-prompt">${scenario.reflectionPrompt}</div>
+                            <div class="text-input-container">
+                                <textarea class="text-input" id="reflection-input" placeholder="${scenario.placeholder}">${state.choices.reflection}</textarea>
+                            </div>
+                        </div>
+                        <div class="feedback-container" id="feedback-container" style="display: none;">
+                            <div class="feedback-header">
+                                <div class="feedback-icon">✓</div>
+                                <div class="feedback-title">Reflection Submitted</div>
+                            </div>
+                            <div class="feedback-content">
+                                Thank you for your reflection! This exercise helps solidify how core competencies apply differently across practice settings. Your insights will be valuable as you continue your pharmacy technician career.
+                            </div>
+                        </div>
+                    `;
+                }
+
+                scenarioContainer.innerHTML = html;
+
+                // Add event listeners to choice cards
+                if (scenarioNumber !== 4) {
+                    document.querySelectorAll('.choice-card').forEach(card => {
+                        card.addEventListener('click', function() {
+                            const choiceId = this.dataset.choice;
+                            selectChoice(scenarioNumber, choiceId);
+                        });
+                    });
+
+                    // Load existing feedback if choice was already made
+                    if (state.choices[`scenario${scenarioNumber}`]) {
+                        showFeedback(scenarioNumber, state.choices[`scenario${scenarioNumber}`]);
+                    }
+                }
+
+                // Update button state
+                updateButtonState(scenarioNumber);
+            }
+
+            function selectChoice(scenarioNumber, choiceId) {
+                state.choices[`scenario${scenarioNumber}`] = choiceId;
+                
+                // Update UI
+                document.querySelectorAll('.choice-card').forEach(card => {
+                    card.classList.remove('selected');
+                });
+                document.querySelector(`.choice-card[data-choice="${choiceId}"]`).classList.add('selected');
+                
+                // Show feedback
+                showFeedback(scenarioNumber, choiceId);
+                
+                // For scenario 2, show justification input
+                if (scenarioNumber === 2) {
+                    document.getElementById('justification-container').style.display = 'block';
+                    if (state.choices.scenario2Justification) {
+                        document.getElementById('justification-input').value = state.choices.scenario2Justification;
+                    }
+                }
+                
+                // Enable continue button
+                continueBtn.disabled = false;
+            }
+
+            function showFeedback(scenarioNumber, choiceId) {
+                const scenario = scenarios[scenarioNumber];
+                const choice = scenario.choices.find(c => c.id === choiceId);
+                const feedbackContainer = document.getElementById('feedback-container');
+                
+                if (choice && choice.feedback) {
+                    document.getElementById('feedback-title').textContent = choice.feedback.title;
+                    document.getElementById('feedback-content').innerHTML = choice.feedback.content;
+                    feedbackContainer.classList.add('show');
+                    
+                    // Update score based on choice correctness
+                    if (scenarioNumber === 1 && choiceId === 'B') state.score += 25;
+                    if (scenarioNumber === 2 && choiceId === 'A') state.score += 25;
+                    if (scenarioNumber === 3 && choiceId === 'A') state.score += 25;
+                }
+            }
+
+            function continueToNext() {
+                // Save justification for scenario 2
+                if (state.currentScenario === 2) {
+                    const justificationInput = document.getElementById('justification-input');
+                    if (justificationInput) {
+                        state.choices.scenario2Justification = justificationInput.value.trim();
+                    }
+                }
+                
+                // Save reflection for scenario 4
+                if (state.currentScenario === 4) {
+                    const reflectionInput = document.getElementById('reflection-input');
+                    if (reflectionInput) {
+                        state.choices.reflection = reflectionInput.value.trim();
+                        if (state.choices.reflection) {
+                            document.getElementById('feedback-container').classList.add('show');
+                            continueBtn.style.display = 'none';
+                            viewResultsBtn.style.display = 'flex';
+                            state.completed = true;
+                            return;
+                        }
+                    }
+                }
+                
+                // Move to next scenario
+                state.currentScenario++;
+                
+                if (state.currentScenario <= 4) {
+                    loadScenario(state.currentScenario);
+                    continueBtn.disabled = true;
+                }
+            }
+
+            function updateButtonState(scenarioNumber) {
+                if (scenarioNumber === 4) {
+                    continueBtn.textContent = "Submit Reflection";
+                    continueBtn.disabled = !state.choices.reflection;
+                } else {
+                    continueBtn.textContent = "Continue";
+                    continueBtn.disabled = !state.choices[`scenario${scenarioNumber}`];
+                    
+                    // Special handling for scenario 2 with justification
+                    if (scenarioNumber === 2 && state.choices.scenario2) {
+                        continueBtn.disabled = !state.choices.scenario2Justification;
+                    }
+                }
+                
+                viewResultsBtn.style.display = 'none';
+                continueBtn.style.display = 'flex';
+            }
+
+            function updateProgressTracker(scenarioNumber) {
+                progressSteps.forEach((step, index) => {
+                    step.classList.remove('active', 'completed');
+                    if (index + 1 < scenarioNumber) {
+                        step.classList.add('completed');
+                    } else if (index + 1 === scenarioNumber) {
+                        step.classList.add('active');
+                    }
+                });
+            }
+
+            function resetSimulation() {
+                state.currentScenario = 1;
+                state.choices = {
+                    scenario1: null,
+                    scenario2: null,
+                    scenario2Justification: '',
+                    scenario3: null,
+                    reflection: ''
+                };
+                state.score = 0;
+                state.completed = false;
+                
+                continueBtn.style.display = 'flex';
+                viewResultsBtn.style.display = 'none';
+                resultsPanel.classList.remove('show');
+                
+                loadScenario(1);
+            }
+
+            function showFinalResults() {
+                // Calculate final score
+                let score = 0;
+                if (state.choices.scenario1 === 'B') score += 33;
+                if (state.choices.scenario2 === 'A') score += 33;
+                if (state.choices.scenario3 === 'A') score += 34;
+                
+                document.getElementById('final-score').textContent = `${score}%`;
+                resultsPanel.classList.add('show');
+                resultsPanel.scrollIntoView({ behavior: 'smooth' });
+            }
+
+            // Additional event listeners for dynamic inputs
+            scenarioContainer.addEventListener('input', function(e) {
+                if (e.target.id === 'justification-input') {
+                    state.choices.scenario2Justification = e.target.value.trim();
+                    continueBtn.disabled = !state.choices.scenario2Justification;
+                } else if (e.target.id === 'reflection-input') {
+                    state.choices.reflection = e.target.value.trim();
+                    continueBtn.disabled = !state.choices.reflection;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
