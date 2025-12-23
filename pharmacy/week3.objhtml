@@ -1,967 +1,1051 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>AlliedRx Pharmacy Tech — Week 3 Objectives</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    :root {
-      --color-primary: #af4bef;
-      --color-primary-soft: #d492ff;
-      --color-accent: #8380f0;
-      --color-success: #00b894;
-      --color-error: #e17055;
-      --color-bg: #f7f5fb;
-      --color-text: #2b2b2b;
-      --color-muted: #6c6880;
-      --radius-lg: 24px;
-      --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
-      --shadow-hover: 0 25px 60px rgba(175, 75, 239, 0.25);
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html, body {
-      width: 100%;
-      overflow-x: hidden;
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      padding: 24px;
-      background: radial-gradient(circle at top left, #ffffff 0, #f1ecff 40%, var(--color-bg) 100%);
-      color: var(--color-text);
-      -webkit-text-size-adjust: 100%;
-    }
-
-    @media (max-width: 600px) {
-      body { padding: 12px; }
-    }
-
-    .page {
-      width: 100%;
-      max-width: 1120px;
-      margin: 0 auto;
-      background: #ffffff;
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-soft);
-      padding: 28px 30px 32px;
-      display: grid;
-      grid-template-columns: 1.8fr 1fr;
-      gap: 28px;
-      position: relative;
-      overflow: hidden;
-      animation: fadeInUp 0.8s ease-out;
-    }
-
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @media (max-width: 900px) {
-      .page {
-        grid-template-columns: 1fr;
-        padding: 22px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      body { padding: 0; }
-      .page {
-        border-radius: 0;
-        box-shadow: none;
-        padding: 18px 14px 22px;
-        gap: 22px;
-      }
-    }
-
-    .column {
-      position: relative;
-      z-index: 1;
-    }
-
-    /* Header */
-    .brand-row {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 14px;
-      margin-bottom: 8px;
-      flex-wrap: wrap;
-      width: 100%;
-      animation: fadeIn 0.6s ease-out 0.2s both;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .brand-logo {
-      height: 40px;
-      width: auto;
-      max-width: 100%;
-      filter: drop-shadow(0 3px 8px rgba(0,0,0,0.2));
-      transition: transform 0.3s ease;
-    }
-
-    .brand-logo:hover { transform: scale(1.05); }
-
-    .course-meta {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      max-width: 100%;
-    }
-
-    .course-name {
-      font-size: 0.78rem;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      color: var(--color-muted);
-      white-space: normal;
-    }
-
-    .week-label {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 4px 10px;
-      border-radius: 999px;
-      background: rgba(175, 75, 239, 0.08);
-      font-size: 0.76rem;
-      color: var(--color-primary);
-      white-space: normal;
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { background-color: rgba(175, 75, 239, 0.08); }
-      50% { background-color: rgba(175, 75, 239, 0.15); }
-    }
-
-    .week-label-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 999px;
-      background: var(--color-success);
-      flex-shrink: 0;
-      animation: blink 1.5s infinite;
-    }
-
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
-    }
-
-    .badge-mode {
-      padding: 5px 10px;
-      border-radius: 999px;
-      background: rgba(12, 10, 24, 0.06);
-      border: 1px solid rgba(12, 10, 24, 0.08);
-      font-size: 0.74rem;
-      text-transform: uppercase;
-      letter-spacing: 0.14em;
-      color: var(--color-muted);
-      white-space: nowrap;
-      transition: all 0.3s ease;
-    }
-
-    .badge-mode:hover {
-      background: rgba(175, 75, 239, 0.1);
-      border-color: var(--color-primary-soft);
-      color: var(--color-primary);
-    }
-
-    @media (max-width: 480px) {
-      .brand-row { flex-direction: column; align-items: flex-start; }
-      .badge-mode { margin-top: 6px; }
-    }
-
-    h1 {
-      font-size: clamp(2rem, 3vw, 2.4rem);
-      line-height: 1.05;
-      color: var(--color-primary);
-      margin-bottom: 6px;
-      animation: fadeInUp 0.6s ease-out 0.3s both;
-    }
-
-    .subtitle {
-      font-size: 0.98rem;
-      color: var(--color-muted);
-      max-width: 100%;
-      margin-bottom: 24px;
-      line-height: 1.5;
-      animation: fadeInUp 0.6s ease-out 0.4s both;
-    }
-
-    /* Objectives list */
-    .objectives-list {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-
-    .objective-card {
-      background: #0a0910;
-      color: #f0f0f0;
-      border-radius: 18px;
-      padding: 16px 20px 18px;
-      display: grid;
-      grid-template-columns: auto 1fr auto;
-      align-items: center;
-      gap: 16px;
-      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
-      transition: all 0.3s ease;
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-      min-height: 100px;
-    }
-
-    .objective-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-      transition: left 0.7s ease;
-    }
-
-    .objective-card:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow-hover);
-    }
-
-    .objective-card:hover::before { left: 100%; }
-
-    .objective-card.active {
-      background: linear-gradient(135deg, #0f172a, #1e1b4b);
-      border-left: 4px solid var(--color-accent);
-    }
-
-    @media (max-width: 480px) {
-      .objective-card {
-        grid-template-columns: auto 1fr;
-        grid-template-rows: auto auto;
-        padding: 14px 16px;
-      }
-      .objective-icon { justify-self: flex-end; }
-    }
-
-    .objective-number {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 48px;
-      height: 48px;
-      border-radius: 999px;
-      background: #ffffff;
-      color: #111827;
-      font-weight: 700;
-      font-size: 1.2rem;
-      flex-shrink: 0;
-      transition: all 0.3s ease;
-    }
-
-    .objective-card:hover .objective-number {
-      background: var(--color-primary-soft);
-      transform: rotate(5deg);
-    }
-
-    .objective-main {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .objective-verb {
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: #d492ff;
-      transition: color 0.3s ease;
-    }
-
-    .objective-card:hover .objective-verb { color: #ffffff; }
-
-    .objective-text {
-      font-size: 0.92rem;
-      color: #e0e0e0;
-      line-height: 1.5;
-    }
-
-    .objective-icon {
-      width: 32px;
-      height: 32px;
-      border-radius: 999px;
-      border: 1px solid rgba(250,250,250,0.16);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.85rem;
-      color: #f9fafb;
-      background: linear-gradient(135deg, rgba(175,75,239,0.1), rgba(0,0,0,0.4));
-      transition: all 0.3s ease;
-    }
-
-    .objective-card:hover .objective-icon {
-      background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
-      transform: scale(1.1);
-    }
-
-    /* Right column */
-    .objectives-header {
-      font-size: 1.4rem;
-      font-weight: 800;
-      color: var(--color-text);
-      margin-bottom: 8px;
-      animation: fadeInUp 0.6s ease-out 0.5s both;
-    }
-
-    .section-tag {
-      font-size: 0.82rem;
-      text-transform: uppercase;
-      letter-spacing: 0.14em;
-      color: var(--color-primary);
-      font-weight: 600;
-      margin-bottom: 16px;
-      animation: fadeInUp 0.6s ease-out 0.6s both;
-    }
-
-    .week-overview {
-      background: #0c0a18;
-      border-radius: 18px;
-      padding: 20px 22px 24px;
-      color: #e0e0e0;
-      font-size: 0.9rem;
-      line-height: 1.7;
-      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.6);
-      animation: fadeInUp 0.6s ease-out 0.7s both;
-      transition: transform 0.3s ease;
-      height: fit-content;
-    }
-
-    .week-overview:hover { transform: translateY(-2px); }
-
-    .week-overview strong { 
-      color: #ffffff; 
-      font-weight: 700;
-    }
-
-    .mini-heading {
-      font-size: 0.88rem;
-      text-transform: uppercase;
-      letter-spacing: 0.14em;
-      color: #c4b5fd;
-      font-weight: 600;
-      margin: 12px 0 10px;
-    }
-
-    .outcomes-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      font-size: 0.88rem;
-      color: #f0f0f0;
-      margin-bottom: 16px;
-    }
-
-    .outcomes-list li {
-      display: flex;
-      gap: 10px;
-      align-items: flex-start;
-      transition: transform 0.3s ease;
-    }
-
-    .outcomes-list li:hover { transform: translateX(5px); }
-
-    .dot {
-      width: 6px;
-      height: 6px;
-      margin-top: 7px;
-      border-radius: 999px;
-      background: var(--color-accent);
-      flex-shrink: 0;
-      animation: pulse 2s infinite;
-    }
-
-    .note-card {
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,0.16);
-      background: rgba(20, 18, 36, 0.8);
-      padding: 12px 14px;
-      font-size: 0.82rem;
-      color: #e0e0e0;
-      transition: all 0.3s ease;
-      margin-top: 12px;
-    }
-
-    .note-card:hover {
-      border-color: var(--color-primary-soft);
-      background: rgba(25, 23, 42, 0.9);
-    }
-
-    .note-card strong { 
-      color: #ffd966;
-      font-weight: 700;
-    }
-
-    /* Key Terms Box */
-    .terms-box {
-      background: linear-gradient(135deg, rgba(131,128,240,0.15), rgba(175,75,239,0.15));
-      border-radius: 18px;
-      padding: 20px;
-      margin-top: 24px;
-      border: 1px solid rgba(131,128,240,0.3);
-    }
-
-    .terms-title {
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: #a29bfe;
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .terms-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 12px;
-      font-size: 0.85rem;
-      color: #f0f0f0;
-    }
-
-    .term-item {
-      padding: 8px 0;
-      border-bottom: 1px dashed rgba(255,255,255,0.15);
-    }
-
-    .term { 
-      font-weight: 600; 
-      color: #d492ff;
-      font-size: 0.9rem; 
-    }
-    .def { 
-      color: #e0e0e0;
-      margin-top: 4px; 
-      line-height: 1.4; 
-    }
-
-    /* Pharmacy Settings Box */
-    .settings-box {
-      background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(240, 240, 255, 0.95));
-      border-radius: 18px;
-      padding: 18px;
-      margin-top: 20px;
-      border: 1px solid rgba(0,184,148,0.3);
-      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-    }
-
-    .settings-title {
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: var(--color-primary);
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .settings-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      font-size: 0.85rem;
-      color: #333333;
-    }
-
-    .setting-item {
-      display: flex;
-      justify-content: space-between;
-      padding: 8px 10px;
-      border-bottom: 1px dashed rgba(0,0,0,0.1);
-      transition: all 0.3s ease;
-      border-radius: 8px;
-    }
-
-    .setting-item:hover {
-      background-color: rgba(175, 75, 239, 0.08);
-      transform: translateX(3px);
-    }
-
-    .setting-name { 
-      font-weight: 600; 
-      color: #222222;
-    }
-    .setting-desc { 
-      color: #444444;
-      text-align: right; 
-      font-size: 0.8rem;
-      max-width: 50%;
-    }
-
-    /* Certification Comparison Box */
-    .cert-box {
-      background: linear-gradient(135deg, rgba(131,128,240,0.15), rgba(175,75,239,0.15));
-      border-radius: 18px;
-      padding: 20px;
-      margin-top: 24px;
-      border: 1px solid rgba(131,128,240,0.3);
-    }
-
-    .cert-title {
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: #a29bfe;
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .cert-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 12px;
-      font-size: 0.85rem;
-      color: #f0f0f0;
-    }
-
-    .cert-item {
-      padding: 8px 0;
-      border-bottom: 1px dashed rgba(255,255,255,0.15);
-    }
-
-    .cert-name { 
-      font-weight: 600; 
-      color: #d492ff;
-      font-size: 0.9rem; 
-    }
-    .cert-info { 
-      color: #e0e0e0;
-      margin-top: 4px; 
-      line-height: 1.4; 
-    }
-
-    /* Professional Associations Box */
-    .associations-box {
-      background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(240, 240, 255, 0.95));
-      border-radius: 18px;
-      padding: 18px;
-      margin-top: 20px;
-      border: 1px solid rgba(175, 75, 239, 0.3);
-      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-    }
-
-    .associations-title {
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: var(--color-primary);
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .associations-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      font-size: 0.85rem;
-      color: #333333;
-    }
-
-    .association-item {
-      display: flex;
-      justify-content: space-between;
-      padding: 8px 10px;
-      border-bottom: 1px dashed rgba(0,0,0,0.1);
-      transition: all 0.3s ease;
-      border-radius: 8px;
-    }
-
-    .association-item:hover {
-      background-color: rgba(175, 75, 239, 0.08);
-      transform: translateX(3px);
-    }
-
-    .association-name { 
-      font-weight: 600; 
-      color: #222222;
-    }
-    .association-acronym { 
-      color: #444444;
-      text-align: right; 
-      font-size: 0.8rem;
-      font-weight: 600;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>AlliedRx -- Week 3 Objectives</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --color-primary: #af4bef;
+  --color-primary-soft: #d492ff;
+  --color-accent: #8380f0;
+  --color-success: #00b894;
+  --color-error: #e17055;
+  --color-bg: #f7f5fb;
+  --color-text: #2b2b2b;
+  --color-muted: #6c6880;
+  --radius-lg: 24px;
+  --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+  --shadow-hover: 0 25px 60px rgba(175, 75, 239, 0.25);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  width: 100%;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  padding: 24px;
+  background: radial-gradient(
+    circle at top left,
+    #ffffff 0,
+    #f1ecff 40%,
+    var(--color-bg) 100%
+  );
+  color: var(--color-text);
+  -webkit-text-size-adjust: 100%;
+}
+
+@media (max-width: 600px) {
+  body {
+    padding: 12px;
+  }
+}
+
+.page {
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  background: #ffffff;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  padding: 28px 30px 32px 30px;
+  display: grid;
+  grid-template-columns: minmax(0, 3.1fr) minmax(0, 2.4fr);
+  gap: 28px;
+  position: relative;
+  overflow: hidden;
+  animation: fadeInUp 0.8s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 900px) {
+  .page {
+    grid-template-columns: 1fr;
+    padding: 22px;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    padding: 0;
+  }
+  .page {
+    border-radius: 0;
+    box-shadow: none;
+    padding: 18px 14px 22px;
+    gap: 22px;
+  }
+}
+
+img,
+.page,
+.column,
+.objective-card,
+.week-overview {
+  max-width: 100%;
+}
+
+.column {
+  position: relative;
+  z-index: 1;
+}
+
+/* Header */
+.brand-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+  width: 100%;
+  animation: fadeIn 0.6s ease-out 0.2s both;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.brand-logo {
+  height: 40px;
+  width: auto;
+  max-width: 100%;
+  filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+  transition: transform 0.3s ease;
+}
+
+.brand-logo:hover {
+  transform: scale(1.05);
+}
+
+.course-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-width: 100%;
+}
+
+.course-name {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--color-muted);
+  white-space: normal;
+}
+
+.week-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(175, 75, 239, 0.08);
+  font-size: 0.76rem;
+  color: var(--color-primary);
+  white-space: normal;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { background-color: rgba(175, 75, 239, 0.08); }
+  50% { background-color: rgba(175, 75, 239, 0.15); }
+}
+
+.week-label-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--color-success);
+  flex-shrink: 0;
+  animation: blink 1.5s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.badge-mode {
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: rgba(12, 10, 24, 0.06);
+  border: 1px solid rgba(12, 10, 24, 0.08);
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--color-muted);
+  white-space: nowrap;
+  transition: all 0.3s ease;
+}
+
+.badge-mode:hover {
+  background: rgba(175, 75, 239, 0.1);
+  border-color: var(--color-primary-soft);
+  color: var(--color-primary);
+}
+
+@media (max-width: 480px) {
+  .brand-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .badge-mode {
+    margin-top: 6px;
+  }
+}
+
+h1 {
+  font-size: clamp(2rem, 3vw, 2.4rem);
+  line-height: 1.05;
+  color: var(--color-primary);
+  margin-bottom: 6px;
+  animation: fadeInUp 0.6s ease-out 0.3s both;
+}
+
+.subtitle {
+  font-size: 0.98rem;
+  color: var(--color-muted);
+  max-width: 34rem;
+  margin-bottom: 18px;
+  animation: fadeInUp 0.6s ease-out 0.4s both;
+}
+
+/* Objectives list */
+.objectives-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.objective-card {
+  background: #08070a;
+  color: #ffffff;
+  border-radius: 18px;
+  padding: 10px 16px 14px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.objective-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.7s ease;
+}
+
+.objective-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
+}
+
+.objective-card:hover::before {
+  left: 100%;
+}
+
+.objective-card.active {
+  background: linear-gradient(135deg, #0f172a, #1e1b4b);
+  border-left: 4px solid var(--color-accent);
+}
+
+@media (max-width: 480px) {
+  .objective-card {
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto;
+  }
+  .objective-icon {
+    justify-self: flex-end;
+  }
+}
+
+.objective-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #111827;
+  font-weight: 700;
+  font-size: 1.05rem;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.objective-card:hover .objective-number {
+  background: var(--color-primary-soft);
+  transform: rotate(5deg);
+}
+
+.objective-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.objective-verb {
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: var(--color-primary-soft);
+  transition: color 0.3s ease;
+}
+
+.objective-card:hover .objective-verb {
+  color: #ffffff;
+}
+
+.objective-text {
+  font-size: 0.84rem;
+  color: #e5e7eb;
+  line-height: 1.4;
+}
+
+.objective-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  border: 1px solid rgba(250, 250, 250, 0.16);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  color: #f9fafb;
+  background: linear-gradient(
+    135deg,
+    rgba(175, 75, 239, 0.1),
+    rgba(0, 0, 0, 0.4)
+  );
+  transition: all 0.3s ease;
+}
+
+.objective-card:hover .objective-icon {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  transform: scale(1.1);
+}
+
+/* Interactive filter buttons */
+.chapter-filter {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: 8px 16px;
+  border-radius: 20px;
+  background: rgba(12, 10, 24, 0.05);
+  border: 1px solid rgba(12, 10, 24, 0.1);
+  color: var(--color-text);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filter-btn:hover {
+  background: rgba(175, 75, 239, 0.1);
+  border-color: var(--color-primary-soft);
+  color: var(--color-primary);
+}
+
+.filter-btn.active {
+  background: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+/* Right-hand content */
+.objectives-header {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--color-text);
+  margin-bottom: 6px;
+  animation: fadeInUp 0.6s ease-out 0.5s both;
+}
+
+.section-tag {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--color-primary);
+  font-weight: 600;
+  margin-bottom: 10px;
+  animation: fadeInUp 0.6s ease-out 0.6s both;
+}
+
+.week-overview {
+  background: rgba(12, 10, 24, 0.94);
+  border-radius: 18px;
+  padding: 16px 18px 18px;
+  color: #e5e7eb;
+  font-size: 0.88rem;
+  line-height: 1.7;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.6);
+  margin-bottom: 16px;
+  animation: fadeInUp 0.6s ease-out 0.7s both;
+  transition: transform 0.3s ease;
+}
+
+.week-overview:hover {
+  transform: translateY(-2px);
+}
+
+.week-overview strong {
+  color: #ffffff;
+}
+
+.mini-heading {
+  font-size: 0.86rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: #c4b5fd;
+  font-weight: 600;
+  margin: 8px 0 10px;
+}
+
+.outcomes-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.86rem;
+  color: #f9fafb;
+}
+
+.outcomes-list li {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  transition: transform 0.3s ease;
+}
+
+.outcomes-list li:hover {
+  transform: translateX(5px);
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  margin-top: 6px;
+  border-radius: 999px;
+  background: var(--color-accent);
+  flex-shrink: 0;
+  animation: pulse 2s infinite;
+}
+
+.note-card {
+  margin-top: 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(15, 23, 42, 0.7);
+  padding: 10px 12px;
+  font-size: 0.78rem;
+  color: #e5e7eb;
+  transition: all 0.3s ease;
+}
+
+.note-card:hover {
+  border-color: var(--color-primary-soft);
+  background: rgba(15, 23, 42, 0.9);
+}
+
+.note-card strong {
+  color: #fef3c7;
+}
+
+/* Interactive counter */
+.progress-counter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(175, 75, 239, 0.05);
+  border-radius: 16px;
+  padding: 12px 18px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(175, 75, 239, 0.1);
+}
+
+.counter-item {
+  text-align: center;
+}
+
+.counter-number {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--color-primary);
+  display: block;
+}
+
+.counter-label {
+  font-size: 0.75rem;
+  color: var(--color-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* Animation for counter */
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.counter-item {
+  animation: countUp 0.6s ease-out forwards;
+}
+
+.counter-item:nth-child(1) { animation-delay: 0.8s; }
+.counter-item:nth-child(2) { animation-delay: 1s; }
+.counter-item:nth-child(3) { animation-delay: 1.2s; }
+
+/* Case Study Box */
+.case-study {
+  background: linear-gradient(135deg, rgba(131, 128, 240, 0.1), rgba(175, 75, 239, 0.1));
+  border-radius: 18px;
+  padding: 18px;
+  margin-top: 20px;
+  border: 1px solid rgba(131, 128, 240, 0.2);
+}
+
+.case-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.case-content {
+  font-size: 0.85rem;
+  color: #ffffff;
+  line-height: 1.5;
+}
+
+.case-content strong {
+  color: #d492ff;
+}
+</style>
 </head>
 <body>
-  <main class="page" aria-labelledby="week3-heading">
-    <!-- LEFT COLUMN: objectives -->
-    <section class="column" aria-label="Week 3 objectives list">
-      <header class="brand-row">
-        <div class="brand">
-          <img
-            src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
-            alt="AlliedRx logo"
-            class="brand-logo"
-          />
-          <div class="course-meta">
-            <span class="course-name">Pharmacy Technician Program • CPhT Certification Prep</span>
-            <div class="week-label">
-              <span class="week-label-dot"></span>
-              <span>Week 3 — Technician Competencies & Career Paths</span>
-            </div>
+<main class="page" aria-labelledby="week3-heading">
+  <!-- LEFT COLUMN: title + objective cards -->
+  <section class="column" aria-label="Week 3 objectives list">
+    <header class="brand-row">
+      <div class="brand">
+        <img
+          src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+          alt="AlliedRx logo"
+          class="brand-logo"
+        />
+        <div class="course-meta">
+          <span class="course-name">Pharmacy Technician Program • CPhT</span>
+          <div class="week-label">
+            <span class="week-label-dot"></span>
+            <span>Week 3 --- Professional Development & Communication</span>
           </div>
         </div>
-        <span class="badge-mode">Campus & Online</span>
-      </header>
-
-      <h1 id="week3-heading">Week 3 Objectives</h1>
-      <p class="subtitle">
-        Explore technician competencies, certification pathways, professional associations, and career opportunities across various pharmacy settings.
+      </div>
+      <span class="badge-mode">Campus &amp; Online</span>
+    </header>
+    <h1 id="week3-heading">Week 3 Objectives</h1>
+    <p class="subtitle">
+      Master <strong>pharmacy technician competencies and certifications</strong> along with 
+      <strong>effective communication skills</strong> essential for professional success in diverse pharmacy settings.
+    </p>
+    <!-- Interactive filter buttons -->
+    <div class="chapter-filter">
+      <button class="filter-btn active" data-filter="all">All Objectives</button>
+      <button class="filter-btn" data-filter="chapter3">Chapter 3: Competencies & Associations</button>
+      <button class="filter-btn" data-filter="chapter4">Chapter 4: Communication Skills</button>
+    </div>
+    <!-- Progress counter -->
+    <div class="progress-counter">
+      <div class="counter-item">
+        <span class="counter-number" id="total-objectives">17</span>
+        <span class="counter-label">Total Objectives</span>
+      </div>
+      <div class="counter-item">
+        <span class="counter-number">2</span>
+        <span class="counter-label">Chapters</span>
+      </div>
+      <div class="counter-item">
+        <span class="counter-number">9</span>
+        <span class="counter-label">Key Topics</span>
+      </div>
+    </div>
+    <div class="objectives-list" id="objectives-container">
+      <!-- Chapter 3: Competencies, Associations, and Settings Objectives -->
+      <article class="objective-card" data-chapter="chapter3">
+        <div class="objective-number">01</div>
+        <div class="objective-main">
+          <div class="objective-verb">Describe</div>
+          <p class="objective-text">
+            Describe the competencies needed for technicians to be successful in various pharmacy settings.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          🎯
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter3">
+        <div class="objective-number">02</div>
+        <div class="objective-main">
+          <div class="objective-verb">Explain & Describe</div>
+          <p class="objective-text">
+            Explain the term nondiscretionary duties, and describe different nondiscretionary duties in inpatient, outpatient, and closed door pharmacy settings.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          📋
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter3">
+        <div class="objective-number">03</div>
+        <div class="objective-main">
+          <div class="objective-verb">Discuss</div>
+          <p class="objective-text">
+            Discuss the American Society of Health-System Pharmacists (ASHP) Model Curriculum and how it relates to pharmacy technician training programs and certification.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          📚
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter3">
+        <div class="objective-number">04</div>
+        <div class="objective-main">
+          <div class="objective-verb">Discuss & Explain</div>
+          <p class="objective-text">
+            Discuss national certification: differences between certification, licensure, registration; benefits; certification process; exam requirements; PTCB vs NHA; maintenance requirements.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          🏛️
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter3">
+        <div class="objective-number">05</div>
+        <div class="objective-main">
+          <div class="objective-verb">List & Explore</div>
+          <p class="objective-text">
+            List specialty certifications available for technicians, and explore the various websites that can be used to obtain continuing education credits.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          🔍
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter3">
+        <div class="objective-number">06</div>
+        <div class="objective-main">
+          <div class="objective-verb">List & Discuss</div>
+          <p class="objective-text">
+            List various opportunities available for technicians, and discuss incentive programs.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          💼
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter3">
+        <div class="objective-number">07</div>
+        <div class="objective-main">
+          <div class="objective-verb">List</div>
+          <p class="objective-text">
+            List the various professional associations pharmacy technicians can join.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          🤝
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter3">
+        <div class="objective-number">08</div>
+        <div class="objective-main">
+          <div class="objective-verb">Explain</div>
+          <p class="objective-text">
+            Explain the importance of professionalism in the workplace, as well as the importance of networking as it relates to the job search.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          ⭐
+        </div>
+      </article>
+      <!-- Chapter 4: Communication and Role of the Technician Objectives -->
+      <article class="objective-card" data-chapter="chapter4">
+        <div class="objective-number">09</div>
+        <div class="objective-main">
+          <div class="objective-verb">Describe</div>
+          <p class="objective-text">
+            Describe the communication skills needed in the delivery of direct patient care in the pharmacy setting.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          🗣️
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter4">
+        <div class="objective-number">10</div>
+        <div class="objective-main">
+          <div class="objective-verb">Explain</div>
+          <p class="objective-text">
+            Explain the communication cycle.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          🔄
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter4">
+        <div class="objective-number">11</div>
+        <div class="objective-main">
+          <div class="objective-verb">Identify</div>
+          <p class="objective-text">
+            Identify various nonverbal and verbal communication skills.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          👀
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter4">
+        <div class="objective-number">12</div>
+        <div class="objective-main">
+          <div class="objective-verb">Describe</div>
+          <p class="objective-text">
+            Describe ways to improve vocal and verbal communication skills.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          🔊
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter4">
+        <div class="objective-number">13</div>
+        <div class="objective-main">
+          <div class="objective-verb">Use & Describe</div>
+          <p class="objective-text">
+            Use proper telephone and cell phone etiquette and describe its guidelines.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          📞
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter4">
+        <div class="objective-number">14</div>
+        <div class="objective-main">
+          <div class="objective-verb">Describe</div>
+          <p class="objective-text">
+            Describe the importance of written communication skills in today's workplace.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          ✍️
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter4">
+        <div class="objective-number">15</div>
+        <div class="objective-main">
+          <div class="objective-verb">Identify</div>
+          <p class="objective-text">
+            Identify communication skills needed to work with special groups of people, such as the terminally ill, non–English-speaking individuals, and hearing-impaired patients.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          ❤️
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter4">
+        <div class="objective-number">16</div>
+        <div class="objective-main">
+          <div class="objective-verb">Explain</div>
+          <p class="objective-text">
+            Explain the significance of working as an effective member of a team.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          👥
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter4">
+        <div class="objective-number">17</div>
+        <div class="objective-main">
+          <div class="objective-verb">Identify</div>
+          <p class="objective-text">
+            Identify ways to eliminate barriers to effective communication.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          🚧
+        </div>
+      </article>
+    </div>
+  </section>
+  <!-- RIGHT COLUMN: narrative + outcomes framing -->
+  <aside class="column" aria-label="Overview of this week's content">
+    <h2 class="objectives-header">Professional Excellence & Effective Communication</h2>
+    <p class="section-tag">Certifications • Competencies • Patient Communication • Teamwork</p>
+    <div class="week-overview">
+      <p>
+        Week 3 combines <strong>professional development knowledge</strong> with 
+        <strong>essential communication skills</strong> for pharmacy technicians. You'll learn about 
+        certifications, associations, and workplace competencies while mastering communication 
+        techniques for diverse patient interactions.
       </p>
-
-      <div class="objectives-list" id="objectives-container">
-        <article class="objective-card">
-          <div class="objective-number">01</div>
-          <div class="objective-main">
-            <div class="objective-verb">Describe</div>
-            <p class="objective-text">
-              Describe the competencies needed for technicians to be successful in various pharmacy settings including community, hospital, and specialty pharmacies.
-            </p>
-          </div>
-          <div class="objective-icon" aria-hidden="true">🎯</div>
-        </article>
-
-        <article class="objective-card">
-          <div class="objective-number">02</div>
-          <div class="objective-main">
-            <div class="objective-verb">Explain & Describe</div>
-            <p class="objective-text">
-              Explain the term "nondiscretionary duties" and describe different nondiscretionary duties in inpatient, outpatient, and closed-door pharmacy settings.
-            </p>
-          </div>
-          <div class="objective-icon" aria-hidden="true">📝</div>
-        </article>
-
-        <article class="objective-card">
-          <div class="objective-number">03</div>
-          <div class="objective-main">
-            <div class="objective-verb">Discuss</div>
-            <p class="objective-text">
-              Discuss the ASHP Model Curriculum and how it relates to pharmacy technician training programs and certification standards.
-            </p>
-          </div>
-          <div class="objective-icon" aria-hidden="true">📚</div>
-        </article>
-
-        <article class="objective-card">
-          <div class="objective-number">04</div>
-          <div class="objective-main">
-            <div class="objective-verb">State & Explain</div>
-            <p class="objective-text">
-              State differences between certification, licensure, and registration; explain certification benefits and process; describe national exams and requirements.
-            </p>
-          </div>
-          <div class="objective-icon" aria-hidden="true">📜</div>
-        </article>
-
-        <article class="objective-card">
-          <div class="objective-number">05</div>
-          <div class="objective-main">
-            <div class="objective-verb">List & Explore</div>
-            <p class="objective-text">
-              List specialty certifications available for technicians, and explore websites that can be used to obtain continuing education credits.
-            </p>
-          </div>
-          <div class="objective-icon" aria-hidden="true">🏆</div>
-        </article>
-
-        <article class="objective-card">
-          <div class="objective-number">06</div>
-          <div class="objective-main">
-            <div class="objective-verb">List & Discuss</div>
-            <p class="objective-text">
-              List various opportunities available for technicians, and discuss incentive programs and career advancement pathways.
-            </p>
-          </div>
-          <div class="objective-icon" aria-hidden="true">💼</div>
-        </article>
-
-        <article class="objective-card">
-          <div class="objective-number">07</div>
-          <div class="objective-main">
-            <div class="objective-verb">List</div>
-            <p class="objective-text">
-              List the various professional associations pharmacy technicians can join for networking, education, and career development.
-            </p>
-          </div>
-          <div class="objective-icon" aria-hidden="true">🤝</div>
-        </article>
-
-        <article class="objective-card">
-          <div class="objective-number">08</div>
-          <div class="objective-main">
-            <div class="objective-verb">Explain</div>
-            <p class="objective-text">
-              Explain the importance of professionalism in the workplace and the importance of networking as it relates to job search and career growth.
-            </p>
-          </div>
-          <div class="objective-icon" aria-hidden="true">⭐</div>
-        </article>
-      </div>
-
-      <!-- Pharmacy Settings Box -->
-      <div class="settings-box">
-        <div class="settings-title"><span>🏥</span> Pharmacy Settings</div>
-        <div class="settings-list">
-          <div class="setting-item">
-            <span class="setting-name">Community/Retail</span>
-            <span class="setting-desc">Walk-in public pharmacy</span>
-          </div>
-          <div class="setting-item">
-            <span class="setting-name">Hospital/Inpatient</span>
-            <span class="setting-desc">Institutional setting</span>
-          </div>
-          <div class="setting-item">
-            <span class="setting-name">Closed-Door</span>
-            <span class="setting-desc">Long-term care facilities</span>
-          </div>
-          <div class="setting-item">
-            <span class="setting-name">Specialty Pharmacy</span>
-            <span class="setting-desc">Complex medications</span>
-          </div>
-          <div class="setting-item">
-            <span class="setting-name">Mail Order</span>
-            <span class="setting-desc">High-volume dispensing</span>
-          </div>
-          <div class="setting-item">
-            <span class="setting-name">Compounding</span>
-            <span class="setting-desc">Custom medications</span>
-          </div>
+      <p>
+        These chapters connect because <strong>technical competence must be paired with 
+        excellent communication</strong> for career success. A certified technician (Chapter 3) 
+        needs clear communication skills (Chapter 4) to effectively assist patients and 
+        collaborate with healthcare teams.
+      </p>
+      <!-- Case Study from Chapter 3 -->
+      <div class="case-study">
+        <div class="case-title">
+          <span>📋</span> Chapter 3 Case Study: Olivia's Professional Journey
+        </div>
+        <div class="case-content">
+          <strong>Situation:</strong> Olivia is a newly hired technician at an independently owned pharmacy.<br>
+          <strong>Requirements:</strong> Must register with state board of pharmacy (certification not mandated).<br>
+          <strong>Background:</strong> Graduate of a technical career college.<br>
+          <strong>Challenge:</strong> Remembering instructor's discussion about benefits of association membership.<br>
+          <strong>Learning Objective:</strong> Explore Olivia's membership options and information sources.
         </div>
       </div>
-
-      <!-- Professional Associations Box -->
-      <div class="associations-box">
-        <div class="associations-title"><span>🤝</span> Professional Associations</div>
-        <div class="associations-list">
-          <div class="association-item">
-            <span class="association-name">American Association of Pharmacy Technicians</span>
-            <span class="association-acronym">AAPT</span>
-          </div>
-          <div class="association-item">
-            <span class="association-name">National Pharmacy Technician Association</span>
-            <span class="association-acronym">NPTA</span>
-          </div>
-          <div class="association-item">
-            <span class="association-name">The Society for Pharmacy Technicians</span>
-            <span class="association-acronym">SEPhT</span>
-          </div>
-          <div class="association-item">
-            <span class="association-name">American Society of Health-System Pharmacists</span>
-            <span class="association-acronym">ASHP</span>
-          </div>
-          <div class="association-item">
-            <span class="association-name">American Pharmacists Association</span>
-            <span class="association-acronym">APhA</span>
-          </div>
+      <!-- Case Study from Chapter 4 -->
+      <div class="case-study">
+        <div class="case-title">
+          <span>🏥</span> Chapter 4 Case Study: Catherine's Training Program
+        </div>
+        <div class="case-content">
+          <strong>Trainer:</strong> Catherine, lead technician at local grocery store pharmacy.<br>
+          <strong>Trainee:</strong> Jackson, preparing for his first day on the job.<br>
+          <strong>Program:</strong> 4-week training program to integrate new technicians.<br>
+          <strong>Current Module:</strong> Week 1 - "Communication"<br>
+          <strong>Learning Objective:</strong> Identify communication topics Catherine will cover with Jackson.
         </div>
       </div>
-
-    </section>
-
-    <!-- RIGHT COLUMN: overview & key terms -->
-    <aside class="column" aria-label="Overview of this week's content">
-      <h2 class="objectives-header">Building Your Career</h2>
-      <p class="section-tag">Competencies • Certification • Professionalism</p>
-
-      <div class="week-overview">
-        <p>
-          <strong>Week 3</strong> focuses on <strong>building a successful pharmacy technician career</strong>. 
-          You'll learn about essential competencies, certification pathways, professional associations, and 
-          career opportunities across different pharmacy settings.
-        </p>
-        
-        <p class="mini-heading" style="margin-top: 16px;">👩‍🔬 Chapter Scenario: Olivia</p>
-        <div class="note-card">
-          <strong>Olivia</strong> is a newly hired technician at an independently owned pharmacy. She is required to 
-          register with the state board of pharmacy, but certification is not mandated. She is a graduate of a 
-          technical career college and remembers her instructor discussing the benefits of association membership. 
-          <strong>What are Olivia's membership options and how can she find more information?</strong>
-        </div>
-
-        <p class="mini-heading">🎯 By the end of this week, you will be able to:</p>
-        <ul class="outcomes-list">
-          <li><span class="dot"></span><span>Identify core competencies needed for success in different pharmacy environments.</span></li>
-          <li><span class="dot"></span><span>Differentiate between nondiscretionary duties across various pharmacy settings.</span></li>
-          <li><span class="dot"></span><span>Navigate the certification process and understand PTCB vs. NHA exam differences.</span></li>
-          <li><span class="dot"></span><span>Join professional associations for networking and career development.</span></li>
-          <li><span class="dot"></span><span>Maintain certification through continuing education requirements.</span></li>
-          <li><span class="dot"></span><span>Explore specialty certifications and advanced career opportunities.</span></li>
-          <li><span class="dot"></span><span>Demonstrate professional workplace behavior and effective networking skills.</span></li>
-          <li><span class="dot"></span><span>Understand the ASHP Model Curriculum and its role in technician education.</span></li>
-        </ul>
-
-        <!-- Certification Comparison Box -->
-        <div class="cert-box">
-          <div class="cert-title"><span>📜</span> National Certification Comparison</div>
-          <div class="cert-grid">
-            <div class="cert-item">
-              <div class="cert-name">PTCB (Pharmacy Technician Certification Board)</div>
-              <div class="cert-info">Most widely recognized; 90 questions; computer-based; requires high school diploma or equivalent.</div>
-            </div>
-            <div class="cert-item">
-              <div class="cert-name">NHA (National Healthcareer Association)</div>
-              <div class="cert-info">100 questions; more scenario-based; offered through ICPT (Institute for the Certification of Pharmacy Technicians).</div>
-            </div>
-            <div class="cert-item">
-              <div class="cert-name">Maintenance Requirements</div>
-              <div class="cert-info">Both require 20 hours of continuing education every 2 years, including 1 hour in pharmacy law.</div>
-            </div>
-            <div class="cert-item">
-              <div class="cert-name">Designation</div>
-              <div class="cert-info">Certified technicians can use "CPhT" after their name.</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Key Terms Box -->
-        <div class="terms-box" style="margin-top: 20px;">
-          <div class="terms-title"><span>📚</span> Key Terms & Definitions</div>
-          <div class="terms-grid">
-            <div class="term-item">
-              <div class="term">Nondiscretionary Duties</div>
-              <div class="def">Tasks that don't require professional judgment: inventory, filling, repackaging, billing.</div>
-            </div>
-            <div class="term-item">
-              <div class="term">CPhT</div>
-              <div class="def">Certified Pharmacy Technician - designation after passing national certification exam.</div>
-            </div>
-            <div class="term-item">
-              <div class="term">ASHP Model Curriculum</div>
-              <div class="def">Guidelines for pharmacy technician education and training program standards.</div>
-            </div>
-            <div class="term-item">
-              <div class="term">Closed-Door Pharmacy</div>
-              <div class="def">Serves institutions like long-term care facilities; not open to the public.</div>
-            </div>
-            <div class="term-item">
-              <div class="term">Professionalism</div>
-              <div class="def">Conforming to accepted work ethics and conduct standards in the profession.</div>
-            </div>
-            <div class="term-item">
-              <div class="term">Total Parenteral Nutrition (TPN)</div>
-              <div class="def">Intravenous nutrition for patients unable to eat; prepared in sterile compounding.</div>
-            </div>
-            <div class="term-item">
-              <div class="term">PTAC</div>
-              <div class="def">Pharmacy Technician Accreditation Commission - accredits technician education programs.</div>
-            </div>
-            <div class="term-item">
-              <div class="term">Continuing Education (CE)</div>
-              <div class="def">Required education for certification maintenance and professional development.</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="note-card">
-          <strong>💡 Professional Tip:</strong> Join at least <strong>one professional association</strong> (AAPT, NPTA, or SEPHT) 
-          during your training. Membership provides access to <strong>continuing education, job boards, and networking events</strong> 
-          that can accelerate your career.
-        </div>
-
-        <div class="note-card" style="margin-top:12px;">
-          <strong>🏆 Certification Benefits:</strong> Certified technicians earn <strong>10-20% higher wages</strong> on average, 
-          have better job security, and qualify for more advanced positions. Many states now <strong>require certification</strong> 
-          for pharmacy technician registration.
-        </div>
-
-        <div class="note-card" style="margin-top:12px;">
-          <strong>🤝 Networking Strategy:</strong> Create a <strong>professional LinkedIn profile</strong> highlighting your 
-          pharmacy technician training and certifications. Connect with instructors, classmates, and professionals you meet 
-          during externships. Attend <strong>local pharmacy association meetings</strong> to build your professional network.
-        </div>
+      <p class="mini-heading">By the end of this week, you will be able to:</p>
+      <ul class="outcomes-list">
+        <li>
+          <span class="dot"></span>
+          <span>Differentiate between certification, licensure, and registration requirements for pharmacy technicians.</span>
+        </li>
+        <li>
+          <span class="dot"></span>
+          <span>Explain nondiscretionary duties across inpatient, outpatient, and closed-door pharmacy settings.</span>
+        </li>
+        <li>
+          <span class="dot"></span>
+          <span>Compare PTCB and NHA certification exams and identify continuing education resources.</span>
+        </li>
+        <li>
+          <span class="dot"></span>
+          <span>Apply professional communication skills with diverse patient populations, including those with special needs.</span>
+        </li>
+        <li>
+          <span class="dot"></span>
+          <span>Demonstrate proper telephone etiquette and written communication techniques in pharmacy settings.</span>
+        </li>
+      </ul>
+      <div class="note-card">
+        <strong>Certification Insight:</strong> <strong>PTCB certification</strong> is recognized 
+        in all 50 states and often leads to <strong>higher earning potential</strong> (10-20% 
+        increase) and <strong>expanded job responsibilities</strong> in most pharmacy settings.
       </div>
-    </aside>
-  </main>
+      <div class="note-card" style="margin-top: 12px;">
+        <strong>Communication Tip:</strong> When communicating with <strong>hearing-impaired patients</strong>, 
+        maintain <strong>eye contact</strong>, speak <strong>clearly without shouting</strong>, 
+        and use <strong>written instructions</strong> for complex medication information.
+      </div>
+      <div class="note-card" style="margin-top: 12px;">
+        <strong>Professional Development:</strong> Joining associations like <strong>AAPT or NPTA</strong> 
+        provides <strong>networking opportunities</strong>, access to <strong>continuing education</strong>, 
+        and <strong>professional recognition</strong> that can advance your pharmacy technician career.
+      </div>
+    </div>
+  </aside>
+</main>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Filter functionality
+  const filterButtons = document.querySelectorAll('.filter-btn');
+  const objectiveCards = document.querySelectorAll('.objective-card');
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Interactive objective cards
-      const objectiveCards = document.querySelectorAll('.objective-card');
+  filterButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      // Update active button
+      filterButtons.forEach(btn => btn.classList.remove('active'));
+      this.classList.add('active');
+
+      const filter = this.getAttribute('data-filter');
+
+      // Filter cards
       objectiveCards.forEach(card => {
-        card.addEventListener('click', function() {
-          this.classList.toggle('active');
-          if (this.classList.contains('active')) {
-            const icon = this.querySelector('.objective-icon');
-            icon.style.transform = 'scale(1.2) rotate(10deg)';
-            setTimeout(() => { icon.style.transform = 'scale(1.1)'; }, 300);
+        if (filter === 'all') {
+          card.style.display = 'grid';
+          setTimeout(() => {
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+          }, 10);
+        } else {
+          if (card.getAttribute('data-chapter') === filter) {
+            card.style.display = 'grid';
+            setTimeout(() => {
+              card.style.opacity = '1';
+              card.style.transform = 'translateY(0)';
+            }, 10);
+          } else {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(10px)';
+            setTimeout(() => {
+              card.style.display = 'none';
+            }, 300);
           }
-        });
-        card.setAttribute('tabindex', '0');
-        card.addEventListener('keydown', function(e) {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            this.click();
-          }
-        });
-      });
-
-      // Hover effects for outcomes list
-      const outcomesItems = document.querySelectorAll('.outcomes-list li');
-      outcomesItems.forEach(item => {
-        item.addEventListener('mouseenter', function() {
-          const dot = this.querySelector('.dot');
-          dot.style.transform = 'scale(1.5)';
-          dot.style.background = 'var(--color-primary)';
-        });
-        item.addEventListener('mouseleave', function() {
-          const dot = this.querySelector('.dot');
-          dot.style.transform = 'scale(1)';
-          dot.style.background = 'var(--color-accent)';
-        });
-      });
-
-      // Scroll animation for cards
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateY(0)';
-          }
-        });
-      }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-
-      objectiveCards.forEach(card => {
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(20px)';
-        card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-        observer.observe(card);
+        }
       });
     });
-  </script>
+  });
+
+  // Interactive objective cards
+  objectiveCards.forEach(card => {
+    card.addEventListener('click', function() {
+      // Toggle active state
+      this.classList.toggle('active');
+
+      // Add subtle animation
+      if (this.classList.contains('active')) {
+        const icon = this.querySelector('.objective-icon');
+        icon.style.transform = 'scale(1.2) rotate(10deg)';
+        setTimeout(() => {
+          icon.style.transform = 'scale(1.1)';
+        }, 300);
+      }
+    });
+
+    // Add keyboard navigation
+    card.setAttribute('tabindex', '0');
+    card.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        this.click();
+      }
+    });
+  });
+
+  // Animate counter numbers
+  function animateCounter(element, target, duration) {
+    let start = 0;
+    const increment = target / (duration / 16); // 60fps
+    const timer = setInterval(() => {
+      start += increment;
+      if (start >= target) {
+        element.textContent = target;
+        clearInterval(timer);
+      } else {
+        element.textContent = Math.floor(start);
+      }
+    }, 16);
+  }
+
+  // Start counter animation after page load
+  setTimeout(() => {
+    const counterElement = document.getElementById('total-objectives');
+    animateCounter(counterElement, 17, 1000);
+  }, 1500);
+
+  // Add hover effect to outcomes list items
+  const outcomesItems = document.querySelectorAll('.outcomes-list li');
+  outcomesItems.forEach(item => {
+    item.addEventListener('mouseenter', function() {
+      const dot = this.querySelector('.dot');
+      dot.style.transform = 'scale(1.5)';
+      dot.style.background = 'var(--color-primary)';
+    });
+    item.addEventListener('mouseleave', function() {
+      const dot = this.querySelector('.dot');
+      dot.style.transform = 'scale(1)';
+      dot.style.background = 'var(--color-accent)';
+    });
+  });
+
+  // Add scroll animation for cards
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, observerOptions);
+
+  // Observe all objective cards
+  objectiveCards.forEach(card => {
+    card.style.opacity = '0';
+    card.style.transform = 'translateY(20px)';
+    card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    observer.observe(card);
+  });
+
+  // Add interactivity to case study boxes
+  const caseStudies = document.querySelectorAll('.case-study');
+  caseStudies.forEach(study => {
+    study.addEventListener('mouseenter', function() {
+      this.style.transform = 'translateY(-3px)';
+      this.style.boxShadow = '0 12px 30px rgba(131, 128, 240, 0.2)';
+    });
+    study.addEventListener('mouseleave', function() {
+      this.style.transform = 'translateY(0)';
+      this.style.boxShadow = 'none';
+    });
+  });
+});
+</script>
 </body>
 </html>
