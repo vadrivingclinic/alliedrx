@@ -468,7 +468,7 @@
 
         .checklist li.completed .check-dot {
             background: var(--color-success);
-            border-color: var(--color-success);
+            border-color = 'var(--color-success)';
             color: white;
         }
 
@@ -756,39 +756,100 @@
             }
         }
 
-        /* Association Cards */
-        .association-cards {
+        /* Communication Skills Section */
+        .communication-skills {
             margin-top: 20px;
+            background: rgba(0, 184, 148, 0.03);
+            border-radius: 12px;
+            padding: 16px;
+            border-left: 4px solid var(--color-success);
+        }
+
+        .skills-heading {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-success);
+            margin-bottom: 12px;
+        }
+
+        .skills-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 14px;
+            gap: 12px;
         }
 
-        .association-card {
-            background: linear-gradient(135deg, rgba(0, 184, 148, 0.1), rgba(255, 255, 255, 0.9));
-            border-radius: 12px;
-            padding: 14px;
-            border: 1px solid rgba(0, 184, 148, 0.2);
-            transition: all 0.3s ease;
+        .skill-card {
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 8px;
+            border-top: 3px solid var(--color-success);
         }
 
-        .association-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0, 184, 148, 0.15);
-            border-color: var(--color-success);
-        }
-
-        .association-name {
+        .skill-title {
             font-weight: 700;
             color: var(--color-success);
             margin-bottom: 6px;
             font-size: 0.85rem;
         }
 
-        .association-desc {
+        .skill-desc {
             font-size: 0.78rem;
             color: var(--color-muted);
             line-height: 1.4;
+        }
+
+        /* Special Groups Section */
+        .special-groups {
+            margin-top: 20px;
+            background: rgba(131, 128, 240, 0.03);
+            border-radius: 12px;
+            padding: 16px;
+            border-left: 4px solid var(--color-accent);
+        }
+
+        .groups-heading {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-accent);
+            margin-bottom: 12px;
+        }
+
+        .groups-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 12px;
+        }
+
+        .group-card {
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid rgba(131, 128, 240, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .group-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(131, 128, 240, 0.15);
+        }
+
+        .group-icon {
+            font-size: 1.5rem;
+            margin-bottom: 6px;
+            color: var(--color-accent);
+        }
+
+        .group-name {
+            font-weight: 600;
+            color: var(--color-text);
+            font-size: 0.82rem;
+            margin-bottom: 4px;
+        }
+
+        .group-tip {
+            font-size: 0.75rem;
+            color: var(--color-muted);
         }
 
         /* Pharmacy Settings */
@@ -904,19 +965,19 @@
                         <span class="course-name">Pharmacy Technician Program • Campus & Distance Learning</span>
                         <div class="week-label">
                             <span class="week-label-dot"></span>
-                            <span>Week 3 --- Technician Competencies & Career Pathways</span>
+                            <span>Week 3 --- Career Development & Patient Communication</span>
                         </div>
                     </div>
                 </div>
                 <span class="badge-mode">Campus &amp; Online</span>
             </header>
 
-            <h1 id="week3-reading-heading">Week 3 Reading Assignment</h1>
+            <h1 id="week3-reading-heading">Week 3 Reading Assignments</h1>
             <p class="subtitle">
-                Explore the <strong>diverse career pathways</strong> available to pharmacy technicians,
-                understand <strong>essential competencies and nondiscretionary duties</strong>, and learn about
-                <strong>national certification, professional associations</strong>, and <strong>workplace professionalism</strong>
-                that will shape your successful pharmacy career.
+                This week, you'll explore <strong>pharmacy technician career pathways</strong> and master
+                <strong>essential patient communication skills</strong>. You'll learn about
+                <strong>professional competencies, certifications, and workplace professionalism</strong> while
+                developing <strong>effective communication strategies</strong> for diverse patient populations.
             </p>
 
             <!-- Progress tracker -->
@@ -943,11 +1004,27 @@
                             Discover <strong>essential technician competencies</strong> across different pharmacy settings,
                             understand <strong>nondiscretionary duties and ASHP Model Curriculum</strong>, explore
                             <strong>national certification options (PTCB vs. NHA)</strong>, learn about
-                            <strong>professional associations</strong>, and develop <strong>workplace professionalism skills</strong>
-                            for career advancement.
+                            <strong>professional associations</strong>, and develop <strong>workplace professionalism skills</strong>.
                         </p>
                     </div>
                     <div class="tag-time" id="chapter3-time">Est. 70-85 min</div>
+                </article>
+
+                <!-- Chapter 4: Communication and Role of the Technician With the Customer/Patient -->
+                <article class="reading-card" id="chapter4-card" data-chapter="4">
+                    <div class="chapter-pill">Chapter 4</div>
+                    <div class="chapter-main">
+                        <div class="chapter-title">
+                            Communication and Role of the Technician With the Customer/Patient
+                        </div>
+                        <p class="chapter-text">
+                            Master <strong>verbal and nonverbal communication skills</strong> for patient care,
+                            understand the <strong>communication cycle and barriers</strong>, learn
+                            <strong>telephone etiquette and written communication</strong>, develop skills for
+                            <strong>working with special patient groups</strong>, and become an <strong>effective team member</strong>.
+                        </p>
+                    </div>
+                    <div class="tag-time" id="chapter4-time">Est. 65-80 min</div>
                 </article>
             </div>
 
@@ -955,14 +1032,64 @@
                 <strong>Textbook:</strong> Mosby's Pharmacy Technician, 5th Edition
             </p>
 
+            <!-- Communication Skills Section -->
+            <div class="communication-skills">
+                <div class="skills-heading">Essential Communication Skills (Chapter 4)</div>
+                <div class="skills-grid">
+                    <div class="skill-card">
+                        <div class="skill-title">Verbal Communication</div>
+                        <div class="skill-desc">Clear speech, tone modulation, appropriate vocabulary for patients</div>
+                    </div>
+                    <div class="skill-card">
+                        <div class="skill-title">Nonverbal Communication</div>
+                        <div class="skill-desc">Body language, eye contact, facial expressions, posture</div>
+                    </div>
+                    <div class="skill-card">
+                        <div class="skill-title">Telephone Etiquette</div>
+                        <div class="skill-desc">Professional greeting, clear information, proper hold procedures</div>
+                    </div>
+                    <div class="skill-card">
+                        <div class="skill-title">Written Communication</div>
+                        <div class="skill-desc">Clear documentation, accurate notes, professional emails</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Special Patient Groups -->
+            <div class="special-groups">
+                <div class="groups-heading">Communicating with Special Patient Groups</div>
+                <div class="groups-container">
+                    <div class="group-card">
+                        <div class="group-icon">👵</div>
+                        <div class="group-name">Elderly Patients</div>
+                        <div class="group-tip">Speak clearly, allow extra time, verify understanding</div>
+                    </div>
+                    <div class="group-card">
+                        <div class="group-icon">🦻</div>
+                        <div class="group-name">Hearing Impaired</div>
+                        <div class="group-tip">Face patient, speak clearly, use written notes if needed</div>
+                    </div>
+                    <div class="group-card">
+                        <div class="group-icon">🌐</div>
+                        <div class="group-name">Non-English Speakers</div>
+                        <div class="group-tip">Use simple language, visual aids, interpreter services</div>
+                    </div>
+                    <div class="group-card">
+                        <div class="group-icon">🩺</div>
+                        <div class="group-name">Terminally Ill</div>
+                        <div class="group-tip">Show compassion, be patient, listen actively</div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Pharmacy Settings -->
             <div class="key-terms">
-                <div class="terms-heading">Pharmacy Practice Settings</div>
+                <div class="terms-heading">Pharmacy Practice Settings (Chapter 3)</div>
                 <div class="settings-container">
                     <div class="setting-card">
                         <div class="setting-icon">🏥</div>
                         <div class="setting-name">Inpatient Pharmacy</div>
-                        <div class="setting-desc">Hospital/institutional setting, sterile compounding, unit dose systems</div>
+                        <div class="setting-desc">Hospital/institutional setting, sterile compounding</div>
                     </div>
                     <div class="setting-card">
                         <div class="setting-icon">💊</div>
@@ -972,131 +1099,76 @@
                     <div class="setting-card">
                         <div class="setting-icon">🚪</div>
                         <div class="setting-name">Closed Door Pharmacy</div>
-                        <div class="setting-desc">Long-term care facilities, institutional deliveries, not open to public</div>
-                    </div>
-                    <div class="setting-card">
-                        <div class="setting-icon">🏢</div>
-                        <div class="setting-name">Specialty Pharmacy</div>
-                        <div class="setting-desc">Complex medications, chronic disease management, prior authorizations</div>
+                        <div class="setting-desc">Long-term care facilities, institutional deliveries</div>
                     </div>
                 </div>
             </div>
 
             <!-- Key Terms Section -->
             <div class="key-terms">
-                <div class="terms-heading">Key Career & Professional Terms</div>
+                <div class="terms-heading">Key Terms & Definitions</div>
                 <div class="terms-grid">
                     <div class="term-item">
-                        <div class="term">Nondiscretionary Duties</div>
-                        <div class="definition">Tasks requiring no professional judgment: inventory, billing, repackaging</div>
-                    </div>
-                    <div class="term-item">
                         <div class="term">CPhT</div>
-                        <div class="definition">Certified Pharmacy Technician - Passed national exam, uses CPhT credential</div>
+                        <div class="definition">Certified Pharmacy Technician - Passed national exam</div>
                     </div>
                     <div class="term-item">
-                        <div class="term">ASHP Model Curriculum</div>
-                        <div class="definition">Standardized training guidelines for pharmacy technician education</div>
+                        <div class="term">Nondiscretionary Duties</div>
+                        <div class="definition">Tasks requiring no professional judgment</div>
+                    </div>
+                    <div class="term-item">
+                        <div class="term">Communication Cycle</div>
+                        <div class="definition">Sender → Message → Channel → Receiver → Feedback</div>
+                    </div>
+                    <div class="term-item">
+                        <div class="term">Compassion</div>
+                        <div class="definition">Wanting to help someone who is sick or in trouble</div>
                     </div>
                     <div class="term-item">
                         <div class="term">Professionalism</div>
-                        <div class="definition">Conforming to ethical principles and work standards of the profession</div>
+                        <div class="definition">Conforming to ethical principles of the profession</div>
                     </div>
                     <div class="term-item">
-                        <div class="term">Total Parenteral Nutrition (TPN)</div>
-                        <div class="definition">IV nutrition for patients unable to eat; requires sterile compounding</div>
+                        <div class="term">Tact</div>
+                        <div class="definition">Ability to communicate without offending others</div>
                     </div>
                     <div class="term-item">
-                        <div class="term">Competency</div>
-                        <div class="definition">Capability to perform specific functions proficiently in pharmacy settings</div>
+                        <div class="term">Attitude</div>
+                        <div class="definition">Mental disposition toward customers and duties</div>
                     </div>
                     <div class="term-item">
-                        <div class="term">Confidentiality</div>
-                        <div class="definition">Protecting patient information from unauthorized disclosure (HIPAA)</div>
-                    </div>
-                    <div class="term-item">
-                        <div class="term">Continuing Education (CE)</div>
-                        <div class="definition">Required education for maintaining certification and license renewal</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Professional Associations -->
-            <div class="key-terms">
-                <div class="terms-heading">Professional Associations for Technicians</div>
-                <div class="association-cards">
-                    <div class="association-card">
-                        <div class="association-name">AAPT (1979)</div>
-                        <div class="association-desc">First pharmacy technician association, advocacy and education</div>
-                    </div>
-                    <div class="association-card">
-                        <div class="association-name">NPTA (1999)</div>
-                        <div class="association-desc">National Pharmacy Technician Association, primarily for technicians</div>
-                    </div>
-                    <div class="association-card">
-                        <div class="association-name">ASHP (1942)</div>
-                        <div class="association-desc">American Society of Health-System Pharmacists, sets Model Curriculum</div>
-                    </div>
-                    <div class="association-card">
-                        <div class="association-name">APhA (1852)</div>
-                        <div class="association-desc">Oldest pharmacy association, represents all pharmacy professionals</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Certification Comparison -->
-            <div class="cert-comparison">
-                <div class="cert-heading">National Certification Comparison</div>
-                <div class="cert-grid">
-                    <div class="cert-card">
-                        <div class="cert-title">PTCB Certification</div>
-                        <ul class="cert-features">
-                            <li>Pharmacy Technician Certification Board</li>
-                            <li>Most widely recognized nationally</li>
-                            <li>Required in many states</li>
-                            <li>900-question exam pool</li>
-                            <li>20 CE hours every 2 years</li>
-                        </ul>
-                    </div>
-                    <div class="cert-card">
-                        <div class="cert-title">NHA/ExCPT Certification</div>
-                        <ul class="cert-features">
-                            <li>National Healthcareer Association</li>
-                            <li>ExCPT exam (Exam for Certification)</li>
-                            <li>Accepted in many states</li>
-                            <li>Focus on practical skills</li>
-                            <li>20 CE hours every 2 years</li>
-                        </ul>
+                        <div class="term">Etiquette</div>
+                        <div class="definition">Unwritten guidelines for professional behavior</div>
                     </div>
                 </div>
             </div>
 
             <!-- Interactive checklist -->
-            <p class="checklist-heading">Career Development Activities</p>
+            <p class="checklist-heading">Application Exercises for Week 3</p>
             <ul class="checklist" id="reading-checklist">
                 <li data-index="0">
                     <span class="check-dot">□</span>
-                    <span>Research and compare state requirements for technician registration, licensure, and certification in your state and three neighboring states.</span>
+                    <span>Practice the communication cycle by role-playing a patient consultation scenario with a classmate.</span>
                 </li>
                 <li data-index="1">
                     <span class="check-dot">□</span>
-                    <span>Create a list of nondiscretionary duties for each pharmacy setting: inpatient, outpatient, and closed-door.</span>
+                    <span>Create a comparison chart of PTCB vs. NHA certification requirements and state acceptance.</span>
                 </li>
                 <li data-index="2">
                     <span class="check-dot">□</span>
-                    <span>Visit the websites of AAPT, NPTA, and ASHP to compare membership benefits and costs for students.</span>
+                    <span>Develop a telephone etiquette script for answering pharmacy calls and transferring to pharmacist.</span>
                 </li>
                 <li data-index="3">
                     <span class="check-dot">□</span>
-                    <span>Develop a 2-year professional development plan including certification goals and association memberships.</span>
+                    <span>Research and list three professional associations with student membership options and benefits.</span>
                 </li>
                 <li data-index="4">
                     <span class="check-dot">□</span>
-                    <span>Research specialty certifications available (like sterile compounding or chemotherapy) and their requirements.</span>
+                    <span>Create a list of communication strategies for working with hearing-impaired or non-English-speaking patients.</span>
                 </li>
                 <li data-index="5">
                     <span class="check-dot">□</span>
-                    <span>Create a sample resume highlighting competencies learned from the ASHP Model Curriculum.</span>
+                    <span>Practice documenting a mock patient interaction using clear, professional written communication.</span>
                 </li>
             </ul>
 
@@ -1113,130 +1185,128 @@
             </div>
 
             <p class="complete-hint">
-                After completing Chapter 3, you'll have a clear understanding of the diverse career pathways
-                available to pharmacy technicians, certification requirements, and professional development
-                opportunities that will help you build a successful and rewarding pharmacy career.
+                After completing Chapters 3 and 4, you'll understand both the career pathways available to pharmacy technicians
+                and the essential communication skills needed for effective patient care. These combined skills will prepare
+                you for professional success in any pharmacy setting.
             </p>
         </section>
 
         <!-- RIGHT COLUMN: framing & why this reading matters -->
-        <aside class="column" aria-label="Why this reading is important">
-            <p class="section-tag">Career Development</p>
-            <h2 class="side-heading">Building Your Pharmacy Technician Career</h2>
+        <aside class="column" aria-label="Why these readings are important">
+            <p class="section-tag">Professional Development</p>
+            <h2 class="side-heading">Career Skills + Patient Communication = Pharmacy Success</h2>
             
             <div class="side-card">
                 <p>
-                    <strong>Chapter 3</strong> provides the roadmap for your pharmacy technician career development.
-                    Understanding competencies, certifications, and professional associations will help you
-                    navigate career advancement opportunities and maximize your professional potential.
+                    <strong>Chapter 3</strong> provides the career roadmap, while <strong>Chapter 4</strong> gives you the
+                    communication tools. Together, they create the complete pharmacy technician professional profile:
+                    knowledgeable about career opportunities and skilled in patient interactions.
                 </p>
                 
-                <p class="side-subheading">Career Pathway Decisions:</p>
+                <p class="side-subheading">Key Connections Between Chapters:</p>
                 <ul class="side-list">
                     <li>
                         <span class="dot"></span>
-                        <span><strong>Certification Choice:</strong> PTCB vs. NHA certification based on state requirements and career goals.</span>
+                        <span><strong>Professionalism (Ch3)</strong> is demonstrated through <strong>effective communication (Ch4)</strong> with patients and colleagues.</span>
                     </li>
                     <li>
                         <span class="dot"></span>
-                        <span><strong>Setting Selection:</strong> Hospital, retail, closed-door, or specialty pharmacy based on interests.</span>
+                        <span><strong>Competencies (Ch3)</strong> include <strong>communication skills (Ch4)</strong> as essential job requirements.</span>
                     </li>
                     <li>
                         <span class="dot"></span>
-                        <span><strong>Association Membership:</strong> Professional networking and continuing education opportunities.</span>
+                        <span><strong>Teamwork (Ch4)</strong> enhances <strong>workplace effectiveness (Ch3)</strong> in all pharmacy settings.</span>
                     </li>
                     <li>
                         <span class="dot"></span>
-                        <span><strong>Specialization Path:</strong> Advanced certifications in sterile compounding, chemotherapy, or inventory management.</span>
+                        <span><strong>Certification (Ch3)</strong> validates both <strong>technical knowledge and communication abilities (Ch4)</strong>.</span>
                     </li>
                 </ul>
 
                 <div class="note-card">
-                    <strong>Key Learning Objectives Integration:</strong>
+                    <strong>Chapter 3 Learning Objectives:</strong>
                     <ul style="margin-top: 8px; padding-left: 20px;">
-                        <li><strong>Objective 1-2:</strong> Technician competencies & nondiscretionary duties</li>
-                        <li><strong>Objective 3:</strong> ASHP Model Curriculum and training standards</li>
-                        <li><strong>Objective 4:</strong> National certification (PTCB vs. NHA)</li>
-                        <li><strong>Objective 5-6:</strong> Specialty certifications & career opportunities</li>
-                        <li><strong>Objective 7-8:</strong> Professional associations & workplace professionalism</li>
+                        <li>Technician competencies & nondiscretionary duties</li>
+                        <li>ASHP Model Curriculum and training standards</li>
+                        <li>National certification (PTCB vs. NHA)</li>
+                        <li>Professional associations & career opportunities</li>
+                        <li>Workplace professionalism & networking</li>
                     </ul>
                 </div>
 
                 <div class="note-card" style="margin-top: 12px;">
-                    <strong>Scenario: Olivia's Career Decisions</strong>
+                    <strong>Chapter 4 Learning Objectives:</strong>
                     <ul style="margin-top: 8px; padding-left: 20px;">
-                        <li>New technician at independent pharmacy needs to register with state BOP</li>
-                        <li>Certification not mandated but offers career advantages</li>
-                        <li>Technical college graduate with association membership knowledge</li>
-                        <li>Needs to research AAPT, NPTA, ASHP for professional development</li>
-                        <li>Must consider certification for future career advancement</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Workplace Competencies Card -->
-            <div class="side-card" style="margin-top: 20px;">
-                <p class="side-subheading">Essential Technician Competencies</p>
-                <ul class="side-list">
-                    <li>
-                        <span class="dot"></span>
-                        <span><strong>Communication:</strong> Clear patient counseling, professional interactions with healthcare team</span>
-                    </li>
-                    <li>
-                        <span class="dot"></span>
-                        <span><strong>Technical Skills:</strong> Prescription processing, inventory management, sterile compounding</span>
-                    </li>
-                    <li>
-                        <span class="dot"></span>
-                        <span><strong>Legal Compliance:</strong> HIPAA, controlled substance handling, state regulations</span>
-                    </li>
-                    <li>
-                        <span class="dot"></span>
-                        <span><strong>Professionalism:</strong> Ethical conduct, confidentiality, continuous learning</span>
-                    </li>
-                </ul>
-                
-                <div class="note-card" style="margin-top: 12px;">
-                    <strong>Nondiscretionary Duties by Setting:</strong>
-                    <ul style="margin-top: 8px; padding-left: 20px;">
-                        <li><strong>Inpatient:</strong> Unit dose packaging, IV admixture, automated dispensing</li>
-                        <li><strong>Outpatient:</strong> Prescription filling, patient intake, inventory management</li>
-                        <li><strong>Closed-door:</strong> Bulk packaging, delivery preparation, facility billing</li>
-                        <li><strong>All Settings:</strong> Stocking, cleaning, equipment maintenance</li>
+                        <li>Communication skills for patient care</li>
+                        <li>Verbal & nonverbal communication techniques</li>
+                        <li>Telephone etiquette & written communication</li>
+                        <li>Working with special patient groups</li>
+                        <li>Teamwork & barrier elimination</li>
                     </ul>
                 </div>
             </div>
 
-            <!-- Certification & Advancement Card -->
+            <!-- Scenarios Card -->
             <div class="side-card" style="margin-top: 20px;">
-                <p class="side-subheading">Certification & Career Advancement</p>
+                <p class="side-subheading">Real-World Scenarios</p>
+                
+                <div class="note-card">
+                    <strong>Scenario 1: Olivia's Career Decisions (Ch3)</strong>
+                    <ul style="margin-top: 8px; padding-left: 20px;">
+                        <li>New technician at independent pharmacy</li>
+                        <li>Needs to register with state BOP</li>
+                        <li>Considering certification for career advancement</li>
+                        <li>Researching professional associations (AAPT, NPTA, ASHP)</li>
+                        <li>Planning career development path</li>
+                    </ul>
+                </div>
+
+                <div class="note-card" style="margin-top: 12px;">
+                    <strong>Scenario 2: Catherine's Training Program (Ch4)</strong>
+                    <ul style="margin-top: 8px; padding-left: 20px;">
+                        <li>Lead technician training new hire Jackson</li>
+                        <li>4-week program with "Communication" module</li>
+                        <li>Topics: verbal/nonverbal skills, telephone etiquette</li>
+                        <li>Special patient groups communication</li>
+                        <li>Teamwork and barrier elimination strategies</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Communication Cycle Card -->
+            <div class="side-card" style="margin-top: 20px;">
+                <p class="side-subheading">The Communication Cycle (Ch4)</p>
                 <ul class="side-list">
                     <li>
                         <span class="dot"></span>
-                        <span><strong>Salary Impact:</strong> Certified technicians earn 10-20% more on average</span>
+                        <span><strong>Sender:</strong> Pharmacy technician with message to convey</span>
                     </li>
                     <li>
                         <span class="dot"></span>
-                        <span><strong>Job Mobility:</strong> Certification facilitates state-to-state job transfers</span>
+                        <span><strong>Message:</strong> Medication instructions, refill information, etc.</span>
                     </li>
                     <li>
                         <span class="dot"></span>
-                        <span><strong>Specialization:</strong> Advanced roles in chemotherapy, TPN, nuclear pharmacy</span>
+                        <span><strong>Channel:</strong> Verbal, written, or nonverbal communication</span>
                     </li>
                     <li>
                         <span class="dot"></span>
-                        <span><strong>Leadership:</strong> Opportunities for supervisory and training positions</span>
+                        <span><strong>Receiver:</strong> Patient, caregiver, or healthcare professional</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span><strong>Feedback:</strong> Patient questions, clarification requests, understanding verification</span>
                     </li>
                 </ul>
                 
                 <div class="note-card" style="margin-top: 12px;">
-                    <strong>Continuing Education Sources:</strong>
+                    <strong>Barriers to Effective Communication:</strong>
                     <ul style="margin-top: 8px; padding-left: 20px;">
-                        <li>Pharmacy Technician Certification Board (PTCB) website</li>
-                        <li>National Healthcareer Association (NHA) resources</li>
-                        <li>Professional association conferences and webinars</li>
-                        <li>Employer-provided training programs</li>
-                        <li>Accredited online CE providers</li>
+                        <li>Language differences or jargon use</li>
+                        <li>Hearing or vision impairments</li>
+                        <li>Cultural differences in communication styles</li>
+                        <li>Emotional distress or anxiety</li>
+                        <li>Environmental noise or distractions</li>
                     </ul>
                 </div>
             </div>
@@ -1246,16 +1316,15 @@
     <!-- Completion Celebration Modal -->
     <div class="completion-celebration" id="celebration-modal">
         <div class="celebration-content">
-            <div class="celebration-icon">🎯</div>
-            <h2 class="celebration-title">Career Path Defined!</h2>
+            <div class="celebration-icon">🤝</div>
+            <h2 class="celebration-title">Professional Skills Complete!</h2>
             <p class="celebration-text">
-                Excellent work completing Chapter 3: Competencies, Associations, and Settings for Technicians.
-                You've mapped out your pharmacy technician career pathway and understand the certifications,
-                competencies, and professional development needed for success.
+                Excellent work completing Chapters 3 and 4! You've now mastered both the career development
+                pathways for pharmacy technicians and the essential communication skills for effective patient care.
             </p>
             <p class="celebration-text">
-                You're now equipped to make informed decisions about certification, specialization,
-                and professional association memberships that will advance your pharmacy career.
+                You understand certification options, professional associations, workplace competencies,
+                and how to communicate effectively with diverse patient populations in any pharmacy setting.
             </p>
             <button class="celebration-btn" id="close-celebration">Continue to Week 4</button>
         </div>
@@ -1266,11 +1335,13 @@
             // State management
             let readingState = {
                 chapter3: false,
+                chapter4: false,
                 checklist: [false, false, false, false, false, false]
             };
 
             // DOM elements
             const chapter3Card = document.getElementById('chapter3-card');
+            const chapter4Card = document.getElementById('chapter4-card');
             const checklistItems = document.querySelectorAll('#reading-checklist li');
             const progressFill = document.getElementById('progress-fill');
             const progressPercent = document.getElementById('progress-percent');
@@ -1281,10 +1352,11 @@
 
             // Calculate progress
             function calculateProgress() {
-                const totalItems = 7; // 1 chapter + 6 checklist items
+                const totalItems = 8; // 2 chapters + 6 checklist items
                 let completed = 0;
                 
                 if (readingState.chapter3) completed++;
+                if (readingState.chapter4) completed++;
                 readingState.checklist.forEach(item => {
                     if (item) completed++;
                 });
@@ -1312,24 +1384,35 @@
             }
 
             // Toggle chapter completion
-            function toggleChapter() {
-                const isCompleted = readingState.chapter3;
+            function toggleChapter(chapter) {
+                const card = chapter === 3 ? chapter3Card : chapter4Card;
+                const isCompleted = chapter === 3 ? readingState.chapter3 : readingState.chapter4;
                 
                 if (isCompleted) {
                     // Mark as incomplete
-                    chapter3Card.classList.remove('completed');
-                    readingState.chapter3 = false;
-                    document.getElementById('chapter3-time').textContent = 'Est. 70-85 min';
+                    card.classList.remove('completed');
+                    if (chapter === 3) {
+                        readingState.chapter3 = false;
+                        document.getElementById('chapter3-time').textContent = 'Est. 70-85 min';
+                    } else {
+                        readingState.chapter4 = false;
+                        document.getElementById('chapter4-time').textContent = 'Est. 65-80 min';
+                    }
                 } else {
                     // Mark as complete
-                    chapter3Card.classList.add('completed');
-                    readingState.chapter3 = true;
-                    document.getElementById('chapter3-time').textContent = '✓ Completed';
+                    card.classList.add('completed');
+                    if (chapter === 3) {
+                        readingState.chapter3 = true;
+                        document.getElementById('chapter3-time').textContent = '✓ Completed';
+                    } else {
+                        readingState.chapter4 = true;
+                        document.getElementById('chapter4-time').textContent = '✓ Completed';
+                    }
                     
                     // Add animation
-                    chapter3Card.style.transform = 'scale(1.02)';
+                    card.style.transform = 'scale(1.02)';
                     setTimeout(() => {
-                        chapter3Card.style.transform = '';
+                        card.style.transform = '';
                     }, 300);
                 }
                 
@@ -1362,10 +1445,13 @@
 
             // Mark all as read
             function markAllAsRead() {
-                // Mark chapter
+                // Mark both chapters
                 readingState.chapter3 = true;
+                readingState.chapter4 = true;
                 chapter3Card.classList.add('completed');
+                chapter4Card.classList.add('completed');
                 document.getElementById('chapter3-time').textContent = '✓ Completed';
+                document.getElementById('chapter4-time').textContent = '✓ Completed';
                 
                 // Mark all checklist items
                 readingState.checklist = [true, true, true, true, true, true];
@@ -1381,18 +1467,24 @@
                 calculateProgress();
                 
                 // Celebration animation
-                chapter3Card.style.transform = 'scale(1.05)';
-                setTimeout(() => {
-                    chapter3Card.style.transform = '';
-                }, 300);
+                const cards = document.querySelectorAll('.reading-card');
+                cards.forEach(card => {
+                    card.style.transform = 'scale(1.05)';
+                    setTimeout(() => {
+                        card.style.transform = '';
+                    }, 300);
+                });
             }
 
             // Reset progress
             function resetProgress() {
-                // Reset chapter
+                // Reset chapters
                 readingState.chapter3 = false;
+                readingState.chapter4 = false;
                 chapter3Card.classList.remove('completed');
+                chapter4Card.classList.remove('completed');
                 document.getElementById('chapter3-time').textContent = 'Est. 70-85 min';
+                document.getElementById('chapter4-time').textContent = 'Est. 65-80 min';
                 
                 // Reset checklist
                 readingState.checklist = [false, false, false, false, false, false];
@@ -1421,12 +1513,20 @@
             }
 
             // Event listeners
-            chapter3Card.addEventListener('click', toggleChapter);
+            chapter3Card.addEventListener('click', () => toggleChapter(3));
+            chapter4Card.addEventListener('click', () => toggleChapter(4));
             
             chapter3Card.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
-                    toggleChapter();
+                    toggleChapter(3);
+                }
+            });
+            
+            chapter4Card.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    toggleChapter(4);
                 }
             });
             
@@ -1472,11 +1572,14 @@
                 });
             }, observerOptions);
 
-            // Observe reading card
-            chapter3Card.style.opacity = '0';
-            chapter3Card.style.transform = 'translateY(20px)';
-            chapter3Card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-            observer.observe(chapter3Card);
+            // Observe reading cards
+            const readingCards = document.querySelectorAll('.reading-card');
+            readingCards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                observer.observe(card);
+            });
 
             // Observe checklist items with delay
             checklistItems.forEach((item, index) => {
@@ -1487,29 +1590,29 @@
             });
 
             // Observe key sections
+            const communicationSkills = document.querySelector('.communication-skills');
+            const specialGroups = document.querySelector('.special-groups');
             const settingsContainer = document.querySelector('.settings-container');
-            const keyTermsSection = document.querySelector('.key-terms');
-            const associationCards = document.querySelector('.association-cards');
+            
+            if (communicationSkills) {
+                communicationSkills.style.opacity = '0';
+                communicationSkills.style.transform = 'translateY(20px)';
+                communicationSkills.style.transition = 'opacity 0.5s ease 0.3s, transform 0.5s ease 0.3s';
+                observer.observe(communicationSkills);
+            }
+            
+            if (specialGroups) {
+                specialGroups.style.opacity = '0';
+                specialGroups.style.transform = 'translateY(20px)';
+                specialGroups.style.transition = 'opacity 0.5s ease 0.4s, transform 0.5s ease 0.4s';
+                observer.observe(specialGroups);
+            }
             
             if (settingsContainer) {
                 settingsContainer.style.opacity = '0';
                 settingsContainer.style.transform = 'translateY(20px)';
-                settingsContainer.style.transition = 'opacity 0.5s ease 0.3s, transform 0.5s ease 0.3s';
+                settingsContainer.style.transition = 'opacity 0.5s ease 0.5s, transform 0.5s ease 0.5s';
                 observer.observe(settingsContainer);
-            }
-            
-            if (keyTermsSection) {
-                keyTermsSection.style.opacity = '0';
-                keyTermsSection.style.transform = 'translateY(20px)';
-                keyTermsSection.style.transition = 'opacity 0.5s ease 0.4s, transform 0.5s ease 0.4s';
-                observer.observe(keyTermsSection);
-            }
-            
-            if (associationCards) {
-                associationCards.style.opacity = '0';
-                associationCards.style.transform = 'translateY(20px)';
-                associationCards.style.transition = 'opacity 0.5s ease 0.5s, transform 0.5s ease 0.5s';
-                observer.observe(associationCards);
             }
         });
     </script>
