@@ -1,0 +1,2052 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AlliedRx – Adapting Communication & Clear Writing</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-error: #e17055;
+            --color-warning: #fdcb6e;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
+            --color-dark: #0c0a18;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+            --shadow-card: 0 12px 30px rgba(15, 23, 42, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(
+                circle at top left,
+                #ffffff 0,
+                #f1ecff 40%,
+                var(--color-bg) 100%
+            );
+            color: var(--color-text);
+            -webkit-text-size-adjust: 100%;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 12px; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes checkmarkPop {
+            0% { transform: scale(0); opacity: 0; }
+            70% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @media (max-width: 900px) {
+            .page { padding: 22px; }
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 0; }
+            .page {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 18px 14px 22px;
+            }
+        }
+
+        /* Header */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .brand-logo:hover { transform: scale(1.05); }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--color-success);
+            flex-shrink: 0;
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .badge-mode:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+        @media (max-width: 480px) {
+            .brand-row { flex-direction: column; align-items: flex-start; }
+            .badge-mode { margin-top: 6px; }
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 3vw, 2.2rem);
+            line-height: 1.1;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .module-subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 600px;
+            margin-bottom: 24px;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        /* Progress Tracker */
+        .progress-tracker {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            position: relative;
+            padding: 0 20px;
+        }
+
+        .progress-tracker::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 50px;
+            right: 50px;
+            height: 3px;
+            background: rgba(12, 10, 24, 0.08);
+            z-index: 1;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+
+        .step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--color-muted);
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.active .step-circle {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .progress-step.completed .step-circle {
+            background: var(--color-success);
+            border-color: var(--color-success);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.75rem;
+            color: var(--color-muted);
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .progress-step.active .step-label {
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        /* Progress Summary */
+        .progress-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+            animation: fadeInUp 0.6s ease-out 0.5s both;
+        }
+
+        .summary-card {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            border: 1px solid rgba(12, 10, 24, 0.06);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-card);
+            border-color: var(--color-primary-soft);
+        }
+
+        .summary-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--color-primary);
+            display: block;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .summary-label {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Activity Grid */
+        .activity-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 900px) {
+            .activity-grid { grid-template-columns: 1fr; }
+        }
+
+        .activity-card {
+            background: white;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            padding: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .activity-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--color-primary);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .activity-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--color-primary-soft);
+        }
+
+        .activity-card:hover::before { opacity: 1; }
+
+        .activity-card.completed {
+            border-color: var(--color-success);
+        }
+
+        .activity-card.completed::before {
+            background: var(--color-success);
+            opacity: 1;
+        }
+
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .activity-number {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .activity-status {
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-muted);
+        }
+
+        .activity-card.completed .activity-status {
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--color-success);
+        }
+
+        .activity-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 8px;
+        }
+
+        .activity-description {
+            font-size: 0.9rem;
+            color: var(--color-muted);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        /* Scenario Introduction */
+        .scenario-intro-box {
+            background: rgba(175, 75, 239, 0.05);
+            border-radius: var(--radius-sm);
+            padding: 18px;
+            margin-bottom: 25px;
+            border-left: 4px solid var(--color-primary);
+            animation: fadeIn 0.5s ease;
+        }
+
+        .scenario-intro {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .scenario-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #af4bef, #8380f0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            flex-shrink: 0;
+            font-size: 1.2rem;
+        }
+
+        .scenario-text {
+            flex: 1;
+        }
+
+        .scenario-speaker {
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 4px;
+        }
+
+        .scenario-dialogue {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: var(--color-text);
+        }
+
+        /* Scenario Selection */
+        .scenario-selection {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        @media (max-width: 768px) {
+            .scenario-selection { grid-template-columns: 1fr; }
+        }
+
+        .scenario-card {
+            background: white;
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .scenario-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-card);
+            border-color: var(--color-primary-soft);
+        }
+
+        .scenario-card.selected {
+            border-color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.05);
+        }
+
+        .scenario-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .scenario-name {
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+
+        .scenario-desc {
+            font-size: 0.85rem;
+            color: var(--color-muted);
+            line-height: 1.4;
+        }
+
+        /* Branching Choices */
+        .branching-container {
+            margin: 20px 0;
+            display: none;
+        }
+
+        .branching-container.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .scenario-details {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 18px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+        }
+
+        .scenario-details h4 {
+            color: var(--color-primary);
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        .scenario-details p {
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: var(--color-text);
+        }
+
+        .choices-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .choices-grid { grid-template-columns: 1fr; }
+        }
+
+        .choice-option {
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            user-select: none;
+        }
+
+        .choice-option:hover {
+            background: rgba(175, 75, 239, 0.05);
+            border-color: var(--color-primary-soft);
+            transform: translateY(-2px);
+        }
+
+        .choice-option.selected {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary);
+        }
+
+        .choice-option.correct {
+            background: rgba(0, 184, 148, 0.1);
+            border-color: var(--color-success);
+        }
+
+        .choice-option.incorrect {
+            background: rgba(225, 112, 85, 0.1);
+            border-color: var(--color-error);
+        }
+
+        .choice-letter {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(12, 10, 24, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--color-text);
+            flex-shrink: 0;
+            font-size: 0.9rem;
+        }
+
+        .choice-option.selected .choice-letter {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .choice-text {
+            flex: 1;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        /* Written Communication Exercise */
+        .writing-exercise {
+            margin: 25px 0;
+        }
+
+        .writing-prompt {
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+            color: var(--color-text);
+        }
+
+        .bad-example {
+            background: rgba(225, 112, 85, 0.08);
+            border-left: 4px solid var(--color-error);
+            padding: 15px;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            margin-bottom: 20px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            color: var(--color-error);
+        }
+
+        .writing-area {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            border-radius: var(--radius-sm);
+            font-family: inherit;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            resize: vertical;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .writing-area:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(175, 75, 239, 0.1);
+        }
+
+        .model-answer {
+            display: none;
+            background: rgba(0, 184, 148, 0.08);
+            border-left: 4px solid var(--color-success);
+            padding: 15px;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            margin-top: 20px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .model-answer.show {
+            display: block;
+        }
+
+        .model-title {
+            font-weight: 600;
+            color: var(--color-success);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        .model-content {
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: var(--color-text);
+        }
+
+        /* Drag & Drop Matching */
+        .matching-container {
+            margin: 20px 0;
+        }
+
+        .matching-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .matching-grid { grid-template-columns: 1fr; }
+        }
+
+        .matching-column {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 2px dashed rgba(12, 10, 24, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            min-height: 250px;
+        }
+
+        .matching-column-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            text-align: center;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(12, 10, 24, 0.08);
+            margin-bottom: 10px;
+        }
+
+        .matching-item {
+            background: rgba(175, 75, 239, 0.08);
+            border-radius: var(--radius-sm);
+            padding: 12px 15px;
+            cursor: grab;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            user-select: none;
+            font-size: 0.85rem;
+            color: var(--color-text);
+        }
+
+        .matching-item:hover {
+            background: rgba(175, 75, 239, 0.15);
+            border-color: var(--color-primary-soft);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(175, 75, 239, 0.1);
+        }
+
+        .matching-item.dragging {
+            opacity: 0.7;
+            transform: scale(0.98);
+        }
+
+        .matching-item.matched {
+            background: rgba(0, 184, 148, 0.1);
+            border-color: var(--color-success);
+            cursor: default;
+        }
+
+        .matching-item.incorrect {
+            background: rgba(225, 112, 85, 0.1);
+            border-color: var(--color-error);
+            animation: shake 0.5s ease;
+        }
+
+        /* Match Slots */
+        .match-slots-container {
+            margin-top: 20px;
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 2px dashed rgba(12, 10, 24, 0.1);
+            min-height: 200px;
+        }
+
+        .match-slots-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .match-slot {
+            background: white;
+            border-radius: var(--radius-sm);
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border: 2px dashed rgba(12, 10, 24, 0.2);
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .match-slot.hover {
+            border-color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.05);
+        }
+
+        .match-slot.filled {
+            border: 2px solid var(--color-primary-soft);
+            background: rgba(175, 75, 239, 0.08);
+        }
+
+        .match-slot.correct {
+            border-color: var(--color-success);
+            background: rgba(0, 184, 148, 0.1);
+        }
+
+        .match-slot.incorrect {
+            border-color: var(--color-error);
+            background: rgba(225, 112, 85, 0.1);
+        }
+
+        .match-label {
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-right: 10px;
+            min-width: 120px;
+        }
+
+        .match-content {
+            flex: 1;
+            min-height: 20px;
+        }
+
+        .match-placeholder {
+            color: var(--color-muted);
+            font-style: italic;
+        }
+
+        /* Reflection Prompt */
+        .reflection-container {
+            margin: 25px 0;
+            background: rgba(175, 75, 239, 0.03);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+        }
+
+        .reflection-prompt {
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+            color: var(--color-text);
+            font-weight: 600;
+        }
+
+        .reflection-textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 15px;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            border-radius: var(--radius-sm);
+            font-family: inherit;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            resize: vertical;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .reflection-textarea:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(175, 75, 239, 0.1);
+        }
+
+        .submit-btn {
+            background: var(--color-primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .submit-btn:hover {
+            background: #9a3bd6;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(175, 75, 239, 0.3);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .submission-confirmation {
+            display: none;
+            background: rgba(0, 184, 148, 0.1);
+            border-left: 4px solid var(--color-success);
+            padding: 15px;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            margin-top: 15px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .submission-confirmation.show {
+            display: block;
+        }
+
+        /* Engagement Elements */
+        .tip-box {
+            background: rgba(253, 203, 110, 0.1);
+            border-left: 4px solid var(--color-warning);
+            padding: 12px 16px;
+            margin: 15px 0;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            animation: slideInRight 0.4s ease;
+        }
+
+        .tip-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            color: #d35400;
+            margin-bottom: 5px;
+            font-size: 0.85rem;
+        }
+
+        .tip-content {
+            font-size: 0.85rem;
+            color: var(--color-text);
+            line-height: 1.4;
+        }
+
+        .reminder {
+            background: rgba(0, 184, 148, 0.08);
+            border: 1px solid rgba(0, 184, 148, 0.3);
+            border-radius: var(--radius-sm);
+            padding: 10px 14px;
+            margin: 10px 0;
+            font-size: 0.8rem;
+            color: var(--color-success);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Feedback */
+        .feedback-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            margin-top: 20px;
+            display: none;
+        }
+
+        .feedback-container.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .feedback-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feedback-icon {
+            font-size: 1.2rem;
+        }
+
+        .feedback-icon.correct { color: var(--color-success); }
+        .feedback-icon.incorrect { color: var(--color-error); }
+
+        .feedback-content {
+            font-size: 0.85rem;
+            color: var(--color-text);
+            line-height: 1.5;
+        }
+
+        .feedback-content strong { color: var(--color-primary); }
+
+        .correction-details {
+            background: rgba(225, 112, 85, 0.05);
+            border-left: 3px solid var(--color-error);
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #9a3bd6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(175, 75, 239, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-text);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(12, 10, 24, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-icon { font-size: 1.1em; }
+
+        /* Results Panel */
+        .results-panel {
+            background: var(--color-dark);
+            color: white;
+            border-radius: var(--radius-md);
+            padding: 30px;
+            margin-top: 30px;
+            display: none;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .results-panel.show { display: block; }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .results-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .score-display {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--color-primary-soft);
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .clinical-insights {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .insights-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-primary-soft);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .insights-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .insights-list li {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            font-size: 0.9rem;
+            color: #e5e7eb;
+        }
+
+        .insight-dot {
+            width: 6px;
+            height: 6px;
+            margin-top: 6px;
+            border-radius: 999px;
+            background: var(--color-accent);
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="module-heading">
+        <!-- Header -->
+        <header class="brand-row">
+            <div class="brand">
+                <img
+                    src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                    alt="AlliedRx logo"
+                    class="brand-logo"
+                />
+                <div class="course-meta">
+                    <span class="course-name">Pharmacy Technician • Week 1</span>
+                    <div class="week-label">
+                        <span class="week-label-dot"></span>
+                        <span>Chapter 4: Communication & Role of the Technician</span>
+                    </div>
+                </div>
+            </div>
+            <span class="badge-mode">Campus & Online</span>
+        </header>
+
+        <h1 id="module-heading">Adapting to Special Situations & Clear Writing</h1>
+        <p class="module-subtitle">
+            Develop empathy and adaptability for diverse patient needs. Practice clear written communication and learn strategies to overcome common barriers.
+        </p>
+
+        <!-- Progress Tracker -->
+        <div class="progress-tracker">
+            <div class="progress-step active" data-step="1">
+                <div class="step-circle">1</div>
+                <div class="step-label">Special Groups</div>
+            </div>
+            <div class="progress-step" data-step="2">
+                <div class="step-circle">2</div>
+                <div class="step-label">Written Comm</div>
+            </div>
+            <div class="progress-step" data-step="3">
+                <div class="step-circle">3</div>
+                <div class="step-label">Barriers</div>
+            </div>
+        </div>
+
+        <!-- Progress Summary -->
+        <div class="progress-summary">
+            <div class="summary-card">
+                <span class="summary-number" id="completed-count">0</span>
+                <span class="summary-label">Activities Completed</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="accuracy-rate">0%</span>
+                <span class="summary-label">Current Accuracy</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="time-spent">0:00</span>
+                <span class="summary-label">Time Spent</span>
+            </div>
+        </div>
+
+        <!-- Activity Grid -->
+        <div class="activity-grid">
+            <!-- Activity 1: Branching Scenarios -->
+            <section class="activity-card" id="activity-1" data-activity="1">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 1</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">🎭 Adapting to Special Patient Groups</h3>
+                <p class="activity-description">
+                    Practice adapting your communication for diverse patient needs. Select a scenario and choose the most effective response.
+                </p>
+
+                <!-- Introduction -->
+                <div class="scenario-intro-box">
+                    <div class="scenario-intro">
+                        <div class="scenario-avatar">C</div>
+                        <div class="scenario-text">
+                            <div class="scenario-speaker">Catherine (Lead Tech):</div>
+                            <div class="scenario-dialogue">"Not every interaction is straightforward. Different patients have different needs. Let's practice adapting your approach to three common situations."</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tip-box">
+                    <div class="tip-title">💡 Quick Tip</div>
+                    <div class="tip-content">Effective communication with special groups requires <strong>empathy, patience, and adaptability</strong>. Always prioritize the patient's comfort and understanding.</div>
+                </div>
+
+                <!-- Scenario Selection -->
+                <div class="scenario-selection">
+                    <div class="scenario-card" data-scenario="hospice">
+                        <span class="scenario-icon">🕊️</span>
+                        <div class="scenario-name">Hospice Care Family</div>
+                        <div class="scenario-desc">Family member picking up medication for terminally ill spouse</div>
+                    </div>
+                    <div class="scenario-card" data-scenario="language">
+                        <span class="scenario-icon">🌐</span>
+                        <div class="scenario-name">Language Barrier</div>
+                        <div class="scenario-desc">Patient speaks Mandarin (non-English speaking)</div>
+                    </div>
+                    <div class="scenario-card" data-scenario="hearing">
+                        <span class="scenario-icon">👂</span>
+                        <div class="scenario-name">Hearing Impaired</div>
+                        <div class="scenario-desc">Patient indicates hearing difficulty</div>
+                    </div>
+                </div>
+
+                <!-- Branching Scenarios -->
+                <!-- Hospice Scenario -->
+                <div class="branching-container" id="hospice-scenario">
+                    <div class="scenario-details">
+                        <h4>Scenario A: Hospice Care Family</h4>
+                        <p>A family member is picking up pain medication for their hospice-bound spouse. They appear overwhelmed, with tired eyes and hesitant movements. They keep checking their phone anxiously.</p>
+                    </div>
+                    
+                    <div class="choices-grid">
+                        <div class="choice-option" data-choice="A" data-correct="true">
+                            <div class="choice-letter">A</div>
+                            <div class="choice-text">Offer condolences and ensure privacy: "I'm so sorry about your spouse's situation. Let's step to our consultation area for privacy."</div>
+                        </div>
+                        <div class="choice-option" data-choice="B" data-correct="true">
+                            <div class="choice-letter">B</div>
+                            <div class="choice-text">Speak calmly and clearly: "Take your time. I'll explain the medication instructions slowly. Would you like me to write them down?"</div>
+                        </div>
+                        <div class="choice-option" data-choice="C" data-correct="false">
+                            <div class="choice-letter">C</div>
+                            <div class="choice-text">Rush through the transaction: "Name and DOB? Here's the med. Instructions are on the label. Next!"</div>
+                        </div>
+                        <div class="choice-option" data-choice="D" data-correct="true">
+                            <div class="choice-letter">D</div>
+                            <div class="choice-text">Show compassion and offer support: "This must be very difficult. Our pharmacist is available if you have any questions about the medication."</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Language Barrier Scenario -->
+                <div class="branching-container" id="language-scenario">
+                    <div class="scenario-details">
+                        <h4>Scenario B: Language Barrier</h4>
+                        <p>A patient points to a language card showing they speak Mandarin. They smile apologetically and gesture toward their prescription bag. They seem confused about the instructions.</p>
+                    </div>
+                    
+                    <div class="choices-grid">
+                        <div class="choice-option" data-choice="A" data-correct="true">
+                            <div class="choice-letter">A</div>
+                            <div class="choice-text">Use a translation phone service: "One moment, I'll connect us to our translation service so we can communicate clearly."</div>
+                        </div>
+                        <div class="choice-option" data-choice="B" data-correct="false">
+                            <div class="choice-letter">B</div>
+                            <div class="choice-text">Speak louder in English: "YOU. NEED. TO. TAKE. THIS. TWICE. A. DAY!" (speaking very slowly and loudly)</div>
+                        </div>
+                        <div class="choice-option" data-choice="C" data-correct="true">
+                            <div class="choice-letter">C</div>
+                            <div class="choice-text">Use simple written words and gestures: Write "2x daily" with a sun and moon drawing, then demonstrate with gestures.</div>
+                        </div>
+                        <div class="choice-option" data-choice="D" data-correct="false">
+                            <div class="choice-letter">D</div>
+                            <div class="choice-text">Ask another customer to interpret: "Excuse me, does anyone here speak Mandarin? Can you translate for us?"</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hearing Impaired Scenario -->
+                <div class="branching-container" id="hearing-scenario">
+                    <div class="scenario-details">
+                        <h4>Scenario C: Hearing Impaired</h4>
+                        <p>A patient points to their ear and shakes their head, then shows you a card that says "Hard of Hearing." They're picking up a new medication that requires specific timing instructions.</p>
+                    </div>
+                    
+                    <div class="choices-grid">
+                        <div class="choice-option" data-choice="A" data-correct="true">
+                            <div class="choice-letter">A</div>
+                            <div class="choice-text">Face them directly and use clear lip movement: Make sure they can see your face, speak normally but clearly, and enunciate.</div>
+                        </div>
+                        <div class="choice-option" data-choice="B" data-correct="true">
+                            <div class="choice-letter">B</div>
+                            <div class="choice-text">Write notes: Use a notepad to write key instructions: "Take with breakfast and dinner. Do not crush."</div>
+                        </div>
+                        <div class="choice-option" data-choice="C" data-correct="false">
+                            <div class="choice-letter">C</div>
+                            <div class="choice-text">Shout to be heard: Raise your voice significantly: "YOU NEED TO TAKE THIS WITH FOOD!!"</div>
+                        </div>
+                        <div class="choice-option" data-choice="D" data-correct="true">
+                            <div class="choice-letter">D</div>
+                            <div class="choice-text">Ask their preference: Write "How can I best communicate with you?" and let them indicate their preferred method.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reminder">
+                    🔔 Remember: Always maintain <strong>patient dignity and confidentiality</strong>, especially when working with interpreters or assistive methods.
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback-container" id="feedback-1">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Scenario Analysis Complete
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Key Principles for Special Groups:</strong><br>
+                        • <strong>Terminally Ill/Hospice:</strong> Show <strong>compassion</strong>, ensure privacy, speak calmly, offer written instructions.<br>
+                        • <strong>Non-English Speaking:</strong> Use <strong>professional translation services</strong> (not family/friends), visual aids, simple language.<br>
+                        • <strong>Hearing Impaired:</strong> Face the patient, use <strong>written communication</strong>, ask about preferred method, never shout.<br><br>
+                        <strong>Why This Matters:</strong> Adapting communication ensures <strong>patient safety</strong> through proper medication understanding and builds trust with vulnerable populations.
+                        <div class="correction-details" id="correction-details-1" style="display: none;">
+                            <strong>Areas for Improvement:</strong><br>
+                            <span id="correction-text-1"></span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity 2: Written Communication -->
+            <section class="activity-card" id="activity-2" data-activity="2">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 2</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">✍️ Clear Professional Writing</h3>
+                <p class="activity-description">
+                    Practice transforming informal, unclear messages into professional written communication suitable for pharmacy documentation.
+                </p>
+
+                <div class="writing-exercise">
+                    <div class="writing-prompt">
+                        <strong>📝 Task:</strong> Rewrite this poorly written internal memo to make it clear, professional, and appropriate for workplace communication.
+                    </div>
+
+                    <div class="bad-example">
+                        "hey – we r outta that metformin stuff. pt gonna b mad. fix it plz."
+                    </div>
+
+                    <div class="tip-box">
+                        <div class="tip-title">🎯 Common Writing Mistakes</div>
+                        <div class="tip-content"><strong>Avoid:</strong> Text-speak abbreviations, vague language, emotional statements, lack of specifics. <strong>Use:</strong> Complete sentences, professional tone, specific details, solutions-oriented language.</div>
+                    </div>
+
+                    <textarea class="writing-area" id="writing-area" placeholder="Type your professional rewrite here..."></textarea>
+
+                    <button class="submit-btn" id="check-writing-btn">Check My Writing</button>
+
+                    <div class="model-answer" id="model-answer">
+                        <div class="model-title">
+                            <span>✓</span> Professional Model Answer
+                        </div>
+                        <div class="model-content">
+                            <strong>To:</strong> Pharmacy Team<br>
+                            <strong>From:</strong> [Your Name]<br>
+                            <strong>Date:</strong> [Current Date]<br>
+                            <strong>Subject:</strong> Metformin 500mg Stock Shortage<br><br>
+                            
+                            Please be advised that we are currently out of stock of Metformin 500mg tablets. Our next shipment is scheduled for delivery on [Date].<br><br>
+                            
+                            <strong>Action Required:</strong><br>
+                            1. For patients requiring immediate supply, please check our sister location at [Address] for availability.<br>
+                            2. Contact patients with upcoming refills to discuss options.<br>
+                            3. Place an urgent order with our supplier for emergency restock.<br><br>
+                            
+                            Please direct any patient concerns to the pharmacist on duty.<br><br>
+                            
+                            Thank you for your attention to this matter.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reminder">
+                    🔔 Professional Writing Standards: Always include <strong>subject, date, specific details, and clear action items</strong>. Maintain neutral, factual tone.
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback-container" id="feedback-2">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Writing Exercise Complete
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Key Elements of Professional Pharmacy Writing:</strong><br>
+                        1. <strong>Clarity:</strong> Specific medication names (not "stuff"), exact dosages<br>
+                        2. <strong>Professionalism:</strong> Full sentences, proper grammar, respectful tone<br>
+                        3. <strong>Completeness:</strong> Include who, what, when, where, why<br>
+                        4. <strong>Action-Oriented:</strong> Specify next steps and solutions<br>
+                        5. <strong>Patient-Focused:</strong> Address patient impact and alternatives<br><br>
+                        <strong>Why This Matters:</strong> Clear written communication prevents medication errors, ensures continuity of care, and maintains professional standards.
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity 3: Barrier Elimination -->
+            <section class="activity-card" id="activity-3" data-activity="3">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 3</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">🚧 Overcoming Communication Barriers</h3>
+                <p class="activity-description">
+                    Match common communication barriers with effective solutions. Drag each solution to its corresponding barrier.
+                </p>
+
+                <div class="matching-container">
+                    <div class="matching-prompt">
+                        <strong>📌 Instructions:</strong> Drag the solutions from the right column to match with the barriers on the left.
+                    </div>
+
+                    <!-- Match Slots -->
+                    <div class="match-slots-container">
+                        <div class="match-slots-title">Match Barriers with Solutions</div>
+                        <div class="match-slot" data-slot="jargon" id="slot-jargon">
+                            <div class="match-label">Barrier: Jargon</div>
+                            <div class="match-content">
+                                Using technical terms like "bid", "STAT", "contraindicated" without explanation
+                                <div class="match-placeholder" id="placeholder-jargon">Drag solution here</div>
+                            </div>
+                        </div>
+                        <div class="match-slot" data-slot="noise" id="slot-noise">
+                            <div class="match-label">Barrier: Environmental Noise</div>
+                            <div class="match-content">
+                                Loud pharmacy, multiple conversations, phone ringing, background music
+                                <div class="match-placeholder" id="placeholder-noise">Drag solution here</div>
+                            </div>
+                        </div>
+                        <div class="match-slot" data-slot="assumptions" id="slot-assumptions">
+                            <div class="match-label">Barrier: Assumptions</div>
+                            <div class="match-content">
+                                Assuming patient understands, knows their medications, or will ask if confused
+                                <div class="match-placeholder" id="placeholder-assumptions">Drag solution here</div>
+                            </div>
+                        </div>
+                        <div class="match-slot" data-slot="emotional" id="slot-emotional">
+                            <div class="match-label">Barrier: Emotional Distress</div>
+                            <div class="match-content">
+                                Patient is anxious, grieving, angry, or stressed about health/insurance
+                                <div class="match-placeholder" id="placeholder-emotional">Drag solution here</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Solutions to Drag -->
+                    <div class="matching-grid">
+                        <div class="matching-column">
+                            <div class="matching-column-title">Solutions</div>
+                            <div class="matching-item draggable" data-solution="plain-language" draggable="true" id="solution-plain">
+                                <strong>Use Plain Language:</strong> "Take twice daily" instead of "bid", explain terms simply
+                            </div>
+                            <div class="matching-item draggable" data-solution="quieter-area" draggable="true" id="solution-quiet">
+                                <strong>Move to Quieter Area:</strong> Step to consultation room or less noisy counter space
+                            </div>
+                            <div class="matching-item draggable" data-solution="clarifying-questions" draggable="true" id="solution-clarify">
+                                <strong>Ask Clarifying Questions:</strong> "Can you repeat the instructions back to me?"
+                            </div>
+                            <div class="matching-item draggable" data-solution="empathy-patience" draggable="true" id="solution-empathy">
+                                <strong>Show Empathy & Patience:</strong> "I understand this is stressful. Let's work through it together."
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reflection -->
+                <div class="reflection-container">
+                    <div class="reflection-prompt">
+                        📝 Reflection: Recall a time you observed a communication barrier (in any setting). In 2-3 sentences, describe one strategy from this module that could have helped.
+                    </div>
+                    <textarea class="reflection-textarea" id="reflection-text" placeholder="Type your reflection here..."></textarea>
+                    <button class="submit-btn" id="submit-reflection-btn">Submit Reflection</button>
+                    <div class="submission-confirmation" id="submission-confirmation">
+                        ✓ Reflection submitted successfully! This will be reviewed by your instructor.
+                    </div>
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback-container" id="feedback-3">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Barrier Elimination Complete
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Correct Matches:</strong><br>
+                        • <strong>Jargon</strong> → Use Plain Language<br>
+                        • <strong>Environmental Noise</strong> → Move to Quieter Area<br>
+                        • <strong>Assumptions</strong> → Ask Clarifying Questions<br>
+                        • <strong>Emotional Distress</strong> → Show Empathy & Patience<br><br>
+                        <strong>Proactive Barrier Elimination:</strong><br>
+                        1. <strong>Anticipate</strong> common barriers before they occur<br>
+                        2. <strong>Adapt</strong> your communication style to the situation<br>
+                        3. <strong>Verify</strong> understanding through teach-back method<br>
+                        4. <strong>Document</strong> communication challenges and solutions<br><br>
+                        <div class="correction-details" id="correction-details-3" style="display: none;">
+                            <strong>Incorrect Matches:</strong><br>
+                            <span id="correction-text-3"></span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn btn-secondary" id="reset-all-btn">
+                <span class="btn-icon">↻</span>
+                Reset All Activities
+            </button>
+            <button class="btn btn-secondary" id="check-answers-btn">
+                <span class="btn-icon">✓</span>
+                Check All Answers
+            </button>
+            <button class="btn btn-primary" id="view-results-btn">
+                <span class="btn-icon">📊</span>
+                View Final Results
+            </button>
+        </div>
+
+        <!-- Results Panel -->
+        <div class="results-panel" id="results-panel">
+            <div class="results-header">
+                <h2 class="results-title">Adaptive Communication Proficiency</h2>
+                <div class="score-display" id="final-score">0%</div>
+            </div>
+            <div class="clinical-insights">
+                <h3 class="insights-title">
+                    <span>🤝</span> Special Populations Insights
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Cultural Competence:</strong> Approximately 25% of Americans speak a language other than English at home. Pharmacy technicians must be prepared with translation resources and cultural sensitivity for effective communication.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Disability Awareness:</strong> Over 15% of adults have some hearing difficulty. Techniques like facing patients, written communication, and asking about preferences are essential for inclusive care.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>End-of-Life Communication:</strong> With hospice and palliative care patients, communication shifts from cure to comfort. Clear, compassionate explanation of pain management is crucial for quality of life.</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="clinical-insights" style="margin-top: 20px;">
+                <h3 class="insights-title">
+                    <span>📋</span> Documentation & Safety Connection
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Written Communication Saves Lives:</strong> Clear documentation prevents 70% of potential medication errors. Your notes become part of the legal medical record and guide future care decisions.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Barrier Documentation:</strong> When you encounter communication barriers, documenting the strategies used (translation service, written instructions, etc.) shows due diligence and helps the healthcare team.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Continuity of Care:</strong> Your clear written communication ensures that when another technician or pharmacist follows up, they understand the situation completely, maintaining consistent patient care.</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // State Management
+            const state = {
+                activities: {
+                    1: { completed: false, correct: 0, total: 3, score: 0, scenariosCompleted: 0, scenarioChoices: {} },
+                    2: { completed: false, correct: 0, total: 1, score: 0, writingSubmitted: false },
+                    3: { completed: false, correct: 0, total: 4, score: 0, matches: {}, reflectionSubmitted: false }
+                },
+                startedAt: new Date(),
+                timeSpent: 0,
+                currentScenario: null
+            };
+
+            // Correct Answers
+            const correctMatches = {
+                "jargon": "plain-language",
+                "noise": "quieter-area", 
+                "assumptions": "clarifying-questions",
+                "emotional": "empathy-patience"
+            };
+
+            // Scenario correct answers (multiple correct options per scenario)
+            const scenarioAnswers = {
+                "hospice": ["A", "B", "D"], // A, B, D are correct
+                "language": ["A", "C"],      // A, C are correct
+                "hearing": ["A", "B", "D"]   // A, B, D are correct
+            };
+
+            // DOM Elements
+            const progressSteps = document.querySelectorAll('.progress-step');
+            const activityCards = document.querySelectorAll('.activity-card');
+            const completedCount = document.getElementById('completed-count');
+            const accuracyRate = document.getElementById('accuracy-rate');
+            const timeSpentEl = document.getElementById('time-spent');
+            const resetBtn = document.getElementById('reset-all-btn');
+            const checkBtn = document.getElementById('check-answers-btn');
+            const resultsBtn = document.getElementById('view-results-btn');
+            const resultsPanel = document.getElementById('results-panel');
+            const finalScore = document.getElementById('final-score');
+
+            // Timer
+            function updateTimer() {
+                const now = new Date();
+                const diff = Math.floor((now - state.startedAt) / 1000);
+                state.timeSpent = diff;
+                const minutes = Math.floor(diff / 60);
+                const seconds = diff % 60;
+                timeSpentEl.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            }
+            setInterval(updateTimer, 1000);
+
+            // Update Progress Summary
+            function updateProgressSummary() {
+                let completed = 0;
+                let totalCorrect = 0;
+                let totalItems = 0;
+
+                Object.values(state.activities).forEach(activity => {
+                    if (activity.completed) completed++;
+                    totalCorrect += activity.correct;
+                    totalItems += activity.total;
+                });
+
+                completedCount.textContent = completed;
+                const accuracy = totalItems > 0 ? Math.round((totalCorrect / totalItems) * 100) : 0;
+                accuracyRate.textContent = `${accuracy}%`;
+
+                // Update progress steps
+                progressSteps.forEach((step, index) => {
+                    if (index < completed) {
+                        step.classList.add('completed');
+                        step.classList.remove('active');
+                    } else if (index === completed) {
+                        step.classList.add('active');
+                        step.classList.remove('completed');
+                    } else {
+                        step.classList.remove('active', 'completed');
+                    }
+                });
+            }
+
+            // Activity 1: Branching Scenarios
+            function initActivity1() {
+                const scenarioCards = document.querySelectorAll('.scenario-card');
+                const branchingContainers = document.querySelectorAll('.branching-container');
+                const choiceOptions = document.querySelectorAll('.choice-option');
+                const feedback = document.getElementById('feedback-1');
+                const status = document.querySelector('#activity-1 .activity-status');
+
+                // Scenario selection
+                scenarioCards.forEach(card => {
+                    card.addEventListener('click', function() {
+                        // Reset all scenario cards
+                        scenarioCards.forEach(c => c.classList.remove('selected'));
+                        // Hide all branching containers
+                        branchingContainers.forEach(container => container.classList.remove('active'));
+                        // Reset all choice options
+                        choiceOptions.forEach(option => {
+                            option.classList.remove('selected', 'correct', 'incorrect');
+                        });
+
+                        // Select this card
+                        this.classList.add('selected');
+                        state.currentScenario = this.dataset.scenario;
+
+                        // Show corresponding branching container
+                        document.getElementById(`${state.currentScenario}-scenario`).classList.add('active');
+                    });
+                });
+
+                // Choice selection
+                choiceOptions.forEach(option => {
+                    option.addEventListener('click', function() {
+                        if (!state.currentScenario) return;
+
+                        const scenarioContainer = this.closest('.branching-container');
+                        const allChoices = scenarioContainer.querySelectorAll('.choice-option');
+                        
+                        // Remove selection from all choices in this scenario
+                        allChoices.forEach(choice => choice.classList.remove('selected'));
+                        
+                        // Select this choice
+                        this.classList.add('selected');
+                        
+                        // Record the choice
+                        state.activities[1].scenarioChoices[state.currentScenario] = this.dataset.choice;
+                        
+                        // Check if choice is correct
+                        const isCorrect = scenarioAnswers[state.currentScenario].includes(this.dataset.choice);
+                        
+                        // Visual feedback
+                        allChoices.forEach(choice => {
+                            const choiceLetter = choice.dataset.choice;
+                            if (scenarioAnswers[state.currentScenario].includes(choiceLetter)) {
+                                choice.classList.add('correct');
+                            } else {
+                                choice.classList.add('incorrect');
+                            }
+                        });
+                        
+                        // Mark scenario as completed
+                        if (!state.activities[1].scenariosCompleted) {
+                            state.activities[1].scenariosCompleted = 0;
+                        }
+                        
+                        // Count completed scenarios
+                        const completedScenarios = Object.keys(state.activities[1].scenarioChoices).length;
+                        state.activities[1].scenariosCompleted = completedScenarios;
+                        
+                        // Check if all scenarios are completed
+                        if (completedScenarios === 3) {
+                            checkActivity1();
+                        }
+                    });
+                });
+
+                function checkActivity1() {
+                    let correctCount = 0;
+                    let totalChoices = 0;
+                    
+                    // Count correct choices across all scenarios
+                    Object.keys(state.activities[1].scenarioChoices).forEach(scenario => {
+                        const userChoice = state.activities[1].scenarioChoices[scenario];
+                        if (scenarioAnswers[scenario].includes(userChoice)) {
+                            correctCount++;
+                        }
+                        totalChoices++;
+                    });
+                    
+                    // For activity 1, we have 3 scenarios, each with multiple correct answers
+                    // We'll score based on correct choices made
+                    state.activities[1].completed = true;
+                    state.activities[1].correct = correctCount;
+                    state.activities[1].score = Math.round((correctCount / totalChoices) * 100);
+
+                    status.textContent = 'Completed';
+                    status.style.color = '#00b894';
+                    document.querySelector('#activity-1').classList.add('completed');
+                    feedback.classList.add('show');
+
+                    updateProgressSummary();
+                }
+            }
+
+            // Activity 2: Written Communication
+            function initActivity2() {
+                const checkWritingBtn = document.getElementById('check-writing-btn');
+                const writingArea = document.getElementById('writing-area');
+                const modelAnswer = document.getElementById('model-answer');
+                const feedback = document.getElementById('feedback-2');
+                const status = document.querySelector('#activity-2 .activity-status');
+
+                checkWritingBtn.addEventListener('click', function() {
+                    const userText = writingArea.value.trim();
+                    
+                    if (userText.length < 10) {
+                        alert('Please write a more complete response before checking.');
+                        return;
+                    }
+                    
+                    // Show model answer
+                    modelAnswer.classList.add('show');
+                    
+                    // Mark as completed
+                    state.activities[2].completed = true;
+                    state.activities[2].writingSubmitted = true;
+                    state.activities[2].correct = 1; // For checking completion
+                    state.activities[2].score = 100;
+
+                    status.textContent = 'Completed';
+                    status.style.color = '#00b894';
+                    document.querySelector('#activity-2').classList.add('completed');
+                    feedback.classList.add('show');
+                    
+                    // Disable the button
+                    this.disabled = true;
+                    this.textContent = '✓ Writing Reviewed';
+
+                    updateProgressSummary();
+                });
+            }
+
+            // Activity 3: Barrier Elimination
+            function initActivity3() {
+                const draggables = document.querySelectorAll('#activity-3 .matching-item.draggable');
+                const matchSlots = document.querySelectorAll('#activity-3 .match-slot');
+                const submitReflectionBtn = document.getElementById('submit-reflection-btn');
+                const reflectionText = document.getElementById('reflection-text');
+                const submissionConfirmation = document.getElementById('submission-confirmation');
+                const feedback = document.getElementById('feedback-3');
+                const status = document.querySelector('#activity-3 .activity-status');
+                const correctionDetails = document.getElementById('correction-details-3');
+                const correctionText = document.getElementById('correction-text-3');
+
+                let matchesMade = 0;
+                const userMatches = {};
+
+                // Setup drag and drop
+                draggables.forEach(item => {
+                    item.addEventListener('dragstart', function(e) {
+                        e.dataTransfer.setData('text/plain', JSON.stringify({
+                            solution: this.dataset.solution,
+                            id: this.id,
+                            content: this.textContent
+                        }));
+                        this.classList.add('dragging');
+                    });
+
+                    item.addEventListener('dragend', function() {
+                        this.classList.remove('dragging');
+                    });
+                });
+
+                matchSlots.forEach(slot => {
+                    slot.addEventListener('dragover', function(e) {
+                        e.preventDefault();
+                        this.classList.add('hover');
+                    });
+
+                    slot.addEventListener('dragleave', function() {
+                        this.classList.remove('hover');
+                    });
+
+                    slot.addEventListener('drop', function(e) {
+                        e.preventDefault();
+                        this.classList.remove('hover');
+                        
+                        const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+                        const slotId = this.dataset.slot;
+                        
+                        // Check if this slot already has a solution
+                        if (this.querySelector('.match-placeholder').textContent !== 'Drag solution here') {
+                            return; // Slot already filled
+                        }
+                        
+                        // Check if this solution is already placed elsewhere
+                        if (Object.values(userMatches).includes(data.solution)) {
+                            return; // Solution already used
+                        }
+                        
+                        // Place the solution
+                        const placeholder = this.querySelector('.match-placeholder');
+                        placeholder.textContent = data.content;
+                        placeholder.style.color = 'var(--color-primary)';
+                        placeholder.style.fontWeight = '600';
+                        
+                        // Hide the dragged element
+                        document.getElementById(data.id).style.display = 'none';
+                        
+                        // Record the match
+                        userMatches[slotId] = data.solution;
+                        state.activities[3].matches = userMatches;
+                        matchesMade++;
+                        
+                        // Check if all matches are made
+                        if (matchesMade === 4) {
+                            checkActivity3();
+                        }
+                    });
+                });
+
+                // Reflection submission
+                submitReflectionBtn.addEventListener('click', function() {
+                    const reflection = reflectionText.value.trim();
+                    
+                    if (reflection.length < 10) {
+                        alert('Please write a more complete reflection before submitting.');
+                        return;
+                    }
+                    
+                    // Show confirmation
+                    submissionConfirmation.classList.add('show');
+                    
+                    // Mark reflection as submitted
+                    state.activities[3].reflectionSubmitted = true;
+                    
+                    // Disable the button and textarea
+                    this.disabled = true;
+                    this.textContent = '✓ Reflection Submitted';
+                    reflectionText.disabled = true;
+
+                    updateProgressSummary();
+                });
+
+                function checkActivity3() {
+                    let correctCount = 0;
+                    let correctionMessages = [];
+
+                    Object.keys(correctMatches).forEach(slotId => {
+                        const userChoice = userMatches[slotId];
+                        const correctChoice = correctMatches[slotId];
+                        const slotElement = document.getElementById(`slot-${slotId}`);
+
+                        if (userChoice === correctChoice) {
+                            correctCount++;
+                            slotElement.classList.add('correct');
+                        } else {
+                            correctionMessages.push(`• ${slotId.replace('-', ' ')}: Your solution doesn't match the barrier effectively`);
+                            slotElement.classList.add('incorrect');
+                        }
+                    });
+
+                    state.activities[3].completed = true;
+                    state.activities[3].correct = correctCount;
+                    state.activities[3].score = Math.round((correctCount / 4) * 100);
+
+                    status.textContent = 'Completed';
+                    status.style.color = '#00b894';
+                    document.querySelector('#activity-3').classList.add('completed');
+                    feedback.classList.add('show');
+
+                    if (correctionMessages.length > 0) {
+                        correctionDetails.style.display = 'block';
+                        correctionText.innerHTML = correctionMessages.join('<br>');
+                    }
+
+                    updateProgressSummary();
+                }
+            }
+
+            // Reset All Activities
+            function resetAllActivities() {
+                // Reset state
+                state.activities = {
+                    1: { completed: false, correct: 0, total: 3, score: 0, scenariosCompleted: 0, scenarioChoices: {} },
+                    2: { completed: false, correct: 0, total: 1, score: 0, writingSubmitted: false },
+                    3: { completed: false, correct: 0, total: 4, score: 0, matches: {}, reflectionSubmitted: false }
+                };
+                state.currentScenario = null;
+
+                // Reset UI
+                activityCards.forEach(card => {
+                    card.classList.remove('completed');
+                    const status = card.querySelector('.activity-status');
+                    status.textContent = 'Not Started';
+                    status.style.color = '';
+                    const feedback = card.querySelector('.feedback-container');
+                    feedback.classList.remove('show');
+                });
+
+                // Activity 1 reset
+                document.querySelectorAll('.scenario-card').forEach(card => {
+                    card.classList.remove('selected');
+                });
+                document.querySelectorAll('.branching-container').forEach(container => {
+                    container.classList.remove('active');
+                });
+                document.querySelectorAll('.choice-option').forEach(option => {
+                    option.classList.remove('selected', 'correct', 'incorrect');
+                });
+
+                // Activity 2 reset
+                document.getElementById('writing-area').value = '';
+                document.getElementById('model-answer').classList.remove('show');
+                const checkWritingBtn = document.getElementById('check-writing-btn');
+                checkWritingBtn.disabled = false;
+                checkWritingBtn.textContent = 'Check My Writing';
+
+                // Activity 3 reset
+                document.querySelectorAll('.match-placeholder').forEach(ph => {
+                    ph.textContent = 'Drag solution here';
+                    ph.style.color = '';
+                    ph.style.fontWeight = '';
+                });
+                document.querySelectorAll('.match-slot').forEach(slot => {
+                    slot.classList.remove('correct', 'incorrect', 'hover');
+                });
+                document.querySelectorAll('#activity-3 .matching-item').forEach(item => {
+                    item.style.display = '';
+                });
+                document.getElementById('reflection-text').value = '';
+                document.getElementById('reflection-text').disabled = false;
+                document.getElementById('submission-confirmation').classList.remove('show');
+                const submitReflectionBtn = document.getElementById('submit-reflection-btn');
+                submitReflectionBtn.disabled = false;
+                submitReflectionBtn.textContent = 'Submit Reflection';
+
+                // Reset results
+                resultsPanel.classList.remove('show');
+
+                updateProgressSummary();
+            }
+
+            // Check All Answers
+            function checkAllAnswers() {
+                // Force check all activities
+                [1, 2, 3].forEach(activityNum => {
+                    if (!state.activities[activityNum].completed) {
+                        state.activities[activityNum].completed = true;
+                        state.activities[activityNum].correct = state.activities[activityNum].total;
+                        state.activities[activityNum].score = 100;
+                        
+                        const status = document.querySelector(`#activity-${activityNum} .activity-status`);
+                        status.textContent = 'Completed';
+                        status.style.color = '#00b894';
+                        
+                        document.querySelector(`#activity-${activityNum}`).classList.add('completed');
+                        document.querySelector(`#feedback-${activityNum}`).classList.add('show');
+                    }
+                });
+
+                updateProgressSummary();
+            }
+
+            // View Final Results
+            function viewFinalResults() {
+                let totalScore = 0;
+                let activityCount = 0;
+
+                Object.values(state.activities).forEach(activity => {
+                    if (activity.completed) {
+                        totalScore += activity.score;
+                        activityCount++;
+                    }
+                });
+
+                const averageScore = activityCount > 0 ? Math.round(totalScore / activityCount) : 0;
+                finalScore.textContent = `${averageScore}%`;
+                resultsPanel.classList.add('show');
+                resultsPanel.scrollIntoView({ behavior: 'smooth' });
+            }
+
+            // Initialize all activities
+            initActivity1();
+            initActivity2();
+            initActivity3();
+
+            // Event listeners
+            resetBtn.addEventListener('click', resetAllActivities);
+            checkBtn.addEventListener('click', checkAllAnswers);
+            resultsBtn.addEventListener('click', viewFinalResults);
+
+            // Initial progress update
+            updateProgressSummary();
+        });
+    </script>
+</body>
+</html>
