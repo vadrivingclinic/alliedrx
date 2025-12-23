@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Week 3 Wrap-Up -- Technician Competencies & Settings</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d9b8ff;
+            --color-accent: #8380f0;
+            --color-bg: #f7f5fb;
+            --color-text: #1e2030;
+            --color-muted: #727089;
+            --radius-lg: 24px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(circle at top left, #ffffff 0, #f3edff 40%, var(--color-bg) 100%);
+            color: var(--color-text);
+            -webkit-text-size-adjust: 100%;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 12px; }
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1120px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px 30px;
+            display: grid;
+            grid-template-columns: minmax(0, 3.1fr) minmax(0, 2.4fr);
+            gap: 28px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @media (max-width: 900px) {
+            .page {
+                grid-template-columns: 1fr;
+                padding: 22px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 0; }
+            .page {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 18px 14px 22px;
+                gap: 22px;
+            }
+            h1 { font-size: 1.7rem; }
+            .section-title { font-size: 1rem; }
+        }
+
+        img, .page, .column, .card, .side-card, .completion-card {
+            max-width: 100%;
+        }
+
+        .column {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header / branding */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+        }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: #00b894;
+            flex-shrink: 0;
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+        }
+
+        @media (max-width: 480px) {
+            .brand-row { flex-direction: column; align-items: flex-start; }
+            .badge-mode { margin-top: 6px; }
+        }
+
+        h1 {
+            font-size: clamp(1.9rem, 3vw, 2.3rem);
+            line-height: 1.05;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+        }
+
+        .subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 36rem;
+            margin-bottom: 18px;
+        }
+
+        .subtitle strong {
+            color: var(--color-primary);
+        }
+
+        /* Sections */
+        .section-label {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-primary);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--color-text);
+        }
+
+        .card {
+            border-radius: 18px;
+            border: 1px solid rgba(15, 23, 42, 0.06);
+            padding: 14px 16px 16px;
+            margin-bottom: 14px;
+            background: linear-gradient(135deg, rgba(175, 75, 239, 0.06), rgba(255, 255, 255, 0.98));
+        }
+
+        .card + .card { margin-top: 6px; }
+
+        .card p {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--color-text);
+        }
+
+        .small {
+            font-size: 0.82rem;
+            color: var(--color-muted);
+        }
+
+        /* Quiz styles */
+        .quiz-item {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px dashed rgba(148, 163, 184, 0.7);
+        }
+
+        .quiz-question {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .quiz-options {
+            list-style: none;
+            padding-left: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            font-size: 0.88rem;
+        }
+
+        .quiz-options li {
+            display: flex;
+            align-items: flex-start;
+            gap: 6px;
+        }
+
+        .quiz-options input {
+            margin-top: 3px;
+            cursor: pointer;
+        }
+
+        .quiz-feedback {
+            font-size: 0.82rem;
+            margin-top: 5px;
+            min-height: 1.1em;
+        }
+
+        .quiz-feedback.correct { color: #15803d; }
+        .quiz-feedback.incorrect { color: #b91c1c; }
+
+        .btn {
+            border-radius: 999px;
+            border: none;
+            padding: 7px 14px;
+            margin-top: 10px;
+            font-size: 0.84rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            cursor: pointer;
+            background: linear-gradient(135deg, var(--color-primary), #7c3aed);
+            color: #ffffff;
+            box-shadow: 0 10px 25px rgba(88, 28, 135, 0.35);
+            transition: transform 0.05s ease, box-shadow 0.05s ease;
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 5px 12px rgba(88, 28, 135, 0.4);
+        }
+
+        /* Vocabulary */
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+            margin-top: 4px;
+        }
+
+        @media (max-width: 900px) {
+            .vocab-grid { grid-template-columns: 1fr; }
+        }
+
+        .vocab-card {
+            border-radius: 14px;
+            padding: 10px 12px;
+            background: rgba(12, 10, 24, 0.94);
+            color: #e5e7eb;
+            font-size: 0.86rem;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .vocab-term {
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: #fef9c3;
+        }
+
+        .vocab-definition {
+            font-size: 0.82rem;
+            line-height: 1.5;
+            display: none;
+        }
+
+        .vocab-card.active .vocab-definition { display: block; }
+
+        .vocab-card::after {
+            content: "Tap to flip";
+            position: absolute;
+            right: 10px;
+            bottom: 8px;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #a5b4fc;
+        }
+
+        .vocab-card.active::after { content: "Hide"; }
+
+        /* Reflection */
+        textarea {
+            width: 100%;
+            min-height: 80px;
+            border-radius: 12px;
+            border: 1px solid rgba(148, 163, 184, 0.7);
+            padding: 10px 11px;
+            font-family: inherit;
+            font-size: 0.88rem;
+            resize: vertical;
+            margin-top: 6px;
+        }
+
+        textarea:focus {
+            outline: 2px solid var(--color-primary-soft);
+            border-color: var(--color-primary);
+        }
+
+        .checklist {
+            list-style: none;
+            margin-top: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            font-size: 0.86rem;
+        }
+
+        .checklist li {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .checklist input { margin-top: 2px; }
+
+        /* Right column cards */
+        .side-card {
+            background: rgba(12, 10, 24, 0.96);
+            color: #e5e7eb;
+            border-radius: 18px;
+            padding: 16px 18px 18px;
+            font-size: 0.88rem;
+            line-height: 1.7;
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.6);
+            margin-bottom: 16px;
+        }
+
+        .side-card strong { color: #ffffff; }
+
+        .side-subtitle {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #c4b5fd;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .side-list {
+            list-style: none;
+            margin-top: 6px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            font-size: 0.86rem;
+        }
+
+        .side-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 7px;
+        }
+
+        .dot {
+            width: 6px;
+            height: 6px;
+            margin-top: 7px;
+            border-radius: 999px;
+            background: #a5b4fc;
+            flex-shrink: 0;
+        }
+
+        .completion-card {
+            border-radius: 18px;
+            border: 1px dashed rgba(148, 163, 184, 0.7);
+            padding: 12px 14px;
+            font-size: 0.84rem;
+            color: var(--color-muted);
+            background: rgba(248, 250, 252, 0.9);
+        }
+
+        /* Settings Grid */
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        @media (max-width: 600px) {
+            .settings-grid { grid-template-columns: 1fr; }
+        }
+
+        .setting-card {
+            background: rgba(175, 75, 239, 0.08);
+            border-radius: 12px;
+            padding: 14px;
+            font-size: 0.85rem;
+        }
+
+        .setting-title {
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .setting-icon {
+            width: 24px;
+            height: 24px;
+            background: var(--color-primary);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.8rem;
+        }
+
+        /* Association Cards */
+        .association-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .association-card {
+            background: rgba(131, 128, 240, 0.1);
+            border-radius: 10px;
+            padding: 12px;
+            font-size: 0.82rem;
+        }
+
+        .association-name {
+            font-weight: 700;
+            color: var(--color-accent);
+            margin-bottom: 4px;
+        }
+
+        /* Certification Comparison */
+        .cert-compare {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 12px;
+        }
+
+        @media (max-width: 600px) {
+            .cert-compare { grid-template-columns: 1fr; }
+        }
+
+        .cert-box {
+            background: rgba(175, 75, 239, 0.05);
+            border-radius: 12px;
+            padding: 14px;
+            border: 2px solid rgba(175, 75, 239, 0.2);
+        }
+
+        .cert-header {
+            font-weight: 700;
+            color: var(--color-primary);
+            text-align: center;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(175, 75, 239, 0.3);
+        }
+
+        /* Competency List */
+        .competency-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .competency-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 8px;
+            background: rgba(175, 75, 239, 0.05);
+            border-radius: 8px;
+        }
+
+        .competency-number {
+            background: var(--color-primary);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="wrapup-heading">
+        <!-- LEFT COLUMN -->
+        <section class="column">
+            <header class="brand-row">
+                <div class="brand">
+                    <img
+                        src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                        alt="AlliedRx logo"
+                        class="brand-logo"
+                    />
+                    <div class="course-meta">
+                        <span class="course-name">Pharmacy Technician Program • Mosby's 5th Edition</span>
+                        <div class="week-label">
+                            <span class="week-label-dot"></span>
+                            <span>Week 3 — Chapter 3: Technician Competencies & Settings</span>
+                        </div>
+                    </div>
+                </div>
+                <span class="badge-mode">Interactive Review</span>
+            </header>
+
+            <h1 id="wrapup-heading">Building Your Pharmacy Technician Career</h1>
+            <p class="subtitle">
+                Master <strong>Chapter 3 — Competencies, Associations, and Settings for Technicians</strong> from Mosby's 5th Edition. 
+                Explore career pathways, certification options, professional associations, and essential competencies for AlliedRx pharmacy technicians.
+            </p>
+
+            <!-- QUICK SELF-CHECK QUIZ -->
+            <section aria-label="quick self check">
+                <p class="section-label">Step 1</p>
+                <h2 class="section-title">Career Development Check</h2>
+                <div class="card" id="quiz-card">
+                    <p class="small">
+                        Test your understanding of pharmacy technician career pathways and professional development.
+                    </p>
+
+                    <div class="quiz-item" data-answer="c">
+                        <p class="quiz-question">
+                            1. What does the term "nondiscretionary duties" refer to in pharmacy practice?
+                        </p>
+                        <ul class="quiz-options">
+                            <li><input type="radio" name="q1" value="a" id="q1a" /><label for="q1a">Tasks requiring independent clinical judgment</label></li>
+                            <li><input type="radio" name="q1" value="b" id="q1b" /><label for="q1b">Duties that can only be performed by pharmacists</label></li>
+                            <li><input type="radio" name="q1" value="c" id="q1c" /><label for="q1c">Tasks that do not require professional judgment, like repackaging medications</label></li>
+                        </ul>
+                        <div class="quiz-feedback" id="q1-feedback"></div>
+                    </div>
+
+                    <div class="quiz-item" data-answer="b">
+                        <p class="quiz-question">
+                            2. Which organization provides the Model Curriculum for Pharmacy Technician Education?
+                        </p>
+                        <ul class="quiz-options">
+                            <li><input type="radio" name="q2" value="a" id="q2a" /><label for="q2a">PTCB</label></li>
+                            <li><input type="radio" name="q2" value="b" id="q2b" /><label for="q2b">ASHP</label></li>
+                            <li><input type="radio" name="q2" value="c" id="q2c" /><label for="q2c">NABP</label></li>
+                        </ul>
+                        <div class="quiz-feedback" id="q2-feedback"></div>
+                    </div>
+
+                    <div class="quiz-item" data-answer="a">
+                        <p class="quiz-question">
+                            3. What is the key difference between certification and licensure?
+                        </p>
+                        <ul class="quiz-options">
+                            <li><input type="radio" name="q3" value="a" id="q3a" /><label for="q3a">Certification validates skills; licensure is legal permission to practice</label></li>
+                            <li><input type="radio" name="q3" value="b" id="q3b" /><label for="q3b">Certification is state-based; licensure is national</label></li>
+                            <li><input type="radio" name="q3" value="c" id="q3c" /><label for="q3c">There is no difference; terms are interchangeable</label></li>
+                        </ul>
+                        <div class="quiz-feedback" id="q3-feedback"></div>
+                    </div>
+
+                    <div class="quiz-item" data-answer="c">
+                        <p class="quiz-question">
+                            4. Which pharmacy setting would primarily prepare TPN (total parenteral nutrition) solutions?
+                        </p>
+                        <ul class="quiz-options">
+                            <li><input type="radio" name="q4" value="a" id="q4a" /><label for="q4a">Community pharmacy</label></li>
+                            <li><input type="radio" name="q4" value="b" id="q4b" /><label for="q4b">Mail-order pharmacy</label></li>
+                            <li><input type="radio" name="q4" value="c" id="q4c" /><label for="q4c">Hospital inpatient pharmacy</label></li>
+                        </ul>
+                        <div class="quiz-feedback" id="q4-feedback"></div>
+                    </div>
+
+                    <button class="btn" type="button" onclick="checkQuiz()">Check answers</button>
+                </div>
+            </section>
+
+            <!-- PHARMACY SETTINGS -->
+            <section aria-label="pharmacy settings">
+                <p class="section-label">Career Pathways</p>
+                <h2 class="section-title">Pharmacy Practice Settings</h2>
+                <div class="card">
+                    <p class="small">Understanding different practice environments for pharmacy technicians:</p>
+                    <div class="settings-grid">
+                        <div class="setting-card">
+                            <div class="setting-title">
+                                <span class="setting-icon">R</span>
+                                <span>Retail/Community</span>
+                            </div>
+                            <p>Serves walk-in patients, processes prescriptions, provides OTC recommendations, patient counseling support.</p>
+                            <p class="small" style="margin-top: 6px; color: var(--color-primary);">
+                                <strong>Technician Duties:</strong> Prescription processing, inventory, customer service, insurance billing.
+                            </p>
+                        </div>
+                        <div class="setting-card">
+                            <div class="setting-title">
+                                <span class="setting-icon">H</span>
+                                <span>Hospital/Inpatient</span>
+                            </div>
+                            <p>Serves hospitalized patients, prepares IV medications, unit dose packaging, operates automated dispensing systems.</p>
+                            <p class="small" style="margin-top: 6px; color: var(--color-primary);">
+                                <strong>Technician Duties:</strong> IV preparation, TPN compounding, medication cart filling, sterile compounding.
+                            </p>
+                        </div>
+                        <div class="setting-card">
+                            <div class="setting-title">
+                                <span class="setting-icon">C</span>
+                                <span>Closed-Door</span>
+                            </div>
+                            <p>Serves long-term care facilities, nursing homes; medications delivered, not open to public walk-in.</p>
+                            <p class="small" style="margin-top: 6px; color: var(--color-primary);">
+                                <strong>Technician Duties:</strong> Bulk medication packaging, facility deliveries, medication cart preparation.
+                            </p>
+                        </div>
+                        <div class="setting-card">
+                            <div class="setting-title">
+                                <span class="setting-icon">S</span>
+                                <span>Specialty Pharmacy</span>
+                            </div>
+                            <p>Focuses on complex, high-cost medications for chronic conditions (oncology, HIV, transplant).</p>
+                            <p class="small" style="margin-top: 6px; color: var(--color-primary);">
+                                <strong>Technician Duties:</strong> Prior authorization, patient assistance programs, specialty medication handling.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TECHNICIAN COMPETENCIES -->
+            <section aria-label="technician competencies">
+                <p class="section-label">Essential Skills</p>
+                <h2 class="section-title">Core Technician Competencies</h2>
+                <div class="card">
+                    <p class="small">Successful pharmacy technicians demonstrate these key competencies across all settings:</p>
+                    <div class="competency-list">
+                        <div class="competency-item">
+                            <div class="competency-number">1</div>
+                            <div><strong>Technical Knowledge:</strong> Drug names, classifications, dosage forms, calculations, pharmacy software systems.</div>
+                        </div>
+                        <div class="competency-item">
+                            <div class="competency-number">2</div>
+                            <div><strong>Communication Skills:</strong> Clear patient interaction, professional team communication, accurate documentation.</div>
+                        </div>
+                        <div class="competency-item">
+                            <div class="competency-number">3</div>
+                            <div><strong>Attention to Detail:</strong> Accuracy in prescription processing, labeling, inventory management, data entry.</div>
+                        </div>
+                        <div class="competency-item">
+                            <div class="competency-number">4</div>
+                            <div><strong>Ethical Practice:</strong> Maintain confidentiality, follow regulations, demonstrate honesty and integrity.</div>
+                        </div>
+                        <div class="competency-item">
+                            <div class="competency-number">5</div>
+                            <div><strong>Problem-Solving:</strong> Identify and resolve medication issues, insurance problems, workflow challenges.</div>
+                        </div>
+                        <div class="competency-item">
+                            <div class="competency-number">6</div>
+                            <div><strong>Time Management:</strong> Prioritize tasks, manage workflow efficiently, meet deadlines in fast-paced environment.</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- RIGHT COLUMN -->
+        <aside class="column" aria-label="apply it to pharmacy practice">
+            <!-- CERTIFICATION COMPARISON -->
+            <section>
+                <p class="section-label">Professional Credentials</p>
+                <h2 class="section-title">National Certification Options</h2>
+                <div class="side-card">
+                    <p class="side-subtitle">PTCB vs. NHA/ExCPT Certification</p>
+                    <div class="cert-compare">
+                        <div class="cert-box">
+                            <div class="cert-header">PTCB Certification</div>
+                            <ul class="side-list">
+                                <li><span class="dot"></span><span>Administered by Pharmacy Technician Certification Board</span></li>
+                                <li><span class="dot"></span><span>90 multiple-choice questions, 1 hour 50 minutes</span></li>
+                                <li><span class="emphasis" style="color:#fef9c3;">CPhT credential after passing</span></li>
+                                <li><span class="dot"></span><span>Requires 20 CE hours every 2 years (including 1 hour pharmacy law, 1 hour patient safety)</span></li>
+                                <li><span class="dot"></span><span>Recognized in all 50 states</span></li>
+                            </ul>
+                        </div>
+                        <div class="cert-box">
+                            <div class="cert-header">NHA/ExCPT Certification</div>
+                            <ul class="side-list">
+                                <li><span class="dot"></span><span>Administered by National Healthcareer Association</span></li>
+                                <li><span class="dot"></span><span>100 multiple-choice questions, 2 hours 10 minutes</span></li>
+                                <li><span class="emphasis" style="color:#fef9c3;">CPhT credential after passing</span></li>
+                                <li><span class="dot"></span><span>Requires 20 CE hours every 2 years</span></li>
+                                <li><span class="dot"></span><span>Also recognized nationally</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p class="small" style="margin-top: 12px; color: #a5b4fc;">
+                        <strong>AlliedRx Recommendation:</strong> Research your state requirements and employer preferences when choosing certification.
+                    </p>
+                </div>
+            </section>
+
+            <!-- PROFESSIONAL ASSOCIATIONS -->
+            <section>
+                <p class="section-label">Career Development</p>
+                <h2 class="section-title">Professional Associations</h2>
+                <div class="side-card">
+                    <p>Key organizations for pharmacy technician career advancement:</p>
+                    <div class="association-grid">
+                        <div class="association-card">
+                            <div class="association-name">AAPT</div>
+                            <div>American Association of Pharmacy Technicians - First technician association (1979)</div>
+                        </div>
+                        <div class="association-card">
+                            <div class="association-name">NPTA</div>
+                            <div>National Pharmacy Technician Association - Largest technician-focused organization</div>
+                        </div>
+                        <div class="association-card">
+                            <div class="association-name">ASHP</div>
+                            <div>American Society of Health-System Pharmacists - Offers Model Curriculum</div>
+                        </div>
+                        <div class="association-card">
+                            <div class="association-name">APhA</div>
+                            <div>American Pharmacists Association - Oldest pharmacy association (1852)</div>
+                        </div>
+                        <div class="association-card">
+                            <div class="association-name">SEPhT</div>
+                            <div>Society for Education of Pharmacy Technicians - Free membership, educational resources</div>
+                        </div>
+                    </div>
+                    <p class="small" style="margin-top: 10px; color: #a5b4fc;">
+                        <strong>Benefits of Membership:</strong> Networking, continuing education, job resources, professional development.
+                    </p>
+                </div>
+            </section>
+
+            <!-- CAREER SCENARIO -->
+            <section>
+                <p class="section-label">Apply it</p>
+                <h2 class="section-title">Your Career Development Plan</h2>
+                <div class="side-card">
+                    <p class="side-subtitle">Scenario: Planning Your Technician Career</p>
+                    <p>
+                        You're completing the AlliedRx program and planning your next steps. You're interested in hospital pharmacy 
+                        but want to understand all your options and how to build a successful career.
+                    </p>
+                    <p class="side-subtitle" style="margin-top:12px;">Career Planning Questions</p>
+                    <ul class="side-list">
+                        <li><span class="dot"></span><span>What specific competencies do you need to develop for hospital pharmacy work?</span></li>
+                        <li><span class="dot"></span><span>Which professional associations would be most beneficial for your career goals?</span></li>
+                        <li><span class="dot"></span><span>How will you maintain your certification through continuing education?</span></li>
+                        <li><span class="dot"></span><span>What networking strategies will you use during your job search?</span></li>
+                    </ul>
+                    <label class="small" for="career-plan" style="display:block;margin-top:10px;">
+                        Draft your 1-year and 5-year career development plan:
+                    </label>
+                    <textarea id="career-plan" placeholder="Outline your goals for certification, skills development, networking, and career advancement. Consider different pharmacy settings and specialty areas."></textarea>
+                </div>
+            </section>
+
+            <!-- KEY TERMINOLOGY -->
+            <section>
+                <p class="section-label">Step 2</p>
+                <h2 class="section-title">Essential Terminology</h2>
+                <div class="side-card">
+                    <p>Select each term to reveal its definition:</p>
+                    <div class="vocab-grid">
+                        <div class="vocab-card" onclick="toggleVocab(this)">
+                            <div class="vocab-term">Nondiscretionary Duties</div>
+                            <div class="vocab-definition">Tasks that do not require professional judgment, such as repackaging medications, inventory management, and filling automated dispensing machines.</div>
+                        </div>
+                        <div class="vocab-card" onclick="toggleVocab(this)">
+                            <div class="vocab-term">CPhT</div>
+                            <div class="vocab-definition">Certified Pharmacy Technician - Credential earned after passing national certification exam; indicates validated knowledge and skills.</div>
+                        </div>
+                        <div class="vocab-card" onclick="toggleVocab(this)">
+                            <div class="vocab-term">TPN</div>
+                            <div class="vocab-definition">Total Parenteral Nutrition - Intravenous nutrition administered through central vein for patients unable to eat solids or liquids.</div>
+                        </div>
+                        <div class="vocab-card" onclick="toggleVocab(this)">
+                            <div class="vocab-term">ASHP Model Curriculum</div>
+                            <div class="vocab-definition">Guidelines for pharmacy technician training programs to ensure comprehensive education meeting professional standards.</div>
+                        </div>
+                        <div class="vocab-card" onclick="toggleVocab(this)">
+                            <div class="vocab-term">Professionalism</div>
+                            <div class="vocab-definition">Conforming to accepted principles of conduct in the pharmacy profession, including ethics, appearance, communication, and work habits.</div>
+                        </div>
+                        <div class="vocab-card" onclick="toggleVocab(this)">
+                            <div class="vocab-term">Closed-Door Pharmacy</div>
+                            <div class="vocab-definition">Pharmacy serving institutions like nursing homes; medications delivered, not open to public walk-in traffic.</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- COMPETENCY CHECKLIST -->
+            <section>
+                <p class="section-label">Step 3</p>
+                <h2 class="section-title">Chapter 3 Competency Checklist</h2>
+                <div class="side-card">
+                    <p>Mark each item when you can confidently demonstrate knowledge:</p>
+                    <ul class="checklist" style="margin-top:10px;">
+                        <li><input type="checkbox" id="obj1" /><label for="obj1">Describe competencies needed across pharmacy settings</label></li>
+                        <li><input type="checkbox" id="obj2" /><label for="obj2">Explain nondiscretionary duties with examples</label></li>
+                        <li><input type="checkbox" id="obj3" /><label for="obj3">Describe ASHP Model Curriculum purpose</label></li>
+                        <li><input type="checkbox" id="obj4" /><label for="obj4">Differentiate certification, licensure, registration</label></li>
+                        <li><input type="checkbox" id="obj5" /><label for="obj5">Compare PTCB vs. NHA certification exams</label></li>
+                        <li><input type="checkbox" id="obj6" /><label for="obj6">List CE requirements for certification maintenance</label></li>
+                        <li><input type="checkbox" id="obj7" /><label for="obj7">Identify specialty certification opportunities</label></li>
+                        <li><input type="checkbox" id="obj8" /><label for="obj8">List major professional associations for technicians</label></li>
+                        <li><input type="checkbox" id="obj9" /><label for="obj9">Explain importance of professionalism and networking</label></li>
+                        <li><input type="checkbox" id="obj10" /><label for="obj10">Describe various pharmacy practice settings</label></li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- COMPLETION REMINDER -->
+            <section>
+                <p class="section-label">Step 4</p>
+                <h2 class="section-title">Ready for Chapter 4?</h2>
+                <div class="completion-card">
+                    <p>Before proceeding to Chapter 4, ensure you have:</p>
+                    <ul class="side-list" style="margin-top:8px;">
+                        <li><span class="dot"></span><span>Completed the <strong>Career Development Check</strong> quiz</span></li>
+                        <li><span class="dot"></span><span>Mastered all <strong>key terminology</strong> through flashcards</span></li>
+                        <li><span class="dot"></span><span>Explored different <strong>pharmacy practice settings</strong></span></li>
+                        <li><span class="dot"></span><span>Compared <strong>certification options</strong> (PTCB vs. NHA)</span></li>
+                        <li><span class="dot"></span><span>Identified <strong>professional associations</strong> for networking</span></li>
+                        <li><span class="dot"></span><span>Drafted your <strong>career development plan</strong></span></li>
+                        <li><span class="dot"></span><span>Checked off items in your <strong>Competency Checklist</strong></span></li>
+                    </ul>
+                    <p style="margin-top:8px;">
+                        Chapter 3 provides the foundation for your pharmacy technician career development. Master these concepts before moving to 
+                        <strong>Chapter 4: Conversions and Calculations</strong> in your AlliedRx Pharmacy Technician Program.
+                    </p>
+                </div>
+            </section>
+        </aside>
+    </main>
+
+    <script>
+        // Quiz logic
+        function checkQuiz() {
+            const items = document.querySelectorAll('.quiz-item');
+            items.forEach((item, index) => {
+                const correct = item.getAttribute('data-answer');
+                const name = 'q' + (index + 1);
+                const selected = document.querySelector('input[name="' + name + '"]:checked');
+                const feedback = document.getElementById(name + '-feedback');
+                
+                if (!selected) {
+                    feedback.textContent = 'Please select an answer.';
+                    feedback.className = 'quiz-feedback';
+                    return;
+                }
+                
+                if (selected.value === correct) {
+                    feedback.textContent = 'Correct! Your career knowledge is solid.';
+                    feedback.className = 'quiz-feedback correct';
+                } else {
+                    feedback.textContent = 'Review this concept in Chapter 3.';
+                    feedback.className = 'quiz-feedback incorrect';
+                }
+            });
+        }
+
+        // Vocabulary flip
+        function toggleVocab(card) {
+            card.classList.toggle('active');
+        }
+
+        // Career planning resources
+        function showCareerResources() {
+            const resources = [
+                "PTCB.org - Certification information",
+                "PharmacyTechnician.com - NPTA resources",
+                "ASHP.org - Health-system pharmacy information",
+                "Indeed.com/LinkedIn.com - Job search platforms",
+                "CE websites: PowerPak, FreeCE, PharmacyTechCE"
+            ];
+            console.log("Career Development Resources:", resources);
+        }
+    </script>
+</body>
+</html>
