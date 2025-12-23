@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Week 2 Wrap-Up -- Pharmacy Law, Ethics & Regulatory Agencies</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d9b8ff;
+            --color-accent: #8380f0;
+            --color-bg: #f7f5fb;
+            --color-text: #1e2030;
+            --color-muted: #727089;
+            --radius-lg: 24px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(circle at top left, #ffffff 0, #f3edff 40%, var(--color-bg) 100%);
+            color: var(--color-text);
+            -webkit-text-size-adjust: 100%;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 12px; }
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1120px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px 30px;
+            display: grid;
+            grid-template-columns: minmax(0, 3.1fr) minmax(0, 2.4fr);
+            gap: 28px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @media (max-width: 900px) {
+            .page {
+                grid-template-columns: 1fr;
+                padding: 22px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 0; }
+            .page {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 18px 14px 22px;
+                gap: 22px;
+            }
+            h1 { font-size: 1.7rem; }
+            .section-title { font-size: 1rem; }
+        }
+
+        img, .page, .column, .card, .side-card, .completion-card {
+            max-width: 100%;
+        }
+
+        .column {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header / branding */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+        }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: #00b894;
+            flex-shrink: 0;
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+        }
+
+        @media (max-width: 480px) {
+            .brand-row { flex-direction: column; align-items: flex-start; }
+            .badge-mode { margin-top: 6px; }
+        }
+
+        h1 {
+            font-size: clamp(1.9rem, 3vw, 2.3rem);
+            line-height: 1.05;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+        }
+
+        .subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 36rem;
+            margin-bottom: 18px;
+        }
+
+        .subtitle strong {
+            color: var(--color-primary);
+        }
+
+        /* Sections */
+        .section-label {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-primary);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--color-text);
+        }
+
+        .card {
+            border-radius: 18px;
+            border: 1px solid rgba(15, 23, 42, 0.06);
+            padding: 14px 16px 16px;
+            margin-bottom: 14px;
+            background: linear-gradient(135deg, rgba(175, 75, 239, 0.06), rgba(255, 255, 255, 0.98));
+        }
+
+        .card + .card { margin-top: 6px; }
+
+        .card p {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--color-text);
+        }
+
+        .small {
+            font-size: 0.82rem;
+            color: var(--color-muted);
+        }
+
+        /* Quiz styles */
+        .quiz-item {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px dashed rgba(148, 163, 184, 0.7);
+        }
+
+        .quiz-question {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .quiz-options {
+            list-style: none;
+            padding-left: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            font-size: 0.88rem;
+        }
+
+        .quiz-options li {
+            display: flex;
+            align-items: flex-start;
+            gap: 6px;
+        }
+
+        .quiz-options input {
+            margin-top: 3px;
+            cursor: pointer;
+        }
+
+        .quiz-feedback {
+            font-size: 0.82rem;
+            margin-top: 5px;
+            min-height: 1.1em;
+        }
+
+        .quiz-feedback.correct { color: #15803d; }
+        .quiz-feedback.incorrect { color: #b91c1c; }
+
+        .btn {
+            border-radius: 999px;
+            border: none;
+            padding: 7px 14px;
+            margin-top: 10px;
+            font-size: 0.84rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            cursor: pointer;
+            background: linear-gradient(135deg, var(--color-primary), #7c3aed);
+            color: #ffffff;
+            box-shadow: 0 10px 25px rgba(88, 28, 135, 0.35);
+            transition: transform 0.05s ease, box-shadow 0.05s ease;
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 5px 12px rgba(88, 28, 135, 0.4);
+        }
+
+        /* Vocabulary */
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+            margin-top: 4px;
+        }
+
+        @media (max-width: 900px) {
+            .vocab-grid { grid-template-columns: 1fr; }
+        }
+
+        .vocab-card {
+            border-radius: 14px;
+            padding: 10px 12px;
+            background: rgba(12, 10, 24, 0.94);
+            color: #e5e7eb;
+            font-size: 0.86rem;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .vocab-term {
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: #fef9c3;
+        }
+
+        .vocab-definition {
+            font-size: 0.82rem;
+            line-height: 1.5;
+            display: none;
+        }
+
+        .vocab-card.active .vocab-definition { display: block; }
+
+        .vocab-card::after {
+            content: "Tap to flip";
+            position: absolute;
+            right: 10px;
+            bottom: 8px;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #a5b4fc;
+        }
+
+        .vocab-card.active::after { content: "Hide"; }
+
+        /* Reflection */
+        textarea {
+            width: 100%;
+            min-height: 80px;
+            border-radius: 12px;
+            border: 1px solid rgba(148, 163, 184, 0.7);
+            padding: 10px 11px;
+            font-family: inherit;
+            font-size: 0.88rem;
+            resize: vertical;
+            margin-top: 6px;
+        }
+
+        textarea:focus {
+            outline: 2px solid var(--color-primary-soft);
+            border-color: var(--color-primary);
+        }
+
+        .checklist {
+            list-style: none;
+            margin-top: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            font-size: 0.86rem;
+        }
+
+        .checklist li {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .checklist input { margin-top: 2px; }
+
+        /* Right column cards */
+        .side-card {
+            background: rgba(12, 10, 24, 0.96);
+            color: #e5e7eb;
+            border-radius: 18px;
+            padding: 16px 18px 18px;
+            font-size: 0.88rem;
+            line-height: 1.7;
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.6);
+            margin-bottom: 16px;
+        }
+
+        .side-card strong { color: #ffffff; }
+
+        .side-subtitle {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #c4b5fd;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .side-list {
+            list-style: none;
+            margin-top: 6px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            font-size: 0.86rem;
+        }
+
+        .side-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 7px;
+        }
+
+        .dot {
+            width: 6px;
+            height: 6px;
+            margin-top: 7px;
+            border-radius: 999px;
+            background: #a5b4fc;
+            flex-shrink: 0;
+        }
+
+        .completion-card {
+            border-radius: 18px;
+            border: 1px dashed rgba(148, 163, 184, 0.7);
+            padding: 12px 14px;
+            font-size: 0.84rem;
+            color: var(--color-muted);
+            background: rgba(248, 250, 252, 0.9);
+        }
+
+        /* Timeline */
+        .timeline {
+            margin-top: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .timeline-item {
+            padding: 8px 10px;
+            border-left: 3px solid var(--color-primary);
+            background: rgba(175, 75, 239, 0.05);
+            border-radius: 0 8px 8px 0;
+            font-size: 0.85rem;
+        }
+
+        .timeline-period {
+            font-weight: 600;
+            color: var(--color-primary);
+        }
+
+        /* Agency Cards */
+        .agency-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .agency-card {
+            background: rgba(175, 75, 239, 0.08);
+            border-radius: 12px;
+            padding: 12px;
+            font-size: 0.84rem;
+        }
+
+        .agency-name {
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+        }
+
+        /* Recall Classes */
+        .recall-boxes {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        @media (max-width: 600px) {
+            .recall-boxes { grid-template-columns: 1fr; }
+        }
+
+        .recall-box {
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+
+        .class-i { background: rgba(220, 38, 38, 0.1); border: 2px solid #dc2626; }
+        .class-ii { background: rgba(245, 158, 11, 0.1); border: 2px solid #f59e0b; }
+        .class-iii { background: rgba(34, 197, 94, 0.1); border: 2px solid #22c55e; }
+
+        .recall-class {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 4px;
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="wrapup-heading">
+        <!-- LEFT COLUMN -->
+        <section class="column">
+            <header class="brand-row">
+                <div class="brand">
+                    <img
+                        src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                        alt="AlliedRx logo"
+                        class="brand-logo"
+                    />
+                    <div class="course-meta">
+                        <span class="course-name">Pharmacy Technician Program • Mosby's 5th Edition</span>
+                        <div class="week-label">
+                            <span class="week-label-dot"></span>
+                            <span>Week 2 — Chapter 2: Pharmacy Law, Ethics & Regulatory Agencies</span>
+                        </div>
+                    </div>
+                </div>
+                <span class="badge-mode">Interactive Review</span>
+            </header>
+
+            <h1 id="wrapup-heading">Navigating Pharmacy Law & Regulations</h1>
+            <p class="subtitle">
+                Master <strong>Chapter 2 — Pharmacy Law, Ethics, and Regulatory Agencies</strong> from Mosby's 5th Edition. 
+                Understand federal laws, regulatory agencies, controlled substance handling, and ethical responsibilities for AlliedRx pharmacy technicians.
+            </p>
+
+            <!-- QUICK SELF-CHECK QUIZ -->
+            <section aria-label="quick self check">
+                <p class="section-label">Step 1</p>
+                <h2 class="section-title">Regulatory Knowledge Check</h2>
+                <div class="card" id="quiz-card">
+                    <p class="small">
+                        Test your understanding of pharmacy laws and regulations. Select the best answer for each question.
+                    </p>
+
+                    <div class="quiz-item" data-answer="b">
+                        <p class="quiz-question">
+                            1. Which federal act specifically protects patient health information privacy?
+                        </p>
+                        <ul class="quiz-options">
+                            <li><input type="radio" name="q1" value="a" id="q1a" /><label for="q1a">OBRA '90</label></li>
+                            <li><input type="radio" name="q1" value="b" id="q1b" /><label for="q1b">HIPAA</label></li>
+                            <li><input type="radio" name="q1" value="c" id="q1c" /><label for="q1c">DQSA</label></li>
+                        </ul>
+                        <div class="quiz-feedback" id="q1-feedback"></div>
+                    </div>
+
+                    <div class="quiz-item" data-answer="c">
+                        <p class="quiz-question">
+                            2. What is the primary function of the DEA?
+                        </p>
+                        <ul class="quiz-options">
+                            <li><input type="radio" name="q2" value="a" id="q2a" /><label for="q2a">Approve new medications for market</label></li>
+                            <li><input type="radio" name="q2" value="b" id="q2b" /><label for="q2b">Regulate workplace safety</label></li>
+                            <li><input type="radio" name="q2" value="c" id="q2c" /><label for="q2c">Enforce controlled substance laws</label></li>
+                        </ul>
+                        <div class="quiz-feedback" id="q2-feedback"></div>
+                    </div>
+
+                    <div class="quiz-item" data-answer="a">
+                        <p class="quiz-question">
+                            3. A Class I drug recall indicates:
+                        </p>
+                        <ul class="quiz-options">
+                            <li><input type="radio" name="q3" value="a" id="q3a" /><label for="q3a">Strong probability of serious adverse effects or death</label></li>
+                            <li><input type="radio" name="q3" value="b" id="q3b" /><label for="q3b">May cause temporary or medically reversible effects</label></li>
+                            <li><input type="radio" name="q3" value="c" id="q3c" /><label for="q3c">Unlikely to cause adverse health effects</label></li>
+                        </ul>
+                        <div class="quiz-feedback" id="q3-feedback"></div>
+                    </div>
+
+                    <div class="quiz-item" data-answer="c">
+                        <p class="quiz-question">
+                            4. What must be verified when processing a prescription for a controlled substance?
+                        </p>
+                        <ul class="quiz-options">
+                            <li><input type="radio" name="q4" value="a" id="q4a" /><label for="q4a">Only the patient's name</label></li>
+                            <li><input type="radio" name="q4" value="b" id="q4b" /><label for="q4b">Just the drug name and strength</label></li>
+                            <li><input type="radio" name="q4" value="c" id="q4c" /><label for="q4c">Prescriber's DEA number, patient ID, and prescription completeness</label></li>
+                        </ul>
+                        <div class="quiz-feedback" id="q4-feedback"></div>
+                    </div>
+
+                    <button class="btn" type="button" onclick="checkQuiz()">Check answers</button>
+                </div>
+            </section>
+
+            <!-- REGULATORY AGENCIES -->
+            <section aria-label="regulatory agencies">
+                <p class="section-label">Key Agencies</p>
+                <h2 class="section-title">Regulatory Agencies & Functions</h2>
+                <div class="card">
+                    <p class="small">Understand the roles and responsibilities of major pharmacy regulatory bodies:</p>
+                    <div class="agency-grid">
+                        <div class="agency-card">
+                            <div class="agency-name">FDA (Food & Drug Admin)</div>
+                            <div>Ensures safety, efficacy of drugs/devices; approves new medications; monitors drug recalls</div>
+                        </div>
+                        <div class="agency-card">
+                            <div class="agency-name">DEA (Drug Enforcement Admin)</div>
+                            <div>Enforces controlled substance laws; regulates Schedule I-V drugs; combats drug diversion</div>
+                        </div>
+                        <div class="agency-card">
+                            <div class="agency-name">State Board of Pharmacy</div>
+                            <div>Licenses pharmacists/technicians; regulates pharmacy practice within the state</div>
+                        </div>
+                        <div class="agency-card">
+                            <div class="agency-name">OSHA (Occupational Safety)</div>
+                            <div>Ensures workplace safety; requires SDS documentation; regulates hazardous material handling</div>
+                        </div>
+                        <div class="agency-card">
+                            <div class="agency-name">The Joint Commission</div>
+                            <div>Accredits healthcare organizations; sets quality/safety standards for hospitals</div>
+                        </div>
+                        <div class="agency-card">
+                            <div class="agency-name">USP (United States Pharmacopeia)</div>
+                            <div>Sets medication quality standards; publishes USP-NF with drug monographs</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DRUG RECALL CLASSES -->
+            <section aria-label="drug recalls">
+                <p class="section-label">Safety Protocols</p>
+                <h2 class="section-title">FDA Drug Recall Classification</h2>
+                <div class="card">
+                    <p class="small">Understanding recall classifications is essential for pharmacy technicians:</p>
+                    <div class="recall-boxes">
+                        <div class="recall-box class-i">
+                            <div class="recall-class">Class I Recall</div>
+                            <div><strong>Most Serious:</strong> Reasonable probability that use will cause serious adverse health consequences or death</div>
+                        </div>
+                        <div class="recall-box class-ii">
+                            <div class="recall-class">Class II Recall</div>
+                            <div><strong>Intermediate:</strong> Use may cause temporary or medically reversible adverse health consequences</div>
+                        </div>
+                        <div class="recall-box class-iii">
+                            <div class="recall-class">Class III Recall</div>
+                            <div><strong>Least Serious:</strong> Use is not likely to cause adverse health consequences</div>
+                        </div>
+                    </div>
+                    <p class="small" style="margin-top: 12px;">
+                        <strong>Technician Responsibility:</strong> Immediately remove recalled medications from inventory and follow pharmacy protocol.
+                    </p>
+                </div>
+            </section>
+        </section>
+
+        <!-- RIGHT COLUMN -->
+        <aside class="column" aria-label="apply it to pharmacy practice">
+            <!-- LAW TIMELINE -->
+            <section>
+                <p class="section-label">Historical Context</p>
+                <h2 class="section-title">Federal Drug Law Timeline</h2>
+                <div class="side-card">
+                    <p class="side-subtitle">Key Legislation in Chronological Order</p>
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <span class="timeline-period">1906:</span> Pure Food and Drug Act - First federal law regulating drugs
+                        </div>
+                        <div class="timeline-item">
+                            <span class="timeline-period">1938:</span> Food, Drug & Cosmetic Act - Required safety proof before marketing
+                        </div>
+                        <div class="timeline-item">
+                            <span class="timeline-period">1951:</span> Durham-Humphrey Amendment - Created prescription drug category
+                        </div>
+                        <div class="timeline-item">
+                            <span class="timeline-period">1970:</span> Controlled Substances Act - Established Schedules I-V
+                        </div>
+                        <div class="timeline-item">
+                            <span class="timeline-period">1990:</span> OBRA '90 - Required patient counseling, DUE programs
+                        </div>
+                        <div class="timeline-item">
+                            <span class="timeline-period">1996:</span> HIPAA - Protected patient privacy/health information
+                        </div>
+                        <div class="timeline-item">
+                            <span class="timeline-period">2010:</span> Affordable Care Act - Expanded healthcare coverage
+                        </div>
+                        <div class="timeline-item">
+                            <span class="timeline-period">2013:</span> DQSA - Enhanced drug supply chain security
+                        </div>
+                    </div>
+                    <p class="small" style="margin-top: 10px; color: #a5b4fc;">
+                        <strong>Memorization Tip:</strong> Use the acronym "PFD-DC-OH-D" to remember major acts in order.
+                    </p>
+                </div>
+            </section>
+
+            <!-- CONTROLLED SUBSTANCE SCENARIO -->
+            <section>
+                <p class="section-label">Apply it</p>
+                <h2 class="section-title">Controlled Substance Compliance</h2>
+                <div class="side-card">
+                    <p class="side-subtitle">Pharmacy Scenario</p>
+                    <p>
+                        As an AlliedRx technician, you're processing a Schedule II prescription for oxycodone. 
+                        The prescription has some irregularities, and you notice the prescriber's DEA number format looks incorrect.
+                    </p>
+                    <p class="side-subtitle" style="margin-top:12px;">Critical Thinking Questions</p>
+                    <ul class="side-list">
+                        <li><span class="dot"></span><span>How would you verify the DEA number is valid? What's the verification formula?</span></li>
+                        <li><span class="dot"></span><span>What documentation is required for Schedule II controlled substances?</span></li>
+                        <li><span class="dot"></span><span>When should you consult the pharmacist about a suspicious prescription?</span></li>
+                        <li><span class="dot"></span><span>What are the consequences of improper controlled substance handling?</span></li>
+                    </ul>
+                    <label class="small" for="controlled-substance" style="display:block;margin-top:10px;">
+                        Document your response protocol:
+                    </label>
+                    <textarea id="controlled-substance" placeholder="Describe the steps you would take from prescription receipt to documentation, including red flags to watch for and when to involve the pharmacist."></textarea>
+                </div>
+            </section>
+
+            <!-- KEY TERMINOLOGY -->
+            <section>
+                <p class="section-label">Step 2</p>
+                <h2 class="section-title">Essential Terminology</h2>
+                <div class="side-card">
+                    <p>Select each term to reveal its definition:</p>
+                    <div class="vocab-grid">
+                        <div class="vocab-card" onclick="toggleVocab(this)">
+                            <div class="vocab-term">HIPAA</div>
+                            <div class="vocab-definition">Health Insurance Portability and Accountability Act - Federal law protecting patient health information privacy and security.</div>
+                        </div>
+                        <div class="vocab-card" onclick="toggleVocab(this)">
+                            <div class="vocab-term">PHI</div>
+                            <div class="vocab-definition">Protected Health Information - Any identifiable patient health data protected under HIPAA regulations.</div>
+                        </div>
+                        <div class="vocab-card" onclick="toggleVocab(this)">
+                            <div class="vocab-term">DEA Number</div>
+                            <div class="vocab-definition">Unique identifier for prescribers authorized to prescribe controlled substances; follows specific format with verification formula.</div>
+                        </div>
+                        <div class="vocab-card" onclick="toggleVocab(this)">
+                            <div class="vocab-term">Boxed Warning</div>
+                            <div class="vocab-definition">FDA's strongest warning for serious or life-threatening risks; appears in black box on drug labeling.</div>
+                        </div>
+                        <div class="vocab-card" onclick="toggleVocab(this)">
+                            <div class="vocab-term">NDC Number</div>
+                            <div class="vocab-definition">National Drug Code - 10-digit identifier specifying manufacturer, product, and package size.</div>
+                        </div>
+                        <div class="vocab-card" onclick="toggleVocab(this)">
+                            <div class="vocab-term">Drug Diversion</div>
+                            <div class="vocab-definition">Illegal channeling of regulated drugs from legal sources to illegal marketplace; serious federal offense.</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- COMPETENCY CHECKLIST -->
+            <section>
+                <p class="section-label">Step 3</p>
+                <h2 class="section-title">Chapter 2 Competency Checklist</h2>
+                <div class="side-card">
+                    <p>Mark each item when you can confidently demonstrate knowledge:</p>
+                    <ul class="checklist" style="margin-top:10px;">
+                        <li><input type="checkbox" id="obj1" /><label for="obj1">List federal drug laws in chronological order</label></li>
+                        <li><input type="checkbox" id="obj2" /><label for="obj2">Explain HIPAA implications for pharmacy practice</label></li>
+                        <li><input type="checkbox" id="obj3" /><label for="obj3">Describe FDA vs. DEA functions and responsibilities</label></li>
+                        <li><input type="checkbox" id="obj4" /><label for="obj4">Identify three classes of FDA drug recalls</label></li>
+                        <li><input type="checkbox" id="obj5" /><label for="obj5">Demonstrate proper controlled substance handling</label></li>
+                        <li><input type="checkbox" id="obj6" /><label for="obj6">Verify a DEA number using the validation formula</label></li>
+                        <li><input type="checkbox" id="obj7" /><label for="obj7">Explain OSHA guidelines for pharmacy safety</label></li>
+                        <li><input type="checkbox" id="obj8" /><label for="obj8">Differentiate between morals and ethics in pharmacy</label></li>
+                        <li><input type="checkbox" id="obj9" /><label for="obj9">Describe The Joint Commission's role in healthcare</label></li>
+                        <li><input type="checkbox" id="obj10" /><label for="obj10">Explain prescription requirements and who can prescribe</label></li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- COMPLETION REMINDER -->
+            <section>
+                <p class="section-label">Step 4</p>
+                <h2 class="section-title">Ready for Chapter 3?</h2>
+                <div class="completion-card">
+                    <p>Before proceeding to Chapter 3, ensure you have:</p>
+                    <ul class="side-list" style="margin-top:8px;">
+                        <li><span class="dot"></span><span>Completed the <strong>Regulatory Knowledge Check</strong> quiz</span></li>
+                        <li><span class="dot"></span><span>Mastered all <strong>key terminology</strong> through flashcards</span></li>
+                        <li><span class="dot"></span><span>Reviewed the <strong>Federal Drug Law Timeline</strong></span></li>
+                        <li><span class="dot"></span><span>Understood <strong>FDA recall classifications</strong></span></li>
+                        <li><span class="dot"></span><span>Completed the <strong>controlled substance scenario</strong> reflection</span></li>
+                        <li><span class="dot"></span><span>Checked off items in your <strong>Competency Checklist</strong></span></li>
+                    </ul>
+                    <p style="margin-top:8px;">
+                        Chapter 2 provides the legal and ethical foundation for your pharmacy career. Master these concepts before moving to 
+                        <strong>Chapter 3: Conversions and Calculations</strong> in your AlliedRx Pharmacy Technician Program.
+                    </p>
+                </div>
+            </section>
+        </aside>
+    </main>
+
+    <script>
+        // Quiz logic
+        function checkQuiz() {
+            const items = document.querySelectorAll('.quiz-item');
+            items.forEach((item, index) => {
+                const correct = item.getAttribute('data-answer');
+                const name = 'q' + (index + 1);
+                const selected = document.querySelector('input[name="' + name + '"]:checked');
+                const feedback = document.getElementById(name + '-feedback');
+                
+                if (!selected) {
+                    feedback.textContent = 'Please select an answer.';
+                    feedback.className = 'quiz-feedback';
+                    return;
+                }
+                
+                if (selected.value === correct) {
+                    feedback.textContent = 'Correct! Your regulatory knowledge is solid.';
+                    feedback.className = 'quiz-feedback correct';
+                } else {
+                    feedback.textContent = 'Review this concept in Chapter 2.';
+                    feedback.className = 'quiz-feedback incorrect';
+                }
+            });
+        }
+
+        // Vocabulary flip
+        function toggleVocab(card) {
+            card.classList.toggle('active');
+        }
+
+        // DEA Number Validation Example (for educational purposes)
+        function validateDEAExample() {
+            // Educational example: DEA number validation formula
+            // First letter = first letter of prescriber's last name
+            // Second letter = first letter of prescriber's first name (A=1, B=2, etc.)
+            // Formula: Add 1st+3rd+5th digits, add 2nd+4th+6th digits multiplied by 2
+            // Sum should end with the 7th digit
+            console.log("DEA Validation Formula Educational Example");
+        }
+    </script>
+</body>
+</html>
