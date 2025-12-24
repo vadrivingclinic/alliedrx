@@ -1,0 +1,1702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AlliedRx | Emergency Cart Restocking Simulation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-error: #e17055;
+            --color-warning: #fdcb6e;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
+            --color-dark: #0c0a18;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+            --shadow-card: 0 12px 30px rgba(15, 23, 42, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(circle at top left, #ffffff 0%, #f1ecff 40%, var(--color-bg) 100%);
+            color: var(--color-text);
+            -webkit-text-size-adjust: 100%;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 12px; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @media (max-width: 900px) {
+            .page { padding: 22px; }
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 0; }
+            .page {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 18px 14px 22px;
+            }
+        }
+
+        /* Header */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            width: 100%;
+            animation: fadeInUp 0.6s ease-out 0.2s both;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .brand-logo:hover { transform: scale(1.05); }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--color-success);
+            flex-shrink: 0;
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .badge-mode:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 3vw, 2.2rem);
+            line-height: 1.1;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .module-subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 800px;
+            margin-bottom: 24px;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        /* Simulation Header */
+        .simulation-header {
+            background: linear-gradient(135deg, rgba(175, 75, 239, 0.1), rgba(131, 128, 240, 0.1));
+            border-radius: var(--radius-md);
+            padding: 25px;
+            margin-bottom: 30px;
+            border-left: 5px solid var(--color-primary);
+        }
+
+        .simulation-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+        }
+
+        .simulation-objectives {
+            font-size: 0.9rem;
+            color: var(--color-text);
+            margin-bottom: 15px;
+        }
+
+        .simulation-scenario {
+            background: rgba(12, 10, 24, 0.05);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin-top: 15px;
+            border-left: 3px solid var(--color-accent);
+        }
+
+        .scenario-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-accent);
+            margin-bottom: 8px;
+        }
+
+        /* Cart Navigation */
+        .cart-navigation {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .cart-nav-btn {
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            border: 2px solid var(--color-primary);
+            background: white;
+            color: var(--color-primary);
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .cart-nav-btn:hover {
+            background: rgba(175, 75, 239, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .cart-nav-btn.active {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        /* Main Layout */
+        .simulation-layout {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 1024px) {
+            .simulation-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Charge List Section */
+        .charge-list-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-md);
+            padding: 25px;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+        }
+
+        .charge-list-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .charge-list-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .charge-list-table th {
+            background: rgba(175, 75, 239, 0.1);
+            color: var(--color-primary);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-align: left;
+            padding: 12px 15px;
+            border-bottom: 2px solid rgba(175, 75, 239, 0.2);
+        }
+
+        .charge-list-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.85rem;
+        }
+
+        .charge-list-table tr:hover {
+            background: rgba(175, 75, 239, 0.05);
+        }
+
+        .charge-list-table tr.expiring {
+            background: rgba(253, 203, 110, 0.1);
+        }
+
+        .charge-list-table tr.expired {
+            background: rgba(225, 112, 85, 0.1);
+        }
+
+        .charge-list-table tr.missing {
+            background: rgba(12, 10, 24, 0.05);
+        }
+
+        .status-badge {
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .status-expired {
+            background: rgba(225, 112, 85, 0.2);
+            color: var(--color-error);
+        }
+
+        .status-expiring {
+            background: rgba(253, 203, 110, 0.2);
+            color: #b38b00;
+        }
+
+        .status-ok {
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--color-success);
+        }
+
+        .status-missing {
+            background: rgba(12, 10, 24, 0.1);
+            color: var(--color-muted);
+        }
+
+        /* Medication Cards */
+        .medication-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .medication-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .medication-card {
+            background: white;
+            border-radius: var(--radius-md);
+            border: 2px solid rgba(12, 10, 24, 0.08);
+            padding: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .medication-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-card);
+            border-color: var(--color-primary-soft);
+        }
+
+        .medication-card.selected {
+            border-color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.05);
+        }
+
+        .medication-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .medication-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 5px;
+        }
+
+        .medication-category {
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 10px;
+            background: rgba(131, 128, 240, 0.1);
+            color: var(--color-accent);
+            display: inline-block;
+        }
+
+        .medication-details {
+            font-size: 0.85rem;
+            color: var(--color-muted);
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .expiry-section {
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .expiry-label {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+            margin-bottom: 5px;
+        }
+
+        .expiry-date {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-text);
+        }
+
+        .expiry-date.expired {
+            color: var(--color-error);
+        }
+
+        .expiry-date.expiring {
+            color: #b38b00;
+        }
+
+        .stock-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .stock-label {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+        }
+
+        .stock-status {
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 12px;
+        }
+
+        .stock-ok {
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--color-success);
+        }
+
+        .stock-low {
+            background: rgba(253, 203, 110, 0.2);
+            color: #b38b00;
+        }
+
+        .stock-missing {
+            background: rgba(225, 112, 85, 0.1);
+            color: var(--color-error);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            border: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn.check {
+            background: rgba(175, 75, 239, 0.1);
+            color: var(--color-primary);
+        }
+
+        .action-btn.check:hover {
+            background: rgba(175, 75, 239, 0.2);
+        }
+
+        .action-btn.replace {
+            background: rgba(225, 112, 85, 0.1);
+            color: var(--color-error);
+        }
+
+        .action-btn.replace:hover {
+            background: rgba(225, 112, 85, 0.2);
+        }
+
+        .action-btn.replace.selected {
+            background: var(--color-error);
+            color: white;
+        }
+
+        /* Documentation Panel */
+        .documentation-panel {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-md);
+            padding: 25px;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+        }
+
+        .documentation-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .documentation-instructions {
+            font-size: 0.85rem;
+            color: var(--color-text);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .replacement-list {
+            background: white;
+            border-radius: var(--radius-sm);
+            border: 1px solid rgba(12, 10, 24, 0.1);
+            margin-bottom: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .replacement-item {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(12, 10, 24, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .replacement-item:last-child {
+            border-bottom: none;
+        }
+
+        .replacement-item-name {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--color-text);
+        }
+
+        .replacement-item-reason {
+            font-size: 0.75rem;
+            color: var(--color-muted);
+        }
+
+        .remove-btn {
+            background: none;
+            border: none;
+            color: var(--color-error);
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 5px;
+        }
+
+        .documentation-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .doc-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: var(--radius-sm);
+            border: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .doc-btn.generate {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .doc-btn.generate:hover {
+            background: #9a3bd6;
+            transform: translateY(-2px);
+        }
+
+        .doc-btn.clear {
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-text);
+        }
+
+        .doc-btn.clear:hover {
+            background: rgba(12, 10, 24, 0.1);
+        }
+
+        /* Report Preview */
+        .report-preview {
+            background: white;
+            border-radius: var(--radius-sm);
+            border: 1px solid rgba(12, 10, 24, 0.1);
+            padding: 20px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .report-preview.show {
+            display: block;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .report-header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--color-primary);
+        }
+
+        .report-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 5px;
+        }
+
+        .report-date {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+        }
+
+        .report-content {
+            font-size: 0.85rem;
+            line-height: 1.6;
+            color: var(--color-text);
+        }
+
+        .report-section {
+            margin-bottom: 20px;
+        }
+
+        .report-section-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid rgba(12, 10, 24, 0.1);
+        }
+
+        .report-list {
+            list-style: none;
+        }
+
+        .report-list li {
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(12, 10, 24, 0.05);
+        }
+
+        .report-list li:last-child {
+            border-bottom: none;
+        }
+
+        .copy-btn {
+            width: 100%;
+            padding: 10px;
+            background: var(--color-success);
+            color: white;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: #00a382;
+        }
+
+        /* Progress Summary */
+        .progress-summary {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+            animation: fadeInUp 0.6s ease-out 0.5s both;
+        }
+
+        @media (max-width: 768px) {
+            .progress-summary {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .progress-summary {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .summary-card {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            border: 1px solid rgba(12, 10, 24, 0.06);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-card);
+            border-color: var(--color-primary-soft);
+        }
+
+        .summary-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--color-primary);
+            display: block;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .summary-label {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Footer Actions */
+        .footer-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .footer-btn {
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer-btn.primary {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .footer-btn.primary:hover {
+            background: #9a3bd6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(175, 75, 239, 0.3);
+        }
+
+        .footer-btn.secondary {
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-text);
+        }
+
+        .footer-btn.secondary:hover {
+            background: rgba(12, 10, 24, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .footer-btn-icon {
+            font-size: 1.1em;
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="module-heading">
+        <!-- Header -->
+        <header class="brand-row">
+            <div class="brand">
+                <img
+                    src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                    alt="AlliedRx logo"
+                    class="brand-logo"
+                />
+                <div class="course-meta">
+                    <span class="course-name">Pharmacy Technician • Emergency Preparedness</span>
+                    <div class="week-label">
+                        <span class="week-label-dot"></span>
+                        <span>Simulation Lab: Crash Cart Restocking</span>
+                    </div>
+                </div>
+            </div>
+            <span class="badge-mode">Documentation Required</span>
+        </header>
+
+        <h1 id="module-heading">Emergency Cart Restocking Simulation</h1>
+        <p class="module-subtitle">
+            Practice inventory management and documentation skills by checking expiration dates, 
+            identifying medications needing replacement, and generating a charge list report.
+        </p>
+
+        <!-- Simulation Header -->
+        <div class="simulation-header">
+            <div class="simulation-title">Simulation Lab Objectives</div>
+            <div class="simulation-objectives">
+                In this Simulation Lab, you will:<br>
+                • Demonstrate how to identify emergency medications and their pharmacology<br>
+                • Perform tasks associated with replenishing an emergency cart using a charge list<br>
+                • Document findings for submission
+            </div>
+            <div class="simulation-scenario">
+                <div class="scenario-title">Scenario</div>
+                <div>
+                    You are working in a busy hospital pharmacy and are responsible for restocking 
+                    the emergency carts. Using your knowledge and data skills, you will replenish 
+                    each cart using the list provided and document all medications that need replacement.
+                </div>
+            </div>
+        </div>
+
+        <!-- Progress Summary -->
+        <div class="progress-summary">
+            <div class="summary-card">
+                <span class="summary-number" id="total-meds">0</span>
+                <span class="summary-label">Total Medications</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="checked-meds">0</span>
+                <span class="summary-label">Checked</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="expired-meds">0</span>
+                <span class="summary-label">Expired/Expiring</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="replacements-needed">0</span>
+                <span class="summary-label">To Replace</span>
+            </div>
+        </div>
+
+        <!-- Cart Navigation -->
+        <div class="cart-navigation">
+            <button class="cart-nav-btn active" data-cart="adult">
+                <span>👨‍⚕️</span>
+                Adult Crash Cart
+            </button>
+            <button class="cart-nav-btn" data-cart="pediatric">
+                <span>👶</span>
+                Pediatric Crash Cart
+            </button>
+            <button class="cart-nav-btn" data-cart="ems">
+                <span>🚑</span>
+                EMS Box
+            </button>
+        </div>
+
+        <!-- Main Simulation Layout -->
+        <div class="simulation-layout">
+            <!-- Left Column: Charge List & Medications -->
+            <div>
+                <!-- Charge List -->
+                <div class="charge-list-container">
+                    <div class="charge-list-title">
+                        <span>📋</span>
+                        Emergency Cart Charge List
+                    </div>
+                    <table class="charge-list-table" id="charge-list-table">
+                        <thead>
+                            <tr>
+                                <th>Medication</th>
+                                <th>Strength/Form</th>
+                                <th>Expiry Date</th>
+                                <th>Status</th>
+                                <th>Stock</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="charge-list-body">
+                            <!-- Will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Medication Cards -->
+                <div class="medication-grid" id="medication-grid">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Right Column: Documentation Panel -->
+            <div class="documentation-panel">
+                <div class="documentation-title">
+                    <span>📝</span>
+                    Documentation
+                </div>
+                <div class="documentation-instructions">
+                    <strong>Instructions:</strong><br>
+                    1. Check each medication for expiration (within 30 days = needs replacement)<br>
+                    2. Click "Mark for Replacement" on medications that need to be replaced<br>
+                    3. Generate your report for submission
+                </div>
+
+                <div class="replacement-list" id="replacement-list">
+                    <div class="replacement-item" style="padding: 15px; text-align: center; color: var(--color-muted);" id="empty-list-message">
+                        No medications marked for replacement yet
+                    </div>
+                </div>
+
+                <div class="documentation-actions">
+                    <button class="doc-btn generate" id="generate-report-btn">
+                        📄 Generate Report
+                    </button>
+                    <button class="doc-btn clear" id="clear-list-btn">
+                        🗑️ Clear List
+                    </button>
+                </div>
+
+                <!-- Report Preview -->
+                <div class="report-preview" id="report-preview">
+                    <div class="report-header">
+                        <div class="report-title">Emergency Cart Restocking Report</div>
+                        <div class="report-date" id="report-date"></div>
+                    </div>
+                    
+                    <div class="report-content">
+                        <div class="report-section">
+                            <div class="report-section-title">Cart Information</div>
+                            <div><strong>Cart Type:</strong> <span id="report-cart-type">Adult Crash Cart</span></div>
+                            <div><strong>Date of Check:</strong> <span id="report-check-date"></span></div>
+                            <div><strong>Pharmacy Technician:</strong> [Student Name/ID]</div>
+                        </div>
+                        
+                        <div class="report-section">
+                            <div class="report-section-title">Medications Requiring Replacement</div>
+                            <ul class="report-list" id="report-medications-list">
+                                <!-- Will be populated -->
+                            </ul>
+                        </div>
+                        
+                        <div class="report-section">
+                            <div class="report-section-title">Pharmacology Notes</div>
+                            <div id="report-pharmacology">
+                                Emergency medications identified include cardiac drugs, respiratory agents, 
+                                and neurological emergency medications. All replacements maintain therapeutic 
+                                equivalence for emergency use.
+                            </div>
+                        </div>
+                        
+                        <div class="report-section">
+                            <div class="report-section-title">Charge List Documentation</div>
+                            <div>
+                                All medications marked for replacement have been documented in the 
+                                pharmacy inventory system and added to the restocking queue for 
+                                next-day delivery.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="copy-btn" id="copy-report-btn">
+                        📋 Copy Report for Submission
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Actions -->
+        <div class="footer-actions">
+            <button class="footer-btn secondary" id="reset-sim-btn">
+                <span class="footer-btn-icon">↻</span>
+                Reset Simulation
+            </button>
+            <button class="footer-btn secondary" id="check-all-btn">
+                <span class="footer-btn-icon">✓</span>
+                Check All Expiring
+            </button>
+            <button class="footer-btn primary" id="submit-documentation-btn">
+                <span class="footer-btn-icon">📤</span>
+                Prepare Submission Document
+            </button>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // State Management
+            const state = {
+                currentCart: 'adult',
+                medications: {},
+                replacements: [],
+                checkedItems: []
+            };
+
+            // Medication Database
+            const medicationDatabase = {
+                adult: [
+                    {
+                        id: 'epi-1',
+                        name: 'Epinephrine',
+                        strength: '1:1000, 1 mL',
+                        category: 'Cardiac/Respiratory',
+                        expiryDate: '2024-12-15',
+                        daysUntilExpiry: 15,
+                        stock: 'adequate',
+                        status: 'expiring',
+                        pharmacology: 'Alpha and beta adrenergic agonist for anaphylaxis, cardiac arrest',
+                        needsReplacement: true,
+                        quantity: 2
+                    },
+                    {
+                        id: 'amio-50',
+                        name: 'Amiodarone',
+                        strength: '50 mg/mL, 3 mL',
+                        category: 'Cardiac',
+                        expiryDate: '2025-06-20',
+                        daysUntilExpiry: 180,
+                        stock: 'low',
+                        status: 'ok',
+                        pharmacology: 'Class III antiarrhythmic for ventricular fibrillation/tachycardia',
+                        needsReplacement: false,
+                        quantity: 3
+                    },
+                    {
+                        id: 'diazepam',
+                        name: 'Diazepam',
+                        strength: '5 mg/mL, 2 mL',
+                        category: 'Neurological',
+                        expiryDate: '2023-11-01',
+                        daysUntilExpiry: -400,
+                        stock: 'adequate',
+                        status: 'expired',
+                        pharmacology: 'Benzodiazepine for seizure control and sedation',
+                        needsReplacement: true,
+                        quantity: 2
+                    },
+                    {
+                        id: 'furosemide',
+                        name: 'Furosemide',
+                        strength: '10 mg/mL, 4 mL',
+                        category: 'Renal/Cardiac',
+                        expiryDate: '2025-08-15',
+                        daysUntilExpiry: 240,
+                        stock: 'adequate',
+                        status: 'ok',
+                        pharmacology: 'Loop diuretic for pulmonary edema and hypertension',
+                        needsReplacement: false,
+                        quantity: 4
+                    },
+                    {
+                        id: 'haloperidol',
+                        name: 'Haloperidol',
+                        strength: '5 mg/mL, 1 mL',
+                        category: 'Psychiatric',
+                        expiryDate: '2024-11-30',
+                        daysUntilExpiry: 45,
+                        stock: 'adequate',
+                        status: 'expiring',
+                        pharmacology: 'Antipsychotic for acute agitation and delirium',
+                        needsReplacement: true,
+                        quantity: 2
+                    },
+                    {
+                        id: 'lido-2',
+                        name: 'Lidocaine',
+                        strength: '2%, 5 mL',
+                        category: 'Cardiac/Anesthetic',
+                        expiryDate: '2025-03-01',
+                        daysUntilExpiry: 90,
+                        stock: 'missing',
+                        status: 'missing',
+                        pharmacology: 'Local anesthetic and Class IB antiarrhythmic',
+                        needsReplacement: true,
+                        quantity: 0
+                    },
+                    {
+                        id: 'bicarb',
+                        name: 'Sodium Bicarbonate',
+                        strength: '8.4%, 50 mL',
+                        category: 'Metabolic',
+                        expiryDate: '2025-01-10',
+                        daysUntilExpiry: 30,
+                        stock: 'adequate',
+                        status: 'expiring',
+                        pharmacology: 'Alkalinizing agent for metabolic acidosis',
+                        needsReplacement: true,
+                        quantity: 1
+                    },
+                    {
+                        id: 'atropine',
+                        name: 'Atropine',
+                        strength: '1 mg/mL, 10 mL',
+                        category: 'Cardiac',
+                        expiryDate: '2025-09-30',
+                        daysUntilExpiry: 270,
+                        stock: 'adequate',
+                        status: 'ok',
+                        pharmacology: 'Anticholinergic for bradycardia and organophosphate poisoning',
+                        needsReplacement: false,
+                        quantity: 2
+                    }
+                ],
+                pediatric: [
+                    {
+                        id: 'ped-epi',
+                        name: 'Epinephrine',
+                        strength: '1:10,000, 10 mL',
+                        category: 'Cardiac/Respiratory',
+                        expiryDate: '2024-11-20',
+                        daysUntilExpiry: 35,
+                        stock: 'adequate',
+                        status: 'expiring',
+                        pharmacology: 'Pediatric concentration for anaphylaxis and cardiac arrest',
+                        needsReplacement: true,
+                        quantity: 2
+                    },
+                    {
+                        id: 'ped-dextrose',
+                        name: 'Dextrose 50%',
+                        strength: '25 grams, 50 mL',
+                        category: 'Metabolic',
+                        expiryDate: '2025-07-15',
+                        daysUntilExpiry: 225,
+                        stock: 'low',
+                        status: 'ok',
+                        pharmacology: 'Hypertonic glucose for hypoglycemia',
+                        needsReplacement: false,
+                        quantity: 1
+                    }
+                ],
+                ems: [
+                    {
+                        id: 'ems-nitro',
+                        name: 'Nitroglycerin',
+                        strength: '0.4 mg, Sublingual',
+                        category: 'Cardiac',
+                        expiryDate: '2024-10-01',
+                        daysUntilExpiry: -15,
+                        stock: 'adequate',
+                        status: 'expired',
+                        pharmacology: 'Vasodilator for angina and heart failure',
+                        needsReplacement: true,
+                        quantity: 1
+                    },
+                    {
+                        id: 'ems-albuterol',
+                        name: 'Albuterol',
+                        strength: '2.5 mg/3 mL, Nebulizer',
+                        category: 'Respiratory',
+                        expiryDate: '2025-04-30',
+                        daysUntilExpiry: 150,
+                        stock: 'adequate',
+                        status: 'ok',
+                        pharmacology: 'Bronchodilator for asthma and bronchospasm',
+                        needsReplacement: false,
+                        quantity: 4
+                    }
+                ]
+            };
+
+            // DOM Elements
+            const cartNavBtns = document.querySelectorAll('.cart-nav-btn');
+            const chargeListBody = document.getElementById('charge-list-body');
+            const medicationGrid = document.getElementById('medication-grid');
+            const replacementList = document.getElementById('replacement-list');
+            const emptyListMessage = document.getElementById('empty-list-message');
+            const generateReportBtn = document.getElementById('generate-report-btn');
+            const clearListBtn = document.getElementById('clear-list-btn');
+            const reportPreview = document.getElementById('report-preview');
+            const copyReportBtn = document.getElementById('copy-report-btn');
+            const resetBtn = document.getElementById('reset-sim-btn');
+            const checkAllBtn = document.getElementById('check-all-btn');
+            const submitBtn = document.getElementById('submit-documentation-btn');
+            
+            // Summary elements
+            const totalMedsEl = document.getElementById('total-meds');
+            const checkedMedsEl = document.getElementById('checked-meds');
+            const expiredMedsEl = document.getElementById('expired-meds');
+            const replacementsEl = document.getElementById('replacements-needed');
+
+            // Initialize Simulation
+            function initSimulation() {
+                state.currentCart = 'adult';
+                state.replacements = [];
+                state.checkedItems = [];
+                
+                // Load initial cart data
+                state.medications = medicationDatabase[state.currentCart];
+                
+                // Set up event listeners
+                setupEventListeners();
+                
+                // Update display
+                updateCartDisplay();
+                updateSummary();
+            }
+
+            // Set up event listeners
+            function setupEventListeners() {
+                // Cart navigation
+                cartNavBtns.forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        cartNavBtns.forEach(b => b.classList.remove('active'));
+                        this.classList.add('active');
+                        
+                        state.currentCart = this.dataset.cart;
+                        state.medications = medicationDatabase[state.currentCart];
+                        state.replacements = [];
+                        state.checkedItems = [];
+                        
+                        updateCartDisplay();
+                        updateReplacementList();
+                        updateSummary();
+                    });
+                });
+                
+                // Documentation buttons
+                generateReportBtn.addEventListener('click', generateReport);
+                clearListBtn.addEventListener('click', clearReplacementList);
+                copyReportBtn.addEventListener('click', copyReportToClipboard);
+                
+                // Action buttons
+                resetBtn.addEventListener('click', resetSimulation);
+                checkAllBtn.addEventListener('click', checkAllExpiring);
+                submitBtn.addEventListener('click', prepareSubmission);
+            }
+
+            // Update cart display
+            function updateCartDisplay() {
+                updateChargeListTable();
+                updateMedicationCards();
+            }
+
+            // Update charge list table
+            function updateChargeListTable() {
+                chargeListBody.innerHTML = '';
+                
+                state.medications.forEach(med => {
+                    const row = document.createElement('tr');
+                    if (med.status === 'expired') row.classList.add('expired');
+                    if (med.status === 'expiring') row.classList.add('expiring');
+                    if (med.stock === 'missing') row.classList.add('missing');
+                    
+                    const statusClass = `status-${med.status}`;
+                    const stockClass = med.stock === 'adequate' ? 'stock-ok' : 
+                                     med.stock === 'low' ? 'stock-low' : 'stock-missing';
+                    
+                    row.innerHTML = `
+                        <td><strong>${med.name}</strong></td>
+                        <td>${med.strength}</td>
+                        <td>${formatDate(med.expiryDate)}</td>
+                        <td><span class="status-badge ${statusClass}">${getStatusText(med.status)}</span></td>
+                        <td><span class="stock-status ${stockClass}">${getStockText(med.stock)}</span></td>
+                        <td>
+                            <button class="action-btn replace" data-med-id="${med.id}">
+                                ${state.replacements.includes(med.id) ? '✓ Marked' : 'Mark for Replacement'}
+                            </button>
+                        </td>
+                    `;
+                    
+                    chargeListBody.appendChild(row);
+                });
+                
+                // Add event listeners to replacement buttons
+                document.querySelectorAll('.action-btn.replace').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const medId = this.dataset.medId;
+                        toggleReplacement(medId);
+                    });
+                });
+            }
+
+            // Update medication cards
+            function updateMedicationCards() {
+                medicationGrid.innerHTML = '';
+                
+                state.medications.forEach(med => {
+                    const card = document.createElement('div');
+                    card.className = 'medication-card';
+                    if (state.replacements.includes(med.id)) {
+                        card.classList.add('selected');
+                    }
+                    
+                    const expiryClass = med.daysUntilExpiry <= 0 ? 'expired' : 
+                                     med.daysUntilExpiry <= 30 ? 'expiring' : '';
+                    
+                    const stockClass = med.stock === 'adequate' ? 'stock-ok' : 
+                                     med.stock === 'low' ? 'stock-low' : 'stock-missing';
+                    
+                    card.innerHTML = `
+                        <div class="medication-header">
+                            <div>
+                                <div class="medication-name">${med.name}</div>
+                                <div class="medication-category">${med.category}</div>
+                            </div>
+                            <span class="status-badge status-${med.status}">${getStatusText(med.status)}</span>
+                        </div>
+                        
+                        <div class="medication-details">
+                            <strong>Strength/Form:</strong> ${med.strength}<br>
+                            <strong>Pharmacology:</strong> ${med.pharmacology}
+                        </div>
+                        
+                        <div class="expiry-section">
+                            <div class="expiry-label">Expiry Date</div>
+                            <div class="expiry-date ${expiryClass}">
+                                ${formatDate(med.expiryDate)}
+                                ${med.daysUntilExpiry <= 30 ? 
+                                    `(${med.daysUntilExpiry <= 0 ? 'Expired' : `${med.daysUntilExpiry} days`})` : ''}
+                            </div>
+                        </div>
+                        
+                        <div class="stock-section">
+                            <div class="stock-label">Current Stock</div>
+                            <div class="stock-status ${stockClass}">
+                                ${getStockText(med.stock)} (${med.quantity} vials)
+                            </div>
+                        </div>
+                        
+                        <div class="action-buttons">
+                            <button class="action-btn check" data-med-id="${med.id}">
+                                Check Item
+                            </button>
+                            <button class="action-btn replace ${state.replacements.includes(med.id) ? 'selected' : ''}" 
+                                    data-med-id="${med.id}">
+                                ${state.replacements.includes(med.id) ? '✓ Marked' : 'Mark for Replacement'}
+                            </button>
+                        </div>
+                    `;
+                    
+                    medicationGrid.appendChild(card);
+                });
+                
+                // Add event listeners to card buttons
+                document.querySelectorAll('.action-btn.check').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const medId = this.dataset.medId;
+                        markAsChecked(medId);
+                    });
+                });
+                
+                document.querySelectorAll('.action-btn.replace').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const medId = this.dataset.medId;
+                        toggleReplacement(medId);
+                    });
+                });
+            }
+
+            // Toggle medication replacement
+            function toggleReplacement(medId) {
+                const med = state.medications.find(m => m.id === medId);
+                if (!med) return;
+                
+                const index = state.replacements.indexOf(medId);
+                
+                if (index === -1) {
+                    // Add to replacements
+                    state.replacements.push(medId);
+                    if (!state.checkedItems.includes(medId)) {
+                        state.checkedItems.push(medId);
+                    }
+                } else {
+                    // Remove from replacements
+                    state.replacements.splice(index, 1);
+                }
+                
+                // Update UI
+                updateCartDisplay();
+                updateReplacementList();
+                updateSummary();
+            }
+
+            // Mark medication as checked
+            function markAsChecked(medId) {
+                if (!state.checkedItems.includes(medId)) {
+                    state.checkedItems.push(medId);
+                    updateSummary();
+                    
+                    // Show confirmation
+                    const med = state.medications.find(m => m.id === medId);
+                    if (med) {
+                        alert(`Checked: ${med.name}\nExpiry: ${formatDate(med.expiryDate)}\nStatus: ${getStatusText(med.status)}`);
+                    }
+                }
+            }
+
+            // Update replacement list
+            function updateReplacementList() {
+                replacementList.innerHTML = '';
+                
+                if (state.replacements.length === 0) {
+                    replacementList.appendChild(emptyListMessage);
+                    emptyListMessage.style.display = 'block';
+                    return;
+                }
+                
+                emptyListMessage.style.display = 'none';
+                
+                state.replacements.forEach(medId => {
+                    const med = state.medications.find(m => m.id === medId);
+                    if (!med) return;
+                    
+                    const item = document.createElement('div');
+                    item.className = 'replacement-item';
+                    
+                    const reason = med.daysUntilExpiry <= 0 ? 'Expired' :
+                                 med.daysUntilExpiry <= 30 ? 'Expiring Soon' :
+                                 med.stock === 'missing' ? 'Missing' :
+                                 med.stock === 'low' ? 'Low Stock' : 'Needs Replacement';
+                    
+                    item.innerHTML = `
+                        <div>
+                            <div class="replacement-item-name">${med.name}</div>
+                            <div class="replacement-item-reason">${med.strength} • ${reason}</div>
+                        </div>
+                        <button class="remove-btn" data-med-id="${medId}">×</button>
+                    `;
+                    
+                    replacementList.appendChild(item);
+                });
+                
+                // Add event listeners to remove buttons
+                document.querySelectorAll('.remove-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const medId = this.dataset.medId;
+                        toggleReplacement(medId);
+                    });
+                });
+            }
+
+            // Generate report
+            function generateReport() {
+                if (state.replacements.length === 0) {
+                    alert('Please mark at least one medication for replacement before generating a report.');
+                    return;
+                }
+                
+                // Update report date
+                const now = new Date();
+                document.getElementById('report-date').textContent = now.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                document.getElementById('report-check-date').textContent = now.toLocaleDateString();
+                
+                // Update cart type
+                const cartTypeMap = {
+                    adult: 'Adult Crash Cart',
+                    pediatric: 'Pediatric Crash Cart',
+                    ems: 'EMS Box'
+                };
+                document.getElementById('report-cart-type').textContent = cartTypeMap[state.currentCart];
+                
+                // Update medications list
+                const medList = document.getElementById('report-medications-list');
+                medList.innerHTML = '';
+                
+                state.replacements.forEach(medId => {
+                    const med = state.medications.find(m => m.id === medId);
+                    if (med) {
+                        const reason = med.daysUntilExpiry <= 0 ? 'Expired' :
+                                     med.daysUntilExpiry <= 30 ? 'Expiring within 30 days' :
+                                     med.stock === 'missing' ? 'Missing from cart' :
+                                     med.stock === 'low' ? 'Low stock' : 'Needs replacement';
+                        
+                        const li = document.createElement('li');
+                        li.innerHTML = `<strong>${med.name}</strong> - ${med.strength}<br>
+                                       <small>Reason: ${reason} | Expiry: ${formatDate(med.expiryDate)} | Pharmacology: ${med.pharmacology}</small>`;
+                        medList.appendChild(li);
+                    }
+                });
+                
+                // Update pharmacology notes
+                const categories = new Set();
+                state.replacements.forEach(medId => {
+                    const med = state.medications.find(m => m.id === medId);
+                    if (med) categories.add(med.category);
+                });
+                
+                const pharmacologyNotes = document.getElementById('report-pharmacology');
+                pharmacologyNotes.innerHTML = `
+                    Emergency medications requiring replacement include: ${Array.from(categories).join(', ')}.<br><br>
+                    All identified medications are critical for emergency response and must be replaced immediately 
+                    to maintain cart readiness. Pharmacology includes cardiac drugs for arrhythmias and arrest, 
+                    respiratory agents for bronchospasm and anaphylaxis, and neurological agents for seizures 
+                    and sedation.
+                `;
+                
+                // Show report
+                reportPreview.classList.add('show');
+                reportPreview.scrollIntoView({ behavior: 'smooth' });
+            }
+
+            // Clear replacement list
+            function clearReplacementList() {
+                if (state.replacements.length === 0) return;
+                
+                if (confirm('Are you sure you want to clear all marked medications?')) {
+                    state.replacements = [];
+                    updateCartDisplay();
+                    updateReplacementList();
+                    updateSummary();
+                }
+            }
+
+            // Copy report to clipboard
+            function copyReportToClipboard() {
+                const reportText = generateReportText();
+                
+                navigator.clipboard.writeText(reportText).then(() => {
+                    alert('Report copied to clipboard! You can now paste it into your submission document.');
+                }).catch(err => {
+                    console.error('Failed to copy: ', err);
+                    alert('Failed to copy report. Please try again.');
+                });
+            }
+
+            // Generate report text for clipboard
+            function generateReportText() {
+                const now = new Date();
+                const cartTypeMap = {
+                    adult: 'Adult Crash Cart',
+                    pediatric: 'Pediatric Crash Cart',
+                    ems: 'EMS Box'
+                };
+                
+                let report = `EMERGENCY CART RESTOCKING REPORT\n`;
+                report += `====================================\n\n`;
+                report += `Cart Type: ${cartTypeMap[state.currentCart]}\n`;
+                report += `Date of Check: ${now.toLocaleDateString()}\n`;
+                report += `Pharmacy Technician: [Student Name/ID]\n\n`;
+                
+                report += `MEDICATIONS REQUIRING REPLACEMENT:\n`;
+                report += `-----------------------------------\n`;
+                
+                state.replacements.forEach(medId => {
+                    const med = state.medications.find(m => m.id === medId);
+                    if (med) {
+                        const reason = med.daysUntilExpiry <= 0 ? 'Expired' :
+                                     med.daysUntilExpiry <= 30 ? 'Expiring within 30 days' :
+                                     med.stock === 'missing' ? 'Missing from cart' :
+                                     med.stock === 'low' ? 'Low stock' : 'Needs replacement';
+                        
+                        report += `• ${med.name} - ${med.strength}\n`;
+                        report += `  Reason: ${reason}\n`;
+                        report += `  Expiry Date: ${formatDate(med.expiryDate)}\n`;
+                        report += `  Pharmacology: ${med.pharmacology}\n\n`;
+                    }
+                });
+                
+                report += `PHARMACOLOGY NOTES:\n`;
+                report += `-------------------\n`;
+                report += `Emergency medications identified include cardiac drugs, respiratory agents, and neurological emergency medications.\n`;
+                report += `All replacements maintain therapeutic equivalence for emergency use.\n\n`;
+                
+                report += `CHARGE LIST DOCUMENTATION:\n`;
+                report += `--------------------------\n`;
+                report += `All medications marked for replacement have been documented in the pharmacy inventory system\n`;
+                report += `and added to the restocking queue for next-day delivery.\n\n`;
+                
+                report += `Submitted via AlliedRx Pharmacy Technician Simulation Lab`;
+                
+                return report;
+            }
+
+            // Check all expiring medications
+            function checkAllExpiring() {
+                state.medications.forEach(med => {
+                    if ((med.daysUntilExpiry <= 30 || med.daysUntilExpiry <= 0 || med.stock === 'missing') && 
+                        !state.replacements.includes(med.id)) {
+                        state.replacements.push(med.id);
+                    }
+                    if (!state.checkedItems.includes(med.id)) {
+                        state.checkedItems.push(med.id);
+                    }
+                });
+                
+                updateCartDisplay();
+                updateReplacementList();
+                updateSummary();
+            }
+
+            // Prepare submission
+            function prepareSubmission() {
+                if (state.replacements.length === 0) {
+                    alert('Please mark medications for replacement before preparing submission.');
+                    return;
+                }
+                
+                generateReport();
+                
+                setTimeout(() => {
+                    alert('Submission document prepared! Your report has been generated and is ready for submission.\n\n' +
+                          'Please:\n' +
+                          '1. Copy the report text (click "Copy Report for Submission")\n' +
+                          '2. Paste it into your assignment submission document\n' +
+                          '3. Upload to the learning management system');
+                }, 500);
+            }
+
+            // Reset simulation
+            function resetSimulation() {
+                if (confirm('Are you sure you want to reset the simulation? All progress will be lost.')) {
+                    state.currentCart = 'adult';
+                    state.replacements = [];
+                    state.checkedItems = [];
+                    state.medications = medicationDatabase[state.currentCart];
+                    
+                    cartNavBtns.forEach((btn, index) => {
+                        btn.classList.toggle('active', index === 0);
+                    });
+                    
+                    reportPreview.classList.remove('show');
+                    updateCartDisplay();
+                    updateReplacementList();
+                    updateSummary();
+                }
+            }
+
+            // Update summary statistics
+            function updateSummary() {
+                const total = state.medications.length;
+                const checked = state.checkedItems.length;
+                
+                const expiring = state.medications.filter(m => 
+                    m.daysUntilExpiry <= 30 || m.daysUntilExpiry <= 0
+                ).length;
+                
+                const replacements = state.replacements.length;
+                
+                totalMedsEl.textContent = total;
+                checkedMedsEl.textContent = checked;
+                expiredMedsEl.textContent = expiring;
+                replacementsEl.textContent = replacements;
+            }
+
+            // Helper functions
+            function formatDate(dateString) {
+                const date = new Date(dateString);
+                return date.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                });
+            }
+
+            function getStatusText(status) {
+                const statusMap = {
+                    'expired': 'Expired',
+                    'expiring': 'Expiring Soon',
+                    'ok': 'OK',
+                    'missing': 'Missing'
+                };
+                return statusMap[status] || status;
+            }
+
+            function getStockText(stock) {
+                const stockMap = {
+                    'adequate': 'Adequate',
+                    'low': 'Low Stock',
+                    'missing': 'Missing'
+                };
+                return stockMap[stock] || stock;
+            }
+
+            // Initialize the simulation
+            initSimulation();
+        });
+    </script>
+</body>
+</html>
