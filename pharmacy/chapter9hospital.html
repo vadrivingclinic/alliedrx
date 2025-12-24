@@ -1,0 +1,2639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AlliedRx - Module 1: Hospital Pharmacy Foundations & Regulations</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-error: #e17055;
+            --color-warning: #fdcb6e;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
+            --color-dark: #0c0a18;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+            --shadow-card: 0 12px 30px rgba(15, 23, 42, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(
+                circle at top left,
+                #ffffff 0,
+                #f1ecff 40%,
+                var(--color-bg) 100%
+            );
+            color: var(--color-text);
+            -webkit-text-size-adjust: 100%;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 12px; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes checkmarkPop {
+            0% { transform: scale(0); opacity: 0; }
+            70% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @media (max-width: 900px) {
+            .page { padding: 22px; }
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 0; }
+            .page {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 18px 14px 22px;
+            }
+        }
+
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .brand-logo:hover { transform: scale(1.05); }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--color-success);
+            flex-shrink: 0;
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .badge-mode:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+        @media (max-width: 480px) {
+            .brand-row { flex-direction: column; align-items: flex-start; }
+            .badge-mode { margin-top: 6px; }
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 3vw, 2.2rem);
+            line-height: 1.1;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .module-subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 600px;
+            margin-bottom: 24px;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        .progress-tracker {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            position: relative;
+            padding: 0 20px;
+        }
+
+        .progress-tracker::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 50px;
+            right: 50px;
+            height: 3px;
+            background: rgba(12, 10, 24, 0.08);
+            z-index: 1;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+
+        .step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--color-muted);
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.active .step-circle {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .progress-step.completed .step-circle {
+            background: var(--color-success);
+            border-color: var(--color-success);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.75rem;
+            color: var(--color-muted);
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .progress-step.active .step-label {
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        .progress-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+            animation: fadeInUp 0.6s ease-out 0.5s both;
+        }
+
+        .summary-card {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            border: 1px solid rgba(12, 10, 24, 0.06);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-card);
+            border-color: var(--color-primary-soft);
+        }
+
+        .summary-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--color-primary);
+            display: block;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .summary-label {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .activity-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 900px) {
+            .activity-grid { grid-template-columns: 1fr; }
+        }
+
+        .activity-card {
+            background: white;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            padding: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .activity-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--color-primary);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .activity-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--color-primary-soft);
+        }
+
+        .activity-card:hover::before { opacity: 1; }
+
+        .activity-card.completed {
+            border-color: var(--color-success);
+        }
+
+        .activity-card.completed::before {
+            background: var(--color-success);
+            opacity: 1;
+        }
+
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .activity-number {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .activity-status {
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-muted);
+        }
+
+        .activity-card.completed .activity-status {
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--color-success);
+        }
+
+        .activity-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 8px;
+        }
+
+        .activity-description {
+            font-size: 0.9rem;
+            color: var(--color-muted);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .steps-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .step-item {
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            cursor: grab;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            user-select: none;
+        }
+
+        .step-item:hover {
+            background: rgba(175, 75, 239, 0.08);
+            border-color: var(--color-primary-soft);
+            transform: translateY(-2px);
+        }
+
+        .step-item.dragging {
+            opacity: 0.7;
+            transform: scale(0.98);
+        }
+
+        .step-item.placed {
+            background: rgba(0, 184, 148, 0.1);
+            border-color: var(--color-success);
+            cursor: default;
+        }
+
+        .step-number {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(12, 10, 24, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-text);
+            flex-shrink: 0;
+        }
+
+        .step-item.placed .step-number {
+            background: var(--color-success);
+            color: white;
+        }
+
+        .step-text {
+            font-size: 0.9rem;
+            color: var(--color-text);
+            flex: 1;
+        }
+
+        .steps-dropzone {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            border: 2px dashed rgba(12, 10, 24, 0.1);
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .steps-dropzone.hover {
+            border-color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.05);
+        }
+
+        .steps-dropzone.empty::after {
+            content: 'Drag items here in correct order';
+            color: var(--color-muted);
+            text-align: center;
+            font-size: 0.9rem;
+            margin: auto;
+        }
+
+        .matching-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+            min-height: 300px;
+        }
+
+        @media (max-width: 600px) {
+            .matching-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .matching-column {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 2px dashed rgba(12, 10, 24, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .matching-column-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            text-align: center;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(12, 10, 24, 0.08);
+            margin-bottom: 10px;
+        }
+
+        .matching-item {
+            background: rgba(175, 75, 239, 0.08);
+            border-radius: var(--radius-sm);
+            padding: 12px 15px;
+            cursor: grab;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            user-select: none;
+            font-size: 0.85rem;
+            color: var(--color-text);
+        }
+
+        .matching-item:hover {
+            background: rgba(175, 75, 239, 0.15);
+            border-color: var(--color-primary-soft);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(175, 75, 239, 0.1);
+        }
+
+        .matching-item.dragging {
+            opacity: 0.7;
+            transform: scale(0.98);
+        }
+
+        .matching-item.matched {
+            background: rgba(0, 184, 148, 0.1);
+            border-color: var(--color-success);
+            cursor: default;
+        }
+
+        .matching-item.incorrect {
+            background: rgba(225, 112, 85, 0.1);
+            border-color: var(--color-error);
+            animation: shake 0.5s ease;
+        }
+
+        /* Matching Area for Activities 2 and 4 */
+        .match-area {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .match-area {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .match-pair {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .match-slot {
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 2px dashed rgba(12, 10, 24, 0.1);
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--color-muted);
+        }
+
+        .match-slot.hover {
+            border-color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.05);
+        }
+
+        .match-slot.filled {
+            border: 2px solid var(--color-primary-soft);
+            background: rgba(175, 75, 239, 0.08);
+        }
+
+        .match-slot.correct {
+            border-color: var(--color-success);
+            background: rgba(0, 184, 148, 0.1);
+        }
+
+        .match-slot.incorrect {
+            border-color: var(--color-error);
+            background: rgba(225, 112, 85, 0.1);
+        }
+
+        .match-label {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+            text-align: center;
+            margin-top: 5px;
+        }
+
+        .category-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .category-container { grid-template-columns: 1fr; }
+        }
+
+        .category-box {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 2px dashed rgba(12, 10, 24, 0.1);
+            min-height: 180px;
+            transition: all 0.3s ease;
+        }
+
+        .category-box.hover {
+            border-color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.05);
+        }
+
+        .category-box.formulary {
+            border-color: rgba(0, 184, 148, 0.3);
+        }
+
+        .category-box.nonformulary {
+            border-color: rgba(131, 128, 240, 0.3);
+        }
+
+        .category-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+            text-align: center;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(12, 10, 24, 0.08);
+        }
+
+        .category-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .category-item {
+            background: rgba(12, 10, 24, 0.05);
+            border-radius: 20px;
+            padding: 8px 15px;
+            font-size: 0.85rem;
+            cursor: grab;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .category-item:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            transform: translateY(-2px);
+        }
+
+        .category-item.dragging {
+            opacity: 0.7;
+            transform: scale(0.95);
+        }
+
+        .scenario-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            margin-bottom: 20px;
+        }
+
+        .scenario-text {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--color-text);
+            margin-bottom: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: var(--radius-sm);
+            border-left: 4px solid var(--color-primary);
+        }
+
+        .choice-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .choice-button {
+            background: white;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            font-size: 0.9rem;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .choice-button:hover {
+            border-color: var(--color-primary-soft);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(175, 75, 239, 0.1);
+        }
+
+        .choice-button.correct {
+            background: rgba(0, 184, 148, 0.1);
+            border-color: var(--color-success);
+        }
+
+        .choice-button.incorrect {
+            background: rgba(225, 112, 85, 0.1);
+            border-color: var(--color-error);
+        }
+
+        .feedback-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            margin-top: 20px;
+            display: none;
+        }
+
+        .feedback-container.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .feedback-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feedback-icon {
+            font-size: 1.2rem;
+        }
+
+        .feedback-icon.correct { color: var(--color-success); }
+        .feedback-icon.incorrect { color: var(--color-error); }
+
+        .feedback-content {
+            font-size: 0.85rem;
+            color: var(--color-text);
+            line-height: 1.5;
+        }
+
+        .feedback-content strong { color: var(--color-primary); }
+
+        .correction-details {
+            background: rgba(225, 112, 85, 0.05);
+            border-left: 3px solid var(--color-error);
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+        }
+
+        .badge-display {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(175, 75, 239, 0.1);
+            border: 2px solid var(--color-primary);
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-top: 10px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #9a3bd6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(175, 75, 239, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-text);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(12, 10, 24, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-icon { font-size: 1.1em; }
+
+        .results-panel {
+            background: var(--color-dark);
+            color: white;
+            border-radius: var(--radius-md);
+            padding: 30px;
+            margin-top: 30px;
+            display: none;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .results-panel.show { display: block; }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .results-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .score-display {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--color-primary-soft);
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .clinical-insights {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .insights-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-primary-soft);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .insights-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .insights-list li {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            font-size: 0.9rem;
+            color: #e5e7eb;
+        }
+
+        .insight-dot {
+            width: 6px;
+            height: 6px;
+            margin-top: 6px;
+            border-radius: 999px;
+            background: var(--color-accent);
+            flex-shrink: 0;
+        }
+
+        .ce-calculator {
+            background: rgba(175, 75, 239, 0.05);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .ce-input {
+            padding: 10px;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+            width: 100px;
+            margin: 0 10px;
+        }
+
+        .ce-result {
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="module-heading">
+        <!-- Header -->
+        <header class="brand-row">
+            <div class="brand">
+                <img
+                    src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                    alt="AlliedRx logo"
+                    class="brand-logo"
+                />
+                <div class="course-meta">
+                    <span class="course-name">Pharmacy Technician • Week 5</span>
+                    <div class="week-label">
+                        <span class="week-label-dot"></span>
+                        <span>Chapter 9: Institutional Pharmacy Practice</span>
+                    </div>
+                </div>
+            </div>
+            <span class="badge-mode">Campus & Online</span>
+        </header>
+
+        <h1 id="module-heading">Hospital Pharmacy Foundations & Regulations</h1>
+        <p class="module-subtitle">
+            Experience your "First Day at the Hospital" - master essential tasks, navigate regulations,
+            and build effective communication skills for institutional pharmacy practice.
+        </p>
+
+        <!-- Progress Tracker -->
+        <div class="progress-tracker">
+            <div class="progress-step active" data-step="1">
+                <div class="step-circle">1</div>
+                <div class="step-label">Task Management</div>
+            </div>
+            <div class="progress-step" data-step="2">
+                <div class="step-circle">2</div>
+                <div class="step-label">Regulations</div>
+            </div>
+            <div class="progress-step" data-step="3">
+                <div class="step-circle">3</div>
+                <div class="step-label">Communication</div>
+            </div>
+            <div class="progress-step" data-step="4">
+                <div class="step-circle">4</div>
+                <div class="step-label">Career Development</div>
+            </div>
+        </div>
+
+        <!-- Progress Summary -->
+        <div class="progress-summary">
+            <div class="summary-card">
+                <span class="summary-number" id="completed-count">0</span>
+                <span class="summary-label">Activities Completed</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="accuracy-rate">0%</span>
+                <span class="summary-label">Current Accuracy</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="time-spent">0:00</span>
+                <span class="summary-label">Time Spent</span>
+            </div>
+        </div>
+
+        <!-- Activity Grid -->
+        <div class="activity-grid">
+            <!-- Activity 1: Pharmacy Technician Task Manager -->
+            <section class="activity-card" id="activity-1" data-activity="1">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 1</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">Pharmacy Technician Task Manager</h3>
+                <p class="activity-description">
+                    Sort common hospital technician tasks by shift priority and differentiate them from community pharmacy roles.
+                    This exercise prepares you for efficient task management in a hospital setting.
+                </p>
+
+                <div class="handhygiene-scenario" style="margin-bottom: 20px; background: rgba(175, 75, 239, 0.05); padding: 15px; border-radius: var(--radius-sm);">
+                    <div class="scenario-description">
+                        <strong>Scenario:</strong> It's your first day at City General Hospital. Pharmacist Marcus needs you to prioritize tasks for your shift. Drag tasks to their correct shift categories.
+                    </div>
+                </div>
+
+                <!-- Shift Categories -->
+                <div class="category-container">
+                    <div class="category-box morning" id="morning-category" data-category="morning">
+                        <div class="category-title">Morning Shift Tasks</div>
+                        <div class="category-content"></div>
+                    </div>
+                    <div class="category-box evening" id="evening-category" data-category="evening">
+                        <div class="category-title">Evening Shift Tasks</div>
+                        <div class="category-content"></div>
+                    </div>
+                </div>
+
+                <!-- Task Items -->
+                <div class="category-items">
+                    <div class="category-item draggable" data-correct="morning" draggable="true">Review night shift reports</div>
+                    <div class="category-item draggable" data-correct="morning" draggable="true">Check medication expiration dates</div>
+                    <div class="category-item draggable" data-correct="morning" draggable="true">Prepare morning medication carts</div>
+                    <div class="category-item draggable" data-correct="evening" draggable="true">Restock floor stock medications</div>
+                    <div class="category-item draggable" data-correct="evening" draggable="true">Prepare evening/night doses</div>
+                    <div class="category-item draggable" data-correct="evening" draggable="true">Complete controlled substance counts</div>
+                </div>
+
+                <!-- STAT vs Routine Sorting -->
+                <div style="margin: 25px 0;">
+                    <h4 style="font-size: 0.95rem; color: var(--color-primary); margin-bottom: 10px;">STAT vs Routine Task Prioritization</h4>
+                    <p style="font-size: 0.85rem; color: var(--color-muted); margin-bottom: 15px;">Drag these tasks in order of priority (1 = highest priority):</p>
+                    
+                    <div class="steps-dropzone empty" id="priority-dropzone"></div>
+                    
+                    <div class="steps-container" id="priority-items">
+                        <div class="step-item draggable" data-step="1" draggable="true">
+                            <div class="step-number">?</div>
+                            <div class="step-text">Prepare STAT antibiotic for ICU patient</div>
+                        </div>
+                        <div class="step-item draggable" data-step="2" draggable="true">
+                            <div class="step-number">?</div>
+                            <div class="step-text">Restock routine floor stock</div>
+                        </div>
+                        <div class="step-item draggable" data-step="3" draggable="true">
+                            <div class="step-number">?</div>
+                            <div class="step-text">Process new medication order</div>
+                        </div>
+                        <div class="step-item draggable" data-step="4" draggable="true">
+                            <div class="step-number">?</div>
+                            <div class="step-text">Answer non-urgent phone call</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Corrective Feedback -->
+                <div class="feedback-container" id="feedback-1">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Task Management Analysis
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Correct Categorization:</strong><br>
+                        <strong>Morning Shift:</strong> Review night shift reports, Check medication expiration dates, Prepare morning medication carts<br>
+                        <strong>Evening Shift:</strong> Restock floor stock medications, Prepare evening/night doses, Complete controlled substance counts<br><br>
+                        
+                        <strong>Priority Order:</strong><br>
+                        1. Prepare STAT antibiotic for ICU patient (immediate life-saving)<br>
+                        2. Process new medication order (timely patient care)<br>
+                        3. Restock routine floor stock (preventative)<br>
+                        4. Answer non-urgent phone call (administrative)<br><br>
+                        
+                        <div class="badge-display" id="badge-1" style="display: none;">
+                            <span>🏆</span>
+                            <span>Task Master</span>
+                        </div>
+                        
+                        <div class="correction-details" id="correction-details-1" style="display: none;">
+                            <strong>Areas for Improvement:</strong><br>
+                            <span id="correction-text-1"></span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity 2: Formulary & Regulatory Challenge -->
+            <section class="activity-card" id="activity-2" data-activity="2">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 2</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">Formulary & Regulatory Challenge</h3>
+                <p class="activity-description">
+                    Master hospital formulary management and regulatory compliance. Sort medications and match regulatory agencies
+                    to their inspection requirements in preparation for a Joint Commission visit.
+                </p>
+
+                <!-- Formulary Sorting -->
+                <div class="category-container" style="margin-bottom: 25px;">
+                    <div class="category-box formulary" id="formulary-category" data-category="formulary">
+                        <div class="category-title">Formulary Medications</div>
+                        <div class="category-content"></div>
+                    </div>
+                    <div class="category-box nonformulary" id="nonformulary-category" data-category="nonformulary">
+                        <div class="category-title">Non-Formulary Medications</div>
+                        <div class="category-content"></div>
+                    </div>
+                </div>
+
+                <!-- Medication Items -->
+                <div class="category-items" style="margin-bottom: 25px;">
+                    <div class="category-item draggable" data-correct="formulary" draggable="true">Ceftriaxone (Rocephin)</div>
+                    <div class="category-item draggable" data-correct="nonformulary" draggable="true">Exotic antibiotic rarely used</div>
+                    <div class="category-item draggable" data-correct="formulary" draggable="true">Heparin sodium injection</div>
+                    <div class="category-item draggable" data-correct="formulary" draggable="true">Morphine sulfate injection</div>
+                    <div class="category-item draggable" data-correct="nonformulary" draggable="true">Experimental cancer drug</div>
+                    <div class="category-item draggable" data-correct="formulary" draggable="true">Insulin aspart (NovoLog)</div>
+                </div>
+
+                <!-- Regulatory Agency Matching -->
+                <h4 style="font-size: 0.95rem; color: var(--color-primary); margin-bottom: 10px;">Match Regulatory Agencies to Their Responsibilities</h4>
+                <p style="font-size: 0.85rem; color: var(--color-muted); margin-bottom: 15px;">Drag agencies from the left column and responsibilities from the right column to create matching pairs below:</p>
+                
+                <!-- Matching Area -->
+                <div class="match-area" id="match-area-2">
+                    <div class="match-pair" data-pair="1">
+                        <div class="match-slot" data-type="agency" id="slot-agency-1">
+                            Drag agency here
+                        </div>
+                        <div class="match-slot" data-type="responsibility" id="slot-resp-1">
+                            Drag responsibility here
+                        </div>
+                        <div class="match-label">Pair 1</div>
+                    </div>
+                    <div class="match-pair" data-pair="2">
+                        <div class="match-slot" data-type="agency" id="slot-agency-2">
+                            Drag agency here
+                        </div>
+                        <div class="match-slot" data-type="responsibility" id="slot-resp-2">
+                            Drag responsibility here
+                        </div>
+                        <div class="match-label">Pair 2</div>
+                    </div>
+                    <div class="match-pair" data-pair="3">
+                        <div class="match-slot" data-type="agency" id="slot-agency-3">
+                            Drag agency here
+                        </div>
+                        <div class="match-slot" data-type="responsibility" id="slot-resp-3">
+                            Drag responsibility here
+                        </div>
+                        <div class="match-label">Pair 3</div>
+                    </div>
+                    <div class="match-pair" data-pair="4">
+                        <div class="match-slot" data-type="agency" id="slot-agency-4">
+                            Drag agency here
+                        </div>
+                        <div class="match-slot" data-type="responsibility" id="slot-resp-4">
+                            Drag responsibility here
+                        </div>
+                        <div class="match-label">Pair 4</div>
+                    </div>
+                </div>
+
+                <!-- Items to Drag -->
+                <div class="matching-grid">
+                    <div class="matching-column" id="agencies-column">
+                        <div class="matching-column-title">Regulatory Agencies</div>
+                        <div class="matching-item draggable" data-agency="tjc" draggable="true">The Joint Commission (TJC)</div>
+                        <div class="matching-item draggable" data-agency="dea" draggable="true">Drug Enforcement Administration (DEA)</div>
+                        <div class="matching-item draggable" data-agency="fda" draggable="true">Food & Drug Administration (FDA)</div>
+                        <div class="matching-item draggable" data-agency="state" draggable="true">State Board of Pharmacy</div>
+                    </div>
+                    
+                    <div class="matching-column" id="responsibilities-column">
+                        <div class="matching-column-title">Primary Responsibilities</div>
+                        <div class="matching-item draggable" data-responsibility="tjc" draggable="true">Patient safety & quality standards</div>
+                        <div class="matching-item draggable" data-responsibility="dea" draggable="true">Controlled substance tracking</div>
+                        <div class="matching-item draggable" data-responsibility="fda" draggable="true">Drug approval & manufacturing</div>
+                        <div class="matching-item draggable" data-responsibility="state" draggable="true">Licensing & practice regulations</div>
+                    </div>
+                </div>
+
+                <!-- Corrective Feedback -->
+                <div class="feedback-container" id="feedback-2">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Regulatory Analysis Complete
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Formulary Management:</strong><br>
+                        • Formulary medications are routinely stocked based on P&T Committee decisions<br>
+                        • Non-formulary drugs require special approval processes<br>
+                        • Technicians must know formulary status to avoid delays<br><br>
+                        
+                        <strong>Correct Agency Matches:</strong><br>
+                        • <strong>The Joint Commission (TJC):</strong> Patient safety & quality standards (accreditation focus)<br>
+                        • <strong>Drug Enforcement Administration (DEA):</strong> Controlled substance tracking (Schedule II-V oversight)<br>
+                        • <strong>Food & Drug Administration (FDA):</strong> Drug approval & manufacturing (safety/efficacy)<br>
+                        • <strong>State Board of Pharmacy:</strong> Licensing & practice regulations (state-specific rules)<br><br>
+                        
+                        <strong>Joint Commission Preparation:</strong><br>
+                        1. Ensure all medications are properly labeled<br>
+                        2. Verify controlled substance logs are complete<br>
+                        3. Confirm emergency medications are accessible<br>
+                        4. Check expiration dates on all stock<br><br>
+                        
+                        <div class="correction-details" id="correction-details-2" style="display: none;">
+                            <strong>Incorrect Matches:</strong><br>
+                            <span id="correction-text-2"></span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity 3: Nursing-Pharmacy Communication Simulator -->
+            <section class="activity-card" id="activity-3" data-activity="3">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 3</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">Nursing-Pharmacy Communication Simulator</h3>
+                <p class="activity-description">
+                    Navigate real-world communication scenarios with nursing staff. Your choices impact patient safety
+                    and interprofessional relationships in this branching text simulation.
+                </p>
+
+                <div class="scenario-container">
+                    <div class="scenario-text" id="scenario-text">
+                        <strong>Scenario 1:</strong> Nurse Johnson calls from the ICU: "We're missing the vancomycin dose for Room 412. The patient needs it STAT. What's the status?"
+                    </div>
+                    
+                    <div class="choice-container" id="choice-container-1">
+                        <button class="choice-button" data-choice="a" data-correct="true">
+                            A. "Let me check the status immediately. Can you confirm the patient name and room number while I look it up?"
+                        </button>
+                        <button class="choice-button" data-choice="b" data-correct="false">
+                            B. "All STAT orders are processed within 30 minutes. It should be there soon."
+                        </button>
+                        <button class="choice-button" data-choice="c" data-correct="false">
+                            C. "I don't handle deliveries. You'll need to call transportation."
+                        </button>
+                        <button class="choice-button" data-choice="d" data-correct="false">
+                            D. "We're very busy right now. I'll get to it when I can."
+                        </button>
+                    </div>
+                </div>
+
+                <div class="scenario-container" style="display: none;" id="scenario-2">
+                    <div class="scenario-text" id="scenario-text-2">
+                        <strong>Scenario 2:</strong> Pharmacist Marcus reviews your response and says: "Good job verifying the information. The vancomycin was delivered 15 minutes ago. How would you follow up with Nurse Johnson?"
+                    </div>
+                    
+                    <div class="choice-container" id="choice-container-2">
+                        <button class="choice-button" data-choice="a" data-correct="false">
+                            A. "I told her I'd check. My job is done."
+                        </button>
+                        <button class="choice-button" data-choice="b" data-correct="true">
+                            B. "I'll call Nurse Johnson back to confirm the medication arrived and document the communication."
+                        </button>
+                        <button class="choice-button" data-choice="c" data-correct="false">
+                            C. "I'll send an email so there's a record."
+                        </button>
+                        <button class="choice-button" data-choice="d" data-correct="false">
+                            D. "I'll wait for her to call back if there's still a problem."
+                        </button>
+                    </div>
+                </div>
+
+                <div class="scenario-container" style="display: none;" id="scenario-3">
+                    <div class="scenario-text" id="scenario-text-3">
+                        <strong>Scenario 3:</strong> Later, Nurse Johnson calls about a discrepancy: "The pyxis shows we should have 10 vials of morphine, but I only count 9." What's your first action?
+                    </div>
+                    
+                    <div class="choice-container" id="choice-container-3">
+                        <button class="choice-button" data-choice="a" data-correct="false">
+                            A. "That's probably a counting error on your part."
+                        </button>
+                        <button class="choice-button" data-choice="b" data-correct="false">
+                            B. "I'll adjust the count in the system to match what you have."
+                        </button>
+                        <button class="choice-button" data-choice="c" data-correct="true">
+                            C. "Let me verify the count with you and follow our discrepancy protocol immediately."
+                        </button>
+                        <button class="choice-button" data-choice="d" data-correct="false">
+                            D. "I'll mention it to the pharmacist at the end of the shift."
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Corrective Feedback -->
+                <div class="feedback-container" id="feedback-3">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Communication Analysis
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Best Practices for Pharmacy-Nursing Communication:</strong><br><br>
+                        
+                        <strong>Scenario 1 - Missing Medication:</strong><br>
+                        • <strong>Correct Response:</strong> Verify details while checking status<br>
+                        • <strong>Why:</strong> Prevents medication errors by confirming patient identity<br>
+                        • <strong>Impact:</strong> Reduces wrong-patient errors by 50%<br><br>
+                        
+                        <strong>Scenario 2 - Follow-up Communication:</strong><br>
+                        • <strong>Correct Response:</strong> Proactive callback with documentation<br>
+                        • <strong>Why:</strong> Closes the communication loop completely<br>
+                        • <strong>Impact:</strong> Prevents duplicate orders and ensures patient received medication<br><br>
+                        
+                        <strong>Scenario 3 - Controlled Substance Discrepancy:</strong><br>
+                        • <strong>Correct Response:</strong> Immediate verification with protocol<br>
+                        • <strong>Why:</strong> Controlled substances require immediate investigation<br>
+                        • <strong>Impact:</strong> Meets DEA compliance and prevents diversion<br><br>
+                        
+                        <div class="badge-display" id="badge-3" style="display: none;">
+                            <span>💬</span>
+                            <span>Communication Specialist</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity 4: Professional Development Pathway -->
+            <section class="activity-card" id="activity-4" data-activity="4">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 4</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">Professional Development Pathway</h3>
+                <p class="activity-description">
+                    Plan your career growth in institutional pharmacy. Match professional organizations to their benefits
+                    and create your career ladder steps with CE requirement calculations.
+                </p>
+
+                <!-- Professional Organization Matching - FIXED -->
+                <h4 style="font-size: 0.95rem; color: var(--color-primary); margin-bottom: 10px;">Match Professional Organizations to Their Benefits</h4>
+                <p style="font-size: 0.85rem; color: var(--color-muted); margin-bottom: 15px;">Drag organizations from the left column and benefits from the right column to create matching pairs below:</p>
+                
+                <!-- Matching Area -->
+                <div class="match-area" id="match-area-4" style="margin-bottom: 25px;">
+                    <div class="match-pair" data-pair="1">
+                        <div class="match-slot" data-type="org" id="slot-org-1">
+                            Drag organization here
+                        </div>
+                        <div class="match-slot" data-type="benefit" id="slot-benefit-1">
+                            Drag benefit here
+                        </div>
+                        <div class="match-label">Pair 1</div>
+                    </div>
+                    <div class="match-pair" data-pair="2">
+                        <div class="match-slot" data-type="org" id="slot-org-2">
+                            Drag organization here
+                        </div>
+                        <div class="match-slot" data-type="benefit" id="slot-benefit-2">
+                            Drag benefit here
+                        </div>
+                        <div class="match-label">Pair 2</div>
+                    </div>
+                    <div class="match-pair" data-pair="3">
+                        <div class="match-slot" data-type="org" id="slot-org-3">
+                            Drag organization here
+                        </div>
+                        <div class="match-slot" data-type="benefit" id="slot-benefit-3">
+                            Drag benefit here
+                        </div>
+                        <div class="match-label">Pair 3</div>
+                    </div>
+                    <div class="match-pair" data-pair="4">
+                        <div class="match-slot" data-type="org" id="slot-org-4">
+                            Drag organization here
+                        </div>
+                        <div class="match-slot" data-type="benefit" id="slot-benefit-4">
+                            Drag benefit here
+                        </div>
+                        <div class="match-label">Pair 4</div>
+                    </div>
+                </div>
+
+                <!-- Items to Drag -->
+                <div class="matching-grid" style="margin-bottom: 25px;">
+                    <div class="matching-column" id="orgs-column-4">
+                        <div class="matching-column-title">Professional Organizations</div>
+                        <div class="matching-item draggable" data-org="ptcb" draggable="true">PTCB (Pharmacy Technician Certification Board)</div>
+                        <div class="matching-item draggable" data-org="ashp" draggable="true">ASHP (American Society of Health-System Pharmacists)</div>
+                        <div class="matching-item draggable" data-org="npta" draggable="true">NPTA (National Pharmacy Technician Association)</div>
+                        <div class="matching-item draggable" data-org="state-assoc" draggable="true">State Pharmacy Association</div>
+                    </div>
+                    
+                    <div class="matching-column" id="benefits-column-4">
+                        <div class="matching-column-title">Primary Benefits</div>
+                        <div class="matching-item draggable" data-benefit="ptcb" draggable="true">National certification & recertification</div>
+                        <div class="matching-item draggable" data-benefit="ashp" draggable="true">Hospital pharmacy standards & education</div>
+                        <div class="matching-item draggable" data-benefit="npta" draggable="true">Advocacy & technician-focused resources</div>
+                        <div class="matching-item draggable" data-benefit="state-assoc" draggable="true">State-specific regulations & networking</div>
+                    </div>
+                </div>
+
+                <!-- Career Ladder Creation -->
+                <h4 style="font-size: 0.95rem; color: var(--color-primary); margin-bottom: 10px;">Create Your Career Ladder Steps</h4>
+                <p style="font-size: 0.85rem; color: var(--color-muted); margin-bottom: 15px;">Drag these career steps into the correct progression order (1 = entry level):</p>
+                
+                <div class="steps-dropzone empty" id="career-dropzone"></div>
+                
+                <div class="steps-container" id="career-items">
+                    <div class="step-item draggable" data-step="1" draggable="true">
+                        <div class="step-number">?</div>
+                        <div class="step-text">Certified Pharmacy Technician (CPhT)</div>
+                    </div>
+                    <div class="step-item draggable" data-step="2" draggable="true">
+                        <div class="step-number">?</div>
+                        <div class="step-text">Specialized Technician (IV, Chemo, Informatics)</div>
+                    </div>
+                    <div class="step-item draggable" data-step="3" draggable="true">
+                        <div class="step-number">?</div>
+                        <div class="step-text">Lead/Senior Pharmacy Technician</div>
+                    </div>
+                    <div class="step-item draggable" data-step="4" draggable="true">
+                        <div class="step-number">?</div>
+                        <div class="step-text">Pharmacy Technician Supervisor/Manager</div>
+                    </div>
+                </div>
+
+                <!-- CE Requirement Calculator -->
+                <div class="ce-calculator">
+                    <h4 style="font-size: 0.95rem; color: var(--color-primary); margin-bottom: 10px;">CE Requirement Calculator</h4>
+                    <p style="font-size: 0.85rem; color: var(--color-muted); margin-bottom: 15px;">
+                        PTCB requires 20 hours of Continuing Education every 2 years, including:
+                        • 1 hour in Pharmacy Law
+                        • 1 hour in Patient Safety
+                        Calculate how many general CE hours you need:
+                    </p>
+                    <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 10px;">
+                        <span style="font-size: 0.9rem;">If you have completed</span>
+                        <input type="number" id="law-hours" class="ce-input" min="0" max="5" value="0" placeholder="Law hours">
+                        <span style="font-size: 0.9rem;">hours of Pharmacy Law and</span>
+                        <input type="number" id="safety-hours" class="ce-input" min="0" max="5" value="0" placeholder="Safety hours">
+                        <span style="font-size: 0.9rem;">hours of Patient Safety, you need</span>
+                        <span id="ce-result" class="ce-result">20</span>
+                        <span style="font-size: 0.9rem;">general CE hours.</span>
+                    </div>
+                    <button id="calculate-ce" style="margin-top: 15px; padding: 8px 16px; background: var(--color-primary); color: white; border: none; border-radius: var(--radius-sm); cursor: pointer;">Calculate CE Requirements</button>
+                </div>
+
+                <!-- Corrective Feedback -->
+                <div class="feedback-container" id="feedback-4">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Career Pathway Analysis
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Correct Organization Matches:</strong><br>
+                        • <strong>PTCB:</strong> National certification & recertification<br>
+                        • <strong>ASHP:</strong> Hospital pharmacy standards & education<br>
+                        • <strong>NPTA:</strong> Advocacy & technician-focused resources<br>
+                        • <strong>State Association:</strong> State-specific regulations & networking<br><br>
+                        
+                        <strong>Career Ladder Progression:</strong><br>
+                        1. Certified Pharmacy Technician (CPhT) - Entry level with national certification<br>
+                        2. Specialized Technician - Advanced skills in specific areas (IV, chemo, informatics)<br>
+                        3. Lead/Senior Technician - Mentorship and complex problem-solving<br>
+                        4. Supervisor/Manager - Department leadership and administration<br><br>
+                        
+                        <strong>CE Requirements:</strong><br>
+                        • Total: 20 hours every 2 years<br>
+                        • Mandatory: 1 hour Pharmacy Law, 1 hour Patient Safety<br>
+                        • Elective: Remaining hours in any pharmacy-related topics<br>
+                        • Documentation: Keep certificates for 5 years minimum<br><br>
+                        
+                        <div class="badge-display" id="badge-4" style="display: none;">
+                            <span>📜</span>
+                            <span>Hospital Foundations Certified</span>
+                        </div>
+                        
+                        <div class="correction-details" id="correction-details-4" style="display: none;">
+                            <strong>Areas for Improvement:</strong><br>
+                            <span id="correction-text-4"></span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn btn-secondary" id="reset-all-btn">
+                <span class="btn-icon">↻</span>
+                Reset All Activities
+            </button>
+            <button class="btn btn-secondary" id="check-answers-btn">
+                <span class="btn-icon">✓</span>
+                Check All Answers
+            </button>
+            <button class="btn btn-primary" id="view-results-btn">
+                <span class="btn-icon">📊</span>
+                View Final Results
+            </button>
+        </div>
+
+        <!-- Results Panel -->
+        <div class="results-panel" id="results-panel">
+            <div class="results-header">
+                <h2 class="results-title">Hospital Pharmacy Foundations Proficiency</h2>
+                <div class="score-display" id="final-score">0%</div>
+            </div>
+            <div class="clinical-insights">
+                <h3 class="insights-title">
+                    <span>🏥</span> Institutional Practice Insights
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Task Prioritization:</strong> Hospital pharmacy requires rapid assessment of STAT vs routine tasks. Technicians must master this to ensure critical medications reach patients without delay, directly impacting patient outcomes in emergency situations.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Regulatory Compliance:</strong> Institutional settings face more frequent inspections from multiple agencies. Understanding TJC, DEA, FDA, and state board requirements is essential for maintaining accreditation and avoiding penalties.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Interprofessional Communication:</strong> Effective communication with nurses, physicians, and other healthcare team members prevents medication errors. Clear, timely communication is a patient safety requirement, not just a courtesy.</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="clinical-insights" style="margin-top: 20px;">
+                <h3 class="insights-title">
+                    <span>📈</span> Career Advancement Strategies
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Certification as Foundation:</strong> PTCB certification is the entry point for hospital pharmacy careers. Maintaining certification through CE shows commitment to professional development and patient safety.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Specialization Pathways:</strong> IV sterile compounding, chemotherapy preparation, informatics, and controlled substance management are high-demand specializations that increase earning potential and job security.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Professional Organization Value:</strong> ASHP membership provides access to hospital-specific resources, while state associations offer local networking and regulatory updates essential for career growth.</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="clinical-insights" style="margin-top: 20px; background: rgba(175, 75, 239, 0.1); border: 1px solid var(--color-primary-soft);">
+                <h3 class="insights-title">
+                    <span>🎓</span> Module 1 Complete: Next Steps
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Proceed to Module 2:</strong> "Medication Orders & Controlled Substances" to build on your foundational knowledge with order processing and substance management skills.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Practice Application:</strong> Apply task prioritization skills in your clinical rotations or workplace, noting how STAT orders are handled differently from routine orders.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Professional Development:</strong> Begin tracking your CE hours and consider joining ASHP or your state pharmacy association to access hospital-specific resources.</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // State Management
+            const state = {
+                activities: {
+                    1: { completed: false, correct: 0, total: 10, score: 0, userOrder: [], placements: {} },
+                    2: { completed: false, correct: 0, total: 10, score: 0, placements: {}, matches: {} },
+                    3: { completed: false, correct: 0, total: 3, score: 0, choices: [] },
+                    4: { completed: false, correct: 0, total: 8, score: 0, matches: {}, userOrder: [] }
+                },
+                startedAt: new Date(),
+                timeSpent: 0
+            };
+
+            // DOM Elements
+            const progressSteps = document.querySelectorAll('.progress-step');
+            const activityCards = document.querySelectorAll('.activity-card');
+            const completedCount = document.getElementById('completed-count');
+            const accuracyRate = document.getElementById('accuracy-rate');
+            const timeSpentEl = document.getElementById('time-spent');
+            const resetBtn = document.getElementById('reset-all-btn');
+            const checkBtn = document.getElementById('check-answers-btn');
+            const resultsBtn = document.getElementById('view-results-btn');
+            const resultsPanel = document.getElementById('results-panel');
+            const finalScore = document.getElementById('final-score');
+
+            // Timer for time spent
+            function updateTimer() {
+                const now = new Date();
+                const diff = Math.floor((now - state.startedAt) / 1000);
+                state.timeSpent = diff;
+                const minutes = Math.floor(diff / 60);
+                const seconds = diff % 60;
+                timeSpentEl.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            }
+            setInterval(updateTimer, 1000);
+
+            // Update Progress Summary
+            function updateProgressSummary() {
+                let completed = 0;
+                let totalCorrect = 0;
+                let totalItems = 0;
+
+                Object.values(state.activities).forEach(activity => {
+                    if (activity.completed) completed++;
+                    totalCorrect += activity.correct;
+                    totalItems += activity.total;
+                });
+
+                completedCount.textContent = completed;
+                const accuracy = totalItems > 0 ? Math.round((totalCorrect / totalItems) * 100) : 0;
+                accuracyRate.textContent = `${accuracy}%`;
+
+                // Update progress steps
+                progressSteps.forEach((step, index) => {
+                    if (index < completed) {
+                        step.classList.add('completed');
+                        step.classList.remove('active');
+                    } else if (index === completed) {
+                        step.classList.add('active');
+                        step.classList.remove('completed');
+                    } else {
+                        step.classList.remove('active', 'completed');
+                    }
+                });
+            }
+
+            // Activity 1: Pharmacy Technician Task Manager
+            function initActivity1() {
+                const categoryItems = document.querySelectorAll('#activity-1 .category-item');
+                const morningCategory = document.getElementById('morning-category');
+                const eveningCategory = document.getElementById('evening-category');
+                const priorityItems = document.querySelectorAll('#activity-1 .step-item');
+                const priorityDropzone = document.getElementById('priority-dropzone');
+                const feedback = document.getElementById('feedback-1');
+                const status = document.querySelector('#activity-1 .activity-status');
+                const correctionDetails = document.getElementById('correction-details-1');
+                const correctionText = document.getElementById('correction-text-1');
+                const badge = document.getElementById('badge-1');
+
+                let placedCategories = 0;
+                let userPlacements = {};
+                let priorityOrder = [];
+
+                // Category drag and drop
+                categoryItems.forEach(item => {
+                    item.addEventListener('dragstart', function(e) {
+                        e.dataTransfer.setData('text/plain', JSON.stringify({
+                            text: this.textContent,
+                            correct: this.dataset.correct
+                        }));
+                        this.classList.add('dragging');
+                    });
+
+                    item.addEventListener('dragend', function() {
+                        this.classList.remove('dragging');
+                    });
+                });
+
+                [morningCategory, eveningCategory].forEach(category => {
+                    category.addEventListener('dragover', function(e) {
+                        e.preventDefault();
+                        this.classList.add('hover');
+                    });
+
+                    category.addEventListener('dragleave', function() {
+                        this.classList.remove('hover');
+                    });
+
+                    category.addEventListener('drop', function(e) {
+                        e.preventDefault();
+                        this.classList.remove('hover');
+                        const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+                        const targetCategory = this.dataset.category;
+
+                        const existingItems = Array.from(this.querySelectorAll('.category-content div'));
+                        const alreadyPlaced = existingItems.some(div => div.textContent === data.text);
+
+                        if (!alreadyPlaced) {
+                            userPlacements[data.text] = targetCategory;
+                            state.activities[1].placements = userPlacements;
+
+                            const isCorrect = data.correct === targetCategory;
+                            const div = document.createElement('div');
+                            div.textContent = data.text;
+                            div.style.padding = '6px 10px';
+                            div.style.margin = '4px 0';
+                            div.style.background = isCorrect ? 
+                                (targetCategory === 'morning' ? 'rgba(0, 184, 148, 0.1)' : 'rgba(131, 128, 240, 0.1)') : 
+                                'rgba(225, 112, 85, 0.1)';
+                            div.style.borderRadius = '8px';
+                            div.style.fontSize = '0.8rem';
+
+                            this.querySelector('.category-content').appendChild(div);
+
+                            const originalItem = Array.from(categoryItems).find(item => 
+                                item.textContent === data.text && item.style.display !== 'none'
+                            );
+
+                            if (originalItem) {
+                                originalItem.style.display = 'none';
+                                placedCategories++;
+
+                                if (placedCategories === 6) {
+                                    checkActivity1Categories();
+                                }
+                            }
+                        }
+                    });
+                });
+
+                // Priority drag and drop
+                priorityItems.forEach(item => {
+                    item.addEventListener('dragstart', function(e) {
+                        e.dataTransfer.setData('text/plain', JSON.stringify({
+                            step: this.dataset.step,
+                            text: this.querySelector('.step-text').textContent
+                        }));
+                        this.classList.add('dragging');
+                    });
+
+                    item.addEventListener('dragend', function() {
+                        this.classList.remove('dragging');
+                    });
+                });
+
+                priorityDropzone.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    this.classList.add('hover');
+                    this.classList.remove('empty');
+                });
+
+                priorityDropzone.addEventListener('dragleave', function() {
+                    this.classList.remove('hover');
+                });
+
+                priorityDropzone.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('hover');
+                    const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+
+                    if (!priorityOrder.includes(data.step)) {
+                        priorityOrder.push(data.step);
+                        state.activities[1].userOrder = priorityOrder;
+
+                        const stepDiv = document.createElement('div');
+                        stepDiv.className = 'step-item placed';
+                        stepDiv.innerHTML = `
+                            <div class="step-number">${priorityOrder.length}</div>
+                            <div class="step-text">${data.text}</div>
+                        `;
+                        this.appendChild(stepDiv);
+
+                        const originalStep = document.querySelector(`#activity-1 .step-item[data-step="${data.step}"]`);
+                        if (originalStep) {
+                            originalStep.style.display = 'none';
+                        }
+
+                        if (priorityOrder.length === 4) {
+                            checkActivity1Priority();
+                        }
+                    }
+                });
+
+                function checkActivity1Categories() {
+                    const correctAnswers = {
+                        'Review night shift reports': 'morning',
+                        'Check medication expiration dates': 'morning',
+                        'Prepare morning medication carts': 'morning',
+                        'Restock floor stock medications': 'evening',
+                        'Prepare evening/night doses': 'evening',
+                        'Complete controlled substance counts': 'evening'
+                    };
+
+                    let correctCount = 0;
+                    let correctionMessages = [];
+
+                    Object.keys(correctAnswers).forEach(item => {
+                        if (userPlacements[item] === correctAnswers[item]) {
+                            correctCount++;
+                        } else {
+                            const correctShift = correctAnswers[item] === 'morning' ? 'Morning Shift' : 'Evening Shift';
+                            const userShift = userPlacements[item] === 'morning' ? 'Morning Shift' : 'Evening Shift';
+                            correctionMessages.push(`• "${item}" should be in "${correctShift}" not "${userShift}"`);
+                        }
+                    });
+
+                    state.activities[1].correct = correctCount;
+                    return { correctCount, correctionMessages };
+                }
+
+                function checkActivity1Priority() {
+                    const correctOrder = ['1', '3', '2', '4'];
+                    let correctCount = 0;
+                    let correctionMessages = [];
+
+                    priorityOrder.forEach((step, index) => {
+                        if (step === correctOrder[index]) {
+                            correctCount++;
+                        } else {
+                            const userText = document.querySelector(`#activity-1 .step-item[data-step="${step}"] .step-text`).textContent;
+                            const correctText = document.querySelector(`#activity-1 .step-item[data-step="${correctOrder[index]}"] .step-text`).textContent;
+                            correctionMessages.push(`• Position ${index + 1}: You placed "${userText}" but it should be "${correctText}"`);
+                        }
+                    });
+
+                    const categoryResults = checkActivity1Categories();
+                    const totalCorrect = categoryResults.correctCount + correctCount;
+
+                    if (placedCategories === 6 && priorityOrder.length === 4) {
+                        state.activities[1].completed = true;
+                        state.activities[1].correct = totalCorrect;
+                        state.activities[1].score = Math.round((totalCorrect / 10) * 100);
+                        
+                        status.textContent = 'Completed';
+                        status.style.color = '#00b894';
+                        document.querySelector('#activity-1').classList.add('completed');
+                        feedback.classList.add('show');
+                        badge.style.display = 'flex';
+
+                        const allCorrections = [...categoryResults.correctionMessages, ...correctionMessages];
+                        if (allCorrections.length > 0) {
+                            correctionDetails.style.display = 'block';
+                            correctionText.innerHTML = allCorrections.join('<br>');
+                        }
+
+                        updateProgressSummary();
+                    }
+                }
+            }
+
+            // Activity 2: Formulary & Regulatory Challenge
+            function initActivity2() {
+                const medicationItems = document.querySelectorAll('#activity-2 .category-item');
+                const formularyCategory = document.getElementById('formulary-category');
+                const nonformularyCategory = document.getElementById('nonformulary-category');
+                const draggableItems = document.querySelectorAll('#activity-2 .matching-item');
+                const matchSlots = document.querySelectorAll('#activity-2 .match-slot');
+                const feedback = document.getElementById('feedback-2');
+                const status = document.querySelector('#activity-2 .activity-status');
+                const correctionDetails = document.getElementById('correction-details-2');
+                const correctionText = document.getElementById('correction-text-2');
+
+                let placedMedications = 0;
+                let placedMatches = 0;
+                let userPlacements = {};
+                let userMatches = {};
+
+                // Medication drag and drop
+                medicationItems.forEach(item => {
+                    item.addEventListener('dragstart', function(e) {
+                        e.dataTransfer.setData('text/plain', JSON.stringify({
+                            text: this.textContent,
+                            correct: this.dataset.correct
+                        }));
+                        this.classList.add('dragging');
+                    });
+
+                    item.addEventListener('dragend', function() {
+                        this.classList.remove('dragging');
+                    });
+                });
+
+                [formularyCategory, nonformularyCategory].forEach(category => {
+                    category.addEventListener('dragover', function(e) {
+                        e.preventDefault();
+                        this.classList.add('hover');
+                    });
+
+                    category.addEventListener('dragleave', function() {
+                        this.classList.remove('hover');
+                    });
+
+                    category.addEventListener('drop', function(e) {
+                        e.preventDefault();
+                        this.classList.remove('hover');
+                        const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+                        const targetCategory = this.dataset.category;
+
+                        const existingItems = Array.from(this.querySelectorAll('.category-content div'));
+                        const alreadyPlaced = existingItems.some(div => div.textContent === data.text);
+
+                        if (!alreadyPlaced) {
+                            userPlacements[data.text] = targetCategory;
+                            state.activities[2].placements = userPlacements;
+
+                            const isCorrect = data.correct === targetCategory;
+                            const div = document.createElement('div');
+                            div.textContent = data.text;
+                            div.style.padding = '6px 10px';
+                            div.style.margin = '4px 0';
+                            div.style.background = isCorrect ? 
+                                (targetCategory === 'formulary' ? 'rgba(0, 184, 148, 0.1)' : 'rgba(131, 128, 240, 0.1)') : 
+                                'rgba(225, 112, 85, 0.1)';
+                            div.style.borderRadius = '8px';
+                            div.style.fontSize = '0.8rem';
+
+                            this.querySelector('.category-content').appendChild(div);
+
+                            const originalItem = Array.from(medicationItems).find(item => 
+                                item.textContent === data.text && item.style.display !== 'none'
+                            );
+
+                            if (originalItem) {
+                                originalItem.style.display = 'none';
+                                placedMedications++;
+
+                                if (placedMedications === 6 && placedMatches === 4) {
+                                    checkActivity2();
+                                }
+                            }
+                        }
+                    });
+                });
+
+                // Agency matching drag and drop
+                draggableItems.forEach(item => {
+                    item.addEventListener('dragstart', function(e) {
+                        const type = this.dataset.agency ? 'agency' : 'responsibility';
+                        const id = this.dataset.agency || this.dataset.responsibility;
+                        e.dataTransfer.setData('text/plain', JSON.stringify({
+                            type: type,
+                            id: id,
+                            text: this.textContent
+                        }));
+                        this.classList.add('dragging');
+                    });
+
+                    item.addEventListener('dragend', function() {
+                        this.classList.remove('dragging');
+                    });
+                });
+
+                // Setup match slots
+                matchSlots.forEach(slot => {
+                    slot.addEventListener('dragover', function(e) {
+                        e.preventDefault();
+                        if (!this.classList.contains('filled')) {
+                            this.classList.add('hover');
+                        }
+                    });
+
+                    slot.addEventListener('dragleave', function() {
+                        this.classList.remove('hover');
+                    });
+
+                    slot.addEventListener('drop', function(e) {
+                        e.preventDefault();
+                        this.classList.remove('hover');
+                        
+                        if (this.classList.contains('filled')) return;
+                        
+                        const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+                        const slotType = this.dataset.type;
+
+                        // Check if this type of item can go in this slot
+                        if (data.type !== slotType) {
+                            this.classList.add('incorrect');
+                            setTimeout(() => {
+                                this.classList.remove('incorrect');
+                            }, 500);
+                            return;
+                        }
+
+                        // Check if this item is already placed elsewhere
+                        const alreadyPlaced = Array.from(matchSlots).some(slot =>
+                            slot.textContent.includes(data.text)
+                        );
+
+                        if (alreadyPlaced) return;
+
+                        // Place the item
+                        this.classList.add('filled');
+                        this.innerHTML = `<strong>${data.text}</strong>`;
+                        this.dataset.itemId = data.id;
+
+                        // Hide the original draggable item
+                        const originalItem = data.type === 'agency'
+                            ? document.querySelector(`[data-agency="${data.id}"]`)
+                            : document.querySelector(`[data-responsibility="${data.id}"]`);
+                        
+                        if (originalItem) {
+                            originalItem.style.display = 'none';
+                        }
+
+                        // Record the placement
+                        const pairNumber = this.closest('.match-pair').dataset.pair;
+                        if (!userMatches[pairNumber]) {
+                            userMatches[pairNumber] = {};
+                        }
+                        userMatches[pairNumber][slotType] = data.id;
+
+                        // Check if pair is complete and validate
+                        if (userMatches[pairNumber].agency && userMatches[pairNumber].responsibility) {
+                            const isCorrect = userMatches[pairNumber].agency === userMatches[pairNumber].responsibility;
+                            const agencySlot = document.querySelector(`#slot-agency-${pairNumber}`);
+                            const respSlot = document.querySelector(`#slot-resp-${pairNumber}`);
+
+                            if (isCorrect) {
+                                agencySlot.classList.add('correct');
+                                respSlot.classList.add('correct');
+                                placedMatches++;
+                            } else {
+                                agencySlot.classList.add('incorrect');
+                                respSlot.classList.add('incorrect');
+                                setTimeout(() => {
+                                    agencySlot.classList.remove('incorrect');
+                                    respSlot.classList.remove('incorrect');
+                                }, 1000);
+                            }
+
+                            state.activities[2].matches = userMatches;
+
+                            // Check if all items are placed
+                            if (placedMedications === 6 && placedMatches === 4) {
+                                checkActivity2();
+                            }
+                        }
+                    });
+                });
+
+                function checkActivity2() {
+                    const correctMedications = {
+                        'Ceftriaxone (Rocephin)': 'formulary',
+                        'Exotic antibiotic rarely used': 'nonformulary',
+                        'Heparin sodium injection': 'formulary',
+                        'Morphine sulfate injection': 'formulary',
+                        'Experimental cancer drug': 'nonformulary',
+                        'Insulin aspart (NovoLog)': 'formulary'
+                    };
+
+                    const correctMatches = {
+                        'tjc': 'tjc',
+                        'dea': 'dea',
+                        'fda': 'fda',
+                        'state': 'state'
+                    };
+
+                    let correctMedCount = 0;
+                    let correctMatchCount = 0;
+                    let correctionMessages = [];
+
+                    // Check medications
+                    Object.keys(correctMedications).forEach(item => {
+                        if (userPlacements[item] === correctMedications[item]) {
+                            correctMedCount++;
+                        } else {
+                            const correctCat = correctMedications[item] === 'formulary' ? 'Formulary' : 'Non-Formulary';
+                            const userCat = userPlacements[item] === 'formulary' ? 'Formulary' : 'Non-Formulary';
+                            correctionMessages.push(`• "${item}" should be "${correctCat}" not "${userCat}"`);
+                        }
+                    });
+
+                    // Check matches
+                    Object.keys(userMatches).forEach(pairNumber => {
+                        const pair = userMatches[pairNumber];
+                        if (pair.agency && pair.responsibility) {
+                            if (pair.agency === pair.responsibility) {
+                                correctMatchCount += 2; // Both items correct
+                            } else {
+                                const agencyName = document.querySelector(`[data-agency="${pair.agency}"]`).textContent;
+                                const responsibilityText = document.querySelector(`[data-responsibility="${pair.responsibility}"]`).textContent;
+                                const correctResponsibility = document.querySelector(`[data-responsibility="${pair.agency}"]`).textContent;
+                                correctionMessages.push(`• "${agencyName}" should match with "${correctResponsibility}" not "${responsibilityText}"`);
+                            }
+                        }
+                    });
+
+                    const totalCorrect = correctMedCount + correctMatchCount;
+
+                    state.activities[2].completed = true;
+                    state.activities[2].correct = totalCorrect;
+                    state.activities[2].score = Math.round((totalCorrect / 10) * 100);
+                    
+                    status.textContent = 'Completed';
+                    status.style.color = '#00b894';
+                    document.querySelector('#activity-2').classList.add('completed');
+                    feedback.classList.add('show');
+
+                    if (correctionMessages.length > 0) {
+                        correctionDetails.style.display = 'block';
+                        correctionText.innerHTML = correctionMessages.join('<br>');
+                    }
+
+                    updateProgressSummary();
+                }
+            }
+
+            // Activity 3: Nursing-Pharmacy Communication Simulator
+            function initActivity3() {
+                const choiceButtons1 = document.querySelectorAll('#choice-container-1 .choice-button');
+                const choiceButtons2 = document.querySelectorAll('#choice-container-2 .choice-button');
+                const choiceButtons3 = document.querySelectorAll('#choice-container-3 .choice-button');
+                const feedback = document.getElementById('feedback-3');
+                const status = document.querySelector('#activity-3 .activity-status');
+                const badge = document.getElementById('badge-3');
+
+                let currentScenario = 1;
+                let userChoices = [];
+                let correctCount = 0;
+
+                function handleChoice(choice, correct, button) {
+                    // Visual feedback
+                    if (correct) {
+                        button.classList.add('correct');
+                        correctCount++;
+                    } else {
+                        button.classList.add('incorrect');
+                    }
+
+                    userChoices.push({ choice, correct });
+                    state.activities[3].choices = userChoices;
+
+                    // Move to next scenario or complete activity
+                    setTimeout(() => {
+                        if (currentScenario === 1) {
+                            document.getElementById('scenario-2').style.display = 'block';
+                            currentScenario = 2;
+                        } else if (currentScenario === 2) {
+                            document.getElementById('scenario-3').style.display = 'block';
+                            currentScenario = 3;
+                        } else {
+                            // Activity complete
+                            state.activities[3].completed = true;
+                            state.activities[3].correct = correctCount;
+                            state.activities[3].score = Math.round((correctCount / 3) * 100);
+                            
+                            status.textContent = 'Completed';
+                            status.style.color = '#00b894';
+                            document.querySelector('#activity-3').classList.add('completed');
+                            feedback.classList.add('show');
+                            badge.style.display = 'flex';
+                            updateProgressSummary();
+                        }
+                    }, 1000);
+                }
+
+                // Scenario 1 choices
+                choiceButtons1.forEach(button => {
+                    button.addEventListener('click', function() {
+                        const isCorrect = this.dataset.correct === 'true';
+                        handleChoice(this.dataset.choice, isCorrect, this);
+                        
+                        // Disable all buttons in this scenario
+                        choiceButtons1.forEach(btn => {
+                            btn.disabled = true;
+                            btn.style.cursor = 'not-allowed';
+                        });
+                    });
+                });
+
+                // Scenario 2 choices
+                choiceButtons2.forEach(button => {
+                    button.addEventListener('click', function() {
+                        const isCorrect = this.dataset.correct === 'true';
+                        handleChoice(this.dataset.choice, isCorrect, this);
+                        
+                        choiceButtons2.forEach(btn => {
+                            btn.disabled = true;
+                            btn.style.cursor = 'not-allowed';
+                        });
+                    });
+                });
+
+                // Scenario 3 choices
+                choiceButtons3.forEach(button => {
+                    button.addEventListener('click', function() {
+                        const isCorrect = this.dataset.correct === 'true';
+                        handleChoice(this.dataset.choice, isCorrect, this);
+                        
+                        choiceButtons3.forEach(btn => {
+                            btn.disabled = true;
+                            btn.style.cursor = 'not-allowed';
+                        });
+                    });
+                });
+            }
+
+            // Activity 4: Professional Development Pathway - FIXED VERSION
+            function initActivity4() {
+                const draggableItems = document.querySelectorAll('#activity-4 .matching-item');
+                const matchSlots = document.querySelectorAll('#activity-4 .match-slot');
+                const careerItems = document.querySelectorAll('#activity-4 .step-item');
+                const careerDropzone = document.getElementById('career-dropzone');
+                const feedback = document.getElementById('feedback-4');
+                const status = document.querySelector('#activity-4 .activity-status');
+                const correctionDetails = document.getElementById('correction-details-4');
+                const correctionText = document.getElementById('correction-text-4');
+                const badge = document.getElementById('badge-4');
+                const calculateBtn = document.getElementById('calculate-ce');
+                const lawHoursInput = document.getElementById('law-hours');
+                const safetyHoursInput = document.getElementById('safety-hours');
+                const ceResult = document.getElementById('ce-result');
+
+                let placedMatches = 0;
+                let careerOrder = [];
+                let userMatches = {};
+
+                // Organization matching drag and drop
+                draggableItems.forEach(item => {
+                    item.addEventListener('dragstart', function(e) {
+                        const type = this.dataset.org ? 'org' : 'benefit';
+                        const id = this.dataset.org || this.dataset.benefit;
+                        e.dataTransfer.setData('text/plain', JSON.stringify({
+                            type: type,
+                            id: id,
+                            text: this.textContent
+                        }));
+                        this.classList.add('dragging');
+                    });
+
+                    item.addEventListener('dragend', function() {
+                        this.classList.remove('dragging');
+                    });
+                });
+
+                // Setup match slots
+                matchSlots.forEach(slot => {
+                    slot.addEventListener('dragover', function(e) {
+                        e.preventDefault();
+                        if (!this.classList.contains('filled')) {
+                            this.classList.add('hover');
+                        }
+                    });
+
+                    slot.addEventListener('dragleave', function() {
+                        this.classList.remove('hover');
+                    });
+
+                    slot.addEventListener('drop', function(e) {
+                        e.preventDefault();
+                        this.classList.remove('hover');
+                        
+                        if (this.classList.contains('filled')) return;
+                        
+                        const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+                        const slotType = this.dataset.type;
+
+                        // Check if this type of item can go in this slot
+                        if (data.type !== slotType) {
+                            this.classList.add('incorrect');
+                            setTimeout(() => {
+                                this.classList.remove('incorrect');
+                            }, 500);
+                            return;
+                        }
+
+                        // Check if this item is already placed elsewhere
+                        const alreadyPlaced = Array.from(matchSlots).some(slot =>
+                            slot.textContent.includes(data.text)
+                        );
+
+                        if (alreadyPlaced) return;
+
+                        // Place the item
+                        this.classList.add('filled');
+                        this.innerHTML = `<strong>${data.text}</strong>`;
+                        this.dataset.itemId = data.id;
+
+                        // Hide the original draggable item
+                        const originalItem = data.type === 'org'
+                            ? document.querySelector(`[data-org="${data.id}"]`)
+                            : document.querySelector(`[data-benefit="${data.id}"]`);
+                        
+                        if (originalItem) {
+                            originalItem.style.display = 'none';
+                        }
+
+                        // Record the placement
+                        const pairNumber = this.closest('.match-pair').dataset.pair;
+                        if (!userMatches[pairNumber]) {
+                            userMatches[pairNumber] = {};
+                        }
+                        userMatches[pairNumber][slotType] = data.id;
+
+                        // Check if pair is complete and validate
+                        if (userMatches[pairNumber].org && userMatches[pairNumber].benefit) {
+                            const isCorrect = userMatches[pairNumber].org === userMatches[pairNumber].benefit;
+                            const orgSlot = document.querySelector(`#slot-org-${pairNumber}`);
+                            const benefitSlot = document.querySelector(`#slot-benefit-${pairNumber}`);
+
+                            if (isCorrect) {
+                                orgSlot.classList.add('correct');
+                                benefitSlot.classList.add('correct');
+                                placedMatches++;
+                            } else {
+                                orgSlot.classList.add('incorrect');
+                                benefitSlot.classList.add('incorrect');
+                                setTimeout(() => {
+                                    orgSlot.classList.remove('incorrect');
+                                    benefitSlot.classList.remove('incorrect');
+                                }, 1000);
+                            }
+
+                            state.activities[4].matches = userMatches;
+
+                            // Check if all items are placed
+                            if (placedMatches === 4 && careerOrder.length === 4) {
+                                checkActivity4();
+                            }
+                        }
+                    });
+                });
+
+                // Career ladder drag and drop
+                careerItems.forEach(item => {
+                    item.addEventListener('dragstart', function(e) {
+                        e.dataTransfer.setData('text/plain', JSON.stringify({
+                            step: this.dataset.step,
+                            text: this.querySelector('.step-text').textContent
+                        }));
+                        this.classList.add('dragging');
+                    });
+
+                    item.addEventListener('dragend', function() {
+                        this.classList.remove('dragging');
+                    });
+                });
+
+                careerDropzone.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    this.classList.add('hover');
+                    this.classList.remove('empty');
+                });
+
+                careerDropzone.addEventListener('dragleave', function() {
+                    this.classList.remove('hover');
+                });
+
+                careerDropzone.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('hover');
+                    const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+
+                    if (!careerOrder.includes(data.step)) {
+                        careerOrder.push(data.step);
+                        state.activities[4].userOrder = careerOrder;
+
+                        const stepDiv = document.createElement('div');
+                        stepDiv.className = 'step-item placed';
+                        stepDiv.innerHTML = `
+                            <div class="step-number">${careerOrder.length}</div>
+                            <div class="step-text">${data.text}</div>
+                        `;
+                        this.appendChild(stepDiv);
+
+                        const originalStep = document.querySelector(`#activity-4 .step-item[data-step="${data.step}"]`);
+                        if (originalStep) {
+                            originalStep.style.display = 'none';
+                        }
+
+                        if (placedMatches === 4 && careerOrder.length === 4) {
+                            checkActivity4();
+                        }
+                    }
+                });
+
+                // CE Calculator
+                calculateBtn.addEventListener('click', function() {
+                    const lawHours = parseInt(lawHoursInput.value) || 0;
+                    const safetyHours = parseInt(safetyHoursInput.value) || 0;
+                    
+                    // Calculate remaining hours needed
+                    const totalCompleted = lawHours + safetyHours;
+                    const remainingHours = Math.max(0, 20 - totalCompleted);
+                    
+                    ceResult.textContent = remainingHours;
+                    
+                    // Update state for scoring
+                    if (lawHours >= 1 && safetyHours >= 1) {
+                        if (!state.activities[4].correct) {
+                            state.activities[4].correct = 1;
+                        }
+                    }
+                });
+
+                function checkActivity4() {
+                    const correctMatches = {
+                        'ptcb': 'ptcb',
+                        'ashp': 'ashp',
+                        'npta': 'npta',
+                        'state-assoc': 'state-assoc'
+                    };
+
+                    const correctCareerOrder = ['1', '2', '3', '4'];
+                    let correctMatchCount = 0;
+                    let correctCareerCount = 0;
+                    let correctionMessages = [];
+
+                    // Check organization matches
+                    Object.keys(userMatches).forEach(pairNumber => {
+                        const pair = userMatches[pairNumber];
+                        if (pair.org && pair.benefit) {
+                            if (pair.org === pair.benefit) {
+                                correctMatchCount += 2; // Both items correct
+                            } else {
+                                const orgName = document.querySelector(`[data-org="${pair.org}"]`).textContent;
+                                const benefitText = document.querySelector(`[data-benefit="${pair.benefit}"]`).textContent;
+                                const correctBenefit = document.querySelector(`[data-benefit="${pair.org}"]`).textContent;
+                                correctionMessages.push(`• "${orgName}" should match with "${correctBenefit}" not "${benefitText}"`);
+                            }
+                        }
+                    });
+
+                    // Check career order
+                    careerOrder.forEach((step, index) => {
+                        if (step === correctCareerOrder[index]) {
+                            correctCareerCount++;
+                        } else {
+                            const userText = document.querySelector(`#activity-4 .step-item[data-step="${step}"] .step-text`).textContent;
+                            const correctText = document.querySelector(`#activity-4 .step-item[data-step="${correctCareerOrder[index]}"] .step-text`).textContent;
+                            correctionMessages.push(`• Position ${index + 1}: You placed "${userText}" but it should be "${correctText}"`);
+                        }
+                    });
+
+                    const totalCorrect = correctMatchCount + correctCareerCount;
+
+                    state.activities[4].completed = true;
+                    state.activities[4].correct = totalCorrect;
+                    state.activities[4].score = Math.round((totalCorrect / 8) * 100);
+                    
+                    status.textContent = 'Completed';
+                    status.style.color = '#00b894';
+                    document.querySelector('#activity-4').classList.add('completed');
+                    feedback.classList.add('show');
+                    badge.style.display = 'flex';
+
+                    if (correctionMessages.length > 0) {
+                        correctionDetails.style.display = 'block';
+                        correctionText.innerHTML = correctionMessages.join('<br>');
+                    }
+
+                    updateProgressSummary();
+                }
+            }
+
+            // Reset All Activities
+            function resetAllActivities() {
+                // Reset state
+                Object.keys(state.activities).forEach(key => {
+                    state.activities[key] = {
+                        completed: false,
+                        correct: 0,
+                        total: parseInt(key) === 1 ? 10 : parseInt(key) === 2 ? 10 : parseInt(key) === 3 ? 3 : 8,
+                        score: 0,
+                        userOrder: [],
+                        placements: {},
+                        matches: {},
+                        choices: []
+                    };
+                });
+
+                // Reset UI
+                activityCards.forEach(card => {
+                    card.classList.remove('completed');
+                    const status = card.querySelector('.activity-status');
+                    status.textContent = 'Not Started';
+                    status.style.color = '';
+                    const feedback = card.querySelector('.feedback-container');
+                    feedback.classList.remove('show');
+                    const correctionDetails = card.querySelector('.correction-details');
+                    if (correctionDetails) correctionDetails.style.display = 'none';
+                    const badge = card.querySelector('.badge-display');
+                    if (badge) badge.style.display = 'none';
+                });
+
+                // Reset Activity 1
+                document.querySelectorAll('#morning-category .category-content, #evening-category .category-content').forEach(content => {
+                    content.innerHTML = '';
+                });
+                document.querySelectorAll('#activity-1 .category-item').forEach(item => {
+                    item.style.display = '';
+                });
+                const priorityDropzone = document.getElementById('priority-dropzone');
+                priorityDropzone.innerHTML = '';
+                priorityDropzone.classList.add('empty');
+                document.querySelectorAll('#activity-1 .step-item').forEach(item => {
+                    item.style.display = '';
+                    item.classList.remove('placed');
+                });
+
+                // Reset Activity 2
+                document.querySelectorAll('#formulary-category .category-content, #nonformulary-category .category-content').forEach(content => {
+                    content.innerHTML = '';
+                });
+                document.querySelectorAll('#activity-2 .category-item').forEach(item => {
+                    item.style.display = '';
+                });
+                document.querySelectorAll('#activity-2 .matching-item').forEach(item => {
+                    item.style.display = '';
+                    item.classList.remove('dragging');
+                });
+                document.querySelectorAll('#activity-2 .match-slot').forEach(slot => {
+                    slot.classList.remove('filled', 'correct', 'incorrect', 'hover');
+                    slot.innerHTML = slot.dataset.type === 'agency' ? 'Drag agency here' : 'Drag responsibility here';
+                    delete slot.dataset.itemId;
+                });
+
+                // Reset Activity 3
+                document.getElementById('scenario-2').style.display = 'none';
+                document.getElementById('scenario-3').style.display = 'none';
+                document.querySelectorAll('.choice-button').forEach(button => {
+                    button.classList.remove('correct', 'incorrect');
+                    button.disabled = false;
+                    button.style.cursor = 'pointer';
+                });
+
+                // Reset Activity 4
+                document.querySelectorAll('#activity-4 .matching-item').forEach(item => {
+                    item.style.display = '';
+                    item.classList.remove('dragging');
+                });
+                document.querySelectorAll('#activity-4 .match-slot').forEach(slot => {
+                    slot.classList.remove('filled', 'correct', 'incorrect', 'hover');
+                    slot.innerHTML = slot.dataset.type === 'org' ? 'Drag organization here' : 'Drag benefit here';
+                    delete slot.dataset.itemId;
+                });
+                const careerDropzone = document.getElementById('career-dropzone');
+                careerDropzone.innerHTML = '';
+                careerDropzone.classList.add('empty');
+                document.querySelectorAll('#activity-4 .step-item').forEach(item => {
+                    item.style.display = '';
+                    item.classList.remove('placed');
+                });
+                document.getElementById('law-hours').value = '0';
+                document.getElementById('safety-hours').value = '0';
+                document.getElementById('ce-result').textContent = '20';
+
+                // Reset results
+                resultsPanel.classList.remove('show');
+
+                // Reset timer
+                state.startedAt = new Date();
+                state.timeSpent = 0;
+                updateTimer();
+
+                // Update progress
+                updateProgressSummary();
+            }
+
+            // Check All Answers
+            function checkAllAnswers() {
+                // Force check all activities
+                [1, 2, 3, 4].forEach(activityNum => {
+                    if (!state.activities[activityNum].completed) {
+                        state.activities[activityNum].completed = true;
+                        state.activities[activityNum].correct = state.activities[activityNum].total;
+                        state.activities[activityNum].score = 100;
+                        
+                        const activityCard = document.querySelector(`#activity-${activityNum}`);
+                        activityCard.classList.add('completed');
+                        activityCard.querySelector('.activity-status').textContent = 'Completed';
+                        activityCard.querySelector('.activity-status').style.color = '#00b894';
+                        
+                        const feedback = document.getElementById(`feedback-${activityNum}`);
+                        if (feedback) feedback.classList.add('show');
+                        
+                        const badge = document.getElementById(`badge-${activityNum}`);
+                        if (badge) badge.style.display = 'flex';
+                    }
+                });
+
+                updateProgressSummary();
+            }
+
+            // View Final Results
+            function viewFinalResults() {
+                let totalScore = 0;
+                let activityCount = 0;
+
+                Object.values(state.activities).forEach(activity => {
+                    if (activity.completed) {
+                        totalScore += activity.score;
+                        activityCount++;
+                    }
+                });
+
+                const averageScore = activityCount > 0 ? Math.round(totalScore / activityCount) : 0;
+                finalScore.textContent = `${averageScore}%`;
+                resultsPanel.classList.add('show');
+                resultsPanel.scrollIntoView({ behavior: 'smooth' });
+            }
+
+            // Initialize all activities
+            initActivity1();
+            initActivity2();
+            initActivity3();
+            initActivity4();
+
+            // Event listeners
+            resetBtn.addEventListener('click', resetAllActivities);
+            checkBtn.addEventListener('click', checkAllAnswers);
+            resultsBtn.addEventListener('click', viewFinalResults);
+
+            // Initial progress update
+            updateProgressSummary();
+        });
+    </script>
+</body>
+</html>
