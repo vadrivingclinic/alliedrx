@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Week 9 Wrap-Up -- Institutional Pharmacy Practice</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d9b8ff;
+            --color-accent: #8380f0;
+            --color-bg: #f7f5fb;
+            --color-text: #1e2030;
+            --color-muted: #727089;
+            --radius-lg: 24px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(circle at top left, #ffffff 0, #f3edff 40%, var(--color-bg) 100%);
+            color: var(--color-text);
+            -webkit-text-size-adjust: 100%;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 12px; }
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1120px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px 30px;
+            display: grid;
+            grid-template-columns: minmax(0, 3.1fr) minmax(0, 2.4fr);
+            gap: 28px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @media (max-width: 900px) {
+            .page {
+                grid-template-columns: 1fr;
+                padding: 22px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 0; }
+            .page {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 18px 14px 22px;
+                gap: 22px;
+            }
+            h1 { font-size: 1.7rem; }
+            .section-title { font-size: 1rem; }
+        }
+
+        img, .page, .column, .card, .side-card, .completion-card {
+            max-width: 100%;
+        }
+
+        .column {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header / branding */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+        }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: #00b894;
+            flex-shrink: 0;
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+        }
+
+        @media (max-width: 480px) {
+            .brand-row { flex-direction: column; align-items: flex-start; }
+            .badge-mode { margin-top: 6px; }
+        }
+
+        h1 {
+            font-size: clamp(1.9rem, 3vw, 2.3rem);
+            line-height: 1.05;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+        }
+
+        .subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 36rem;
+            margin-bottom: 18px;
+        }
+
+        .subtitle strong {
+            color: var(--color-primary);
+        }
+
+        /* Sections */
+        .section-label {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-primary);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--color-text);
+        }
+
+        .card {
+            border-radius: 18px;
+            border: 1px solid rgba(15, 23, 42, 0.06);
+            padding: 14px 16px 16px;
+            margin-bottom: 14px;
+            background: linear-gradient(135deg, rgba(175, 75, 239, 0.06), rgba(255, 255, 255, 0.98));
+        }
+
+        .card + .card { margin-top: 6px; }
+
+        .card p {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--color-text);
+        }
+
+        .small {
+            font-size: 0.82rem;
+            color: var(--color-muted);
+        }
+
+        /* Quiz styles */
+        .quiz-item {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px dashed rgba(148, 163, 184, 0.7);
+        }
+
+        .quiz-question {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .quiz-options {
+            list-style: none;
+            padding-left: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            font-size: 0.88rem;
+        }
+
+        .quiz-options li {
+            display: flex;
+            align-items: flex-start;
+            gap: 6px;
+        }
+
+        .quiz-options input {
+            margin-top: 3px;
+            cursor: pointer;
+        }
+
+        .quiz-feedback {
+            font-size: 0.82rem;
+            margin-top: 5px;
+            min-height: 1.1em;
+        }
+
+        .quiz-feedback.correct { color: #15803d; }
+        .quiz-feedback.incorrect { color: #b91c1c; }
+
+        .btn {
+            border-radius: 999px;
+            border: none;
+            padding: 7px 14px;
+            margin-top: 10px;
+            font-size: 0.84rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            cursor: pointer;
+            background: linear-gradient(135deg, var(--color-primary), #7c3aed);
+            color: #ffffff;
+            box-shadow: 0 10px 25px rgba(88, 28, 135, 0.35);
+            transition: transform 0.05s ease, box-shadow 0.05s ease;
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 5px 12px rgba(88, 28, 135, 0.4);
+        }
+
+        /* Vocabulary */
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+            margin-top: 4px;
+        }
+
+        @media (max-width: 900px) {
+            .vocab-grid { grid-template-columns: 1fr; }
+        }
+
+        .vocab-card {
+            border-radius: 14px;
+            padding: 10px 12px;
+            background: rgba(12, 10, 24, 0.94);
+            color: #e5e7eb;
+            font-size: 0.86rem;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .vocab-term {
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: #fef9c3;
+        }
+
+        .vocab-definition {
+            font-size: 0.82rem;
+            line-height: 1.5;
+            display: none;
+        }
+
+        .vocab-card.active .vocab-definition { display: block; }
+
+        .vocab-card::after {
+            content: "Tap to flip";
+            position: absolute;
+            right: 10px;
+            bottom: 8px;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #a5b4fc;
+        }
+
+        .vocab-card.active::after { content: "Hide"; }
+
+        /* Reflection */
+        textarea {
+            width: 100%;
+            min-height: 80px;
+            border-radius: 12px;
+            border: 1px solid rgba(148, 163, 184, 0.7);
+            padding: 10px 11px;
+            font-family: inherit;
+            font-size: 0.88rem;
+            resize: vertical;
+            margin-top: 6px;
+        }
+
+        textarea:focus {
+            outline: 2px solid var(--color-primary-soft);
+            border-color: var(--color-primary);
+        }
+
+        .checklist {
+            list-style: none;
+            margin-top: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            font-size: 0.86rem;
+        }
+
+        .checklist li {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .checklist input { margin-top: 2px; }
+
+        /* Right column cards */
+        .side-card {
+            background: rgba(12, 10, 24, 0.96);
+            color: #e5e7eb;
+            border-radius: 18px;
+            padding: 16px 18px 18px;
+            font-size: 0.88rem;
+            line-height: 1.7;
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.6);
+            margin-bottom: 16px;
+        }
+
+        .side-card strong { color: #ffffff; }
+
+        .side-subtitle {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #c4b5fd;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .side-list {
+            list-style: none;
+            margin-top: 6px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            font-size: 0.86rem;
+        }
+
+        .side-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 7px;
+        }
+
+        .dot {
+            width: 6px;
+            height: 6px;
+            margin-top: 7px;
+            border-radius: 999px;
+            background: #a5b4fc;
+            flex-shrink: 0;
+        }
+
+        .completion-card {
+            border-radius: 18px;
+            border: 1px dashed rgba(148, 163, 184, 0.7);
+            padding: 12px 14px;
+            font-size: 0.84rem;
+            color: var(--color-muted);
+            background: rgba(248, 250, 252, 0.9);
+        }
+
+        /* Hospital Settings Grid */
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .setting-card {
+            background: rgba(175, 75, 239, 0.08);
+            border-radius: 12px;
+            padding: 12px;
+            font-size: 0.84rem;
+            border: 1px solid rgba(175, 75, 239, 0.2);
+        }
+
+        .setting-title {
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .setting-icon {
+            width: 24px;
+            height: 24px;
+            background: var(--color-primary);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.8rem;
+        }
+
+        /* Order Types */
+        .orders-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        @media (max-width: 600px) {
+            .orders-grid { grid-template-columns: 1fr; }
+        }
+
+        .order-card {
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+
+        .stat { background: rgba(220, 38, 38, 0.1); border: 2px solid #dc2626; }
+        .asap { background: rgba(245, 158, 11, 0.1); border: 2px solid #f59e0b; }
+        .standing { background: rgba(34, 197, 94, 0.1); border: 2px solid #22c55e; }
+
+        .order-type {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 4px;
+        }
+
+        /* Regulatory Agencies */
+        .agency-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .agency-card {
+            background: rgba(131, 128, 240, 0.1);
+            border-radius: 10px;
+            padding: 10px;
+            font-size: 0.82rem;
+        }
+
+        .agency-name {
+            font-weight: 700;
+            color: var(--color-accent);
+            margin-bottom: 4px;
+        }
+
+        /* Technician Tasks */
+        .task-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 8px;
+            background: rgba(175, 75, 239, 0.05);
+            border-radius: 8px;
+            font-size: 0.85rem;
+        }
+
+        .task-number {
+            background: var(--color-primary);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+        }
+
+        /* IV Preparation */
+        .iv-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 12px;
+        }
+
+        @media (max-width: 600px) {
+            .iv-comparison { grid-template-columns: 1fr; }
+        }
+
+        .iv-box {
+            background: rgba(175, 75, 239, 0.05);
+            border-radius: 12px;
+            padding: 14px;
+            border: 2px solid rgba(175, 75, 239, 0.2);
+        }
+
+        .iv-header {
+            font-weight: 700;
+            color: var(--color-primary);
+            text-align: center;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(175, 75, 239, 0.3);
+        }
+
+        /* Specialty Areas */
+        .specialty-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .specialty-card {
+            background: rgba(34, 197, 94, 0.1);
+            border-radius: 10px;
+            padding: 10px;
+            font-size: 0.82rem;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .specialty-name {
+            font-weight: 700;
+            color: #22c55e;
+            margin-bottom: 4px;
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="wrapup-heading">
+        <!-- LEFT COLUMN -->
+        <section class="column">
+            <header class="brand-row">
+                <div class="brand">
+                    <img
+                        src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                        alt="AlliedRx logo"
+                        class="brand-logo"
+                    />
+                    <div class="course-meta">
+                        <span class="course-name">Pharmacy Technician Program • Mosby's 5th Edition</span>
+                        <div class="week-label">
+                            <span class="week-label-dot"></span>
+                            <span>Week 9 — Chapter 9: Institutional Pharmacy Practice</span>
+                        </div>
+                    </div>
+                </div>
+                <span class="badge-mode">Interactive Review</span>
+            </header>
+
+            <h1 id="wrapup-heading">Hospital Pharmacy Operations</h1>
+            <p class="subtitle">
+                Master <strong>Chapter 9 — Institutional Pharmacy Practice</strong> from Mosby's 5th Edition. 
+                Learn hospital pharmacy operations, technician responsibilities, regulatory standards, and specialized institutional practices for AlliedRx pharmacy technicians.
+            </p>
+
+            <!-- QUICK SELF-CHECK QUIZ -->
+            <section aria-label="quick self check">
+                <p class="section-label">Step 1</p>
+                <h2 class="section-title">Institutional Pharmacy Check</h2>
+                <div class="card" id="quiz-card">
+                    <p class="small">
+                        Test your understanding of hospital pharmacy operations and technician responsibilities.
+                    </p>
+
+                    <div class="quiz-item" data-answer="c">
+                        <p class="quiz-question">
+                            1. What is the primary difference between formulary and nonformulary medications in a hospital?
+                        </p>
+                        <ul class="quiz-options">
+                            <li><input type="radio" name="q1" value="a" id="q1a" /><label for="q1a">Formulary drugs are cheaper; nonformulary are expensive</label></li>
+                            <li><input type="radio" name="q1" value="b" id="q1b" /><label for="q1b">Formulary drugs require prescriptions; nonformulary do not</label></li>
+                            <li><input type="radio" name="q1" value="c" id="q1c" /><label for="q1c">Formulary drugs are approved for hospital use; nonformulary require special approval</label></li>
+                        </ul>
+                        <div class="quiz-feedback" id="q1-feedback"></div>
+                    </div>
+
+                    <div class="quiz-item" data-answer="b">
+                        <p class="quiz-question">
+                            2. How much time does a technician typically have to prepare a STAT order?
+                        </p>
+                        <ul class="quiz-options">
+                            <li><input type="radio" name="q2" value="a" id="q2a" /><label for="q2a">Within 60 minutes</label></li>
+                            <li><input type="radio" name="q2" value="b" id="q2b" /><label for="q2b">Within 10-15 minutes</label></li>
+                            <li><input type="radio" name="q2" value="c" id="q2c" /><label for="q2c">By the end of the shift</label></li>
+                        </ul>
+                        <div class="quiz-feedback" id="q2-feedback"></div>
+                    </div>
+
+                    <div class="quiz-item" data-answer="a">
+                        <p class="quiz-question">
+                            3. What does PAR level stand for in hospital pharmacy inventory management?
+                        </p>
+                        <ul class="quiz-options">
+                            <li><input type="radio" name="q3" value="a" id="q3a" /><label for="q3a">Periodic Automatic Replenishment - minimum stock levels maintained on floors</label></li>
+                            <li><input type="radio" name="q3" value="b" id="q3b" /><label for="q3b">Pharmacy Administration Requirement - legal minimum stock</label></li>
+                            <li><input type="radio" name="q3" value="c" id="q3c" /><label for="q3c">Patient Administration Record - medication administration documentation</label></li>
+                        </ul>
+                        <div class="quiz-feedback" id="q3-feedback"></div>
+                    </div>
+
+                    <div class="quiz-item" data-answer="c">
+                        <p class="quiz-question">
+                            4. Which regulatory agency accredits hospitals and must approve them for Medicare/Medicaid reimbursement?
+                        </p>
+                        <ul class="quiz-options">
+                            <li><input type="radio" name="q4" value="a" id="q4a" /><label for="q4a">FDA (Food and Drug Administration)</label></li>
+                            <li><input type="radio" name="q4" value="b" id="q4b" /><label for="q4b">DEA (Drug Enforcement Administration)</label></li>
+                            <li><input type="radio" name="q4" value="c" id="q4c" /><label for="q4c">The Joint Commission</label></li>
+                        </ul>
+                        <div class="quiz-feedback" id="q4-feedback"></div>
+                    </div>
+
+                    <button class="btn" type="button" onclick="checkQuiz()">Check answers</button>
+                </div>
+            </section>
+
+            <!-- HOSPITAL PHARMACY SETTINGS -->
+            <section aria-label="hospital settings">
+                <p class="section-label">Practice Environments</p>
+                <h2 class="section-title">Hospital Pharmacy Settings</h2>
+                <div class="card">
+                    <p class="small">Different types of institutional pharmacy environments where technicians may work:</p>
+                    <div class="settings-grid">
+                        <div class="setting-card">
+                            <div class="setting-title">
+                                <span class="setting-icon">🏥</span>
+                                <span>Central Pharmacy</span>
+                            </div>
+                            <div>Main pharmacy serving entire hospital; processes most medication orders, IV preparations, maintains main inventory.</div>
+                        </div>
+                        <div class="setting-card">
+                            <div class="setting-title">
+                                <span class="setting-icon">🔄</span>
+                                <span>Satellite Pharmacy</span>
+                            </div>
+                            <div>Specialty pharmacy located in specific departments (OR, ED, ICU); provides immediate access to critical medications.</div>
+                        </div>
+                        <div class="setting-card">
+                            <div class="setting-title">
+                                <span class="setting-icon">💉</span>
+                                <span>IV Room/Clean Room</span>
+                            </div>
+                            <div>Sterile compounding area for IV medications, TPN, chemotherapy; requires aseptic technique certification.</div>
+                        </div>
+                        <div class="setting-card">
+                            <div class="setting-title">
+                                <span class="setting-icon">📦</span>
+                                <span>Decentralized Pharmacy</span>
+                            </div>
+                            <div>Pharmacists/technicians stationed on patient care units; provides clinical services and immediate order processing.</div>
+                        </div>
+                        <div class="setting-card">
+                            <div class="setting-title">
+                                <span class="setting-icon">🏢</span>
+                                <span>Government Hospitals</span>
+                            </div>
+                            <div>VA hospitals, Indian Health Service, Bureau of Prisons; follow federal regulations and specific formularies.</div>
+                        </div>
+                        <div class="setting-card">
+                            <div class="setting-title">
+                                <span class="setting-icon">👵</span>
+                                <span>Long-Term Care</span>
+                            </div>
+                            <div>Nursing homes, extended-living facilities; unit-dose packaging, medication cart preparation.</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TECHNICIAN RESPONSIBILITIES -->
+            <section aria-label="technician tasks">
+                <p class="section-label">Core Functions</p>
+                <h2 class="section-title">Hospital Pharmacy Technician Tasks</h2>
+                <div class="card">
+                    <p class="small">Common responsibilities of institutional pharmacy technicians (based on Marcus's role in chapter scenario):</p>
+                    <div class="task-list">
+                        <div class="task-item">
+                            <div class="task-number">1</div>
+                            <div><strong>IV Preparation:</strong> Compounding sterile preparations (CSPs), TPN, chemotherapy, IV antibiotics using aseptic technique</div>
+                        </div>
+                        <div class="task-item">
+                            <div class="task-number">2</div>
+                            <div><strong>Automated Dispensing:</strong> Restocking Pyxis/Omnicell/SureMed machines, maintaining PAR levels, troubleshooting issues</div>
+                        </div>
+                        <div class="task-item">
+                            <div class="task-number">3</div>
+                            <div><strong>Medication Distribution:</strong> Delivering medications to nursing units, preparing patient-specific doses, unit-dose packaging</div>
+                        </div>
+                        <div class="task-item">
+                            <div class="task-number">4</div>
+                            <div><strong>Inventory Management:</strong> Ordering medications, rotating stock, monitoring expiration dates, controlled substance counts</div>
+                        </div>
+                        <div class="task-item">
+                            <div class="task-number">5</div>
+                            <div><strong>Order Processing:</strong> Entering medication orders into computer systems, verifying STAT/ASAP/standing orders</div>
+                        </div>
+                        <div class="task-item">
+                            <div class="task-number">6</div>
+                            <div><strong>Crash Cart Maintenance:</strong> Checking and restocking emergency medication carts throughout the hospital</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- RIGHT COLUMN -->
+        <aside class="column" aria-label="apply it to hospital practice">
+            <!-- ORDER TYPES -->
+            <section>
+                <p class="section-label">Order Processing</p>
+                <h2 class="section-title">Hospital Medication Orders</h2>
+                <div class="side-card">
+                    <p class="side-subtitle">Understanding Order Priorities and Processing Systems</p>
+                    <div class="orders-grid">
+                        <div class="order-card stat">
+                            <div class="order-type">STAT Order</div>
+                            <div><strong>Immediate:</strong> Life-threatening situation<br><strong>Timeframe:</strong> 10-15 minutes<br><strong>Examples:</strong> Cardiac arrest, anaphylaxis, severe pain</div>
+                        </div>
+                        <div class="order-card asap">
+                            <div class="order-type">ASAP Order</div>
+                            <div><strong>Urgent:</strong> As soon as possible<br><strong>Timeframe:</strong> 30-60 minutes<br><strong>Examples:</strong> Antibiotics for infection, pain management</div>
+                        </div>
+                        <div class="order-card standing">
+                            <div class="order-type">Standing Order</div>
+                            <div><strong>Protocol-based:</strong> Pre-approved for specific situations<br><strong>Timeframe:</strong> Routine processing<br><strong>Examples:</strong> Post-op pain meds, vaccination protocols</div>
+                        </div>
+                    </div>
+                    <p class="side-subtitle" style="margin-top:15px;">Order Entry Systems</p>
+                    <ul class="side-list">
+                        <li><span class="dot"></span><span><strong>CPOE:</strong> Computerized Physician Order Entry - reduces errors, improves efficiency</span></li>
+                        <li><span class="dot"></span><span><strong>E-MAR:</strong> Electronic Medication Administration Record - documents medication administration</span></li>
+                        <li><span class="dot"></span><span><strong>BPOE:</strong> Bedside Physician Order Entry - entered at patient bedside</span></li>
+                        <li><span class="dot"></span><span><strong>CADM:</strong> Computer-Aided Dispensing Machines - automated medication dispensing</span></li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- REGULATORY AGENCIES -->
+            <section>
+                <p class="section-label">Compliance</p>
+                <h2 class="section-title">Regulatory Agencies & Standards</h2>
+                <div class="side-card">
+                    <p>Key organizations governing hospital pharmacy operations (Marcus's Joint Commission scenario):</p>
+                    <div class="agency-grid">
+                        <div class="agency-card">
+                            <div class="agency-name">The Joint Commission</div>
+                            <div>Accredits hospitals; required for Medicare/Medicaid reimbursement; conducts unannounced surveys</div>
+                        </div>
+                        <div class="agency-card">
+                            <div class="agency-name">CMS</div>
+                            <div>Centers for Medicare & Medicaid Services; sets Conditions of Participation for hospitals</div>
+                        </div>
+                        <div class="agency-card">
+                            <div class="agency-name">FDA</div>
+                            <div>Regulates drug safety, IND process, medication approvals and recalls</div>
+                        </div>
+                        <div class="agency-card">
+                            <div class="agency-name">DEA</div>
+                            <div>Controls scheduled medications; requires strict inventory and documentation</div>
+                        </div>
+                        <div class="agency-card">
+                            <div class="agency-name">USP</div>
+                            <div>Sets standards for sterile compounding (USP Chapter 797), medication quality</div>
+                        </div>
+                        <div class="agency-card">
+                            <div class="agency-name">State BOP</div>
+                            <div>State Board of Pharmacy; licenses facilities and personnel; sets state-specific regulations</div>
+                        </div>
+                    </div>
+                    <p class="small" style="margin-top: 10px; color: #a5b4fc;">
+                        <strong>Joint Commission Visit Preparation:</strong> Review policies, ensure documentation complete, verify staff competencies, check medication storage, audit controlled substances.
+                    </p>
+                </div>
+            </section>
+
+            <!-- IV PREPARATION -->
+            <section>
+                <p class="section-label">Sterile Compounding</p>
+                <h2 class="section-title">IV Preparation: Hazardous vs. Nonhazardous</h2>
+                <div class="side-card">
+                    <p class="side-subtitle">Critical Differences and Safety Protocols</p>
+                    <div class="iv-comparison">
+                        <div class="iv-box">
+                            <div class="iv-header">Hazardous Drugs</div>
+                            <ul class="side-list">
+                                <li><span class="dot"></span><span><strong>Examples:</strong> Chemotherapy, some antivirals, immunosuppressants</span></li>
+                                <li><span class="dot"></span><span><strong>Preparation:</strong> Biological Safety Cabinet (BSC) Class II</span></li>
+                                <li><span class="dot"></span><span><strong>PPE Required:</strong> Double gloves, gown, eye protection, respiratory protection</span></li>
+                                <li><span class="dot"></span><span><strong>Disposal:</strong> Special hazardous waste containers</span></li>
+                                <li><span class="dot"></span><span><strong>Standards:</strong> USP Chapter 800</span></li>
+                            </ul>
+                        </div>
+                        <div class="iv-box">
+                            <div class="iv-header">Nonhazardous CSPs</div>
+                            <ul class="side-list">
+                                <li><span class="dot"></span><span><strong>Examples:</strong> IV antibiotics, TPN, pain medications</span></li>
+                                <li><span class="dot"></span><span><strong>Preparation:</strong> Laminar Airflow Hood (LAF)</span></li>
+                                <li><span class="dot"></span><span><strong>PPE Required:</strong> Single gloves, gown, hair cover, shoe covers</span></li>
+                                <li><span class="dot"></span><span><strong>Disposal:</strong> Regular pharmaceutical waste</span></li>
+                                <li><span class="dot"></span><span><strong>Standards:</strong> USP Chapter 797</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div style="margin-top: 12px; padding: 10px; background: rgba(175, 75, 239, 0.1); border-radius: 8px;">
+                        <strong>Aseptic Technique Essentials:</strong> Hand hygiene, proper garbing, sterile field maintenance, no-touch technique, 
+                        environmental monitoring, beyond-use dating, quality assurance checks.
+                    </div>
+                </div>
+            </section>
+
+            <!-- CHAPTER SCENARIO -->
+            <section>
+                <p class="section-label">Apply it</p>
+                <h2 class="section-title">Marcus's Joint Commission Preparation</h2>
+                <div class="side-card">
+                    <p class="side-subtitle">Scenario: Preparing for Regulatory Inspection</p>
+                    <p>
+                        Marcus (CPhT II) learns The Joint Commission will visit his 500-bed hospital pharmacy next week. 
+                        As a technician responsible for Pyxis machines, IV preparation, and medication distribution, 
+                        what specific areas should he focus on during preparation?
+                    </p>
+                    <p class="side-subtitle" style="margin-top:12px;">Preparation Checklist</p>
+                    <ul class="side-list">
+                        <li><span class="dot"></span><span>Verify all Pyxis/ADS discrepancy reports are resolved</span></li>
+                        <li><span class="dot"></span><span>Ensure controlled substance logs are complete and accurate</span></li>
+                        <li><span class="dot"></span><span>Check IV room documentation (cleaning logs, hood certifications)</span></li>
+                        <li><span class="dot"></span><span>Review staff competency records for sterile compounding</span></li>
+                        <li><span class="dot"></span><span>Audit medication storage temperatures and expiration dates</span></li>
+                        <li><span class="dot"></span><span>Ensure crash carts are properly stocked and sealed</span></li>
+                    </ul>
+                    <label class="small" for="jc-preparation" style="display:block;margin-top:10px;">
+                        If you were Marcus, what would be your top 3 priorities during the week before The Joint Commission visit?
+                    </label>
+                    <textarea id="jc-preparation" placeholder="Describe specific actions you would take, documentation you would review, and areas you would double-check to ensure compliance with Joint Commission standards."></textarea>
+                </div>
+            </section>
+
+            <!-- SPECIALTY AREAS -->
+            <section>
+                <p class="section-label">Hospital Departments</p>
+                <h2 class="section-title">Specialty Areas Requiring Pharmacy Support</h2>
+                <div class="side-card">
+                    <p>Different hospital departments with unique medication needs:</p>
+                    <div class="specialty-grid">
+                        <div class="specialty-card">
+                            <div class="specialty-name">Emergency Dept (ED)</div>
+                            <div>Crash carts, emergency medications, rapid sequence intubation kits</div>
+                        </div>
+                        <div class="specialty-card">
+                            <div class="specialty-name">Operating Room (OR)</div>
+                            <div>Anesthetics, neuromuscular blockers, reversal agents, irrigation solutions</div>
+                        </div>
+                        <div class="specialty-card">
+                            <div class="specialty-name">Intensive Care Unit (ICU)</div>
+                            <div>Vasopressors, sedatives, paralytics, IV antibiotics, TPN</div>
+                        </div>
+                        <div class="specialty-card">
+                            <div class="specialty-name">Oncology</div>
+                            <div>Chemotherapy, antiemetics, growth factors, supportive care medications</div>
+                        </div>
+                        <div class="specialty-card">
+                            <div class="specialty-name">Pediatrics/NICU</div>
+                            <div>Weight-based dosing, specialized formulations, neonatal medications</div>
+                        </div>
+                        <div class="specialty-card">
+                            <div class="specialty-name">Psychiatry</div>
+                            <div>Psychotropics, mood stabilizers, antipsychotics, PRN medications</div>
+                        </div>
+                    </div>
+                    <p class="small" style="margin-top: 10px; color: #a5b4fc;">
+                        <strong>Floor Stock:</strong> Non-patient-specific medications kept at nursing stations (emergency drugs, commonly used medications).
+                    </p>
+                </div>
+            </section>
+
+            <!-- KEY TERMINOLOGY -->
+            <section>
+                <p class="section-label">Step 2</p>
+                <h2 class="section-title">Essential Terminology</h2>
+                <div class="side-card">
+                    <p>Select each term to reveal its definition:</p>
+                    <div class="vocab-grid">
+                        <div class="vocab-card" onclick="toggleVocab(this)">
+                            <div class="vocab-term">Formulary</div>
+                            <div class="vocab-definition">List of drugs approved for hospital use by Pharmacy & Therapeutics Committee; standard stock medications.</div>
+                        </div>
+                        <div class="vocab-card" onclick="toggleVocab(this)">
+                            <div class="vocab-term">PAR Level</div>
+                            <div class="vocab-definition">Periodic Automatic Replenishment - minimum quantity of medications maintained on nursing units.</div>
+                        </div>
+                        <div class="vocab-card" onclick="toggleVocab(this)">
+                            <div class="vocab-term">Aseptic Technique</div>
+                            <div class="vocab-definition">Procedures to minimize contamination during sterile compounding; required for IV preparation.</div>
+                        </div>
+                        <div class="vocab-card" onclick="toggleVocab(this)">
+                            <div class="vocab-term">Automated Dispensing System</div>
+                            <div class="vocab-definition">Computerized cabinets (Pyxis, Omnicell) that control medication access on nursing units.</div>
+                        </div>
+                        <div class="vocab-card" onclick="toggleVocab(this)">
+                            <div class="vocab-term">Investigational Drug</div>
+                            <div class="vocab-definition">FDA-unapproved drug in clinical trials; requires special handling and documentation.</div>
+                        </div>
+                        <div class="vocab-card" onclick="toggleVocab(this)">
+                            <div class="vocab-term">Unit Dose</div>
+                            <div class="vocab-definition">Individualized medication packaging for single administration; standard in institutional practice.</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- COMPETENCY CHECKLIST -->
+            <section>
+                <p class="section-label">Step 3</p>
+                <h2 class="section-title">Chapter 9 Competency Checklist</h2>
+                <div class="side-card">
+                    <p>Mark each item when you can confidently demonstrate knowledge:</p>
+                    <ul class="checklist" style="margin-top:10px;">
+                        <li><input type="checkbox" id="obj1" /><label for="obj1">Define common hospital pharmacy technician tasks</label></li>
+                        <li><input type="checkbox" id="obj2" /><label for="obj2">Identify different hospital pharmacy settings</label></li>
+                        <li><input type="checkbox" id="obj3" /><label for="obj3">Differentiate formulary vs nonformulary medications</label></li>
+                        <li><input type="checkbox" id="obj4" /><label for="obj4">Explain pharmacy-nursing relationship importance</label></li>
+                        <li><input type="checkbox" id="obj5" /><label for="obj5">Identify regulatory agencies governing hospitals</label></li>
+                        <li><input type="checkbox" id="obj6" /><label for="obj6">Differentiate STAT, ASAP, standing orders</label></li>
+                        <li><input type="checkbox" id="obj7" /><label for="obj7">Describe institutional technician responsibilities</label></li>
+                        <li><input type="checkbox" id="obj8" /><label for="obj8">Explain technician role in IND process</label></li>
+                        <li><input type="checkbox" id="obj9" /><label for="obj9">Describe advantages of automated dispensing systems</label></li>
+                        <li><input type="checkbox" id="obj10" /><label for="obj10">Explain controlled substance tracking and PAR levels</label></li>
+                        <li><input type="checkbox" id="obj11" /><label for="obj11">Differentiate hazardous vs nonhazardous IV prep</label></li>
+                        <li><input type="checkbox" id="obj12" /><label for="obj12">Identify specialty areas requiring pharmacy support</label></li>
+                        <li><input type="checkbox" id="obj13" /><label for="obj13">Describe importance of ongoing technician education</label></li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- COMPLETION REMINDER -->
+            <section>
+                <p class="section-label">Step 4</p>
+                <h2 class="section-title">Ready for Chapter 10?</h2>
+                <div class="completion-card">
+                    <p>Before proceeding to Chapter 10, ensure you have:</p>
+                    <ul class="side-list" style="margin-top:8px;">
+                        <li><span class="dot"></span><span>Completed the <strong>Institutional Pharmacy Check</strong> quiz</span></li>
+                        <li><span class="dot"></span><span>Mastered all <strong>key terminology</strong> through flashcards</span></li>
+                        <li><span class="dot"></span><span>Understood different <strong>hospital pharmacy settings</strong></span></li>
+                        <li><span class="dot"></span><span>Differentiated <strong>STAT, ASAP, standing orders</strong></span></li>
+                        <li><span class="dot"></span><span>Identified <strong>regulatory agencies</strong> and compliance requirements</span></li>
+                        <li><span class="dot"></span><span>Understood <strong>hazardous vs nonhazardous IV preparation</strong></span></li>
+                        <li><span class="dot"></span><span>Completed <strong>Joint Commission preparation scenario</strong></span></li>
+                        <li><span class="dot"></span><span>Checked off items in your <strong>Competency Checklist</strong></span></li>
+                    </ul>
+                    <p style="margin-top:8px;">
+                        Chapter 9 provides essential knowledge for hospital pharmacy practice. Master these concepts before moving to 
+                        <strong>Chapter 10: Community Pharmacy Practice</strong> in your AlliedRx Pharmacy Technician Program.
+                    </p>
+                </div>
+            </section>
+        </aside>
+    </main>
+
+    <script>
+        // Quiz logic
+        function checkQuiz() {
+            const items = document.querySelectorAll('.quiz-item');
+            items.forEach((item, index) => {
+                const correct = item.getAttribute('data-answer');
+                const name = 'q' + (index + 1);
+                const selected = document.querySelector('input[name="' + name + '"]:checked');
+                const feedback = document.getElementById(name + '-feedback');
+                
+                if (!selected) {
+                    feedback.textContent = 'Please select an answer.';
+                    feedback.className = 'quiz-feedback';
+                    return;
+                }
+                
+                if (selected.value === correct) {
+                    feedback.textContent = 'Correct! Your institutional pharmacy knowledge is solid.';
+                    feedback.className = 'quiz-feedback correct';
+                } else {
+                    feedback.textContent = 'Review this concept in Chapter 9.';
+                    feedback.className = 'quiz-feedback incorrect';
+                }
+            });
+        }
+
+        // Vocabulary flip
+        function toggleVocab(card) {
+            card.classList.toggle('active');
+        }
+
+        // Joint Commission preparation resources
+        function jcPreparation() {
+            const preparationAreas = [
+                "Controlled substance documentation and reconciliation",
+                "IV room cleaning logs and hood certifications",
+                "Staff competency records and training documentation",
+                "Medication storage temperature monitoring logs",
+                "Automated dispensing system discrepancy reports",
+                "Expired medication audit and removal records",
+                "Crash cart checking and sealing documentation",
+                "Policy and procedure manual accessibility"
+            ];
+            console.log("Joint Commission Preparation Areas:", preparationAreas);
+        }
+    </script>
+</body>
+</html>
