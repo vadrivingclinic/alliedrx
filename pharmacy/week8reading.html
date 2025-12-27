@@ -1,0 +1,1527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>AlliedRx -- Week 8 Reading Assignment</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-error: #e17055;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
+            --radius-lg: 24px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(
+                circle at top left,
+                #ffffff 0,
+                #f1ecff 40%,
+                var(--color-bg) 100%
+            );
+            color: var(--color-text);
+            -webkit-text-size-adjust: 100%;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 12px;
+            }
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1120px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px 30px;
+            display: grid;
+            grid-template-columns: minmax(0, 3.1fr) minmax(0, 2.4fr);
+            gap: 28px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .page {
+                grid-template-columns: 1fr;
+                padding: 22px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 0;
+            }
+            .page {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 18px 14px 22px;
+                gap: 22px;
+            }
+        }
+
+        img, .page, .column, .reading-card, .side-card {
+            max-width: 100%;
+        }
+
+        .column {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header / branding */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .brand-logo:hover {
+            transform: scale(1.05);
+        }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+            animation: pulse 3s infinite;
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--color-success);
+            flex-shrink: 0;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .badge-mode:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+        @media (max-width: 480px) {
+            .brand-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .badge-mode {
+                margin-top: 6px;
+            }
+        }
+
+        h1 {
+            font-size: clamp(2rem, 3vw, 2.4rem);
+            line-height: 1.05;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 34rem;
+            margin-bottom: 18px;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        .subtitle strong {
+            color: var(--color-primary);
+        }
+
+        /* Reading cards */
+        .reading-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 12px;
+        }
+
+        .reading-card {
+            border-radius: 18px;
+            padding: 14px 16px 14px;
+            border: 1px solid rgba(15, 23, 42, 0.06);
+            background: linear-gradient(
+                135deg,
+                rgba(175, 75, 239, 0.07),
+                rgba(255, 255, 255, 0.95)
+            );
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 12px;
+            align-items: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .reading-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.7s ease;
+        }
+
+        .reading-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--color-primary-soft);
+        }
+
+        .reading-card:hover::before {
+            left: 100%;
+        }
+
+        .reading-card.completed {
+            border-color: var(--color-success);
+            background: linear-gradient(
+                135deg,
+                rgba(0, 184, 148, 0.07),
+                rgba(255, 255, 255, 0.95)
+            );
+        }
+
+        @media (max-width: 600px) {
+            .reading-card {
+                grid-template-columns: 1fr;
+                align-items: flex-start;
+            }
+            .chapter-pill {
+                justify-self: flex-start;
+            }
+            .tag-time {
+                justify-self: flex-start;
+                margin-top: 6px;
+            }
+        }
+
+        .chapter-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px 11px;
+            border-radius: 999px;
+            background: #ffffff;
+            box-shadow: 0 6px 18px rgba(79, 70, 229, 0.16);
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .reading-card:hover .chapter-pill {
+            background: var(--color-primary);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .chapter-main {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .chapter-title {
+            font-size: 0.98rem;
+            font-weight: 700;
+            color: var(--color-text);
+            transition: color 0.3s ease;
+        }
+
+        .reading-card:hover .chapter-title {
+            color: var(--color-primary);
+        }
+
+        .chapter-text {
+            font-size: 0.84rem;
+            color: var(--color-muted);
+            line-height: 1.4;
+        }
+
+        .tag-time {
+            padding: 5px 8px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            font-size: 0.74rem;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .reading-card:hover .tag-time {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        /* Progress tracker */
+        .progress-container {
+            margin: 20px 0;
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: 16px;
+            padding: 16px 18px;
+            border: 1px solid rgba(12, 10, 24, 0.06);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .progress-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-text);
+        }
+
+        .progress-percent {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: rgba(12, 10, 24, 0.08);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+            border-radius: 4px;
+            width: 0%;
+            transition: width 1s ease-out;
+        }
+
+        /* Interactive checklist */
+        .checklist-heading {
+            font-size: 0.86rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-primary);
+            font-weight: 600;
+            margin-top: 24px;
+            margin-bottom: 12px;
+            animation: slideInRight 0.6s ease-out 0.6s both;
+        }
+
+        .checklist {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-size: 0.86rem;
+            color: var(--color-text);
+        }
+
+        .checklist li {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            padding: 8px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .checklist li:hover {
+            background: rgba(175, 75, 239, 0.05);
+            transform: translateX(5px);
+        }
+
+        .checklist li.completed {
+            opacity: 0.7;
+        }
+
+        .check-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 6px;
+            border: 2px solid rgba(148, 163, 184, 0.9);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.72rem;
+            color: rgba(148, 163, 184, 0.9);
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .checklist li:hover .check-dot {
+            border-color: var(--color-primary);
+        }
+
+        .checklist li.completed .check-dot {
+            background: var(--color-success);
+            border-color: var(--color-success);
+            color: white;
+        }
+
+        .reading-notes {
+            font-size: 0.85rem;
+            color: var(--color-muted);
+            line-height: 1.6;
+            margin-top: 16px;
+            animation: fadeIn 0.6s ease-out 0.7s both;
+        }
+
+        .reading-notes strong {
+            color: var(--color-text);
+        }
+
+        .complete-hint {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+            margin-top: 20px;
+            padding: 12px;
+            background: rgba(175, 75, 239, 0.05);
+            border-radius: 12px;
+            border-left: 3px solid var(--color-primary);
+            animation: fadeIn 0.6s ease-out 0.8s both;
+        }
+
+        /* Right column */
+        .section-tag {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-primary);
+            font-weight: 600;
+            margin-bottom: 10px;
+            animation: slideInRight 0.6s ease-out 0.5s both;
+        }
+
+        .side-heading {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--color-text);
+            margin-bottom: 10px;
+            animation: slideInRight 0.6s ease-out 0.6s both;
+        }
+
+        .side-card {
+            background: rgba(12, 10, 24, 0.94);
+            color: #e5e7eb;
+            border-radius: 18px;
+            padding: 16px 18px 18px;
+            font-size: 0.88rem;
+            line-height: 1.7;
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.6);
+            margin-bottom: 14px;
+            transition: transform 0.3s ease;
+            animation: slideInRight 0.6s ease-out 0.7s both;
+        }
+
+        .side-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .side-card strong {
+            color: #ffffff;
+        }
+
+        .side-subheading {
+            font-size: 0.86rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: #c4b5fd;
+            font-weight: 600;
+            margin: 14px 0 10px;
+        }
+
+        .side-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-size: 0.86rem;
+        }
+
+        .side-list li {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            transition: transform 0.3s ease;
+            padding: 4px 0;
+        }
+
+        .side-list li:hover {
+            transform: translateX(5px);
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            margin-top: 6px;
+            border-radius: 999px;
+            background: var(--color-accent);
+            flex-shrink: 0;
+            animation: pulse 2s infinite;
+        }
+
+        .side-list li:hover .dot {
+            background: var(--color-primary);
+            transform: scale(1.3);
+        }
+
+        .note-card {
+            margin-top: 14px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            background: rgba(15, 23, 42, 0.75);
+            padding: 12px 14px;
+            font-size: 0.8rem;
+            color: #e5e7eb;
+            transition: all 0.3s ease;
+        }
+
+        .note-card:hover {
+            border-color: var(--color-primary-soft);
+            background: rgba(15, 23, 42, 0.9);
+        }
+
+        .note-card strong {
+            color: #fef3c7;
+        }
+
+        /* Action buttons */
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 18px;
+            border-radius: 12px;
+            border: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #9a3bd6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(175, 75, 239, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-text);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(12, 10, 24, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-icon {
+            font-size: 1.1em;
+        }
+
+        /* Completion celebration */
+        .completion-celebration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .celebration-content {
+            background: white;
+            padding: 40px;
+            border-radius: var(--radius-lg);
+            text-align: center;
+            max-width: 500px;
+            animation: fadeInUp 0.5s ease;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+        }
+
+        .celebration-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        .celebration-title {
+            font-size: 1.8rem;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+        }
+
+        .celebration-text {
+            color: var(--color-muted);
+            margin-bottom: 20px;
+        }
+
+        .celebration-btn {
+            padding: 12px 24px;
+            background: var(--color-primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .celebration-btn:hover {
+            background: #9a3bd6;
+            transform: scale(1.05);
+        }
+
+        /* Terms section */
+        .terms-section {
+            margin-top: 24px;
+            border-top: 1px solid rgba(12, 10, 24, 0.1);
+            padding-top: 20px;
+        }
+
+        .terms-heading {
+            font-size: 0.86rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-primary);
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .terms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 12px;
+            font-size: 0.85rem;
+        }
+
+        .term-item {
+            background: rgba(175, 75, 239, 0.05);
+            border-radius: 12px;
+            padding: 12px;
+            border-left: 3px solid var(--color-primary);
+            transition: all 0.3s ease;
+        }
+
+        .term-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(175, 75, 239, 0.1);
+        }
+
+        .term-name {
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 4px;
+        }
+
+        .term-definition {
+            color: var(--color-text);
+            line-height: 1.4;
+        }
+
+        @media (max-width: 600px) {
+            .terms-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Objectives section */
+        .objectives-section {
+            margin: 20px 0;
+            padding: 16px;
+            background: linear-gradient(135deg, rgba(175, 75, 239, 0.05), rgba(131, 128, 240, 0.05));
+            border-radius: 16px;
+            border-left: 4px solid var(--color-primary);
+        }
+
+        .objectives-heading {
+            font-size: 0.86rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-primary);
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .objectives-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .objective-item {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            padding: 6px 0;
+        }
+
+        .objective-number {
+            background: var(--color-primary);
+            color: white;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .objective-text {
+            font-size: 0.84rem;
+            color: var(--color-text);
+            line-height: 1.4;
+        }
+
+        /* Hazard warning styles */
+        .warning-note {
+            margin: 16px 0;
+            padding: 12px 16px;
+            background: linear-gradient(135deg, rgba(225, 112, 85, 0.1), rgba(225, 112, 85, 0.05));
+            border-radius: 12px;
+            border-left: 4px solid var(--color-error);
+            font-size: 0.85rem;
+        }
+
+        .warning-note strong {
+            color: var(--color-error);
+        }
+
+        .safety-note {
+            margin: 16px 0;
+            padding: 12px 16px;
+            background: linear-gradient(135deg, rgba(0, 184, 148, 0.1), rgba(0, 184, 148, 0.05));
+            border-radius: 12px;
+            border-left: 4px solid var(--color-success);
+            font-size: 0.85rem;
+        }
+
+        .safety-note strong {
+            color: var(--color-success);
+        }
+
+        /* USP Comparison Table */
+        .usp-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+            font-size: 0.85rem;
+        }
+
+        .usp-table th {
+            background: var(--color-primary);
+            color: white;
+            padding: 10px 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .usp-table td {
+            padding: 10px 12px;
+            border: 1px solid rgba(12, 10, 24, 0.1);
+        }
+
+        .usp-table tr:nth-child(even) {
+            background: rgba(175, 75, 239, 0.03);
+        }
+
+        .usp-table tr:hover {
+            background: rgba(175, 75, 239, 0.05);
+        }
+
+        .usp-category {
+            font-weight: 600;
+            color: var(--color-primary);
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="week8-reading-heading">
+        <!-- LEFT COLUMN: title + reading cards + checklist -->
+        <section class="column" aria-label="Week 8 reading assignments">
+            <header class="brand-row">
+                <div class="brand">
+                    <img
+                        src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                        alt="AlliedRx logo"
+                        class="brand-logo"
+                    />
+                    <div class="course-meta">
+                        <span class="course-name">Sterile Compounding • Campus & Distance Learning</span>
+                        <div class="week-label">
+                            <span class="week-label-dot"></span>
+                            <span>Week 8 --- Aseptic Technique & Sterile Compounding</span>
+                        </div>
+                    </div>
+                </div>
+                <span class="badge-mode">Campus &amp; Online</span>
+            </header>
+
+            <h1 id="week8-reading-heading">Week 8 Reading Assignment</h1>
+            <p class="subtitle">
+                This week, you'll master <strong>aseptic technique</strong> and 
+                <strong>sterile compounding procedures</strong> through Chapter 12. 
+                Learn USP &lt;797&gt; and &lt;800&gt; standards, clean room protocols, 
+                and proper handling of hazardous medications for patient safety.
+            </p>
+
+            <!-- Progress tracker -->
+            <div class="progress-container">
+                <div class="progress-header">
+                    <span class="progress-title">Reading Progress</span>
+                    <span class="progress-percent" id="progress-percent">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+            </div>
+
+            <!-- Warning Note -->
+            <div class="warning-note">
+                <strong>⚠️ Critical Safety Focus:</strong> This chapter covers life-saving but 
+                high-risk procedures. Pay special attention to USP standards, hood classifications, 
+                and hazardous drug handling protocols.
+            </div>
+
+            <!-- Reading cards -->
+            <div class="reading-grid">
+                <!-- Chapter 12: Aseptic Technique and Sterile Compounding -->
+                <article class="reading-card" id="chapter12-card" data-chapter="12">
+                    <div class="chapter-pill">Chapter 12</div>
+                    <div class="chapter-main">
+                        <div class="chapter-title">
+                            Aseptic Technique & Sterile Compounding
+                        </div>
+                        <p class="chapter-text">
+                            Focus on <strong>USP &lt;797&gt; and &lt;800&gt; standards</strong>, 
+                            <strong>clean room protocols</strong>, <strong>laminar flow hood operation</strong>,
+                            <strong>aseptic technique mastery</strong>, and <strong>hazardous drug handling</strong>.
+                            Critical for TPN and chemotherapy preparation.
+                        </p>
+                    </div>
+                    <div class="tag-time" id="chapter12-time">Est. 90–110 min</div>
+                </article>
+            </div>
+
+            <!-- Chapter Objectives -->
+            <div class="objectives-section">
+                <p class="objectives-heading">
+                    <span>📋</span>
+                    Chapter 12 Learning Objectives
+                </p>
+                <ul class="objectives-list" id="objectives-list">
+                    <!-- Objectives will be populated by JavaScript -->
+                </ul>
+            </div>
+
+            <!-- USP Comparison Table -->
+            <div class="note-card" style="background: rgba(15, 23, 42, 0.9); margin-top: 20px;">
+                <strong>USP Standards Comparison:</strong>
+                <table class="usp-table">
+                    <tr>
+                        <th>Standard</th>
+                        <th>Purpose</th>
+                        <th>Key Focus Areas</th>
+                    </tr>
+                    <tr>
+                        <td class="usp-category">USP &lt;797&gt;</td>
+                        <td>Sterile compounding standards for non-hazardous preparations</td>
+                        <td>Clean room classification, garbing procedures, beyond-use dating, quality assurance</td>
+                    </tr>
+                    <tr>
+                        <td class="usp-category">USP &lt;800&gt;</td>
+                        <td>Handling hazardous drugs to protect personnel, patients, and environment</td>
+                        <td>Containment strategies, PPE requirements, deactivation/decontamination/cleaning, waste disposal</td>
+                    </tr>
+                </table>
+            </div>
+
+            <p class="reading-notes">
+                <strong>Textbook:</strong> Kinn's The Medical Assistant, 13th Edition<br>
+                <strong>Scenario:</strong> Ken is a total parenteral nutrition (TPN) technician specialist at a prominent hospital pharmacy...
+            </p>
+
+            <!-- Terms and Definitions -->
+            <div class="terms-section">
+                <p class="terms-heading">Critical Sterile Compounding Terms</p>
+                <div class="terms-grid" id="terms-list">
+                    <!-- Terms will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Interactive checklist -->
+            <p class="checklist-heading">Mastering Sterile Compounding Competencies</p>
+            <ul class="checklist" id="reading-checklist">
+                <li data-index="0">
+                    <span class="check-dot">□</span>
+                    <span>Practice handwashing and garbing procedures following USP &lt;797&gt; standards with timed rehearsals.</span>
+                </li>
+                <li data-index="1">
+                    <span class="check-dot">□</span>
+                    <span>Create a flowchart comparing horizontal vs. vertical laminar flow hoods and their appropriate uses.</span>
+                </li>
+                <li data-index="2">
+                    <span class="check-dot">□</span>
+                    <span>Simulate drawing up medications from both ampules and vials using proper aseptic technique.</span>
+                </li>
+                <li data-index="3">
+                    <span class="check-dot">□</span>
+                    <span>Research and document your state's specific requirements for hazardous drug compounding certification.</span>
+                </li>
+                <li data-index="4">
+                    <span class="check-dot">□</span>
+                    <span>Develop a checklist for hood cleaning and maintenance following USP &lt;797&gt; frequency requirements.</span>
+                </li>
+                <li data-index="5">
+                    <span class="check-dot">□</span>
+                    <span>Create flashcards for all USP risk levels (low, medium, high) with corresponding BUD timeframes.</span>
+                </li>
+            </ul>
+
+            <!-- Safety Note -->
+            <div class="safety-note">
+                <strong>🛡️ Patient Safety First:</strong> Remember Ken's experience highlights why properly trained technicians 
+                are essential for sterile compounding. One breach in aseptic technique can cause life-threatening infections.
+            </div>
+
+            <!-- Action buttons -->
+            <div class="action-buttons">
+                <button class="btn btn-primary" id="mark-all-read">
+                    <span class="btn-icon">✓</span>
+                    Mark All as Read
+                </button>
+                <button class="btn btn-secondary" id="reset-progress">
+                    <span class="btn-icon">↺</span>
+                    Reset Progress
+                </button>
+            </div>
+
+            <p class="complete-hint">
+                Once you've completed Chapter 12 and the checklist items, proceed to 
+                the simulation lab for hands-on practice with aseptic technique and 
+                sterile compounding procedures.
+            </p>
+        </section>
+
+        <!-- RIGHT COLUMN: framing & why this reading matters -->
+        <aside class="column" aria-label="Why this reading is important">
+            <p class="section-tag">Clinical Application</p>
+            <h2 class="side-heading">The Life-Saving Precision of Sterile Compounding</h2>
+            
+            <div class="side-card">
+                <p>
+                    <strong>Chapter 12 (Aseptic Technique & Sterile Compounding)</strong> teaches the 
+                    critical skills needed to prepare medications that bypass the body's natural 
+                    defenses. These procedures directly impact patient survival in ICU, oncology, 
+                    and neonatal care settings.
+                </p>
+                
+                <p class="side-subheading">Why Sterile Technique Matters:</p>
+                <ul class="side-list">
+                    <li>
+                        <span class="dot"></span>
+                        <span><strong>Patient Survival:</strong> Contaminated IV medications can cause immediate sepsis and death</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span><strong>Regulatory Compliance:</strong> USP standards are enforceable by regulatory agencies</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span><strong>Healthcare Worker Safety:</strong> Hazardous drugs require specific handling to prevent occupational exposure</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span><strong>Medication Efficacy:</strong> Proper technique ensures drug stability and therapeutic effect</span>
+                    </li>
+                </ul>
+
+                <div class="note-card">
+                    <strong>Ken's TPN Specialist Role:</strong>
+                    <ul style="margin-top: 8px; padding-left: 20px;">
+                        <li><strong>20+ Years Experience:</strong> Witnessed evolution from manual to automated compounding</li>
+                        <li><strong>PTCB Certified:</strong> National certification demonstrating competency</li>
+                        <li><strong>ASHP Member:</strong> Active professional organization participation</li>
+                        <li><strong>Quality Patient Care:</strong> Recognizes department's critical role in patient outcomes</li>
+                    </ul>
+                </div>
+
+                <div class="note-card" style="margin-top: 12px;">
+                    <strong>Three Risk Levels of USP &lt;797&gt;:</strong>
+                    <ul style="margin-top: 8px; padding-left: 20px;">
+                        <li><strong>Low Risk:</strong> Simple transfers of commercial products (BUD: 48 hours room temp)</li>
+                        <li><strong>Medium Risk:</strong> Multiple components or complex manipulations (BUD: 30 hours room temp)</li>
+                        <li><strong>High Risk:</strong> Non-sterile ingredients or prolonged preparation (BUD: 24 hours room temp)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="side-card">
+                <p class="side-subheading">Critical Compounding Environments:</p>
+                <ul class="side-list">
+                    <li>
+                        <span class="dot"></span>
+                        <span><strong>Clean Room (ISO Class 7):</strong> Controlled environment for sterile preparation</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span><strong>Anteroom (ISO Class 8):</strong> Buffer zone for garbing and supply preparation</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span><strong>Horizontal Laminar Flow Hood:</strong> For non-hazardous sterile preparations</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span><strong>Biological Safety Cabinet (BSC):</strong> For hazardous drug compounding</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span><strong>CACI:</strong> Isolator for highest-risk hazardous preparations</span>
+                    </li>
+                </ul>
+
+                <div class="note-card" style="margin-top: 12px;">
+                    <strong>Key USP &lt;800&gt; Requirements:</strong>
+                    <ul style="margin-top: 8px; padding-left: 20px;">
+                        <li>Designated hazardous drug handling areas with negative pressure</li>
+                        <li>Specific PPE including double gloves, gowns, and respiratory protection</li>
+                        <li>Deactivation, decontamination, and cleaning (DDC) procedures</li>
+                        <li>Proper hazardous waste disposal in labeled containers</li>
+                        <li>Competency assessment and ongoing training requirements</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="side-card">
+                <p class="side-subheading">Practical Skill Development:</p>
+                <ul class="side-list">
+                    <li>
+                        <span class="dot"></span>
+                        <span><strong>Ampule Opening:</strong> Score, break, and filter technique to prevent glass contamination</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span><strong>Vial Access:</strong> Maintaining negative pressure and first air principle</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span><strong>Syringe Handling:</strong> Avoiding touch contamination at critical sites</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span><strong>Labeling:</strong> Complete information including patient name, drug, concentration, BUD</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span><strong>Quality Assurance:</strong> Visual inspection, documentation, and end-product testing</span>
+                    </li>
+                </ul>
+
+                <div class="note-card" style="margin-top: 12px; background: rgba(225, 112, 85, 0.1); border-color: var(--color-error);">
+                    <strong style="color: var(--color-error);">⚠️ Common Aseptic Technique Errors:</strong>
+                    <ul style="margin-top: 8px; padding-left: 20px;">
+                        <li>Breaking ampules toward first air flow</li>
+                        <li>Touching syringe plunger tip or needle hub</li>
+                        <li>Working outside the "six-inch rule" in laminar flow hood</li>
+                        <li>Inadequate hand hygiene before garbing</li>
+                        <li>Using expired or compromised sterile supplies</li>
+                    </ul>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <!-- Completion Celebration Modal -->
+    <div class="completion-celebration" id="celebration-modal">
+        <div class="celebration-content">
+            <div class="celebration-icon">🧫</div>
+            <h2 class="celebration-title">Sterile Technique Mastered!</h2>
+            <p class="celebration-text">
+                Excellent work completing Chapter 12 (Aseptic Technique & Sterile Compounding). 
+                You've developed the precision skills needed for life-saving medication preparation.
+            </p>
+            <p class="celebration-text">
+                You're now ready for the simulation lab where you'll apply USP &lt;797&gt; and &lt;800&gt; 
+                standards in controlled sterile compounding scenarios.
+            </p>
+            <button class="celebration-btn" id="close-celebration">Continue to Simulation Lab</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // State management
+            let readingState = {
+                chapter12: false,
+                checklist: [false, false, false, false, false, false]
+            };
+
+            // Chapter objectives from the provided content
+            const objectives = [
+                "Explain why certain medications must be sterile.",
+                "Define common terms used in sterile compounding.",
+                "Describe Standard Precautions necessary when preparing compounded sterile preparations.",
+                "Discuss the following as they relate to supplies and equipment used to prepare compounded sterile preparations: (a) describe standard supplies and equipment used to prepare compounded sterile preparations; (b) explain the anatomy of a syringe and needle; (c) list the sizes of syringes and needles used in the pharmacy setting; (d) explain when and why filters are used in sterile compounding; and (e) list the types of stock used within a clean room.",
+                "Describe various medication delivery systems.",
+                "Discuss the following as they relate to the United States Pharmacopeia (USP) <797>: (a) explain the history of USP <797>; (b) list the main components of USP <797> regulations; and (c) list the three risk levels of drug preparation determined by USP <797>.",
+                "Discuss the following as they relate to hood cleaning and maintenance: (a) explain the differences between the various types of hoods; (b) describe how often hoods must be inspected; and (c) describe how to properly clean various types of hoods and prepare them for use.",
+                "Describe proper aseptic technique.",
+                "Demonstrate the steps in drawing up medication from an ampule and from a vial.",
+                "Discuss the following as they relate to aseptic technique: (a) describe different types of intravenous (IV) parenteral medications; (b) discuss hyperalimentation; (c) list types of parenteral additives; (d) discuss compatibility considerations for parenteral medications; (e) list components of a label for an intravenous medication; and (f) describe how to properly dispose of needles, vials, and cytotoxic supplies.",
+                "List two key components of USP<800> regulations as well as the proper steps that need to be taken for a pharmacy technician to be competent in compounding hazardous preparations."
+            ];
+
+            // Terms and definitions from the provided content
+            const terms = [
+                { term: "Anteroom", definition: "The room adjacent to the 'clean room' used for donning all personal protective equipment (PPE) and wiping down all supplies that will be used in the compounding area" },
+                { term: "Aseptic technique", definition: "The procedures used to eliminate the possibility of a drug becoming contaminated with microbes or particles" },
+                { term: "Beyond-use date (BUD)", definition: "Defined by USP <797> as the date or time after which a compounded sterile preparation (CSP) shall not be administered, stored, or transported; it is determined from the date the preparation is compounded" },
+                { term: "Biological safety cabinet (BSC)", definition: "A vertical flow hood that should be used for making hazardous sterile preparations in the clean room" },
+                { term: "Compounding aseptic containment isolator (CACI)", definition: "ISO Class 5 compounding area used to prepare hazardous drugs" },
+                { term: "Clean room", definition: "In pharmacy, a contained and controlled environment in the pharmacy that has a low level of environmental pollutants (eg, dust, airborne microbes, aerosol particles, and chemical vapors); the clean room is used for preparing sterile medication products" },
+                { term: "Compounded sterile preparations (CSPs)", definition: "Preparations prepared in a sterile environment using non-sterile ingredients or devices that must be sterilized before administration" },
+                { term: "Critical site", definition: "Any surface or area exposed to first air, which is exposed or at risk for touch, or direct air (ie, vial tops, open ampules, needle hubs, or injection ports)" },
+                { term: "Gauges", definition: "The sizes of needle openings" },
+                { term: "First air", definition: "Air exiting the HEPA filter in a unidirectional air stream" },
+                { term: "Hazardous drug", definition: "Any drug that has been proven to have dangerous effects during animal or human testing; it may cause cancer or may harm certain organs or pregnant women" },
+                { term: "Hazardous waste", definition: "Any waste that meets the Resource Conservation and Recovery Act (RCRA) criteria of ignitability, corrosiveness, reactivity, or toxicity" },
+                { term: "Health care–associated infection (HAI)", definition: "An infection that patients acquire during the course of receiving treatments for other conditions in an institutional setting" },
+                { term: "Horizontal laminar flow hood", definition: "An environment for the preparation of compounded sterile preparations in which air originating from the back of the hood moves forward across the hood and into the room" },
+                { term: "Hyperalimentation", definition: "Parenteral nutrition for individuals who are unable to eat solids or liquids" },
+                { term: "Infection control", definition: "Policies and procedures put in place to minimize the risk of spreading infections in hospitals or other health care facilities" },
+                { term: "Laminar airflow hood", definition: "An environment for the preparation of sterile products" },
+                { term: "Parenteral medications", definition: "Medications that bypass the digestive system but are intended for systemic action; the term parenteral most commonly describes medications given by injection, such as intravenously or intramuscularly" },
+                { term: "Peripheral parenteral", definition: "Injection of a medication into the veins on the periphery of the body instead of into a central vein or artery" },
+                { term: "Peripheral parenteral nutrition (PPN)", definition: "Intravenous nutrition administered through veins on the periphery of the body rather than through a central vein or artery" },
+                { term: "Precipitate", definition: "To separate from solution or suspension; a solid that emerges from a liquid solution" },
+                { term: "Primary engineering control (PEC)", definition: "A device or zone that provides Class 5 environment for sterile compounding (ie, hoods)" },
+                { term: "Reconstituted", definition: "A substance that has had a diluent (eg, saline or sterile water) added to a powder" },
+                { term: "Standard operating procedures (SOPs)", definition: "Written guidelines and criteria that list specific steps for various competencies" },
+                { term: "Standard Precautions (Universal Precautions)", definition: "A set of standards that reduces the possibility of contamination and the risk of transmission of infectious disease; these standards are used throughout a health care facility, including to prepare medications" },
+                { term: "Sterile preparation", definition: "A preparation that contains no living microorganisms" },
+                { term: "Total parenteral nutrition (TPN)", definition: "Large volume intravenous nutrition administered through a central vein (eg, subclavian vein), which allows for a higher concentration of solutions" },
+                { term: "United States Pharmacopeia <797> (USP <797>)", definition: "Chapter 797, 'Pharmaceutical Compounding—Sterile Preparations,' of the USP National Formulary. It contains a set of enforceable sterile compounding standards; describes the guidelines, procedures, and compliance requirements for compounding sterile preparations; and sets the standards that apply to all settings in which sterile preparations are compounded" },
+                { term: "United States Pharmacopeia <800> (USP <800>)", definition: "Chapter 800, 'A new general chapter created to identify the requirements for receipt, storage, mixing, preparing, compounding, dispensing, and administration of hazardous drugs to protect the patient, health care personnel, and environment" },
+                { term: "Vertical laminar flow hood", definition: "An environment for the preparation of chemotherapeutic and other hazardous agents in which air originating from the roof of the hood moves downward (over the agent) and is captured in a vent on the floor of the hood" }
+            ];
+
+            // DOM elements
+            const chapter12Card = document.getElementById('chapter12-card');
+            const checklistItems = document.querySelectorAll('#reading-checklist li');
+            const progressFill = document.getElementById('progress-fill');
+            const progressPercent = document.getElementById('progress-percent');
+            const markAllBtn = document.getElementById('mark-all-read');
+            const resetBtn = document.getElementById('reset-progress');
+            const celebrationModal = document.getElementById('celebration-modal');
+            const closeCelebrationBtn = document.getElementById('close-celebration');
+            const termsList = document.getElementById('terms-list');
+            const objectivesList = document.getElementById('objectives-list');
+
+            // Populate objectives
+            function populateObjectives() {
+                objectives.forEach((objective, index) => {
+                    const objectiveItem = document.createElement('li');
+                    objectiveItem.className = 'objective-item';
+                    objectiveItem.innerHTML = `
+                        <div class="objective-number">${index + 1}</div>
+                        <div class="objective-text">${objective}</div>
+                    `;
+                    objectivesList.appendChild(objectiveItem);
+                });
+            }
+
+            // Populate terms
+            function populateTerms() {
+                terms.forEach(term => {
+                    const termItem = document.createElement('div');
+                    termItem.className = 'term-item';
+                    termItem.innerHTML = `
+                        <div class="term-name">${term.term}</div>
+                        <div class="term-definition">${term.definition}</div>
+                    `;
+                    termsList.appendChild(termItem);
+                });
+            }
+
+            // Calculate progress
+            function calculateProgress() {
+                const totalItems = 7; // 1 chapter + 6 checklist items
+                let completed = 0;
+                
+                if (readingState.chapter12) completed++;
+                readingState.checklist.forEach(item => {
+                    if (item) completed++;
+                });
+                
+                const percentage = Math.round((completed / totalItems) * 100);
+                
+                // Update progress bar
+                progressFill.style.width = `${percentage}%`;
+                progressPercent.textContent = `${percentage}%`;
+                
+                // Update progress bar color based on completion
+                if (percentage === 100) {
+                    progressFill.style.background = 'linear-gradient(90deg, var(--color-success), #00d2a0)';
+                    progressPercent.style.color = 'var(--color-success)';
+                    showCelebration();
+                } else if (percentage >= 50) {
+                    progressFill.style.background = 'linear-gradient(90deg, var(--color-primary), var(--color-accent))';
+                    progressPercent.style.color = 'var(--color-primary)';
+                } else {
+                    progressFill.style.background = 'linear-gradient(90deg, var(--color-primary), var(--color-accent))';
+                    progressPercent.style.color = 'var(--color-primary)';
+                }
+                
+                return percentage;
+            }
+
+            // Toggle chapter completion
+            function toggleChapter() {
+                const isCompleted = readingState.chapter12;
+                
+                if (isCompleted) {
+                    // Mark as incomplete
+                    chapter12Card.classList.remove('completed');
+                    readingState.chapter12 = false;
+                    document.getElementById('chapter12-time').textContent = 'Est. 90–110 min';
+                } else {
+                    // Mark as complete
+                    chapter12Card.classList.add('completed');
+                    readingState.chapter12 = true;
+                    document.getElementById('chapter12-time').textContent = '✓ Completed';
+                    
+                    // Add animation
+                    chapter12Card.style.transform = 'scale(1.02)';
+                    setTimeout(() => {
+                        chapter12Card.style.transform = '';
+                    }, 300);
+                }
+                
+                calculateProgress();
+            }
+
+            // Toggle checklist item
+            function toggleChecklistItem(index) {
+                const item = checklistItems[index];
+                const dot = item.querySelector('.check-dot');
+                readingState.checklist[index] = !readingState.checklist[index];
+                
+                if (readingState.checklist[index]) {
+                    item.classList.add('completed');
+                    dot.textContent = '✓';
+                    dot.style.background = 'var(--color-success)';
+                    dot.style.borderColor = 'var(--color-success)';
+                    dot.style.color = 'white';
+                } else {
+                    item.classList.remove('completed');
+                    dot.textContent = '□';
+                    dot.style.background = '';
+                    dot.style.borderColor = 'rgba(148, 163, 184, 0.9)';
+                    dot.style.color = 'rgba(148, 163, 184, 0.9)';
+                }
+                
+                calculateProgress();
+            }
+
+            // Mark all as read
+            function markAllAsRead() {
+                // Mark chapter
+                readingState.chapter12 = true;
+                chapter12Card.classList.add('completed');
+                document.getElementById('chapter12-time').textContent = '✓ Completed';
+                
+                // Mark all checklist items
+                readingState.checklist = [true, true, true, true, true, true];
+                checklistItems.forEach((item, index) => {
+                    item.classList.add('completed');
+                    const dot = item.querySelector('.check-dot');
+                    dot.textContent = '✓';
+                    dot.style.background = 'var(--color-success)';
+                    dot.style.borderColor = 'var(--color-success)';
+                    dot.style.color = 'white';
+                });
+                
+                calculateProgress();
+                
+                // Celebration animation
+                chapter12Card.style.transform = 'scale(1.05)';
+                setTimeout(() => {
+                    chapter12Card.style.transform = '';
+                }, 300);
+            }
+
+            // Reset progress
+            function resetProgress() {
+                // Reset chapter
+                readingState.chapter12 = false;
+                chapter12Card.classList.remove('completed');
+                document.getElementById('chapter12-time').textContent = 'Est. 90–110 min';
+                
+                // Reset checklist
+                readingState.checklist = [false, false, false, false, false, false];
+                checklistItems.forEach((item, index) => {
+                    item.classList.remove('completed');
+                    const dot = item.querySelector('.check-dot');
+                    dot.textContent = '□';
+                    dot.style.background = '';
+                    dot.style.borderColor = 'rgba(148, 163, 184, 0.9)';
+                    dot.style.color = 'rgba(148, 163, 184, 0.9)';
+                });
+                
+                calculateProgress();
+            }
+
+            // Show celebration modal
+            function showCelebration() {
+                setTimeout(() => {
+                    celebrationModal.style.display = 'flex';
+                }, 500);
+            }
+
+            // Close celebration modal
+            function closeCelebration() {
+                celebrationModal.style.display = 'none';
+            }
+
+            // Initialize
+            populateObjectives();
+            populateTerms();
+            
+            // Event listeners
+            chapter12Card.addEventListener('click', toggleChapter);
+            chapter12Card.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    toggleChapter();
+                }
+            });
+            
+            checklistItems.forEach((item, index) => {
+                item.addEventListener('click', () => toggleChecklistItem(index));
+                item.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        toggleChecklistItem(index);
+                    }
+                });
+            });
+            
+            markAllBtn.addEventListener('click', markAllAsRead);
+            resetBtn.addEventListener('click', resetProgress);
+            closeCelebrationBtn.addEventListener('click', closeCelebration);
+            
+            // Close modal when clicking outside
+            celebrationModal.addEventListener('click', (e) => {
+                if (e.target === celebrationModal) {
+                    closeCelebration();
+                }
+            });
+            
+            // Initialize with some progress for demo
+            setTimeout(() => {
+                // Mark first checklist item as completed for demo
+                toggleChecklistItem(0);
+            }, 1000);
+            
+            // Add scroll animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+            
+            // Observe reading card
+            chapter12Card.style.opacity = '0';
+            chapter12Card.style.transform = 'translateY(20px)';
+            chapter12Card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            observer.observe(chapter12Card);
+            
+            // Observe objectives with delay
+            const objectiveItems = document.querySelectorAll('.objective-item');
+            objectiveItems.forEach((item, index) => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateX(-10px)';
+                item.style.transition = `opacity 0.5s ease ${index * 0.05}s, transform 0.5s ease ${index * 0.05}s`;
+                observer.observe(item);
+            });
+            
+            // Observe checklist items with delay
+            checklistItems.forEach((item, index) => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateX(-20px)';
+                item.style.transition = `opacity 0.5s ease ${index * 0.1}s, transform 0.5s ease ${index * 0.1}s`;
+                observer.observe(item);
+            });
+            
+            // Observe terms with delay
+            const termItems = document.querySelectorAll('.term-item');
+            termItems.forEach((item, index) => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateY(10px)';
+                item.style.transition = `opacity 0.5s ease ${index * 0.03}s, transform 0.5s ease ${index * 0.03}s`;
+                observer.observe(item);
+            });
+        });
+    </script>
+</body>
+</html>
