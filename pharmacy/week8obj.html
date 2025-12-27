@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AlliedRx Pharmacy Tech -- Week 8 Objectives</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --color-primary: #af4bef;
+  --color-primary-soft: #d492ff;
+  --color-accent: #8380f0;
+  --color-success: #00b894;
+  --color-error: #e17055;
+  --color-bg: #f7f5fb;
+  --color-text: #2b2b2b;
+  --color-muted: #6c6880;
+  --radius-lg: 24px;
+  --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+  --shadow-hover: 0 25px 60px rgba(175, 75, 239, 0.25);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  width: 100%;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  padding: 24px;
+  background: radial-gradient(
+    circle at top left,
+    #ffffff 0,
+    #f1ecff 40%,
+    var(--color-bg) 100%
+  );
+  color: var(--color-text);
+  -webkit-text-size-adjust: 100%;
+}
+
+@media (max-width: 600px) {
+  body {
+    padding: 12px;
+  }
+}
+
+.page {
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  background: #ffffff;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  padding: 28px 30px 32px 30px;
+  display: grid;
+  grid-template-columns: minmax(0, 3.1fr) minmax(0, 2.4fr);
+  gap: 28px;
+  position: relative;
+  overflow: hidden;
+  animation: fadeInUp 0.8s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 900px) {
+  .page {
+    grid-template-columns: 1fr;
+    padding: 22px;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    padding: 0;
+  }
+  .page {
+    border-radius: 0;
+    box-shadow: none;
+    padding: 18px 14px 22px;
+    gap: 22px;
+  }
+}
+
+img,
+.page,
+.column,
+.objective-card,
+.week-overview {
+  max-width: 100%;
+}
+
+.column {
+  position: relative;
+  z-index: 1;
+}
+
+/* Header */
+.brand-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+  width: 100%;
+  animation: fadeIn 0.6s ease-out 0.2s both;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.brand-logo {
+  height: 40px;
+  width: auto;
+  max-width: 100%;
+  filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+  transition: transform 0.3s ease;
+}
+
+.brand-logo:hover {
+  transform: scale(1.05);
+}
+
+.course-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-width: 100%;
+}
+
+.course-name {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--color-muted);
+  white-space: normal;
+}
+
+.week-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(175, 75, 239, 0.08);
+  font-size: 0.76rem;
+  color: var(--color-primary);
+  white-space: normal;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { background-color: rgba(175, 75, 239, 0.08); }
+  50% { background-color: rgba(175, 75, 239, 0.15); }
+}
+
+.week-label-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--color-success);
+  flex-shrink: 0;
+  animation: blink 1.5s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.badge-mode {
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: rgba(12, 10, 24, 0.06);
+  border: 1px solid rgba(12, 10, 24, 0.08);
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--color-muted);
+  white-space: nowrap;
+  transition: all 0.3s ease;
+}
+
+.badge-mode:hover {
+  background: rgba(175, 75, 239, 0.1);
+  border-color: var(--color-primary-soft);
+  color: var(--color-primary);
+}
+
+@media (max-width: 480px) {
+  .brand-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .badge-mode {
+    margin-top: 6px;
+  }
+}
+
+h1 {
+  font-size: clamp(2rem, 3vw, 2.4rem);
+  line-height: 1.05;
+  color: var(--color-primary);
+  margin-bottom: 6px;
+  animation: fadeInUp 0.6s ease-out 0.3s both;
+}
+
+.subtitle {
+  font-size: 0.98rem;
+  color: var(--color-muted);
+  max-width: 34rem;
+  margin-bottom: 18px;
+  animation: fadeInUp 0.6s ease-out 0.4s both;
+}
+
+/* Objectives list */
+.objectives-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.objective-card {
+  background: #08070a;
+  color: #ffffff;
+  border-radius: 18px;
+  padding: 10px 16px 14px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.objective-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.7s ease;
+}
+
+.objective-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
+}
+
+.objective-card:hover::before {
+  left: 100%;
+}
+
+.objective-card.active {
+  background: linear-gradient(135deg, #0f172a, #1e1b4b);
+  border-left: 4px solid var(--color-accent);
+}
+
+@media (max-width: 480px) {
+  .objective-card {
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto;
+  }
+  .objective-icon {
+    justify-self: flex-end;
+  }
+}
+
+.objective-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #111827;
+  font-weight: 700;
+  font-size: 1.05rem;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.objective-card:hover .objective-number {
+  background: var(--color-primary-soft);
+  transform: rotate(5deg);
+}
+
+.objective-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.objective-verb {
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: var(--color-primary-soft);
+  transition: color 0.3s ease;
+}
+
+.objective-card:hover .objective-verb {
+  color: #ffffff;
+}
+
+.objective-text {
+  font-size: 0.84rem;
+  color: #e5e7eb;
+  line-height: 1.4;
+}
+
+.objective-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  border: 1px solid rgba(250, 250, 250, 0.16);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  color: #f9fafb;
+  background: linear-gradient(
+    135deg,
+    rgba(175, 75, 239, 0.1),
+    rgba(0, 0, 0, 0.4)
+  );
+  transition: all 0.3s ease;
+}
+
+.objective-card:hover .objective-icon {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  transform: scale(1.1);
+}
+
+/* Right-hand content */
+.objectives-header {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--color-text);
+  margin-bottom: 6px;
+  animation: fadeInUp 0.6s ease-out 0.5s both;
+}
+
+.section-tag {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--color-primary);
+  font-weight: 600;
+  margin-bottom: 10px;
+  animation: fadeInUp 0.6s ease-out 0.6s both;
+}
+
+.week-overview {
+  background: rgba(12, 10, 24, 0.94);
+  border-radius: 18px;
+  padding: 16px 18px 18px;
+  color: #e5e7eb;
+  font-size: 0.88rem;
+  line-height: 1.7;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.6);
+  margin-bottom: 16px;
+  animation: fadeInUp 0.6s ease-out 0.7s both;
+  transition: transform 0.3s ease;
+}
+
+.week-overview:hover {
+  transform: translateY(-2px);
+}
+
+.week-overview strong {
+  color: #ffffff;
+}
+
+.mini-heading {
+  font-size: 0.86rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: #c4b5fd;
+  font-weight: 600;
+  margin: 8px 0 10px;
+}
+
+.outcomes-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.86rem;
+  color: #f9fafb;
+}
+
+.outcomes-list li {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  transition: transform 0.3s ease;
+}
+
+.outcomes-list li:hover {
+  transform: translateX(5px);
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  margin-top: 6px;
+  border-radius: 999px;
+  background: var(--color-accent);
+  flex-shrink: 0;
+  animation: pulse 2s infinite;
+}
+
+.note-card {
+  margin-top: 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(15, 23, 42, 0.7);
+  padding: 10px 12px;
+  font-size: 0.78rem;
+  color: #e5e7eb;
+  transition: all 0.3s ease;
+}
+
+.note-card:hover {
+  border-color: var(--color-primary-soft);
+  background: rgba(15, 23, 42, 0.9);
+}
+
+.note-card strong {
+  color: #fef3c7;
+}
+
+/* Interactive counter */
+.progress-counter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(175, 75, 239, 0.05);
+  border-radius: 16px;
+  padding: 12px 18px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(175, 75, 239, 0.1);
+}
+
+.counter-item {
+  text-align: center;
+}
+
+.counter-number {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--color-primary);
+  display: block;
+}
+
+.counter-label {
+  font-size: 0.75rem;
+  color: var(--color-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* Animation for counter */
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.counter-item {
+  animation: countUp 0.6s ease-out forwards;
+}
+
+.counter-item:nth-child(1) { animation-delay: 0.8s; }
+.counter-item:nth-child(2) { animation-delay: 1s; }
+.counter-item:nth-child(3) { animation-delay: 1.2s; }
+
+/* Case Study Box */
+.case-study {
+  background: linear-gradient(135deg, rgba(131, 128, 240, 0.1), rgba(175, 75, 239, 0.1));
+  border-radius: 18px;
+  padding: 18px;
+  margin-top: 20px;
+  border: 1px solid rgba(131, 128, 240, 0.2);
+}
+
+.case-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.case-content {
+  font-size: 0.85rem;
+  color: #ffffff;
+  line-height: 1.5;
+}
+
+.case-content strong {
+  color: #d492ff;
+}
+
+/* Equipment Grid */
+.equipment-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.equipment-item {
+  background: rgba(131, 128, 240, 0.1);
+  border-radius: 12px;
+  padding: 10px;
+  border: 1px solid rgba(131, 128, 240, 0.2);
+  transition: all 0.3s ease;
+}
+
+.equipment-item:hover {
+  background: rgba(131, 128, 240, 0.2);
+  transform: translateY(-2px);
+}
+
+.equipment-name {
+  font-weight: 600;
+  color: #c4b5fd;
+  font-size: 0.8rem;
+}
+
+.equipment-desc {
+  color: #e5e7eb;
+  font-size: 0.75rem;
+  margin-top: 4px;
+}
+
+/* Key Terms Section */
+.key-terms {
+  margin-top: 20px;
+  background: rgba(12, 10, 24, 0.94);
+  border-radius: 18px;
+  padding: 16px 18px;
+  border: 1px solid rgba(131, 128, 240, 0.2);
+}
+
+.key-terms-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.term-definition {
+  margin-bottom: 8px;
+  padding-left: 10px;
+  border-left: 2px solid var(--color-primary-soft);
+  transition: all 0.3s ease;
+}
+
+.term-definition:hover {
+  border-left-color: var(--color-primary);
+  transform: translateX(3px);
+}
+
+.term {
+  font-weight: 600;
+  color: #d492ff;
+  font-size: 0.82rem;
+}
+
+.definition {
+  color: #e5e7eb;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  margin-top: 2px;
+}
+
+/* USP Risk Levels */
+.risk-levels {
+  margin-top: 15px;
+  padding: 15px;
+  background: rgba(15, 23, 42, 0.5);
+  border-radius: 12px;
+  border-left: 4px solid var(--color-accent);
+}
+
+.risk-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #c4b5fd;
+  margin-bottom: 8px;
+}
+
+.risk-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.78rem;
+  color: #e5e7eb;
+}
+
+.risk-level {
+  padding: 8px;
+  border-radius: 8px;
+  background: rgba(131, 128, 240, 0.15);
+}
+
+.risk-name {
+  font-weight: 600;
+  color: #d492ff;
+  margin-bottom: 4px;
+}
+
+.risk-desc {
+  font-size: 0.76rem;
+}
+</style>
+</head>
+<body>
+<main class="page" aria-labelledby="week8-heading">
+  <!-- LEFT COLUMN: title + objective cards -->
+  <section class="column" aria-label="Week 8 objectives list">
+    <header class="brand-row">
+      <div class="brand">
+        <img
+          src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+          alt="AlliedRx logo"
+          class="brand-logo"
+        />
+        <div class="course-meta">
+          <span class="course-name">Pharmacy Technician Program • CPhT</span>
+          <div class="week-label">
+            <span class="week-label-dot"></span>
+            <span>Week 8 --- Aseptic Technique & Sterile Compounding</span>
+          </div>
+        </div>
+      </div>
+      <span class="badge-mode">Campus &amp; Online</span>
+    </header>
+    <h1 id="week8-heading">Week 8 Objectives</h1>
+    <p class="subtitle">
+      Master <strong>sterile compounding principles, aseptic technique, and USP regulations</strong> 
+      essential for pharmacy technicians preparing intravenous medications and sterile preparations.
+    </p>
+    <!-- Progress counter -->
+    <div class="progress-counter">
+      <div class="counter-item">
+        <span class="counter-number" id="total-objectives">11</span>
+        <span class="counter-label">Objectives</span>
+      </div>
+      <div class="counter-item">
+        <span class="counter-number">31</span>
+        <span class="counter-label">Key Terms</span>
+      </div>
+      <div class="counter-item">
+        <span class="counter-number">1</span>
+        <span class="counter-label">Chapter</span>
+      </div>
+    </div>
+    <div class="objectives-list" id="objectives-container">
+      <!-- Chapter 12: Aseptic Technique and Sterile Compounding Objectives -->
+      <article class="objective-card" data-chapter="chapter12">
+        <div class="objective-number">01</div>
+        <div class="objective-main">
+          <div class="objective-verb">Explain</div>
+          <p class="objective-text">
+            Explain why certain medications must be sterile.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          🦠
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter12">
+        <div class="objective-number">02</div>
+        <div class="objective-main">
+          <div class="objective-verb">Define</div>
+          <p class="objective-text">
+            Define common terms used in sterile compounding.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          📖
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter12">
+        <div class="objective-number">03</div>
+        <div class="objective-main">
+          <div class="objective-verb">Describe</div>
+          <p class="objective-text">
+            Describe Standard Precautions necessary when preparing compounded sterile preparations.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          🛡️
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter12">
+        <div class="objective-number">04</div>
+        <div class="objective-main">
+          <div class="objective-verb">Discuss & Describe</div>
+          <p class="objective-text">
+            Discuss supplies and equipment for CSPs: standard equipment, syringe/needle anatomy, sizes, filter use, and clean room stock.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          🧰
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter12">
+        <div class="objective-number">05</div>
+        <div class="objective-main">
+          <div class="objective-verb">Describe</div>
+          <p class="objective-text">
+            Describe various medication delivery systems.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          💉
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter12">
+        <div class="objective-number">06</div>
+        <div class="objective-main">
+          <div class="objective-verb">Discuss</div>
+          <p class="objective-text">
+            Discuss USP <797>: history, main components, and three risk levels of drug preparation.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          📜
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter12">
+        <div class="objective-number">07</div>
+        <div class="objective-main">
+          <div class="objective-verb">Discuss</div>
+          <p class="objective-text">
+            Discuss hood cleaning and maintenance: hood types, inspection frequency, and proper cleaning procedures.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          🧼
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter12">
+        <div class="objective-number">08</div>
+        <div class="objective-main">
+          <div class="objective-verb">Describe</div>
+          <p class="objective-text">
+            Describe proper aseptic technique.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          👨‍🔬
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter12">
+        <div class="objective-number">09</div>
+        <div class="objective-main">
+          <div class="objective-verb">Demonstrate</div>
+          <p class="objective-text">
+            Demonstrate the steps in drawing up medication from an ampule and from a vial.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          🧪
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter12">
+        <div class="objective-number">10</div>
+        <div class="objective-main">
+          <div class="objective-verb">Discuss</div>
+          <p class="objective-text">
+            Discuss aseptic technique: IV medications, hyperalimentation, parenteral additives, compatibility, labeling, and proper disposal.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          🏥
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter12">
+        <div class="objective-number">11</div>
+        <div class="objective-main">
+          <div class="objective-verb">List</div>
+          <p class="objective-text">
+            List two key components of USP<800> regulations and steps for technician competency in hazardous preparations.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          ⚠️
+        </div>
+      </article>
+    </div>
+  </section>
+  <!-- RIGHT COLUMN: narrative + outcomes framing -->
+  <aside class="column" aria-label="Overview of this week's content">
+    <h2 class="objectives-header">Sterile Compounding Excellence</h2>
+    <p class="section-tag">Aseptic Technique • USP Regulations • Hazardous Drugs • IV Preparation</p>
+    <div class="week-overview">
+      <p>
+        Week 8 focuses on <strong>sterile compounding and aseptic technique</strong>, the most critical skills for 
+        pharmacy technicians working in hospital and compounding settings. You'll learn USP regulations, 
+        proper technique, and safety protocols for preparing life-saving intravenous medications.
+      </p>
+      <p>
+        Sterile compounding requires <strong>absolute precision and strict adherence to protocols</strong>. 
+        Contaminated preparations can cause serious infections or fatalities, making proper training 
+        and technique essential for patient safety and regulatory compliance.
+      </p>
+      
+      <div class="case-study">
+        <div class="case-title">
+          <span>📋</span> Chapter 12 Scenario: Ken's TPN Expertise
+        </div>
+        <div class="case-content">
+          <strong>Technician:</strong> Ken, TPN specialist with 20+ years experience at prominent hospital<br>
+          <strong>Credentials:</strong> PTCB certified, ASHP member<br>
+          <strong>Experience:</strong> Worked through evolution from manual to automated TPN preparation<br>
+          <strong>Role:</strong> Rotating shifts including monthly weekends<br>
+          <strong>Belief:</strong> Department plays critical role in quality patient care<br>
+          <strong>Learning Focus:</strong> Importance of well-trained technicians for parenteral medications
+        </div>
+      </div>
+      
+      <!-- Equipment Grid -->
+      <div class="mini-heading" style="margin-top: 20px;">🧪 Sterile Compounding Equipment</div>
+      <div class="equipment-grid">
+        <div class="equipment-item">
+          <div class="equipment-name">Laminar Flow Hood</div>
+          <div class="equipment-desc">Provides ISO Class 5 environment for sterile preparation</div>
+        </div>
+        <div class="equipment-item">
+          <div class="equipment-name">Biological Safety Cabinet</div>
+          <div class="equipment-desc">Vertical flow hood for hazardous drug preparation</div>
+        </div>
+        <div class="equipment-item">
+          <div class="equipment-name">Compounding Aseptic Isolator</div>
+          <div class="equipment-desc">ISO Class 5 area for preparing hazardous drugs</div>
+        </div>
+        <div class="equipment-item">
+          <div class="equipment-name">Anteroom</div>
+          <div class="equipment-desc">PPE donning area adjacent to clean room</div>
+        </div>
+      </div>
+      
+      <!-- USP Risk Levels -->
+      <div class="risk-levels">
+        <div class="risk-title">📊 USP <797> Risk Levels</div>
+        <div class="risk-list">
+          <div class="risk-level">
+            <div class="risk-name">Low Risk Level</div>
+            <div class="risk-desc">Simple aseptic transfers of sterile products using ≤3 commercial containers</div>
+          </div>
+          <div class="risk-level">
+            <div class="risk-name">Medium Risk Level</div>
+            <div class="risk-desc">Multiple aseptic transfers or manipulations; complex compounding procedures</div>
+          </div>
+          <div class="risk-level">
+            <div class="risk-name">High Risk Level</div>
+            <div class="risk-desc">Non-sterile ingredients used, prolonged preparation time, complex manipulations</div>
+          </div>
+        </div>
+      </div>
+      
+      <p class="mini-heading">By the end of this week, you will be able to:</p>
+      <ul class="outcomes-list">
+        <li>
+          <span class="dot"></span>
+          <span>Apply USP <797> and <800> regulations to daily sterile compounding activities.</span>
+        </li>
+        <li>
+          <span class="dot"></span>
+          <span>Perform proper aseptic technique to prevent contamination of compounded sterile preparations.</span>
+        </li>
+        <li>
+          <span class="dot"></span>
+          <span>Differentiate between horizontal and vertical laminar flow hoods and their appropriate uses.</span>
+        </li>
+        <li>
+          <span class="dot"></span>
+          <span>Prepare medications from ampules and vials using correct technique to maintain sterility.</span>
+        </li>
+        <li>
+          <span class="dot"></span>
+          <span>Identify and apply appropriate risk levels (low, medium, high) to various compounding scenarios.</span>
+        </li>
+        <li>
+          <span class="dot"></span>
+          <span>Implement proper disposal procedures for hazardous materials and chemotherapy waste.</span>
+        </li>
+      </ul>
+      
+      <div class="note-card">
+        <strong>Critical Safety:</strong> <strong>First air</strong> is the air exiting the HEPA filter that must 
+        contact critical sites (vial tops, needle hubs) first. Never block first air flow as contamination can 
+        occur within seconds, potentially causing life-threatening infections in immunocompromised patients.
+      </div>
+      
+      <div class="note-card" style="margin-top: 12px;">
+        <strong>USP <800> Hazardous Drugs:</strong> <strong>Biological Safety Cabinets (BSCs)</strong> must be used 
+        for hazardous drug compounding. Proper PPE includes double gloves, gowns, respiratory protection, and 
+        eye protection to prevent exposure to carcinogenic and teratogenic substances.
+      </div>
+      
+      <div class="note-card" style="margin-top: 12px;">
+        <strong>Beyond-Use Dating:</strong> <strong>BUDs</strong> are determined by USP <797> based on risk level 
+        and storage conditions. Low-risk CSPs stored at room temperature have 48-hour BUDs, while high-risk 
+        preparations may have only 24-hour BUDs. Accurate labeling prevents administration of expired medications.
+      </div>
+    </div>
+    
+    <!-- Key Terms Section -->
+    <div class="key-terms">
+      <div class="key-terms-title">
+        <span>📚</span> Key Sterile Compounding Terms
+      </div>
+      <div class="term-definition">
+        <div class="term">Aseptic Technique</div>
+        <div class="definition">Procedures to eliminate possibility of drug contamination with microbes or particles</div>
+      </div>
+      <div class="term-definition">
+        <div class="term">Critical Site</div>
+        <div class="definition">Any surface exposed to first air or at risk for touch contamination</div>
+      </div>
+      <div class="term-definition">
+        <div class="term">First Air</div>
+        <div class="definition">Air exiting HEPA filter in unidirectional stream that must contact critical sites first</div>
+      </div>
+      <div class="term-definition">
+        <div class="term">Beyond-Use Date (BUD)</div>
+        <div class="definition">Date after which compounded sterile preparation cannot be administered</div>
+      </div>
+      <div class="term-definition">
+        <div class="term">Clean Room</div>
+        <div class="definition">Controlled environment with low pollutants for preparing sterile medications</div>
+      </div>
+      <div class="term-definition">
+        <div class="term">Biological Safety Cabinet (BSC)</div>
+        <div class="definition">Vertical flow hood for hazardous sterile preparations</div>
+      </div>
+      <div class="term-definition">
+        <div class="term">Total Parenteral Nutrition (TPN)</div>
+        <div class="definition">Large volume IV nutrition administered through central vein</div>
+      </div>
+      <div class="term-definition">
+        <div class="term">Hazardous Drug</div>
+        <div class="definition">Drug proven to have dangerous effects during testing (carcinogenic, teratogenic)</div>
+      </div>
+      <div class="term-definition">
+        <div class="term">Compounded Sterile Preparations (CSPs)</div>
+        <div class="definition">Preparations made in sterile environment using non-sterile ingredients/devices</div>
+      </div>
+    </div>
+  </aside>
+</main>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Interactive objective cards
+  const objectiveCards = document.querySelectorAll('.objective-card');
+  
+  objectiveCards.forEach(card => {
+    card.addEventListener('click', function() {
+      // Toggle active state
+      this.classList.toggle('active');
+
+      // Add subtle animation
+      if (this.classList.contains('active')) {
+        const icon = this.querySelector('.objective-icon');
+        icon.style.transform = 'scale(1.2) rotate(10deg)';
+        setTimeout(() => {
+          icon.style.transform = 'scale(1.1)';
+        }, 300);
+      }
+    });
+
+    // Add keyboard navigation
+    card.setAttribute('tabindex', '0');
+    card.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        this.click();
+      }
+    });
+  });
+
+  // Animate counter numbers
+  function animateCounter(element, target, duration) {
+    let start = 0;
+    const increment = target / (duration / 16); // 60fps
+    const timer = setInterval(() => {
+      start += increment;
+      if (start >= target) {
+        element.textContent = target;
+        clearInterval(timer);
+      } else {
+        element.textContent = Math.floor(start);
+      }
+    }, 16);
+  }
+
+  // Start counter animation after page load
+  setTimeout(() => {
+    const counterElement = document.getElementById('total-objectives');
+    animateCounter(counterElement, 11, 1000);
+  }, 1500);
+
+  // Add hover effect to outcomes list items
+  const outcomesItems = document.querySelectorAll('.outcomes-list li');
+  outcomesItems.forEach(item => {
+    item.addEventListener('mouseenter', function() {
+      const dot = this.querySelector('.dot');
+      dot.style.transform = 'scale(1.5)';
+      dot.style.background = 'var(--color-primary)';
+    });
+    item.addEventListener('mouseleave', function() {
+      const dot = this.querySelector('.dot');
+      dot.style.transform = 'scale(1)';
+      dot.style.background = 'var(--color-accent)';
+    });
+  });
+
+  // Add scroll animation for cards
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, observerOptions);
+
+  // Observe all objective cards
+  objectiveCards.forEach(card => {
+    card.style.opacity = '0';
+    card.style.transform = 'translateY(20px)';
+    card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    observer.observe(card);
+  });
+
+  // Add interactivity to case study boxes
+  const caseStudies = document.querySelectorAll('.case-study');
+  caseStudies.forEach(study => {
+    study.addEventListener('mouseenter', function() {
+      this.style.transform = 'translateY(-3px)';
+      this.style.boxShadow = '0 12px 30px rgba(131, 128, 240, 0.2)';
+    });
+    study.addEventListener('mouseleave', function() {
+      this.style.transform = 'translateY(0)';
+      this.style.boxShadow = 'none';
+    });
+  });
+
+  // Add interactivity to equipment items
+  const equipmentItems = document.querySelectorAll('.equipment-item');
+  equipmentItems.forEach(item => {
+    item.addEventListener('mouseenter', function() {
+      this.style.transform = 'translateY(-3px)';
+      this.style.boxShadow = '0 8px 20px rgba(131, 128, 240, 0.15)';
+    });
+    item.addEventListener('mouseleave', function() {
+      this.style.transform = 'translateY(0)';
+      this.style.boxShadow = 'none';
+    });
+  });
+
+  // Add interactivity to key terms
+  const termDefinitions = document.querySelectorAll('.term-definition');
+  termDefinitions.forEach(term => {
+    term.addEventListener('mouseenter', function() {
+      this.style.transform = 'translateX(3px)';
+      this.style.borderLeftColor = 'var(--color-primary)';
+    });
+    term.addEventListener('mouseleave', function() {
+      this.style.transform = 'translateX(0)';
+      this.style.borderLeftColor = 'var(--color-primary-soft)';
+    });
+  });
+
+  // Add interactivity to risk levels
+  const riskLevels = document.querySelectorAll('.risk-level');
+  riskLevels.forEach(level => {
+    level.addEventListener('mouseenter', function() {
+      this.style.transform = 'translateX(3px)';
+      this.style.background = 'rgba(131, 128, 240, 0.25)';
+    });
+    level.addEventListener('mouseleave', function() {
+      this.style.transform = 'translateX(0)';
+      this.style.background = 'rgba(131, 128, 240, 0.15)';
+    });
+  });
+});
+</script>
+</body>
+</html>
