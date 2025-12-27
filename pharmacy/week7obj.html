@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AlliedRx Pharmacy Tech -- Week 7 Objectives</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --color-primary: #af4bef;
+  --color-primary-soft: #d492ff;
+  --color-accent: #8380f0;
+  --color-success: #00b894;
+  --color-error: #e17055;
+  --color-bg: #f7f5fb;
+  --color-text: #2b2b2b;
+  --color-muted: #6c6880;
+  --radius-lg: 24px;
+  --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+  --shadow-hover: 0 25px 60px rgba(175, 75, 239, 0.25);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  width: 100%;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  padding: 24px;
+  background: radial-gradient(
+    circle at top left,
+    #ffffff 0,
+    #f1ecff 40%,
+    var(--color-bg) 100%
+  );
+  color: var(--color-text);
+  -webkit-text-size-adjust: 100%;
+}
+
+@media (max-width: 600px) {
+  body {
+    padding: 12px;
+  }
+}
+
+.page {
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  background: #ffffff;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  padding: 28px 30px 32px 30px;
+  display: grid;
+  grid-template-columns: minmax(0, 3.1fr) minmax(0, 2.4fr);
+  gap: 28px;
+  position: relative;
+  overflow: hidden;
+  animation: fadeInUp 0.8s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 900px) {
+  .page {
+    grid-template-columns: 1fr;
+    padding: 22px;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    padding: 0;
+  }
+  .page {
+    border-radius: 0;
+    box-shadow: none;
+    padding: 18px 14px 22px;
+    gap: 22px;
+  }
+}
+
+img,
+.page,
+.column,
+.objective-card,
+.week-overview {
+  max-width: 100%;
+}
+
+.column {
+  position: relative;
+  z-index: 1;
+}
+
+/* Header */
+.brand-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+  width: 100%;
+  animation: fadeIn 0.6s ease-out 0.2s both;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.brand-logo {
+  height: 40px;
+  width: auto;
+  max-width: 100%;
+  filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+  transition: transform 0.3s ease;
+}
+
+.brand-logo:hover {
+  transform: scale(1.05);
+}
+
+.course-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-width: 100%;
+}
+
+.course-name {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--color-muted);
+  white-space: normal;
+}
+
+.week-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(175, 75, 239, 0.08);
+  font-size: 0.76rem;
+  color: var(--color-primary);
+  white-space: normal;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { background-color: rgba(175, 75, 239, 0.08); }
+  50% { background-color: rgba(175, 75, 239, 0.15); }
+}
+
+.week-label-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--color-success);
+  flex-shrink: 0;
+  animation: blink 1.5s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.badge-mode {
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: rgba(12, 10, 24, 0.06);
+  border: 1px solid rgba(12, 10, 24, 0.08);
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--color-muted);
+  white-space: nowrap;
+  transition: all 0.3s ease;
+}
+
+.badge-mode:hover {
+  background: rgba(175, 75, 239, 0.1);
+  border-color: var(--color-primary-soft);
+  color: var(--color-primary);
+}
+
+@media (max-width: 480px) {
+  .brand-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .badge-mode {
+    margin-top: 6px;
+  }
+}
+
+h1 {
+  font-size: clamp(2rem, 3vw, 2.4rem);
+  line-height: 1.05;
+  color: var(--color-primary);
+  margin-bottom: 6px;
+  animation: fadeInUp 0.6s ease-out 0.3s both;
+}
+
+.subtitle {
+  font-size: 0.98rem;
+  color: var(--color-muted);
+  max-width: 34rem;
+  margin-bottom: 18px;
+  animation: fadeInUp 0.6s ease-out 0.4s both;
+}
+
+/* Objectives list */
+.objectives-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.objective-card {
+  background: #08070a;
+  color: #ffffff;
+  border-radius: 18px;
+  padding: 10px 16px 14px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.objective-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.7s ease;
+}
+
+.objective-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
+}
+
+.objective-card:hover::before {
+  left: 100%;
+}
+
+.objective-card.active {
+  background: linear-gradient(135deg, #0f172a, #1e1b4b);
+  border-left: 4px solid var(--color-accent);
+}
+
+@media (max-width: 480px) {
+  .objective-card {
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto;
+  }
+  .objective-icon {
+    justify-self: flex-end;
+  }
+}
+
+.objective-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #111827;
+  font-weight: 700;
+  font-size: 1.05rem;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.objective-card:hover .objective-number {
+  background: var(--color-primary-soft);
+  transform: rotate(5deg);
+}
+
+.objective-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.objective-verb {
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: var(--color-primary-soft);
+  transition: color 0.3s ease;
+}
+
+.objective-card:hover .objective-verb {
+  color: #ffffff;
+}
+
+.objective-text {
+  font-size: 0.84rem;
+  color: #e5e7eb;
+  line-height: 1.4;
+}
+
+.objective-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  border: 1px solid rgba(250, 250, 250, 0.16);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  color: #f9fafb;
+  background: linear-gradient(
+    135deg,
+    rgba(175, 75, 239, 0.1),
+    rgba(0, 0, 0, 0.4)
+  );
+  transition: all 0.3s ease;
+}
+
+.objective-card:hover .objective-icon {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  transform: scale(1.1);
+}
+
+/* Right-hand content */
+.objectives-header {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--color-text);
+  margin-bottom: 6px;
+  animation: fadeInUp 0.6s ease-out 0.5s both;
+}
+
+.section-tag {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--color-primary);
+  font-weight: 600;
+  margin-bottom: 10px;
+  animation: fadeInUp 0.6s ease-out 0.6s both;
+}
+
+.week-overview {
+  background: rgba(12, 10, 24, 0.94);
+  border-radius: 18px;
+  padding: 16px 18px 18px;
+  color: #e5e7eb;
+  font-size: 0.88rem;
+  line-height: 1.7;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.6);
+  margin-bottom: 16px;
+  animation: fadeInUp 0.6s ease-out 0.7s both;
+  transition: transform 0.3s ease;
+}
+
+.week-overview:hover {
+  transform: translateY(-2px);
+}
+
+.week-overview strong {
+  color: #ffffff;
+}
+
+.mini-heading {
+  font-size: 0.86rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: #c4b5fd;
+  font-weight: 600;
+  margin: 8px 0 10px;
+}
+
+.outcomes-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.86rem;
+  color: #f9fafb;
+}
+
+.outcomes-list li {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  transition: transform 0.3s ease;
+}
+
+.outcomes-list li:hover {
+  transform: translateX(5px);
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  margin-top: 6px;
+  border-radius: 999px;
+  background: var(--color-accent);
+  flex-shrink: 0;
+  animation: pulse 2s infinite;
+}
+
+.note-card {
+  margin-top: 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(15, 23, 42, 0.7);
+  padding: 10px 12px;
+  font-size: 0.78rem;
+  color: #e5e7eb;
+  transition: all 0.3s ease;
+}
+
+.note-card:hover {
+  border-color: var(--color-primary-soft);
+  background: rgba(15, 23, 42, 0.9);
+}
+
+.note-card strong {
+  color: #fef3c7;
+}
+
+/* Interactive counter */
+.progress-counter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(175, 75, 239, 0.05);
+  border-radius: 16px;
+  padding: 12px 18px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(175, 75, 239, 0.1);
+}
+
+.counter-item {
+  text-align: center;
+}
+
+.counter-number {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--color-primary);
+  display: block;
+}
+
+.counter-label {
+  font-size: 0.75rem;
+  color: var(--color-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* Animation for counter */
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.counter-item {
+  animation: countUp 0.6s ease-out forwards;
+}
+
+.counter-item:nth-child(1) { animation-delay: 0.8s; }
+.counter-item:nth-child(2) { animation-delay: 1s; }
+.counter-item:nth-child(3) { animation-delay: 1.2s; }
+
+/* Case Study Box */
+.case-study {
+  background: linear-gradient(135deg, rgba(131, 128, 240, 0.1), rgba(175, 75, 239, 0.1));
+  border-radius: 18px;
+  padding: 18px;
+  margin-top: 20px;
+  border: 1px solid rgba(131, 128, 240, 0.2);
+}
+
+.case-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.case-content {
+  font-size: 0.85rem;
+  color: #ffffff;
+  line-height: 1.5;
+}
+
+.case-content strong {
+  color: #d492ff;
+}
+
+/* Equipment Grid */
+.equipment-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.equipment-item {
+  background: rgba(131, 128, 240, 0.1);
+  border-radius: 12px;
+  padding: 10px;
+  border: 1px solid rgba(131, 128, 240, 0.2);
+  transition: all 0.3s ease;
+}
+
+.equipment-item:hover {
+  background: rgba(131, 128, 240, 0.2);
+  transform: translateY(-2px);
+}
+
+.equipment-name {
+  font-weight: 600;
+  color: #c4b5fd;
+  font-size: 0.8rem;
+}
+
+.equipment-desc {
+  color: #e5e7eb;
+  font-size: 0.75rem;
+  margin-top: 4px;
+}
+
+/* Dosage Forms Grid */
+.forms-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.form-item {
+  background: rgba(15, 23, 42, 0.5);
+  border-radius: 8px;
+  padding: 8px;
+  border-left: 3px solid var(--color-primary-soft);
+  font-size: 0.75rem;
+  color: #e5e7eb;
+}
+
+/* Key Terms Section */
+.key-terms {
+  margin-top: 20px;
+  background: rgba(12, 10, 24, 0.94);
+  border-radius: 18px;
+  padding: 16px 18px;
+  border: 1px solid rgba(131, 128, 240, 0.2);
+}
+
+.key-terms-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.term-definition {
+  margin-bottom: 8px;
+  padding-left: 10px;
+  border-left: 2px solid var(--color-primary-soft);
+  transition: all 0.3s ease;
+}
+
+.term-definition:hover {
+  border-left-color: var(--color-primary);
+  transform: translateX(3px);
+}
+
+.term {
+  font-weight: 600;
+  color: #d492ff;
+  font-size: 0.82rem;
+}
+
+.definition {
+  color: #e5e7eb;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  margin-top: 2px;
+}
+
+/* Safety & Quality Section */
+.safety-section {
+  margin-top: 20px;
+  padding: 15px;
+  background: rgba(15, 23, 42, 0.5);
+  border-radius: 12px;
+  border-left: 4px solid var(--color-success);
+}
+
+.safety-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #c4b5fd;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.safety-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.78rem;
+  color: #e5e7eb;
+}
+
+.safety-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.safety-list li::before {
+  content: "✅";
+  font-size: 0.7rem;
+}
+</style>
+</head>
+<body>
+<main class="page" aria-labelledby="week7-heading">
+  <!-- LEFT COLUMN: title + objective cards -->
+  <section class="column" aria-label="Week 7 objectives list">
+    <header class="brand-row">
+      <div class="brand">
+        <img
+          src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+          alt="AlliedRx logo"
+          class="brand-logo"
+        />
+        <div class="course-meta">
+          <span class="course-name">Pharmacy Technician Program • CPhT</span>
+          <div class="week-label">
+            <span class="week-label-dot"></span>
+            <span>Week 7 --- Bulk Repackaging & Non-Sterile Compounding</span>
+          </div>
+        </div>
+      </div>
+      <span class="badge-mode">Campus &amp; Online</span>
+    </header>
+    <h1 id="week7-heading">Week 7 Objectives</h1>
+    <p class="subtitle">
+      Master <strong>bulk repackaging procedures, non-sterile compounding techniques, and quality control</strong> 
+      essential for pharmacy technicians working in long-term care and compounding pharmacy settings.
+    </p>
+    <!-- Progress counter -->
+    <div class="progress-counter">
+      <div class="counter-item">
+        <span class="counter-number" id="total-objectives">16</span>
+        <span class="counter-label">Objectives</span>
+      </div>
+      <div class="counter-item">
+        <span class="counter-number">25</span>
+        <span class="counter-label">Key Terms</span>
+      </div>
+      <div class="counter-item">
+        <span class="counter-number">1</span>
+        <span class="counter-label">Chapter</span>
+      </div>
+    </div>
+    <div class="objectives-list" id="objectives-container">
+      <!-- Chapter 11: Bulk Repackaging and Non-Sterile Compounding Objectives -->
+      <article class="objective-card" data-chapter="chapter11">
+        <div class="objective-number">01</div>
+        <div class="objective-main">
+          <div class="objective-verb">Explain</div>
+          <p class="objective-text">
+            Explain the need for packaging products in the appropriate type and size of container.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          📦
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter11">
+        <div class="objective-number">02</div>
+        <div class="objective-main">
+          <div class="objective-verb">List</div>
+          <p class="objective-text">
+            List the steps in the bulk repackaging of medications.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          📝
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter11">
+        <div class="objective-number">03</div>
+        <div class="objective-main">
+          <div class="objective-verb">List</div>
+          <p class="objective-text">
+            List five reasons pharmacies often repackage bulk medications into unit dose packages.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          🎯
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter11">
+        <div class="objective-number">04</div>
+        <div class="objective-main">
+          <div class="objective-verb">Describe</div>
+          <p class="objective-text">
+            Describe the proper handling of medications during bulk repackaging.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          👨‍⚕️
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter11">
+        <div class="objective-number">05</div>
+        <div class="objective-main">
+          <div class="objective-verb">Demonstrate</div>
+          <p class="objective-text">
+            Demonstrate how to complete a repacking logbook with the necessary information.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          📋
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter11">
+        <div class="objective-number">06</div>
+        <div class="objective-main">
+          <div class="objective-verb">Explain</div>
+          <p class="objective-text">
+            Explain the importance of the accurate labeling of pharmaceuticals.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          🏷️
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter11">
+        <div class="objective-number">07</div>
+        <div class="objective-main">
+          <div class="objective-verb">Explain & Discuss</div>
+          <p class="objective-text">
+            Explain the calculations used to determine beyond-use dates, and discuss long-term care packaging including blister cards.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          📅
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter11">
+        <div class="objective-number">08</div>
+        <div class="objective-main">
+          <div class="objective-verb">Define & Discuss</div>
+          <p class="objective-text">
+            Define non-sterile compounding, discuss its history, and list common reasons patients need compounded medications.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          🧪
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter11">
+        <div class="objective-number">09</div>
+        <div class="objective-main">
+          <div class="objective-verb">Explain & List</div>
+          <p class="objective-text">
+            Explain considerations in storage and stability of compounded products, and list dosage forms under USP-NF <795>.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          🌡️
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter11">
+        <div class="objective-number">10</div>
+        <div class="objective-main">
+          <div class="objective-verb">Describe & Differentiate</div>
+          <p class="objective-text">
+            Describe equipment used in compounding drugs, and differentiate among types of scales used to weigh compounds.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          ⚖️
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter11">
+        <div class="objective-number">11</div>
+        <div class="objective-main">
+          <div class="objective-verb">Discuss & List</div>
+          <p class="objective-text">
+            Discuss additional supplies used in compounding, and list competencies technicians must possess to reduce errors.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          🔧
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter11">
+        <div class="objective-number">12</div>
+        <div class="objective-main">
+          <div class="objective-verb">Demonstrate</div>
+          <p class="objective-text">
+            Demonstrate compounding procedures: weighing, measuring liquids, preparing solutions, reconstituting suspensions, etc.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          👨‍🔬
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter11">
+        <div class="objective-number">13</div>
+        <div class="objective-main">
+          <div class="objective-verb">Discuss</div>
+          <p class="objective-text">
+            Discuss packaging for compounded products.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          🎁
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter11">
+        <div class="objective-number">14</div>
+        <div class="objective-main">
+          <div class="objective-verb">Keep</div>
+          <p class="objective-text">
+            Keep accurate records for compounded medications.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          📊
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter11">
+        <div class="objective-number">15</div>
+        <div class="objective-main">
+          <div class="objective-verb">Describe</div>
+          <p class="objective-text">
+            Describe the importance of safety, professionalism, and quality control related to compounding.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          ✅
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter11">
+        <div class="objective-number">16</div>
+        <div class="objective-main">
+          <div class="objective-verb">Describe</div>
+          <p class="objective-text">
+            Describe the types of dosage forms compounded for animal use.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          🐶
+        </div>
+      </article>
+    </div>
+  </section>
+  <!-- RIGHT COLUMN: narrative + outcomes framing -->
+  <aside class="column" aria-label="Overview of this week's content">
+    <h2 class="objectives-header">Compounding & Repackaging Excellence</h2>
+    <p class="section-tag">BULK Repackaging • USP 795 • Quality Control • Hands-On Training</p>
+    <div class="week-overview">
+      <p>
+        Week 7 delves into the <strong>specialized skills of bulk repackaging and non-sterile compounding</strong>. 
+        You'll learn procedures for preparing unit doses, compounding customized medications, and maintaining 
+        quality control according to USP 795 standards.
+      </p>
+      <p>
+        These skills are <strong>critical for long-term care, compounding, and hospital pharmacies</strong> where 
+        customized medications and unit-dose packaging improve patient safety, medication adherence, and 
+        operational efficiency.
+      </p>
+      
+      <div class="case-study">
+        <div class="case-title">
+          <span>📋</span> Chapter 11 Scenario: Judy's Cross-Training
+        </div>
+        <div class="case-content">
+          <strong>Technician:</strong> Judy, new technician at long-term care pharmacy<br>
+          <strong>Training:</strong> ASHP-accredited technician program with hands-on laboratory experience<br>
+          <strong>Cross-Trained Areas:</strong> Order entry, repackaging, extemporaneous compounding, IV admixture<br>
+          <strong>Compounding Experience:</strong> Troches, ointments, creams, suspensions in lab setting<br>
+          <strong>Learning Focus:</strong> Advantages of hands-on training for compounding proficiency and safety
+        </div>
+      </div>
+      
+      <!-- Compounding Equipment -->
+      <div class="mini-heading" style="margin-top: 20px;">🔧 Essential Compounding Equipment</div>
+      <div class="equipment-grid">
+        <div class="equipment-item">
+          <div class="equipment-name">Mortar & Pestle</div>
+          <div class="equipment-desc">For grinding and mixing powders, crushing tablets</div>
+        </div>
+        <div class="equipment-item">
+          <div class="equipment-name">Analytical Balance</div>
+          <div class="equipment-desc">Precise weighing of ingredients (±0.001g accuracy)</div>
+        </div>
+        <div class="equipment-item">
+          <div class="equipment-name">Class A Balance</div>
+          <div class="equipment-desc">General weighing with ±0.01g accuracy</div>
+        </div>
+        <div class="equipment-item">
+          <div class="equipment-name">Graduated Cylinders</div>
+          <div class="equipment-desc">Accurate liquid measurement with meniscus reading</div>
+        </div>
+      </div>
+      
+      <!-- Dosage Forms -->
+      <div class="mini-heading" style="margin-top: 15px;">💊 Non-Sterile Compounding Forms (USP 795)</div>
+      <div class="forms-grid">
+        <div class="form-item">Creams (hydrophilic)</div>
+        <div class="form-item">Ointments (hydrophobic)</div>
+        <div class="form-item">Solutions</div>
+        <div class="form-item">Suspensions</div>
+        <div class="form-item">Troches</div>
+        <div class="form-item">Capsules</div>
+        <div class="form-item">Powders</div>
+        <div class="form-item">Emulsions</div>
+      </div>
+      
+      <!-- Safety Section -->
+      <div class="safety-section">
+        <div class="safety-title">✅ Compounding Safety & Quality Control</div>
+        <ul class="safety-list">
+          <li><strong>Beyond-Use Dates (BUD):</strong> Calculate using stability data from USP or literature</li>
+          <li><strong>Documentation:</strong> Complete Formulation Records (FR) and Compounding Records (CR)</li>
+          <li><strong>Calibration:</strong> Regular equipment calibration according to manufacturer specifications</li>
+          <li><strong>Labeling:</strong> Complete labeling with BUD, storage conditions, and patient instructions</li>
+        </ul>
+      </div>
+      
+      <p class="mini-heading">By the end of this week, you will be able to:</p>
+      <ul class="outcomes-list">
+        <li>
+          <span class="dot"></span>
+          <span>Perform bulk repackaging procedures with proper handling and documentation according to GMP standards.</span>
+        </li>
+        <li>
+          <span class="dot"></span>
+          <span>Calculate beyond-use dates for repackaged and compounded medications using appropriate stability data.</span>
+        </li>
+        <li>
+          <span class="dot"></span>
+          <span>Prepare non-sterile compounded products following USP 795 guidelines and formulation records.</span>
+        </li>
+        <li>
+          <span class="dot"></span>
+          <span>Operate compounding equipment including balances, mortars/pestles, and measuring devices accurately.</span>
+        </li>
+        <li>
+          <span class="dot"></span>
+          <span>Maintain complete documentation including repackaging logs, formulation records, and compounding records.</span>
+        </li>
+        <li>
+          <span class="dot"></span>
+          <span>Apply quality control procedures to ensure compounded products meet safety and efficacy standards.</span>
+        </li>
+      </ul>
+      
+      <div class="note-card">
+        <strong>Unit Dose Advantages:</strong> <strong>Repackaging into unit doses reduces medication errors</strong> by 50% 
+        in institutional settings. It improves medication adherence, reduces waste, and enhances medication 
+        tracking and inventory control.
+      </div>
+      
+      <div class="note-card" style="margin-top: 12px;">
+        <strong>USP 795 Compliance:</strong> <strong>Non-sterile compounding must follow USP Chapter 795</strong> 
+        guidelines which address stability, beyond-use dating, ingredient quality, and documentation requirements. 
+        These standards ensure patient safety and product efficacy.
+      </div>
+      
+      <div class="note-card" style="margin-top: 12px;">
+        <strong>Blister Card Packaging:</strong> Used in <strong>long-term care facilities</strong>, blister cards 
+        (bubble packs) with 28-, 30-, or 31-day compartments improve medication administration accuracy and 
+        simplify medication pass procedures for nursing staff.
+      </div>
+    </div>
+    
+    <!-- Key Terms Section -->
+    <div class="key-terms">
+      <div class="key-terms-title">
+        <span>📚</span> Key Compounding & Repackaging Terms
+      </div>
+      <div class="term-definition">
+        <div class="term">Beyond-Use Date (BUD)</div>
+        <div class="definition">Date after which compounded preparation should not be used; determined from preparation date</div>
+      </div>
+      <div class="term-definition">
+        <div class="term">USP 795</div>
+        <div class="definition">General chapter defining practices and guidelines for non-sterile compounding</div>
+      </div>
+      <div class="term-definition">
+        <div class="term">Bubble Pack (Blister Card)</div>
+        <div class="definition">Preformed card with daily compartments for long-term care medication packaging</div>
+      </div>
+      <div class="term-definition">
+        <div class="term">Formulation Record (FR)</div>
+        <div class="definition">Document similar to recipe used in preparation of non-sterile compounds</div>
+      </div>
+      <div class="term-definition">
+        <div class="term">Compounding Record (CR)</div>
+        <div class="definition">Form that documents a non-sterile compounding process</div>
+      </div>
+      <div class="term-definition">
+        <div class="term">Good Manufacturing Practices (GMP)</div>
+        <div class="definition">Federal guidelines for all entities preparing and packaging medication or devices</div>
+      </div>
+      <div class="term-definition">
+        <div class="term">Triturate</div>
+        <div class="definition">To grind or crush powder, such as a tablet, into fine particles</div>
+      </div>
+      <div class="term-definition">
+        <div class="term">Troches</div>
+        <div class="definition">Flat, disklike tablets that dissolve between gum and cheek</div>
+      </div>
+      <div class="term-definition">
+        <div class="term">Reconstitution</div>
+        <div class="definition">Mixing liquid and powder to form suspension or solution</div>
+      </div>
+    </div>
+  </aside>
+</main>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Interactive objective cards
+  const objectiveCards = document.querySelectorAll('.objective-card');
+  
+  objectiveCards.forEach(card => {
+    card.addEventListener('click', function() {
+      // Toggle active state
+      this.classList.toggle('active');
+
+      // Add subtle animation
+      if (this.classList.contains('active')) {
+        const icon = this.querySelector('.objective-icon');
+        icon.style.transform = 'scale(1.2) rotate(10deg)';
+        setTimeout(() => {
+          icon.style.transform = 'scale(1.1)';
+        }, 300);
+      }
+    });
+
+    // Add keyboard navigation
+    card.setAttribute('tabindex', '0');
+    card.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        this.click();
+      }
+    });
+  });
+
+  // Animate counter numbers
+  function animateCounter(element, target, duration) {
+    let start = 0;
+    const increment = target / (duration / 16); // 60fps
+    const timer = setInterval(() => {
+      start += increment;
+      if (start >= target) {
+        element.textContent = target;
+        clearInterval(timer);
+      } else {
+        element.textContent = Math.floor(start);
+      }
+    }, 16);
+  }
+
+  // Start counter animation after page load
+  setTimeout(() => {
+    const counterElement = document.getElementById('total-objectives');
+    animateCounter(counterElement, 16, 1000);
+  }, 1500);
+
+  // Add hover effect to outcomes list items
+  const outcomesItems = document.querySelectorAll('.outcomes-list li');
+  outcomesItems.forEach(item => {
+    item.addEventListener('mouseenter', function() {
+      const dot = this.querySelector('.dot');
+      dot.style.transform = 'scale(1.5)';
+      dot.style.background = 'var(--color-primary)';
+    });
+    item.addEventListener('mouseleave', function() {
+      const dot = this.querySelector('.dot');
+      dot.style.transform = 'scale(1)';
+      dot.style.background = 'var(--color-accent)';
+    });
+  });
+
+  // Add scroll animation for cards
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, observerOptions);
+
+  // Observe all objective cards
+  objectiveCards.forEach(card => {
+    card.style.opacity = '0';
+    card.style.transform = 'translateY(20px)';
+    card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    observer.observe(card);
+  });
+
+  // Add interactivity to case study boxes
+  const caseStudies = document.querySelectorAll('.case-study');
+  caseStudies.forEach(study => {
+    study.addEventListener('mouseenter', function() {
+      this.style.transform = 'translateY(-3px)';
+      this.style.boxShadow = '0 12px 30px rgba(131, 128, 240, 0.2)';
+    });
+    study.addEventListener('mouseleave', function() {
+      this.style.transform = 'translateY(0)';
+      this.style.boxShadow = 'none';
+    });
+  });
+
+  // Add interactivity to equipment items
+  const equipmentItems = document.querySelectorAll('.equipment-item');
+  equipmentItems.forEach(item => {
+    item.addEventListener('mouseenter', function() {
+      this.style.transform = 'translateY(-3px)';
+      this.style.boxShadow = '0 8px 20px rgba(131, 128, 240, 0.15)';
+    });
+    item.addEventListener('mouseleave', function() {
+      this.style.transform = 'translateY(0)';
+      this.style.boxShadow = 'none';
+    });
+  });
+
+  // Add interactivity to key terms
+  const termDefinitions = document.querySelectorAll('.term-definition');
+  termDefinitions.forEach(term => {
+    term.addEventListener('mouseenter', function() {
+      this.style.transform = 'translateX(3px)';
+      this.style.borderLeftColor = 'var(--color-primary)';
+    });
+    term.addEventListener('mouseleave', function() {
+      this.style.transform = 'translateX(0)';
+      this.style.borderLeftColor = 'var(--color-primary-soft)';
+    });
+  });
+});
+</script>
+</body>
+</html>
