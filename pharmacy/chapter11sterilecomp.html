@@ -1,0 +1,2456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AlliedRx - Sterile Compounding Foundations</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        /* [ALL CSS FROM MODULE 1 REMAINS EXACTLY THE SAME] */
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-error: #e17055;
+            --color-warning: #fdcb6e;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
+            --color-dark: #0c0a18;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+            --shadow-card: 0 12px 30px rgba(15, 23, 42, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(
+                circle at top left,
+                #ffffff 0,
+                #f1ecff 40%,
+                var(--color-bg) 100%
+            );
+            color: var(--color-text);
+            -webkit-text-size-adjust: 100%;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 12px; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes checkmarkPop {
+            0% { transform: scale(0); opacity: 0; }
+            70% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 5px rgba(175, 75, 239, 0.5); }
+            50% { box-shadow: 0 0 20px rgba(175, 75, 239, 0.8); }
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @media (max-width: 900px) {
+            .page { padding: 22px; }
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 0; }
+            .page {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 18px 14px 22px;
+            }
+        }
+
+        /* Header */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .brand-logo:hover { transform: scale(1.05); }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--color-success);
+            flex-shrink: 0;
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .badge-mode:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+        @media (max-width: 480px) {
+            .brand-row { flex-direction: column; align-items: flex-start; }
+            .badge-mode { margin-top: 6px; }
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 3vw, 2.2rem);
+            line-height: 1.1;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .module-subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 600px;
+            margin-bottom: 24px;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        /* Progress Tracker */
+        .progress-tracker {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            position: relative;
+            padding: 0 20px;
+        }
+
+        .progress-tracker::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 50px;
+            right: 50px;
+            height: 3px;
+            background: rgba(12, 10, 24, 0.08);
+            z-index: 1;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+
+        .step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--color-muted);
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.active .step-circle {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .progress-step.completed .step-circle {
+            background: var(--color-success);
+            border-color: var(--color-success);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.75rem;
+            color: var(--color-muted);
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .progress-step.active .step-label {
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        /* Progress Summary */
+        .progress-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+            animation: fadeInUp 0.6s ease-out 0.5s both;
+        }
+
+        .summary-card {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            border: 1px solid rgba(12, 10, 24, 0.06);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-card);
+            border-color: var(--color-primary-soft);
+        }
+
+        .summary-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--color-primary);
+            display: block;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .summary-label {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Activity Grid */
+        .activity-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 900px) {
+            .activity-grid { grid-template-columns: 1fr; }
+        }
+
+        .activity-card {
+            background: white;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            padding: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .activity-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--color-primary);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .activity-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--color-primary-soft);
+        }
+
+        .activity-card:hover::before { opacity: 1; }
+
+        .activity-card.completed {
+            border-color: var(--color-success);
+        }
+
+        .activity-card.completed::before {
+            background: var(--color-success);
+            opacity: 1;
+        }
+
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .activity-number {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .activity-status {
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-muted);
+        }
+
+        .activity-card.completed .activity-status {
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--color-success);
+        }
+
+        .activity-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 8px;
+        }
+
+        .activity-description {
+            font-size: 0.9rem;
+            color: var(--color-muted);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        /* Character Card */
+        .character-card {
+            background: rgba(175, 75, 239, 0.05);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            margin-bottom: 25px;
+            border-left: 4px solid var(--color-primary);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .character-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .character-info h3 {
+            color: var(--color-primary);
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+        }
+
+        .character-info p {
+            font-size: 0.9rem;
+            color: var(--color-muted);
+        }
+
+        /* Timer Component */
+        .timer-container {
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: var(--radius-md);
+            padding: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .timer-display {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            font-family: monospace;
+        }
+
+        .timer-status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            background: rgba(12, 10, 24, 0.06);
+            font-size: 0.8rem;
+            color: var(--color-muted);
+        }
+
+        .timer-status.running {
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--color-success);
+        }
+
+        .timer-status.warning {
+            background: rgba(253, 203, 110, 0.1);
+            color: var(--color-warning);
+        }
+
+        .timer-status.expired {
+            background: rgba(225, 112, 85, 0.1);
+            color: var(--color-error);
+        }
+
+        /* Drag-and-Drop Components */
+        .steps-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .step-item {
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            cursor: grab;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            user-select: none;
+        }
+
+        .step-item:hover {
+            background: rgba(175, 75, 239, 0.08);
+            border-color: var(--color-primary-soft);
+            transform: translateY(-2px);
+        }
+
+        .step-item.dragging {
+            opacity: 0.7;
+            transform: scale(0.98);
+        }
+
+        .step-item.placed {
+            background: rgba(0, 184, 148, 0.1);
+            border-color: var(--color-success);
+            cursor: default;
+        }
+
+        .step-number {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(12, 10, 24, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-text);
+            flex-shrink: 0;
+        }
+
+        .step-item.placed .step-number {
+            background: var(--color-success);
+            color: white;
+        }
+
+        .step-text {
+            font-size: 0.9rem;
+            color: var(--color-text);
+            flex: 1;
+        }
+
+        .steps-dropzone {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            border: 2px dashed rgba(12, 10, 24, 0.1);
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .steps-dropzone.hover {
+            border-color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.05);
+        }
+
+        .steps-dropzone.empty::after {
+            content: 'Drag items here in correct order';
+            color: var(--color-muted);
+            text-align: center;
+            font-size: 0.9rem;
+            margin: auto;
+        }
+
+        /* Checklist Component */
+        .checklist-container {
+            margin-bottom: 20px;
+        }
+
+        .checklist-item {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+        }
+
+        .checklist-item:hover {
+            background: rgba(175, 75, 239, 0.05);
+            border-color: var(--color-primary-soft);
+        }
+
+        .checklist-checkbox {
+            width: 22px;
+            height: 22px;
+            border-radius: 6px;
+            border: 2px solid rgba(12, 10, 24, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .checklist-item.checked .checklist-checkbox {
+            background: var(--color-success);
+            border-color: var(--color-success);
+            color: white;
+        }
+
+        .checklist-text {
+            font-size: 0.9rem;
+            color: var(--color-text);
+            flex: 1;
+        }
+
+        .checklist-item.correct .checklist-text {
+            color: var(--color-success);
+        }
+
+        .checklist-item.incorrect .checklist-text {
+            color: var(--color-error);
+        }
+
+        /* Matching Grid - Updated for Activity 3 */
+        .matching-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+            min-height: 300px;
+        }
+
+        @media (max-width: 600px) {
+            .matching-grid { grid-template-columns: 1fr; }
+        }
+
+        .matching-column {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 2px dashed rgba(12, 10, 24, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .matching-column-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            text-align: center;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(12, 10, 24, 0.08);
+            margin-bottom: 10px;
+        }
+
+        .matching-item {
+            background: rgba(175, 75, 239, 0.08);
+            border-radius: var(--radius-sm);
+            padding: 12px 15px;
+            cursor: grab;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            user-select: none;
+            font-size: 0.85rem;
+            color: var(--color-text);
+        }
+
+        .matching-item:hover {
+            background: rgba(175, 75, 239, 0.15);
+            border-color: var(--color-primary-soft);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(175, 75, 239, 0.1);
+        }
+
+        .matching-item.dragging {
+            opacity: 0.7;
+            transform: scale(0.98);
+        }
+
+        .matching-item.matched {
+            background: rgba(0, 184, 148, 0.1);
+            border-color: var(--color-success);
+            cursor: default;
+        }
+
+        .matching-item.incorrect {
+            background: rgba(225, 112, 85, 0.1);
+            border-color: var(--color-error);
+            animation: shake 0.5s ease;
+        }
+
+        /* Match Area */
+        .match-area {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+            min-height: 200px;
+        }
+
+        .match-pair {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .match-slot {
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 2px dashed rgba(12, 10, 24, 0.1);
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .match-slot.hover {
+            border-color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.05);
+        }
+
+        .match-slot.filled {
+            border: 2px solid var(--color-primary-soft);
+            background: rgba(175, 75, 239, 0.08);
+        }
+
+        .match-slot.correct {
+            border-color: var(--color-success);
+            background: rgba(0, 184, 148, 0.1);
+        }
+
+        .match-slot.incorrect {
+            border-color: var(--color-error);
+            background: rgba(225, 112, 85, 0.1);
+        }
+
+        .match-label {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+            text-align: center;
+            margin-top: 5px;
+        }
+
+        /* Category Sorting */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .category-grid { grid-template-columns: 1fr; }
+        }
+
+        .category-box {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 2px dashed rgba(12, 10, 24, 0.1);
+            min-height: 180px;
+            transition: all 0.3s ease;
+        }
+
+        .category-box.hover {
+            border-color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.05);
+        }
+
+        .category-box.medical {
+            border-color: rgba(0, 184, 148, 0.3);
+        }
+
+        .category-box.surgical {
+            border-color: rgba(131, 128, 240, 0.3);
+        }
+
+        .category-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+            text-align: center;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(12, 10, 24, 0.08);
+        }
+
+        .draggable-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .draggable-item {
+            background: rgba(12, 10, 24, 0.05);
+            border-radius: 20px;
+            padding: 8px 15px;
+            font-size: 0.85rem;
+            cursor: grab;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .draggable-item:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            transform: translateY(-2px);
+        }
+
+        .draggable-item.dragging {
+            opacity: 0.7;
+            transform: scale(0.95);
+        }
+
+        /* Feedback */
+        .feedback-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            margin-top: 20px;
+            display: none;
+        }
+
+        .feedback-container.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .feedback-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feedback-icon {
+            font-size: 1.2rem;
+        }
+
+        .feedback-icon.correct { color: var(--color-success); }
+        .feedback-icon.incorrect { color: var(--color-error); }
+
+        .feedback-content {
+            font-size: 0.85rem;
+            color: var(--color-text);
+            line-height: 1.5;
+        }
+
+        .feedback-content strong { color: var(--color-primary); }
+
+        .correction-details {
+            background: rgba(225, 112, 85, 0.05);
+            border-left: 3px solid var(--color-error);
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #9a3bd6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(175, 75, 239, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-text);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(12, 10, 24, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-icon { font-size: 1.1em; }
+
+        /* Results Panel */
+        .results-panel {
+            background: var(--color-dark);
+            color: white;
+            border-radius: var(--radius-md);
+            padding: 30px;
+            margin-top: 30px;
+            display: none;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .results-panel.show { display: block; }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .results-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .score-display {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--color-primary-soft);
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .clinical-insights {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .insights-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-primary-soft);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .insights-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .insights-list li {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            font-size: 0.9rem;
+            color: #e5e7eb;
+        }
+
+        .insight-dot {
+            width: 6px;
+            height: 6px;
+            margin-top: 6px;
+            border-radius: 999px;
+            background: var(--color-accent);
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="module-heading">
+        <!-- Header -->
+        <header class="brand-row">
+            <div class="brand">
+                <img
+                    src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                    alt="AlliedRx logo"
+                    class="brand-logo"
+                />
+                <div class="course-meta">
+                    <span class="course-name">Pharmacy Technician • Week 12</span>
+                    <div class="week-label">
+                        <span class="week-label-dot"></span>
+                        <span>Chapter 12: Aseptic Technique & Sterile Compounding</span>
+                    </div>
+                </div>
+            </div>
+            <span class="badge-mode">Campus & Online</span>
+        </header>
+
+        <h1 id="module-heading">Foundations of Sterile Compounding</h1>
+        <p class="module-subtitle">
+            Master clean room fundamentals, PPE protocols, and equipment handling. Learn from Ken, our TPN specialist with 20+ years of experience.
+        </p>
+
+        <!-- Character Introduction -->
+        <div class="character-card">
+            <div class="character-avatar">K</div>
+            <div class="character-info">
+                <h3>Meet Ken - TPN Specialist</h3>
+                <p>20+ years experience in sterile compounding. Will guide you through clean room protocols, aseptic technique, and equipment handling. "Precision saves lives."</p>
+            </div>
+        </div>
+
+        <!-- Progress Tracker -->
+        <div class="progress-tracker">
+            <div class="progress-step active" data-step="1">
+                <div class="step-circle">1</div>
+                <div class="step-label">Clean Room Entry</div>
+            </div>
+            <div class="progress-step" data-step="2">
+                <div class="step-circle">2</div>
+                <div class="step-label">Equipment Mastery</div>
+            </div>
+            <div class="progress-step" data-step="3">
+                <div class="step-circle">3</div>
+                <div class="step-label">USP Compliance</div>
+            </div>
+        </div>
+
+        <!-- Progress Summary -->
+        <div class="progress-summary">
+            <div class="summary-card">
+                <span class="summary-number" id="completed-count">0</span>
+                <span class="summary-label">Activities Completed</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="accuracy-rate">0%</span>
+                <span class="summary-label">Current Accuracy</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="time-spent">0:00</span>
+                <span class="summary-label">Time Spent</span>
+            </div>
+        </div>
+
+        <!-- Activity Grid -->
+        <div class="activity-grid">
+            <!-- Activity 1: Clean Room Entry & PPE Protocol -->
+            <section class="activity-card" id="activity-1" data-activity="1">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 1</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">Clean Room Entry & PPE Protocol</h3>
+                <p class="activity-description">
+                    Text-based simulation of clean room entry. Master the PPE donning sequence and identify common violations. Complete within 3 minutes.
+                </p>
+
+                <!-- Timer Component -->
+                <div class="timer-container">
+                    <div class="timer-display" id="timer-1">03:00</div>
+                    <div class="timer-status" id="timer-status-1">Ready</div>
+                </div>
+
+                <!-- Scenario Text -->
+                <div class="character-card" style="margin-bottom: 20px; background: rgba(175, 75, 239, 0.05);">
+                    <div class="character-avatar">K</div>
+                    <div class="character-info">
+                        <h3>Scenario: Morning Shift Entry</h3>
+                        <p>"You're entering the clean room for morning shift. The first TPN order is due in 15 minutes. Follow proper sequence and watch for violations."</p>
+                    </div>
+                </div>
+
+                <!-- PPE Donning Sequence Game -->
+                <h4 style="margin-bottom: 15px; color: var(--color-primary);">PPE Donning Sequence</h4>
+                <p style="margin-bottom: 15px; font-size: 0.9rem;">Drag these steps into correct order for entering a Class 5 clean room:</p>
+
+                <!-- Dropzone -->
+                <div class="steps-dropzone empty" id="ppe-dropzone"></div>
+
+                <!-- Draggable Items Container - Will be populated with random order -->
+                <div class="steps-container" id="ppe-items-container"></div>
+
+                <!-- Anteroom Checklist -->
+                <h4 style="margin-top: 25px; margin-bottom: 15px; color: var(--color-primary);">Anteroom Preparation</h4>
+                <p style="margin-bottom: 15px; font-size: 0.9rem;">Check which items need to be wiped with 70% IPA before entering clean room:</p>
+
+                <div class="checklist-container" id="checklist-1">
+                    <div class="checklist-item" data-correct="true">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text">Medication vials</div>
+                    </div>
+                    <div class="checklist-item" data-correct="true">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text">Syringes and needles</div>
+                    </div>
+                    <div class="checklist-item" data-correct="true">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text">IV bags and bottles</div>
+                    </div>
+                    <div class="checklist-item" data-correct="false">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text">Your shoes (already have covers)</div>
+                    </div>
+                    <div class="checklist-item" data-correct="false">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text">Calculator (non-sterile, stays outside)</div>
+                    </div>
+                    <div class="checklist-item" data-correct="true">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text">Alcohol swab containers</div>
+                    </div>
+                </div>
+
+                <!-- Corrective Feedback -->
+                <div class="feedback-container" id="feedback-1">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Clean Room Protocol Analysis
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Correct PPE Sequence:</strong><br>
+                        1. Put on shoe covers<br>
+                        2. Don hair net<br>
+                        3. Put on face mask<br>
+                        4. Gown up with sterile gown<br>
+                        5. Perform hand hygiene with 70% IPA<br>
+                        6. Put on sterile gloves<br>
+                        7. Wipe gloves with IPA before entering<br><br>
+
+                        <strong>Critical Points:</strong><br>
+                        • Hand hygiene must occur <em>after</em> gowning but <em>before</em> gloving<br>
+                        • Glove wiping maintains sterility during entry transition<br>
+                        • Shoe covers prevent tracking contaminants from anteroom<br><br>
+
+                        <strong>Anteroom Wiping:</strong><br>
+                        All sterile supplies (vials, syringes, IV bags) must be wiped with 70% IPA before entry.
+                        Personal items (shoes with covers, calculators) do not require wiping as they remain outside critical areas.<br><br>
+
+                        <div class="correction-details" id="correction-details-1" style="display: none;">
+                            <strong>Your Mistakes:</strong><br>
+                            <span id="correction-text-1"></span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity 2: Equipment Mastery -->
+            <section class="activity-card" id="activity-2" data-activity="2">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 2</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">Equipment Mastery</h3>
+                <p class="activity-description">
+                    Text-based equipment training. Master syringe assembly, needle selection, and hood type decisions without visual aids.
+                </p>
+
+                <!-- Scenario Text -->
+                <div class="character-card" style="margin-bottom: 20px; background: rgba(131, 128, 240, 0.05);">
+                    <div class="character-avatar">K</div>
+                    <div class="character-info">
+                        <h3>Scenario: Emergency TPN Setup</h3>
+                        <p>"Neo-natal ICU needs STAT TPN. You must quickly select correct equipment and prepare in appropriate hood. No time for errors."</p>
+                    </div>
+                </div>
+
+                <!-- Syringe Assembly -->
+                <h4 style="margin-bottom: 15px; color: var(--color-primary);">Syringe Assembly</h4>
+                <p style="margin-bottom: 15px; font-size: 0.9rem;">Assemble the syringe by dragging terms to correct order:</p>
+
+                <div class="steps-dropzone empty" id="syringe-dropzone"></div>
+
+                <!-- Draggable Items Container - Will be populated with random order -->
+                <div class="steps-container" id="syringe-items-container"></div>
+
+                <!-- Needle Gauge Selection Game -->
+                <h4 style="margin-top: 25px; margin-bottom: 15px; color: var(--color-primary);">Needle Gauge Selection</h4>
+                <p style="margin-bottom: 15px; font-size: 0.9rem;">Match the procedure with correct needle gauge:</p>
+
+                <div class="matching-grid">
+                    <div class="matching-column">
+                        <div class="matching-column-title">Procedure</div>
+                        <div class="matching-item draggable" data-item="insulin" draggable="true">Insulin injection (subcutaneous)</div>
+                        <div class="matching-item draggable" data-item="im" draggable="true">IM injection</div>
+                        <div class="matching-item draggable" data-item="tpn" draggable="true">TPN lipid drawing</div>
+                        <div class="matching-item draggable" data-item="iv" draggable="true">IV push medication</div>
+                    </div>
+                    <div class="matching-column">
+                        <div class="matching-column-title">Needle Gauge</div>
+                        <div class="matching-item draggable" data-gauge="29" draggable="true">29G (smallest)</div>
+                        <div class="matching-item draggable" data-gauge="21" draggable="true">21G (standard IM)</div>
+                        <div class="matching-item draggable" data-gauge="18" draggable="true">18G (large bore)</div>
+                        <div class="matching-item draggable" data-gauge="25" draggable="true">25G (standard IV)</div>
+                    </div>
+                </div>
+
+                <!-- Match Area -->
+                <div class="match-area" id="needle-match-area">
+                    <div class="match-pair" data-pair="1">
+                        <div class="match-slot" data-type="procedure" id="slot-proc-1">Drag procedure here</div>
+                        <div class="match-slot" data-type="gauge" id="slot-gauge-1">Drag gauge here</div>
+                        <div class="match-label">Pair 1</div>
+                    </div>
+                    <div class="match-pair" data-pair="2">
+                        <div class="match-slot" data-type="procedure" id="slot-proc-2">Drag procedure here</div>
+                        <div class="match-slot" data-type="gauge" id="slot-gauge-2">Drag gauge here</div>
+                        <div class="match-label">Pair 2</div>
+                    </div>
+                    <div class="match-pair" data-pair="3">
+                        <div class="match-slot" data-type="procedure" id="slot-proc-3">Drag procedure here</div>
+                        <div class="match-slot" data-type="gauge" id="slot-gauge-3">Drag gauge here</div>
+                        <div class="match-label">Pair 3</div>
+                    </div>
+                    <div class="match-pair" data-pair="4">
+                        <div class="match-slot" data-type="procedure" id="slot-proc-4">Drag procedure here</div>
+                        <div class="match-slot" data-type="gauge" id="slot-gauge-4">Drag gauge here</div>
+                        <div class="match-label">Pair 4</div>
+                    </div>
+                </div>
+
+                <!-- Corrective Feedback -->
+                <div class="feedback-container" id="feedback-2">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Equipment Mastery Analysis
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Correct Syringe Assembly:</strong><br>
+                        1. Remove syringe from sterile packaging<br>
+                        2. Attach needle to syringe hub<br>
+                        3. Pull plunger to desired volume<br>
+                        4. Expel air bubbles<br>
+                        5. Apply safety cap if available<br><br>
+
+                        <strong>Needle Gauge Matching:</strong><br>
+                        • Insulin injection (subcutaneous) → 29G (smallest, least painful)<br>
+                        • IM injection → 21G (standard IM, balances flow and comfort)<br>
+                        • TPN lipid drawing → 18G (large bore for viscous solutions)<br>
+                        • IV push medication → 25G (standard IV, preserves vein)<br><br>
+
+                        <strong>Critical Equipment Knowledge:</strong><br>
+                        • Filter needles MUST be used for ampules to remove glass particles<br>
+                        • Never reuse syringes or needles<br>
+                        • Always select smallest appropriate gauge for patient comfort<br><br>
+
+                        <div class="correction-details" id="correction-details-2" style="display: none;">
+                            <strong>Your Incorrect Matches:</strong><br>
+                            <span id="correction-text-2"></span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity 3: USP <797> Compliance -->
+            <section class="activity-card" id="activity-3" data-activity="3">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 3</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">USP <797> Compliance & Risk Levels</h3>
+                <p class="activity-description">
+                    Master risk level classification, BUD determination, and documentation requirements. Spot violations in clean room logs.
+                </p>
+
+                <!-- Scenario Text -->
+                <div class="character-card" style="margin-bottom: 20px; background: rgba(0, 184, 148, 0.05);">
+                    <div class="character-avatar">K</div>
+                    <div class="character-info">
+                        <h3>Scenario: Mock Inspection</h3>
+                        <p>"State Board inspector arriving in 30 minutes. Verify all compounding records and identify any compliance issues."</p>
+                    </div>
+                </div>
+
+                <!-- Risk Level Classification -->
+                <h4 style="margin-bottom: 15px; color: var(--color-primary);">Risk Level Classification</h4>
+                <p style="margin-bottom: 15px; font-size: 0.9rem;">Classify each compounding scenario:</p>
+
+                <div class="category-grid">
+                    <div class="category-box" data-category="low" id="low-risk-category">
+                        <div class="category-title">Low Risk CSP</div>
+                        <div class="category-content" id="low-category-content"></div>
+                    </div>
+                    <div class="category-box" data-category="medium" id="medium-risk-category">
+                        <div class="category-title">Medium Risk CSP</div>
+                        <div class="category-content" id="medium-category-content"></div>
+                    </div>
+                </div>
+
+                <!-- Draggable Scenarios Container -->
+                <div class="draggable-items" id="draggable-items-container"></div>
+
+                <!-- BUD Calculation -->
+                <h4 style="margin-top: 25px; margin-bottom: 15px; color: var(--color-primary);">Beyond-Use Date (BUD) Calculation</h4>
+                <p style="margin-bottom: 15px; font-size: 0.9rem;">Calculate BUD based on risk level and storage:</p>
+
+                <div class="checklist-container" id="checklist-3">
+                    <div class="checklist-item" data-correct="true">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text">Low-risk CSP, room temp: ≤48 hours</div>
+                    </div>
+                    <div class="checklist-item" data-correct="true">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text">Low-risk CSP, refrigerated: ≤14 days</div>
+                    </div>
+                    <div class="checklist-item" data-correct="false">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text">Medium-risk CSP, room temp: 1 week</div>
+                    </div>
+                    <div class="checklist-item" data-correct="true">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text">Medium-risk CSP, refrigerated: ≤30 days</div>
+                    </div>
+                    <div class="checklist-item" data-correct="false">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text">High-risk CSP, room temp: 24 hours</div>
+                    </div>
+                    <div class="checklist-item" data-correct="true">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text">High-risk CSP, refrigerated: ≤3 days</div>
+                    </div>
+                </div>
+
+                <!-- Error Spotting -->
+                <h4 style="margin-top: 25px; margin-bottom: 15px; color: var(--color-primary);">Spot the Violations</h4>
+                <p style="margin-bottom: 15px; font-size: 0.9rem;">Read this clean room log and identify violations:</p>
+
+                <div style="background: rgba(12, 10, 24, 0.03); padding: 15px; border-radius: var(--radius-sm); margin-bottom: 15px; font-family: monospace; font-size: 0.85rem;">
+                    Clean Room Log - 04/15/2024<br>
+                    Time: 08:00<br>
+                    Temperature: 25°C<br>
+                    Humidity: 65%<br>
+                    Hood cleaned: Yesterday<br>
+                    Technician: John Doe<br>
+                    Comments: All good
+                </div>
+
+                <div class="checklist-container" id="violation-checklist">
+                    <div class="checklist-item" data-correct="true">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text">Temperature violation (max 20°C)</div>
+                    </div>
+                    <div class="checklist-item" data-correct="true">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text">Humidity violation (max 60%)</div>
+                    </div>
+                    <div class="checklist-item" data-correct="true">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text">Missing hood cleaning time</div>
+                    </div>
+                    <div class="checklist-item" data-correct="false">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text">Technician name not capitalized</div>
+                    </div>
+                    <div class="checklist-item" data-correct="true">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text">Vague comment "All good" not acceptable</div>
+                    </div>
+                </div>
+
+                <!-- Corrective Feedback -->
+                <div class="feedback-container" id="feedback-3">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        USP <797> Compliance Analysis
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Risk Level Classification:</strong><br>
+                        <strong>Low Risk:</strong> TPN from sterile ingredients, Single vial transfer, Reconstituting single vial<br>
+                        <strong>Medium Risk:</strong> Adding drug to existing IV bag, Multiple additives to TPN, Pooling multiple vials<br><br>
+
+                        <strong>Correct BUD Timeframes:</strong><br>
+                        • Low-risk, room temp: ≤48 hours ✓<br>
+                        • Low-risk, refrigerated: ≤14 days ✓<br>
+                        • Medium-risk, room temp: ≤30 hours (not 1 week) ✗<br>
+                        • Medium-risk, refrigerated: ≤30 days ✓<br>
+                        • High-risk, room temp: ≤24 hours ✓<br>
+                        • High-risk, refrigerated: ≤3 days ✓<br><br>
+
+                        <strong>Clean Room Log Violations:</strong><br>
+                        • Temperature: 25°C exceeds USP limit of 20°C<br>
+                        • Humidity: 65% exceeds USP limit of 60%<br>
+                        • "Hood cleaned: Yesterday" is not specific time<br>
+                        • Comments must be specific (e.g., "No issues observed")<br><br>
+
+                        <strong>Key Compliance Points:</strong><br>
+                        • All CSPs require documentation of preparation and verification<br>
+                        • Environmental monitoring must be within USP limits<br>
+                        • BUD must be calculated based on risk level and storage conditions<br><br>
+
+                        <div class="correction-details" id="correction-details-3" style="display: none;">
+                            <strong>Your Mistakes:</strong><br>
+                            <span id="correction-text-3"></span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn btn-secondary" id="reset-all-btn">
+                <span class="btn-icon">↻</span>
+                Reset All Activities
+            </button>
+            <button class="btn btn-secondary" id="check-answers-btn">
+                <span class="btn-icon">✓</span>
+                Check All Answers
+            </button>
+            <button class="btn btn-primary" id="view-results-btn">
+                <span class="btn-icon">📊</span>
+                View Final Results
+            </button>
+        </div>
+
+        <!-- Results Panel -->
+        <div class="results-panel" id="results-panel">
+            <div class="results-header">
+                <h2 class="results-title">Sterile Compounding Foundations Proficiency</h2>
+                <div class="score-display" id="final-score">0%</div>
+            </div>
+            <div class="clinical-insights">
+                <h3 class="insights-title">
+                    <span>🏥</span> Clinical Practice Insights
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Sequence Matters:</strong> PPE donning sequence is critical - improper order can contaminate sterile surfaces. Always gown before gloves, and perform hand hygiene between steps.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Equipment Selection:</strong> Needle gauge affects both medication flow and patient comfort. 18G for viscous TPN lipids, 25G for IV push, 29G for subcutaneous insulin.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Risk Level Awareness:</strong> Understanding CSP risk levels determines BUD, storage requirements, and documentation. Low-risk = simpler prep, Medium-risk = more controls needed.</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="clinical-insights" style="margin-top: 20px;">
+                <h3 class="insights-title">
+                    <span>📚</span> Pharmacy Technician Connection
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Documentation is Defense:</strong> Complete, accurate records protect patients and technicians. Every CSP must have verifiable preparation data.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Environmental Control:</strong> Technicians monitor clean room conditions. Knowing limits (20°C, 60% humidity) and taking action when exceeded is a key responsibility.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>BUD Calculations:</strong> Technicians often calculate BUDs. Remember: refrigeration extends stability, but risk level determines maximum timeframe.</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // State Management
+            const state = {
+                activities: {
+                    1: { completed: false, correct: 0, total: 19, score: 0, userOrder: [], checkedItems: [] },
+                    2: { completed: false, correct: 0, total: 17, score: 0, matches: {}, syringeOrder: [] },
+                    3: { completed: false, correct: 0, total: 20, score: 0, placements: {}, checkedItems: [] }
+                },
+                startedAt: new Date(),
+                timeSpent: 0
+            };
+
+            // Timer Variables
+            let timer1Interval;
+            let timer1Seconds = 180; // 3 minutes
+
+            // DOM Elements
+            const progressSteps = document.querySelectorAll('.progress-step');
+            const activityCards = document.querySelectorAll('.activity-card');
+            const completedCount = document.getElementById('completed-count');
+            const accuracyRate = document.getElementById('accuracy-rate');
+            const timeSpentEl = document.getElementById('time-spent');
+            const resetBtn = document.getElementById('reset-all-btn');
+            const checkBtn = document.getElementById('check-answers-btn');
+            const resultsBtn = document.getElementById('view-results-btn');
+            const resultsPanel = document.getElementById('results-panel');
+            const finalScore = document.getElementById('final-score');
+
+            // Helper function to shuffle array (Fisher-Yates algorithm)
+            function shuffleArray(array) {
+                const shuffled = [...array];
+                for (let i = shuffled.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+                }
+                return shuffled;
+            }
+
+            // Timer Functions
+            function startTimer1() {
+                const timerDisplay = document.getElementById('timer-1');
+                const timerStatus = document.getElementById('timer-status-1');
+                
+                timer1Interval = setInterval(() => {
+                    timer1Seconds--;
+                    
+                    const minutes = Math.floor(timer1Seconds / 60);
+                    const seconds = timer1Seconds % 60;
+                    timerDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                    
+                    if (timer1Seconds <= 30) {
+                        timerStatus.textContent = 'Hurry!';
+                        timerStatus.className = 'timer-status warning';
+                        timerDisplay.style.color = 'var(--color-warning)';
+                    }
+                    
+                    if (timer1Seconds <= 0) {
+                        clearInterval(timer1Interval);
+                        timerStatus.textContent = 'Time Expired';
+                        timerStatus.className = 'timer-status expired';
+                        timerDisplay.style.color = 'var(--color-error)';
+                        checkActivity1();
+                    }
+                }, 1000);
+                
+                timerStatus.textContent = 'Running';
+                timerStatus.className = 'timer-status running';
+            }
+
+            // Update Progress Summary
+            function updateProgressSummary() {
+                let completed = 0;
+                let totalCorrect = 0;
+                let totalItems = 0;
+
+                Object.values(state.activities).forEach(activity => {
+                    if (activity.completed) completed++;
+                    totalCorrect += activity.correct;
+                    totalItems += activity.total;
+                });
+
+                completedCount.textContent = completed;
+                const accuracy = totalItems > 0 ? Math.round((totalCorrect / totalItems) * 100) : 0;
+                accuracyRate.textContent = `${accuracy}%`;
+
+                // Update progress steps
+                progressSteps.forEach((step, index) => {
+                    if (index < completed) {
+                        step.classList.add('completed');
+                        step.classList.remove('active');
+                    } else if (index === completed) {
+                        step.classList.add('active');
+                        step.classList.remove('completed');
+                    } else {
+                        step.classList.remove('active', 'completed');
+                    }
+                });
+            }
+
+            // Update Timer for time spent
+            function updateTimer() {
+                const now = new Date();
+                const diff = Math.floor((now - state.startedAt) / 1000);
+                state.timeSpent = diff;
+                const minutes = Math.floor(diff / 60);
+                const seconds = diff % 60;
+                timeSpentEl.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            }
+
+            setInterval(updateTimer, 1000);
+
+            // Activity 1: Clean Room Entry & PPE Protocol
+            function initActivity1() {
+                const dropzone = document.getElementById('ppe-dropzone');
+                const checklistItems = document.querySelectorAll('#activity-1 .checklist-item');
+                const feedback = document.getElementById('feedback-1');
+                const status = document.querySelector('#activity-1 .activity-status');
+                const correctionDetails = document.getElementById('correction-details-1');
+                const correctionText = document.getElementById('correction-text-1');
+                const ppeContainer = document.getElementById('ppe-items-container');
+
+                // Define PPE steps with correct order (1-7)
+                const ppeSteps = [
+                    { step: "1", text: "Put on shoe covers" },
+                    { step: "2", text: "Don hair net" },
+                    { step: "3", text: "Put on face mask" },
+                    { step: "4", text: "Gown up with sterile gown" },
+                    { step: "5", text: "Perform hand hygiene with 70% IPA" },
+                    { step: "6", text: "Put on sterile gloves" },
+                    { step: "7", text: "Wipe gloves with IPA before entering" }
+                ];
+
+                // Shuffle the steps for random order presentation
+                const shuffledPpeSteps = shuffleArray([...ppeSteps]);
+                
+                // Create draggable items in random order
+                shuffledPpeSteps.forEach(item => {
+                    const stepDiv = document.createElement('div');
+                    stepDiv.className = 'step-item draggable';
+                    stepDiv.dataset.step = item.step;
+                    stepDiv.draggable = true;
+                    stepDiv.innerHTML = `
+                        <div class="step-number">?</div>
+                        <div class="step-text">${item.text}</div>
+                    `;
+                    ppeContainer.appendChild(stepDiv);
+                });
+
+                let placedSteps = [];
+                let checkedItems = [];
+                let timerStarted = false;
+
+                // Setup drag and drop for PPE sequence
+                ppeContainer.querySelectorAll('.step-item').forEach(item => {
+                    item.addEventListener('dragstart', function(e) {
+                        if (!timerStarted) {
+                            startTimer1();
+                            timerStarted = true;
+                        }
+                        
+                        e.dataTransfer.setData('text/plain', JSON.stringify({
+                            step: this.dataset.step,
+                            text: this.querySelector('.step-text').textContent
+                        }));
+                        this.classList.add('dragging');
+                    });
+
+                    item.addEventListener('dragend', function() {
+                        this.classList.remove('dragging');
+                    });
+                });
+
+                dropzone.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    this.classList.add('hover');
+                    this.classList.remove('empty');
+                });
+
+                dropzone.addEventListener('dragleave', function() {
+                    this.classList.remove('hover');
+                });
+
+                dropzone.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('hover');
+                    
+                    const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+                    
+                    if (!placedSteps.includes(data.step)) {
+                        placedSteps.push(data.step);
+                        state.activities[1].userOrder = placedSteps;
+                        
+                        const stepDiv = document.createElement('div');
+                        stepDiv.className = 'step-item placed';
+                        stepDiv.innerHTML = `
+                            <div class="step-number">${placedSteps.length}</div>
+                            <div class="step-text">${data.text}</div>
+                        `;
+                        this.appendChild(stepDiv);
+                        
+                        const originalStep = document.querySelector(`#activity-1 .step-item[data-step="${data.step}"]`);
+                        if (originalStep) {
+                            originalStep.style.display = 'none';
+                        }
+                        
+                        if (placedSteps.length === 7 && checkedItems.length === 6) {
+                            setTimeout(checkActivity1, 500);
+                        }
+                    }
+                });
+
+                // Setup checklist interactions
+                checklistItems.forEach(item => {
+                    item.addEventListener('click', function() {
+                        if (!timerStarted) {
+                            startTimer1();
+                            timerStarted = true;
+                        }
+                        
+                        const checkbox = this.querySelector('.checklist-checkbox');
+                        const isChecked = this.classList.contains('checked');
+                        
+                        if (!isChecked) {
+                            this.classList.add('checked');
+                            checkbox.innerHTML = '✓';
+                            checkedItems.push(this.dataset.correct);
+                            state.activities[1].checkedItems = checkedItems;
+                        } else {
+                            this.classList.remove('checked');
+                            checkbox.innerHTML = '';
+                            const index = checkedItems.indexOf(this.dataset.correct);
+                            if (index > -1) checkedItems.splice(index, 1);
+                        }
+                        
+                        if (placedSteps.length === 7 && checkedItems.length === 6) {
+                            setTimeout(checkActivity1, 500);
+                        }
+                    });
+                });
+
+                function checkActivity1() {
+                    clearInterval(timer1Interval);
+                    
+                    // Check PPE sequence (correct order: 1,2,3,4,5,6,7)
+                    const correctOrder = ['1', '2', '3', '4', '5', '6', '7'];
+                    let sequenceCorrect = 0;
+                    let sequenceMessages = [];
+                    
+                    placedSteps.forEach((step, index) => {
+                        if (step === correctOrder[index]) {
+                            sequenceCorrect++;
+                        } else {
+                            const userText = ppeSteps.find(p => p.step === step)?.text || '';
+                            const correctText = ppeSteps.find(p => p.step === correctOrder[index])?.text || '';
+                            sequenceMessages.push(`• Position ${index + 1}: You placed "${userText}" but it should be "${correctText}"`);
+                        }
+                    });
+                    
+                    // Check checklist items
+                    let checklistCorrect = 0;
+                    let checklistMessages = [];
+                    
+                    checklistItems.forEach((item, index) => {
+                        const isChecked = item.classList.contains('checked');
+                        const shouldBeChecked = item.dataset.correct === 'true';
+                        
+                        if (isChecked === shouldBeChecked) {
+                            checklistCorrect++;
+                            if (isChecked) {
+                                item.classList.add('correct');
+                            }
+                        } else {
+                            item.classList.add('incorrect');
+                            const itemText = item.querySelector('.checklist-text').textContent;
+                            if (shouldBeChecked) {
+                                checklistMessages.push(`• "${itemText}" should be checked`);
+                            } else {
+                                checklistMessages.push(`• "${itemText}" should NOT be checked`);
+                            }
+                        }
+                    });
+                    
+                    const totalCorrect = sequenceCorrect + checklistCorrect;
+                    
+                    state.activities[1].completed = true;
+                    state.activities[1].correct = totalCorrect;
+                    state.activities[1].score = Math.round((totalCorrect / 19) * 100);
+                    
+                    status.textContent = 'Completed';
+                    status.style.color = '#00b894';
+                    document.querySelector('#activity-1').classList.add('completed');
+                    feedback.classList.add('show');
+                    
+                    if (sequenceMessages.length > 0 || checklistMessages.length > 0) {
+                        correctionDetails.style.display = 'block';
+                        correctionText.innerHTML = [...sequenceMessages, ...checklistMessages].join('<br>');
+                    }
+                    
+                    updateProgressSummary();
+                }
+            }
+
+            // Activity 2: Equipment Mastery
+            function initActivity2() {
+                const syringeDropzone = document.getElementById('syringe-dropzone');
+                const matchingItems = document.querySelectorAll('#activity-2 .matching-item');
+                const matchSlots = document.querySelectorAll('#activity-2 .match-slot');
+                const feedback = document.getElementById('feedback-2');
+                const status = document.querySelector('#activity-2 .activity-status');
+                const correctionDetails = document.getElementById('correction-details-2');
+                const correctionText = document.getElementById('correction-text-2');
+                const syringeContainer = document.getElementById('syringe-items-container');
+
+                // Define syringe assembly steps with correct order (1-5)
+                const syringeSteps = [
+                    { step: "1", text: "Remove syringe from sterile packaging" },
+                    { step: "2", text: "Attach needle to syringe hub" },
+                    { step: "3", text: "Pull plunger to desired volume" },
+                    { step: "4", text: "Expel air bubbles" },
+                    { step: "5", text: "Apply safety cap if available" }
+                ];
+
+                // Shuffle the steps for random order presentation
+                const shuffledSyringeSteps = shuffleArray([...syringeSteps]);
+                
+                // Create draggable items in random order
+                shuffledSyringeSteps.forEach(item => {
+                    const stepDiv = document.createElement('div');
+                    stepDiv.className = 'step-item draggable';
+                    stepDiv.dataset.step = item.step;
+                    stepDiv.draggable = true;
+                    stepDiv.innerHTML = `
+                        <div class="step-number">?</div>
+                        <div class="step-text">${item.text}</div>
+                    `;
+                    syringeContainer.appendChild(stepDiv);
+                });
+
+                const syringeItems = syringeContainer.querySelectorAll('.step-item');
+                let placedSyringeSteps = [];
+                let userMatches = {};
+                let placedItems = 0;
+
+                // Syringe Assembly
+                syringeItems.forEach(item => {
+                    item.addEventListener('dragstart', function(e) {
+                        e.dataTransfer.setData('text/plain', JSON.stringify({
+                            step: this.dataset.step,
+                            text: this.querySelector('.step-text').textContent
+                        }));
+                        this.classList.add('dragging');
+                    });
+
+                    item.addEventListener('dragend', function() {
+                        this.classList.remove('dragging');
+                    });
+                });
+
+                syringeDropzone.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    this.classList.add('hover');
+                    this.classList.remove('empty');
+                });
+
+                syringeDropzone.addEventListener('dragleave', function() {
+                    this.classList.remove('hover');
+                });
+
+                syringeDropzone.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('hover');
+                    
+                    const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+                    
+                    if (!placedSyringeSteps.includes(data.step)) {
+                        placedSyringeSteps.push(data.step);
+                        state.activities[2].syringeOrder = placedSyringeSteps;
+                        
+                        const stepDiv = document.createElement('div');
+                        stepDiv.className = 'step-item placed';
+                        stepDiv.innerHTML = `
+                            <div class="step-number">${placedSyringeSteps.length}</div>
+                            <div class="step-text">${data.text}</div>
+                        `;
+                        this.appendChild(stepDiv);
+                        
+                        const originalStep = document.querySelector(`#activity-2 .step-item[data-step="${data.step}"]`);
+                        if (originalStep) {
+                            originalStep.style.display = 'none';
+                        }
+                        
+                        if (placedSyringeSteps.length === 5 && placedItems === 8) {
+                            setTimeout(checkActivity2, 500);
+                        }
+                    }
+                });
+
+                // Needle Gauge Matching
+                const correctMatches = {
+                    'insulin': '29',
+                    'im': '21',
+                    'tpn': '18',
+                    'iv': '25'
+                };
+
+                matchingItems.forEach(item => {
+                    item.addEventListener('dragstart', function(e) {
+                        const type = this.dataset.item ? 'procedure' : 'gauge';
+                        const id = this.dataset.item || this.dataset.gauge;
+                        
+                        e.dataTransfer.setData('text/plain', JSON.stringify({
+                            type: type,
+                            id: id,
+                            text: this.textContent
+                        }));
+                        this.classList.add('dragging');
+                    });
+
+                    item.addEventListener('dragend', function() {
+                        this.classList.remove('dragging');
+                    });
+                });
+
+                matchSlots.forEach(slot => {
+                    slot.addEventListener('dragover', function(e) {
+                        e.preventDefault();
+                        if (!this.classList.contains('filled')) {
+                            this.classList.add('hover');
+                        }
+                    });
+
+                    slot.addEventListener('dragleave', function() {
+                        this.classList.remove('hover');
+                    });
+
+                    slot.addEventListener('drop', function(e) {
+                        e.preventDefault();
+                        this.classList.remove('hover');
+                        
+                        if (this.classList.contains('filled')) return;
+                        
+                        const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+                        const slotType = this.dataset.type;
+                        
+                        if (data.type !== slotType) {
+                            this.classList.add('incorrect');
+                            setTimeout(() => {
+                                this.classList.remove('incorrect');
+                            }, 500);
+                            return;
+                        }
+                        
+                        const alreadyPlaced = Array.from(matchSlots).some(slot =>
+                            slot.textContent.includes(data.text)
+                        );
+                        
+                        if (alreadyPlaced) return;
+                        
+                        this.classList.add('filled');
+                        this.innerHTML = `<strong>${data.text}</strong>`;
+                        this.dataset.itemId = data.id;
+                        
+                        const originalItem = data.type === 'procedure'
+                            ? document.querySelector(`[data-item="${data.id}"]`)
+                            : document.querySelector(`[data-gauge="${data.id}"]`);
+                            
+                        if (originalItem) {
+                            originalItem.style.display = 'none';
+                            placedItems++;
+                        }
+                        
+                        const pairNumber = this.closest('.match-pair').dataset.pair;
+                        if (!userMatches[pairNumber]) {
+                            userMatches[pairNumber] = {};
+                        }
+                        userMatches[pairNumber][slotType] = data.id;
+                        
+                        if (userMatches[pairNumber].procedure && userMatches[pairNumber].gauge) {
+                            const isCorrect = correctMatches[userMatches[pairNumber].procedure] === userMatches[pairNumber].gauge;
+                            
+                            const procedureSlot = document.querySelector(`#slot-proc-${pairNumber}`);
+                            const gaugeSlot = document.querySelector(`#slot-gauge-${pairNumber}`);
+                            
+                            if (isCorrect) {
+                                procedureSlot.classList.add('correct');
+                                gaugeSlot.classList.add('correct');
+                            } else {
+                                procedureSlot.classList.add('incorrect');
+                                gaugeSlot.classList.add('incorrect');
+                                setTimeout(() => {
+                                    procedureSlot.classList.remove('incorrect');
+                                    gaugeSlot.classList.remove('incorrect');
+                                }, 1000);
+                            }
+                            
+                            state.activities[2].matches = userMatches;
+                        }
+                        
+                        if (placedSyringeSteps.length === 5 && placedItems === 8) {
+                            setTimeout(checkActivity2, 500);
+                        }
+                    });
+                });
+
+                function checkActivity2() {
+                    // Check syringe assembly
+                    const correctSyringeOrder = ['1', '2', '3', '4', '5'];
+                    let syringeCorrect = 0;
+                    let syringeMessages = [];
+                    
+                    placedSyringeSteps.forEach((step, index) => {
+                        if (step === correctSyringeOrder[index]) {
+                            syringeCorrect++;
+                        } else {
+                            syringeMessages.push(`• Position ${index + 1} is incorrect`);
+                        }
+                    });
+                    
+                    // Check needle matching
+                    let matchingCorrect = 0;
+                    let matchingMessages = [];
+                    
+                    Object.keys(userMatches).forEach(pairNumber => {
+                        const pair = userMatches[pairNumber];
+                        if (pair.procedure && pair.gauge) {
+                            const isCorrect = correctMatches[pair.procedure] === pair.gauge;
+                            if (isCorrect) {
+                                matchingCorrect += 2; // Both items correct
+                            } else {
+                                const procedureText = document.querySelector(`[data-item="${pair.procedure}"]`).textContent;
+                                const gaugeText = document.querySelector(`[data-gauge="${pair.gauge}"]`).textContent;
+                                const correctGauge = correctMatches[pair.procedure];
+                                const correctGaugeText = document.querySelector(`[data-gauge="${correctGauge}"]`).textContent;
+                                matchingMessages.push(`• "${procedureText}" should match with "${correctGaugeText}" not "${gaugeText}"`);
+                            }
+                        }
+                    });
+                    
+                    const totalCorrect = syringeCorrect + matchingCorrect;
+                    
+                    state.activities[2].completed = true;
+                    state.activities[2].correct = totalCorrect;
+                    state.activities[2].score = Math.round((totalCorrect / 17) * 100);
+                    
+                    status.textContent = 'Completed';
+                    status.style.color = '#00b894';
+                    document.querySelector('#activity-2').classList.add('completed');
+                    feedback.classList.add('show');
+                    
+                    if (syringeMessages.length > 0 || matchingMessages.length > 0) {
+                        correctionDetails.style.display = 'block';
+                        correctionText.innerHTML = [...syringeMessages, ...matchingMessages].join('<br>');
+                    }
+                    
+                    updateProgressSummary();
+                }
+            }
+
+            // Activity 3: USP <797> Compliance - FIXED VERSION
+            function initActivity3() {
+                const categories = document.querySelectorAll('#activity-3 .category-box');
+                const feedback = document.getElementById('feedback-3');
+                const status = document.querySelector('#activity-3 .activity-status');
+                const correctionDetails = document.getElementById('correction-details-3');
+                const correctionText = document.getElementById('correction-text-3');
+                const draggableContainer = document.getElementById('draggable-items-container');
+                const checklist3 = document.getElementById('checklist-3');
+                const violationChecklist = document.getElementById('violation-checklist');
+
+                // Define draggable items
+                const draggableItemsData = [
+                    { text: 'TPN from sterile ingredients', correct: 'low' },
+                    { text: 'Adding drug to existing IV bag', correct: 'medium' },
+                    { text: 'Single vial transfer to syringe', correct: 'low' },
+                    { text: 'Multiple additives to TPN', correct: 'medium' },
+                    { text: 'Reconstituting single vial', correct: 'low' },
+                    { text: 'Pooling contents of multiple vials', correct: 'medium' }
+                ];
+
+                // Shuffle the draggable items
+                const shuffledItems = shuffleArray([...draggableItemsData]);
+
+                // Create draggable items in random order
+                shuffledItems.forEach((item, index) => {
+                    const draggableDiv = document.createElement('div');
+                    draggableDiv.className = 'draggable-item draggable';
+                    draggableDiv.dataset.correct = item.correct;
+                    draggableDiv.dataset.id = `item-${index}`;
+                    draggableDiv.draggable = true;
+                    draggableDiv.textContent = item.text;
+                    draggableContainer.appendChild(draggableDiv);
+                });
+
+                const draggableItems = draggableContainer.querySelectorAll('.draggable-item');
+                const checklistItems = checklist3.querySelectorAll('.checklist-item');
+                const violationItems = violationChecklist.querySelectorAll('.checklist-item');
+
+                let userPlacements = {};
+                let checklistChecked = new Set();
+                let violationChecked = new Set();
+                let placedItems = 0;
+
+                // Setup drag and drop for risk level classification
+                draggableItems.forEach(item => {
+                    item.addEventListener('dragstart', function(e) {
+                        e.dataTransfer.setData('text/plain', JSON.stringify({
+                            text: this.textContent,
+                            correct: this.dataset.correct,
+                            id: this.dataset.id
+                        }));
+                        this.classList.add('dragging');
+                    });
+
+                    item.addEventListener('dragend', function() {
+                        this.classList.remove('dragging');
+                    });
+                });
+
+                categories.forEach(category => {
+                    category.addEventListener('dragover', function(e) {
+                        e.preventDefault();
+                        this.classList.add('hover');
+                    });
+
+                    category.addEventListener('dragleave', function() {
+                        this.classList.remove('hover');
+                    });
+
+                    category.addEventListener('drop', function(e) {
+                        e.preventDefault();
+                        this.classList.remove('hover');
+                        
+                        const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+                        const targetCategory = this.dataset.category;
+                        const categoryContent = this.querySelector('.category-content');
+                        
+                        // Check if item already placed in any category
+                        if (userPlacements[data.id]) return;
+                        
+                        userPlacements[data.id] = {
+                            category: targetCategory,
+                            text: data.text,
+                            correct: data.correct
+                        };
+                        state.activities[3].placements = userPlacements;
+                        
+                        const isCorrect = data.correct === targetCategory;
+                        
+                        const div = document.createElement('div');
+                        div.textContent = data.text;
+                        div.style.padding = '6px 10px';
+                        div.style.margin = '4px 0';
+                        div.style.background = isCorrect
+                            ? (targetCategory === 'low' ? 'rgba(0, 184, 148, 0.1)' : 'rgba(131, 128, 240, 0.1)')
+                            : 'rgba(225, 112, 85, 0.1)';
+                        div.style.borderRadius = '8px';
+                        div.style.fontSize = '0.8rem';
+                        
+                        categoryContent.appendChild(div);
+                        
+                        // Hide the original draggable item
+                        const originalItem = document.querySelector(`[data-id="${data.id}"]`);
+                        if (originalItem) {
+                            originalItem.style.display = 'none';
+                            placedItems++;
+                        }
+                        
+                        // Check completion
+                        checkActivity3Completion();
+                    });
+                });
+
+                // Setup checklist interactions for BUD
+                checklistItems.forEach(item => {
+                    item.addEventListener('click', function() {
+                        const checkbox = this.querySelector('.checklist-checkbox');
+                        const isChecked = this.classList.contains('checked');
+                        
+                        if (!isChecked) {
+                            this.classList.add('checked');
+                            checkbox.innerHTML = '✓';
+                            checklistChecked.add(this);
+                        } else {
+                            this.classList.remove('checked');
+                            checkbox.innerHTML = '';
+                            checklistChecked.delete(this);
+                        }
+                        
+                        // Check completion
+                        checkActivity3Completion();
+                    });
+                });
+
+                // Setup checklist interactions for violations
+                violationItems.forEach(item => {
+                    item.addEventListener('click', function() {
+                        const checkbox = this.querySelector('.checklist-checkbox');
+                        const isChecked = this.classList.contains('checked');
+                        
+                        if (!isChecked) {
+                            this.classList.add('checked');
+                            checkbox.innerHTML = '✓';
+                            violationChecked.add(this);
+                        } else {
+                            this.classList.remove('checked');
+                            checkbox.innerHTML = '';
+                            violationChecked.delete(this);
+                        }
+                        
+                        // Check completion
+                        checkActivity3Completion();
+                    });
+                });
+
+                function checkActivity3Completion() {
+                    // Check if all items are placed and all checklists are completed
+                    if (placedItems === 6 && checklistChecked.size === 6 && violationChecked.size === 5) {
+                        setTimeout(checkActivity3, 300);
+                    }
+                }
+
+                function checkActivity3() {
+                    // Check risk level placements
+                    const correctPlacements = {
+                        'TPN from sterile ingredients': 'low',
+                        'Adding drug to existing IV bag': 'medium',
+                        'Single vial transfer to syringe': 'low',
+                        'Multiple additives to TPN': 'medium',
+                        'Reconstituting single vial': 'low',
+                        'Pooling contents of multiple vials': 'medium'
+                    };
+                    
+                    let placementCorrect = 0;
+                    let placementMessages = [];
+                    
+                    Object.values(userPlacements).forEach(placement => {
+                        const correctCat = correctPlacements[placement.text];
+                        if (placement.category === correctCat) {
+                            placementCorrect++;
+                        } else {
+                            const correctCatText = correctCat === 'low' ? 'Low Risk' : 'Medium Risk';
+                            const userCatText = placement.category === 'low' ? 'Low Risk' : 'Medium Risk';
+                            placementMessages.push(`• "${placement.text}" should be "${correctCatText}" not "${userCatText}"`);
+                        }
+                    });
+                    
+                    // Check BUD checklist items
+                    let budChecklistCorrect = 0;
+                    let budChecklistMessages = [];
+                    
+                    checklistItems.forEach(item => {
+                        const isChecked = item.classList.contains('checked');
+                        const shouldBeChecked = item.dataset.correct === 'true';
+                        
+                        if (isChecked === shouldBeChecked) {
+                            budChecklistCorrect++;
+                            if (isChecked) {
+                                item.classList.add('correct');
+                            }
+                        } else {
+                            item.classList.add('incorrect');
+                            const itemText = item.querySelector('.checklist-text').textContent;
+                            if (shouldBeChecked) {
+                                budChecklistMessages.push(`• "${itemText}" should be checked`);
+                            } else {
+                                budChecklistMessages.push(`• "${itemText}" should NOT be checked`);
+                            }
+                        }
+                    });
+                    
+                    // Check violation checklist items
+                    let violationChecklistCorrect = 0;
+                    let violationChecklistMessages = [];
+                    
+                    violationItems.forEach(item => {
+                        const isChecked = item.classList.contains('checked');
+                        const shouldBeChecked = item.dataset.correct === 'true';
+                        
+                        if (isChecked === shouldBeChecked) {
+                            violationChecklistCorrect++;
+                            if (isChecked) {
+                                item.classList.add('correct');
+                            }
+                        } else {
+                            item.classList.add('incorrect');
+                            const itemText = item.querySelector('.checklist-text').textContent;
+                            if (shouldBeChecked) {
+                                violationChecklistMessages.push(`• "${itemText}" should be checked`);
+                            } else {
+                                violationChecklistMessages.push(`• "${itemText}" should NOT be checked`);
+                            }
+                        }
+                    });
+                    
+                    const totalCorrect = placementCorrect + budChecklistCorrect + violationChecklistCorrect;
+                    
+                    state.activities[3].completed = true;
+                    state.activities[3].correct = totalCorrect;
+                    state.activities[3].score = Math.round((totalCorrect / 20) * 100);
+                    
+                    status.textContent = 'Completed';
+                    status.style.color = '#00b894';
+                    document.querySelector('#activity-3').classList.add('completed');
+                    feedback.classList.add('show');
+                    
+                    const allMessages = [...placementMessages, ...budChecklistMessages, ...violationChecklistMessages];
+                    if (allMessages.length > 0) {
+                        correctionDetails.style.display = 'block';
+                        correctionText.innerHTML = allMessages.join('<br>');
+                    }
+                    
+                    updateProgressSummary();
+                }
+            }
+
+            // Reset All Activities
+            function resetAllActivities() {
+                // Reset state
+                Object.keys(state.activities).forEach(key => {
+                    state.activities[key] = {
+                        completed: false,
+                        correct: 0,
+                        total: parseInt(key) === 1 ? 19 : parseInt(key) === 2 ? 17 : 20,
+                        score: 0,
+                        userOrder: [],
+                        checkedItems: [],
+                        matches: {},
+                        placements: {},
+                        syringeOrder: []
+                    };
+                });
+
+                // Reset UI
+                activityCards.forEach(card => {
+                    card.classList.remove('completed');
+                    const status = card.querySelector('.activity-status');
+                    status.textContent = 'Not Started';
+                    status.style.color = '';
+                    const feedback = card.querySelector('.feedback-container');
+                    feedback.classList.remove('show');
+                    const correctionDetails = card.querySelector('.correction-details');
+                    if (correctionDetails) correctionDetails.style.display = 'none';
+                });
+
+                // Reset Activity 1
+                clearInterval(timer1Interval);
+                timer1Seconds = 180;
+                document.getElementById('timer-1').textContent = '03:00';
+                document.getElementById('timer-status-1').textContent = 'Ready';
+                document.getElementById('timer-status-1').className = 'timer-status';
+                
+                const dropzone1 = document.getElementById('ppe-dropzone');
+                dropzone1.innerHTML = '';
+                dropzone1.classList.add('empty');
+                const ppeContainer = document.getElementById('ppe-items-container');
+                ppeContainer.innerHTML = '';
+                document.querySelectorAll('#activity-1 .checklist-item').forEach(item => {
+                    item.classList.remove('checked', 'correct', 'incorrect');
+                    item.querySelector('.checklist-checkbox').innerHTML = '';
+                });
+
+                // Reset Activity 2
+                const dropzone2 = document.getElementById('syringe-dropzone');
+                dropzone2.innerHTML = '';
+                dropzone2.classList.add('empty');
+                const syringeContainer = document.getElementById('syringe-items-container');
+                syringeContainer.innerHTML = '';
+                document.querySelectorAll('#activity-2 .matching-item').forEach(item => {
+                    item.style.display = '';
+                    item.classList.remove('dragging', 'matched', 'incorrect');
+                });
+                document.querySelectorAll('#activity-2 .match-slot').forEach(slot => {
+                    slot.classList.remove('filled', 'correct', 'incorrect', 'hover');
+                    slot.innerHTML = slot.dataset.type === 'procedure' ? 'Drag procedure here' : 'Drag gauge here';
+                    delete slot.dataset.itemId;
+                });
+
+                // Reset Activity 3
+                const draggableContainer = document.getElementById('draggable-items-container');
+                draggableContainer.innerHTML = '';
+                document.querySelectorAll('#activity-3 .category-content').forEach(content => {
+                    content.innerHTML = '';
+                });
+                document.querySelectorAll('#activity-3 .checklist-item').forEach(item => {
+                    item.classList.remove('checked', 'correct', 'incorrect');
+                    item.querySelector('.checklist-checkbox').innerHTML = '';
+                });
+                document.querySelectorAll('#activity-3 .category-box').forEach(box => {
+                    box.classList.remove('hover');
+                });
+
+                // Reset results
+                resultsPanel.classList.remove('show');
+
+                // Re-initialize activities with new random order
+                initActivity1();
+                initActivity2();
+                initActivity3();
+
+                // Update progress
+                updateProgressSummary();
+            }
+
+            // Check All Answers
+            function checkAllAnswers() {
+                // Force check all activities
+                [1, 2, 3].forEach(activityNum => {
+                    if (!state.activities[activityNum].completed) {
+                        state.activities[activityNum].completed = true;
+                        state.activities[activityNum].correct = state.activities[activityNum].total;
+                        state.activities[activityNum].score = 100;
+                        
+                        const activityCard = document.querySelector(`#activity-${activityNum}`);
+                        activityCard.querySelector('.activity-status').textContent = 'Completed';
+                        activityCard.classList.add('completed');
+                        document.querySelector(`#feedback-${activityNum}`).classList.add('show');
+                    }
+                });
+
+                updateProgressSummary();
+            }
+
+            // View Final Results
+            function viewFinalResults() {
+                let totalScore = 0;
+                let activityCount = 0;
+
+                Object.values(state.activities).forEach(activity => {
+                    if (activity.completed) {
+                        totalScore += activity.score;
+                        activityCount++;
+                    }
+                });
+
+                const averageScore = activityCount > 0 ? Math.round(totalScore / activityCount) : 0;
+                finalScore.textContent = `${averageScore}%`;
+                resultsPanel.classList.add('show');
+                resultsPanel.scrollIntoView({ behavior: 'smooth' });
+            }
+
+            // Initialize all activities
+            initActivity1();
+            initActivity2();
+            initActivity3();
+
+            // Event listeners
+            resetBtn.addEventListener('click', resetAllActivities);
+            checkBtn.addEventListener('click', checkAllAnswers);
+            resultsBtn.addEventListener('click', viewFinalResults);
+
+            // Initial progress update
+            updateProgressSummary();
+        });
+    </script>
+</body>
+</html>
