@@ -2,21 +2,21 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <title>AlliedRx Phlebotomy -- Week 1 Objectives</title>
+    <title>AlliedRx -- Phlebotomy Week 1 Objectives</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
         :root {
-            --color-primary: #2a5caa;
-            --color-primary-soft: #6a9ae8;
-            --color-accent: #e63946;
-            --color-success: #06d6a0;
-            --color-error: #ef476f;
-            --color-bg: #f8f9fa;
-            --color-text: #1d3557;
-            --color-muted: #457b9d;
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-error: #e17055;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
             --radius-lg: 24px;
-            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.12);
-            --shadow-hover: 0 25px 60px rgba(42, 92, 170, 0.2);
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 60px rgba(175, 75, 239, 0.25);
         }
 
         * {
@@ -25,7 +25,8 @@
             padding: 0;
         }
 
-        html, body {
+        html,
+        body {
             width: 100%;
             overflow-x: hidden;
             scroll-behavior: smooth;
@@ -34,13 +35,20 @@
         body {
             font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
             padding: 24px;
-            background: radial-gradient(circle at top left, #ffffff 0, #e3f2fd 40%, var(--color-bg) 100%);
+            background: radial-gradient(
+                circle at top left,
+                #ffffff 0,
+                #f1ecff 40%,
+                var(--color-bg) 100%
+            );
             color: var(--color-text);
             -webkit-text-size-adjust: 100%;
         }
 
         @media (max-width: 600px) {
-            body { padding: 12px; }
+            body {
+                padding: 12px;
+            }
         }
 
         .page {
@@ -50,7 +58,7 @@
             background: #ffffff;
             border-radius: var(--radius-lg);
             box-shadow: var(--shadow-soft);
-            padding: 28px 30px 32px;
+            padding: 28px 30px 32px 30px;
             display: grid;
             grid-template-columns: minmax(0, 3.1fr) minmax(0, 2.4fr);
             gap: 28px;
@@ -60,8 +68,14 @@
         }
 
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         @media (max-width: 900px) {
@@ -72,7 +86,9 @@
         }
 
         @media (max-width: 480px) {
-            body { padding: 0; }
+            body {
+                padding: 0;
+            }
             .page {
                 border-radius: 0;
                 box-shadow: none;
@@ -81,7 +97,11 @@
             }
         }
 
-        img, .page, .column, .objective-card, .week-overview {
+        img,
+        .page,
+        .column,
+        .objective-card,
+        .week-overview {
             max-width: 100%;
         }
 
@@ -122,7 +142,9 @@
             transition: transform 0.3s ease;
         }
 
-        .brand-logo:hover { transform: scale(1.05); }
+        .brand-logo:hover {
+            transform: scale(1.05);
+        }
 
         .course-meta {
             display: flex;
@@ -145,7 +167,7 @@
             gap: 8px;
             padding: 4px 10px;
             border-radius: 999px;
-            background: rgba(42, 92, 170, 0.08);
+            background: rgba(175, 75, 239, 0.08);
             font-size: 0.76rem;
             color: var(--color-primary);
             white-space: normal;
@@ -153,8 +175,8 @@
         }
 
         @keyframes pulse {
-            0%, 100% { background-color: rgba(42, 92, 170, 0.08); }
-            50% { background-color: rgba(42, 92, 170, 0.15); }
+            0%, 100% { background-color: rgba(175, 75, 239, 0.08); }
+            50% { background-color: rgba(175, 75, 239, 0.15); }
         }
 
         .week-label-dot {
@@ -185,14 +207,19 @@
         }
 
         .badge-mode:hover {
-            background: rgba(42, 92, 170, 0.1);
+            background: rgba(175, 75, 239, 0.1);
             border-color: var(--color-primary-soft);
             color: var(--color-primary);
         }
 
         @media (max-width: 480px) {
-            .brand-row { flex-direction: column; align-items: flex-start; }
-            .badge-mode { margin-top: 6px; }
+            .brand-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .badge-mode {
+                margin-top: 6px;
+            }
         }
 
         h1 {
@@ -219,7 +246,7 @@
         }
 
         .objective-card {
-            background: #0a1929;
+            background: #08070a;
             color: #ffffff;
             border-radius: 18px;
             padding: 10px 16px 14px;
@@ -227,7 +254,7 @@
             grid-template-columns: auto 1fr auto;
             align-items: center;
             gap: 12px;
-            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
             transition: all 0.3s ease;
             cursor: pointer;
             position: relative;
@@ -250,10 +277,12 @@
             box-shadow: var(--shadow-hover);
         }
 
-        .objective-card:hover::before { left: 100%; }
+        .objective-card:hover::before {
+            left: 100%;
+        }
 
         .objective-card.active {
-            background: linear-gradient(135deg, #0f172a, #1a237e);
+            background: linear-gradient(135deg, #0f172a, #1e1b4b);
             border-left: 4px solid var(--color-accent);
         }
 
@@ -262,7 +291,9 @@
                 grid-template-columns: auto 1fr;
                 grid-template-rows: auto auto;
             }
-            .objective-icon { justify-self: flex-end; }
+            .objective-icon {
+                justify-self: flex-end;
+            }
         }
 
         .objective-number {
@@ -298,7 +329,9 @@
             transition: color 0.3s ease;
         }
 
-        .objective-card:hover .objective-verb { color: #ffffff; }
+        .objective-card:hover .objective-verb {
+            color: #ffffff;
+        }
 
         .objective-text {
             font-size: 0.84rem;
@@ -316,7 +349,11 @@
             justify-content: center;
             font-size: 0.7rem;
             color: #f9fafb;
-            background: linear-gradient(135deg, rgba(42, 92, 170, 0.1), rgba(0, 0, 0, 0.4));
+            background: linear-gradient(
+                135deg,
+                rgba(175, 75, 239, 0.1),
+                rgba(0, 0, 0, 0.4)
+            );
             transition: all 0.3s ease;
         }
 
@@ -346,7 +383,7 @@
         }
 
         .filter-btn:hover {
-            background: rgba(42, 92, 170, 0.1);
+            background: rgba(175, 75, 239, 0.1);
             border-color: var(--color-primary-soft);
             color: var(--color-primary);
         }
@@ -377,7 +414,7 @@
         }
 
         .week-overview {
-            background: rgba(10, 25, 41, 0.94);
+            background: rgba(12, 10, 24, 0.94);
             border-radius: 18px;
             padding: 16px 18px 18px;
             color: #e5e7eb;
@@ -389,15 +426,19 @@
             transition: transform 0.3s ease;
         }
 
-        .week-overview:hover { transform: translateY(-2px); }
+        .week-overview:hover {
+            transform: translateY(-2px);
+        }
 
-        .week-overview strong { color: #ffffff; }
+        .week-overview strong {
+            color: #ffffff;
+        }
 
         .mini-heading {
             font-size: 0.86rem;
             text-transform: uppercase;
             letter-spacing: 0.14em;
-            color: #90caf9;
+            color: #c4b5fd;
             font-weight: 600;
             margin: 8px 0 10px;
         }
@@ -418,7 +459,9 @@
             transition: transform 0.3s ease;
         }
 
-        .outcomes-list li:hover { transform: translateX(5px); }
+        .outcomes-list li:hover {
+            transform: translateX(5px);
+        }
 
         .dot {
             width: 6px;
@@ -446,21 +489,25 @@
             background: rgba(15, 23, 42, 0.9);
         }
 
-        .note-card strong { color: #ffde59; }
+        .note-card strong {
+            color: #fef3c7;
+        }
 
         /* Interactive counter */
         .progress-counter {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(42, 92, 170, 0.05);
+            background: rgba(175, 75, 239, 0.05);
             border-radius: 16px;
             padding: 12px 18px;
             margin-bottom: 20px;
-            border: 1px solid rgba(42, 92, 170, 0.1);
+            border: 1px solid rgba(175, 75, 239, 0.1);
         }
 
-        .counter-item { text-align: center; }
+        .counter-item {
+            text-align: center;
+        }
 
         .counter-number {
             font-size: 1.8rem;
@@ -482,18 +529,21 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .counter-item { animation: countUp 0.6s ease-out forwards; }
+        .counter-item {
+            animation: countUp 0.6s ease-out forwards;
+        }
+
         .counter-item:nth-child(1) { animation-delay: 0.8s; }
         .counter-item:nth-child(2) { animation-delay: 1s; }
         .counter-item:nth-child(3) { animation-delay: 1.2s; }
 
         /* Case Study Box */
         .case-study {
-            background: linear-gradient(135deg, rgba(42, 92, 170, 0.1), rgba(230, 57, 70, 0.1));
+            background: linear-gradient(135deg, rgba(131, 128, 240, 0.1), rgba(175, 75, 239, 0.1));
             border-radius: 18px;
             padding: 18px;
             margin-top: 20px;
-            border: 1px solid rgba(42, 92, 170, 0.2);
+            border: 1px solid rgba(131, 128, 240, 0.2);
         }
 
         .case-title {
@@ -512,45 +562,48 @@
             line-height: 1.5;
         }
 
-        .case-content strong { color: #6a9ae8; }
+        .case-content strong {
+            color: #d492ff;
+        }
 
         /* Key Terms Box */
-        .key-terms {
-            background: rgba(10, 25, 41, 0.9);
+        .key-terms-box {
+            background: linear-gradient(135deg, rgba(0, 184, 148, 0.1), rgba(131, 128, 240, 0.1));
             border-radius: 16px;
             padding: 16px;
-            margin-top: 20px;
-            border: 1px solid rgba(42, 92, 170, 0.3);
-            font-size: 0.8rem;
-            line-height: 1.6;
+            margin-top: 16px;
+            border: 1px solid rgba(0, 184, 148, 0.2);
         }
 
         .key-terms-title {
+            font-size: 0.88rem;
             font-weight: 700;
-            color: var(--color-primary-soft);
+            color: var(--color-success);
             margin-bottom: 10px;
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
-        .terms-grid {
+        .key-terms-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
             gap: 8px;
+            font-size: 0.8rem;
             color: #e5e7eb;
         }
 
-        .term-item {
+        .key-term {
             padding: 4px 8px;
             background: rgba(255, 255, 255, 0.05);
-            border-radius: 6px;
-            transition: all 0.3s ease;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        .term-item:hover {
-            background: rgba(42, 92, 170, 0.3);
-            transform: translateY(-2px);
+        @media (max-width: 600px) {
+            .key-terms-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            }
         }
     </style>
 </head>
@@ -569,18 +622,17 @@
                         <span class="course-name">Phlebotomy Technician Program • PBT</span>
                         <div class="week-label">
                             <span class="week-label-dot"></span>
-                            <span>Week 1 — Introduction & Anatomy/Physiology</span>
+                            <span>Week 1 --- Foundations of Phlebotomy</span>
                         </div>
                     </div>
                 </div>
-                <span class="badge-mode">Campus & Online</span>
+                <span class="badge-mode">Campus &amp; Online</span>
             </header>
 
             <h1 id="week1-heading">Week 1 Objectives</h1>
             <p class="subtitle">
-                Master the <strong>foundations of phlebotomy practice</strong> and 
-                <strong>essential anatomy/physiology</strong> to perform safe, effective 
-                blood collection with clinical precision.
+                Master the <strong>foundational knowledge</strong> of phlebotomy practice and 
+                <strong>human anatomy & physiology</strong> essential for safe and effective blood collection procedures.
             </p>
 
             <!-- Interactive filter buttons -->
@@ -601,8 +653,8 @@
                     <span class="counter-label">Chapters</span>
                 </div>
                 <div class="counter-item">
-                    <span class="counter-number">14</span>
-                    <span class="counter-label">Anatomy Concepts</span>
+                    <span class="counter-number">13</span>
+                    <span class="counter-label">Key Systems</span>
                 </div>
             </div>
 
@@ -672,7 +724,7 @@
                             Define all key terms included in this chapter.
                         </p>
                     </div>
-                    <div class="objective-icon" aria-hidden="true">📖</div>
+                    <div class="objective-icon" aria-hidden="true">📚</div>
                 </article>
 
                 <article class="objective-card" data-chapter="chapter2">
@@ -683,7 +735,7 @@
                             Identify body planes and describe directional terms.
                         </p>
                     </div>
-                    <div class="objective-icon" aria-hidden="true">🗺️</div>
+                    <div class="objective-icon" aria-hidden="true">🧭</div>
                 </article>
 
                 <article class="objective-card" data-chapter="chapter2">
@@ -716,7 +768,7 @@
                             Describe the organs, major structures, and functions of each body system.
                         </p>
                     </div>
-                    <div class="objective-icon" aria-hidden="true">🧠</div>
+                    <div class="objective-icon" aria-hidden="true">🫀</div>
                 </article>
 
                 <article class="objective-card" data-chapter="chapter2">
@@ -738,7 +790,7 @@
                             Describe how blood circulates within the heart to the lungs and tissues.
                         </p>
                     </div>
-                    <div class="objective-icon" aria-hidden="true">❤️</div>
+                    <div class="objective-icon" aria-hidden="true">🔄</div>
                 </article>
 
                 <article class="objective-card" data-chapter="chapter2">
@@ -782,7 +834,7 @@
                             List the major components of blood and describe the function of each formed element.
                         </p>
                     </div>
-                    <div class="objective-icon" aria-hidden="true">🧪</div>
+                    <div class="objective-icon" aria-hidden="true">🧫</div>
                 </article>
 
                 <article class="objective-card" data-chapter="chapter2">
@@ -793,7 +845,7 @@
                             Differentiate between whole blood, serum, and plasma.
                         </p>
                     </div>
-                    <div class="objective-icon" aria-hidden="true">⚗️</div>
+                    <div class="objective-icon" aria-hidden="true">🔍</div>
                 </article>
 
                 <article class="objective-card" data-chapter="chapter2">
@@ -804,53 +856,80 @@
                             Briefly explain clot formation, fibrinolysis, and the principles of blood typing.
                         </p>
                     </div>
-                    <div class="objective-icon" aria-hidden="true">🩹</div>
+                    <div class="objective-icon" aria-hidden="true">🧩</div>
                 </article>
             </div>
         </section>
 
         <!-- RIGHT COLUMN: narrative + outcomes framing -->
         <aside class="column" aria-label="Overview of this week's content">
-            <h2 class="objectives-header">Foundations of Phlebotomy Practice</h2>
-            <p class="section-tag">Professional Standards • Human Anatomy • Blood Collection Basics</p>
+            <h2 class="objectives-header">Foundations of Blood Collection</h2>
+            <p class="section-tag">Professional Standards • Human Anatomy • Circulatory System</p>
 
             <div class="week-overview">
                 <p>
-                    Week 1 establishes the <strong>essential knowledge base</strong> for your phlebotomy career. 
-                    You'll begin with <strong>professional standards and ethics</strong>, then dive deep into 
-                    <strong>human anatomy and physiology</strong> with special focus on the circulatory system.
+                    Week 1 establishes the <strong>essential foundations</strong> for your phlebotomy career. 
+                    You'll learn about the <strong>professional standards</strong> governing phlebotomy practice 
+                    and dive deep into the <strong>anatomy and physiology</strong> that makes safe, effective 
+                    blood collection possible.
                 </p>
 
                 <p>
-                    These two chapters are interconnected because <strong>anatomy knowledge directly informs 
-                    safe phlebotomy practice</strong>. Understanding vein structure, blood composition, and 
-                    physiological principles enables you to collect specimens effectively while minimizing 
-                    patient discomfort and risk.
+                    These chapters connect because <strong>anatomical knowledge directly informs phlebotomy technique</strong>. 
+                    Understanding body systems, particularly the circulatory system, is crucial for locating veins, 
+                    understanding blood composition, and recognizing potential complications during venipuncture.
                 </p>
 
-                <!-- Chapter 1 Case Study -->
+                <!-- Case Study from Chapter 1 -->
                 <div class="case-study">
                     <div class="case-title">
-                        <span>👨‍⚕️</span> Chapter 1 Scenario: The Multidisciplinary Team
+                        <span>🏥</span> Chapter 1 Scenario: New Phlebotomy Student
                     </div>
                     <div class="case-content">
-                        <strong>Setting:</strong> Large metropolitan hospital with 500+ beds<br>
-                        <strong>Team Members:</strong> Nurses, Medical Assistants, Lab Technicians, Respiratory Therapists<br>
-                        <strong>Challenge:</strong> Understanding who can perform phlebotomy in different states and settings, 
-                        and how certification vs. licensure affects scope of practice.
+                        <strong>Situation:</strong> You're beginning your clinical rotation at a multi-specialty clinic<br>
+                        <strong>Challenges:</strong> Need to understand which healthcare professionals can perform phlebotomy, 
+                        workplace settings, and professional certification requirements<br>
+                        <strong>Learning Goal:</strong> Navigate the professional landscape of phlebotomy while 
+                        understanding ethical responsibilities and scope of practice
                     </div>
                 </div>
 
-                <!-- Chapter 2 Case Study -->
+                <!-- Case Study from Chapter 2 -->
                 <div class="case-study">
                     <div class="case-title">
-                        <span>🏥</span> Chapter 2 Scenario: Anatomy in Action
+                        <span>🔬</span> Chapter 2 Scenario: Anatomy in Practice
                     </div>
                     <div class="case-content">
-                        <strong>Patient:</strong> 68-year-old male with difficult venous access<br>
-                        <strong>Challenge:</strong> Identifying alternative venipuncture sites beyond the median cubital vein<br>
-                        <strong>Solution:</strong> Applying knowledge of venous anatomy, vessel depth, and adjacent structures 
-                        to safely access the basilic or cephalic veins.
+                        <strong>Patient:</strong> Elderly patient with fragile veins and hypertension<br>
+                        <strong>Challenges:</strong> Identifying suitable veins, understanding how blood pressure 
+                        affects venipuncture, knowing blood components for different tests<br>
+                        <strong>Learning Goal:</strong> Apply anatomical knowledge to real-world phlebotomy situations 
+                        for safe and efficient blood collection
+                    </div>
+                </div>
+
+                <!-- Key Terms Box -->
+                <div class="key-terms-box">
+                    <div class="key-terms-title">
+                        <span>📖</span> Chapter 2 Key Terms
+                    </div>
+                    <div class="key-terms-grid">
+                        <div class="key-term">adenosine triphosphate (ATP)</div>
+                        <div class="key-term">antecubital veins</div>
+                        <div class="key-term">basilic vein</div>
+                        <div class="key-term">cephalic vein</div>
+                        <div class="key-term">median cubital vein</div>
+                        <div class="key-term">erythrocytes</div>
+                        <div class="key-term">leukocytes</div>
+                        <div class="key-term">thrombocytes</div>
+                        <div class="key-term">hemoglobin</div>
+                        <div class="key-term">plasma</div>
+                        <div class="key-term">serum</div>
+                        <div class="key-term">hemostasis</div>
+                        <div class="key-term">homeostasis</div>
+                        <div class="key-term">systole</div>
+                        <div class="key-term">diastole</div>
+                        <div class="key-term">vasoconstrictor</div>
                     </div>
                 </div>
 
@@ -858,64 +937,43 @@
                 <ul class="outcomes-list">
                     <li>
                         <span class="dot"></span>
-                        <span>Identify which healthcare team members can perform phlebotomy in various clinical settings.</span>
+                        <span>Identify appropriate venipuncture sites using anatomical landmarks.</span>
                     </li>
                     <li>
                         <span class="dot"></span>
-                        <span>Explain the ethical and legal standards governing phlebotomy practice.</span>
+                        <span>Explain the professional requirements and ethical standards for phlebotomists.</span>
                     </li>
                     <li>
                         <span class="dot"></span>
-                        <span>Name and locate the three primary veins used for venipuncture.</span>
+                        <span>Describe blood circulation and its relevance to venipuncture techniques.</span>
                     </li>
                     <li>
                         <span class="dot"></span>
-                        <span>Describe blood circulation pathways and vessel structures.</span>
+                        <span>Differentiate between blood components for various laboratory tests.</span>
                     </li>
                     <li>
                         <span class="dot"></span>
-                        <span>Differentiate blood components and explain their clinical significance.</span>
+                        <span>Apply knowledge of homeostasis to patient assessment during blood collection.</span>
                     </li>
                 </ul>
 
-                <!-- Key Terms Section -->
-                <div class="key-terms">
-                    <div class="key-terms-title">
-                        <span>📚</span> Chapter 2 Key Terms
-                    </div>
-                    <div class="terms-grid">
-                        <div class="term-item">Homeostasis</div>
-                        <div class="term-item">Median Cubital Vein</div>
-                        <div class="term-item">Basilic Vein</div>
-                        <div class="term-item">Cephalic Vein</div>
-                        <div class="term-item">Erythrocytes</div>
-                        <div class="term-item">Leukocytes</div>
-                        <div class="term-item">Thrombocytes</div>
-                        <div class="term-item">Plasma</div>
-                        <div class="term-item">Serum</div>
-                        <div class="term-item">Hemostasis</div>
-                        <div class="term-item">Systole/Diastole</div>
-                        <div class="term-item">Arteries/Veins/Capillaries</div>
-                    </div>
-                </div>
-
                 <div class="note-card">
-                    <strong>Phlebotomy Insight:</strong> The <strong>median cubital vein</strong> is the 
-                    preferred venipuncture site because it's typically large, well-anchored, and has fewer 
-                    nerves nearby, reducing patient discomfort during blood draws.
+                    <strong>Phlebotomy Tip:</strong> The <strong>median cubital vein</strong> is typically the 
+                    first choice for venipuncture because it's large, well-anchored, and less painful for patients. 
+                    Always palpate veins before attempting venipuncture to assess size, depth, and direction.
                 </div>
 
                 <div class="note-card" style="margin-top: 12px;">
-                    <strong>Anatomy Tip:</strong> When locating veins, remember: 
-                    <strong>"cephalic" = thumb side</strong> (lateral), 
-                    <strong>"basilic" = pinky side</strong> (medial), and 
-                    <strong>"median cubital" connects them</strong> in the antecubital fossa.
+                    <strong>Anatomy Insight:</strong> Understanding <strong>blood pressure dynamics</strong> 
+                    (systole vs. diastole) helps explain why veins may be more visible or palpable at different 
+                    times. Patients with hypertension may have more resistant veins requiring different techniques.
                 </div>
 
                 <div class="note-card" style="margin-top: 12px;">
-                    <strong>Professional Development:</strong> Most states don't require phlebotomist 
-                    licensure, but <strong>certification significantly increases employment opportunities</strong> 
-                    and average salary. Major certifying organizations include ASCP, NHA, and AMT.
+                    <strong>Professional Practice:</strong> Phlebotomists work in diverse settings including 
+                    <strong>hospitals, clinics, blood banks, and research facilities</strong>. Certification, 
+                    while not always legally required, significantly increases employment opportunities and 
+                    demonstrates professional commitment.
                 </div>
             </div>
         </aside>
@@ -1017,6 +1075,7 @@
                     dot.style.transform = 'scale(1.5)';
                     dot.style.background = 'var(--color-primary)';
                 });
+
                 item.addEventListener('mouseleave', function() {
                     const dot = this.querySelector('.dot');
                     dot.style.transform = 'scale(1)';
@@ -1052,22 +1111,12 @@
             caseStudies.forEach(study => {
                 study.addEventListener('mouseenter', function() {
                     this.style.transform = 'translateY(-3px)';
-                    this.style.boxShadow = '0 12px 30px rgba(42, 92, 170, 0.2)';
+                    this.style.boxShadow = '0 12px 30px rgba(131, 128, 240, 0.2)';
                 });
+
                 study.addEventListener('mouseleave', function() {
                     this.style.transform = 'translateY(0)';
                     this.style.boxShadow = 'none';
-                });
-            });
-
-            // Add interactivity to key terms
-            const termItems = document.querySelectorAll('.term-item');
-            termItems.forEach(term => {
-                term.addEventListener('mouseenter', function() {
-                    this.style.backgroundColor = 'rgba(42, 92, 170, 0.4)';
-                });
-                term.addEventListener('mouseleave', function() {
-                    this.style.backgroundColor = 'rgba(255, 255, 255, 0.05)';
                 });
             });
         });
