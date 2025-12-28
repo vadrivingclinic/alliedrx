@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Chapter 12 Wrap-Up – Aseptic Technique & Sterile Compounding</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        :root {
+            --color-primary: #0ea5e9;
+            --color-primary-soft: #e0f2fe;
+            --color-accent: #3b82f6;
+            --color-bg: #f8fafc;
+            --color-text: #0f172a;
+            --color-muted: #64748b;
+            --radius-lg: 24px;
+            --shadow-soft: 0 18px 45px rgba(30, 41, 59, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(circle at top left, #ffffff 0, #f0f9ff 40%, var(--color-bg) 100%);
+            color: var(--color-text);
+            -webkit-text-size-adjust: 100%;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 12px;
+            }
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1120px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px 30px;
+            display: grid;
+            grid-template-columns: minmax(0, 3.1fr) minmax(0, 2.4fr);
+            gap: 28px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @media (max-width: 900px) {
+            .page {
+                grid-template-columns: 1fr;
+                padding: 22px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 0;
+            }
+            .page {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 18px 14px 22px;
+                gap: 22px;
+            }
+            h1 {
+                font-size: 1.7rem;
+            }
+            .section-title {
+                font-size: 1rem;
+            }
+        }
+
+        img, .page, .column, .card, .side-card, .completion-card {
+            max-width: 100%;
+        }
+
+        .column {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header / branding */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+        }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(14, 165, 233, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: #0d9488;
+            flex-shrink: 0;
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+        }
+
+        @media (max-width: 480px) {
+            .brand-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .badge-mode {
+                margin-top: 6px;
+            }
+        }
+
+        h1 {
+            font-size: clamp(1.9rem, 3vw, 2.3rem);
+            line-height: 1.05;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+        }
+
+        .subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 36rem;
+            margin-bottom: 18px;
+        }
+
+        .subtitle strong {
+            color: var(--color-primary);
+        }
+
+        /* Sections */
+        .section-label {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-primary);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--color-text);
+        }
+
+        .card {
+            border-radius: 18px;
+            border: 1px solid rgba(15, 23, 42, 0.06);
+            padding: 14px 16px 16px;
+            margin-bottom: 14px;
+            background: linear-gradient(
+                135deg,
+                rgba(14, 165, 233, 0.06),
+                rgba(255, 255, 255, 0.98)
+            );
+        }
+
+        .card + .card {
+            margin-top: 6px;
+        }
+
+        .card p {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--color-text);
+        }
+
+        .small {
+            font-size: 0.82rem;
+            color: var(--color-muted);
+        }
+
+        /* Quiz styles */
+        .quiz-item {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px dashed rgba(148, 163, 184, 0.7);
+        }
+
+        .quiz-question {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .quiz-options {
+            list-style: none;
+            padding-left: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            font-size: 0.88rem;
+        }
+
+        .quiz-options li {
+            display: flex;
+            align-items: flex-start;
+            gap: 6px;
+        }
+
+        .quiz-options input {
+            margin-top: 3px;
+            cursor: pointer;
+        }
+
+        .quiz-feedback {
+            font-size: 0.82rem;
+            margin-top: 5px;
+            min-height: 1.1em;
+        }
+
+        .quiz-feedback.correct {
+            color: #15803d;
+        }
+
+        .quiz-feedback.incorrect {
+            color: #b91c1c;
+        }
+
+        .btn {
+            border-radius: 999px;
+            border: none;
+            padding: 7px 14px;
+            margin-top: 10px;
+            font-size: 0.84rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            cursor: pointer;
+            background: linear-gradient(135deg, var(--color-primary), #3b82f6);
+            color: #ffffff;
+            box-shadow: 0 10px 25px rgba(14, 165, 233, 0.3);
+            transition: transform 0.05s ease, box-shadow 0.05s ease;
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 5px 12px rgba(14, 165, 233, 0.4);
+        }
+
+        /* Vocabulary */
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+            margin-top: 4px;
+        }
+
+        @media (max-width: 900px) {
+            .vocab-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .vocab-card {
+            border-radius: 14px;
+            padding: 10px 12px;
+            background: rgba(12, 10, 24, 0.94);
+            color: #e5e7eb;
+            font-size: 0.86rem;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .vocab-term {
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: #dbeafe;
+        }
+
+        .vocab-definition {
+            font-size: 0.82rem;
+            line-height: 1.5;
+            display: none;
+        }
+
+        .vocab-card.active .vocab-definition {
+            display: block;
+        }
+
+        .vocab-card::after {
+            content: "Tap to flip";
+            position: absolute;
+            right: 10px;
+            bottom: 8px;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #a5b4fc;
+        }
+
+        .vocab-card.active::after {
+            content: "Hide";
+        }
+
+        /* Reflection */
+        textarea {
+            width: 100%;
+            min-height: 80px;
+            border-radius: 12px;
+            border: 1px solid rgba(148, 163, 184, 0.7);
+            padding: 10px 11px;
+            font-family: inherit;
+            font-size: 0.88rem;
+            resize: vertical;
+            margin-top: 6px;
+        }
+
+        textarea:focus {
+            outline: 2px solid var(--color-primary-soft);
+            border-color: var(--color-primary);
+        }
+
+        .checklist {
+            list-style: none;
+            margin-top: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            font-size: 0.86rem;
+        }
+
+        .checklist li {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .checklist input {
+            margin-top: 2px;
+        }
+
+        /* Right column cards */
+        .side-card {
+            background: rgba(12, 10, 24, 0.96);
+            color: #e5e7eb;
+            border-radius: 18px;
+            padding: 16px 18px 18px;
+            font-size: 0.88rem;
+            line-height: 1.7;
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.6);
+            margin-bottom: 16px;
+        }
+
+        .side-card strong {
+            color: #ffffff;
+        }
+
+        .side-subtitle {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #93c5fd;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .side-list {
+            list-style: none;
+            margin-top: 6px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            font-size: 0.86rem;
+        }
+
+        .side-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 7px;
+        }
+
+        .dot {
+            width: 6px;
+            height: 6px;
+            margin-top: 7px;
+            border-radius: 999px;
+            background: #93c5fd;
+            flex-shrink: 0;
+        }
+
+        .completion-card {
+            border-radius: 18px;
+            border: 1px dashed rgba(148, 163, 184, 0.7);
+            padding: 12px 14px;
+            font-size: 0.84rem;
+            color: var(--color-muted);
+            background: rgba(248, 250, 252, 0.9);
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="wrapup-heading">
+        <!-- LEFT COLUMN -->
+        <section class="column">
+            <header class="brand-row">
+                <div class="brand">
+                    <img
+                        src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                        alt="AlliedRx logo"
+                        class="brand-logo"
+                    />
+                    <div class="course-meta">
+                        <span class="course-name">Pharmacy Technician • Sterile Compounding & Asepsis</span>
+                        <div class="week-label">
+                            <span class="week-label-dot"></span>
+                            <span>Chapter 12 Wrap-Up — Aseptic Technique & Sterile Compounding</span>
+                        </div>
+                    </div>
+                </div>
+                <span class="badge-mode">Interactive Review</span>
+            </header>
+
+            <h1 id="wrapup-heading">Aseptic Technique & Sterile Compounding</h1>
+            <p class="subtitle">
+                Use this page to pause and check your understanding of
+                <strong>Chapter 12 — Aseptic Technique and Sterile Compounding</strong>.
+                Review key ideas about USP standards, clean room protocols, and sterile preparation steps so you’re ready to prepare safe, contamination‑free medications.
+            </p>
+
+            <!-- QUICK SELF-CHECK QUIZ -->
+            <section aria-label="quick self check">
+                <p class="section-label">Step 1</p>
+                <h2 class="section-title">Quick Self‑Check</h2>
+                <div class="card" id="quiz-card">
+                    <p class="small">
+                        Choose the best answer for each question, then select
+                        <strong>Check answers</strong>. This is low‑stakes practice to help you spot any
+                        concepts you need to review.
+                    </p>
+
+                    <div class="quiz-item" data-answer="c">
+                        <p class="quiz-question">
+                            1. The <strong>primary purpose</strong> of a laminar airflow hood in sterile compounding is to:
+                        </p>
+                        <ul class="quiz-options">
+                            <li>
+                                <input type="radio" name="q1" value="a" id="q1a" />
+                                <label for="q1a">Store compounded sterile preparations (CSPs) until dispensing.</label>
+                            </li>
+                            <li>
+                                <input type="radio" name="q1" value="b" id="q1b" />
+                                <label for="q1b">Provide a comfortable workspace for the pharmacy technician.</label>
+                            </li>
+                            <li>
+                                <input type="radio" name="q1" value="c" id="q1c" />
+                                <label for="q1c">Provide a Class 5 environment by delivering first air that is free of particles and microorganisms.</label>
+                            </li>
+                        </ul>
+                        <div class="quiz-feedback" id="q1-feedback"></div>
+                    </div>
+
+                    <div class="quiz-item" data-answer="a">
+                        <p class="quiz-question">
+                            2. According to USP <797>, a <strong>Beyond‑Use Date (BUD)</strong> is:
+                        </p>
+                        <ul class="quiz-options">
+                            <li>
+                                <input type="radio" name="q2" value="a" id="q2a" />
+                                <label for="q2a">The date or time after which a CSP shall not be administered, stored, or transported.</label>
+                            </li>
+                            <li>
+                                <input type="radio" name="q2" value="b" id="q2b" />
+                                <label for="q2b">The manufacturer’s expiration date printed on the vial or ampule.</label>
+                            </li>
+                            <li>
+                                <input type="radio" name="q2" value="c" id="q2c" />
+                                <label for="q2c">The date the CSP is dispensed to the patient.</label>
+                            </li>
+                        </ul>
+                        <div class="quiz-feedback" id="q2-feedback"></div>
+                    </div>
+
+                    <div class="quiz-item" data-answer="b">
+                        <p class="quiz-question">
+                            3. Which type of hood <strong>must</strong> be used when compounding hazardous drugs (e.g., chemotherapeutic agents)?
+                        </p>
+                        <ul class="quiz-options">
+                            <li>
+                                <input type="radio" name="q3" value="a" id="q3a" />
+                                <label for="q3a">Horizontal laminar flow hood</label>
+                            </li>
+                            <li>
+                                <input type="radio" name="q3" value="b" id="q3b" />
+                                <label for="q3b">Biological safety cabinet (BSC) or Compounding Aseptic Containment Isolator (CACI)</label>
+                            </li>
+                            <li>
+                                <input type="radio" name="q3" value="c" id="q3c" />
+                                <label for="q3c">Standard clean bench with vertical airflow</label>
+                            </li>
+                        </ul>
+                        <div class="quiz-feedback" id="q3-feedback"></div>
+                    </div>
+
+                    <div class="quiz-item" data-answer="c">
+                        <p class="quiz-question">
+                            4. The term <strong>“critical site”</strong> in sterile compounding refers to:
+                        </p>
+                        <ul class="quiz-options">
+                            <li>
+                                <input type="radio" name="q4" value="a" id="q4a" />
+                                <label for="q4a">The area of the pharmacy where CSPs are stored.</label>
+                            </li>
+                            <li>
+                                <input type="radio" name="q4" value="b" id="q4b" />
+                                <label for="q4b">The location of the emergency eyewash station.</label>
+                            </li>
+                            <li>
+                                <input type="radio" name="q4" value="c" id="q4c" />
+                                <label for="q4c">Any surface exposed to first air that is at risk for touch contamination (e.g., vial tops, needle hubs, injection ports).</label>
+                            </li>
+                        </ul>
+                        <div class="quiz-feedback" id="q4-feedback"></div>
+                    </div>
+
+                    <button class="btn" type="button" onclick="checkQuiz()">Check answers</button>
+                </div>
+            </section>
+
+            <!-- VOCABULARY FLASHCARDS -->
+            <section aria-label="vocabulary practice">
+                <p class="section-label">Step 2</p>
+                <h2 class="section-title">Key Vocabulary Flashcards</h2>
+                <div class="card">
+                    <p class="small">
+                        Select each card to reveal the definition. Then try to explain each
+                        term in your <strong>own words</strong>—as if you were training a new pharmacy technician.
+                    </p>
+                    <div class="vocab-grid">
+                        <div class="vocab-card" onclick="toggleVocab(this)">
+                            <div class="vocab-term">Aseptic Technique</div>
+                            <div class="vocab-definition">
+                                Procedures used to eliminate the possibility of a drug becoming contaminated with microbes or particles during preparation.
+                            </div>
+                        </div>
+                        <div class="vocab-card" onclick="toggleVocab(this)">
+                            <div class="vocab-term">USP &lt;797&gt;</div>
+                            <div class="vocab-definition">
+                                Chapter 797 of the USP National Formulary containing enforceable standards for compounding sterile preparations, including guidelines, procedures, and compliance requirements.
+                            </div>
+                        </div>
+                        <div class="vocab-card" onclick="toggleVocab(this)">
+                            <div class="vocab-term">Clean Room</div>
+                            <div class="vocab-definition">
+                                A contained, controlled environment with low levels of environmental pollutants (dust, airborne microbes, etc.) used for preparing sterile medication products.
+                            </div>
+                        </div>
+                        <div class="vocab-card" onclick="toggleVocab(this)">
+                            <div class="vocab-term">Biological Safety Cabinet (BSC)</div>
+                            <div class="vocab-definition">
+                                A vertical flow hood designed to protect the operator and environment when compounding hazardous sterile preparations.
+                            </div>
+                        </div>
+                        <div class="vocab-card" onclick="toggleVocab(this)">
+                            <div class="vocab-term">Total Parenteral Nutrition (TPN)</div>
+                            <div class="vocab-definition">
+                                Large‑volume intravenous nutrition administered through a central vein, allowing higher concentration of solutions for patients unable to eat.
+                            </div>
+                        </div>
+                        <div class="vocab-card" onclick="toggleVocab(this)">
+                            <div class="vocab-term">Critical Site</div>
+                            <div class="vocab-definition">
+                                Any surface or area exposed to first air that is at risk for touch contamination (e.g., vial tops, open ampules, needle hubs, injection ports).
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- RIGHT COLUMN -->
+        <aside class="column" aria-label="apply it to Ken and your practice">
+            <!-- KEN SCENARIO -->
+            <section>
+                <p class="section-label">Apply it</p>
+                <h2 class="section-title">Supporting Ken & Your Team</h2>
+                <div class="side-card">
+                    <p class="side-subtitle">Scenario</p>
+                    <p>
+                        Ken is a TPN technician specialist with over 20 years of experience in a hospital pharmacy.
+                        He has seen the evolution from manual TPN preparation to modern sterile compounding processes.
+                        Ken is nationally certified and believes his role is crucial for patient safety.
+                    </p>
+                    <p class="side-subtitle" style="margin-top:12px;">Reflection prompts</p>
+                    <ul class="side-list">
+                        <li>
+                            <span class="dot"></span>
+                            <span>Why is it <strong>essential</strong> that all parenteral medications be prepared by well‑trained pharmacy technicians like Ken?</span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span>How do <strong>USP &lt;797&gt; and &lt;800&gt;</strong> standards directly protect patients, technicians, and the environment?</span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span>What are three <strong>critical errors</strong> a technician could make during sterile compounding that could lead to a health care‑associated infection (HAI)?</span>
+                        </li>
+                    </ul>
+                    <label class="small" for="ken-notes" style="display:block;margin-top:10px;">
+                        Jot down how you would explain the importance of aseptic technique to a new technician:
+                    </label>
+                    <textarea id="ken-notes" placeholder="Write a few sentences about the risks of contamination, the role of USP standards, and how proper training ensures patient safety."></textarea>
+                </div>
+            </section>
+
+            <!-- MY STERILE COMPOUNDING READINESS PLAN -->
+            <section>
+                <p class="section-label">Step 3</p>
+                <h2 class="section-title">My Sterile Compounding Readiness Checklist</h2>
+                <div class="side-card">
+                    <p>
+                        Turn Chapter 12 concepts into action. Mark each item when you have a
+                        specific plan—not just a general idea.
+                    </p>
+                    <ul class="checklist" style="margin-top:10px;">
+                        <li>
+                            <input type="checkbox" id="plan-hood" />
+                            <label for="plan-hood">
+                                I can explain the difference between a <strong>horizontal laminar flow hood</strong> and a <strong>biological safety cabinet (BSC)</strong> and when each is used.
+                            </label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="plan-usp" />
+                            <label for="plan-usp">
+                                I can list the <strong>three risk levels</strong> of drug preparation defined by USP &lt;797&gt; and describe one example of each.
+                            </label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="plan-technique" />
+                            <label for="plan-technique">
+                                I can demonstrate the <strong>proper steps</strong> for drawing up medication from both a vial and an ampule using aseptic technique.
+                            </label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="plan-hazardous" />
+                            <label for="plan-hazardous">
+                                I know the <strong>key requirements of USP &lt;800&gt;</strong> for handling hazardous drugs and the PPE required.
+                            </label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="plan-bud" />
+                            <label for="plan-bud">
+                                I understand how to determine a <strong>Beyond‑Use Date (BUD)</strong> for a compounded sterile preparation.
+                            </label>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- COMPLETION REMINDER -->
+            <section>
+                <p class="section-label">Step 4</p>
+                <h2 class="section-title">Ready to Move On?</h2>
+                <div class="completion-card">
+                    <p>
+                        Before you mark this unit complete, make sure you have:
+                    </p>
+                    <ul class="side-list" style="margin-top:8px;">
+                        <li>
+                            <span class="dot"></span>
+                            <span>Answered the <strong>Quick Self‑Check</strong> questions and noted any topics to review.</span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span>Practiced each <strong>vocabulary card</strong> until you can define the term without looking.</span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span>Written some ideas in the <strong>Ken & team</strong> reflection box.</span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span>Checked off items in your <strong>Sterile Compounding Readiness Checklist</strong>.</span>
+                        </li>
+                    </ul>
+                    <p style="margin-top:8px;">
+                        When you feel confident with these ideas, return to your course and
+                        continue to the next activity.
+                    </p>
+                </div>
+            </section>
+        </aside>
+    </main>
+
+    <script>
+        // Quiz logic
+        function checkQuiz() {
+            const items = document.querySelectorAll('.quiz-item');
+            items.forEach((item, index) => {
+                const correct = item.getAttribute('data-answer');
+                const name = 'q' + (index + 1);
+                const selected = document.querySelector('input[name="' + name + '"]:checked');
+                const feedback = document.getElementById(name + '-feedback');
+                if (!selected) {
+                    feedback.textContent = 'Choose an answer.';
+                    feedback.className = 'quiz-feedback';
+                    return;
+                }
+                if (selected.value === correct) {
+                    feedback.textContent = 'Correct! Nice work.';
+                    feedback.className = 'quiz-feedback correct';
+                } else {
+                    feedback.textContent = 'Not quite—review this concept in your notes and try again.';
+                    feedback.className = 'quiz-feedback incorrect';
+                }
+            });
+        }
+
+        // Vocabulary flip
+        function toggleVocab(card) {
+            card.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
