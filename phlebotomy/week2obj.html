@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>AlliedRx -- Phlebotomy Week 2 Objectives</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-error: #e17055;
+            --color-warning: #fdcb6e;
+            --color-info: #0984e3;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
+            --radius-lg: 24px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 60px rgba(175, 75, 239, 0.25);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(
+                circle at top left,
+                #ffffff 0,
+                #f1ecff 40%,
+                var(--color-bg) 100%
+            );
+            color: var(--color-text);
+            -webkit-text-size-adjust: 100%;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 12px;
+            }
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1120px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px 30px;
+            display: grid;
+            grid-template-columns: minmax(0, 3.1fr) minmax(0, 2.4fr);
+            gap: 28px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .page {
+                grid-template-columns: 1fr;
+                padding: 22px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 0;
+            }
+            .page {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 18px 14px 22px;
+                gap: 22px;
+            }
+        }
+
+        img,
+        .page,
+        .column,
+        .objective-card,
+        .week-overview {
+            max-width: 100%;
+        }
+
+        .column {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .brand-logo:hover {
+            transform: scale(1.05);
+        }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { background-color: rgba(175, 75, 239, 0.08); }
+            50% { background-color: rgba(175, 75, 239, 0.15); }
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--color-error);
+            flex-shrink: 0;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .badge-mode:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+        @media (max-width: 480px) {
+            .brand-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .badge-mode {
+                margin-top: 6px;
+            }
+        }
+
+        h1 {
+            font-size: clamp(2rem, 3vw, 2.4rem);
+            line-height: 1.05;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 34rem;
+            margin-bottom: 18px;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        /* Objectives list */
+        .objectives-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .objective-card {
+            background: #08070a;
+            color: #ffffff;
+            border-radius: 18px;
+            padding: 10px 16px 14px;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .objective-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.7s ease;
+        }
+
+        .objective-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .objective-card:hover::before {
+            left: 100%;
+        }
+
+        .objective-card.active {
+            background: linear-gradient(135deg, #0f172a, #1e1b4b);
+            border-left: 4px solid var(--color-accent);
+        }
+
+        @media (max-width: 480px) {
+            .objective-card {
+                grid-template-columns: auto 1fr;
+                grid-template-rows: auto auto;
+            }
+            .objective-icon {
+                justify-self: flex-end;
+            }
+        }
+
+        .objective-number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 999px;
+            background: #ffffff;
+            color: #111827;
+            font-weight: 700;
+            font-size: 1.05rem;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .objective-card:hover .objective-number {
+            background: var(--color-primary-soft);
+            transform: rotate(5deg);
+        }
+
+        .objective-main {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .objective-verb {
+            font-size: 0.98rem;
+            font-weight: 700;
+            color: var(--color-primary-soft);
+            transition: color 0.3s ease;
+        }
+
+        .objective-card:hover .objective-verb {
+            color: #ffffff;
+        }
+
+        .objective-text {
+            font-size: 0.84rem;
+            color: #e5e7eb;
+            line-height: 1.4;
+        }
+
+        .objective-icon {
+            width: 26px;
+            height: 26px;
+            border-radius: 999px;
+            border: 1px solid rgba(250, 250, 250, 0.16);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: #f9fafb;
+            background: linear-gradient(
+                135deg,
+                rgba(175, 75, 239, 0.1),
+                rgba(0, 0, 0, 0.4)
+            );
+            transition: all 0.3s ease;
+        }
+
+        .objective-card:hover .objective-icon {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+            transform: scale(1.1);
+        }
+
+        /* Chapter color coding */
+        .objective-card[data-chapter="chapter3"] {
+            border-left: 3px solid var(--color-error);
+        }
+
+        .objective-card[data-chapter="chapter5"] {
+            border-left: 3px solid var(--color-info);
+        }
+
+        .objective-card[data-chapter="chapter3"] .objective-verb {
+            color: #ffa8a8;
+        }
+
+        .objective-card[data-chapter="chapter5"] .objective-verb {
+            color: #74b9ff;
+        }
+
+        /* Interactive filter buttons */
+        .chapter-filter {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border-radius: 20px;
+            background: rgba(12, 10, 24, 0.05);
+            border: 1px solid rgba(12, 10, 24, 0.1);
+            color: var(--color-text);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+        .filter-btn.active {
+            background: var(--color-primary);
+            color: white;
+            border-color: var(--color-primary);
+        }
+
+        .filter-btn[data-filter="chapter3"] {
+            border-color: rgba(225, 112, 85, 0.3);
+        }
+
+        .filter-btn[data-filter="chapter5"] {
+            border-color: rgba(9, 132, 227, 0.3);
+        }
+
+        /* Right-hand content */
+        .objectives-header {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--color-text);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.5s both;
+        }
+
+        .section-tag {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-primary);
+            font-weight: 600;
+            margin-bottom: 10px;
+            animation: fadeInUp 0.6s ease-out 0.6s both;
+        }
+
+        .week-overview {
+            background: rgba(12, 10, 24, 0.94);
+            border-radius: 18px;
+            padding: 16px 18px 18px;
+            color: #e5e7eb;
+            font-size: 0.88rem;
+            line-height: 1.7;
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.6);
+            margin-bottom: 16px;
+            animation: fadeInUp 0.6s ease-out 0.7s both;
+            transition: transform 0.3s ease;
+        }
+
+        .week-overview:hover {
+            transform: translateY(-2px);
+        }
+
+        .week-overview strong {
+            color: #ffffff;
+        }
+
+        .mini-heading {
+            font-size: 0.86rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: #c4b5fd;
+            font-weight: 600;
+            margin: 8px 0 10px;
+        }
+
+        .outcomes-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-size: 0.86rem;
+            color: #f9fafb;
+        }
+
+        .outcomes-list li {
+            display: flex;
+            gap: 8px;
+            align-items: flex-start;
+            transition: transform 0.3s ease;
+        }
+
+        .outcomes-list li:hover {
+            transform: translateX(5px);
+        }
+
+        .dot {
+            width: 6px;
+            height: 6px;
+            margin-top: 6px;
+            border-radius: 999px;
+            background: var(--color-accent);
+            flex-shrink: 0;
+            animation: pulse 2s infinite;
+        }
+
+        .note-card {
+            margin-top: 14px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            background: rgba(15, 23, 42, 0.7);
+            padding: 10px 12px;
+            font-size: 0.78rem;
+            color: #e5e7eb;
+            transition: all 0.3s ease;
+        }
+
+        .note-card:hover {
+            border-color: var(--color-primary-soft);
+            background: rgba(15, 23, 42, 0.9);
+        }
+
+        .note-card strong {
+            color: #fef3c7;
+        }
+
+        /* Interactive counter */
+        .progress-counter {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(175, 75, 239, 0.05);
+            border-radius: 16px;
+            padding: 12px 18px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(175, 75, 239, 0.1);
+        }
+
+        .counter-item {
+            text-align: center;
+        }
+
+        .counter-number {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--color-primary);
+            display: block;
+        }
+
+        .counter-label {
+            font-size: 0.75rem;
+            color: var(--color-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Animation for counter */
+        @keyframes countUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .counter-item {
+            animation: countUp 0.6s ease-out forwards;
+        }
+
+        .counter-item:nth-child(1) { animation-delay: 0.8s; }
+        .counter-item:nth-child(2) { animation-delay: 1s; }
+        .counter-item:nth-child(3) { animation-delay: 1.2s; }
+
+        /* Warning Box */
+        .warning-box {
+            background: linear-gradient(135deg, rgba(253, 203, 110, 0.1), rgba(225, 112, 85, 0.1));
+            border-radius: 16px;
+            padding: 16px;
+            margin-top: 20px;
+            border: 1px solid rgba(253, 203, 110, 0.3);
+        }
+
+        .warning-title {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--color-warning);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .warning-content {
+            font-size: 0.82rem;
+            color: #fef3c7;
+            line-height: 1.5;
+        }
+
+        /* Info Box */
+        .info-box {
+            background: linear-gradient(135deg, rgba(9, 132, 227, 0.1), rgba(116, 185, 255, 0.1));
+            border-radius: 16px;
+            padding: 16px;
+            margin-top: 20px;
+            border: 1px solid rgba(9, 132, 227, 0.3);
+        }
+
+        .info-title {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--color-info);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-content {
+            font-size: 0.82rem;
+            color: #dfe6e9;
+            line-height: 1.5;
+        }
+
+        /* Key Terms Box */
+        .key-terms-box {
+            background: linear-gradient(135deg, rgba(225, 112, 85, 0.1), rgba(253, 203, 110, 0.1));
+            border-radius: 16px;
+            padding: 16px;
+            margin-top: 16px;
+            border: 1px solid rgba(225, 112, 85, 0.2);
+        }
+
+        .key-terms-title {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--color-error);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .key-terms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 8px;
+            font-size: 0.8rem;
+            color: #e5e7eb;
+        }
+
+        .key-term {
+            padding: 6px 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            font-family: monospace;
+        }
+
+        /* Equipment Grid */
+        .equipment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .equipment-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .equipment-item:hover {
+            transform: translateY(-3px);
+            border-color: var(--color-primary-soft);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .equipment-icon {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+
+        .equipment-name {
+            font-size: 0.75rem;
+            color: #f9fafb;
+            font-weight: 600;
+        }
+
+        .equipment-desc {
+            font-size: 0.7rem;
+            color: #a5b4cb;
+            margin-top: 4px;
+        }
+
+        /* Tube Color Guide - CORRECTED */
+        .tube-guide {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        .tube-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 10px;
+            border-left: 4px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .tube-color {
+            width: 100%;
+            height: 20px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+        }
+
+        .tube-tests {
+            font-size: 0.7rem;
+            color: #a5b4cb;
+        }
+
+        @media (max-width: 600px) {
+            .key-terms-grid,
+            .equipment-grid,
+            .tube-guide {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            }
+            
+            .tube-guide {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="week2-heading">
+        <!-- LEFT COLUMN: title + objective cards -->
+        <section class="column" aria-label="Week 2 objectives list">
+            <header class="brand-row">
+                <div class="brand">
+                    <img
+                        src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                        alt="AlliedRx logo"
+                        class="brand-logo"
+                    />
+                    <div class="course-meta">
+                        <span class="course-name">Phlebotomy Technician Program • PBT</span>
+                        <div class="week-label">
+                            <span class="week-label-dot"></span>
+                            <span>Week 2 --- Infection Control & Equipment</span>
+                        </div>
+                    </div>
+                </div>
+                <span class="badge-mode">Campus &amp; Online</span>
+            </header>
+
+            <h1 id="week2-heading">Week 2 Objectives</h1>
+            <p class="subtitle">
+                Master <strong>infection control protocols</strong> and 
+                <strong>blood collection equipment</strong> to ensure safe, 
+                efficient, and effective phlebotomy procedures.
+            </p>
+
+            <!-- Interactive filter buttons -->
+            <div class="chapter-filter">
+                <button class="filter-btn active" data-filter="all">All Objectives</button>
+                <button class="filter-btn" data-filter="chapter3">Chapter 3: Infection Control</button>
+                <button class="filter-btn" data-filter="chapter5">Chapter 5: Equipment</button>
+            </div>
+
+            <!-- Progress counter -->
+            <div class="progress-counter">
+                <div class="counter-item">
+                    <span class="counter-number" id="total-objectives">17</span>
+                    <span class="counter-label">Total Objectives</span>
+                </div>
+                <div class="counter-item">
+                    <span class="counter-number">2</span>
+                    <span class="counter-label">Chapters</span>
+                </div>
+                <div class="counter-item">
+                    <span class="counter-number">14</span>
+                    <span class="counter-label">Key Terms</span>
+                </div>
+            </div>
+
+            <div class="objectives-list" id="objectives-container">
+                <!-- Chapter 3: Infectious Diseases and Their Prevention -->
+                <article class="objective-card" data-chapter="chapter3">
+                    <div class="objective-number">01</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Discuss</div>
+                        <p class="objective-text">
+                            Discuss bloodborne pathogens—hepatitis B, hepatitis C, and human 
+                            immunodeficiency virus—and their significance.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🦠</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter3">
+                    <div class="objective-number">02</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Describe</div>
+                        <p class="objective-text">
+                            Describe the routes of transmission for infectious diseases.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🔄</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter3">
+                    <div class="objective-number">03</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Describe</div>
+                        <p class="objective-text">
+                            Describe the chain of infection.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">⛓️</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter3">
+                    <div class="objective-number">04</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Describe</div>
+                        <p class="objective-text">
+                            Describe the symptoms and routes of transmission for common 
+                            viral and bacterial diseases.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🤒</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter3">
+                    <div class="objective-number">05</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Discuss</div>
+                        <p class="objective-text">
+                            Discuss the importance of common viral and bacterial diseases 
+                            for phlebotomists.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">⚠️</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter3">
+                    <div class="objective-number">06</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Discuss</div>
+                        <p class="objective-text">
+                            Discuss the importance of multidrug-resistant organisms (MDRO) 
+                            in a hospital setting.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">💊</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter3">
+                    <div class="objective-number">07</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Identify</div>
+                        <p class="objective-text">
+                            Identify personal protective equipment (PPE) that phlebotomists 
+                            use on the job.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🧤</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter3">
+                    <div class="objective-number">08</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Describe</div>
+                        <p class="objective-text">
+                            Describe the proper technique for putting on and taking off PPE.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">👕</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter3">
+                    <div class="objective-number">09</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Describe</div>
+                        <p class="objective-text">
+                            Describe Standard Precautions and Transmission-Based Precautions 
+                            used to protect health care workers from infectious diseases.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🛡️</div>
+                </article>
+
+                <!-- Chapter 5: Equipment -->
+                <article class="objective-card" data-chapter="chapter5">
+                    <div class="objective-number">10</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Identify</div>
+                        <p class="objective-text">
+                            Identify the various blood collection tubes, their additive, 
+                            and common clinical tests.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🧪</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter5">
+                    <div class="objective-number">11</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Discuss</div>
+                        <p class="objective-text">
+                            Discuss the various types of needles and microcollection devices.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">💉</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter5">
+                    <div class="objective-number">12</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Explain</div>
+                        <p class="objective-text">
+                            Explain the importance of proper needle disposal.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🗑️</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter5">
+                    <div class="objective-number">13</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Explain</div>
+                        <p class="objective-text">
+                            Explain the use of tube holders.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🔧</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter5">
+                    <div class="objective-number">14</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Discuss</div>
+                        <p class="objective-text">
+                            Discuss the various ways to locate a vein for venipuncture.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">📍</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter5">
+                    <div class="objective-number">15</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Identify & Use</div>
+                        <p class="objective-text">
+                            Identify and properly use gloves and goggles.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">👓</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter5">
+                    <div class="objective-number">16</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Discuss</div>
+                        <p class="objective-text">
+                            Discuss the use of training aids.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🏋️</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter5">
+                    <div class="objective-number">17</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">List</div>
+                        <p class="objective-text">
+                            List additional equipment that a phlebotomist should carry.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🎒</div>
+                </article>
+            </div>
+        </section>
+
+        <!-- RIGHT COLUMN: narrative + outcomes framing -->
+        <aside class="column" aria-label="Overview of this week's content">
+            <h2 class="objectives-header">Safety Protocols & Equipment Mastery</h2>
+            <p class="section-tag">Infection Control • Blood Collection Tools • Professional Practice</p>
+
+            <div class="week-overview">
+                <p>
+                    Week 2 combines <strong>critical safety knowledge</strong> with 
+                    <strong>practical equipment skills</strong>. You'll learn how to protect 
+                    yourself and patients from infectious diseases while mastering the 
+                    tools and techniques for successful blood collection.
+                </p>
+
+                <p>
+                    These chapters are interconnected: <strong>proper equipment use depends on 
+                    infection control knowledge</strong>. Knowing which PPE to wear, how to 
+                    handle contaminated sharps, and which collection tubes to use are all 
+                    essential skills that keep everyone safe.
+                </p>
+
+                <!-- Bloodborne Pathogens Warning Box -->
+                <div class="warning-box">
+                    <div class="warning-title">
+                        <span>⚠️</span> Critical Bloodborne Pathogens
+                    </div>
+                    <div class="warning-content">
+                        <strong>Hepatitis B (HBV):</strong> Vaccine recommended for all healthcare workers. 
+                        Can survive on surfaces for 7+ days.<br><br>
+                        <strong>Hepatitis C (HCV):</strong> No vaccine available. Most common chronic 
+                        bloodborne infection in the US.<br><br>
+                        <strong>HIV:</strong> Weaker virus outside the body, but serious consequences 
+                        if transmitted. Standard Precautions prevent transmission.
+                    </div>
+                </div>
+
+                <!-- Equipment Info Box -->
+                <div class="info-box">
+                    <div class="info-title">
+                        <span>🧪</span> Essential Phlebotomy Equipment
+                    </div>
+                    <div class="info-content">
+                        <strong>Needle Selection:</strong> 21-23 gauge for most adults, 23-25 gauge for 
+                        pediatric/geriatric patients<br><br>
+                        <strong>Tube Holders:</strong> Must be single-use only to prevent cross-contamination<br><br>
+                        <strong>Sharps Containers:</strong> Must be within arm's reach, never overfilled, 
+                        and disposed of according to facility policy
+                    </div>
+                </div>
+
+                <!-- Tube Color Guide - CORRECTED VERSION -->
+                <div class="mini-heading">Common Blood Collection Tubes</div>
+                <div class="tube-guide">
+                    <div class="tube-item">
+                        <div class="tube-color" style="background-color: #ff4444;"></div>
+                        <strong>Red Top</strong>
+                        <div class="tube-tests">No additive, Serum tests</div>
+                    </div>
+                    <div class="tube-item">
+                        <div class="tube-color" style="background-color: #6c5ce7;"></div>
+                        <strong>Lavender</strong>
+                        <div class="tube-tests">EDTA, CBC, WBC diff</div>
+                    </div>
+                    <div class="tube-item">
+                        <div class="tube-color" style="background-color: #2d3436;"></div>
+                        <strong>Black Top</strong>
+                        <div class="tube-tests">Sodium citrate, ESR</div>
+                    </div>
+                    <div class="tube-item">
+                        <div class="tube-color" style="background-color: #00b894;"></div>
+                        <strong>Green Top</strong>
+                        <div class="tube-tests">Heparin, Chemistry</div>
+                    </div>
+                    <div class="tube-item">
+                        <div class="tube-color" style="background-color: #fd79a8;"></div>
+                        <strong>Pink Top</strong>
+                        <div class="tube-tests">EDTA, Blood Bank</div>
+                    </div>
+                    <div class="tube-item">
+                        <div class="tube-color" style="background-color: #0984e3;"></div>
+                        <strong>Blue Top</strong>
+                        <div class="tube-tests">Citrate, Coagulation</div>
+                    </div>
+                </div>
+
+                <!-- Key Terms Box -->
+                <div class="key-terms-box">
+                    <div class="key-terms-title">
+                        <span>📖</span> Chapter Key Terms
+                    </div>
+                    <div class="key-terms-grid">
+                        <div class="key-term">PPE</div>
+                        <div class="key-term">Standard Precautions</div>
+                        <div class="key-term">bloodborne pathogens</div>
+                        <div class="key-term">MRSA</div>
+                        <div class="key-term">MDRO</div>
+                        <div class="key-term">EDTA</div>
+                        <div class="key-term">heparin</div>
+                        <div class="key-term">CBC</div>
+                        <div class="key-term">WBC differential</div>
+                        <div class="key-term">PT</div>
+                        <div class="key-term">aPTT</div>
+                        <div class="key-term">needle gauge</div>
+                    </div>
+                </div>
+
+                <p class="mini-heading">By the end of this week, you will be able to:</p>
+                <ul class="outcomes-list">
+                    <li>
+                        <span class="dot"></span>
+                        <span>Select appropriate PPE for different isolation precautions and clinical situations.</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span>Identify correct blood collection tubes for common laboratory tests.</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span>Properly don and doff PPE following infection control protocols.</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span>Safely handle and dispose of needles and other sharps equipment.</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span>Apply Standard Precautions in all patient encounters.</span>
+                    </li>
+                </ul>
+
+                <div class="note-card">
+                    <strong>PPE Tip:</strong> Always perform <strong>hand hygiene</strong> before donning 
+                    PPE and immediately after doffing. Gloves are not a substitute for hand washing—they 
+                    can have microscopic tears that allow pathogen transmission.
+                </div>
+
+                <div class="note-card" style="margin-top: 12px;">
+                    <strong>Tube Order of Draw:</strong> Remember the sequence: 
+                    <strong>Blood Cultures → Blue (Coagulation) → Serum Tubes → Heparin → EDTA → Glycolytic Inhibitor</strong>. 
+                    Incorrect order can cause additive carryover and affect test results.
+                </div>
+
+                <div class="note-card" style="margin-top: 12px;">
+                    <strong>Needle Safety:</strong> Never <strong>recap used needles</strong>. Activate 
+                    safety devices immediately after use. Dispose of sharps in puncture-resistant 
+                    containers at the point of use. Report all needlestick injuries immediately.
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Filter functionality
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const objectiveCards = document.querySelectorAll('.objective-card');
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Update active button
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+
+                    const filter = this.getAttribute('data-filter');
+
+                    // Filter cards
+                    objectiveCards.forEach(card => {
+                        if (filter === 'all') {
+                            card.style.display = 'grid';
+                            setTimeout(() => {
+                                card.style.opacity = '1';
+                                card.style.transform = 'translateY(0)';
+                            }, 10);
+                        } else {
+                            if (card.getAttribute('data-chapter') === filter) {
+                                card.style.display = 'grid';
+                                setTimeout(() => {
+                                    card.style.opacity = '1';
+                                    card.style.transform = 'translateY(0)';
+                                }, 10);
+                            } else {
+                                card.style.opacity = '0';
+                                card.style.transform = 'translateY(10px)';
+                                setTimeout(() => {
+                                    card.style.display = 'none';
+                                }, 300);
+                            }
+                        }
+                    });
+                });
+            });
+
+            // Interactive objective cards
+            objectiveCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    // Toggle active state
+                    this.classList.toggle('active');
+
+                    // Add subtle animation
+                    if (this.classList.contains('active')) {
+                        const icon = this.querySelector('.objective-icon');
+                        icon.style.transform = 'scale(1.2) rotate(10deg)';
+                        setTimeout(() => {
+                            icon.style.transform = 'scale(1.1)';
+                        }, 300);
+                    }
+                });
+
+                // Add keyboard navigation
+                card.setAttribute('tabindex', '0');
+                card.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        this.click();
+                    }
+                });
+            });
+
+            // Animate counter numbers
+            function animateCounter(element, target, duration) {
+                let start = 0;
+                const increment = target / (duration / 16); // 60fps
+                const timer = setInterval(() => {
+                    start += increment;
+                    if (start >= target) {
+                        element.textContent = target;
+                        clearInterval(timer);
+                    } else {
+                        element.textContent = Math.floor(start);
+                    }
+                }, 16);
+            }
+
+            // Start counter animation after page load
+            setTimeout(() => {
+                const counterElement = document.getElementById('total-objectives');
+                animateCounter(counterElement, 17, 1000);
+            }, 1500);
+
+            // Add hover effect to outcomes list items
+            const outcomesItems = document.querySelectorAll('.outcomes-list li');
+            outcomesItems.forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    const dot = this.querySelector('.dot');
+                    dot.style.transform = 'scale(1.5)';
+                    dot.style.background = 'var(--color-primary)';
+                });
+
+                item.addEventListener('mouseleave', function() {
+                    const dot = this.querySelector('.dot');
+                    dot.style.transform = 'scale(1)';
+                    dot.style.background = 'var(--color-accent)';
+                });
+            });
+
+            // Add scroll animation for cards
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all objective cards
+            objectiveCards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                observer.observe(card);
+            });
+
+            // Add interactivity to boxes
+            const infoBoxes = document.querySelectorAll('.warning-box, .info-box, .note-card');
+            infoBoxes.forEach(box => {
+                box.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-3px)';
+                });
+
+                box.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
