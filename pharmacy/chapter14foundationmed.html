@@ -1,0 +1,1628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AlliedRx – Chapter 14: Foundations of Medication Safety</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-error: #e17055;
+            --color-warning: #fdcb6e;
+            --color-info: #0984e3;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
+            --color-dark: #0c0a18;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+            --shadow-card: 0 12px 30px rgba(15, 23, 42, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(
+                circle at top left,
+                #ffffff 0,
+                #f1ecff 40%,
+                var(--color-bg) 100%
+            );
+            color: var(--color-text);
+            -webkit-text-size-adjust: 100%;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 12px; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes checkmarkPop {
+            0% { transform: scale(0); opacity: 0; }
+            70% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @media (max-width: 900px) {
+            .page { padding: 22px; }
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 0; }
+            .page {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 18px 14px 22px;
+            }
+        }
+
+        /* Header */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .brand-logo:hover { transform: scale(1.05); }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--color-success);
+            flex-shrink: 0;
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .badge-mode:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+        @media (max-width: 480px) {
+            .brand-row { flex-direction: column; align-items: flex-start; }
+            .badge-mode { margin-top: 6px; }
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 3vw, 2.2rem);
+            line-height: 1.1;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .module-subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 600px;
+            margin-bottom: 24px;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        /* Progress Tracker (2-STEP ONLY) */
+        .progress-tracker {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            position: relative;
+            padding: 0 20px;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .progress-tracker::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 25%;
+            right: 25%;
+            height: 3px;
+            background: rgba(12, 10, 24, 0.08);
+            z-index: 1;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+
+        .step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--color-muted);
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.active .step-circle {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .progress-step.completed .step-circle {
+            background: var(--color-success);
+            border-color: var(--color-success);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.75rem;
+            color: var(--color-muted);
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .progress-step.active .step-label {
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        /* Progress Summary */
+        .progress-summary {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+            animation: fadeInUp 0.6s ease-out 0.5s both;
+        }
+
+        @media (min-width: 768px) {
+            .progress-summary {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .summary-card {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            border: 1px solid rgba(12, 10, 24, 0.06);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-card);
+            border-color: var(--color-primary-soft);
+        }
+
+        .summary-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--color-primary);
+            display: block;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .summary-label {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Activity Grid (2 ACTIVITIES ONLY) */
+        .activity-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        @media (min-width: 900px) {
+            .activity-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .activity-card {
+            background: white;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            padding: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .activity-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--color-primary);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .activity-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--color-primary-soft);
+        }
+
+        .activity-card:hover::before { opacity: 1; }
+
+        .activity-card.completed {
+            border-color: var(--color-success);
+        }
+
+        .activity-card.completed::before {
+            background: var(--color-success);
+            opacity: 1;
+        }
+
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .activity-number {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .activity-status {
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-muted);
+        }
+
+        .activity-card.completed .activity-status {
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--color-success);
+        }
+
+        .activity-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 8px;
+        }
+
+        .activity-description {
+            font-size: 0.9rem;
+            color: var(--color-muted);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        /* Five Rights Matching - RANDOMIZED */
+        .rights-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+            min-height: 350px;
+        }
+
+        @media (max-width: 768px) {
+            .rights-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .rights-column {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 2px dashed rgba(12, 10, 24, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            min-height: 300px;
+        }
+
+        .rights-column-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            text-align: center;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(12, 10, 24, 0.08);
+            margin-bottom: 10px;
+        }
+
+        .rights-item {
+            background: rgba(175, 75, 239, 0.08);
+            border-radius: var(--radius-sm);
+            padding: 12px 15px;
+            cursor: grab;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            user-select: none;
+            font-size: 0.85rem;
+            color: var(--color-text);
+        }
+
+        .rights-item:hover {
+            background: rgba(175, 75, 239, 0.15);
+            border-color: var(--color-primary-soft);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(175, 75, 239, 0.1);
+        }
+
+        .rights-item.dragging {
+            opacity: 0.7;
+            transform: scale(0.98);
+        }
+
+        .rights-item.correct {
+            background: rgba(0, 184, 148, 0.1);
+            border-color: var(--color-success);
+            cursor: default;
+        }
+
+        .rights-item.incorrect {
+            background: rgba(225, 112, 85, 0.1);
+            border-color: var(--color-error);
+            animation: shake 0.5s ease;
+        }
+
+        /* Hospital Patient Chart - Realism */
+        .patient-chart {
+            background: #f8f9fa;
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--color-primary);
+        }
+
+        .patient-id {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+            font-family: monospace;
+            background: rgba(12, 10, 24, 0.05);
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .patient-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .patient-info {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .info-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--color-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .info-value {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--color-text);
+            padding: 6px 10px;
+            background: white;
+            border-radius: var(--radius-sm);
+            border: 1px solid rgba(12, 10, 24, 0.1);
+        }
+
+        .medication-order {
+            background: white;
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin-top: 15px;
+            border-left: 4px solid var(--color-warning);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .order-title {
+            color: var(--color-warning);
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .order-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            font-size: 0.85rem;
+        }
+
+        /* Error Identification - Interactive */
+        .error-scenarios {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .scenario-card {
+            background: rgba(225, 112, 85, 0.05);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 2px solid rgba(225, 112, 85, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .scenario-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(225, 112, 85, 0.1);
+        }
+
+        .scenario-description {
+            font-size: 0.85rem;
+            color: var(--color-text);
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        .error-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+
+        @media (max-width: 480px) {
+            .error-options {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .error-option {
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            background: white;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .error-option:hover {
+            border-color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.05);
+        }
+
+        .error-option.selected {
+            border-color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.1);
+            font-weight: 600;
+        }
+
+        .error-option.correct {
+            border-color: var(--color-success);
+            background: rgba(0, 184, 148, 0.1);
+        }
+
+        .error-option.incorrect {
+            border-color: var(--color-error);
+            background: rgba(225, 112, 85, 0.1);
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #9a3bd6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(175, 75, 239, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-text);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(12, 10, 24, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-icon { font-size: 1.1em; }
+
+        .activity-btn {
+            margin-top: 15px;
+            width: 100%;
+        }
+
+        /* Feedback */
+        .feedback-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            margin-top: 20px;
+            display: none;
+        }
+
+        .feedback-container.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .feedback-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feedback-icon {
+            font-size: 1.2rem;
+        }
+
+        .feedback-icon.correct { color: var(--color-success); }
+        .feedback-icon.incorrect { color: var(--color-error); }
+
+        .feedback-content {
+            font-size: 0.85rem;
+            color: var(--color-text);
+            line-height: 1.5;
+        }
+
+        .feedback-content strong { color: var(--color-primary); }
+
+        .correction-details {
+            background: rgba(225, 112, 85, 0.05);
+            border-left: 3px solid var(--color-error);
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+        }
+
+        /* Results Panel */
+        .results-panel {
+            background: var(--color-dark);
+            color: white;
+            border-radius: var(--radius-md);
+            padding: 30px;
+            margin-top: 30px;
+            display: none;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .results-panel.show { display: block; }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .results-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .score-display {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--color-primary-soft);
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .clinical-insights {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .insights-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-primary-soft);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .insights-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .insights-list li {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            font-size: 0.9rem;
+            color: #e5e7eb;
+        }
+
+        .insight-dot {
+            width: 6px;
+            height: 6px;
+            margin-top: 6px;
+            border-radius: 999px;
+            background: var(--color-accent);
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="module-heading">
+        <!-- Header -->
+        <header class="brand-row">
+            <div class="brand">
+                <img
+                    src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                    alt="AlliedRx logo"
+                    class="brand-logo"
+                />
+                <div class="course-meta">
+                    <span class="course-name">Pharmacy Technician • Week 14</span>
+                    <div class="week-label">
+                        <span class="week-label-dot"></span>
+                        <span>Chapter 14: Foundations of Medication Safety</span>
+                    </div>
+                </div>
+            </div>
+            <span class="badge-mode">Campus & Online</span>
+        </header>
+
+        <h1 id="module-heading">Foundations of Medication Safety</h1>
+        <p class="module-subtitle">
+            Master the Five Rights of medication safety and learn to identify different types of medication errors. 
+            Apply these skills in realistic hospital pharmacy scenarios.
+        </p>
+
+        <!-- Progress Tracker (2-STEP ONLY) -->
+        <div class="progress-tracker">
+            <div class="progress-step active" data-step="1">
+                <div class="step-circle">1</div>
+                <div class="step-label">Five Rights Matching</div>
+            </div>
+            <div class="progress-step" data-step="2">
+                <div class="step-circle">2</div>
+                <div class="step-label">Error Identification</div>
+            </div>
+        </div>
+
+        <!-- Progress Summary -->
+        <div class="progress-summary">
+            <div class="summary-card">
+                <span class="summary-number" id="completed-count">0</span>
+                <span class="summary-label">Activities Completed</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="accuracy-rate">0%</span>
+                <span class="summary-label">Current Accuracy</span>
+            </div>
+        </div>
+
+        <!-- Activity Grid (2 ACTIVITIES ONLY) -->
+        <div class="activity-grid">
+            <!-- Activity 1: Five Rights Matching - RANDOMIZED -->
+            <section class="activity-card" id="activity-1" data-activity="1">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 1</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">The Five Rights of Medication Safety</h3>
+                <p class="activity-description">
+                    Match each of the Five Rights with its correct definition and a hospital scenario example. 
+                    This foundational knowledge is critical for preventing medication errors.
+                </p>
+
+                <div class="rights-container">
+                    <div class="rights-column" id="rights-column">
+                        <div class="rights-column-title">Medication Rights</div>
+                        <!-- Items will be populated randomly by JavaScript -->
+                    </div>
+                    <div class="rights-column" id="definitions-column">
+                        <div class="rights-column-title">Definitions & Examples</div>
+                        <!-- Items will be populated randomly by JavaScript -->
+                    </div>
+                </div>
+
+                <button class="btn btn-primary activity-btn" id="check-rights-btn">
+                    <span class="btn-icon">✓</span> Check Rights Matching
+                </button>
+
+                <div class="feedback-container" id="feedback-1">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Five Rights Analysis
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Correct Matches:</strong><br>
+                        • <strong>Right Patient</strong> → Verify patient identity using two identifiers (name & DOB/ID)<br>
+                        • <strong>Right Medication</strong> → Check medication name, NDC, and expiration date<br>
+                        • <strong>Right Dose</strong> → Verify correct dosage based on weight, age, and condition<br>
+                        • <strong>Right Route</strong> → Confirm administration method (oral, IV, topical, etc.)<br>
+                        • <strong>Right Time</strong> → Administer at correct time based on schedule and pharmacokinetics<br><br>
+                        
+                        <strong>Clinical Significance:</strong><br>
+                        The Five Rights form the foundation of medication safety. Each right serves as a checkpoint to prevent errors. 
+                        In hospital settings, these checks occur at multiple points: prescribing, transcribing, dispensing, and administration.<br><br>
+                        
+                        <strong>Hospital Application:</strong><br>
+                        • <strong>Patient Identification:</strong> Always use two identifiers before medication administration<br>
+                        • <strong>Medication Verification:</strong> Scan barcodes and verify against electronic MAR<br>
+                        • <strong>Dose Calculation:</strong> Double-check calculations, especially for pediatric and geriatric patients<br>
+                        • <strong>Route Confirmation:</strong> IV medications require different checks than oral medications<br>
+                        • <strong>Timing:</strong> Critical for antibiotics, anticoagulants, and time-sensitive medications<br><br>
+                        
+                        <div class="correction-details" id="correction-details-1" style="display: none;">
+                            <strong>Incorrect Matches:</strong><br>
+                            <span id="correction-text-1"></span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity 2: Error Identification - Real Hospital Scenarios -->
+            <section class="activity-card" id="activity-2" data-activity="2">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 2</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">Medication Error Identification</h3>
+                <p class="activity-description">
+                    Review hospital medication scenarios and identify which of the Five Rights was violated. 
+                    Practice error recognition in realistic hospital pharmacy situations.
+                </p>
+
+                <!-- Hospital Patient Chart - Realism -->
+                <div class="patient-chart">
+                    <div class="chart-header">
+                        <div>
+                            <h4 style="color: var(--color-primary); margin-bottom: 4px;">Metropolitan General Hospital</h4>
+                            <div style="font-size: 0.75rem; color: var(--color-muted);">Inpatient Medication Administration</div>
+                        </div>
+                        <div class="patient-id">MRN: 875432-19</div>
+                    </div>
+                    
+                    <div class="patient-info">
+                        <div class="info-item">
+                            <div class="info-label">Patient Name</div>
+                            <div class="info-value">WILLIAMS, ROBERT J.</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Date of Birth</div>
+                            <div class="info-value">08/22/1956 (Age: 67)</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Room/Bed</div>
+                            <div class="info-value">4 West • Room 412 • Bed B</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Allergies</div>
+                            <div class="info-value" style="color: var(--color-error);">Penicillin, Codeine</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Diagnosis</div>
+                            <div class="info-value">Community-acquired pneumonia</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Attending Physician</div>
+                            <div class="info-value">Dr. Chen, Maria (NPI: 1234567890)</div>
+                        </div>
+                    </div>
+                    
+                    <div class="medication-order">
+                        <div class="order-title">
+                            <span>💊</span> Current Medication Orders
+                        </div>
+                        <div class="order-details">
+                            <div><strong>Vancomycin:</strong> 1g IV q12h</div>
+                            <div><strong>Started:</strong> 11/15/2023</div>
+                            <div><strong>Azithromycin:</strong> 500mg PO daily</div>
+                            <div><strong>Started:</strong> 11/15/2023</div>
+                            <div><strong>Acetaminophen:</strong> 650mg PO q6h PRN pain</div>
+                            <div><strong>Started:</strong> 11/14/2023</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Error Scenarios - Randomized -->
+                <div class="error-scenarios" id="error-scenarios">
+                    <!-- Scenarios will be populated randomly by JavaScript -->
+                </div>
+
+                <button class="btn btn-primary activity-btn" id="check-errors-btn">
+                    <span class="btn-icon">✓</span> Check Error Analysis
+                </button>
+
+                <div class="feedback-container" id="feedback-2">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Error Analysis Complete
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Correct Identifications:</strong><br>
+                        1. <strong>Wrong Patient:</strong> Medications delivered to incorrect room/bed<br>
+                        2. <strong>Wrong Medication:</strong> Sound-alike/look-alike drug confusion<br>
+                        3. <strong>Wrong Dose:</strong> Incorrect calculation or measurement<br>
+                        4. <strong>Wrong Route:</strong> IV medication given orally or vice versa<br>
+                        5. <strong>Wrong Time:</strong> Early/late administration affecting therapy<br><br>
+                        
+                        <strong>Common Hospital Error Patterns:</strong><br>
+                        • <strong>Patient Misidentification:</strong> Accounts for 20% of medication errors in hospitals<br>
+                        • <strong>Look-Alike/Sound-Alike:</strong> Requires Tall Man lettering and barcode scanning<br>
+                        • <strong>Calculation Errors:</strong> Especially problematic in pediatric and geriatric dosing<br>
+                        • <strong>Route Confusion:</strong> IV push vs IV infusion, oral vs enteral<br>
+                        • <strong>Timing Issues:</strong> Critical for antibiotics, anticoagulants, and insulin<br><br>
+                        
+                        <strong>Prevention Strategies:</strong><br>
+                        1. <strong>Barcode Scanning:</strong> Implement at all medication administration points<br>
+                        2. <strong>Independent Double-Checks:</strong> For high-alert medications<br>
+                        3. <strong>Standardized Protocols:</strong> Clear procedures for medication handling<br>
+                        4. <strong>Education:</strong> Regular training on error prevention<br>
+                        5. <strong>Culture of Safety:</strong> Non-punitive error reporting system<br><br>
+                        
+                        <div class="correction-details" id="correction-details-2" style="display: none;">
+                            <strong>Incorrect Identifications:</strong><br>
+                            <span id="correction-text-2"></span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn btn-secondary" id="reset-all-btn">
+                <span class="btn-icon">↻</span>
+                Reset All Activities
+            </button>
+            <button class="btn btn-secondary" id="check-answers-btn">
+                <span class="btn-icon">✓</span>
+                Check All Answers
+            </button>
+            <button class="btn btn-primary" id="view-results-btn">
+                <span class="btn-icon">📊</span>
+                View Final Results
+            </button>
+        </div>
+
+        <!-- Results Panel -->
+        <div class="results-panel" id="results-panel">
+            <div class="results-header">
+                <h2 class="results-title">Medication Safety Proficiency</h2>
+                <div class="score-display" id="final-score">0%</div>
+            </div>
+            
+            <div class="clinical-insights">
+                <h3 class="insights-title">
+                    <span>🛡️</span> Five Rights Mastery Insights
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Error Prevention Foundation:</strong> The Five Rights prevent 85% of potential medication errors when consistently applied. 
+                        Each right serves as a critical checkpoint in the medication use process from prescription to administration.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Hospital Impact:</strong> In hospital settings, implementing barcode medication administration with Five Rights verification 
+                        has reduced medication errors by 41-51% according to The Joint Commission studies.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Technician Role:</strong> Pharmacy technicians verify the Five Rights during dispensing and distribution. 
+                        Your attention to detail at this stage prevents errors before they reach patient care areas.</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="clinical-insights" style="margin-top: 20px;">
+                <h3 class="insights-title">
+                    <span>🏥</span> Hospital Error Prevention Strategies
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>High-Reliability Organizations:</strong> Successful hospitals create systems where errors are difficult to make 
+                        and easy to catch. This involves standardized processes, technology integration, and a culture of continuous improvement.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Committee Preparation:</strong> As Jonathan prepares for the medication safety committee, he should familiarize himself 
+                        with error tracking systems like MedMARx, root cause analysis methodologies, and ISMP safety recommendations.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Career Advancement:</strong> Technicians who specialize in medication safety can advance to roles like 
+                        Medication Safety Coordinator or Quality Improvement Specialist, with significant impact on patient outcomes.</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // State Management
+            const state = {
+                activities: {
+                    1: { completed: false, correct: 0, total: 5, score: 0, matches: {} },
+                    2: { completed: false, correct: 0, total: 5, score: 0, answers: {} }
+                },
+                startedAt: new Date(),
+                timeSpent: 0
+            };
+
+            // DOM Elements
+            const progressSteps = document.querySelectorAll('.progress-step');
+            const activityCards = document.querySelectorAll('.activity-card');
+            const completedCount = document.getElementById('completed-count');
+            const accuracyRate = document.getElementById('accuracy-rate');
+            const resetBtn = document.getElementById('reset-all-btn');
+            const checkBtn = document.getElementById('check-answers-btn');
+            const resultsBtn = document.getElementById('view-results-btn');
+            const resultsPanel = document.getElementById('results-panel');
+            const finalScore = document.getElementById('final-score');
+            const checkRightsBtn = document.getElementById('check-rights-btn');
+            const checkErrorsBtn = document.getElementById('check-errors-btn');
+
+            // Timer for time spent
+            function updateTimer() {
+                const now = new Date();
+                const diff = Math.floor((now - state.startedAt) / 1000);
+                state.timeSpent = diff;
+                const minutes = Math.floor(diff / 60);
+                const seconds = diff % 60;
+                document.getElementById('time-spent').textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            }
+            setInterval(updateTimer, 1000);
+
+            // Update Progress Summary
+            function updateProgressSummary() {
+                let completed = 0;
+                let totalCorrect = 0;
+                let totalItems = 0;
+
+                Object.values(state.activities).forEach(activity => {
+                    if (activity.completed) completed++;
+                    totalCorrect += activity.correct;
+                    totalItems += activity.total;
+                });
+
+                completedCount.textContent = completed;
+                const accuracy = totalItems > 0 ? Math.round((totalCorrect / totalItems) * 100) : 0;
+                accuracyRate.textContent = `${accuracy}%`;
+
+                // Update progress steps
+                progressSteps.forEach((step, index) => {
+                    const stepNum = index + 1;
+                    if (stepNum <= completed) {
+                        step.classList.add('completed');
+                        step.classList.remove('active');
+                    } else if (stepNum === completed + 1) {
+                        step.classList.add('active');
+                        step.classList.remove('completed');
+                    } else {
+                        step.classList.remove('active', 'completed');
+                    }
+                });
+            }
+
+            // Activity 1: Five Rights Matching - RANDOMIZED
+            function initActivity1() {
+                const rightsColumn = document.getElementById('rights-column');
+                const definitionsColumn = document.getElementById('definitions-column');
+                const feedback = document.getElementById('feedback-1');
+                const status = document.querySelector('#activity-1 .activity-status');
+                const correctionDetails = document.getElementById('correction-details-1');
+                const correctionText = document.getElementById('correction-text-1');
+
+                // Define all matching pairs
+                const matchingPairs = [
+                    {
+                        right: 'Right Patient',
+                        definition: 'Verify patient identity using two identifiers (name & DOB/ID)',
+                        example: 'Check patient wristband against medication order before administration',
+                        id: 'patient'
+                    },
+                    {
+                        right: 'Right Medication',
+                        definition: 'Check medication name, NDC, and expiration date',
+                        example: 'Confirm drug name matches order, check for look-alike/sound-alike confusion',
+                        id: 'medication'
+                    },
+                    {
+                        right: 'Right Dose',
+                        definition: 'Verify correct dosage based on weight, age, and condition',
+                        example: 'Double-check calculations for pediatric or geriatric dosing',
+                        id: 'dose'
+                    },
+                    {
+                        right: 'Right Route',
+                        definition: 'Confirm administration method (oral, IV, topical, etc.)',
+                        example: 'Ensure IV medications are not given orally, check compatibility',
+                        id: 'route'
+                    },
+                    {
+                        right: 'Right Time',
+                        definition: 'Administer at correct time based on schedule and pharmacokinetics',
+                        example: 'Time-critical medications must be given within 30 minutes of scheduled time',
+                        id: 'time'
+                    }
+                ];
+
+                // Clear columns first
+                rightsColumn.innerHTML = '<div class="rights-column-title">Medication Rights</div>';
+                definitionsColumn.innerHTML = '<div class="rights-column-title">Definitions & Examples</div>';
+
+                // Shuffle the pairs array
+                const shuffledPairs = [...matchingPairs].sort(() => Math.random() - 0.5);
+                
+                // Create rights items (shuffled)
+                shuffledPairs.forEach(pair => {
+                    const rightDiv = document.createElement('div');
+                    rightDiv.className = 'rights-item draggable';
+                    rightDiv.textContent = pair.right;
+                    rightDiv.dataset.id = pair.id;
+                    rightDiv.dataset.type = 'right';
+                    rightDiv.setAttribute('draggable', 'true');
+                    rightsColumn.appendChild(rightDiv);
+                });
+
+                // Create definition items (shuffled differently)
+                const shuffledDefinitions = [...shuffledPairs].sort(() => Math.random() - 0.5);
+                shuffledDefinitions.forEach(pair => {
+                    const definitionDiv = document.createElement('div');
+                    definitionDiv.className = 'rights-item draggable';
+                    definitionDiv.innerHTML = `<strong>${pair.definition}</strong><br><em>${pair.example}</em>`;
+                    definitionDiv.dataset.id = pair.id;
+                    definitionDiv.dataset.type = 'definition';
+                    definitionDiv.setAttribute('draggable', 'true');
+                    definitionsColumn.appendChild(definitionDiv);
+                });
+
+                let matchedPairs = 0;
+                let userMatches = {};
+                let draggedItem = null;
+
+                // Setup drag and drop
+                const allItems = document.querySelectorAll('#activity-1 .rights-item');
+                
+                allItems.forEach(item => {
+                    item.addEventListener('dragstart', function(e) {
+                        draggedItem = this;
+                        this.classList.add('dragging');
+                        e.dataTransfer.setData('text/plain', this.dataset.id);
+                    });
+
+                    item.addEventListener('dragend', function() {
+                        this.classList.remove('dragging');
+                        draggedItem = null;
+                    });
+
+                    item.addEventListener('dragover', function(e) {
+                        e.preventDefault();
+                        if (draggedItem && draggedItem !== this) {
+                            this.style.backgroundColor = 'rgba(175, 75, 239, 0.1)';
+                        }
+                    });
+
+                    item.addEventListener('dragleave', function() {
+                        this.style.backgroundColor = '';
+                    });
+
+                    item.addEventListener('drop', function(e) {
+                        e.preventDefault();
+                        this.style.backgroundColor = '';
+                        
+                        if (!draggedItem || draggedItem === this) return;
+                        
+                        const draggedId = draggedItem.dataset.id;
+                        const targetId = this.dataset.id;
+                        
+                        // Check if they match
+                        if (draggedId === targetId && draggedItem.dataset.type !== this.dataset.type) {
+                            // Correct match
+                            draggedItem.classList.add('correct');
+                            this.classList.add('correct');
+                            draggedItem.style.cursor = 'default';
+                            this.style.cursor = 'default';
+                            
+                            userMatches[draggedId] = true;
+                            matchedPairs++;
+                        } else {
+                            // Incorrect match
+                            draggedItem.classList.add('incorrect');
+                            this.classList.add('incorrect');
+                            
+                            setTimeout(() => {
+                                draggedItem.classList.remove('incorrect');
+                                this.classList.remove('incorrect');
+                            }, 500);
+                        }
+                    });
+                });
+
+                checkRightsBtn.addEventListener('click', function() {
+                    const correctCount = Object.keys(userMatches).length;
+                    
+                    state.activities[1].completed = true;
+                    state.activities[1].correct = correctCount;
+                    state.activities[1].score = Math.round((correctCount / 5) * 100);
+                    state.activities[1].matches = userMatches;
+                    
+                    status.textContent = 'Completed';
+                    status.style.color = '#00b894';
+                    document.querySelector('#activity-1').classList.add('completed');
+                    feedback.classList.add('show');
+                    
+                    if (correctCount < 5) {
+                        correctionDetails.style.display = 'block';
+                        const incorrectIds = matchingPairs
+                            .map(pair => pair.id)
+                            .filter(id => !userMatches[id])
+                            .map(id => {
+                                const pair = matchingPairs.find(p => p.id === id);
+                                return pair ? pair.right : id;
+                            });
+                        
+                        if (incorrectIds.length > 0) {
+                            correctionText.textContent = `You missed: ${incorrectIds.join(', ')}. Review the Five Rights and their applications.`;
+                        }
+                    } else {
+                        correctionDetails.style.display = 'none';
+                    }
+                    
+                    updateProgressSummary();
+                });
+            }
+
+            // Activity 2: Error Identification - RANDOMIZED SCENARIOS
+            function initActivity2() {
+                const scenariosContainer = document.getElementById('error-scenarios');
+                const feedback = document.getElementById('feedback-2');
+                const status = document.querySelector('#activity-2 .activity-status');
+                const correctionDetails = document.getElementById('correction-details-2');
+                const correctionText = document.getElementById('correction-text-2');
+
+                // Define error scenarios
+                const errorScenarios = [
+                    {
+                        id: 'scenario1',
+                        description: 'The evening nurse administers vancomycin 1g IV to Mr. Williams at 8:00 PM. The medication administration record shows it was already given at 2:00 PM by the day nurse.',
+                        correctAnswer: 'Wrong Time',
+                        options: ['Wrong Patient', 'Wrong Medication', 'Wrong Dose', 'Wrong Route', 'Wrong Time'],
+                        explanation: 'This is a Wrong Time error - duplicate dose administration. Vancomycin is scheduled q12h (every 12 hours).'
+                    },
+                    {
+                        id: 'scenario2',
+                        description: 'A technician prepares azithromycin 250mg tablets instead of 500mg tablets for Mr. Williams\' 4:00 PM dose. The order specifies 500mg daily.',
+                        correctAnswer: 'Wrong Dose',
+                        options: ['Wrong Patient', 'Wrong Medication', 'Wrong Dose', 'Wrong Route', 'Wrong Time'],
+                        explanation: 'This is a Wrong Dose error - incorrect strength dispensed. 250mg instead of 500mg represents a 50% underdose.'
+                    },
+                    {
+                        id: 'scenario3',
+                        description: 'A nursing student brings acetaminophen to Room 412 Bed A (Mr. Adams) instead of Bed B (Mr. Williams). Both patients have orders for acetaminophen.',
+                        correctAnswer: 'Wrong Patient',
+                        options: ['Wrong Patient', 'Wrong Medication', 'Wrong Dose', 'Wrong Route', 'Wrong Time'],
+                        explanation: 'This is a Wrong Patient error - medication delivered to wrong patient despite same room. Always verify using two patient identifiers.'
+                    },
+                    {
+                        id: 'scenario4',
+                        description: 'A new pharmacy technician dispenses vancomycin oral solution instead of IV solution. Both are available in the pharmacy stock.',
+                        correctAnswer: 'Wrong Route',
+                        options: ['Wrong Patient', 'Wrong Medication', 'Wrong Dose', 'Wrong Route', 'Wrong Time'],
+                        explanation: 'This is a Wrong Route error - incorrect formulation for intended administration route. IV vancomycin cannot be given orally.'
+                    },
+                    {
+                        id: 'scenario5',
+                        description: 'During a busy shift, a nurse grabs "Vancomycin" but actually administers "Vancocin" (a different antibiotic with similar packaging).',
+                        correctAnswer: 'Wrong Medication',
+                        options: ['Wrong Patient', 'Wrong Medication', 'Wrong Dose', 'Wrong Route', 'Wrong Time'],
+                        explanation: 'This is a Wrong Medication error - look-alike/sound-alike drug confusion. Tall Man lettering (VANcomycin vs VANCOcin) helps prevent this.'
+                    }
+                ];
+
+                // Function to create randomized scenarios
+                function createRandomizedScenarios() {
+                    // Clear container
+                    scenariosContainer.innerHTML = '';
+                    
+                    // Shuffle scenarios array
+                    const shuffledScenarios = [...errorScenarios].sort(() => Math.random() - 0.5);
+                    
+                    // Create scenario cards
+                    shuffledScenarios.forEach((scenario, index) => {
+                        const scenarioCard = document.createElement('div');
+                        scenarioCard.className = 'scenario-card';
+                        scenarioCard.dataset.id = scenario.id;
+                        scenarioCard.dataset.correctAnswer = scenario.correctAnswer;
+                        
+                        // Shuffle options for this scenario
+                        const shuffledOptions = [...scenario.options].sort(() => Math.random() - 0.5);
+                        
+                        let optionsHTML = '';
+                        shuffledOptions.forEach(option => {
+                            optionsHTML += `
+                                <div class="error-option" data-option="${option}">
+                                    ${option}
+                                </div>
+                            `;
+                        });
+                        
+                        scenarioCard.innerHTML = `
+                            <div class="scenario-description">
+                                <strong>Scenario ${index + 1}:</strong> ${scenario.description}
+                            </div>
+                            <div class="error-options">
+                                ${optionsHTML}
+                            </div>
+                        `;
+                        
+                        scenariosContainer.appendChild(scenarioCard);
+                    });
+                    
+                    // Reset state
+                    state.activities[2].answers = {};
+                }
+
+                // Initialize with randomized scenarios
+                createRandomizedScenarios();
+
+                // Setup click handlers for options
+                function setupOptionHandlers() {
+                    const allOptions = document.querySelectorAll('#activity-2 .error-option');
+                    
+                    allOptions.forEach(option => {
+                        option.addEventListener('click', function() {
+                            const scenarioCard = this.closest('.scenario-card');
+                            const scenarioId = scenarioCard.dataset.id;
+                            const selectedOption = this.dataset.option;
+                            
+                            // Remove selected class from all options in this scenario
+                            scenarioCard.querySelectorAll('.error-option').forEach(opt => {
+                                opt.classList.remove('selected');
+                            });
+                            
+                            // Add selected class to clicked option
+                            this.classList.add('selected');
+                            
+                            // Store user's answer
+                            state.activities[2].answers[scenarioId] = selectedOption;
+                        });
+                    });
+                }
+
+                // Initial setup
+                setupOptionHandlers();
+
+                checkErrorsBtn.addEventListener('click', function() {
+                    let correctCount = 0;
+                    let errors = [];
+                    
+                    // Check all answers
+                    Object.keys(state.activities[2].answers).forEach(scenarioId => {
+                        const scenario = errorScenarios.find(s => s.id === scenarioId);
+                        const userAnswer = state.activities[2].answers[scenarioId];
+                        
+                        if (scenario && userAnswer === scenario.correctAnswer) {
+                            correctCount++;
+                            
+                            // Mark as correct
+                            const scenarioCard = document.querySelector(`[data-id="${scenarioId}"]`);
+                            scenarioCard.querySelector(`[data-option="${userAnswer}"]`).classList.add('correct');
+                        } else {
+                            errors.push(`Scenario "${scenarioId}": You selected "${userAnswer}", correct answer is "${scenario.correctAnswer}"`);
+                            
+                            // Mark as incorrect
+                            const scenarioCard = document.querySelector(`[data-id="${scenarioId}"]`);
+                            if (scenarioCard) {
+                                const userOption = scenarioCard.querySelector(`[data-option="${userAnswer}"]`);
+                                const correctOption = scenarioCard.querySelector(`[data-option="${scenario.correctAnswer}"]`);
+                                
+                                if (userOption) userOption.classList.add('incorrect');
+                                if (correctOption) correctOption.classList.add('correct');
+                            }
+                        }
+                    });
+                    
+                    state.activities[2].completed = true;
+                    state.activities[2].correct = correctCount;
+                    state.activities[2].score = Math.round((correctCount / 5) * 100);
+                    
+                    status.textContent = 'Completed';
+                    status.style.color = '#00b894';
+                    document.querySelector('#activity-2').classList.add('completed');
+                    feedback.classList.add('show');
+                    
+                    if (errors.length > 0) {
+                        correctionDetails.style.display = 'block';
+                        correctionText.innerHTML = errors.join('<br>');
+                    } else {
+                        correctionDetails.style.display = 'none';
+                    }
+                    
+                    updateProgressSummary();
+                });
+            }
+
+            // Reset All Activities
+            function resetAllActivities() {
+                // Reset state
+                Object.keys(state.activities).forEach(key => {
+                    state.activities[key] = {
+                        completed: false,
+                        correct: 0,
+                        total: 5,
+                        score: 0,
+                        matches: {},
+                        answers: {}
+                    };
+                });
+
+                // Reset UI
+                activityCards.forEach(card => {
+                    card.classList.remove('completed');
+                    const status = card.querySelector('.activity-status');
+                    status.textContent = 'Not Started';
+                    status.style.color = '';
+                    const feedback = card.querySelector('.feedback-container');
+                    feedback.classList.remove('show');
+                    const correctionDetails = card.querySelector('.correction-details');
+                    if (correctionDetails) correctionDetails.style.display = 'none';
+                });
+
+                // Reset Activity 1 - Re-randomize
+                const rightsColumn = document.getElementById('rights-column');
+                const definitionsColumn = document.getElementById('definitions-column');
+                rightsColumn.innerHTML = '<div class="rights-column-title">Medication Rights</div>';
+                definitionsColumn.innerHTML = '<div class="rights-column-title">Definitions & Examples</div>';
+                initActivity1(); // Reinitialize with new random order
+
+                // Reset Activity 2 - Re-randomize scenarios
+                const scenariosContainer = document.getElementById('error-scenarios');
+                scenariosContainer.innerHTML = '';
+                initActivity2(); // Reinitialize with new random order
+
+                // Reset results
+                resultsPanel.classList.remove('show');
+
+                // Update progress
+                updateProgressSummary();
+            }
+
+            // Check All Answers
+            function checkAllAnswers() {
+                // Trigger checks for both activities
+                if (!state.activities[1].completed) {
+                    checkRightsBtn.click();
+                }
+
+                if (!state.activities[2].completed) {
+                    checkErrorsBtn.click();
+                }
+
+                updateProgressSummary();
+            }
+
+            // View Final Results
+            function viewFinalResults() {
+                let totalScore = 0;
+                let activityCount = 0;
+                
+                Object.values(state.activities).forEach(activity => {
+                    if (activity.completed) {
+                        totalScore += activity.score;
+                        activityCount++;
+                    }
+                });
+                
+                const averageScore = activityCount > 0 ? Math.round(totalScore / activityCount) : 0;
+                finalScore.textContent = `${averageScore}%`;
+                resultsPanel.classList.add('show');
+                resultsPanel.scrollIntoView({ behavior: 'smooth' });
+            }
+
+            // Initialize all activities
+            initActivity1();
+            initActivity2();
+
+            // Event listeners
+            resetBtn.addEventListener('click', resetAllActivities);
+            checkBtn.addEventListener('click', checkAllAnswers);
+            resultsBtn.addEventListener('click', viewFinalResults);
+
+            // Initial progress update
+            updateProgressSummary();
+        });
+    </script>
+</body>
+</html>
