@@ -1,0 +1,1628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>AlliedRx -- Week 10 Reading Assignment</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-error: #e17055;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
+            --radius-lg: 24px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(
+                circle at top left,
+                #ffffff 0,
+                #f1ecff 40%,
+                var(--color-bg) 100%
+            );
+            color: var(--color-text);
+            -webkit-text-size-adjust: 100%;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 12px;
+            }
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1120px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px 30px;
+            display: grid;
+            grid-template-columns: minmax(0, 3.1fr) minmax(0, 2.4fr);
+            gap: 28px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .page {
+                grid-template-columns: 1fr;
+                padding: 22px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 0;
+            }
+            .page {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 18px 14px 22px;
+                gap: 22px;
+            }
+        }
+
+        img, .page, .column, .reading-card, .side-card {
+            max-width: 100%;
+        }
+
+        .column {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header / branding */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .brand-logo:hover {
+            transform: scale(1.05);
+        }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+            animation: pulse 3s infinite;
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--color-success);
+            flex-shrink: 0;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .badge-mode:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+        @media (max-width: 480px) {
+            .brand-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .badge-mode {
+                margin-top: 6px;
+            }
+        }
+
+        h1 {
+            font-size: clamp(2rem, 3vw, 2.4rem);
+            line-height: 1.05;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 34rem;
+            margin-bottom: 18px;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        .subtitle strong {
+            color: var(--color-primary);
+        }
+
+        /* Reading cards */
+        .reading-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 12px;
+        }
+
+        .reading-card {
+            border-radius: 18px;
+            padding: 14px 16px 14px;
+            border: 1px solid rgba(15, 23, 42, 0.06);
+            background: linear-gradient(
+                135deg,
+                rgba(175, 75, 239, 0.07),
+                rgba(255, 255, 255, 0.95)
+            );
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 12px;
+            align-items: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .reading-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.7s ease;
+        }
+
+        .reading-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--color-primary-soft);
+        }
+
+        .reading-card:hover::before {
+            left: 100%;
+        }
+
+        .reading-card.completed {
+            border-color: var(--color-success);
+            background: linear-gradient(
+                135deg,
+                rgba(0, 184, 148, 0.07),
+                rgba(255, 255, 255, 0.95)
+            );
+        }
+
+        @media (max-width: 600px) {
+            .reading-card {
+                grid-template-columns: 1fr;
+                align-items: flex-start;
+            }
+            .chapter-pill {
+                justify-self: flex-start;
+            }
+            .tag-time {
+                justify-self: flex-start;
+                margin-top: 6px;
+            }
+        }
+
+        .chapter-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px 11px;
+            border-radius: 999px;
+            background: #ffffff;
+            box-shadow: 0 6px 18px rgba(79, 70, 229, 0.16);
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .reading-card:hover .chapter-pill {
+            background: var(--color-primary);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .chapter-main {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .chapter-title {
+            font-size: 0.98rem;
+            font-weight: 700;
+            color: var(--color-text);
+            transition: color 0.3s ease;
+        }
+
+        .reading-card:hover .chapter-title {
+            color: var(--color-primary);
+        }
+
+        .chapter-text {
+            font-size: 0.84rem;
+            color: var(--color-muted);
+            line-height: 1.4;
+        }
+
+        .tag-time {
+            padding: 5px 8px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            font-size: 0.74rem;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .reading-card:hover .tag-time {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        /* Progress tracker */
+        .progress-container {
+            margin: 20px 0;
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: 16px;
+            padding: 16px 18px;
+            border: 1px solid rgba(12, 10, 24, 0.06);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .progress-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-text);
+        }
+
+        .progress-percent {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: rgba(12, 10, 24, 0.08);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+            border-radius: 4px;
+            width: 0%;
+            transition: width 1s ease-out;
+        }
+
+        /* Interactive checklist */
+        .checklist-heading {
+            font-size: 0.86rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-primary);
+            font-weight: 600;
+            margin-top: 24px;
+            margin-bottom: 12px;
+            animation: slideInRight 0.6s ease-out 0.6s both;
+        }
+
+        .checklist {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-size: 0.86rem;
+            color: var(--color-text);
+        }
+
+        .checklist li {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            padding: 8px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .checklist li:hover {
+            background: rgba(175, 75, 239, 0.05);
+            transform: translateX(5px);
+        }
+
+        .checklist li.completed {
+            opacity: 0.7;
+        }
+
+        .check-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 6px;
+            border: 2px solid rgba(148, 163, 184, 0.9);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.72rem;
+            color: rgba(148, 163, 184, 0.9);
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .checklist li:hover .check-dot {
+            border-color: var(--color-primary);
+        }
+
+        .checklist li.completed .check-dot {
+            background: var(--color-success);
+            border-color: var(--color-success);
+            color: white;
+        }
+
+        .reading-notes {
+            font-size: 0.85rem;
+            color: var(--color-muted);
+            line-height: 1.6;
+            margin-top: 16px;
+            animation: fadeIn 0.6s ease-out 0.7s both;
+        }
+
+        .reading-notes strong {
+            color: var(--color-text);
+        }
+
+        .complete-hint {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+            margin-top: 20px;
+            padding: 12px;
+            background: rgba(175, 75, 239, 0.05);
+            border-radius: 12px;
+            border-left: 3px solid var(--color-primary);
+            animation: fadeIn 0.6s ease-out 0.8s both;
+        }
+
+        /* Right column */
+        .section-tag {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-primary);
+            font-weight: 600;
+            margin-bottom: 10px;
+            animation: slideInRight 0.6s ease-out 0.5s both;
+        }
+
+        .side-heading {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--color-text);
+            margin-bottom: 10px;
+            animation: slideInRight 0.6s ease-out 0.6s both;
+        }
+
+        .side-card {
+            background: rgba(12, 10, 24, 0.94);
+            color: #e5e7eb;
+            border-radius: 18px;
+            padding: 16px 18px 18px;
+            font-size: 0.88rem;
+            line-height: 1.7;
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.6);
+            margin-bottom: 14px;
+            transition: transform 0.3s ease;
+            animation: slideInRight 0.6s ease-out 0.7s both;
+        }
+
+        .side-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .side-card strong {
+            color: #ffffff;
+        }
+
+        .side-subheading {
+            font-size: 0.86rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: #c4b5fd;
+            font-weight: 600;
+            margin: 14px 0 10px;
+        }
+
+        .side-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-size: 0.86rem;
+        }
+
+        .side-list li {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            transition: transform 0.3s ease;
+            padding: 4px 0;
+        }
+
+        .side-list li:hover {
+            transform: translateX(5px);
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            margin-top: 6px;
+            border-radius: 999px;
+            background: var(--color-accent);
+            flex-shrink: 0;
+            animation: pulse 2s infinite;
+        }
+
+        .side-list li:hover .dot {
+            background: var(--color-primary);
+            transform: scale(1.3);
+        }
+
+        .note-card {
+            margin-top: 14px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            background: rgba(15, 23, 42, 0.75);
+            padding: 12px 14px;
+            font-size: 0.8rem;
+            color: #e5e7eb;
+            transition: all 0.3s ease;
+        }
+
+        .note-card:hover {
+            border-color: var(--color-primary-soft);
+            background: rgba(15, 23, 42, 0.9);
+        }
+
+        .note-card strong {
+            color: #fef3c7;
+        }
+
+        /* Action buttons */
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 18px;
+            border-radius: 12px;
+            border: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #9a3bd6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(175, 75, 239, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-text);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(12, 10, 24, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-icon {
+            font-size: 1.1em;
+        }
+
+        /* Completion celebration */
+        .completion-celebration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .celebration-content {
+            background: white;
+            padding: 40px;
+            border-radius: var(--radius-lg);
+            text-align: center;
+            max-width: 500px;
+            animation: fadeInUp 0.5s ease;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+        }
+
+        .celebration-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        .celebration-title {
+            font-size: 1.8rem;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+        }
+
+        .celebration-text {
+            color: var(--color-muted);
+            margin-bottom: 20px;
+        }
+
+        .celebration-btn {
+            padding: 12px 24px;
+            background: var(--color-primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .celebration-btn:hover {
+            background: #9a3bd6;
+            transform: scale(1.05);
+        }
+
+        /* Terms section */
+        .terms-section {
+            margin-top: 24px;
+            border-top: 1px solid rgba(12, 10, 24, 0.1);
+            padding-top: 20px;
+        }
+
+        .terms-heading {
+            font-size: 0.86rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-primary);
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .terms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 12px;
+            font-size: 0.85rem;
+        }
+
+        .term-item {
+            background: rgba(175, 75, 239, 0.05);
+            border-radius: 12px;
+            padding: 12px;
+            border-left: 3px solid var(--color-primary);
+            transition: all 0.3s ease;
+        }
+
+        .term-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(175, 75, 239, 0.1);
+        }
+
+        .term-name {
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 4px;
+        }
+
+        .term-definition {
+            color: var(--color-text);
+            line-height: 1.4;
+        }
+
+        @media (max-width: 600px) {
+            .terms-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Objectives section */
+        .objectives-section {
+            margin: 20px 0;
+            padding: 16px;
+            background: linear-gradient(135deg, rgba(175, 75, 239, 0.05), rgba(131, 128, 240, 0.05));
+            border-radius: 16px;
+            border-left: 4px solid var(--color-primary);
+        }
+
+        .objectives-heading {
+            font-size: 0.86rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-primary);
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .objectives-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .objective-item {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            padding: 6px 0;
+        }
+
+        .objective-number {
+            background: var(--color-primary);
+            color: white;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .objective-text {
+            font-size: 0.84rem;
+            color: var(--color-text);
+            line-height: 1.4;
+        }
+
+        /* Business/financial styles */
+        .financial-note {
+            margin: 16px 0;
+            padding: 12px 16px;
+            background: linear-gradient(135deg, rgba(131, 128, 240, 0.1), rgba(131, 128, 240, 0.05));
+            border-radius: 12px;
+            border-left: 4px solid var(--color-accent);
+            font-size: 0.85rem;
+        }
+
+        .financial-note strong {
+            color: var(--color-accent);
+        }
+
+        .insurance-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+            font-size: 0.85rem;
+        }
+
+        .insurance-table th {
+            background: var(--color-accent);
+            color: white;
+            padding: 10px 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .insurance-table td {
+            padding: 10px 12px;
+            border: 1px solid rgba(12, 10, 24, 0.1);
+        }
+
+        .insurance-table tr:nth-child(even) {
+            background: rgba(131, 128, 240, 0.03);
+        }
+
+        .insurance-table tr:hover {
+            background: rgba(131, 128, 240, 0.05);
+        }
+
+        .insurance-category {
+            font-weight: 600;
+            color: var(--color-accent);
+        }
+
+        /* Inventory management styles */
+        .inventory-timeline {
+            margin: 20px 0;
+            padding: 0;
+            position: relative;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .timeline-dot {
+            width: 24px;
+            height: 24px;
+            background: var(--color-primary);
+            border-radius: 50%;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .timeline-content {
+            flex: 1;
+            padding: 12px;
+            background: rgba(175, 75, 239, 0.05);
+            border-radius: 12px;
+            border-left: 3px solid var(--color-primary);
+        }
+
+        .timeline-title {
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 4px;
+        }
+
+        .timeline-desc {
+            font-size: 0.85rem;
+            color: var(--color-text);
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="week10-reading-heading">
+        <!-- LEFT COLUMN: title + reading cards + checklist -->
+        <section class="column" aria-label="Week 10 reading assignments">
+            <header class="brand-row">
+                <div class="brand">
+                    <img
+                        src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                        alt="AlliedRx logo"
+                        class="brand-logo"
+                    />
+                    <div class="course-meta">
+                        <span class="course-name">Pharmacy Operations • Campus & Distance Learning</span>
+                        <div class="week-label">
+                            <span class="week-label-dot"></span>
+                            <span>Week 10 --- Pharmacy Billing & Inventory Management</span>
+                        </div>
+                    </div>
+                </div>
+                <span class="badge-mode">Campus &amp; Online</span>
+            </header>
+
+            <h1 id="week10-reading-heading">Week 10 Reading Assignment</h1>
+            <p class="subtitle">
+                This week, you'll master <strong>pharmacy financial operations</strong> and 
+                <strong>inventory management systems</strong> through Chapter 13. 
+                Learn insurance billing, formulary management, and inventory control 
+                for pharmacy profitability and regulatory compliance.
+            </p>
+
+            <!-- Progress tracker -->
+            <div class="progress-container">
+                <div class="progress-header">
+                    <span class="progress-title">Reading Progress</span>
+                    <span class="progress-percent" id="progress-percent">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+            </div>
+
+            <!-- Financial Note -->
+            <div class="financial-note">
+                <strong>💰 Pharmacy Business Essentials:</strong> This chapter covers the financial 
+                backbone of pharmacy practice. Mastering billing and inventory directly impacts 
+                both patient access to medications and pharmacy financial viability.
+            </div>
+
+            <!-- Reading cards -->
+            <div class="reading-grid">
+                <!-- Chapter 13: Pharmacy Billing and Inventory Management -->
+                <article class="reading-card" id="chapter13-card" data-chapter="13">
+                    <div class="chapter-pill">Chapter 13</div>
+                    <div class="chapter-main">
+                        <div class="chapter-title">
+                            Pharmacy Billing & Inventory Management
+                        </div>
+                        <p class="chapter-text">
+                            Focus on <strong>insurance billing systems</strong>, 
+                            <strong>government programs (Medicare/Medicaid)</strong>, 
+                            <strong>inventory control methods</strong>, <strong>formulary management</strong>,
+                            and <strong>financial operations</strong> essential for pharmacy sustainability.
+                        </p>
+                    </div>
+                    <div class="tag-time" id="chapter13-time">Est. 85–100 min</div>
+                </article>
+            </div>
+
+            <!-- Chapter Objectives -->
+            <div class="objectives-section">
+                <p class="objectives-heading">
+                    <span>📋</span>
+                    Chapter 13 Learning Objectives
+                </p>
+                <ul class="objectives-list" id="objectives-list">
+                    <!-- Objectives will be populated by JavaScript -->
+                </ul>
+            </div>
+
+            <!-- Insurance Comparison Table -->
+            <div class="note-card" style="background: rgba(15, 23, 42, 0.9); margin-top: 20px;">
+                <strong>Insurance Program Comparison:</strong>
+                <table class="insurance-table">
+                    <tr>
+                        <th>Program</th>
+                        <th>Population Served</th>
+                        <th>Key Features</th>
+                    </tr>
+                    <tr>
+                        <td class="insurance-category">Medicare</td>
+                        <td>65+, disabled, ESRD patients</td>
+                        <td>Parts A-D, donut hole coverage, Medicare Advantage plans</td>
+                    </tr>
+                    <tr>
+                        <td class="insurance-category">Medicaid</td>
+                        <td>Low-income individuals & families</td>
+                        <td>State-administered, income-based eligibility, CHIP for children</td>
+                    </tr>
+                    <tr>
+                        <td class="insurance-category">TRICARE</td>
+                        <td>Active/retired military & dependents</td>
+                        <td>Three tiers (Prime, Select, For Life), worldwide coverage</td>
+                    </tr>
+                    <tr>
+                        <td class="insurance-category">Workers' Comp</td>
+                        <td>Work-related injuries</td>
+                        <td>Employer-funded, state-regulated, no patient copays</td>
+                    </tr>
+                </table>
+            </div>
+
+            <p class="reading-notes">
+                <strong>Textbook:</strong> Kinn's The Medical Assistant, 13th Edition<br>
+                <strong>Scenario:</strong> Brian is a technician at a large retail pharmacy. He is nationally certified 
+                with the Pharmacy Technician Certification Board (PTCB) and is registered with his state board...
+            </p>
+
+            <!-- Inventory Management Timeline -->
+            <div class="inventory-timeline">
+                <p class="terms-heading" style="margin-top: 0;">Inventory Management Cycle</p>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">Assessment & Ordering</div>
+                        <div class="timeline-desc">Monitor PAR levels, use just-in-time ordering, verify wholesaler contracts</div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">Receiving & Verification</div>
+                        <div class="timeline-desc">Check shipments against invoices, verify NDC numbers, inspect for damage</div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">Storage & Organization</div>
+                        <div class="timeline-desc">Maintain proper temperature controls, FIFO rotation, secure controlled substances</div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">Dispensing & Monitoring</div>
+                        <div class="timeline-desc">Track usage patterns, adjust PAR levels, monitor expiration dates</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Terms and Definitions -->
+            <div class="terms-section">
+                <p class="terms-heading">Key Billing & Inventory Terms</p>
+                <div class="terms-grid" id="terms-list">
+                    <!-- Terms will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Interactive checklist -->
+            <p class="checklist-heading">Developing Pharmacy Business Acumen</p>
+            <ul class="checklist" id="reading-checklist">
+                <li data-index="0">
+                    <span class="check-dot">□</span>
+                    <span>Create a comparison chart of Medicare Parts A, B, C, and D with coverage details and patient costs.</span>
+                </li>
+                <li data-index="1">
+                    <span class="check-dot">□</span>
+                    <span>Practice completing a universal claim form with sample patient data and insurance information.</span>
+                </li>
+                <li data-index="2">
+                    <span class="check-dot">□</span>
+                    <span>Develop a PAR level calculation worksheet for a simulated pharmacy's top 20 medications.</span>
+                </li>
+                <li data-index="3">
+                    <span class="check-dot">□</span>
+                    <span>Research and document common claim rejection codes and resolution strategies.</span>
+                </li>
+                <li data-index="4">
+                    <span class="check-dot">□</span>
+                    <span>Create a flowchart for handling medication recalls including notification and documentation steps.</span>
+                </li>
+                <li data-index="5">
+                    <span class="check-dot">□</span>
+                    <span>Compare open vs. closed formularies and their impact on patient access and pharmacy billing.</span>
+                </li>
+            </ul>
+
+            <!-- Brian's Career Development - UPDATED WITH BETTER CONTRAST -->
+            <div class="note-card" style="background: rgba(12, 10, 24, 0.95); border-color: var(--color-success); margin-top: 20px;">
+                <strong style="color: #d4f7c7;">💼 Brian's Level 3 Advancement:</strong>
+                <ul style="margin-top: 8px; padding-left: 20px; color: #e5e7eb;">
+                    <li><strong style="color: #d4f7c7;">Current Status:</strong> PTCB certified, state registered, Level 2 technician</li>
+                    <li><strong style="color: #d4f7c7;">Requirements:</strong> Additional training, pharmacist evaluation</li>
+                    <li><strong style="color: #d4f7c7;">Development Areas:</strong> Master billing systems, optimize inventory, lead DUE processes</li>
+                    <li><strong style="color: #d4f7c7;">Career Value:</strong> Billing/inventory expertise = higher responsibility, better compensation</li>
+                </ul>
+            </div>
+
+            <!-- Action buttons -->
+            <div class="action-buttons">
+                <button class="btn btn-primary" id="mark-all-read">
+                    <span class="btn-icon">✓</span>
+                    Mark All as Read
+                </button>
+                <button class="btn btn-secondary" id="reset-progress">
+                    <span class="btn-icon">↺</span>
+                    Reset Progress
+                </button>
+            </div>
+
+            <p class="complete-hint">
+                Once you've completed Chapter 13 and the checklist items, proceed to 
+                the business simulation module to practice insurance billing scenarios 
+                and inventory management decisions.
+            </p>
+        </section>
+
+        <!-- RIGHT COLUMN: framing & why this reading matters -->
+        <aside class="column" aria-label="Why this reading is important">
+            <p class="section-tag">Business Operations</p>
+            <h2 class="side-heading">Financial & Operational Pharmacy Excellence</h2>
+            
+            <div class="side-card">
+                <p>
+                    <strong>Chapter 13 (Pharmacy Billing & Inventory Management)</strong> bridges clinical 
+                    knowledge with business operations. These skills ensure medication access for patients 
+                    while maintaining pharmacy financial health and regulatory compliance.
+                </p>
+                
+                <p class="side-subheading">Why Billing & Inventory Matter:</p>
+                <ul class="side-list">
+                    <li>
+                        <span class="dot"></span>
+                        <span><strong>Patient Access:</strong> Proper billing ensures patients can afford necessary medications</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span><strong>Pharmacy Viability:</strong> Effective inventory management controls costs and prevents waste</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span><strong>Regulatory Compliance:</strong> Accurate billing and inventory tracking meet legal requirements</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span><strong>Quality Care:</strong> Proper stock ensures medication availability when patients need it</span>
+                    </li>
+                </ul>
+
+                <div class="note-card">
+                    <strong>Brian's Career Advancement Strategy:</strong>
+                    <ul style="margin-top: 8px; padding-left: 20px;">
+                        <li><strong>Master Billing Systems:</strong> Become the go-to expert for complex insurance claims</li>
+                        <li><strong>Optimize Inventory:</strong> Reduce waste and improve turnover rates</li>
+                        <li><strong>Lead DUE Processes:</strong> Take initiative in drug utilization evaluation</li>
+                        <li><strong>Train Others:</strong> Share knowledge with newer technicians</li>
+                        <li><strong>Document Achievements:</strong> Keep records of cost-saving improvements</li>
+                    </ul>
+                </div>
+
+                <div class="note-card" style="margin-top: 12px;">
+                    <strong>Common Claim Rejection Reasons:</strong>
+                    <ul style="margin-top: 8px; padding-left: 20px;">
+                        <li>Incorrect patient ID or group number</li>
+                        <li>Medication not on formulary (requires prior auth)</li>
+                        <li>Refill too soon (early refill restriction)</li>
+                        <li>Dose exceeds plan limits (quantity limit exceeded)</li>
+                        <li>Provider not in network (out-of-network claim)</li>
+                        <li>Incorrect NDC or date of service</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="side-card">
+                <p class="side-subheading">Inventory Management Best Practices:</p>
+                <ul class="side-list">
+                    <li>
+                        <span class="dot"></span>
+                        <span><strong>PAR Level Optimization:</strong> Balance availability with carrying costs</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span><strong>FIFO Rotation:</strong> First-in, first-out to minimize expiration losses</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span><strong>Temperature Monitoring:</strong> Continuous logging for refrigerated items</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span><strong>Controlled Substance Security:</strong> Double-locked storage, meticulous documentation</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span><strong>Regular Audits:</strong> Physical counts to verify system accuracy</span>
+                    </li>
+                </ul>
+
+                <div class="note-card" style="margin-top: 12px;">
+                    <strong>Government Program Key Differences:</strong>
+                    <ul style="margin-top: 8px; padding-left: 20px;">
+                        <li><strong>Medicare:</strong> Federal program for seniors/disabled (Part D for prescriptions)</li>
+                        <li><strong>Medicaid:</strong> State-federal partnership for low-income individuals</li>
+                        <li><strong>Medigap:</strong> Private supplemental insurance for Medicare gaps</li>
+                        <li><strong>TRICARE:</strong> Military health system (formerly CHAMPUS)</li>
+                        <li><strong>CHAMPVA:</strong> Veterans Affairs program for disabled veterans' families</li>
+                        <li><strong>Workers' Comp:</strong> Employer-funded injury coverage</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="side-card">
+                <p class="side-subheading">Pharmacy Financial Systems Mastery:</p>
+                <ul class="side-list">
+                    <li>
+                        <span class="dot"></span>
+                        <span><strong>Third-Party Billing:</strong> Electronic claims submission and adjudication</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span><strong>Point of Sale (POS):</strong> Real-time inventory and sales tracking</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span><strong>Prior Authorization:</strong> Navigating restricted medication approvals</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span><strong>Co-pay Assistance:</strong> Manufacturer coupons and discount programs</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span><strong>340B Program:</strong> Discounted pricing for covered entities</span>
+                    </li>
+                </ul>
+
+                <div class="note-card" style="margin-top: 12px; background: rgba(225, 112, 85, 0.1); border-color: var(--color-error);">
+                    <strong style="color: var(--color-error);">⚠️ Inventory Management Pitfalls:</strong>
+                    <ul style="margin-top: 8px; padding-left: 20px;">
+                        <li>Overstocking leading to expiration losses</li>
+                        <li>Understocking causing patient care delays</li>
+                        <li>Poor temperature control compromising medication integrity</li>
+                        <li>Inadequate controlled substance documentation risking regulatory violations</li>
+                        <li>Failure to process recalls promptly endangering patient safety</li>
+                    </ul>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <!-- Completion Celebration Modal -->
+    <div class="completion-celebration" id="celebration-modal">
+        <div class="celebration-content">
+            <div class="celebration-icon">💰</div>
+            <h2 class="celebration-title">Business Operations Mastered!</h2>
+            <p class="celebration-text">
+                Excellent work completing Chapter 13 (Pharmacy Billing & Inventory Management). 
+                You've developed essential skills for pharmacy financial operations and inventory control.
+            </p>
+            <p class="celebration-text">
+                You're now ready for the business simulation module where you'll practice 
+                insurance billing scenarios and make inventory management decisions.
+            </p>
+            <button class="celebration-btn" id="close-celebration">Continue to Business Simulation</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // State management
+            let readingState = {
+                chapter13: false,
+                checklist: [false, false, false, false, false, false]
+            };
+
+            // Chapter objectives from the provided content
+            const objectives = [
+                "Discuss the importance of pharmacy billing and inventory management to the pharmacy practice.",
+                "Discuss the following related to formulary and drug utilization: (a) explain the function of a drug formulary in insurance plans; (b) describe the role of the pharmacy technician in the drug utilization evaluation; (c) discuss how a drug formulary or an approved/preferred product list affects pharmacy billing and inventory control.",
+                "Assess the differences between generic and trade name (proprietary) drugs in pharmacy billing.",
+                "Discuss the following related to private and group medical insurance plans: (a) list the primary types of private and group medical insurance plans; (b) describe how each type of private and group insurance manages drug coverage.",
+                "Discuss the following related to government-managed insurance programs: (a) differentiate among Medicare, Medicaid, and Medigap programs; (b) list the four parts of Medicare coverage; (c) differentiate between TRICARE and CHAMPVA benefits; (d) describe workers' compensation coverage.",
+                "Explain the purpose of third-party billing, describe the purpose of point of sale billing, describe the role of prior authorization in claims processing. Also, list the information found on a prescription card.",
+                "Determine the information needed to complete a patient profile for a pharmacy database.",
+                "Discuss the following related to claims: (a) identify the information needed to complete a universal claim form; (b) list and discuss reasons for claim rejections; (c) describe the process of resubmitting rejected claims.",
+                "Discuss the types of plan limitations common in managed care.",
+                "Explain the various prescription payment methods, including self-pay, discount programs or coupons, private plans, and health savings accounts/flexible spending accounts.",
+                "Explain the importance of inventory management, define the periodic automatic replenishment level and describe how it affects inventory management, and describe the role of an inventory control technician.",
+                "Explain the inventory ordering and receiving processes, including special orders, bar coding, automated dispensing systems, manual ordering, and new stock.",
+                "Describe storage requirements for various types of inventory.",
+                "Outline the steps for handling recalled, returned, or expired medications.",
+                "List the types of suppliers of pharmacy stock.",
+                "Identify any special considerations related to drug ordering and storage."
+            ];
+
+            // Terms and definitions from the provided content
+            const terms = [
+                { term: "Adjudication", definition: "Electronic insurance billing for medication payment" },
+                { term: "Average wholesale price (AWP)", definition: "The average price at which a drug is sold; the data are compiled from information provided by manufacturers, distributors, and pharmacies; the AWP is often used in calculations related to medication reimbursement" },
+                { term: "Civilian Health and Medical Program of the Department of Veterans Affairs (CHAMPVA)", definition: "A program for veterans with permanent service-related disabilities and their dependents and for the spouses and children of veterans who died of service-connected disability; also known as the Veterans Health Administration (VHA)" },
+                { term: "Closed formulary", definition: "Tight restriction of medication use to the medications included on the formulary list; medications that are not listed as preapproved drugs per the health plan provider or pharmacy benefits manager are not reimbursed except under extenuating circumstances and with proper documentation" },
+                { term: "Coinsurance", definition: "A type of insurance in which the policyholder pays a share of the payment made against a claim" },
+                { term: "Copayment", definition: "The portion of the prescription bill that the patient is responsible for paying" },
+                { term: "Deductible", definition: "The amount paid by a policyholder out of pocket before the insurance company pays a claim" },
+                { term: "Direct manufacturer ordering", definition: "Pharmacies may join a group purchasing organization (GPO) and contract directly with the manufacturer to obtain better pricing" },
+                { term: "Drug utilization evaluation (DUE) or review (DUR)", definition: "An ongoing review by a pharmacist of the prescribing, dispensing, and use of medications, based on predetermined criteria, to decide whether changes need to be made in a patient's drug therapy" },
+                { term: "Formulary", definition: "A list of preapproved medications that are covered under a prescription plan or within an institution" },
+                { term: "Health Insurance Portability and Accountability Act (HIPAA)", definition: "Federal guidelines for the protection of a patient's personal health information" },
+                { term: "Health Maintenance Organization (HMO)", definition: "An insurance plan that allows coverage for in-network only physicians and services and uses the primary care physician (or provider) as the 'gatekeeper' for the patient's health care; patients often have copays to defray the costs of medical care and prescription drugs" },
+                { term: "Inventory", definition: "The amount of product a pharmacy has for sale" },
+                { term: "Just-in-time ordering", definition: "A system that orders a product just before it is used" },
+                { term: "Medicaid", definition: "A government-managed insurance program that provides health care services to low-income children, the elderly, blind, and those with disabilities" },
+                { term: "Medicare", definition: "A government-managed insurance program composed of several coverage plans for health care services and supplies; it is funded by both federal and state entities, and individuals must meet specific requirements to be eligible; individuals must be 65 years or older, be younger than 65 with long-term disabilities, or suffer from end-stage renal disease" },
+                { term: "Medicare Modernization Act (MMA)", definition: "The enactment of prescription drug coverage provided for individuals covered under Medicare" },
+                { term: "Medigap plan", definition: "Supplemental insurance provided through private insurance companies to help cover costs not reimbursed by the Medicare plan, such as coinsurance, copays, and deductibles" },
+                { term: "National Drug Code (NDC)", definition: "A 10-digit number given to all drugs for identification purposes; in health and drug databases, the NDC is represented as an 11-digit number, in which placeholder zeros are inserted in the proper order in the code for the purpose of standardizing data transmissions" },
+                { term: "National Provider Identifier (NPI)", definition: "A number assigned to any health care provider that is used for the purpose of standardizing health data transmissions" },
+                { term: "Open formulary", definition: "A formulary list that is essentially unrestricted in the types of drug choices offered or that can be prescribed and reimbursed under the health provider plan or pharmacy benefit plan" },
+                { term: "Patient profile", definition: "A document listing necessary patient personal and health information, including comprehensive information on the medications the patient is taking, disease states, and any food or drug allergies the person might have" },
+                { term: "Periodic automatic replenishment (PAR)", definition: "The PAR of stock levels to a certain number of allowed units" },
+                { term: "Pharmacy and therapeutics committee (P&T committee)", definition: "Medical staff composed of physicians, pharmacists, pharmacy technicians, nurses, and dieticians who provide necessary information and advice to the institution or insurer on whether a drug should be added to a formulary" },
+                { term: "Point of sale (POS)", definition: "A system that allows inventory to be tracked as it is used" },
+                { term: "Preferred provider organization (PPO)", definition: "An insurance plan in which patients choose a provider from a specified list, resulting in reduced costs for medical services" },
+                { term: "Prime vendor", definition: "A large distributor of medications and retail products that contracts with the pharmacy to deliver the bulk of their medications in exchange for lower prices; examples of prime vendors are McKesson, Cardinal Health, and AmerisourceBergen" },
+                { term: "Prior authorization", definition: "Insurance-required approval for a restricted, nonformulary, or noncovered medication before a prescription medication can be filled" },
+                { term: "Safety Data Sheets (SDSs)", definition: "Information sheets supplied to the pharmacy from the manufacturer of chemical products; the SDS lists the hazards of the product and procedures to follow if a person is exposed to that product" },
+                { term: "Trade, brand, or proprietary drug name", definition: "The name a company assigns for marketing and identification purposes to a commercial drug product; most brand names are trademarked and belong to originator products; the named products are often protected for a time by patents" },
+                { term: "Treatment authorization request (TAR)", definition: "The process used by Medicare and Medicaid for authorization of assistive technology devices costing more than $100; durable medical equipment (eg, wheelchairs and walkers) also require a TAR; similar to a preauthorization form" },
+                { term: "TRICARE (formerly CHAMPUS)", definition: "A health benefit program for active duty and retired personnel in all seven uniformed services; it also covers dependents of military personnel who were killed while on active duty" },
+                { term: "Wholesalers", definition: "Companies that stock a variety of drug manufacturers' medications and normally have a 'just-in-time' turnaround for ordered drugs; this means that drugs ordered today arrive the next day" },
+                { term: "Workers' compensation", definition: "Government-required and government-enforced medical coverage for workers injured on the job, paid for by the employer; the programs are managed by each state in accordance with the state's workers' compensation laws" }
+            ];
+
+            // DOM elements
+            const chapter13Card = document.getElementById('chapter13-card');
+            const checklistItems = document.querySelectorAll('#reading-checklist li');
+            const progressFill = document.getElementById('progress-fill');
+            const progressPercent = document.getElementById('progress-percent');
+            const markAllBtn = document.getElementById('mark-all-read');
+            const resetBtn = document.getElementById('reset-progress');
+            const celebrationModal = document.getElementById('celebration-modal');
+            const closeCelebrationBtn = document.getElementById('close-celebration');
+            const termsList = document.getElementById('terms-list');
+            const objectivesList = document.getElementById('objectives-list');
+
+            // Populate objectives
+            function populateObjectives() {
+                objectives.forEach((objective, index) => {
+                    const objectiveItem = document.createElement('li');
+                    objectiveItem.className = 'objective-item';
+                    objectiveItem.innerHTML = `
+                        <div class="objective-number">${index + 1}</div>
+                        <div class="objective-text">${objective}</div>
+                    `;
+                    objectivesList.appendChild(objectiveItem);
+                });
+            }
+
+            // Populate terms
+            function populateTerms() {
+                terms.forEach(term => {
+                    const termItem = document.createElement('div');
+                    termItem.className = 'term-item';
+                    termItem.innerHTML = `
+                        <div class="term-name">${term.term}</div>
+                        <div class="term-definition">${term.definition}</div>
+                    `;
+                    termsList.appendChild(termItem);
+                });
+            }
+
+            // Calculate progress
+            function calculateProgress() {
+                const totalItems = 7; // 1 chapter + 6 checklist items
+                let completed = 0;
+                
+                if (readingState.chapter13) completed++;
+                readingState.checklist.forEach(item => {
+                    if (item) completed++;
+                });
+                
+                const percentage = Math.round((completed / totalItems) * 100);
+                
+                // Update progress bar
+                progressFill.style.width = `${percentage}%`;
+                progressPercent.textContent = `${percentage}%`;
+                
+                // Update progress bar color based on completion
+                if (percentage === 100) {
+                    progressFill.style.background = 'linear-gradient(90deg, var(--color-success), #00d2a0)';
+                    progressPercent.style.color = 'var(--color-success)';
+                    showCelebration();
+                } else if (percentage >= 50) {
+                    progressFill.style.background = 'linear-gradient(90deg, var(--color-primary), var(--color-accent))';
+                    progressPercent.style.color = 'var(--color-primary)';
+                } else {
+                    progressFill.style.background = 'linear-gradient(90deg, var(--color-primary), var(--color-accent))';
+                    progressPercent.style.color = 'var(--color-primary)';
+                }
+                
+                return percentage;
+            }
+
+            // Toggle chapter completion
+            function toggleChapter() {
+                const isCompleted = readingState.chapter13;
+                
+                if (isCompleted) {
+                    // Mark as incomplete
+                    chapter13Card.classList.remove('completed');
+                    readingState.chapter13 = false;
+                    document.getElementById('chapter13-time').textContent = 'Est. 85–100 min';
+                } else {
+                    // Mark as complete
+                    chapter13Card.classList.add('completed');
+                    readingState.chapter13 = true;
+                    document.getElementById('chapter13-time').textContent = '✓ Completed';
+                    
+                    // Add animation
+                    chapter13Card.style.transform = 'scale(1.02)';
+                    setTimeout(() => {
+                        chapter13Card.style.transform = '';
+                    }, 300);
+                }
+                
+                calculateProgress();
+            }
+
+            // Toggle checklist item
+            function toggleChecklistItem(index) {
+                const item = checklistItems[index];
+                const dot = item.querySelector('.check-dot');
+                readingState.checklist[index] = !readingState.checklist[index];
+                
+                if (readingState.checklist[index]) {
+                    item.classList.add('completed');
+                    dot.textContent = '✓';
+                    dot.style.background = 'var(--color-success)';
+                    dot.style.borderColor = 'var(--color-success)';
+                    dot.style.color = 'white';
+                } else {
+                    item.classList.remove('completed');
+                    dot.textContent = '□';
+                    dot.style.background = '';
+                    dot.style.borderColor = 'rgba(148, 163, 184, 0.9)';
+                    dot.style.color = 'rgba(148, 163, 184, 0.9)';
+                }
+                
+                calculateProgress();
+            }
+
+            // Mark all as read
+            function markAllAsRead() {
+                // Mark chapter
+                readingState.chapter13 = true;
+                chapter13Card.classList.add('completed');
+                document.getElementById('chapter13-time').textContent = '✓ Completed';
+                
+                // Mark all checklist items
+                readingState.checklist = [true, true, true, true, true, true];
+                checklistItems.forEach((item, index) => {
+                    item.classList.add('completed');
+                    const dot = item.querySelector('.check-dot');
+                    dot.textContent = '✓';
+                    dot.style.background = 'var(--color-success)';
+                    dot.style.borderColor = 'var(--color-success)';
+                    dot.style.color = 'white';
+                });
+                
+                calculateProgress();
+                
+                // Celebration animation
+                chapter13Card.style.transform = 'scale(1.05)';
+                setTimeout(() => {
+                    chapter13Card.style.transform = '';
+                }, 300);
+            }
+
+            // Reset progress
+            function resetProgress() {
+                // Reset chapter
+                readingState.chapter13 = false;
+                chapter13Card.classList.remove('completed');
+                document.getElementById('chapter13-time').textContent = 'Est. 85–100 min';
+                
+                // Reset checklist
+                readingState.checklist = [false, false, false, false, false, false];
+                checklistItems.forEach((item, index) => {
+                    item.classList.remove('completed');
+                    const dot = item.querySelector('.check-dot');
+                    dot.textContent = '□';
+                    dot.style.background = '';
+                    dot.style.borderColor = 'rgba(148, 163, 184, 0.9)';
+                    dot.style.color = 'rgba(148, 163, 184, 0.9)';
+                });
+                
+                calculateProgress();
+            }
+
+            // Show celebration modal
+            function showCelebration() {
+                setTimeout(() => {
+                    celebrationModal.style.display = 'flex';
+                }, 500);
+            }
+
+            // Close celebration modal
+            function closeCelebration() {
+                celebrationModal.style.display = 'none';
+            }
+
+            // Initialize
+            populateObjectives();
+            populateTerms();
+            
+            // Event listeners
+            chapter13Card.addEventListener('click', toggleChapter);
+            chapter13Card.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    toggleChapter();
+                }
+            });
+            
+            checklistItems.forEach((item, index) => {
+                item.addEventListener('click', () => toggleChecklistItem(index));
+                item.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        toggleChecklistItem(index);
+                    }
+                });
+            });
+            
+            markAllBtn.addEventListener('click', markAllAsRead);
+            resetBtn.addEventListener('click', resetProgress);
+            closeCelebrationBtn.addEventListener('click', closeCelebration);
+            
+            // Close modal when clicking outside
+            celebrationModal.addEventListener('click', (e) => {
+                if (e.target === celebrationModal) {
+                    closeCelebration();
+                }
+            });
+            
+            // Initialize with some progress for demo
+            setTimeout(() => {
+                // Mark first checklist item as completed for demo
+                toggleChecklistItem(0);
+            }, 1000);
+            
+            // Add scroll animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+            
+            // Observe reading card
+            chapter13Card.style.opacity = '0';
+            chapter13Card.style.transform = 'translateY(20px)';
+            chapter13Card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            observer.observe(chapter13Card);
+            
+            // Observe objectives with delay
+            const objectiveItems = document.querySelectorAll('.objective-item');
+            objectiveItems.forEach((item, index) => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateX(-10px)';
+                item.style.transition = `opacity 0.5s ease ${index * 0.05}s, transform 0.5s ease ${index * 0.05}s`;
+                observer.observe(item);
+            });
+            
+            // Observe timeline items
+            const timelineItems = document.querySelectorAll('.timeline-item');
+            timelineItems.forEach((item, index) => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateX(-20px)';
+                item.style.transition = `opacity 0.5s ease ${index * 0.1}s, transform 0.5s ease ${index * 0.1}s`;
+                observer.observe(item);
+            });
+            
+            // Observe checklist items with delay
+            checklistItems.forEach((item, index) => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateX(-20px)';
+                item.style.transition = `opacity 0.5s ease ${index * 0.1}s, transform 0.5s ease ${index * 0.1}s`;
+                observer.observe(item);
+            });
+            
+            // Observe terms with delay
+            const termItems = document.querySelectorAll('.term-item');
+            termItems.forEach((item, index) => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateY(10px)';
+                item.style.transition = `opacity 0.5s ease ${index * 0.03}s, transform 0.5s ease ${index * 0.03}s`;
+                observer.observe(item);
+            });
+        });
+    </script>
+</body>
+</html>
