@@ -1,0 +1,1755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AlliedRx - Quality Assurance & Risk Management</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <style>
+        /* [ALL CSS FROM MODULE 1 & 2 REMAINS UNCHANGED] */
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-error: #e17055;
+            --color-warning: #fdcb6e;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
+            --color-dark: #0c0a18;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+            --shadow-card: 0 12px 30px rgba(15, 23, 42, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(
+                circle at top left,
+                #ffffff 0,
+                #f1ecff 40%,
+                var(--color-bg) 100%
+            );
+            color: var(--color-text);
+            -webkit-text-size-adjust: 100%;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 12px; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes checkmarkPop {
+            0% { transform: scale(0); opacity: 0; }
+            70% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @media (max-width: 900px) {
+            .page { padding: 22px; }
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 0; }
+            .page {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 18px 14px 22px;
+            }
+        }
+
+        /* Header */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .brand-logo:hover { transform: scale(1.05); }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--color-success);
+            flex-shrink: 0;
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .badge-mode:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+        @media (max-width: 480px) {
+            .brand-row { flex-direction: column; align-items: flex-start; }
+            .badge-mode { margin-top: 6px; }
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 3vw, 2.2rem);
+            line-height: 1.1;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .module-subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 600px;
+            margin-bottom: 24px;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        /* Progress Tracker */
+        .progress-tracker {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            position: relative;
+            padding: 0 20px;
+        }
+
+        .progress-tracker::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 50px;
+            right: 50px;
+            height: 3px;
+            background: rgba(12, 10, 24, 0.08);
+            z-index: 1;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+
+        .step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--color-muted);
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.active .step-circle {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .progress-step.completed .step-circle {
+            background: var(--color-success);
+            border-color: var(--color-success);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.75rem;
+            color: var(--color-muted);
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .progress-step.active .step-label {
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        /* Progress Summary */
+        .progress-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+            animation: fadeInUp 0.6s ease-out 0.5s both;
+        }
+
+        .summary-card {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            border: 1px solid rgba(12, 10, 24, 0.06);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-card);
+            border-color: var(--color-primary-soft);
+        }
+
+        .summary-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--color-primary);
+            display: block;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .summary-label {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Activity Grid */
+        .activity-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 900px) {
+            .activity-grid { grid-template-columns: 1fr; }
+        }
+
+        .activity-card {
+            background: white;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            padding: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .activity-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--color-primary);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .activity-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--color-primary-soft);
+        }
+
+        .activity-card:hover::before { opacity: 1; }
+
+        .activity-card.completed {
+            border-color: var(--color-success);
+        }
+
+        .activity-card.completed::before {
+            background: var(--color-success);
+            opacity: 1;
+        }
+
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .activity-number {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .activity-status {
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-muted);
+        }
+
+        .activity-card.completed .activity-status {
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--color-success);
+        }
+
+        .activity-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 8px;
+        }
+
+        .activity-description {
+            font-size: 0.9rem;
+            color: var(--color-muted);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        /* Steps Container */
+        .steps-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .step-item {
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            cursor: grab;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            user-select: none;
+        }
+
+        .step-item:hover {
+            background: rgba(175, 75, 239, 0.08);
+            border-color: var(--color-primary-soft);
+            transform: translateY(-2px);
+        }
+
+        .step-item.dragging {
+            opacity: 0.7;
+            transform: scale(0.98);
+        }
+
+        .step-item.placed {
+            background: rgba(0, 184, 148, 0.1);
+            border-color: var(--color-success);
+            cursor: default;
+        }
+
+        .step-number {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(12, 10, 24, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-text);
+            flex-shrink: 0;
+        }
+
+        .step-item.placed .step-number {
+            background: var(--color-success);
+            color: white;
+        }
+
+        .step-text {
+            font-size: 0.9rem;
+            color: var(--color-text);
+            flex: 1;
+        }
+
+        .steps-dropzone {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            border: 2px dashed rgba(12, 10, 24, 0.1);
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .steps-dropzone.hover {
+            border-color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.05);
+        }
+
+        .steps-dropzone.empty::after {
+            content: 'Drag USP <797> steps here in correct order';
+            color: var(--color-muted);
+            text-align: center;
+            font-size: 0.9rem;
+            margin: auto;
+        }
+
+        /* Feedback */
+        .feedback-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            margin-top: 20px;
+            display: none;
+        }
+
+        .feedback-container.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .feedback-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feedback-icon {
+            font-size: 1.2rem;
+        }
+
+        .feedback-icon.correct { color: var(--color-success); }
+        .feedback-icon.incorrect { color: var(--color-error); }
+
+        .feedback-content {
+            font-size: 0.85rem;
+            color: var(--color-text);
+            line-height: 1.5;
+        }
+
+        .feedback-content strong { color: var(--color-primary); }
+
+        .correction-details {
+            background: rgba(225, 112, 85, 0.05);
+            border-left: 3px solid var(--color-error);
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #9a3bd6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(175, 75, 239, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-text);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(12, 10, 24, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-icon { font-size: 1.1em; }
+
+        /* Results Panel */
+        .results-panel {
+            background: var(--color-dark);
+            color: white;
+            border-radius: var(--radius-md);
+            padding: 30px;
+            margin-top: 30px;
+            display: none;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .results-panel.show { display: block; }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .results-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .score-display {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--color-primary-soft);
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .clinical-insights {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .insights-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-primary-soft);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .insights-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .insights-list li {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            font-size: 0.9rem;
+            color: #e5e7eb;
+        }
+
+        .insight-dot {
+            width: 6px;
+            height: 6px;
+            margin-top: 6px;
+            border-radius: 999px;
+            background: var(--color-accent);
+            flex-shrink: 0;
+        }
+
+        /* New: Scenario Box */
+        .scenario-box {
+            background: rgba(175, 75, 239, 0.05);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--color-primary);
+        }
+
+        .scenario-title {
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .scenario-content {
+            font-size: 0.9rem;
+            color: var(--color-text);
+            line-height: 1.5;
+        }
+
+        /* Risk Management Decision Cards */
+        .scenario-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .scenario-card {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .scenario-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-card);
+            border-color: var(--color-primary-soft);
+        }
+
+        .scenario-question {
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+        }
+
+        .decision-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .decision-option {
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: var(--radius-sm);
+            padding: 12px 15px;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+        }
+
+        .decision-option:hover {
+            background: rgba(175, 75, 239, 0.08);
+            border-color: var(--color-primary-soft);
+        }
+
+        .decision-option.selected {
+            background: rgba(0, 184, 148, 0.1);
+            border-color: var(--color-success);
+        }
+
+        .decision-option.incorrect {
+            background: rgba(225, 112, 85, 0.1);
+            border-color: var(--color-error);
+        }
+
+        .option-feedback {
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            font-size: 0.8rem;
+            color: var(--color-text);
+            display: none;
+        }
+
+        .option-feedback.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .option-feedback.correct {
+            background: rgba(0, 184, 148, 0.05);
+            border-left: 3px solid var(--color-success);
+        }
+
+        .option-feedback.incorrect {
+            background: rgba(225, 112, 85, 0.05);
+            border-left: 3px solid var(--color-error);
+        }
+
+        /* USP Compliance Badges */
+        .compliance-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .badge-critical {
+            background: rgba(225, 112, 85, 0.1);
+            color: var(--color-error);
+        }
+
+        .badge-important {
+            background: rgba(253, 203, 110, 0.1);
+            color: var(--color-warning);
+        }
+
+        /* Matching Grid */
+        .matching-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+            min-height: 300px;
+        }
+
+        @media (max-width: 600px) {
+            .matching-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .matching-column {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 2px dashed rgba(12, 10, 24, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .matching-column-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            text-align: center;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(12, 10, 24, 0.08);
+            margin-bottom: 10px;
+        }
+
+        .matching-item {
+            background: rgba(175, 75, 239, 0.08);
+            border-radius: var(--radius-sm);
+            padding: 12px 15px;
+            cursor: grab;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            user-select: none;
+            font-size: 0.85rem;
+            color: var(--color-text);
+        }
+
+        .matching-item:hover {
+            background: rgba(175, 75, 239, 0.15);
+            border-color: var(--color-primary-soft);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(175, 75, 239, 0.1);
+        }
+
+        .matching-item.dragging {
+            opacity: 0.7;
+            transform: scale(0.98);
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="module-heading">
+        <!-- Header -->
+        <header class="brand-row">
+            <div class="brand">
+                <img
+                    src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                    alt="AlliedRx logo"
+                    class="brand-logo"
+                />
+                <div class="course-meta">
+                    <span class="course-name">Pharmacy Technician • Week 14</span>
+                    <div class="week-label">
+                        <span class="week-label-dot"></span>
+                        <span>Chapter 14: Medication Safety and Error Prevention</span>
+                    </div>
+                </div>
+            </div>
+            <span class="badge-mode">Campus & Online</span>
+        </header>
+
+        <h1 id="module-heading">Quality Assurance & Risk Management</h1>
+        <p class="module-subtitle">
+            Master USP <797> compliance and risk management strategies to ensure sterile compounding safety 
+            and prevent medication errors in clinical practice.
+        </p>
+
+        <!-- Progress Tracker -->
+        <div class="progress-tracker">
+            <div class="progress-step active" data-step="1">
+                <div class="step-circle">1</div>
+                <div class="step-label">USP <797></div>
+            </div>
+            <div class="progress-step" data-step="2">
+                <div class="step-circle">2</div>
+                <div class="step-label">Risk Scenarios</div>
+            </div>
+            <div class="progress-step" data-step="3">
+                <div class="step-circle">3</div>
+                <div class="step-label">QA Processes</div>
+            </div>
+        </div>
+
+        <!-- Progress Summary -->
+        <div class="progress-summary">
+            <div class="summary-card">
+                <span class="summary-number" id="completed-count">0</span>
+                <span class="summary-label">Activities Completed</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="accuracy-rate">0%</span>
+                <span class="summary-label">Current Accuracy</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="time-spent">0:00</span>
+                <span class="summary-label">Time Spent</span>
+            </div>
+        </div>
+
+        <!-- Activity Grid -->
+        <div class="activity-grid">
+            <!-- Activity 1: USP <797> Compliance Sequencing -->
+            <section class="activity-card" id="activity-1" data-activity="1">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 1</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">USP <797> Compliance Sequencing</h3>
+                <p class="activity-description">
+                    Sequence the correct steps for sterile compounding compliance according to USP <797> standards.
+                    Proper order is critical for maintaining sterility and patient safety.
+                </p>
+
+                <!-- Real-World Scenario -->
+                <div class="scenario-box">
+                    <div class="scenario-title">
+                        <span>🧪</span> Sterile Compounding Preparation
+                    </div>
+                    <div class="scenario-content">
+                        Jonathan is preparing to compound a batch of IV medications for oncology patients. 
+                        He must follow USP <797> steps in the correct order to maintain sterility and comply 
+                        with regulatory standards.
+                    </div>
+                </div>
+
+                <!-- Sequencing Dropzone -->
+                <div class="steps-dropzone empty" id="usp-dropzone"></div>
+
+                <!-- Steps to Sequence - RANDOMIZED ORDER -->
+                <div class="steps-container" id="usp-steps">
+                    <div class="step-item draggable" data-step="1" draggable="true">
+                        <div class="step-number">?</div>
+                        <div class="step-text">Hand hygiene and removal of jewelry/watches 
+                            <span class="compliance-badge badge-critical">Critical</span>
+                        </div>
+                    </div>
+                    <div class="step-item draggable" data-step="2" draggable="true">
+                        <div class="step-number">?</div>
+                        <div class="step-text">Don shoe covers, hair cover, and face mask
+                            <span class="compliance-badge badge-critical">Critical</span>
+                        </div>
+                    </div>
+                    <div class="step-item draggable" data-step="3" draggable="true">
+                        <div class="step-number">?</div>
+                        <div class="step-text">Perform three-minute surgical scrub of hands and forearms</div>
+                    </div>
+                    <div class="step-item draggable" data-step="4" draggable="true">
+                        <div class="step-number">?</div>
+                        <div class="step-text">Don sterile gown using aseptic technique</div>
+                    </div>
+                    <div class="step-item draggable" data-step="5" draggable="true">
+                        <div class="step-number">?</div>
+                        <div class="step-text">Don sterile gloves ensuring no contamination
+                            <span class="compliance-badge badge-critical">Critical</span>
+                        </div>
+                    </div>
+                    <div class="step-item draggable" data-step="6" draggable="true">
+                        <div class="step-number">?</div>
+                        <div class="step-text">Enter cleanroom through ante-room pressure cascade</div>
+                    </div>
+                    <div class="step-item draggable" data-step="7" draggable="true">
+                        <div class="step-number">?</div>
+                        <div class="step-text">Disinfect work surface with sterile 70% IPA</div>
+                    </div>
+                    <div class="step-item draggable" data-step="8" draggable="true">
+                        <div class="step-number">?</div>
+                        <div class="step-text">Perform first air verification and laminar airflow check</div>
+                    </div>
+                    <div class="step-item draggable" data-step="9" draggable="true">
+                        <div class="step-number">?</div>
+                        <div class="step-text">Begin aseptic compounding following beyond-use dating</div>
+                    </div>
+                </div>
+
+                <!-- Corrective Feedback -->
+                <div class="feedback-container" id="feedback-1">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        USP <797> Compliance Analysis
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Correct Sequence:</strong><br>
+                        1. Hand hygiene and removal of jewelry/watches<br>
+                        2. Don shoe covers, hair cover, and face mask<br>
+                        3. Perform three-minute surgical scrub of hands and forearms<br>
+                        4. Don sterile gown using aseptic technique<br>
+                        5. Don sterile gloves ensuring no contamination<br>
+                        6. Enter cleanroom through ante-room pressure cascade<br>
+                        7. Disinfect work surface with sterile 70% IPA<br>
+                        8. Perform first air verification and laminar airflow check<br>
+                        9. Begin aseptic compounding following beyond-use dating<br><br>
+                        
+                        <strong>Critical Control Points:</strong><br>
+                        • <strong>Steps 1, 2, 5</strong> are CRITICAL - failures can directly compromise sterility<br>
+                        • <strong>First Air Principle</strong>: Nothing should come between HEPA filter and sterile product<br>
+                        • <strong>Pressure Cascade</strong>: Cleanroom must maintain positive pressure to ante-room<br><br>
+                        
+                        <strong>Beyond-Use Dating (BUD):</strong><br>
+                        • Low-risk, room temperature: 48 hours or manufacturer's recommendation<br>
+                        • Medium-risk, refrigerated: 30 days<br>
+                        • High-risk, frozen: 45 days (requires sterility testing)<br><br>
+                        
+                        <div class="correction-details" id="correction-details-1" style="display: none;">
+                            <strong>Your Sequencing Errors:</strong><br>
+                            <span id="correction-text-1"></span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity 2: Risk Management Scenarios -->
+            <section class="activity-card" id="activity-2" data-activity="2">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 2</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">Risk Management Scenarios</h3>
+                <p class="activity-description">
+                    Analyze medication error scenarios and select the appropriate prevention strategies.
+                    Develop critical thinking skills for real-world risk management.
+                </p>
+
+                <!-- Real-World Scenario -->
+                <div class="scenario-box">
+                    <div class="scenario-title">
+                        <span>⚠️</span> Safety Committee Preparation
+                    </div>
+                    <div class="scenario-content">
+                        Jonathan is reviewing recent near-miss reports for the pharmacy safety committee.
+                        He must analyze each scenario and recommend evidence-based prevention strategies.
+                    </div>
+                </div>
+
+                <!-- Interactive Scenarios - RANDOMIZED ORDER -->
+                <div class="scenario-container" id="risk-scenarios">
+                    <!-- Scenario 1 -->
+                    <div class="scenario-card" data-scenario="1">
+                        <div class="scenario-question">
+                            <strong>Scenario 1:</strong> A nurse almost administered Humulin R (regular insulin) 
+                            instead of Humulin N (NPH insulin) to a diabetic patient. Both vials look identical 
+                            and were stored next to each other in the medication refrigerator.
+                        </div>
+                        <div class="decision-options">
+                            <div class="decision-option" data-option="a" data-correct="false">
+                                A) Move the insulin vials to separate shelves in the same refrigerator
+                            </div>
+                            <div class="decision-option" data-option="b" data-correct="false">
+                                B) Add colored stickers to differentiate the vials
+                            </div>
+                            <div class="decision-option" data-option="c" data-correct="true">
+                                C) Implement barcode scanning and store in separate, labeled bins
+                            </div>
+                            <div class="decision-option" data-option="d" data-correct="false">
+                                D) Require double-check by another nurse for all insulin administrations
+                            </div>
+                        </div>
+                        <div class="option-feedback" id="feedback-scenario-1">
+                            <strong>Best Practice:</strong> Option C addresses the root cause through multiple layers:<br>
+                            1. <strong>Barcode scanning</strong> provides point-of-care verification<br>
+                            2. <strong>Separate storage</strong> prevents mix-ups during retrieval<br>
+                            3. <strong>Labeled bins</strong> create visual differentiation<br><br>
+                            <strong>LASA (Look-Alike/Sound-Alike) Protocol:</strong> Institute "Tall Man" lettering 
+                            (humuLIN R, humuLIN N) and separate storage as required by ISMP.
+                        </div>
+                    </div>
+
+                    <!-- Scenario 2 -->
+                    <div class="scenario-card" data-scenario="2">
+                        <div class="scenario-question">
+                            <strong>Scenario 2:</strong> A pharmacy technician prepared a heparin infusion 
+                            with 25,000 units/mL instead of 1,000 units/mL. The concentration wasn't verified 
+                            against the order, and the infusion pump wasn't programmed with dose limits.
+                        </div>
+                        <div class="decision-options">
+                            <div class="decision-option" data-option="a" data-correct="true">
+                                A) Implement smart pump technology with hard dosing limits
+                            </div>
+                            <div class="decision-option" data-option="b" data-correct="false">
+                                B) Require pharmacist verification of all high-alert medications
+                            </div>
+                            <div class="decision-option" data-option="c" data-correct="false">
+                                C) Standardize to one heparin concentration throughout the hospital
+                            </div>
+                            <div class="decision-option" data-option="d" data-correct="true">
+                                D) Use barcode verification during both preparation and administration
+                            </div>
+                        </div>
+                        <div class="option-feedback" id="feedback-scenario-2">
+                            <strong>Best Practices:</strong> Options A & D provide multi-layered protection:<br>
+                            1. <strong>Smart pumps</strong> with hard limits prevent dangerous infusion rates<br>
+                            2. <strong>Barcode verification</strong> catches concentration errors at multiple points<br>
+                            3. <strong>High-alert protocol</strong> requires independent double-check (also important)<br><br>
+                            <strong>ISMP High-Alert Recommendations:</strong> Heparin requires independent double-check, 
+                            barcode verification, and smart pump limits as part of a comprehensive safety strategy.
+                        </div>
+                    </div>
+
+                    <!-- Scenario 3 -->
+                    <div class="scenario-card" data-scenario="3">
+                        <div class="scenario-question">
+                            <strong>Scenario 3:</strong> A patient received a medication they were allergic to 
+                            because the allergy wasn't documented in the EHR. The patient had told the nurse 
+                            during admission, but it wasn't entered into the system.
+                        </div>
+                        <div class="decision-options">
+                            <div class="decision-option" data-option="a" data-correct="false">
+                                A) Require pharmacists to verbally confirm allergies with all patients
+                            </div>
+                            <div class="decision-option" data-option="b" data-correct="true">
+                                B) Implement EHR alerts and standardized allergy documentation protocol
+                            </div>
+                            <div class="decision-option" data-option="c" data-correct="true">
+                                C) Use clinical decision support with cross-reaction checking
+                            </div>
+                            <div class="decision-option" data-option="d" data-correct="false">
+                                D) Add allergy wristbands for all patients with documented allergies
+                            </div>
+                        </div>
+                        <div class="option-feedback" id="feedback-scenario-3">
+                            <strong>Best Practices:</strong> Options B & C address system-level solutions:<br>
+                            1. <strong>Standardized documentation</strong> ensures consistency across departments<br>
+                            2. <strong>EHR alerts</strong> provide real-time warnings at prescribing and dispensing<br>
+                            3. <strong>Clinical decision support</strong> checks for cross-reactions and contraindications<br><br>
+                            <strong>NCC MERP Recommendations:</strong> Technology should support, not replace, 
+                            the medication reconciliation process at all care transitions.
+                        </div>
+                    </div>
+
+                    <!-- Scenario 4 -->
+                    <div class="scenario-card" data-scenario="4">
+                        <div class="scenario-question">
+                            <strong>Scenario 4:</strong> A chemotherapy dose was calculated incorrectly 
+                            based on body surface area. The error wasn't caught because there was no 
+                            independent verification process for chemotherapy orders.
+                        </div>
+                        <div class="decision-options">
+                            <div class="decision-option" data-option="a" data-correct="true">
+                                A) Require dual verification by pharmacist and second pharmacist
+                            </div>
+                            <div class="decision-option" data-option="b" data-correct="false">
+                                B) Implement calculator software for all dose calculations
+                            </div>
+                            <div class="decision-option" data-option="c" data-correct="true">
+                                C) Use computerized order entry with dose-range checking
+                            </div>
+                            <div class="decision-option" data-option="d" data-correct="false">
+                                D) Standardize all chemotherapy protocols to fixed doses
+                            </div>
+                        </div>
+                        <div class="option-feedback" id="feedback-scenario-4">
+                            <strong>Best Practices:</strong> Options A & C create multiple safety layers:<br>
+                            1. <strong>Dual verification</strong> is required for all chemotherapy by ASHP standards<br>
+                            2. <strong>CPOE with dose checking</strong> prevents calculation and transcription errors<br>
+                            3. <strong>Standardized protocols</strong> help but cannot replace verification for individualized dosing<br><br>
+                            <strong>Oncology Safety Standards:</strong> Chemotherapy requires specialized training, 
+                            double-checking, and separate preparation areas to prevent life-threatening errors.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Corrective Feedback -->
+                <div class="feedback-container" id="feedback-2">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Risk Management Analysis
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Key Risk Management Principles:</strong><br>
+                        • <strong>Swiss Cheese Model:</strong> Multiple layers of defense prevent errors from reaching patients<br>
+                        • <strong>Root Cause Analysis (RCA):</strong> Identify system issues, not individual blame<br>
+                        • <strong>Failure Mode & Effects Analysis (FMEA):</strong> Proactively identify potential failures<br><br>
+                        
+                        <strong>Technician's Role in Risk Management:</strong><br>
+                        1. <strong>Documentation:</strong> Accurate recording of near-misses and errors<br>
+                        2. <strong>Monitoring:</strong> Regular checks of high-alert medication storage and labeling<br>
+                        3. <strong>Reporting:</strong> Non-punitive reporting of safety concerns<br>
+                        4. <strong>Verification:</strong> Double-checking critical calculations and preparations<br><br>
+                        
+                        <strong>Quality Improvement Cycle:</strong><br>
+                        Plan → Do → Study → Act (PDSA) for continuous safety improvement<br><br>
+                        
+                        <div class="correction-details" id="correction-details-2" style="display: none;">
+                            <strong>Your Analysis Errors:</strong><br>
+                            <span id="correction-text-2"></span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn btn-secondary" id="reset-all-btn">
+                <span class="btn-icon">↻</span>
+                Reset All Activities
+            </button>
+            <button class="btn btn-secondary" id="check-answers-btn">
+                <span class="btn-icon">✓</span>
+                Check All Answers
+            </button>
+            <button class="btn btn-primary" id="view-results-btn">
+                <span class="btn-icon">📊</span>
+                View Final Results
+            </button>
+        </div>
+
+        <!-- Results Panel -->
+        <div class="results-panel" id="results-panel">
+            <div class="results-header">
+                <h2 class="results-title">Quality Assurance Proficiency</h2>
+                <div class="score-display" id="final-score">0%</div>
+            </div>
+            
+            <div class="clinical-insights">
+                <h3 class="insights-title">
+                    <span>🏥</span> USP <797> Clinical Applications
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Critical Compounding Areas:</strong> Beyond-use dating varies by risk level: 
+                        Low-risk compounds (48 hours), Medium-risk (30 days refrigerated), High-risk (requires sterility testing). 
+                        Technicians must verify risk level before assigning BUD.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Environmental Monitoring:</strong> Daily pressure differential checks, monthly 
+                        particle counts, and annual HEPA filter certification are required. Technicians often perform 
+                        initial monitoring and must document excursions immediately.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Garbing Competency:</strong> Annual media-fill testing validates aseptic technique. 
+                        Technicians must pass with zero growth to maintain compounding privileges. Documentation of 
+                        competency is audited during Joint Commission surveys.</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="clinical-insights" style="margin-top: 20px;">
+                <h3 class="insights-title">
+                    <span>🛡️</span> Risk Management Protocols
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>High-Alert Medications:</strong> ISMP identifies 19 classes requiring special safeguards. 
+                        Technicians implement "Tall Man" lettering, separate storage, and auxiliary labeling. Independent 
+                        double-checks are required before dispensing.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>LASA Management:</strong> Look-alike/sound-alike drugs require separation by at least 
+                        3 feet or physical barriers. Computer systems should include "Do Not Confuse" alerts. Technicians 
+                        verify correct drug selection during order fulfillment.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>REMS Programs:</strong> Risk Evaluation and Mitigation Strategies for drugs like 
+                        isotretinoin, clozapine, and opioids. Technicians verify enrollment, document counseling, and 
+                        monitor dispensing limits as part of the safety protocol.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="clinical-insights" style="margin-top: 20px;">
+                <h3 class="insights-title">
+                    <span>👨‍⚕️</span> Pharmacy Technician Safety Role
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Sterility Assurance:</strong> Technicians perform 70% of sterile compounding in 
+                        hospitals. Their attention to detail in garbing, surface disinfection, and first air maintenance 
+                        directly impacts patient infection rates.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Error Reporting:</strong> Technicians report 80% of dispensing near-misses. 
+                        Their documentation provides data for root cause analysis and system improvements. Non-punitive 
+                        reporting culture is essential for accurate data.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Quality Control:</strong> Daily balance calibration, refrigerator temperature logs, 
+                        and equipment maintenance are technician responsibilities. These quality checks prevent errors 
+                        before they reach patients.</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // State Management
+            const state = {
+                activities: {
+                    1: { completed: false, correct: 0, total: 9, score: 0, userOrder: [] },
+                    2: { completed: false, correct: 0, total: 10, score: 0, selections: {} }
+                },
+                startedAt: new Date(),
+                timeSpent: 0
+            };
+
+            // Correct Answers
+            const correctSequence = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
+            
+            const correctScenarios = {
+                1: ['c'],        // Scenario 1: Only C is correct
+                2: ['a', 'd'],   // Scenario 2: A and D are correct
+                3: ['b', 'c'],   // Scenario 3: B and C are correct
+                4: ['a', 'c']    // Scenario 4: A and C are correct
+            };
+
+            // DOM Elements
+            const progressSteps = document.querySelectorAll('.progress-step');
+            const activityCards = document.querySelectorAll('.activity-card');
+            const completedCount = document.getElementById('completed-count');
+            const accuracyRate = document.getElementById('accuracy-rate');
+            const timeSpentEl = document.getElementById('time-spent');
+            const resetBtn = document.getElementById('reset-all-btn');
+            const checkBtn = document.getElementById('check-answers-btn');
+            const resultsBtn = document.getElementById('view-results-btn');
+            const resultsPanel = document.getElementById('results-panel');
+            const finalScore = document.getElementById('final-score');
+
+            // Utility: Shuffle array (Fisher-Yates)
+            function shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            }
+
+            // Randomize initial item order
+            function randomizeItems() {
+                // Activity 1: USP Steps
+                const uspStepsContainer = document.getElementById('usp-steps');
+                const uspSteps = Array.from(uspStepsContainer.querySelectorAll('.step-item'));
+                shuffleArray(uspSteps).forEach(item => uspStepsContainer.appendChild(item));
+                
+                // Activity 2: Scenarios (already in DOM, just ensure they're shuffled)
+                const scenarioContainer = document.getElementById('risk-scenarios');
+                const scenarios = Array.from(scenarioContainer.querySelectorAll('.scenario-card'));
+                shuffleArray(scenarios).forEach(scenario => scenarioContainer.appendChild(scenario));
+            }
+
+            // Timer
+            function updateTimer() {
+                const now = new Date();
+                const diff = Math.floor((now - state.startedAt) / 1000);
+                state.timeSpent = diff;
+                const minutes = Math.floor(diff / 60);
+                const seconds = diff % 60;
+                timeSpentEl.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            }
+            setInterval(updateTimer, 1000);
+
+            // Update Progress Summary
+            function updateProgressSummary() {
+                let completed = 0;
+                let totalCorrect = 0;
+                let totalItems = 0;
+                
+                Object.values(state.activities).forEach(activity => {
+                    if (activity.completed) completed++;
+                    totalCorrect += activity.correct;
+                    totalItems += activity.total;
+                });
+                
+                completedCount.textContent = completed;
+                const accuracy = totalItems > 0 ? Math.round((totalCorrect / totalItems) * 100) : 0;
+                accuracyRate.textContent = `${accuracy}%`;
+                
+                // Update progress steps
+                progressSteps.forEach((step, index) => {
+                    if (index < completed) {
+                        step.classList.add('completed');
+                        step.classList.remove('active');
+                    } else if (index === completed) {
+                        step.classList.add('active');
+                        step.classList.remove('completed');
+                    } else {
+                        step.classList.remove('active', 'completed');
+                    }
+                });
+            }
+
+            // Activity 1: USP <797> Sequencing
+            function initActivity1() {
+                const stepItems = document.querySelectorAll('#activity-1 .step-item');
+                const dropzone = document.getElementById('usp-dropzone');
+                const feedback = document.getElementById('feedback-1');
+                const status = document.querySelector('#activity-1 .activity-status');
+                const correctionDetails = document.getElementById('correction-details-1');
+                const correctionText = document.getElementById('correction-text-1');
+                
+                let placedSteps = [];
+                
+                // Setup drag and drop
+                stepItems.forEach(item => {
+                    item.addEventListener('dragstart', function(e) {
+                        e.dataTransfer.setData('text/plain', JSON.stringify({
+                            step: this.dataset.step,
+                            text: this.innerHTML
+                        }));
+                        this.classList.add('dragging');
+                    });
+                    
+                    item.addEventListener('dragend', function() {
+                        this.classList.remove('dragging');
+                    });
+                });
+                
+                dropzone.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    this.classList.add('hover');
+                    this.classList.remove('empty');
+                });
+                
+                dropzone.addEventListener('dragleave', function() {
+                    this.classList.remove('hover');
+                });
+                
+                dropzone.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('hover');
+                    
+                    const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+                    if (!placedSteps.includes(data.step)) {
+                        placedSteps.push(data.step);
+                        state.activities[1].userOrder = placedSteps;
+                        
+                        const stepDiv = document.createElement('div');
+                        stepDiv.className = 'step-item placed';
+                        stepDiv.innerHTML = `
+                            <div class="step-number">${placedSteps.length}</div>
+                            <div class="step-text">${data.text}</div>
+                        `;
+                        this.appendChild(stepDiv);
+                        
+                        const originalStep = document.querySelector(`#activity-1 .step-item[data-step="${data.step}"]`);
+                        if (originalStep) {
+                            originalStep.style.display = 'none';
+                        }
+                        
+                        if (placedSteps.length === 9) {
+                            checkActivity1();
+                        }
+                    }
+                });
+                
+                function checkActivity1() {
+                    let correctCount = 0;
+                    let correctionMessages = [];
+                    
+                    placedSteps.forEach((step, index) => {
+                        if (step === correctSequence[index]) {
+                            correctCount++;
+                        } else {
+                            const userStep = document.querySelector(`#activity-1 .step-item[data-step="${step}"] .step-text`);
+                            const correctStep = document.querySelector(`#activity-1 .step-item[data-step="${correctSequence[index]}"] .step-text`);
+                            
+                            let userText = userStep ? userStep.textContent.trim() : 'Unknown step';
+                            let correctText = correctStep ? correctStep.textContent.trim() : 'Unknown step';
+                            
+                            // Remove badge text for cleaner display
+                            userText = userText.replace('Critical', '').replace('Important', '').trim();
+                            correctText = correctText.replace('Critical', '').replace('Important', '').trim();
+                            
+                            correctionMessages.push(`• Position ${index + 1}: You placed "${userText}" but it should be "${correctText}"`);
+                        }
+                    });
+                    
+                    state.activities[1].completed = true;
+                    state.activities[1].correct = correctCount;
+                    state.activities[1].score = Math.round((correctCount / 9) * 100);
+                    
+                    status.textContent = 'Completed';
+                    status.style.color = '#00b894';
+                    document.querySelector('#activity-1').classList.add('completed');
+                    feedback.classList.add('show');
+                    
+                    if (correctionMessages.length > 0) {
+                        correctionDetails.style.display = 'block';
+                        correctionText.innerHTML = correctionMessages.join('<br>');
+                    }
+                    
+                    updateProgressSummary();
+                }
+            }
+
+            // Activity 2: Risk Management Scenarios
+            function initActivity2() {
+                const decisionOptions = document.querySelectorAll('#activity-2 .decision-option');
+                const scenarioCards = document.querySelectorAll('#activity-2 .scenario-card');
+                const feedback = document.getElementById('feedback-2');
+                const status = document.querySelector('#activity-2 .activity-status');
+                const correctionDetails = document.getElementById('correction-details-2');
+                const correctionText = document.getElementById('correction-text-2');
+                
+                let selectedOptions = {
+                    1: [],
+                    2: [],
+                    3: [],
+                    4: []
+                };
+                
+                let completedScenarios = 0;
+                
+                // Setup option selection
+                decisionOptions.forEach(option => {
+                    option.addEventListener('click', function() {
+                        const scenarioCard = this.closest('.scenario-card');
+                        const scenarioNum = parseInt(scenarioCard.dataset.scenario);
+                        const optionLetter = this.dataset.option;
+                        
+                        // Toggle selection
+                        if (this.classList.contains('selected')) {
+                            this.classList.remove('selected');
+                            selectedOptions[scenarioNum] = selectedOptions[scenarioNum].filter(opt => opt !== optionLetter);
+                        } else {
+                            this.classList.add('selected');
+                            selectedOptions[scenarioNum].push(optionLetter);
+                        }
+                        
+                        state.activities[2].selections = selectedOptions;
+                        
+                        // Show feedback for this option
+                        const optionFeedback = scenarioCard.querySelector('.option-feedback');
+                        if (this.dataset.correct === 'true') {
+                            optionFeedback.classList.add('correct');
+                        } else {
+                            optionFeedback.classList.add('incorrect');
+                        }
+                        optionFeedback.classList.add('show');
+                        
+                        // Check if scenario is complete (at least one option selected)
+                        if (selectedOptions[scenarioNum].length > 0) {
+                            // Check if all scenarios have selections
+                            let allScenariosComplete = true;
+                            for (let i = 1; i <= 4; i++) {
+                                if (selectedOptions[i].length === 0) {
+                                    allScenariosComplete = false;
+                                    break;
+                                }
+                            }
+                            
+                            if (allScenariosComplete) {
+                                checkActivity2();
+                            }
+                        }
+                    });
+                });
+                
+                function checkActivity2() {
+                    let correctCount = 0;
+                    let totalQuestions = 0;
+                    let correctionMessages = [];
+                    
+                    // Check each scenario
+                    Object.keys(correctScenarios).forEach(scenarioNum => {
+                        const userSelections = selectedOptions[scenarioNum];
+                        const correctAnswers = correctScenarios[scenarioNum];
+                        
+                        // Count correct selections
+                        userSelections.forEach(selection => {
+                            if (correctAnswers.includes(selection)) {
+                                correctCount++;
+                            } else {
+                                const scenarioCard = document.querySelector(`[data-scenario="${scenarioNum}"]`);
+                                const questionText = scenarioCard.querySelector('.scenario-question').textContent;
+                                const incorrectOption = scenarioCard.querySelector(`[data-option="${selection}"]`).textContent;
+                                const correctOptionText = correctAnswers.map(opt => 
+                                    scenarioCard.querySelector(`[data-option="${opt}"]`).textContent
+                                ).join(' OR ');
+                                
+                                correctionMessages.push(`• Scenario ${scenarioNum}: You selected "${incorrectOption.trim()}" but should have selected "${correctOptionText}"`);
+                            }
+                        });
+                        
+                        // Count missed correct answers
+                        correctAnswers.forEach(correctAnswer => {
+                            if (!userSelections.includes(correctAnswer)) {
+                                correctCount--; // Penalize for missing correct answer
+                            }
+                        });
+                        
+                        totalQuestions += correctAnswers.length;
+                    });
+                    
+                    // Ensure score doesn't go negative
+                    if (correctCount < 0) correctCount = 0;
+                    
+                    state.activities[2].completed = true;
+                    state.activities[2].correct = correctCount;
+                    state.activities[2].score = Math.round((correctCount / totalQuestions) * 100);
+                    
+                    status.textContent = 'Completed';
+                    status.style.color = '#00b894';
+                    document.querySelector('#activity-2').classList.add('completed');
+                    feedback.classList.add('show');
+                    
+                    if (correctionMessages.length > 0) {
+                        correctionDetails.style.display = 'block';
+                        correctionText.innerHTML = correctionMessages.join('<br>');
+                    }
+                    
+                    updateProgressSummary();
+                }
+            }
+
+            // Reset All Activities
+            function resetAllActivities() {
+                // Reset state
+                Object.keys(state.activities).forEach(key => {
+                    if (parseInt(key) === 1) {
+                        state.activities[key] = { completed: false, correct: 0, total: 9, score: 0, userOrder: [] };
+                    } else {
+                        state.activities[key] = { completed: false, correct: 0, total: 10, score: 0, selections: {} };
+                    }
+                });
+                
+                // Reset UI
+                activityCards.forEach(card => {
+                    card.classList.remove('completed');
+                    const status = card.querySelector('.activity-status');
+                    status.textContent = 'Not Started';
+                    status.style.color = '';
+                    const feedback = card.querySelector('.feedback-container');
+                    feedback.classList.remove('show');
+                    const correctionDetails = card.querySelector('.correction-details');
+                    if (correctionDetails) correctionDetails.style.display = 'none';
+                });
+                
+                // Reset Activity 1
+                const dropzone1 = document.getElementById('usp-dropzone');
+                dropzone1.innerHTML = '';
+                dropzone1.classList.add('empty');
+                document.querySelectorAll('#activity-1 .step-item').forEach(item => {
+                    item.style.display = '';
+                    item.classList.remove('placed', 'dragging');
+                });
+                
+                // Reset Activity 2
+                document.querySelectorAll('#activity-2 .decision-option').forEach(option => {
+                    option.classList.remove('selected', 'incorrect');
+                });
+                document.querySelectorAll('#activity-2 .option-feedback').forEach(feedback => {
+                    feedback.classList.remove('show', 'correct', 'incorrect');
+                });
+                
+                // Reset results
+                resultsPanel.classList.remove('show');
+                
+                // Randomize items again
+                randomizeItems();
+                
+                // Update progress
+                updateProgressSummary();
+            }
+
+            // Check All Answers
+            function checkAllAnswers() {
+                // Force check Activity 1
+                if (!state.activities[1].completed) {
+                    state.activities[1].completed = true;
+                    state.activities[1].correct = 9;
+                    state.activities[1].score = 100;
+                    document.querySelector('#activity-1 .activity-status').textContent = 'Completed';
+                    document.querySelector('#activity-1').classList.add('completed');
+                    document.querySelector('#feedback-1').classList.add('show');
+                }
+                
+                // Force check Activity 2
+                if (!state.activities[2].completed) {
+                    state.activities[2].completed = true;
+                    state.activities[2].correct = 10;
+                    state.activities[2].score = 100;
+                    document.querySelector('#activity-2 .activity-status').textContent = 'Completed';
+                    document.querySelector('#activity-2').classList.add('completed');
+                    document.querySelector('#feedback-2').classList.add('show');
+                }
+                
+                updateProgressSummary();
+            }
+
+            // View Final Results
+            function viewFinalResults() {
+                let totalScore = 0;
+                let activityCount = 0;
+                
+                Object.values(state.activities).forEach(activity => {
+                    if (activity.completed) {
+                        totalScore += activity.score;
+                        activityCount++;
+                    }
+                });
+                
+                const averageScore = activityCount > 0 ? Math.round(totalScore / activityCount) : 0;
+                finalScore.textContent = `${averageScore}%`;
+                resultsPanel.classList.add('show');
+                resultsPanel.scrollIntoView({ behavior: 'smooth' });
+            }
+
+            // Initialize all activities
+            randomizeItems();
+            initActivity1();
+            initActivity2();
+            
+            // Event listeners
+            resetBtn.addEventListener('click', resetAllActivities);
+            checkBtn.addEventListener('click', checkAllAnswers);
+            resultsBtn.addEventListener('click', viewFinalResults);
+            
+            // Initial progress update
+            updateProgressSummary();
+        });
+    </script>
+</body>
+</html>
