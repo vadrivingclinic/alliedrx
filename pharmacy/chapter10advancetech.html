@@ -1,0 +1,1596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AlliedRx – Module 3: Advanced Technology & Leadership Roles</title>
+    <style>
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-error: #e17055;
+            --color-warning: #fdcb6e;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
+            --color-dark: #0c0a18;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+            --shadow-card: 0 12px 30px rgba(15, 23, 42, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(
+                circle at top left,
+                #ffffff 0,
+                #f1ecff 40%,
+                var(--color-bg) 100%
+            );
+            color: var(--color-text);
+            -webkit-text-size-adjust: 100%;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 12px; }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        @keyframes checkmarkPop {
+            0% { transform: scale(0); opacity: 0; }
+            70% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Page Layout */
+        .page {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @media (max-width: 900px) {
+            .page { padding: 22px; }
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 0; }
+            .page {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 18px 14px 22px;
+            }
+        }
+
+        /* Header */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .brand-logo:hover { transform: scale(1.05); }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--color-success);
+            flex-shrink: 0;
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .badge-mode:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+        @media (max-width: 480px) {
+            .brand-row { flex-direction: column; align-items: flex-start; }
+            .badge-mode { margin-top: 6px; }
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 3vw, 2.2rem);
+            line-height: 1.1;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .module-subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 600px;
+            margin-bottom: 24px;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        /* Progress Tracker */
+        .progress-tracker {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            position: relative;
+            padding: 0 20px;
+        }
+
+        .progress-tracker::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 50px;
+            right: 50px;
+            height: 3px;
+            background: rgba(12, 10, 24, 0.08);
+            z-index: 1;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+
+        .step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--color-muted);
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.active .step-circle {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .progress-step.completed .step-circle {
+            background: var(--color-success);
+            border-color: var(--color-success);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.75rem;
+            color: var(--color-muted);
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .progress-step.active .step-label {
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        /* Progress Summary */
+        .progress-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+            animation: fadeInUp 0.6s ease-out 0.5s both;
+        }
+
+        .summary-card {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            border: 1px solid rgba(12, 10, 24, 0.06);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-card);
+            border-color: var(--color-primary-soft);
+        }
+
+        .summary-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--color-primary);
+            display: block;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .summary-label {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Activity Grid */
+        .activity-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 900px) {
+            .activity-grid { grid-template-columns: 1fr; }
+        }
+
+        .activity-card {
+            background: white;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            padding: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .activity-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--color-primary);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .activity-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--color-primary-soft);
+        }
+
+        .activity-card:hover::before { opacity: 1; }
+
+        .activity-card.completed {
+            border-color: var(--color-success);
+        }
+
+        .activity-card.completed::before {
+            background: var(--color-success);
+            opacity: 1;
+        }
+
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .activity-number {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .activity-status {
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-muted);
+        }
+
+        .activity-card.completed .activity-status {
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--color-success);
+        }
+
+        .activity-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 8px;
+        }
+
+        .activity-description {
+            font-size: 0.9rem;
+            color: var(--color-muted);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        /* Drag-and-Drop Components */
+        .matching-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+            min-height: 300px;
+        }
+
+        @media (max-width: 600px) {
+            .matching-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .matching-column {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 2px dashed rgba(12, 10, 24, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .matching-column-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            text-align: center;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(12, 10, 24, 0.08);
+            margin-bottom: 10px;
+        }
+
+        .matching-item {
+            background: rgba(175, 75, 239, 0.08);
+            border-radius: var(--radius-sm);
+            padding: 12px 15px;
+            cursor: grab;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            user-select: none;
+            font-size: 0.85rem;
+            color: var(--color-text);
+        }
+
+        .matching-item:hover {
+            background: rgba(175, 75, 239, 0.15);
+            border-color: var(--color-primary-soft);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(175, 75, 239, 0.1);
+        }
+
+        .matching-item.dragging {
+            opacity: 0.7;
+            transform: scale(0.98);
+        }
+
+        .matching-item.matched {
+            background: rgba(0, 184, 148, 0.1);
+            border-color: var(--color-success);
+            cursor: default;
+        }
+
+        .matching-item.incorrect {
+            background: rgba(225, 112, 85, 0.1);
+            border-color: var(--color-error);
+            animation: shake 0.5s ease;
+        }
+
+        /* Match Area */
+        .match-area {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+            min-height: 200px;
+        }
+
+        .match-pair {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .match-slot {
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 2px dashed rgba(12, 10, 24, 0.1);
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .match-slot.hover {
+            border-color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.05);
+        }
+
+        .match-slot.filled {
+            border: 2px solid var(--color-primary-soft);
+            background: rgba(175, 75, 239, 0.08);
+        }
+
+        .match-slot.correct {
+            border-color: var(--color-success);
+            background: rgba(0, 184, 148, 0.1);
+        }
+
+        .match-slot.incorrect {
+            border-color: var(--color-error);
+            background: rgba(225, 112, 85, 0.1);
+        }
+
+        .match-label {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+            text-align: center;
+            margin-top: 5px;
+        }
+
+        /* Scenario Cards */
+        .scenario-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 900px) {
+            .scenario-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .scenario-card {
+            background: white;
+            border-radius: var(--radius-sm);
+            border: 2px solid rgba(12, 10, 24, 0.08);
+            padding: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .scenario-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--color-primary-soft);
+            box-shadow: 0 10px 30px rgba(175, 75, 239, 0.1);
+        }
+
+        .scenario-card.selected {
+            border-color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.05);
+        }
+
+        .scenario-card.correct {
+            border-color: var(--color-success);
+            background: rgba(0, 184, 148, 0.05);
+        }
+
+        .scenario-card.incorrect {
+            border-color: var(--color-error);
+            background: rgba(225, 112, 85, 0.05);
+        }
+
+        .scenario-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .scenario-number {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(175, 75, 239, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            flex-shrink: 0;
+        }
+
+        .scenario-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--color-text);
+        }
+
+        .scenario-description {
+            font-size: 0.85rem;
+            color: var(--color-muted);
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .scenario-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .scenario-option {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: 8px;
+            padding: 10px 12px;
+            font-size: 0.8rem;
+            color: var(--color-text);
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .scenario-option:hover {
+            background: rgba(175, 75, 239, 0.08);
+        }
+
+        .scenario-option.selected {
+            background: rgba(175, 75, 239, 0.15);
+            border-color: var(--color-primary);
+        }
+
+        .scenario-option.correct {
+            background: rgba(0, 184, 148, 0.1);
+            border-color: var(--color-success);
+        }
+
+        .scenario-option.incorrect {
+            background: rgba(225, 112, 85, 0.1);
+            border-color: var(--color-error);
+        }
+
+        /* Feedback */
+        .feedback-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            margin-top: 20px;
+            display: none;
+        }
+
+        .feedback-container.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .feedback-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feedback-icon {
+            font-size: 1.2rem;
+        }
+
+        .feedback-icon.correct { color: var(--color-success); }
+        .feedback-icon.incorrect { color: var(--color-error); }
+
+        .feedback-content {
+            font-size: 0.85rem;
+            color: var(--color-text);
+            line-height: 1.5;
+        }
+
+        .feedback-content strong { color: var(--color-primary); }
+
+        .correction-details {
+            background: rgba(225, 112, 85, 0.05);
+            border-left: 3px solid var(--color-error);
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #9a3bd6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(175, 75, 239, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-text);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(12, 10, 24, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-icon { font-size: 1.1em; }
+
+        /* Results Panel */
+        .results-panel {
+            background: var(--color-dark);
+            color: white;
+            border-radius: var(--radius-md);
+            padding: 30px;
+            margin-top: 30px;
+            display: none;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .results-panel.show { display: block; }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .results-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .score-display {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--color-primary-soft);
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .clinical-insights {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .insights-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-primary-soft);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .insights-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .insights-list li {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            font-size: 0.9rem;
+            color: #e5e7eb;
+        }
+
+        .insight-dot {
+            width: 6px;
+            height: 6px;
+            margin-top: 6px;
+            border-radius: 999px;
+            background: var(--color-accent);
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="module-heading">
+        <!-- Header -->
+        <header class="brand-row">
+            <div class="brand">
+                <img
+                    src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                    alt="AlliedRx logo"
+                    class="brand-logo"
+                />
+                <div class="course-meta">
+                    <span class="course-name">Pharmacy Technician • Week 10</span>
+                    <div class="week-label">
+                        <span class="week-label-dot"></span>
+                        <span>Chapter 10: Advanced Practice Settings & Roles</span>
+                    </div>
+                </div>
+            </div>
+            <span class="badge-mode">Campus & Online</span>
+        </header>
+        
+        <h1 id="module-heading">Advanced Technology & Leadership Roles</h1>
+        <p class="module-subtitle">
+            Explore cutting-edge pharmacy technology roles and leadership opportunities. 
+            Learn how technicians are advancing into informatics, management, and interdisciplinary teams.
+        </p>
+        
+        <!-- Progress Tracker -->
+        <div class="progress-tracker">
+            <div class="progress-step active" data-step="1">
+                <div class="step-circle">1</div>
+                <div class="step-label">Role Matching</div>
+            </div>
+            <div class="progress-step" data-step="2">
+                <div class="step-circle">2</div>
+                <div class="step-label">Career Scenarios</div>
+            </div>
+            <div class="progress-step" data-step="3">
+                <div class="step-circle">3</div>
+                <div class="step-label">Future Pathways</div>
+            </div>
+        </div>
+        
+        <!-- Progress Summary -->
+        <div class="progress-summary">
+            <div class="summary-card">
+                <span class="summary-number" id="completed-count">0</span>
+                <span class="summary-label">Activities Completed</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="accuracy-rate">0%</span>
+                <span class="summary-label">Current Accuracy</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="time-spent">0:00</span>
+                <span class="summary-label">Time Spent</span>
+            </div>
+        </div>
+        
+        <!-- Activity Grid -->
+        <div class="activity-grid">
+            
+            <!-- Activity 1: Technology & Leadership Role Matching -->
+            <section class="activity-card" id="activity-1" data-activity="1">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 1</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">Match Technology & Leadership Roles</h3>
+                <p class="activity-description">
+                    Drag each advanced role to match with its primary functions. 
+                    These roles represent the future of pharmacy technician career advancement.
+                </p>
+                
+                <!-- Instruction -->
+                <div class="handhygiene-scenario" style="margin-bottom: 20px; background: rgba(175, 75, 239, 0.05); padding: 15px; border-radius: var(--radius-sm);">
+                    <div class="scenario-description">
+                        <strong>Instructions:</strong> Drag items from both columns to create matching pairs in the area below.
+                        Each pair should consist of one role and its correct primary functions.
+                    </div>
+                </div>
+                
+                <!-- Matching Area -->
+                <div class="match-area" id="match-area">
+                    <div class="match-pair" data-pair="1">
+                        <div class="match-slot" data-type="role" id="slot-role-1">
+                            Drag role here
+                        </div>
+                        <div class="match-slot" data-type="function" id="slot-function-1">
+                            Drag functions here
+                        </div>
+                        <div class="match-label">Pair 1</div>
+                    </div>
+                    <div class="match-pair" data-pair="2">
+                        <div class="match-slot" data-type="role" id="slot-role-2">
+                            Drag role here
+                        </div>
+                        <div class="match-slot" data-type="function" id="slot-function-2">
+                            Drag functions here
+                        </div>
+                        <div class="match-label">Pair 2</div>
+                    </div>
+                    <div class="match-pair" data-pair="3">
+                        <div class="match-slot" data-type="role" id="slot-role-3">
+                            Drag role here
+                        </div>
+                        <div class="match-slot" data-type="function" id="slot-function-3">
+                            Drag functions here
+                        </div>
+                        <div class="match-label">Pair 3</div>
+                    </div>
+                    <div class="match-pair" data-pair="4">
+                        <div class="match-slot" data-type="role" id="slot-role-4">
+                            Drag role here
+                        </div>
+                        <div class="match-slot" data-type="function" id="slot-function-4">
+                            Drag functions here
+                        </div>
+                        <div class="match-label">Pair 4</div>
+                    </div>
+                </div>
+                
+                <!-- Items to Drag -->
+                <div class="matching-grid">
+                    <div class="matching-column" id="roles-column">
+                        <div class="matching-column-title">Advanced Roles</div>
+                        <div class="matching-item draggable" data-role="informatics" draggable="true">Pharmacy Informatics Technician</div>
+                        <div class="matching-item draggable" data-role="lead" draggable="true">Lead Pharmacy Technician</div>
+                        <div class="matching-item draggable" data-role="pbm" draggable="true">Pharmacy Benefit Management Technician</div>
+                        <div class="matching-item draggable" data-role="team" draggable="true">Interdisciplinary Team Member</div>
+                    </div>
+                    <div class="matching-column" id="functions-column">
+                        <div class="matching-column-title">Primary Functions</div>
+                        <div class="matching-item draggable" data-function="informatics" draggable="true">EHR optimization, data analysis, reporting, system implementation</div>
+                        <div class="matching-item draggable" data-function="lead" draggable="true">Staff scheduling, quality assurance, training, performance management</div>
+                        <div class="matching-item draggable" data-function="pbm" draggable="true">Claims processing, formulary management, utilization review, network coordination</div>
+                        <div class="matching-item draggable" data-function="team" draggable="true">Patient care coordination, communication with healthcare team, protocol implementation</div>
+                    </div>
+                </div>
+                
+                <!-- Feedback -->
+                <div class="feedback-container" id="feedback-1">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Technology & Leadership Roles Analysis
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Correct Matches:</strong><br>
+                        • <strong>Pharmacy Informatics Technician</strong> → EHR optimization, data analysis, reporting, system implementation<br>
+                        • <strong>Lead Pharmacy Technician</strong> → Staff scheduling, quality assurance, training, performance management<br>
+                        • <strong>PBM Technician</strong> → Claims processing, formulary management, utilization review, network coordination<br>
+                        • <strong>Interdisciplinary Team Member</strong> → Patient care coordination, communication with healthcare team, protocol implementation<br><br>
+                        
+                        <strong>Career Advancement Insights:</strong><br>
+                        <strong>Informatics technicians</strong> bridge clinical practice with technology, optimizing EHR systems and analyzing medication data.<br>
+                        <strong>Lead technicians</strong> develop leadership skills while maintaining clinical expertise, often serving as department supervisors.<br>
+                        <strong>PBM technicians</strong> specialize in insurance systems, playing crucial roles in medication access and cost management.<br>
+                        <strong>Interdisciplinary team members</strong> work directly with nurses, physicians, and pharmacists on patient care units.<br><br>
+                        
+                        <div class="correction-details" id="correction-details-1" style="display: none;">
+                            <strong>Incorrect Matches:</strong><br>
+                            <span id="correction-text-1"></span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Activity 2: Future Opportunities Decision Scenarios -->
+            <section class="activity-card" id="activity-2" data-activity="2">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 2</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">Future Opportunities Decision Analysis</h3>
+                <p class="activity-description">
+                    Analyze career advancement scenarios and select the most appropriate pathways for Jonathan.
+                    Consider his 3 years of hospital experience and interest in technology.
+                </p>
+                
+                <!-- Scenario Cards -->
+                <div class="scenario-grid" id="scenarios-container">
+                    <!-- Scenario 1 -->
+                    <div class="scenario-card" data-scenario="1">
+                        <div class="scenario-header">
+                            <div class="scenario-number">1</div>
+                            <div class="scenario-title">Continuing Education Options</div>
+                        </div>
+                        <div class="scenario-description">
+                            Jonathan wants to move into pharmacy informatics. Which educational pathway would be MOST beneficial?
+                        </div>
+                        <div class="scenario-options">
+                            <div class="scenario-option" data-option="a">Associate's degree in Health Information Technology</div>
+                            <div class="scenario-option" data-option="b">Certified Pharmacy Technician (CPhT) renewal only</div>
+                            <div class="scenario-option" data-option="c">Bachelor's degree in Pharmacy Administration</div>
+                            <div class="scenario-option" data-option="d">Online courses in Excel and basic database management</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Scenario 2 -->
+                    <div class="scenario-card" data-scenario="2">
+                        <div class="scenario-header">
+                            <div class="scenario-number">2</div>
+                            <div class="scenario-title">Certification Specializations</div>
+                        </div>
+                        <div class="scenario-description">
+                            Jonathan's hospital is implementing automated dispensing cabinets. Which certification would enhance his role?
+                        </div>
+                        <div class="scenario-options">
+                            <div class="scenario-option" data-option="a">Certified Compounded Sterile Preparation Technician (CSPT)</div>
+                            <div class="scenario-option" data-option="b">Advanced Certified Pharmacy Technician (CPhT-Adv)</div>
+                            <div class="scenario-option" data-option="c">Certification in Pharmacy Automation (recognized by ASHP)</div>
+                            <div class="scenario-option" data-option="d">Basic Life Support (BLS) certification</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Scenario 3 -->
+                    <div class="scenario-card" data-scenario="3">
+                        <div class="scenario-header">
+                            <div class="scenario-number">3</div>
+                            <div class="scenario-title">Advanced Practice Opportunities</div>
+                        </div>
+                        <div class="scenario-description">
+                            Jonathan is interested in medication safety. Which advanced role aligns with this interest?
+                        </div>
+                        <div class="scenario-options">
+                            <div class="scenario-option" data-option="a">Medication Safety Technician</div>
+                            <div class="scenario-option" data-option="b">Purchasing and Inventory Specialist</div>
+                            <div class="scenario-option" data-option="c">Retail Pharmacy Shift Supervisor</div>
+                            <div class="scenario-option" data-option="d">Pharmaceutical Sales Representative</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Scenario 4 -->
+                    <div class="scenario-card" data-scenario="4">
+                        <div class="scenario-header">
+                            <div class="scenario-number">4</div>
+                            <div class="scenario-title">Leadership Development</div>
+                        </div>
+                        <div class="scenario-description">
+                            Jonathan wants to become a Lead Pharmacy Technician. Which skills should he prioritize developing?
+                        </div>
+                        <div class="scenario-options">
+                            <div class="scenario-option" data-option="a">Staff scheduling and conflict resolution</div>
+                            <div class="scenario-option" data-option="b">Advanced sterile compounding techniques</div>
+                            <div class="scenario-option" data-option="c">Insurance billing and coding expertise</div>
+                            <div class="scenario-option" data-option="d">Community pharmacy marketing strategies</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Feedback -->
+                <div class="feedback-container" id="feedback-2">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Career Pathway Analysis Complete
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Correct Selections:</strong><br>
+                        • <strong>Scenario 1:</strong> Associate's degree in Health Information Technology<br>
+                        • <strong>Scenario 2:</strong> Certification in Pharmacy Automation<br>
+                        • <strong>Scenario 3:</strong> Medication Safety Technician<br>
+                        • <strong>Scenario 4:</strong> Staff scheduling and conflict resolution<br><br>
+                        
+                        <strong>Career Strategy Insights:</strong><br>
+                        <strong>Educational Pathways:</strong> Health Information Technology degrees provide specific skills for informatics roles, combining clinical knowledge with IT expertise.<br>
+                        <strong>Specialized Certifications:</strong> Automation certifications demonstrate specific competency with emerging technologies in institutional settings.<br>
+                        <strong>Emerging Roles:</strong> Medication Safety Technicians focus on error prevention, data analysis, and quality improvement initiatives.<br>
+                        <strong>Leadership Skills:</strong> Lead technicians need management skills like scheduling, training, and conflict resolution alongside clinical expertise.<br><br>
+                        
+                        <div class="correction-details" id="correction-details-2" style="display: none;">
+                            <strong>Incorrect Selections:</strong><br>
+                            <span id="correction-text-2"></span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn btn-secondary" id="reset-all-btn">
+                <span class="btn-icon">↻</span>
+                Reset All Activities
+            </button>
+            <button class="btn btn-secondary" id="check-answers-btn">
+                <span class="btn-icon">✓</span>
+                Check All Answers
+            </button>
+            <button class="btn btn-primary" id="view-results-btn">
+                <span class="btn-icon">📊</span>
+                View Final Results
+            </button>
+        </div>
+        
+        <!-- Results Panel -->
+        <div class="results-panel" id="results-panel">
+            <div class="results-header">
+                <h2 class="results-title">Advanced Career Proficiency</h2>
+                <div class="score-display" id="final-score">0%</div>
+            </div>
+            
+            <div class="clinical-insights">
+                <h3 class="insights-title">
+                    <span>🚀</span> Technology & Leadership Insights
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Informatics Revolution:</strong> Pharmacy informatics technicians are becoming essential as healthcare digitizes. They optimize EHR systems, analyze medication data for quality improvement, and implement new technologies like automated dispensing systems and barcode scanning.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Leadership Development:</strong> Lead pharmacy technicians bridge clinical practice and management. They develop skills in staff scheduling, quality assurance, training programs, and performance management while maintaining patient care expertise.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>PBM Specialization:</strong> Pharmacy Benefit Management technicians specialize in insurance systems, formulary management, and medication access. They play crucial roles in controlling healthcare costs while ensuring appropriate medication utilization.</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="clinical-insights" style="margin-top: 20px;">
+                <h3 class="insights-title">
+                    <span>📈</span> Career Advancement Strategies
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Educational Pathways:</strong> Associate's degrees in Health Information Technology or Pharmacy Administration provide foundational knowledge. Specialized certifications in automation, sterile compounding, or medication therapy management demonstrate advanced competencies.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Skill Development:</strong> Focus on both technical skills (data analysis, automation systems) and soft skills (communication, leadership, problem-solving). Interdisciplinary collaboration skills are increasingly valuable in team-based care models.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Future Trends:</strong> Emerging roles include medication safety technicians, telehealth coordinators, and precision medicine specialists. The integration of artificial intelligence and machine learning will create new opportunities for technicians with technology skills.</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // State Management
+            const state = {
+                activities: {
+                    1: { completed: false, correct: 0, total: 8, score: 0, matches: {} }, // 8 items = 4 roles + 4 functions
+                    2: { completed: false, correct: 0, total: 4, score: 0, selections: {} }
+                },
+                startedAt: new Date(),
+                timeSpent: 0
+            };
+
+            // Correct Answers for Activity 1
+            const correctMatches = {
+                'informatics': 'informatics',
+                'lead': 'lead',
+                'pbm': 'pbm',
+                'team': 'team'
+            };
+
+            // Correct Answers for Activity 2
+            const correctSelections = {
+                '1': 'a',
+                '2': 'c',
+                '3': 'a',
+                '4': 'a'
+            };
+
+            // DOM Elements
+            const progressSteps = document.querySelectorAll('.progress-step');
+            const activityCards = document.querySelectorAll('.activity-card');
+            const completedCount = document.getElementById('completed-count');
+            const accuracyRate = document.getElementById('accuracy-rate');
+            const timeSpentEl = document.getElementById('time-spent');
+            const resetBtn = document.getElementById('reset-all-btn');
+            const checkBtn = document.getElementById('check-answers-btn');
+            const resultsBtn = document.getElementById('view-results-btn');
+            const resultsPanel = document.getElementById('results-panel');
+            const finalScore = document.getElementById('final-score');
+
+            // Timer for time spent
+            function updateTimer() {
+                const now = new Date();
+                const diff = Math.floor((now - state.startedAt) / 1000);
+                state.timeSpent = diff;
+                const minutes = Math.floor(diff / 60);
+                const seconds = diff % 60;
+                timeSpentEl.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            }
+            setInterval(updateTimer, 1000);
+
+            // Update Progress Summary
+            function updateProgressSummary() {
+                let completed = 0;
+                let totalCorrect = 0;
+                let totalItems = 0;
+                
+                Object.values(state.activities).forEach(activity => {
+                    if (activity.completed) completed++;
+                    totalCorrect += activity.correct;
+                    totalItems += activity.total;
+                });
+                
+                completedCount.textContent = completed;
+                const accuracy = totalItems > 0 ? Math.round((totalCorrect / totalItems) * 100) : 0;
+                accuracyRate.textContent = `${accuracy}%`;
+                
+                // Update progress steps
+                progressSteps.forEach((step, index) => {
+                    if (index < completed) {
+                        step.classList.add('completed');
+                        step.classList.remove('active');
+                    } else if (index === completed) {
+                        step.classList.add('active');
+                        step.classList.remove('completed');
+                    } else {
+                        step.classList.remove('active', 'completed');
+                    }
+                });
+            }
+
+            // Activity 1: Role Matching
+            function initActivity1() {
+                const draggableItems = document.querySelectorAll('#activity-1 .matching-item');
+                const matchSlots = document.querySelectorAll('#activity-1 .match-slot');
+                const feedback = document.getElementById('feedback-1');
+                const status = document.querySelector('#activity-1 .activity-status');
+                const correctionDetails = document.getElementById('correction-details-1');
+                const correctionText = document.getElementById('correction-text-1');
+                
+                let placedItems = 0;
+                let userMatches = {};
+
+                // Make ALL items draggable
+                draggableItems.forEach(item => {
+                    item.addEventListener('dragstart', function(e) {
+                        const type = this.dataset.role ? 'role' : 'function';
+                        const id = this.dataset.role || this.dataset.function;
+                        e.dataTransfer.setData('text/plain', JSON.stringify({
+                            type: type,
+                            id: id,
+                            text: this.textContent
+                        }));
+                        this.classList.add('dragging');
+                    });
+
+                    item.addEventListener('dragend', function() {
+                        this.classList.remove('dragging');
+                    });
+                });
+
+                // Setup match slots
+                matchSlots.forEach(slot => {
+                    slot.addEventListener('dragover', function(e) {
+                        e.preventDefault();
+                        if (!this.classList.contains('filled')) {
+                            this.classList.add('hover');
+                        }
+                    });
+
+                    slot.addEventListener('dragleave', function() {
+                        this.classList.remove('hover');
+                    });
+
+                    slot.addEventListener('drop', function(e) {
+                        e.preventDefault();
+                        this.classList.remove('hover');
+                        if (this.classList.contains('filled')) return;
+
+                        const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+                        const slotType = this.dataset.type;
+
+                        // Check if this type of item can go in this slot
+                        if (data.type !== slotType) {
+                            this.classList.add('incorrect');
+                            setTimeout(() => {
+                                this.classList.remove('incorrect');
+                            }, 500);
+                            return;
+                        }
+
+                        // Check if this item is already placed elsewhere
+                        const alreadyPlaced = Array.from(matchSlots).some(slot => 
+                            slot.textContent.includes(data.text)
+                        );
+                        if (alreadyPlaced) return;
+
+                        // Place the item
+                        this.classList.add('filled');
+                        this.innerHTML = `<strong>${data.text}</strong>`;
+                        this.dataset.itemId = data.id;
+
+                        // Hide the original draggable item
+                        const originalItem = data.type === 'role'
+                            ? document.querySelector(`[data-role="${data.id}"]`)
+                            : document.querySelector(`[data-function="${data.id}"]`);
+                        
+                        if (originalItem) {
+                            originalItem.style.display = 'none';
+                            placedItems++;
+                        }
+
+                        // Record the placement
+                        const pairNumber = this.closest('.match-pair').dataset.pair;
+                        if (!userMatches[pairNumber]) {
+                            userMatches[pairNumber] = {};
+                        }
+                        userMatches[pairNumber][slotType] = data.id;
+
+                        // Check if pair is complete and validate
+                        if (userMatches[pairNumber].role && userMatches[pairNumber].function) {
+                            const isCorrect = userMatches[pairNumber].role === userMatches[pairNumber].function;
+                            const roleSlot = document.querySelector(`#slot-role-${pairNumber}`);
+                            const functionSlot = document.querySelector(`#slot-function-${pairNumber}`);
+                            
+                            if (isCorrect) {
+                                roleSlot.classList.add('correct');
+                                functionSlot.classList.add('correct');
+                            } else {
+                                roleSlot.classList.add('incorrect');
+                                functionSlot.classList.add('incorrect');
+                                setTimeout(() => {
+                                    roleSlot.classList.remove('incorrect');
+                                    functionSlot.classList.remove('incorrect');
+                                }, 1000);
+                            }
+                            
+                            state.activities[1].matches = userMatches;
+                        }
+
+                        // Check if all items are placed
+                        if (placedItems === 8) {
+                            checkActivity1();
+                        }
+                    });
+                });
+
+                function checkActivity1() {
+                    let correctCount = 0;
+                    let correctionMessages = [];
+
+                    // Check each pair
+                    Object.keys(userMatches).forEach(pairNumber => {
+                        const pair = userMatches[pairNumber];
+                        if (pair.role && pair.function) {
+                            const isCorrect = pair.role === pair.function;
+                            if (isCorrect) {
+                                correctCount += 2; // Both items in the pair are correct
+                            } else {
+                                const roleName = document.querySelector(`[data-role="${pair.role}"]`).textContent;
+                                const functionText = document.querySelector(`[data-function="${pair.function}"]`).textContent;
+                                const correctFunction = document.querySelector(`[data-function="${pair.role}"]`).textContent;
+                                correctionMessages.push(`• "${roleName}" should match with "${correctFunction}" not "${functionText}"`);
+                            }
+                        }
+                    });
+
+                    state.activities[1].completed = true;
+                    state.activities[1].correct = correctCount;
+                    state.activities[1].score = Math.round((correctCount / 8) * 100);
+                    
+                    status.textContent = 'Completed';
+                    status.style.color = '#00b894';
+                    document.querySelector('#activity-1').classList.add('completed');
+                    feedback.classList.add('show');
+                    
+                    if (correctionMessages.length > 0) {
+                        correctionDetails.style.display = 'block';
+                        correctionText.innerHTML = correctionMessages.join('<br>');
+                    }
+                    
+                    updateProgressSummary();
+                }
+            }
+
+            // Activity 2: Career Scenarios
+            function initActivity2() {
+                const scenarioCards = document.querySelectorAll('.scenario-card');
+                const scenarioOptions = document.querySelectorAll('.scenario-option');
+                const feedback = document.getElementById('feedback-2');
+                const status = document.querySelector('#activity-2 .activity-status');
+                const correctionDetails = document.getElementById('correction-details-2');
+                const correctionText = document.getElementById('correction-text-2');
+                
+                let userSelections = {};
+                let completedScenarios = 0;
+
+                // Setup scenario selections
+                scenarioOptions.forEach(option => {
+                    option.addEventListener('click', function() {
+                        const scenarioCard = this.closest('.scenario-card');
+                        const scenarioId = scenarioCard.dataset.scenario;
+                        const optionId = this.dataset.option;
+
+                        // Clear previous selections in this scenario
+                        scenarioCard.querySelectorAll('.scenario-option').forEach(opt => {
+                            opt.classList.remove('selected', 'correct', 'incorrect');
+                        });
+
+                        // Select this option
+                        this.classList.add('selected');
+                        userSelections[scenarioId] = optionId;
+
+                        // Mark scenario as selected
+                        scenarioCard.classList.add('selected');
+
+                        // Check if all scenarios are selected
+                        completedScenarios = Object.keys(userSelections).length;
+                        if (completedScenarios === 4) {
+                            checkActivity2();
+                        }
+                    });
+                });
+
+                function checkActivity2() {
+                    let correctCount = 0;
+                    let correctionMessages = [];
+
+                    // Check each scenario
+                    Object.keys(userSelections).forEach(scenarioId => {
+                        const userChoice = userSelections[scenarioId];
+                        const correctChoice = correctSelections[scenarioId];
+                        const scenarioCard = document.querySelector(`[data-scenario="${scenarioId}"]`);
+                        const selectedOption = scenarioCard.querySelector(`[data-option="${userChoice}"]`);
+                        const correctOption = scenarioCard.querySelector(`[data-option="${correctChoice}"]`);
+
+                        if (userChoice === correctChoice) {
+                            correctCount++;
+                            selectedOption.classList.add('correct');
+                            scenarioCard.classList.add('correct');
+                        } else {
+                            selectedOption.classList.add('incorrect');
+                            correctOption.classList.add('correct');
+                            scenarioCard.classList.add('incorrect');
+                            
+                            const scenarioText = scenarioCard.querySelector('.scenario-description').textContent;
+                            const userText = selectedOption.textContent;
+                            const correctText = correctOption.textContent;
+                            correctionMessages.push(`• Scenario ${scenarioId}: "${userText}" → Should be "${correctText}"`);
+                        }
+                    });
+
+                    state.activities[2].completed = true;
+                    state.activities[2].correct = correctCount;
+                    state.activities[2].score = Math.round((correctCount / 4) * 100);
+                    
+                    status.textContent = 'Completed';
+                    status.style.color = '#00b894';
+                    document.querySelector('#activity-2').classList.add('completed');
+                    feedback.classList.add('show');
+                    
+                    if (correctionMessages.length > 0) {
+                        correctionDetails.style.display = 'block';
+                        correctionText.innerHTML = correctionMessages.join('<br>');
+                    }
+                    
+                    updateProgressSummary();
+                }
+            }
+
+            // Reset All Activities
+            function resetAllActivities() {
+                // Reset state
+                Object.keys(state.activities).forEach(key => {
+                    state.activities[key] = {
+                        completed: false,
+                        correct: 0,
+                        total: parseInt(key) === 1 ? 8 : 4,
+                        score: 0,
+                        matches: {},
+                        selections: {}
+                    };
+                });
+
+                // Reset UI
+                activityCards.forEach(card => {
+                    card.classList.remove('completed');
+                    const status = card.querySelector('.activity-status');
+                    status.textContent = 'Not Started';
+                    status.style.color = '';
+                    const feedback = card.querySelector('.feedback-container');
+                    feedback.classList.remove('show');
+                    const correctionDetails = card.querySelector('.correction-details');
+                    if (correctionDetails) correctionDetails.style.display = 'none';
+                });
+
+                // Reset Activity 1
+                document.querySelectorAll('#activity-1 .matching-item').forEach(item => {
+                    item.style.display = '';
+                    item.classList.remove('dragging');
+                });
+                document.querySelectorAll('#activity-1 .match-slot').forEach(slot => {
+                    slot.classList.remove('filled', 'correct', 'incorrect', 'hover');
+                    slot.innerHTML = slot.dataset.type === 'role' ? 'Drag role here' : 'Drag functions here';
+                    delete slot.dataset.itemId;
+                });
+
+                // Reset Activity 2
+                document.querySelectorAll('#activity-2 .scenario-card').forEach(card => {
+                    card.classList.remove('selected', 'correct', 'incorrect');
+                    card.querySelectorAll('.scenario-option').forEach(option => {
+                        option.classList.remove('selected', 'correct', 'incorrect');
+                    });
+                });
+
+                // Reset results
+                resultsPanel.classList.remove('show');
+
+                // Update progress
+                updateProgressSummary();
+            }
+
+            // Check All Answers
+            function checkAllAnswers() {
+                // Force check all activities
+                if (!state.activities[1].completed) {
+                    state.activities[1].completed = true;
+                    state.activities[1].correct = 8;
+                    state.activities[1].score = 100;
+                    document.querySelector('#activity-1 .activity-status').textContent = 'Completed';
+                    document.querySelector('#activity-1').classList.add('completed');
+                    document.querySelector('#feedback-1').classList.add('show');
+                }
+
+                if (!state.activities[2].completed) {
+                    state.activities[2].completed = true;
+                    state.activities[2].correct = 4;
+                    state.activities[2].score = 100;
+                    document.querySelector('#activity-2 .activity-status').textContent = 'Completed';
+                    document.querySelector('#activity-2').classList.add('completed');
+                    document.querySelector('#feedback-2').classList.add('show');
+                }
+
+                updateProgressSummary();
+            }
+
+            // View Final Results
+            function viewFinalResults() {
+                let totalScore = 0;
+                let activityCount = 0;
+                
+                Object.values(state.activities).forEach(activity => {
+                    if (activity.completed) {
+                        totalScore += activity.score;
+                        activityCount++;
+                    }
+                });
+                
+                const averageScore = activityCount > 0 ? Math.round(totalScore / activityCount) : 0;
+                finalScore.textContent = `${averageScore}%`;
+                resultsPanel.classList.add('show');
+                resultsPanel.scrollIntoView({ behavior: 'smooth' });
+            }
+
+            // Initialize all activities
+            initActivity1();
+            initActivity2();
+
+            // Event listeners
+            resetBtn.addEventListener('click', resetAllActivities);
+            checkBtn.addEventListener('click', checkAllAnswers);
+            resultsBtn.addEventListener('click', viewFinalResults);
+
+            // Initial progress update
+            updateProgressSummary();
+        });
+    </script>
+</body>
+</html>
