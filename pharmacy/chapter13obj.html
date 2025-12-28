@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AlliedRx Pharmacy Tech -- Week 10 Objectives</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --color-primary: #af4bef;
+  --color-primary-soft: #d492ff;
+  --color-accent: #8380f0;
+  --color-success: #00b894;
+  --color-error: #e17055;
+  --color-bg: #f7f5fb;
+  --color-text: #2b2b2b;
+  --color-muted: #6c6880;
+  --radius-lg: 24px;
+  --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+  --shadow-hover: 0 25px 60px rgba(175, 75, 239, 0.25);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  width: 100%;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  padding: 24px;
+  background: radial-gradient(
+    circle at top left,
+    #ffffff 0,
+    #f1ecff 40%,
+    var(--color-bg) 100%
+  );
+  color: var(--color-text);
+  -webkit-text-size-adjust: 100%;
+}
+
+@media (max-width: 600px) {
+  body {
+    padding: 12px;
+  }
+}
+
+.page {
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  background: #ffffff;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  padding: 28px 30px 32px 30px;
+  display: grid;
+  grid-template-columns: minmax(0, 3.1fr) minmax(0, 2.4fr);
+  gap: 28px;
+  position: relative;
+  overflow: hidden;
+  animation: fadeInUp 0.8s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 900px) {
+  .page {
+    grid-template-columns: 1fr;
+    padding: 22px;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    padding: 0;
+  }
+  .page {
+    border-radius: 0;
+    box-shadow: none;
+    padding: 18px 14px 22px;
+    gap: 22px;
+  }
+}
+
+img,
+.page,
+.column,
+.objective-card,
+.week-overview {
+  max-width: 100%;
+}
+
+.column {
+  position: relative;
+  z-index: 1;
+}
+
+/* Header */
+.brand-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+  width: 100%;
+  animation: fadeIn 0.6s ease-out 0.2s both;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.brand-logo {
+  height: 40px;
+  width: auto;
+  max-width: 100%;
+  filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+  transition: transform 0.3s ease;
+}
+
+.brand-logo:hover {
+  transform: scale(1.05);
+}
+
+.course-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-width: 100%;
+}
+
+.course-name {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--color-muted);
+  white-space: normal;
+}
+
+.week-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(175, 75, 239, 0.08);
+  font-size: 0.76rem;
+  color: var(--color-primary);
+  white-space: normal;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { background-color: rgba(175, 75, 239, 0.08); }
+  50% { background-color: rgba(175, 75, 239, 0.15); }
+}
+
+.week-label-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--color-success);
+  flex-shrink: 0;
+  animation: blink 1.5s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.badge-mode {
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: rgba(12, 10, 24, 0.06);
+  border: 1px solid rgba(12, 10, 24, 0.08);
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--color-muted);
+  white-space: nowrap;
+  transition: all 0.3s ease;
+}
+
+.badge-mode:hover {
+  background: rgba(175, 75, 239, 0.1);
+  border-color: var(--color-primary-soft);
+  color: var(--color-primary);
+}
+
+@media (max-width: 480px) {
+  .brand-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .badge-mode {
+    margin-top: 6px;
+  }
+}
+
+h1 {
+  font-size: clamp(2rem, 3vw, 2.4rem);
+  line-height: 1.05;
+  color: var(--color-primary);
+  margin-bottom: 6px;
+  animation: fadeInUp 0.6s ease-out 0.3s both;
+}
+
+.subtitle {
+  font-size: 0.98rem;
+  color: var(--color-muted);
+  max-width: 34rem;
+  margin-bottom: 18px;
+  animation: fadeInUp 0.6s ease-out 0.4s both;
+}
+
+/* Objectives list */
+.objectives-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.objective-card {
+  background: #08070a;
+  color: #ffffff;
+  border-radius: 18px;
+  padding: 10px 16px 14px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.objective-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.7s ease;
+}
+
+.objective-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
+}
+
+.objective-card:hover::before {
+  left: 100%;
+}
+
+.objective-card.active {
+  background: linear-gradient(135deg, #0f172a, #1e1b4b);
+  border-left: 4px solid var(--color-accent);
+}
+
+@media (max-width: 480px) {
+  .objective-card {
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto;
+  }
+  .objective-icon {
+    justify-self: flex-end;
+  }
+}
+
+.objective-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #111827;
+  font-weight: 700;
+  font-size: 1.05rem;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.objective-card:hover .objective-number {
+  background: var(--color-primary-soft);
+  transform: rotate(5deg);
+}
+
+.objective-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.objective-verb {
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: var(--color-primary-soft);
+  transition: color 0.3s ease;
+}
+
+.objective-card:hover .objective-verb {
+  color: #ffffff;
+}
+
+.objective-text {
+  font-size: 0.84rem;
+  color: #e5e7eb;
+  line-height: 1.4;
+}
+
+.objective-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  border: 1px solid rgba(250, 250, 250, 0.16);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  color: #f9fafb;
+  background: linear-gradient(
+    135deg,
+    rgba(175, 75, 239, 0.1),
+    rgba(0, 0, 0, 0.4)
+  );
+  transition: all 0.3s ease;
+}
+
+.objective-card:hover .objective-icon {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  transform: scale(1.1);
+}
+
+/* Right-hand content */
+.objectives-header {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--color-text);
+  margin-bottom: 6px;
+  animation: fadeInUp 0.6s ease-out 0.5s both;
+}
+
+.section-tag {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--color-primary);
+  font-weight: 600;
+  margin-bottom: 10px;
+  animation: fadeInUp 0.6s ease-out 0.6s both;
+}
+
+.week-overview {
+  background: rgba(12, 10, 24, 0.94);
+  border-radius: 18px;
+  padding: 16px 18px 18px;
+  color: #e5e7eb;
+  font-size: 0.88rem;
+  line-height: 1.7;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.6);
+  margin-bottom: 16px;
+  animation: fadeInUp 0.6s ease-out 0.7s both;
+  transition: transform 0.3s ease;
+}
+
+.week-overview:hover {
+  transform: translateY(-2px);
+}
+
+.week-overview strong {
+  color: #ffffff;
+}
+
+.mini-heading {
+  font-size: 0.86rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: #c4b5fd;
+  font-weight: 600;
+  margin: 8px 0 10px;
+}
+
+.outcomes-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.86rem;
+  color: #f9fafb;
+}
+
+.outcomes-list li {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  transition: transform 0.3s ease;
+}
+
+.outcomes-list li:hover {
+  transform: translateX(5px);
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  margin-top: 6px;
+  border-radius: 999px;
+  background: var(--color-accent);
+  flex-shrink: 0;
+  animation: pulse 2s infinite;
+}
+
+.note-card {
+  margin-top: 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(15, 23, 42, 0.7);
+  padding: 10px 12px;
+  font-size: 0.78rem;
+  color: #e5e7eb;
+  transition: all 0.3s ease;
+}
+
+.note-card:hover {
+  border-color: var(--color-primary-soft);
+  background: rgba(15, 23, 42, 0.9);
+}
+
+.note-card strong {
+  color: #fef3c7;
+}
+
+/* Interactive counter */
+.progress-counter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(175, 75, 239, 0.05);
+  border-radius: 16px;
+  padding: 12px 18px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(175, 75, 239, 0.1);
+}
+
+.counter-item {
+  text-align: center;
+}
+
+.counter-number {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--color-primary);
+  display: block;
+}
+
+.counter-label {
+  font-size: 0.75rem;
+  color: var(--color-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* Animation for counter */
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.counter-item {
+  animation: countUp 0.6s ease-out forwards;
+}
+
+.counter-item:nth-child(1) { animation-delay: 0.8s; }
+.counter-item:nth-child(2) { animation-delay: 1s; }
+.counter-item:nth-child(3) { animation-delay: 1.2s; }
+
+/* Case Study Box */
+.case-study {
+  background: linear-gradient(135deg, rgba(131, 128, 240, 0.1), rgba(175, 75, 239, 0.1));
+  border-radius: 18px;
+  padding: 18px;
+  margin-top: 20px;
+  border: 1px solid rgba(131, 128, 240, 0.2);
+}
+
+.case-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.case-content {
+  font-size: 0.85rem;
+  color: #ffffff;
+  line-height: 1.5;
+}
+
+.case-content strong {
+  color: #d492ff;
+}
+
+/* Insurance Types Grid */
+.insurance-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.insurance-type {
+  background: rgba(131, 128, 240, 0.1);
+  border-radius: 12px;
+  padding: 10px;
+  border: 1px solid rgba(131, 128, 240, 0.2);
+  transition: all 0.3s ease;
+}
+
+.insurance-type:hover {
+  background: rgba(131, 128, 240, 0.2);
+  transform: translateY(-2px);
+}
+
+.insurance-name {
+  font-weight: 600;
+  color: #c4b5fd;
+  font-size: 0.8rem;
+}
+
+.insurance-desc {
+  color: #e5e7eb;
+  font-size: 0.75rem;
+  margin-top: 4px;
+}
+
+/* Key Terms Section */
+.key-terms {
+  margin-top: 20px;
+  background: rgba(12, 10, 24, 0.94);
+  border-radius: 18px;
+  padding: 16px 18px;
+  border: 1px solid rgba(131, 128, 240, 0.2);
+}
+
+.key-terms-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.term-definition {
+  margin-bottom: 8px;
+  padding-left: 10px;
+  border-left: 2px solid var(--color-primary-soft);
+  transition: all 0.3s ease;
+}
+
+.term-definition:hover {
+  border-left-color = var(--color-primary);
+  transform: translateX(3px);
+}
+
+.term {
+  font-weight: 600;
+  color: #d492ff;
+  font-size: 0.82rem;
+}
+
+.definition {
+  color: #e5e7eb;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  margin-top: 2px;
+}
+
+/* Medicare Parts Section */
+.medicare-parts {
+  margin-top: 15px;
+  padding: 15px;
+  background: rgba(15, 23, 42, 0.5);
+  border-radius: 12px;
+  border-left: 4px solid var(--color-accent);
+}
+
+.medicare-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #c4b5fd;
+  margin-bottom: 8px;
+}
+
+.part-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.78rem;
+  color: #e5e7eb;
+}
+
+.part-item {
+  padding: 6px;
+  border-radius: 6px;
+  background: rgba(131, 128, 240, 0.15);
+}
+
+.part-name {
+  font-weight: 600;
+  color: #d492ff;
+}
+
+.part-desc {
+  font-size: 0.76rem;
+  margin-top: 2px;
+}
+
+/* Formulary Comparison */
+.formulary-compare {
+  margin-top: 15px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.formulary-box {
+  padding: 12px;
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.5);
+}
+
+.formulary-type {
+  font-weight: 600;
+  color: #c4b5fd;
+  font-size: 0.8rem;
+  margin-bottom: 6px;
+}
+
+.formulary-desc {
+  font-size: 0.75rem;
+  color: #e5e7eb;
+}
+</style>
+</head>
+<body>
+<main class="page" aria-labelledby="week10-heading">
+  <!-- LEFT COLUMN: title + objective cards -->
+  <section class="column" aria-label="Week 10 objectives list">
+    <header class="brand-row">
+      <div class="brand">
+        <img
+          src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+          alt="AlliedRx logo"
+          class="brand-logo"
+        />
+        <div class="course-meta">
+          <span class="course-name">Pharmacy Technician Program • CPhT</span>
+          <div class="week-label">
+            <span class="week-label-dot"></span>
+            <span>Week 10 --- Pharmacy Billing & Inventory Management</span>
+          </div>
+        </div>
+      </div>
+      <span class="badge-mode">Campus &amp; Online</span>
+    </header>
+    <h1 id="week10-heading">Week 10 Objectives</h1>
+    <p class="subtitle">
+      Master <strong>insurance billing, inventory control, and pharmacy operations management</strong> 
+      essential for pharmacy technicians in both retail and institutional settings.
+    </p>
+    <!-- Progress counter -->
+    <div class="progress-counter">
+      <div class="counter-item">
+        <span class="counter-number" id="total-objectives">16</span>
+        <span class="counter-label">Objectives</span>
+      </div>
+      <div class="counter-item">
+        <span class="counter-number">34</span>
+        <span class="counter-label">Key Terms</span>
+      </div>
+      <div class="counter-item">
+        <span class="counter-number">1</span>
+        <span class="counter-label">Chapter</span>
+      </div>
+    </div>
+    <div class="objectives-list" id="objectives-container">
+      <!-- Chapter 13: Pharmacy Billing and Inventory Management Objectives -->
+      <article class="objective-card" data-chapter="chapter13">
+        <div class="objective-number">01</div>
+        <div class="objective-main">
+          <div class="objective-verb">Discuss</div>
+          <p class="objective-text">
+            Discuss the importance of pharmacy billing and inventory management to the pharmacy practice.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          💰
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter13">
+        <div class="objective-number">02</div>
+        <div class="objective-main">
+          <div class="objective-verb">Discuss</div>
+          <p class="objective-text">
+            Discuss formulary and drug utilization: drug formulary function, technician role in DUE, and effects on billing/inventory.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          📋
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter13">
+        <div class="objective-number">03</div>
+        <div class="objective-main">
+          <div class="objective-verb">Assess</div>
+          <p class="objective-text">
+            Assess the differences between generic and trade name (proprietary) drugs in pharmacy billing.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          ⚖️
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter13">
+        <div class="objective-number">04</div>
+        <div class="objective-main">
+          <div class="objective-verb">Discuss</div>
+          <p class="objective-text">
+            Discuss private and group medical insurance plans: primary types and how each manages drug coverage.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          🏢
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter13">
+        <div class="objective-number">05</div>
+        <div class="objective-main">
+          <div class="objective-verb">Discuss</div>
+          <p class="objective-text">
+            Discuss government-managed insurance programs: Medicare/Medicaid/Medigap, Medicare parts, TRICARE/CHAMPVA, workers' comp.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          🏛️
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter13">
+        <div class="objective-number">06</div>
+        <div class="objective-main">
+          <div class="objective-verb">Explain & Describe</div>
+          <p class="objective-text">
+            Explain third-party billing, point of sale billing, prior authorization role, and list prescription card information.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          💳
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter13">
+        <div class="objective-number">07</div>
+        <div class="objective-main">
+          <div class="objective-verb">Determine</div>
+          <p class="objective-text">
+            Determine the information needed to complete a patient profile for a pharmacy database.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          👤
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter13">
+        <div class="objective-number">08</div>
+        <div class="objective-main">
+          <div class="objective-verb">Discuss</div>
+          <p class="objective-text">
+            Discuss claims: universal claim form information, reasons for rejections, and resubmission process.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          📄
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter13">
+        <div class="objective-number">09</div>
+        <div class="objective-main">
+          <div class="objective-verb">Discuss</div>
+          <p class="objective-text">
+            Discuss the types of plan limitations common in managed care.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          ⚠️
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter13">
+        <div class="objective-number">10</div>
+        <div class="objective-main">
+          <div class="objective-verb">Explain</div>
+          <p class="objective-text">
+            Explain the various prescription payment methods including self-pay, discount programs, private plans, and HSA/FSA.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          💵
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter13">
+        <div class="objective-number">11</div>
+        <div class="objective-main">
+          <div class="objective-verb">Explain & Define</div>
+          <p class="objective-text">
+            Explain inventory management importance, define PAR level effects, and describe inventory control technician role.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          📦
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter13">
+        <div class="objective-number">12</div>
+        <div class="objective-main">
+          <div class="objective-verb">Explain</div>
+          <p class="objective-text">
+            Explain the inventory ordering and receiving processes including special orders, bar coding, ADS, manual ordering, new stock.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          📦
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter13">
+        <div class="objective-number">13</div>
+        <div class="objective-main">
+          <div class="objective-verb">Describe</div>
+          <p class="objective-text">
+            Describe storage requirements for various types of inventory.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          🌡️
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter13">
+        <div class="objective-number">14</div>
+        <div class="objective-main">
+          <div class="objective-verb">Outline</div>
+          <p class="objective-text">
+            Outline the steps for handling recalled, returned, or expired medications.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          🗑️
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter13">
+        <div class="objective-number">15</div>
+        <div class="objective-main">
+          <div class="objective-verb">List</div>
+          <p class="objective-text">
+            List the types of suppliers of pharmacy stock.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          🚚
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter13">
+        <div class="objective-number">16</div>
+        <div class="objective-main">
+          <div class="objective-verb">Identify</div>
+          <p class="objective-text">
+            Identify any special considerations related to drug ordering and storage.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          ⚠️
+        </div>
+      </article>
+    </div>
+  </section>
+  <!-- RIGHT COLUMN: narrative + outcomes framing -->
+  <aside class="column" aria-label="Overview of this week's content">
+    <h2 class="objectives-header">Financial & Inventory Operations</h2>
+    <p class="section-tag">Insurance Billing • Inventory Control • Regulatory Compliance • Pharmacy Economics</p>
+    <div class="week-overview">
+      <p>
+        Week 10 covers <strong>pharmacy billing systems and inventory management</strong>, the financial backbone 
+        of pharmacy operations. You'll learn insurance processing, formulary management, inventory control, and 
+        compliance requirements that ensure pharmacy profitability and regulatory adherence.
+      </p>
+      <p>
+        Effective billing and inventory management <strong>directly impact pharmacy viability and patient care</strong>. 
+        Pharmacy technicians play crucial roles in claims processing, inventory optimization, and ensuring 
+        medication availability while controlling costs.
+      </p>
+      
+      <div class="case-study">
+        <div class="case-title">
+          <span>📋</span> Chapter 13 Scenario: Brian's Career Advancement
+        </div>
+        <div class="case-content">
+          <strong>Technician:</strong> Brian, PTCB certified, state registered, working 2 years at large retail pharmacy<br>
+          <strong>Current Level:</strong> Level 2 technician<br>
+          <strong>Advancement:</strong> Required to complete additional training for Level 3 senior technician<br>
+          <strong>Evaluation:</strong> Supervising pharmacist evaluates training completion<br>
+          <strong>Learning Focus:</strong> Additional skills Brian could develop for career advancement and job performance enhancement
+        </div>
+      </div>
+      
+      <!-- Insurance Types Grid -->
+      <div class="mini-heading" style="margin-top: 20px;">🏥 Insurance Program Types</div>
+      <div class="insurance-grid">
+        <div class="insurance-type">
+          <div class="insurance-name">Medicare</div>
+          <div class="insurance-desc">Federal program for age 65+, disabilities, ESRD; Part D covers prescriptions</div>
+        </div>
+        <div class="insurance-type">
+          <div class="insurance-name">Medicaid</div>
+          <div class="insurance-desc">State/federal program for low-income individuals and families</div>
+        </div>
+        <div class="insurance-type">
+          <div class="insurance-name">HMO</div>
+          <div class="insurance-desc">Health Maintenance Organization with in-network restrictions and gatekeeper PCP</div>
+        </div>
+        <div class="insurance-type">
+          <div class="insurance-name">PPO</div>
+          <div class="insurance-desc">Preferred Provider Organization with provider choice options and network discounts</div>
+        </div>
+      </div>
+      
+      <!-- Medicare Parts -->
+      <div class="medicare-parts">
+        <div class="medicare-title">🏛️ Medicare Parts Coverage</div>
+        <div class="part-list">
+          <div class="part-item">
+            <div class="part-name">Part A: Hospital Insurance</div>
+            <div class="part-desc">Inpatient hospital care, skilled nursing, hospice, home health</div>
+          </div>
+          <div class="part-item">
+            <div class="part-name">Part B: Medical Insurance</div>
+            <div class="part-desc">Physician services, outpatient care, preventive services</div>
+          </div>
+          <div class="part-item">
+            <div class="part-name">Part C: Medicare Advantage</div>
+            <div class="part-desc">Private plan alternative combining Parts A, B, and often D</div>
+          </div>
+          <div class="part-item">
+            <div class="part-name">Part D: Prescription Drug</div>
+            <div class="part-desc">Standalone prescription drug coverage, formularies vary by plan</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Formulary Comparison -->
+      <div class="mini-heading">📋 Formulary Types Comparison</div>
+      <div class="formulary-compare">
+        <div class="formulary-box">
+          <div class="formulary-type">Open Formulary</div>
+          <div class="formulary-desc">Unrestricted drug choices; all prescribed medications typically covered</div>
+        </div>
+        <div class="formulary-box">
+          <div class="formulary-type">Closed Formulary</div>
+          <div class="formulary-desc">Restricted to pre-approved list; non-formulary drugs require prior auth</div>
+        </div>
+      </div>
+      
+      <p class="mini-heading">By the end of this week, you will be able to:</p>
+      <ul class="outcomes-list">
+        <li>
+          <span class="dot"></span>
+          <span>Navigate insurance adjudication processes for Medicare, Medicaid, and private insurance plans.</span>
+        </li>
+        <li>
+          <span class="dot"></span>
+          <span>Differentiate between open and closed formularies and their impact on medication coverage.</span>
+        </li>
+        <li>
+          <span class="dot"></span>
+          <span>Process third-party claims accurately and resolve common rejection reasons efficiently.</span>
+        </li>
+        <li>
+          <span class="dot"></span>
+          <span>Implement PAR level inventory systems to optimize stock while minimizing waste and costs.</span>
+        </li>
+        <li>
+          <span class="dot"></span>
+          <span>Apply proper storage requirements and handle recalled/expired medications according to regulations.</span>
+        </li>
+        <li>
+          <span class="dot"></span>
+          <span>Complete patient profiles accurately to support billing, drug utilization evaluation, and patient safety.</span>
+        </li>
+      </ul>
+      
+      <div class="note-card">
+        <strong>Billing Efficiency:</strong> <strong>Point of Sale (POS) systems</strong> allow real-time inventory 
+        tracking and automatic reordering. When integrated with billing systems, they reduce errors by 75% and 
+        improve inventory turnover by optimizing just-in-time ordering practices.
+      </div>
+      
+      <div class="note-card" style="margin-top: 12px;">
+        <strong>Generic vs Brand:</strong> <strong>Generic substitution</strong> saves patients and insurance 
+        companies 80-85% compared to brand name drugs. Technicians must understand DAW codes (0-9) to 
+        communicate prescribing preferences and ensure proper billing and patient counseling.
+      </div>
+      
+      <div class="note-card" style="margin-top: 12px;">
+        <strong>Career Advancement:</strong> To advance like Brian, technicians should master <strong>inventory 
+        optimization</strong>, <strong>complex insurance billing</strong>, and <strong>regulatory compliance</strong>. 
+        Additional certifications in billing systems, inventory management software, and specialized training 
+        in government programs enhance promotion potential.
+      </div>
+    </div>
+    
+    <!-- Key Terms Section -->
+    <div class="key-terms">
+      <div class="key-terms-title">
+        <span>📚</span> Key Billing & Inventory Terms
+      </div>
+      <div class="term-definition">
+        <div class="term">Adjudication</div>
+        <div class="definition">Electronic insurance billing for medication payment processing</div>
+      </div>
+      <div class="term-definition">
+        <div class="term">National Drug Code (NDC)</div>
+        <div class="definition">10-digit unique identifier for all drugs in the United States</div>
+      </div>
+      <div class="term-definition">
+        <div class="term">Periodic Automatic Replenishment (PAR)</div>
+        <div class="definition">System maintaining stock levels at predetermined unit amounts</div>
+      </div>
+      <div class="term-definition">
+        <div class="term">Drug Utilization Evaluation (DUE)</div>
+        <div class="definition">Ongoing review of prescribing, dispensing, and medication use patterns</div>
+      </div>
+      <div class="term-definition">
+        <div class="term">Prior Authorization</div>
+        <div class="definition">Insurance-required approval for nonformulary or restricted medications</div>
+      </div>
+      <div class="term-definition">
+        <div class="term">Point of Sale (POS)</div>
+        <div class="definition">System tracking inventory as it is sold or used</div>
+      </div>
+      <div class="term-definition">
+        <div class="term">Average Wholesale Price (AWP)</div>
+        <div class="definition">Average price at which drugs are sold; used for reimbursement calculations</div>
+      </div>
+      <div class="term-definition">
+        <div class="term">Prime Vendor</div>
+        <div class="definition">Large distributor (McKesson, Cardinal Health) providing bulk medications at contract prices</div>
+      </div>
+      <div class="term-definition">
+        <div class="term">Just-in-Time Ordering</div>
+        <div class="definition">System ordering products just before needed to minimize inventory costs</div>
+      </div>
+    </div>
+  </aside>
+</main>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Interactive objective cards
+  const objectiveCards = document.querySelectorAll('.objective-card');
+  
+  objectiveCards.forEach(card => {
+    card.addEventListener('click', function() {
+      // Toggle active state
+      this.classList.toggle('active');
+
+      // Add subtle animation
+      if (this.classList.contains('active')) {
+        const icon = this.querySelector('.objective-icon');
+        icon.style.transform = 'scale(1.2) rotate(10deg)';
+        setTimeout(() => {
+          icon.style.transform = 'scale(1.1)';
+        }, 300);
+      }
+    });
+
+    // Add keyboard navigation
+    card.setAttribute('tabindex', '0');
+    card.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        this.click();
+      }
+    });
+  });
+
+  // Animate counter numbers
+  function animateCounter(element, target, duration) {
+    let start = 0;
+    const increment = target / (duration / 16); // 60fps
+    const timer = setInterval(() => {
+      start += increment;
+      if (start >= target) {
+        element.textContent = target;
+        clearInterval(timer);
+      } else {
+        element.textContent = Math.floor(start);
+      }
+    }, 16);
+  }
+
+  // Start counter animation after page load
+  setTimeout(() => {
+    const counterElement = document.getElementById('total-objectives');
+    animateCounter(counterElement, 16, 1000);
+  }, 1500);
+
+  // Add hover effect to outcomes list items
+  const outcomesItems = document.querySelectorAll('.outcomes-list li');
+  outcomesItems.forEach(item => {
+    item.addEventListener('mouseenter', function() {
+      const dot = this.querySelector('.dot');
+      dot.style.transform = 'scale(1.5)';
+      dot.style.background = 'var(--color-primary)';
+    });
+    item.addEventListener('mouseleave', function() {
+      const dot = this.querySelector('.dot');
+      dot.style.transform = 'scale(1)';
+      dot.style.background = 'var(--color-accent)';
+    });
+  });
+
+  // Add scroll animation for cards
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, observerOptions);
+
+  // Observe all objective cards
+  objectiveCards.forEach(card => {
+    card.style.opacity = '0';
+    card.style.transform = 'translateY(20px)';
+    card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    observer.observe(card);
+  });
+
+  // Add interactivity to case study boxes
+  const caseStudies = document.querySelectorAll('.case-study');
+  caseStudies.forEach(study => {
+    study.addEventListener('mouseenter', function() {
+      this.style.transform = 'translateY(-3px)';
+      this.style.boxShadow = '0 12px 30px rgba(131, 128, 240, 0.2)';
+    });
+    study.addEventListener('mouseleave', function() {
+      this.style.transform = 'translateY(0)';
+      this.style.boxShadow = 'none';
+    });
+  });
+
+  // Add interactivity to insurance types
+  const insuranceTypes = document.querySelectorAll('.insurance-type');
+  insuranceTypes.forEach(type => {
+    type.addEventListener('mouseenter', function() {
+      this.style.transform = 'translateY(-3px)';
+      this.style.boxShadow = '0 8px 20px rgba(131, 128, 240, 0.15)';
+    });
+    type.addEventListener('mouseleave', function() {
+      this.style.transform = 'translateY(0)';
+      this.style.boxShadow = 'none';
+    });
+  });
+
+  // Add interactivity to key terms
+  const termDefinitions = document.querySelectorAll('.term-definition');
+  termDefinitions.forEach(term => {
+    term.addEventListener('mouseenter', function() {
+      this.style.transform = 'translateX(3px)';
+      this.style.borderLeftColor = 'var(--color-primary)';
+    });
+    term.addEventListener('mouseleave', function() {
+      this.style.transform = 'translateX(0)';
+      this.style.borderLeftColor = 'var(--color-primary-soft)';
+    });
+  });
+
+  // Add interactivity to Medicare parts
+  const partItems = document.querySelectorAll('.part-item');
+  partItems.forEach(item => {
+    item.addEventListener('mouseenter', function() {
+      this.style.transform = 'translateX(3px)';
+      this.style.background = 'rgba(131, 128, 240, 0.25)';
+    });
+    item.addEventListener('mouseleave', function() {
+      this.style.transform = 'translateX(0)';
+      this.style.background = 'rgba(131, 128, 240, 0.15)';
+    });
+  });
+
+  // Add interactivity to formulary boxes
+  const formularyBoxes = document.querySelectorAll('.formulary-box');
+  formularyBoxes.forEach(box => {
+    box.addEventListener('mouseenter', function() {
+      this.style.transform = 'translateY(-2px)';
+      this.style.background = 'rgba(15, 23, 42, 0.7)';
+    });
+    box.addEventListener('mouseleave', function() {
+      this.style.transform = 'translateY(0)';
+      this.style.background = 'rgba(15, 23, 42, 0.5)';
+    });
+  });
+});
+</script>
+</body>
+</html>
