@@ -1,0 +1,1640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AlliedRx - NHA CPhT Practice Exam</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        /* Branding and Layout Styles - MATCHING YOUR MODULE */
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-error: #e17055;
+            --color-warning: #fdcb6e;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
+            --color-dark: #0c0a18;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+            --shadow-card: 0 12px 30px rgba(15, 23, 42, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: radial-gradient(circle at top left, #ffffff 0, #f1ecff 40%, var(--color-bg) 100%);
+            color: var(--color-text);
+            line-height: 1.5;
+            padding: 24px;
+            min-height: 100vh;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 0;
+            }
+        }
+
+        /* Main Container */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @media (max-width: 900px) {
+            .container {
+                padding: 22px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 18px 14px 22px;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* YOUR EXACT HEADER FROM THE MODULE */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .brand-logo:hover {
+            transform: scale(1.05);
+        }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--color-success);
+            flex-shrink: 0;
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .badge-mode:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+        @media (max-width: 480px) {
+            .brand-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .badge-mode {
+                margin-top: 6px;
+            }
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 3vw, 2.2rem);
+            line-height: 1.1;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .exam-subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 600px;
+            margin-bottom: 30px;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        /* Exam Header Info */
+        .exam-info-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding: 15px 20px;
+            background: rgba(175, 75, 239, 0.05);
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(175, 75, 239, 0.1);
+            animation: fadeInUp 0.6s ease-out 0.5s both;
+        }
+
+        .timer-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .timer {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            background: white;
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            border: 2px solid var(--color-primary-soft);
+            min-width: 100px;
+            text-align: center;
+        }
+
+        .timer.warning {
+            background: rgba(253, 203, 110, 0.1);
+            border-color: var(--color-warning);
+            color: #b08c2c;
+            animation: pulse 1s infinite;
+        }
+
+        .timer.critical {
+            background: rgba(225, 112, 85, 0.1);
+            border-color: var(--color-error);
+            color: var(--color-error);
+            animation: pulse 0.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .questions-progress {
+            text-align: right;
+        }
+
+        .current-question {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+
+        .total-questions {
+            font-size: 0.9rem;
+            color: var(--color-muted);
+        }
+
+        /* Main Layout */
+        .exam-body {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 25px;
+            min-height: 600px;
+        }
+
+        @media (max-width: 992px) {
+            .exam-body {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Question Area */
+        .question-area {
+            background: white;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            padding: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .question-area::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--color-primary);
+            opacity: 1;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(12, 10, 24, 0.08);
+        }
+
+        .question-number {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.1);
+            padding: 6px 15px;
+            border-radius: 20px;
+        }
+
+        .domain-tag {
+            font-size: 0.85rem;
+            padding: 4px 12px;
+            border-radius: 12px;
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-muted);
+        }
+
+        .question-text {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            color: var(--color-text);
+        }
+
+        .question-text.scenario {
+            background: rgba(175, 75, 239, 0.05);
+            padding: 20px;
+            border-radius: var(--radius-sm);
+            border-left: 4px solid var(--color-primary);
+            margin-bottom: 25px;
+        }
+
+        /* Options */
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .option {
+            background: white;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            border-radius: var(--radius-sm);
+            padding: 18px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .option:hover {
+            border-color: var(--color-primary-soft);
+            background: rgba(175, 75, 239, 0.03);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-card);
+        }
+
+        .option.selected {
+            border-color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.08);
+        }
+
+        .option.correct {
+            border-color: var(--color-success);
+            background: rgba(0, 184, 148, 0.1);
+        }
+
+        .option.incorrect {
+            border-color: var(--color-error);
+            background: rgba(225, 112, 85, 0.1);
+        }
+
+        .option-letter {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(12, 10, 24, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 1rem;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .option.selected .option-letter {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .option-text {
+            flex: 1;
+            font-size: 1rem;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(12, 10, 24, 0.08);
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            border: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #9a3bd6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(175, 75, 239, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-text);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(12, 10, 24, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-flag {
+            background: rgba(253, 203, 110, 0.1);
+            color: #b08c2c;
+            border: 1px solid rgba(253, 203, 110, 0.3);
+        }
+
+        .btn-flag:hover {
+            background: rgba(253, 203, 110, 0.2);
+        }
+
+        .btn-flag.flagged {
+            background: rgba(253, 203, 110, 0.3);
+            color: #8a6a1f;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-md);
+            padding: 25px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+        }
+
+        .sidebar-section {
+            margin-bottom: 30px;
+        }
+
+        .sidebar-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(12, 10, 24, 0.08);
+        }
+
+        /* Question Navigation Grid */
+        .question-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .question-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .question-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .question-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-sm);
+            background: white;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .question-btn:hover {
+            border-color: var(--color-primary-soft);
+            transform: translateY(-2px);
+        }
+
+        .question-btn.current {
+            border-color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.1);
+            font-weight: 600;
+        }
+
+        .question-btn.answered {
+            background: rgba(0, 184, 148, 0.1);
+            border-color: var(--color-success);
+        }
+
+        .question-btn.flagged {
+            background: rgba(253, 203, 110, 0.2);
+            border-color: var(--color-warning);
+        }
+
+        /* Filter Buttons */
+        .filter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .filter-btn {
+            padding: 6px 12px;
+            border-radius: 20px;
+            background: white;
+            border: 1px solid rgba(12, 10, 24, 0.1);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover {
+            border-color: var(--color-primary-soft);
+            background: rgba(175, 75, 239, 0.05);
+        }
+
+        .filter-btn.active {
+            background: var(--color-primary);
+            color: white;
+            border-color: var(--color-primary);
+        }
+
+        /* Exam Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 1px solid rgba(12, 10, 24, 0.06);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-card);
+            border-color: var(--color-primary-soft);
+        }
+
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            display: block;
+            line-height: 1;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+        }
+
+        /* Feedback Area */
+        .feedback-area {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-top: 25px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .feedback-area.show {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .feedback-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .feedback-icon {
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        .feedback-icon.correct {
+            color: var(--color-success);
+        }
+
+        .feedback-icon.incorrect {
+            color: var(--color-error);
+        }
+
+        .feedback-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--color-text);
+        }
+
+        .feedback-content {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--color-text);
+        }
+
+        .feedback-content strong {
+            color: var(--color-primary);
+        }
+
+        .rationale {
+            background: rgba(0, 184, 148, 0.05);
+            border-left: 3px solid var(--color-success);
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+        }
+
+        .reference {
+            font-size: 0.85rem;
+            color: var(--color-muted);
+            margin-top: 10px;
+            font-style: italic;
+        }
+
+        /* Results Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(12, 10, 24, 0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            max-width: 700px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-soft);
+            animation: slideUp 0.4s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .modal-title {
+            font-size: 2rem;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+        }
+
+        .score-display {
+            font-size: 4rem;
+            font-weight: 800;
+            color: var(--color-primary);
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .domain-breakdown {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .domain-breakdown {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .domain-score {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 1px solid rgba(12, 10, 24, 0.06);
+        }
+
+        .domain-name {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-text);
+            margin-bottom: 5px;
+        }
+
+        .domain-percentage {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .exam-info-bar {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .questions-progress {
+                text-align: left;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- YOUR EXACT HEADER FROM MODULE -->
+        <header class="brand-row">
+            <div class="brand">
+                <img src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png" 
+                     alt="AlliedRx logo" class="brand-logo">
+                <div class="course-meta">
+                    <span class="course-name">Pharmacy Technician • NHA Certification Prep</span>
+                    <div class="week-label">
+                        <span class="week-label-dot"></span>
+                        <span>ExCPT Practice Exam Simulation</span>
+                    </div>
+                </div>
+            </div>
+            <span class="badge-mode">Campus & Online</span>
+        </header>
+
+        <h1>NHA CPhT Practice Exam</h1>
+        <p class="exam-subtitle">
+            Simulate the real ExCPT exam experience with 100 scored questions covering all domains. 
+            Use flagging, filtering, and detailed feedback to optimize your study strategy.
+        </p>
+
+        <!-- Exam Info Bar -->
+        <div class="exam-info-bar">
+            <div class="timer-container">
+                <div class="timer" id="timer">02:00:00</div>
+                <div>
+                    <div style="font-size: 0.9rem; color: var(--color-muted);">Time Remaining</div>
+                    <div style="font-size: 0.8rem; color: var(--color-primary);">2 hours • 100 questions</div>
+                </div>
+            </div>
+            <div class="questions-progress">
+                <div class="current-question" id="current-question">1</div>
+                <div class="total-questions">of 100 questions</div>
+            </div>
+        </div>
+
+        <!-- Main Exam Body -->
+        <div class="exam-body">
+            <!-- Question Area -->
+            <main class="question-area">
+                <div class="question-header">
+                    <div class="question-number">Question <span id="q-number">1</span></div>
+                    <div class="domain-tag" id="domain-tag">Overview & Laws</div>
+                </div>
+
+                <div class="question-text" id="question-text">
+                    Which federal law requires child-resistant packaging for most oral prescription medications?
+                </div>
+
+                <div class="options-container" id="options-container">
+                    <!-- Options will be populated by JavaScript -->
+                </div>
+
+                <!-- Feedback Area -->
+                <div class="feedback-area" id="feedback-area">
+                    <div class="feedback-header">
+                        <div class="feedback-icon correct" id="feedback-icon">✓</div>
+                        <div class="feedback-title" id="feedback-title">Correct Answer</div>
+                    </div>
+                    <div class="feedback-content" id="feedback-content">
+                        <strong>Correct Answer: B. Poison Prevention Packaging Act (PPPA)</strong><br><br>
+                        <div class="rationale">
+                            The Poison Prevention Packaging Act of 1970 requires child-resistant packaging for most oral prescription drugs, over-the-counter drugs, household chemicals, and other hazardous substances. This law has significantly reduced accidental poisonings in children under 5 years old.
+                        </div>
+                        <div class="reference">
+                            Reference: Domain 1B - Laws and Regulations, NHA ExCPT Test Plan
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <div>
+                        <button class="btn btn-secondary" id="prev-btn">
+                            ← Previous
+                        </button>
+                        <button class="btn btn-secondary" id="next-btn">
+                            Next →
+                        </button>
+                    </div>
+                    <div>
+                        <button class="btn btn-flag" id="flag-btn">
+                            ⚐ Flag for Review
+                        </button>
+                        <button class="btn btn-primary" id="submit-btn">
+                            Submit Answer
+                        </button>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <!-- Question Navigation -->
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">Question Navigation</h3>
+                    <div class="question-grid" id="question-grid">
+                        <!-- Questions 1-100 will be generated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Filter Buttons -->
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">Filter Questions</h3>
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" data-filter="all">All (100)</button>
+                        <button class="filter-btn" data-filter="unanswered">Unanswered</button>
+                        <button class="filter-btn" data-filter="flagged">Flagged</button>
+                        <button class="filter-btn" data-filter="incorrect">Incorrect</button>
+                    </div>
+                </div>
+
+                <!-- Exam Statistics -->
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">Exam Progress</h3>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <span class="stat-number" id="answered-count">0</span>
+                            <span class="stat-label">Answered</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number" id="correct-count">0</span>
+                            <span class="stat-label">Correct</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number" id="flagged-count">0</span>
+                            <span class="stat-label">Flagged</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number" id="score-percent">0%</span>
+                            <span class="stat-label">Score</span>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" style="width: 100%; margin-top: 10px;" id="finish-exam-btn">
+                        Finish Exam
+                    </button>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <!-- Results Modal -->
+    <div class="modal-overlay" id="results-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">Exam Results</h2>
+                <p>Your ExCPT Practice Exam Score</p>
+            </div>
+            
+            <div class="score-display" id="final-score">0%</div>
+            
+            <div class="domain-breakdown" id="domain-breakdown">
+                <!-- Domain scores will be populated by JavaScript -->
+            </div>
+            
+            <div class="modal-actions">
+                <button class="btn btn-secondary" id="review-exam-btn">Review Exam</button>
+                <button class="btn btn-primary" id="retry-incorrect-btn">Retry Incorrect</button>
+                <button class="btn btn-primary" id="new-exam-btn">New Exam</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Exam Data Structure
+        const examData = {
+            totalQuestions: 100,
+            timeLimit: 2 * 60 * 60, // 2 hours in seconds
+            domains: [
+                { id: 1, name: "Overview & Laws", weight: 25, correct: 0, total: 0 },
+                { id: 2, name: "Drugs & Drug Therapy", weight: 15, correct: 0, total: 0 },
+                { id: 3, name: "Dispensing Process", weight: 45, correct: 0, total: 0 },
+                { id: 4, name: "Medication Safety", weight: 15, correct: 0, total: 0 }
+            ]
+        };
+
+        // Sample Questions Database (100 questions - truncated for brevity)
+        const questions = [
+            // Domain 1: Overview & Laws (25 questions)
+            {
+                id: 1,
+                domain: 1,
+                text: "Which federal law requires child-resistant packaging for most oral prescription medications?",
+                options: [
+                    "A. Food, Drug, and Cosmetic Act",
+                    "B. Poison Prevention Packaging Act (PPPA)",
+                    "C. Durham-Humphrey Amendment",
+                    "D. Omnibus Budget Reconciliation Act (OBRA 90)"
+                ],
+                correct: 1,
+                rationale: "The Poison Prevention Packaging Act of 1970 requires child-resistant packaging for most oral prescription drugs, over-the-counter drugs, household chemicals, and other hazardous substances.",
+                reference: "Domain 1B - Laws and Regulations"
+            },
+            {
+                id: 2,
+                domain: 1,
+                text: "According to the Controlled Substances Act, which schedule contains drugs with a high potential for abuse and no accepted medical use in the US?",
+                options: [
+                    "A. Schedule I",
+                    "B. Schedule II",
+                    "C. Schedule III",
+                    "D. Schedule IV"
+                ],
+                correct: 0,
+                rationale: "Schedule I drugs have a high potential for abuse, no currently accepted medical use in treatment in the United States, and a lack of accepted safety for use under medical supervision.",
+                reference: "Domain 1C - Controlled Substances"
+            },
+            {
+                id: 3,
+                domain: 1,
+                text: "Which of the following tasks MUST be performed by a pharmacist rather than a pharmacy technician?",
+                options: [
+                    "A. Counting tablets for a prescription",
+                    "B. Receiving a verbal prescription order",
+                    "C. Performing the final verification of a prescription",
+                    "D. Entering prescription information into the computer"
+                ],
+                correct: 2,
+                rationale: "Final verification of prescriptions must be performed by a licensed pharmacist. Pharmacy technicians may assist with other tasks under pharmacist supervision.",
+                reference: "Domain 1A - Role and Duties"
+            },
+            {
+                id: 4,
+                domain: 1,
+                text: "Which DEA form is used to order Schedule II controlled substances?",
+                options: [
+                    "A. DEA Form 41",
+                    "B. DEA Form 106",
+                    "C. DEA Form 222",
+                    "D. DEA Form 224"
+                ],
+                correct: 2,
+                rationale: "DEA Form 222 is used to order Schedule II controlled substances. Form 41 is for destruction, Form 106 is for theft/loss reporting.",
+                reference: "Domain 1C - Controlled Substances"
+            },
+            {
+                id: 5,
+                domain: 1,
+                text: "What is the maximum number of refills allowed for a Schedule III controlled substance prescription?",
+                options: [
+                    "A. No refills allowed",
+                    "B. Maximum of 2 refills within 6 months",
+                    "C. Maximum of 5 refills within 6 months",
+                    "D. Refills allowed for up to 1 year"
+                ],
+                correct: 2,
+                rationale: "Schedule III-V controlled substances may be refilled up to 5 times within 6 months from the date of issue.",
+                reference: "Domain 1C - Controlled Substances"
+            },
+            // Domain 2: Drugs & Drug Therapy (15 questions)
+            {
+                id: 26,
+                domain: 2,
+                text: "Which drug class is used primarily to lower blood pressure by blocking angiotensin II receptors?",
+                options: [
+                    "A. ACE inhibitors",
+                    "B. ARBs (Angiotensin II Receptor Blockers)",
+                    "C. Beta-blockers",
+                    "D. Calcium channel blockers"
+                ],
+                correct: 1,
+                rationale: "ARBs (like losartan, valsartan) work by blocking angiotensin II receptors, leading to vasodilation and reduced blood pressure.",
+                reference: "Domain 2A - Drug Classification"
+            },
+            {
+                id: 27,
+                domain: 2,
+                text: "What is the generic name for Lipitor?",
+                options: [
+                    "A. Simvastatin",
+                    "B. Atorvastatin",
+                    "C. Rosuvastatin",
+                    "D. Pravastatin"
+                ],
+                correct: 1,
+                rationale: "Lipitor is the brand name for atorvastatin, an HMG-CoA reductase inhibitor (statin) used to lower cholesterol.",
+                reference: "Domain 2B - Frequently Prescribed Medications"
+            },
+            // Domain 3: Dispensing Process (45 questions)
+            {
+                id: 41,
+                domain: 3,
+                text: "A prescription reads: 'Take 1 tablet by mouth twice daily for 10 days.' How many tablets should be dispensed?",
+                options: [
+                    "A. 10 tablets",
+                    "B. 20 tablets",
+                    "C. 30 tablets",
+                    "D. 40 tablets"
+                ],
+                correct: 1,
+                rationale: "1 tablet twice daily = 2 tablets per day × 10 days = 20 tablets total.",
+                reference: "Domain 3C - Calculations"
+            },
+            {
+                id: 42,
+                domain: 3,
+                text: "Which SIG code means 'as needed'?",
+                options: [
+                    "A. ac",
+                    "B. pc",
+                    "C. prn",
+                    "D. qd"
+                ],
+                correct: 2,
+                rationale: "prn stands for 'pro re nata' which means 'as needed'. ac means before meals, pc means after meals, qd means once daily.",
+                reference: "Domain 3A - Prescription Intake"
+            },
+            // Domain 4: Medication Safety (15 questions)
+            {
+                id: 86,
+                domain: 4,
+                text: "Which organization maintains the list of error-prone abbreviations that should not be used?",
+                options: [
+                    "A. FDA",
+                    "B. DEA",
+                    "C. ISMP",
+                    "D. USP"
+                ],
+                correct: 2,
+                rationale: "The Institute for Safe Medication Practices (ISMP) maintains the list of error-prone abbreviations, symbols, and dose designations.",
+                reference: "Domain 4A - Quality Assurance"
+            },
+            {
+                id: 87,
+                domain: 4,
+                text: "What is the purpose of Tall Man lettering on medication labels?",
+                options: [
+                    "A. To indicate high-alert medications",
+                    "B. To distinguish between look-alike/sound-alike drugs",
+                    "C. To identify controlled substances",
+                    "D. To mark pediatric medications"
+                ],
+                correct: 1,
+                rationale: "Tall Man lettering uses mixed case letters (e.g., hydrOXYzine vs. hydrALAzine) to help distinguish between look-alike/sound-alike drug names.",
+                reference: "Domain 4C - Safety Strategies"
+            }
+        ];
+
+        // Fill with more sample questions
+        for (let i = 11; i <= 100; i++) {
+            questions.push({
+                id: i,
+                domain: Math.floor(Math.random() * 4) + 1,
+                text: `Sample question ${i} for NHA ExCPT practice exam. This question tests knowledge in various pharmacy technician domains according to the 2016 NHA test plan.`,
+                options: ["A. First option", "B. Second option", "C. Third option", "D. Fourth option"],
+                correct: Math.floor(Math.random() * 4),
+                rationale: "This is a sample rationale explaining why the correct answer is correct and why other options are incorrect, based on NHA domain knowledge requirements.",
+                reference: "Domain Sample - Reference from NHA Test Plan"
+            });
+        }
+
+        // Exam State
+        const examState = {
+            currentQuestion: 1,
+            userAnswers: new Array(questions.length).fill(null),
+            flaggedQuestions: new Array(questions.length).fill(false),
+            questionStatus: new Array(questions.length).fill('unanswered'),
+            startTime: new Date(),
+            timeRemaining: examData.timeLimit,
+            timerInterval: null
+        };
+
+        // DOM Elements
+        const timerEl = document.getElementById('timer');
+        const currentQuestionEl = document.getElementById('current-question');
+        const qNumberEl = document.getElementById('q-number');
+        const domainTagEl = document.getElementById('domain-tag');
+        const questionTextEl = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const feedbackArea = document.getElementById('feedback-area');
+        const feedbackIcon = document.getElementById('feedback-icon');
+        const feedbackTitle = document.getElementById('feedback-title');
+        const feedbackContent = document.getElementById('feedback-content');
+        const questionGrid = document.getElementById('question-grid');
+        const answeredCountEl = document.getElementById('answered-count');
+        const correctCountEl = document.getElementById('correct-count');
+        const flaggedCountEl = document.getElementById('flagged-count');
+        const scorePercentEl = document.getElementById('score-percent');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const flagBtn = document.getElementById('flag-btn');
+        const submitBtn = document.getElementById('submit-btn');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const finishExamBtn = document.getElementById('finish-exam-btn');
+        const resultsModal = document.getElementById('results-modal');
+        const finalScoreEl = document.getElementById('final-score');
+        const domainBreakdownEl = document.getElementById('domain-breakdown');
+        const reviewExamBtn = document.getElementById('review-exam-btn');
+        const retryIncorrectBtn = document.getElementById('retry-incorrect-btn');
+        const newExamBtn = document.getElementById('new-exam-btn');
+
+        // Initialize Exam
+        function initExam() {
+            // Start timer
+            startTimer();
+            
+            // Create question navigation grid
+            createQuestionGrid();
+            
+            // Load first question
+            loadQuestion(1);
+            
+            // Update statistics
+            updateStatistics();
+            
+            // Setup event listeners
+            setupEventListeners();
+        }
+
+        // Timer Functions
+        function startTimer() {
+            updateTimerDisplay();
+            examState.timerInterval = setInterval(() => {
+                examState.timeRemaining--;
+                updateTimerDisplay();
+                
+                if (examState.timeRemaining <= 0) {
+                    clearInterval(examState.timerInterval);
+                    finishExam();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const hours = Math.floor(examState.timeRemaining / 3600);
+            const minutes = Math.floor((examState.timeRemaining % 3600) / 60);
+            const seconds = examState.timeRemaining % 60;
+            
+            timerEl.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            // Add warning classes based on time remaining
+            timerEl.classList.remove('warning', 'critical');
+            if (examState.timeRemaining <= 600) { // 10 minutes
+                timerEl.classList.add('critical');
+            } else if (examState.timeRemaining <= 1800) { // 30 minutes
+                timerEl.classList.add('warning');
+            }
+        }
+
+        // Question Navigation
+        function createQuestionGrid() {
+            questionGrid.innerHTML = '';
+            for (let i = 1; i <= questions.length; i++) {
+                const btn = document.createElement('button');
+                btn.className = 'question-btn';
+                btn.textContent = i;
+                btn.dataset.question = i;
+                
+                btn.addEventListener('click', () => {
+                    loadQuestion(i);
+                });
+                
+                questionGrid.appendChild(btn);
+            }
+        }
+
+        function loadQuestion(questionNum) {
+            examState.currentQuestion = questionNum;
+            const question = questions[questionNum - 1];
+            
+            // Update UI elements
+            qNumberEl.textContent = questionNum;
+            currentQuestionEl.textContent = questionNum;
+            
+            // Update domain tag
+            const domain = examData.domains.find(d => d.id === question.domain);
+            domainTagEl.textContent = domain ? domain.name : 'Unknown Domain';
+            
+            // Update question text
+            questionTextEl.textContent = question.text;
+            
+            // Clear and update options
+            optionsContainer.innerHTML = '';
+            question.options.forEach((option, index) => {
+                const optionEl = document.createElement('div');
+                optionEl.className = 'option';
+                if (examState.userAnswers[questionNum - 1] === index) {
+                    optionEl.classList.add('selected');
+                }
+                
+                optionEl.innerHTML = `
+                    <div class="option-letter">${String.fromCharCode(65 + index)}</div>
+                    <div class="option-text">${option}</div>
+                `;
+                
+                optionEl.addEventListener('click', () => selectOption(index));
+                optionsContainer.appendChild(optionEl);
+            });
+            
+            // Update flag button
+            updateFlagButton();
+            
+            // Hide feedback
+            feedbackArea.classList.remove('show');
+            
+            // Update navigation buttons state
+            prevBtn.disabled = questionNum === 1;
+            nextBtn.disabled = questionNum === questions.length;
+            
+            // Update question grid highlights
+            updateQuestionGrid();
+        }
+
+        function selectOption(optionIndex) {
+            const questionNum = examState.currentQuestion;
+            
+            // Remove selected class from all options
+            document.querySelectorAll('.option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked option
+            document.querySelectorAll('.option')[optionIndex].classList.add('selected');
+            
+            // Store answer
+            examState.userAnswers[questionNum - 1] = optionIndex;
+            
+            // Update question status if not already answered
+            if (examState.questionStatus[questionNum - 1] === 'unanswered') {
+                updateStatistics();
+            }
+        }
+
+        function updateFlagButton() {
+            const isFlagged = examState.flaggedQuestions[examState.currentQuestion - 1];
+            flagBtn.classList.toggle('flagged', isFlagged);
+            flagBtn.innerHTML = isFlagged ? '✓ Flagged' : '⚐ Flag for Review';
+        }
+
+        // Statistics and Progress
+        function updateStatistics() {
+            let answered = 0;
+            let correct = 0;
+            let flagged = 0;
+            
+            // Reset domain counts
+            examData.domains.forEach(domain => {
+                domain.correct = 0;
+                domain.total = 0;
+            });
+            
+            // Calculate statistics
+            examState.userAnswers.forEach((answer, index) => {
+                if (answer !== null) {
+                    answered++;
+                    
+                    const question = questions[index];
+                    const domain = examData.domains.find(d => d.id === question.domain);
+                    
+                    if (domain) {
+                        domain.total++;
+                        
+                        if (answer === question.correct) {
+                            correct++;
+                            examState.questionStatus[index] = 'correct';
+                            domain.correct++;
+                        } else {
+                            examState.questionStatus[index] = 'incorrect';
+                        }
+                    }
+                }
+            });
+            
+            // Count flagged questions
+            flagged = examState.flaggedQuestions.filter(f => f).length;
+            
+            // Calculate score percentage
+            const scorePercent = questions.length > 0 ? Math.round((correct / questions.length) * 100) : 0;
+            
+            // Update UI
+            answeredCountEl.textContent = answered;
+            correctCountEl.textContent = correct;
+            flaggedCountEl.textContent = flagged;
+            scorePercentEl.textContent = `${scorePercent}%`;
+            
+            // Update question grid
+            updateQuestionGrid();
+        }
+
+        function updateQuestionGrid() {
+            document.querySelectorAll('.question-btn').forEach((btn, index) => {
+                const questionNum = index + 1;
+                btn.classList.remove('current', 'answered', 'flagged');
+                
+                if (questionNum === examState.currentQuestion) {
+                    btn.classList.add('current');
+                }
+                
+                if (examState.userAnswers[index] !== null) {
+                    btn.classList.add('answered');
+                }
+                
+                if (examState.flaggedQuestions[index]) {
+                    btn.classList.add('flagged');
+                }
+            });
+        }
+
+        // Submit Answer
+        function submitAnswer() {
+            const questionNum = examState.currentQuestion;
+            const selectedOption = examState.userAnswers[questionNum - 1];
+            
+            if (selectedOption === null) {
+                alert('Please select an answer before submitting.');
+                return;
+            }
+            
+            const question = questions[questionNum - 1];
+            const isCorrect = selectedOption === question.correct;
+            
+            // Update question status
+            examState.questionStatus[questionNum - 1] = isCorrect ? 'correct' : 'incorrect';
+            
+            // Update domain statistics
+            const domain = examData.domains.find(d => d.id === question.domain);
+            if (domain) {
+                domain.total++;
+                if (isCorrect) domain.correct++;
+            }
+            
+            // Show feedback
+            showFeedback(isCorrect, question);
+            
+            // Update statistics
+            updateStatistics();
+            
+            // Auto-advance after delay if not last question
+            if (questionNum < questions.length) {
+                setTimeout(() => {
+                    loadQuestion(questionNum + 1);
+                }, 3000);
+            }
+        }
+
+        function showFeedback(isCorrect, question) {
+            // Update feedback elements
+            feedbackIcon.textContent = isCorrect ? '✓' : '✗';
+            feedbackIcon.className = `feedback-icon ${isCorrect ? 'correct' : 'incorrect'}`;
+            feedbackTitle.textContent = isCorrect ? 'Correct Answer' : 'Incorrect Answer';
+            
+            const correctLetter = String.fromCharCode(65 + question.correct);
+            const correctText = question.options[question.correct];
+            
+            let feedbackHTML = `
+                <strong>${isCorrect ? 'Your answer is correct!' : `Correct Answer: ${correctLetter}. ${correctText}`}</strong><br><br>
+                <div class="rationale">
+                    ${question.rationale}
+                </div>
+                <div class="reference">
+                    Reference: ${question.reference}
+                </div>
+            `;
+            
+            if (!isCorrect && examState.userAnswers[examState.currentQuestion - 1] !== null) {
+                const userLetter = String.fromCharCode(65 + examState.userAnswers[examState.currentQuestion - 1]);
+                const userText = question.options[examState.userAnswers[examState.currentQuestion - 1]];
+                feedbackHTML = `
+                    <strong>Your Answer: ${userLetter}. ${userText}</strong><br>
+                    <strong>Correct Answer: ${correctLetter}. ${correctText}</strong><br><br>
+                    <div class="rationale">
+                        ${question.rationale}
+                    </div>
+                    <div class="reference">
+                        Reference: ${question.reference}
+                    </div>
+                `;
+            }
+            
+            feedbackContent.innerHTML = feedbackHTML;
+            feedbackArea.classList.add('show');
+            
+            // Scroll feedback into view
+            feedbackArea.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // Filter Questions
+        function filterQuestions(filterType) {
+            let questionsToShow = [];
+            
+            switch(filterType) {
+                case 'unanswered':
+                    questionsToShow = examState.userAnswers
+                        .map((answer, index) => answer === null ? index + 1 : null)
+                        .filter(q => q !== null);
+                    break;
+                case 'flagged':
+                    questionsToShow = examState.flaggedQuestions
+                        .map((flagged, index) => flagged ? index + 1 : null)
+                        .filter(q => q !== null);
+                    break;
+                case 'incorrect':
+                    questionsToShow = examState.questionStatus
+                        .map((status, index) => status === 'incorrect' ? index + 1 : null)
+                        .filter(q => q !== null);
+                    break;
+                default: // 'all'
+                    questionsToShow = Array.from({length: questions.length}, (_, i) => i + 1);
+            }
+            
+            // Update question grid visibility
+            document.querySelectorAll('.question-btn').forEach((btn, index) => {
+                const questionNum = index + 1;
+                btn.style.display = questionsToShow.includes(questionNum) ? 'flex' : 'none';
+            });
+        }
+
+        // Finish Exam
+        function finishExam() {
+            clearInterval(examState.timerInterval);
+            showResults();
+        }
+
+        function showResults() {
+            // Calculate final score
+            const correctCount = examState.questionStatus.filter(status => status === 'correct').length;
+            const scorePercentage = Math.round((correctCount / questions.length) * 100);
+            
+            // Update final score display
+            finalScoreEl.textContent = `${scorePercentage}%`;
+            
+            // Update domain breakdown
+            let domainHTML = '';
+            examData.domains.forEach(domain => {
+                const domainScore = domain.total > 0 ? Math.round((domain.correct / domain.total) * 100) : 0;
+                domainHTML += `
+                    <div class="domain-score">
+                        <div class="domain-name">${domain.name}</div>
+                        <div class="domain-percentage">${domainScore}%</div>
+                        <div style="font-size: 0.8rem; color: var(--color-muted);">
+                            ${domain.correct}/${domain.total} correct
+                        </div>
+                    </div>
+                `;
+            });
+            domainBreakdownEl.innerHTML = domainHTML;
+            
+            // Show modal
+            resultsModal.classList.add('show');
+        }
+
+        // Event Listeners Setup
+        function setupEventListeners() {
+            // Navigation buttons
+            prevBtn.addEventListener('click', () => {
+                if (examState.currentQuestion > 1) {
+                    loadQuestion(examState.currentQuestion - 1);
+                }
+            });
+            
+            nextBtn.addEventListener('click', () => {
+                if (examState.currentQuestion < questions.length) {
+                    loadQuestion(examState.currentQuestion + 1);
+                }
+            });
+            
+            // Flag button
+            flagBtn.addEventListener('click', () => {
+                const questionNum = examState.currentQuestion;
+                examState.flaggedQuestions[questionNum - 1] = !examState.flaggedQuestions[questionNum - 1];
+                updateFlagButton();
+                updateStatistics();
+            });
+            
+            // Submit button
+            submitBtn.addEventListener('click', submitAnswer);
+            
+            // Filter buttons
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    filterQuestions(btn.dataset.filter);
+                });
+            });
+            
+            // Finish exam button
+            finishExamBtn.addEventListener('click', finishExam);
+            
+            // Results modal buttons
+            reviewExamBtn.addEventListener('click', () => {
+                resultsModal.classList.remove('show');
+                loadQuestion(1);
+            });
+            
+            retryIncorrectBtn.addEventListener('click', () => {
+                resultsModal.classList.remove('show');
+                
+                // Find first incorrect question
+                const firstIncorrect = examState.questionStatus.findIndex(status => status === 'incorrect');
+                if (firstIncorrect !== -1) {
+                    loadQuestion(firstIncorrect + 1);
+                } else {
+                    alert('No incorrect answers to review!');
+                    loadQuestion(1);
+                }
+            });
+            
+            newExamBtn.addEventListener('click', () => {
+                if (confirm('Start a new exam? Your current progress will be lost.')) {
+                    location.reload();
+                }
+            });
+            
+            // Keyboard shortcuts
+            document.addEventListener('keydown', (e) => {
+                // Number keys for answer selection
+                if (e.key >= '1' && e.key <= '4') {
+                    selectOption(parseInt(e.key) - 1);
+                }
+                
+                // Arrow keys for navigation
+                if (e.key === 'ArrowLeft' && examState.currentQuestion > 1) {
+                    loadQuestion(examState.currentQuestion - 1);
+                }
+                if (e.key === 'ArrowRight' && examState.currentQuestion < questions.length) {
+                    loadQuestion(examState.currentQuestion + 1);
+                }
+                
+                // Space or Enter to submit
+                if ((e.key === ' ' || e.key === 'Enter') && e.target === document.body) {
+                    e.preventDefault();
+                    submitAnswer();
+                }
+                
+                // F to flag
+                if (e.key === 'f' || e.key === 'F') {
+                    e.preventDefault();
+                    flagBtn.click();
+                }
+            });
+        }
+
+        // Initialize the exam when page loads
+        document.addEventListener('DOMContentLoaded', initExam);
+    </script>
+</body>
+</html>
