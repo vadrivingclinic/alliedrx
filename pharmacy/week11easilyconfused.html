@@ -1,0 +1,1778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AlliedRx – Module 4: Easily Confused Medications</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        /* ALL CSS FROM BEFORE REMAINS - showing only updated/added sections */
+        
+        /* Warning Banner */
+        .warning-banner {
+            background: linear-gradient(135deg, rgba(253, 203, 110, 0.15), rgba(225, 112, 85, 0.1));
+            border: 2px solid var(--color-warning);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            animation: fadeInUp 0.6s ease-out 0.5s both;
+        }
+        
+        .warning-icon {
+            font-size: 2rem;
+            color: var(--color-warning);
+            flex-shrink: 0;
+        }
+        
+        .warning-content h3 {
+            color: var(--color-warning);
+            margin-bottom: 8px;
+        }
+        
+        /* Confusion Card Grid */
+        .confusion-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        @media (max-width: 800px) {
+            .confusion-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .confusion-card {
+            background: white;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            padding: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .confusion-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--color-primary-soft);
+        }
+        
+        .confusion-card.danger {
+            border-left: 5px solid var(--color-error);
+        }
+        
+        .confusion-card.warning {
+            border-left: 5px solid var(--color-warning);
+        }
+        
+        .confusion-card.caution {
+            border-left: 5px solid var(--color-primary);
+        }
+        
+        .confusion-header {
+            background: linear-gradient(135deg, rgba(12, 10, 24, 0.03), rgba(12, 10, 24, 0.01));
+            padding: 20px;
+            border-bottom: 1px solid rgba(12, 10, 24, 0.08);
+        }
+        
+        .confusion-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .confusion-subtitle {
+            font-size: 0.85rem;
+            color: var(--color-muted);
+        }
+        
+        .confusion-body {
+            padding: 20px;
+        }
+        
+        /* Medication Comparison */
+        .medication-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .medication-comparison::before {
+            content: "vs";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--color-bg);
+            color: var(--color-muted);
+            font-weight: 700;
+            font-size: 0.9rem;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+        }
+        
+        .medication-item {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .medication-item.incorrect {
+            background: rgba(225, 112, 85, 0.05);
+            border: 2px solid rgba(225, 112, 85, 0.2);
+        }
+        
+        .medication-item.correct {
+            background: rgba(0, 184, 148, 0.05);
+            border: 2px solid rgba(0, 184, 148, 0.2);
+        }
+        
+        .medication-name {
+            font-size: 1.3rem;
+            font-weight: 800;
+            margin-bottom: 5px;
+            line-height: 1.2;
+        }
+        
+        .tall-man {
+            color: var(--color-error);
+            font-weight: 900;
+            text-transform: uppercase;
+        }
+        
+        .medication-type {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 10px;
+        }
+        
+        .medication-details {
+            font-size: 0.9rem;
+            color: var(--color-text);
+            line-height: 1.4;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(12, 10, 24, 0.08);
+        }
+        
+        /* Danger Level */
+        .danger-level {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: 10px;
+        }
+        
+        .danger-high {
+            background: rgba(225, 112, 85, 0.1);
+            color: var(--color-error);
+        }
+        
+        .danger-medium {
+            background: rgba(253, 203, 110, 0.1);
+            color: var(--color-warning);
+        }
+        
+        .danger-low {
+            background: rgba(131, 128, 240, 0.1);
+            color: var(--color-accent);
+        }
+        
+        /* Scenario Cards */
+        .scenario-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .scenario-card {
+            background: white;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            padding: 25px;
+            transition: all 0.3s ease;
+        }
+        
+        .scenario-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-card);
+        }
+        
+        .scenario-icon {
+            font-size: 2rem;
+            color: var(--color-primary);
+            margin-bottom: 15px;
+        }
+        
+        .scenario-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 10px;
+        }
+        
+        .scenario-text {
+            font-size: 0.9rem;
+            color: var(--color-text);
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+        
+        .scenario-question {
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+        }
+        
+        .scenario-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .scenario-option {
+            padding: 10px 15px;
+            border: 1px solid rgba(12, 10, 24, 0.1);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+        
+        .scenario-option:hover {
+            background: rgba(175, 75, 239, 0.05);
+            border-color: var(--color-primary-soft);
+        }
+        
+        .scenario-option.selected {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary);
+        }
+        
+        .scenario-feedback {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            display: none;
+        }
+        
+        .scenario-feedback.correct {
+            background: rgba(0, 184, 148, 0.1);
+            border-left: 3px solid var(--color-success);
+            display: block;
+        }
+        
+        .scenario-feedback.incorrect {
+            background: rgba(225, 112, 85, 0.1);
+            border-left: 3px solid var(--color-error);
+            display: block;
+        }
+        
+        /* Comprehensive Table */
+        .comprehensive-table-container {
+            overflow-x: auto;
+            margin-bottom: 30px;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+        }
+        
+        .comprehensive-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+        
+        .comprehensive-table th {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.9rem;
+            position: sticky;
+            top: 0;
+        }
+        
+        .comprehensive-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.9rem;
+        }
+        
+        .comprehensive-table tr:nth-child(even) {
+            background: rgba(12, 10, 24, 0.02);
+        }
+        
+        .comprehensive-table tr:hover {
+            background: rgba(175, 75, 239, 0.05);
+        }
+        
+        .look-alike-cell {
+            font-family: 'Courier New', monospace;
+            font-weight: 700;
+            color: var(--color-error);
+        }
+        
+        .risk-level-cell {
+            text-align: center;
+        }
+        
+        .risk-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .risk-high {
+            background: rgba(225, 112, 85, 0.15);
+            color: var(--color-error);
+        }
+        
+        .risk-medium {
+            background: rgba(253, 203, 110, 0.15);
+            color: var(--color-warning);
+        }
+        
+        .risk-low {
+            background: rgba(131, 128, 240, 0.15);
+            color: var(--color-accent);
+        }
+        
+        /* Prevention Tips */
+        .prevention-tips {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .tip-card {
+            background: white;
+            border-radius: var(--radius-md);
+            padding: 25px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .tip-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-card);
+            border-color: var(--color-primary-soft);
+        }
+        
+        .tip-number {
+            width: 40px;
+            height: 40px;
+            background: var(--color-primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin: 0 auto 15px;
+        }
+        
+        .tip-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 10px;
+        }
+        
+        .tip-description {
+            font-size: 0.9rem;
+            color: var(--color-muted);
+            line-height: 1.5;
+        }
+        
+        /* Practice Exercise */
+        .practice-exercise {
+            background: rgba(175, 75, 239, 0.03);
+            border-radius: var(--radius-md);
+            padding: 25px;
+            border: 1px solid rgba(175, 75, 239, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .exercise-title {
+            color: var(--color-primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .exercise-instructions {
+            background: white;
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+        }
+        
+        .exercise-item {
+            margin-bottom: 25px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid rgba(12, 10, 24, 0.08);
+        }
+        
+        .exercise-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .exercise-question {
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--color-text);
+        }
+        
+        .exercise-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .exercise-option {
+            padding: 10px 20px;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+        
+        .exercise-option:hover {
+            border-color: var(--color-primary-soft);
+            background: rgba(175, 75, 239, 0.05);
+        }
+        
+        .exercise-option.selected {
+            border-color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.1);
+        }
+        
+        .exercise-option.correct {
+            border-color: var(--color-success);
+            background: rgba(0, 184, 148, 0.1);
+        }
+        
+        .exercise-option.incorrect {
+            border-color: var(--color-error);
+            background: rgba(225, 112, 85, 0.1);
+        }
+        
+        .exercise-feedback {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: var(--radius-sm);
+            display: none;
+        }
+        
+        .exercise-feedback.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        /* [ALL OTHER CSS REMAINS EXACTLY AS YOUR ORIGINAL EXAMPLE] */
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-error: #e17055;
+            --color-warning: #fdcb6e;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
+            --color-dark: #0c0a18;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+            --shadow-card: 0 12px 30px rgba(15, 23, 42, 0.1);
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(
+                circle at top left,
+                #ffffff 0,
+                #f1ecff 40%,
+                var(--color-bg) 100%
+            );
+            color: var(--color-text);
+            -webkit-text-size-adjust: 100%;
+            line-height: 1.5;
+        }
+        
+        @media (max-width: 600px) {
+            body { padding: 12px; }
+        }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .page {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+        
+        @media (max-width: 900px) {
+            .page { padding: 22px; }
+        }
+        
+        @media (max-width: 480px) {
+            body { padding: 0; }
+            .page {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 18px 14px 22px;
+            }
+        }
+        
+        /* Header */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+        
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+        
+        .brand-logo:hover { transform: scale(1.05); }
+        
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+        
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+        
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+        }
+        
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--color-success);
+            flex-shrink: 0;
+        }
+        
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+        
+        .badge-mode:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+        
+        @media (max-width: 480px) {
+            .brand-row { flex-direction: column; align-items: flex-start; }
+            .badge-mode { margin-top: 6px; }
+        }
+        
+        h1 {
+            font-size: clamp(1.8rem, 3vw, 2.2rem);
+            line-height: 1.1;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+        
+        .module-subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 600px;
+            margin-bottom: 24px;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+        
+        /* Progress Tracker */
+        .progress-tracker {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            position: relative;
+            padding: 0 20px;
+        }
+        
+        .progress-tracker::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 50px;
+            right: 50px;
+            height: 3px;
+            background: rgba(12, 10, 24, 0.08);
+            z-index: 1;
+        }
+        
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+        
+        .step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--color-muted);
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .progress-step.active .step-circle {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+            color: white;
+            transform: scale(1.1);
+        }
+        
+        .progress-step.completed .step-circle {
+            background: var(--color-success);
+            border-color: var(--color-success);
+            color: white;
+        }
+        
+        .step-label {
+            font-size: 0.75rem;
+            color: var(--color-muted);
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .progress-step.active .step-label {
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+        
+        /* Progress Summary */
+        .progress-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+            animation: fadeInUp 0.6s ease-out 0.5s both;
+        }
+        
+        .summary-card {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            border: 1px solid rgba(12, 10, 24, 0.06);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .summary-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-card);
+            border-color: var(--color-primary-soft);
+        }
+        
+        .summary-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--color-primary);
+            display: block;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+        
+        .summary-label {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #9a3bd6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(175, 75, 239, 0.3);
+        }
+        
+        .btn-secondary {
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-text);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(12, 10, 24, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .btn-icon { font-size: 1.1em; }
+        
+        /* Results Panel */
+        .results-panel {
+            background: var(--color-dark);
+            color: white;
+            border-radius: var(--radius-md);
+            padding: 30px;
+            margin-top: 30px;
+            display: none;
+            animation: fadeInUp 0.6s ease;
+        }
+        
+        .results-panel.show { display: block; }
+        
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .results-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+        }
+        
+        .score-display {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--color-primary-soft);
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .clinical-insights {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .insights-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-primary-soft);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .insights-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .insights-list li {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            font-size: 0.9rem;
+            color: #e5e7eb;
+        }
+        
+        .insight-dot {
+            width: 6px;
+            height: 6px;
+            margin-top: 6px;
+            border-radius: 999px;
+            background: var(--color-accent);
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="module-heading">
+        <!-- Header -->
+        <header class="brand-row">
+            <div class="brand">
+                <img
+                    src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                    alt="AlliedRx logo"
+                    class="brand-logo"
+                />
+                <div class="course-meta">
+                    <span class="course-name">Pharmacy Technician • Week 4</span>
+                    <div class="week-label">
+                        <span class="week-label-dot"></span>
+                        <span>Chapter 4: Medication Safety & Error Prevention</span>
+                    </div>
+                </div>
+            </div>
+            <span class="badge-mode">Campus & Online</span>
+        </header>
+
+        <h1 id="module-heading">Easily Confused Medications</h1>
+        <p class="module-subtitle">
+            Learn to identify, differentiate, and prevent errors with look-alike, sound-alike medications.
+            Critical safety training for pharmacy technicians.
+        </p>
+
+        <!-- Warning Banner -->
+        <div class="warning-banner">
+            <div class="warning-icon">⚠️</div>
+            <div class="warning-content">
+                <h3>Safety Alert: High-Risk Medications</h3>
+                <p>Look-alike and sound-alike medications are responsible for <strong>15-25% of all medication errors</strong> in pharmacy practice. This module teaches critical differentiation skills to prevent patient harm.</p>
+            </div>
+        </div>
+
+        <!-- Progress Tracker -->
+        <div class="progress-tracker">
+            <div class="progress-step active" data-step="1">
+                <div class="step-circle">1</div>
+                <div class="step-label">High-Risk Pairs</div>
+            </div>
+            <div class="progress-step" data-step="2">
+                <div class="step-circle">2</div>
+                <div class="step-label">Prevention Tips</div>
+            </div>
+            <div class="progress-step" data-step="3">
+                <div class="step-circle">3</div>
+                <div class="step-label">Practice</div>
+            </div>
+        </div>
+
+        <!-- Progress Summary -->
+        <div class="progress-summary">
+            <div class="summary-card">
+                <span class="summary-number" id="pairs-learned">0</span>
+                <span class="summary-label">Pairs Learned</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="scenarios-completed">0</span>
+                <span class="summary-label">Scenarios Completed</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="time-spent">0:00</span>
+                <span class="summary-label">Study Time</span>
+            </div>
+        </div>
+
+        <!-- High-Risk Confusion Pairs -->
+        <section class="activity-card" id="activity-1" data-activity="1">
+            <div class="activity-header">
+                <span class="activity-number">Activity 1</span>
+                <span class="activity-status">Not Started</span>
+            </div>
+            <h3 class="activity-title">High-Risk Confusion Pairs</h3>
+            <p class="activity-description">
+                Study these commonly confused medication pairs. Pay attention to Tall Man lettering,
+                therapeutic differences, and error prevention strategies.
+            </p>
+
+            <!-- Confusion Grid -->
+            <div class="confusion-grid" id="confusion-grid">
+                <!-- Cards will be generated by JavaScript -->
+            </div>
+
+            <div class="action-buttons" style="margin-top: 20px;">
+                <button class="btn btn-secondary" id="mark-studied-btn">
+                    <span class="btn-icon">✓</span>
+                    Mark All as Studied
+                </button>
+            </div>
+        </section>
+
+        <!-- Prevention Tips -->
+        <section class="activity-card" id="activity-2" data-activity="2">
+            <div class="activity-header">
+                <span class="activity-number">Activity 2</span>
+                <span class="activity-status">Not Started</span>
+            </div>
+            <h3 class="activity-title">Error Prevention Strategies</h3>
+            <p class="activity-description">
+                Implement these proven strategies to prevent look-alike, sound-alike medication errors.
+            </p>
+
+            <div class="prevention-tips">
+                <div class="tip-card">
+                    <div class="tip-number">1</div>
+                    <div class="tip-title">Use Tall Man Lettering</div>
+                    <div class="tip-description">Emphasize differences with uppercase letters (e.g., hydrOXYzine vs hydrALAzine)</div>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-number">2</div>
+                    <div class="tip-title">Ask for Spelling</div>
+                    <div class="tip-description">When receiving verbal orders, always ask for medication name spelling</div>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-number">3</div>
+                    <div class="tip-title">Verify Indications</div>
+                    <div class="tip-description">Confirm medication matches the patient's condition</div>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-number">4</div>
+                    <div class="tip-title">Check Shelf Location</div>
+                    <div class="tip-description">Separate look-alike medications on different shelves</div>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-number">5</div>
+                    <div class="tip-title">Use Barcoding</div>
+                    <div class="tip-description">Scan medications at dispensing and administration</div>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-number">6</div>
+                    <div class="tip-title">Double-Check Doses</div>
+                    <div class="tip-description">Verify both medication name AND dose strength</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Practice Scenarios -->
+        <section class="activity-card" id="activity-3" data-activity="3">
+            <div class="activity-header">
+                <span class="activity-number">Activity 3</span>
+                <span class="activity-status">Not Started</span>
+            </div>
+            <h3 class="activity-title">Practice Scenarios</h3>
+            <p class="activity-description">
+                Test your knowledge with real-world scenarios. Identify potential errors and select the correct prevention strategy.
+            </p>
+
+            <div class="scenario-cards" id="scenario-cards">
+                <!-- Scenarios will be generated by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Comprehensive Table -->
+        <section class="activity-card" id="activity-4" data-activity="4">
+            <div class="activity-header">
+                <span class="activity-number">Activity 4</span>
+                <span class="activity-status">Not Started</span>
+            </div>
+            <h3 class="activity-title">Comprehensive Look-Alike/Sound-Alike List</h3>
+            <p class="activity-description">
+                Reference table of additional commonly confused medications. Pharmacy technicians should familiarize themselves with this list.
+            </p>
+
+            <div class="comprehensive-table-container">
+                <table class="comprehensive-table" id="comprehensive-table">
+                    <!-- Table will be generated by JavaScript -->
+                </table>
+            </div>
+        </section>
+
+        <!-- Practice Exercise -->
+        <section class="activity-card" id="activity-5" data-activity="5">
+            <div class="activity-header">
+                <span class="activity-number">Activity 5</span>
+                <span class="activity-status">Not Started</span>
+            </div>
+            <h3 class="activity-title">Interactive Practice Exercise</h3>
+            <p class="activity-description">
+                Apply your knowledge by identifying look-alike/sound-alike pairs and selecting correct Tall Man lettering.
+            </p>
+
+            <div class="practice-exercise" id="practice-exercise">
+                <!-- Exercise will be generated by JavaScript -->
+            </div>
+
+            <div class="action-buttons" style="margin-top: 20px;">
+                <button class="btn btn-secondary" id="check-exercise-btn">
+                    <span class="btn-icon">✓</span>
+                    Check Answers
+                </button>
+                <button class="btn btn-primary" id="reset-exercise-btn">
+                    <span class="btn-icon">↻</span>
+                    Reset Exercise
+                </button>
+            </div>
+        </section>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn btn-secondary" id="reset-module-btn">
+                <span class="btn-icon">↻</span>
+                Reset Module
+            </button>
+            <button class="btn btn-primary" id="complete-module-btn">
+                <span class="btn-icon">🎓</span>
+                Complete Module
+            </button>
+        </div>
+
+        <!-- Results Panel -->
+        <div class="results-panel" id="results-panel">
+            <div class="results-header">
+                <h2 class="results-title">Medication Safety Proficiency</h2>
+                <div class="score-display" id="final-score">0%</div>
+            </div>
+            
+            <div class="clinical-insights">
+                <h3 class="insights-title">
+                    <span>💊</span> Pharmacy Technician Safety Standards
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Verification Protocols:</strong> Always verify medication names using at least two identifiers. 
+                        When receiving verbal orders, use the "read-back" technique: repeat the medication name and spelling to the prescriber.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Shelf Organization:</strong> Implement physical separation of look-alike medications. 
+                        Use shelf labels with Tall Man lettering and warning stickers for high-risk pairs.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Computer System Safety:</strong> Configure pharmacy software to flag look-alike/sound-alike medications. 
+                        Use alerts when selecting medications with similar names or when dispensing high-risk pairs.</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="clinical-insights" style="margin-top: 20px;">
+                <h3 class="insights-title">
+                    <span>⚠️</span> ISMP Recommendations
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Standardize Tall Man Lettering:</strong> Use ISMP-recommended Tall Man lettering consistently 
+                        across all pharmacy documentation, labels, and computer systems.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Error Reporting:</strong> Report all near-misses and actual errors involving look-alike/sound-alike 
+                        medications to your pharmacy's quality improvement program and to the ISMP.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Continuous Education:</strong> Regularly review look-alike/sound-alike lists and participate in 
+                        medication safety training. Share lessons learned with pharmacy team members.</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // State Management
+            const state = {
+                confusionPairs: [
+                    {
+                        id: 1,
+                        medication1: { name: "Hydroxyzine", tallMan: "hydrOXYzine", type: "Antihistamine", details: "Used for anxiety and itching" },
+                        medication2: { name: "Hydralazine", tallMan: "hydrALAzine", type: "Antihypertensive", details: "Used for high blood pressure" },
+                        riskLevel: "high",
+                        studied: false,
+                        reason: "Names sound alike, first four and last four letters identical. Proximity on shelves contributes to errors."
+                    },
+                    {
+                        id: 2,
+                        medication1: { name: "Humalog", tallMan: "Humalog", type: "Insulin (rapid)", details: "Rapid-acting insulin analog" },
+                        medication2: { name: "Humulin", tallMan: "Humulin", type: "Insulin (regular)", details: "Regular human insulin" },
+                        riskLevel: "high",
+                        studied: false,
+                        reason: "Similar names, strengths, and concentrations. Different types of insulin."
+                    },
+                    {
+                        id: 3,
+                        medication1: { name: "Metformin", tallMan: "metFORMIN", type: "Antidiabetic", details: "Used for type 2 diabetes" },
+                        medication2: { name: "Metronidazole", tallMan: "metroNIDAZOLE", type: "Antibiotic", details: "Used for bacterial infections" },
+                        riskLevel: "medium",
+                        studied: false,
+                        reason: "Look-alike packaging and computer mnemonic 'met500' confusion."
+                    },
+                    {
+                        id: 4,
+                        medication1: { name: "Hydromorphone", tallMan: "hydromorPHONE", type: "Opioid analgesic", details: "Injectable, Dilaudid" },
+                        medication2: { name: "Morphine", tallMan: "MORPHine", type: "Opioid analgesic", details: "Injectable, various brands" },
+                        riskLevel: "high",
+                        studied: false,
+                        reason: "Sometimes thought to be generic equivalents but not interchangeable. Similar concentrations."
+                    },
+                    {
+                        id: 5,
+                        medication1: { name: "OxyContin", tallMan: "OxyCONTIN", type: "Opioid (ER)", details: "Extended-release oxycodone" },
+                        medication2: { name: "Oxycodone", tallMan: "oxyCODONE", type: "Opioid (IR)", details: "Immediate-release oxycodone" },
+                        riskLevel: "high",
+                        studied: false,
+                        reason: "Assumed to be same but different formulations. ER vs IR critical difference."
+                    }
+                ],
+                scenarios: [
+                    {
+                        id: 1,
+                        title: "Verphone Order",
+                        icon: "📞",
+                        text: "A nurse calls with a verbal order: 'Start the patient on 25 mg of hydroxyzine for anxiety.'",
+                        question: "What should you do to prevent potential confusion?",
+                        options: [
+                            "Ask the nurse to spell the medication name",
+                            "Assume it's correct since anxiety is an indication",
+                            "Check if the patient has hypertension",
+                            "Dispense hydralazine instead since it's more common"
+                        ],
+                        correct: 0,
+                        feedback: "Always ask for spelling when receiving verbal orders for look-alike medications. Hydroxyzine (for anxiety) and hydralazine (for hypertension) are commonly confused."
+                    },
+                    {
+                        id: 2,
+                        title: "Insulin Confusion",
+                        icon: "💉",
+                        text: "A prescription for 'Humulin 70/30' is received, but the patient's medication history shows they've been taking 'Humalog'.",
+                        question: "What is the appropriate action?",
+                        options: [
+                            "Dispense as written without questioning",
+                            "Contact the prescriber to clarify",
+                            "Assume it's a brand switch",
+                            "Check if the patient is newly diabetic"
+                        ],
+                        correct: 1,
+                        feedback: "Humulin and Humalog are different insulin types with different onset/duration. Always clarify with the prescriber when there's a discrepancy in insulin type."
+                    },
+                    {
+                        id: 3,
+                        title: "Computer Entry Error",
+                        icon: "💻",
+                        text: "When entering 'met500' in the pharmacy computer, both metformin and metronidazole appear as options.",
+                        question: "How should you ensure you select the correct medication?",
+                        options: [
+                            "Select the first one that appears",
+                            "Verify against the original prescription",
+                            "Check which one is in stock",
+                            "Ask a colleague which one they usually dispense"
+                        ],
+                        correct: 1,
+                        feedback: "Always verify against the original prescription. Metformin is for diabetes, metronidazole is an antibiotic. The indication should also be verified."
+                    }
+                ],
+                comprehensiveList: [
+                    { medication1: "Celebrex", medication2: "Celexa", tallMan1: "CeleBREX", tallMan2: "CeleXA", risk: "High", reason: "Both start with 'Cele', different classes" },
+                    { medication1: "Zyprexa", medication2: "Zyrtec", tallMan1: "ZypreXA", tallMan2: "ZyrTEC", risk: "Medium", reason: "Sound-alike, different indications" },
+                    { medication1: "Lamictal", medication2: "Lamisil", tallMan1: "LamiCTAL", tallMan2: "LamiSIL", risk: "High", reason: "Look-alike names, different uses" },
+                    { medication1: "Risperdal", medication2: "Ritalin", tallMan1: "RisperDAL", tallMan2: "RitaLIN", risk: "Medium", reason: "Sound-alike, different classes" },
+                    { medication1: "Clonidine", medication2: "Klonopin", tallMan1: "CloNIDine", tallMan2: "KloNOPin", risk: "High", reason: "Sound-alike, different indications" },
+                    { medication1: "Amaryl", medication2: "Reminyl", tallMan1: "AmaRYL", tallMan2: "RemiNYL", risk: "Medium", reason: "Look-alike, different uses" },
+                    { medication1: "Prozac", medication2: "Proscar", tallMan1: "ProZAC", tallMan2: "ProSCAR", risk: "Medium", reason: "Sound-alike, different classes" },
+                    { medication1: "Voltaren", medication2: "Verelan", tallMan1: "Voltaren", tallMan2: "Verelan", risk: "Low", reason: "Look-alike, different routes" },
+                    { medication1: "Zantac", medication2: "Xanax", tallMan1: "ZanTAC", tallMan2: "XanAX", risk: "High", reason: "Sound-alike, different classes" },
+                    { medication1: "Serzone", medication2: "Seroquel", tallMan1: "SerZONE", tallMan2: "SeroQUEL", risk: "Medium", reason: "Look-alike names" }
+                ],
+                exercise: [
+                    {
+                        id: 1,
+                        question: "Which medication pair demonstrates correct Tall Man lettering?",
+                        options: [
+                            "HYDROxyzine vs HYDRAzine",
+                            "hydrOXYzine vs hydrALAzine", 
+                            "HydroXYzine vs HydraLAzine",
+                            "HYdroxyZINE vs HYdralaZINE"
+                        ],
+                        correct: 1,
+                        feedback: "Correct: hydrOXYzine vs hydrALAzine emphasizes the differentiating parts of the names."
+                    },
+                    {
+                        id: 2,
+                        question: "What is the MAIN reason OxyContin and oxycodone are confused?",
+                        options: [
+                            "They look identical",
+                            "Both contain oxycodone but different formulations",
+                            "They sound exactly the same",
+                            "They are stored next to each other"
+                        ],
+                        correct: 1,
+                        feedback: "Correct: Both contain oxycodone but OxyContin is extended-release while oxycodone is immediate-release."
+                    },
+                    {
+                        id: 3,
+                        question: "When should you ALWAYS ask for medication name spelling?",
+                        options: [
+                            "Only for controlled substances",
+                            "Only for expensive medications",
+                            "For all verbal medication orders",
+                            "Only when you're unsure"
+                        ],
+                        correct: 2,
+                        feedback: "Correct: Best practice is to ask for spelling for ALL verbal medication orders to prevent look-alike/sound-alike errors."
+                    }
+                ],
+                studiedPairs: 0,
+                completedScenarios: 0,
+                exerciseScore: 0,
+                studyStartTime: new Date(),
+                studyTime: 0,
+                moduleCompleted: false
+            };
+
+            // DOM Elements
+            const progressSteps = document.querySelectorAll('.progress-step');
+            const activityCards = document.querySelectorAll('.activity-card');
+            const pairsLearnedEl = document.getElementById('pairs-learned');
+            const scenariosCompletedEl = document.getElementById('scenarios-completed');
+            const timeSpentEl = document.getElementById('time-spent');
+            const confusionGrid = document.getElementById('confusion-grid');
+            const scenarioCards = document.getElementById('scenario-cards');
+            const comprehensiveTable = document.getElementById('comprehensive-table');
+            const practiceExercise = document.getElementById('practice-exercise');
+            const finalScore = document.getElementById('final-score');
+            const resultsPanel = document.getElementById('results-panel');
+
+            // Timer for study time
+            function updateTimer() {
+                const now = new Date();
+                const diff = Math.floor((now - state.studyStartTime) / 1000);
+                state.studyTime = diff;
+                const minutes = Math.floor(diff / 60);
+                const seconds = diff % 60;
+                timeSpentEl.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            }
+            setInterval(updateTimer, 1000);
+
+            // Update Progress Summary
+            function updateProgressSummary() {
+                pairsLearnedEl.textContent = state.studiedPairs;
+                scenariosCompletedEl.textContent = state.completedScenarios;
+                
+                // Update activity status
+                updateActivityStatus();
+            }
+
+            // Update Activity Status
+            function updateActivityStatus() {
+                // Activity 1: Studied pairs
+                if (state.studiedPairs > 0) {
+                    document.querySelector('#activity-1 .activity-status').textContent = 'In Progress';
+                    document.querySelector('#activity-1 .activity-status').style.color = '#fdcb6e';
+                }
+                if (state.studiedPairs === state.confusionPairs.length) {
+                    document.querySelector('#activity-1 .activity-status').textContent = 'Completed';
+                    document.querySelector('#activity-1 .activity-status').style.color = '#00b894';
+                    document.querySelector('#activity-1').classList.add('completed');
+                }
+                
+                // Activity 2: Always available
+                document.querySelector('#activity-2 .activity-status').textContent = 'Available';
+                
+                // Activity 3: Scenarios
+                if (state.completedScenarios > 0) {
+                    document.querySelector('#activity-3 .activity-status').textContent = 'In Progress';
+                    document.querySelector('#activity-3 .activity-status').style.color = '#fdcb6e';
+                }
+                if (state.completedScenarios === state.scenarios.length) {
+                    document.querySelector('#activity-3 .activity-status').textContent = 'Completed';
+                    document.querySelector('#activity-3 .activity-status').style.color = '#00b894';
+                    document.querySelector('#activity-3').classList.add('completed');
+                }
+                
+                // Activity 4: Always available
+                document.querySelector('#activity-4 .activity-status').textContent = 'Available';
+                
+                // Activity 5: Exercise
+                if (state.exerciseScore > 0) {
+                    document.querySelector('#activity-5 .activity-status').textContent = 'In Progress';
+                    document.querySelector('#activity-5 .activity-status').style.color = '#fdcb6e';
+                }
+                
+                // Update progress steps
+                let completedActivities = 0;
+                if (state.studiedPairs === state.confusionPairs.length) completedActivities++;
+                if (state.completedScenarios === state.scenarios.length) completedActivities++;
+                if (state.exerciseScore === state.exercise.length) completedActivities++;
+                
+                progressSteps.forEach((step, index) => {
+                    if (index < completedActivities) {
+                        step.classList.add('completed');
+                        step.classList.remove('active');
+                    } else if (index === completedActivities) {
+                        step.classList.add('active');
+                        step.classList.remove('completed');
+                    } else {
+                        step.classList.remove('active', 'completed');
+                    }
+                });
+            }
+
+            // Initialize Confusion Pairs
+            function initConfusionPairs() {
+                confusionGrid.innerHTML = '';
+                
+                state.confusionPairs.forEach(pair => {
+                    const card = document.createElement('div');
+                    card.className = `confusion-card ${pair.riskLevel === 'high' ? 'danger' : pair.riskLevel === 'medium' ? 'warning' : 'caution'}`;
+                    card.dataset.id = pair.id;
+                    
+                    card.innerHTML = `
+                        <div class="confusion-header">
+                            <div class="confusion-title">
+                                <span>${pair.riskLevel === 'high' ? '⚠️' : pair.riskLevel === 'medium' ? '🔶' : 'ℹ️'}</span>
+                                High-Risk Confusion Pair
+                            </div>
+                            <div class="confusion-subtitle">Click to mark as studied</div>
+                        </div>
+                        <div class="confusion-body">
+                            <div class="medication-comparison">
+                                <div class="medication-item ${pair.studied ? 'correct' : ''}">
+                                    <div class="medication-name">
+                                        ${pair.medication1.name}<br>
+                                        <span class="tall-man">${pair.medication1.tallMan}</span>
+                                    </div>
+                                    <div class="medication-type">${pair.medication1.type}</div>
+                                    <div class="medication-details">${pair.medication1.details}</div>
+                                </div>
+                                <div class="medication-item ${pair.studied ? 'correct' : ''}">
+                                    <div class="medication-name">
+                                        ${pair.medication2.name}<br>
+                                        <span class="tall-man">${pair.medication2.tallMan}</span>
+                                    </div>
+                                    <div class="medication-type">${pair.medication2.type}</div>
+                                    <div class="medication-details">${pair.medication2.details}</div>
+                                </div>
+                            </div>
+                            <div style="margin-top: 15px;">
+                                <div class="danger-level ${pair.riskLevel === 'high' ? 'danger-high' : pair.riskLevel === 'medium' ? 'danger-medium' : 'danger-low'}">
+                                    ${pair.riskLevel === 'high' ? 'High Risk' : pair.riskLevel === 'medium' ? 'Medium Risk' : 'Low Risk'}
+                                </div>
+                                <div style="font-size: 0.85rem; color: var(--color-text); margin-top: 10px; line-height: 1.4;">
+                                    <strong>Why confused:</strong> ${pair.reason}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    // Add click event to mark as studied
+                    card.addEventListener('click', function() {
+                        const id = parseInt(this.dataset.id);
+                        const pair = state.confusionPairs.find(p => p.id === id);
+                        
+                        if (!pair.studied) {
+                            pair.studied = true;
+                            state.studiedPairs++;
+                            this.querySelectorAll('.medication-item').forEach(item => {
+                                item.classList.add('correct');
+                            });
+                            updateProgressSummary();
+                        }
+                    });
+                    
+                    confusionGrid.appendChild(card);
+                });
+            }
+
+            // Initialize Scenarios
+            function initScenarios() {
+                scenarioCards.innerHTML = '';
+                
+                state.scenarios.forEach(scenario => {
+                    const card = document.createElement('div');
+                    card.className = 'scenario-card';
+                    card.dataset.id = scenario.id;
+                    
+                    card.innerHTML = `
+                        <div class="scenario-icon">${scenario.icon}</div>
+                        <div class="scenario-title">${scenario.title}</div>
+                        <div class="scenario-text">${scenario.text}</div>
+                        <div class="scenario-question">${scenario.question}</div>
+                        <div class="scenario-options">
+                            ${scenario.options.map((option, index) => `
+                                <div class="scenario-option" data-option="${index}">${option}</div>
+                            `).join('')}
+                        </div>
+                        <div class="scenario-feedback" id="feedback-${scenario.id}"></div>
+                    `;
+                    
+                    // Add event listeners to options
+                    card.querySelectorAll('.scenario-option').forEach(option => {
+                        option.addEventListener('click', function() {
+                            const card = this.closest('.scenario-card');
+                            const id = parseInt(card.dataset.id);
+                            const scenario = state.scenarios.find(s => s.id === id);
+                            const selectedOption = parseInt(this.dataset.option);
+                            
+                            // Remove selected class from all options
+                            card.querySelectorAll('.scenario-option').forEach(opt => {
+                                opt.classList.remove('selected');
+                            });
+                            
+                            // Add selected class to clicked option
+                            this.classList.add('selected');
+                            
+                            // Show feedback
+                            const feedback = card.querySelector('.scenario-feedback');
+                            const isCorrect = selectedOption === scenario.correct;
+                            
+                            feedback.textContent = scenario.feedback;
+                            feedback.className = `scenario-feedback ${isCorrect ? 'correct' : 'incorrect'}`;
+                            
+                            // Update completed scenarios if not already counted
+                            if (isCorrect && !scenario.completed) {
+                                scenario.completed = true;
+                                state.completedScenarios++;
+                                updateProgressSummary();
+                            }
+                        });
+                    });
+                    
+                    scenarioCards.appendChild(card);
+                });
+            }
+
+            // Initialize Comprehensive Table
+            function initComprehensiveTable() {
+                comprehensiveTable.innerHTML = `
+                    <thead>
+                        <tr>
+                            <th>Medication 1</th>
+                            <th>Medication 2</th>
+                            <th>Tall Man Lettering</th>
+                            <th>Risk Level</th>
+                            <th>Reason for Confusion</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${state.comprehensiveList.map(item => `
+                            <tr>
+                                <td><strong>${item.medication1}</strong></td>
+                                <td><strong>${item.medication2}</strong></td>
+                                <td><span class="look-alike-cell">${item.tallMan1}</span> vs <span class="look-alike-cell">${item.tallMan2}</span></td>
+                                <td class="risk-level-cell">
+                                    <span class="risk-badge ${item.risk === 'High' ? 'risk-high' : item.risk === 'Medium' ? 'risk-medium' : 'risk-low'}">
+                                        ${item.risk}
+                                    </span>
+                                </td>
+                                <td>${item.reason}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                `;
+            }
+
+            // Initialize Practice Exercise
+            function initPracticeExercise() {
+                practiceExercise.innerHTML = `
+                    <div class="exercise-title">
+                        <span>✏️</span>
+                        Practice Exercise: Identify and Prevent Errors
+                    </div>
+                    <div class="exercise-instructions">
+                        <strong>Instructions:</strong> For each question, select the correct answer. 
+                        After completing all questions, click "Check Answers" to see your score and feedback.
+                    </div>
+                    <div id="exercise-items">
+                        ${state.exercise.map(q => `
+                            <div class="exercise-item" data-id="${q.id}">
+                                <div class="exercise-question">${q.question}</div>
+                                <div class="exercise-options">
+                                    ${q.options.map((option, index) => `
+                                        <div class="exercise-option" data-option="${index}">${option}</div>
+                                    `).join('')}
+                                </div>
+                                <div class="exercise-feedback" id="ex-feedback-${q.id}"></div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                
+                // Add event listeners to exercise options
+                document.querySelectorAll('.exercise-option').forEach(option => {
+                    option.addEventListener('click', function() {
+                        const item = this.closest('.exercise-item');
+                        const id = parseInt(item.dataset.id);
+                        
+                        // Remove selected class from all options in this item
+                        item.querySelectorAll('.exercise-option').forEach(opt => {
+                            opt.classList.remove('selected');
+                        });
+                        
+                        // Add selected class to clicked option
+                        this.classList.add('selected');
+                    });
+                });
+            }
+
+            // Check Exercise Answers
+            function checkExercise() {
+                let score = 0;
+                
+                state.exercise.forEach(q => {
+                    const item = document.querySelector(`.exercise-item[data-id="${q.id}"]`);
+                    const selectedOption = item.querySelector('.exercise-option.selected');
+                    
+                    if (selectedOption) {
+                        const selectedIndex = parseInt(selectedOption.dataset.option);
+                        const isCorrect = selectedIndex === q.correct;
+                        
+                        // Show correct/incorrect styling
+                        item.querySelectorAll('.exercise-option').forEach((opt, index) => {
+                            if (index === q.correct) {
+                                opt.classList.add('correct');
+                            } else if (index === selectedIndex && !isCorrect) {
+                                opt.classList.add('incorrect');
+                            }
+                        });
+                        
+                        // Show feedback
+                        const feedback = document.getElementById(`ex-feedback-${q.id}`);
+                        feedback.textContent = q.feedback;
+                        feedback.classList.add('show');
+                        
+                        if (isCorrect) {
+                            score++;
+                        }
+                    }
+                });
+                
+                state.exerciseScore = score;
+                updateProgressSummary();
+                
+                // Show score
+                alert(`You scored ${score} out of ${state.exercise.length} (${Math.round((score / state.exercise.length) * 100)}%)`);
+            }
+
+            // Reset Exercise
+            function resetExercise() {
+                state.exerciseScore = 0;
+                initPracticeExercise();
+                updateProgressSummary();
+            }
+
+            // Mark All as Studied
+            function markAllStudied() {
+                state.confusionPairs.forEach(pair => {
+                    if (!pair.studied) {
+                        pair.studied = true;
+                        state.studiedPairs++;
+                    }
+                });
+                initConfusionPairs();
+                updateProgressSummary();
+            }
+
+            // Reset Module
+            function resetModule() {
+                // Reset state
+                state.confusionPairs.forEach(pair => {
+                    pair.studied = false;
+                });
+                state.scenarios.forEach(scenario => {
+                    scenario.completed = false;
+                });
+                state.studiedPairs = 0;
+                state.completedScenarios = 0;
+                state.exerciseScore = 0;
+                state.moduleCompleted = false;
+                
+                // Reset UI
+                activityCards.forEach(card => {
+                    card.classList.remove('completed');
+                    const status = card.querySelector('.activity-status');
+                    status.textContent = 'Not Started';
+                    status.style.color = '';
+                });
+                
+                progressSteps.forEach(step => {
+                    step.classList.remove('active', 'completed');
+                });
+                progressSteps[0].classList.add('active');
+                
+                resultsPanel.classList.remove('show');
+                
+                // Reinitialize components
+                initConfusionPairs();
+                initScenarios();
+                initPracticeExercise();
+                updateProgressSummary();
+                
+                // Reset timer
+                state.studyStartTime = new Date();
+            }
+
+            // Complete Module
+            function completeModule() {
+                state.moduleCompleted = true;
+                
+                // Calculate final score
+                const maxScore = state.confusionPairs.length + state.scenarios.length + state.exercise.length;
+                const actualScore = state.studiedPairs + state.completedScenarios + state.exerciseScore;
+                const percentage = Math.round((actualScore / maxScore) * 100);
+                
+                finalScore.textContent = `${percentage}%`;
+                resultsPanel.classList.add('show');
+                resultsPanel.scrollIntoView({ behavior: 'smooth' });
+                
+                // Mark all activities as completed
+                activityCards.forEach(card => {
+                    card.classList.add('completed');
+                    const status = card.querySelector('.activity-status');
+                    status.textContent = 'Completed';
+                    status.style.color = '#00b894';
+                });
+                
+                progressSteps.forEach(step => {
+                    step.classList.add('completed');
+                    step.classList.remove('active');
+                });
+            }
+
+            // Initialize
+            initConfusionPairs();
+            initScenarios();
+            initComprehensiveTable();
+            initPracticeExercise();
+            updateProgressSummary();
+
+            // Event Listeners
+            document.getElementById('mark-studied-btn').addEventListener('click', markAllStudied);
+            document.getElementById('check-exercise-btn').addEventListener('click', checkExercise);
+            document.getElementById('reset-exercise-btn').addEventListener('click', resetExercise);
+            document.getElementById('reset-module-btn').addEventListener('click', resetModule);
+            document.getElementById('complete-module-btn').addEventListener('click', completeModule);
+            
+            // Initial timer update
+            updateTimer();
+        });
+    </script>
+</body>
+</html>
