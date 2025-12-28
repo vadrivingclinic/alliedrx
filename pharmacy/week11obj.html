@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AlliedRx Pharmacy Tech -- Week 11 Objectives</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --color-primary: #af4bef;
+  --color-primary-soft: #d492ff;
+  --color-accent: #8380f0;
+  --color-success: #00b894;
+  --color-error: #e17055;
+  --color-warning: #fdcb6e;
+  --color-bg: #f7f5fb;
+  --color-text: #2b2b2b;
+  --color-muted: #6c6880;
+  --radius-lg: 24px;
+  --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+  --shadow-hover: 0 25px 60px rgba(175, 75, 239, 0.25);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  width: 100%;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  padding: 24px;
+  background: radial-gradient(
+    circle at top left,
+    #ffffff 0,
+    #f1ecff 40%,
+    var(--color-bg) 100%
+  );
+  color: var(--color-text);
+  -webkit-text-size-adjust: 100%;
+}
+
+@media (max-width: 600px) {
+  body {
+    padding: 12px;
+  }
+}
+
+.page {
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  background: #ffffff;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  padding: 28px 30px 32px 30px;
+  display: grid;
+  grid-template-columns: minmax(0, 3.1fr) minmax(0, 2.4fr);
+  gap: 28px;
+  position: relative;
+  overflow: hidden;
+  animation: fadeInUp 0.8s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 900px) {
+  .page {
+    grid-template-columns: 1fr;
+    padding: 22px;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    padding: 0;
+  }
+  .page {
+    border-radius: 0;
+    box-shadow: none;
+    padding: 18px 14px 22px;
+    gap: 22px;
+  }
+}
+
+img,
+.page,
+.column,
+.objective-card,
+.week-overview {
+  max-width: 100%;
+}
+
+.column {
+  position: relative;
+  z-index: 1;
+}
+
+/* Header */
+.brand-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+  width: 100%;
+  animation: fadeIn 0.6s ease-out 0.2s both;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.brand-logo {
+  height: 40px;
+  width: auto;
+  max-width: 100%;
+  filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+  transition: transform 0.3s ease;
+}
+
+.brand-logo:hover {
+  transform: scale(1.05);
+}
+
+.course-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-width: 100%;
+}
+
+.course-name {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--color-muted);
+  white-space: normal;
+}
+
+.week-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(175, 75, 239, 0.08);
+  font-size: 0.76rem;
+  color: var(--color-primary);
+  white-space: normal;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { background-color: rgba(175, 75, 239, 0.08); }
+  50% { background-color: rgba(175, 75, 239, 0.15); }
+}
+
+.week-label-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--color-success);
+  flex-shrink: 0;
+  animation: blink 1.5s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.badge-mode {
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: rgba(12, 10, 24, 0.06);
+  border: 1px solid rgba(12, 10, 24, 0.08);
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--color-muted);
+  white-space: nowrap;
+  transition: all 0.3s ease;
+}
+
+.badge-mode:hover {
+  background: rgba(175, 75, 239, 0.1);
+  border-color: var(--color-primary-soft);
+  color: var(--color-primary);
+}
+
+@media (max-width: 480px) {
+  .brand-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .badge-mode {
+    margin-top: 6px;
+  }
+}
+
+h1 {
+  font-size: clamp(2rem, 3vw, 2.4rem);
+  line-height: 1.05;
+  color: var(--color-primary);
+  margin-bottom: 6px;
+  animation: fadeInUp 0.6s ease-out 0.3s both;
+}
+
+.subtitle {
+  font-size: 0.98rem;
+  color: var(--color-muted);
+  max-width: 34rem;
+  margin-bottom: 18px;
+  animation: fadeInUp 0.6s ease-out 0.4s both;
+}
+
+/* Objectives list */
+.objectives-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.objective-card {
+  background: #08070a;
+  color: #ffffff;
+  border-radius: 18px;
+  padding: 10px 16px 14px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.objective-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.7s ease;
+}
+
+.objective-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
+}
+
+.objective-card:hover::before {
+  left: 100%;
+}
+
+.objective-card.active {
+  background: linear-gradient(135deg, #0f172a, #1e1b4b);
+  border-left: 4px solid var(--color-accent);
+}
+
+@media (max-width: 480px) {
+  .objective-card {
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto;
+  }
+  .objective-icon {
+    justify-self: flex-end;
+  }
+}
+
+.objective-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #111827;
+  font-weight: 700;
+  font-size: 1.05rem;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.objective-card:hover .objective-number {
+  background: var(--color-primary-soft);
+  transform: rotate(5deg);
+}
+
+.objective-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.objective-verb {
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: var(--color-primary-soft);
+  transition: color 0.3s ease;
+}
+
+.objective-card:hover .objective-verb {
+  color: #ffffff;
+}
+
+.objective-text {
+  font-size: 0.84rem;
+  color: #e5e7eb;
+  line-height: 1.4;
+}
+
+.objective-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  border: 1px solid rgba(250, 250, 250, 0.16);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  color: #f9fafb;
+  background: linear-gradient(
+    135deg,
+    rgba(175, 75, 239, 0.1),
+    rgba(0, 0, 0, 0.4)
+  );
+  transition: all 0.3s ease;
+}
+
+.objective-card:hover .objective-icon {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  transform: scale(1.1);
+}
+
+/* Right-hand content */
+.objectives-header {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--color-text);
+  margin-bottom: 6px;
+  animation: fadeInUp 0.6s ease-out 0.5s both;
+}
+
+.section-tag {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--color-primary);
+  font-weight: 600;
+  margin-bottom: 10px;
+  animation: fadeInUp 0.6s ease-out 0.6s both;
+}
+
+.week-overview {
+  background: rgba(12, 10, 24, 0.94);
+  border-radius: 18px;
+  padding: 16px 18px 18px;
+  color: #e5e7eb;
+  font-size: 0.88rem;
+  line-height: 1.7;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.6);
+  margin-bottom: 16px;
+  animation: fadeInUp 0.6s ease-out 0.7s both;
+  transition: transform 0.3s ease;
+}
+
+.week-overview:hover {
+  transform: translateY(-2px);
+}
+
+.week-overview strong {
+  color: #ffffff;
+}
+
+.mini-heading {
+  font-size: 0.86rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: #c4b5fd;
+  font-weight: 600;
+  margin: 8px 0 10px;
+}
+
+.outcomes-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.86rem;
+  color: #f9fafb;
+}
+
+.outcomes-list li {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  transition: transform 0.3s ease;
+}
+
+.outcomes-list li:hover {
+  transform: translateX(5px);
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  margin-top: 6px;
+  border-radius: 999px;
+  background: var(--color-accent);
+  flex-shrink: 0;
+  animation: pulse 2s infinite;
+}
+
+.note-card {
+  margin-top: 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(15, 23, 42, 0.7);
+  padding: 10px 12px;
+  font-size: 0.78rem;
+  color: #e5e7eb;
+  transition: all 0.3s ease;
+}
+
+.note-card:hover {
+  border-color: var(--color-primary-soft);
+  background: rgba(15, 23, 42, 0.9);
+}
+
+.note-card strong {
+  color: #fef3c7;
+}
+
+/* Interactive counter */
+.progress-counter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(175, 75, 239, 0.05);
+  border-radius: 16px;
+  padding: 12px 18px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(175, 75, 239, 0.1);
+}
+
+.counter-item {
+  text-align: center;
+}
+
+.counter-number {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--color-primary);
+  display: block;
+}
+
+.counter-label {
+  font-size: 0.75rem;
+  color: var(--color-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* Animation for counter */
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.counter-item {
+  animation: countUp 0.6s ease-out forwards;
+}
+
+.counter-item:nth-child(1) { animation-delay: 0.8s; }
+.counter-item:nth-child(2) { animation-delay: 1s; }
+.counter-item:nth-child(3) { animation-delay: 1.2s; }
+
+/* Case Study Box */
+.case-study {
+  background: linear-gradient(135deg, rgba(131, 128, 240, 0.1), rgba(175, 75, 239, 0.1));
+  border-radius: 18px;
+  padding: 18px;
+  margin-top: 20px;
+  border: 1px solid rgba(131, 128, 240, 0.2);
+}
+
+.case-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.case-content {
+  font-size: 0.85rem;
+  color: #ffffff;
+  line-height: 1.5;
+}
+
+.case-content strong {
+  color: #d492ff;
+}
+
+/* Patient Rights Grid */
+.rights-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.right-item {
+  background: rgba(131, 128, 240, 0.1);
+  border-radius: 12px;
+  padding: 10px;
+  border: 1px solid rgba(131, 128, 240, 0.2);
+  transition: all 0.3s ease;
+}
+
+.right-item:hover {
+  background: rgba(131, 128, 240, 0.2);
+  transform: translateY(-2px);
+}
+
+.right-number {
+  font-weight: 600;
+  color: #c4b5fd;
+  font-size: 0.9rem;
+  margin-bottom: 4px;
+}
+
+.right-desc {
+  color: #e5e7eb;
+  font-size: 0.75rem;
+  margin-top: 4px;
+}
+
+/* Key Terms Section */
+.key-terms {
+  margin-top: 20px;
+  background: rgba(12, 10, 24, 0.94);
+  border-radius: 18px;
+  padding: 16px 18px;
+  border: 1px solid rgba(131, 128, 240, 0.2);
+}
+
+.key-terms-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.term-definition {
+  margin-bottom: 8px;
+  padding-left: 10px;
+  border-left: 2px solid var(--color-primary-soft);
+  transition: all 0.3s ease;
+}
+
+.term-definition:hover {
+  border-left-color: var(--color-primary);
+  transform: translateX(3px);
+}
+
+.term {
+  font-weight: 600;
+  color: #d492ff;
+  font-size: 0.82rem;
+}
+
+.definition {
+  color: #e5e7eb;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  margin-top: 2px;
+}
+
+/* Error Types Section */
+.error-types {
+  margin-top: 15px;
+  padding: 15px;
+  background: rgba(15, 23, 42, 0.5);
+  border-radius: 12px;
+  border-left: 4px solid var(--color-error);
+}
+
+.error-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fdcb6e;
+  margin-bottom: 8px;
+}
+
+.error-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.78rem;
+  color: #e5e7eb;
+}
+
+.error-item {
+  padding: 6px;
+  border-radius: 6px;
+  background: rgba(225, 112, 85, 0.15);
+}
+
+.error-name {
+  font-weight: 600;
+  color: #ff9e7d;
+}
+
+.error-desc {
+  font-size: 0.76rem;
+  margin-top: 2px;
+}
+
+/* Safety Organizations */
+.org-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.org-item {
+  padding: 10px;
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.5);
+  border: 1px solid rgba(131, 128, 240, 0.2);
+}
+
+.org-name {
+  font-weight: 600;
+  color: #c4b5fd;
+  font-size: 0.8rem;
+  margin-bottom: 4px;
+}
+
+.org-desc {
+  font-size: 0.75rem;
+  color: #e5e7eb;
+}
+</style>
+</head>
+<body>
+<main class="page" aria-labelledby="week11-heading">
+  <!-- LEFT COLUMN: title + objective cards -->
+  <section class="column" aria-label="Week 11 objectives list">
+    <header class="brand-row">
+      <div class="brand">
+        <img
+          src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+          alt="AlliedRx logo"
+          class="brand-logo"
+        />
+        <div class="course-meta">
+          <span class="course-name">Pharmacy Technician Program • CPhT</span>
+          <div class="week-label">
+            <span class="week-label-dot"></span>
+            <span>Week 11 --- Medication Safety & Error Prevention</span>
+          </div>
+        </div>
+      </div>
+      <span class="badge-mode">Campus &amp; Online</span>
+    </header>
+    <h1 id="week11-heading">Week 11 Objectives</h1>
+    <p class="subtitle">
+      Master <strong>medication safety principles, error prevention strategies, and quality assurance systems</strong> 
+      essential for pharmacy technicians to protect patients and ensure optimal therapeutic outcomes.
+    </p>
+    <!-- Progress counter -->
+    <div class="progress-counter">
+      <div class="counter-item">
+        <span class="counter-number" id="total-objectives">10</span>
+        <span class="counter-label">Objectives</span>
+      </div>
+      <div class="counter-item">
+        <span class="counter-number">15</span>
+        <span class="counter-label">Key Terms</span>
+      </div>
+      <div class="counter-item">
+        <span class="counter-number">1</span>
+        <span class="counter-label">Chapter</span>
+      </div>
+    </div>
+    <div class="objectives-list" id="objectives-container">
+      <!-- Chapter 14: Medication Safety and Error Prevention Objectives -->
+      <article class="objective-card" data-chapter="chapter14">
+        <div class="objective-number">01</div>
+        <div class="objective-main">
+          <div class="objective-verb">List & Give Examples</div>
+          <p class="objective-text">
+            List the five patient rights of medication safety and give an example of each.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          ✅
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter14">
+        <div class="objective-number">02</div>
+        <div class="objective-main">
+          <div class="objective-verb">Describe</div>
+          <p class="objective-text">
+            Describe what constitutes an error.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          ⚠️
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter14">
+        <div class="objective-number">03</div>
+        <div class="objective-main">
+          <div class="objective-verb">Differentiate</div>
+          <p class="objective-text">
+            Differentiate among the various types of medication errors.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          🔍
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter14">
+        <div class="objective-number">04</div>
+        <div class="objective-main">
+          <div class="objective-verb">Explain</div>
+          <p class="objective-text">
+            Explain the various causes of medication errors as well as why errors occur.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          🤔
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter14">
+        <div class="objective-number">05</div>
+        <div class="objective-main">
+          <div class="objective-verb">Explain & List</div>
+          <p class="objective-text">
+            Explain the necessity of reporting medication errors, and list the organizations that track and report errors.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          📊
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter14">
+        <div class="objective-number">06</div>
+        <div class="objective-main">
+          <div class="objective-verb">Identify</div>
+          <p class="objective-text">
+            Identify safety strategies pharmacies, pharmacists, and pharmacy technicians can use to reduce medication errors.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          🛡️
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter14">
+        <div class="objective-number">07</div>
+        <div class="objective-main">
+          <div class="objective-verb">List & Describe</div>
+          <p class="objective-text">
+            List and describe four automated systems and explain how they prevent errors.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          🤖
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter14">
+        <div class="objective-number">08</div>
+        <div class="objective-main">
+          <div class="objective-verb">Discuss</div>
+          <p class="objective-text">
+            Discuss patient dose-specific orders, USP <797> regulations, and medication safety leader role in reducing errors.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          📝
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter14">
+        <div class="objective-number">09</div>
+        <div class="objective-main">
+          <div class="objective-verb">Discuss</div>
+          <p class="objective-text">
+            Discuss quality assurance practices and risk management guidelines used in the pharmacy.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          🎯
+        </div>
+      </article>
+      <article class="objective-card" data-chapter="chapter14">
+        <div class="objective-number">10</div>
+        <div class="objective-main">
+          <div class="objective-verb">Describe</div>
+          <p class="objective-text">
+            Describe the roles that training and education play in the reduction of medication errors.
+          </p>
+        </div>
+        <div class="objective-icon" aria-hidden="true">
+          🎓
+        </div>
+      </article>
+    </div>
+  </section>
+  <!-- RIGHT COLUMN: narrative + outcomes framing -->
+  <aside class="column" aria-label="Overview of this week's content">
+    <h2 class="objectives-header">Patient Safety First</h2>
+    <p class="section-tag">Error Prevention • Safety Systems • Quality Assurance • Reporting Protocols</p>
+    <div class="week-overview">
+      <p>
+        Week 11 focuses on <strong>medication safety and error prevention</strong>, the most critical 
+        responsibility for pharmacy technicians. You'll learn about patient rights, error types, prevention 
+        strategies, and quality systems that protect patients from medication-related harm.
+      </p>
+      <p>
+        Medication errors cause <strong>7,000-9,000 deaths annually</strong> in the United States. Pharmacy 
+        technicians are frontline defenders against these preventable tragedies through diligent adherence 
+        to safety protocols and continuous quality improvement.
+      </p>
+      
+      <div class="case-study">
+        <div class="case-title">
+          <span>📋</span> Chapter 14 Scenario: Jonathan's Safety Committee Role
+        </div>
+        <div class="case-content">
+          <strong>Technician:</strong> Jonathan, experienced technician at large municipal hospital<br>
+          <strong>Education:</strong> 2-year technician training program graduate<br>
+          <strong>Credentials:</strong> PTCB certified, full-time inpatient technician<br>
+          <strong>New Role:</strong> Asked to join medication errors committee by pharmacy director<br>
+          <strong>Committee Focus:</strong> Investigating medication error causes and prevention strategies<br>
+          <strong>Preparation:</strong> Understanding error types, reporting systems, and prevention methods
+        </div>
+      </div>
+      
+      <!-- Patient Rights Grid -->
+      <div class="mini-heading" style="margin-top: 20px;">✅ Five Patient Rights of Medication Safety</div>
+      <div class="rights-grid">
+        <div class="right-item">
+          <div class="right-number">1. Right Patient</div>
+          <div class="right-desc">Verify patient identity using two identifiers before administration</div>
+        </div>
+        <div class="right-item">
+          <div class="right-number">2. Right Drug</div>
+          <div class="right-desc">Confirm correct medication selection and labeling accuracy</div>
+        </div>
+        <div class="right-item">
+          <div class="right-number">3. Right Dose</div>
+          <div class="right-desc">Calculate and verify appropriate dosage strength and amount</div>
+        </div>
+        <div class="right-item">
+          <div class="right-number">4. Right Route</div>
+          <div class="right-desc">Ensure proper administration method (oral, IV, topical, etc.)</div>
+        </div>
+        <div class="right-item">
+          <div class="right-number">5. Right Time</div>
+          <div class="right-desc">Administer at correct frequency and scheduled intervals</div>
+        </div>
+      </div>
+      
+      <!-- Error Types -->
+      <div class="error-types">
+        <div class="error-title">⚠️ Common Medication Error Types</div>
+        <div class="error-list">
+          <div class="error-item">
+            <div class="error-name">Wrong Drug Errors</div>
+            <div class="error-desc">Incorrect medication selection due to look-alike/sound-alike names</div>
+          </div>
+          <div class="error-item">
+            <div class="error-name">Wrong Dose Errors</div>
+            <div class="error-desc">Incorrect dosage calculations or decimal point placement errors</div>
+          </div>
+          <div class="error-item">
+            <div class="error-name">Wrong Route Errors</div>
+            <div class="error-desc">Medication administered via incorrect method (oral vs IV)</div>
+          </div>
+          <div class="error-item">
+            <div class="error-name">Wrong Patient Errors</div>
+            <div class="error-desc">Medication given to incorrect patient due to identification failures</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Safety Organizations -->
+      <div class="mini-heading">🏛️ Safety Organizations & Reporting Systems</div>
+      <div class="org-grid">
+        <div class="org-item">
+          <div class="org-name">ISMP</div>
+          <div class="org-desc">Institute for Safe Medication Practices - collects error data and publishes safety alerts</div>
+        </div>
+        <div class="org-item">
+          <div class="org-name">MedWatch</div>
+          <div class="org-desc">FDA's safety information and adverse event reporting program</div>
+        </div>
+        <div class="org-item">
+          <div class="org-name">MedMARx</div>
+          <div class="org-desc">National database for tracking adverse drug reactions and medication errors</div>
+        </div>
+        <div class="org-item">
+          <div class="org-name">NCCMERP</div>
+          <div class="org-desc">National Coordinating Council for Medication Error Reporting and Prevention</div>
+        </div>
+      </div>
+      
+      <p class="mini-heading">By the end of this week, you will be able to:</p>
+      <ul class="outcomes-list">
+        <li>
+          <span class="dot"></span>
+          <span>Apply the Five Rights of medication safety to every dispensing and preparation task.</span>
+        </li>
+        <li>
+          <span class="dot"></span>
+          <span>Identify and categorize different types of medication errors and their root causes.</span>
+        </li>
+        <li>
+          <span class="dot"></span>
+          <span>Navigate error reporting systems and understand mandatory vs voluntary reporting requirements.</span>
+        </li>
+        <li>
+          <span class="dot"></span>
+          <span>Implement barcode scanning, automated dispensing systems, and other technology to prevent errors.</span>
+        </li>
+        <li>
+          <span class="dot"></span>
+          <span>Participate effectively in medication safety committees and quality improvement initiatives.</span>
+        </li>
+        <li>
+          <span class="dot"></span>
+          <span>Apply USP <797> regulations and risk management principles to sterile compounding safety.</span>
+        </li>
+      </ul>
+      
+      <div class="note-card">
+        <strong>Error Prevention:</strong> <strong>Barcode scanning systems</strong> reduce medication errors by 
+        85% when implemented correctly. The combination of barcode scanning at dispensing, administration, and 
+        verification points creates a closed-loop medication system that prevents most preventable errors.
+      </div>
+      
+      <div class="note-card" style="margin-top: 12px;">
+        <strong>Look-Alike Sound-Alike (LASA) Drugs:</strong> Medications like <strong>hydralazine/hydroxyzine</strong> 
+        or <strong>Lamictal/Lamisil</strong> cause frequent errors. Technicians must use TALLman lettering (hydrALAZINE/hydroXYzine), 
+        separate storage, and double verification for all LASA medications to prevent dangerous mix-ups.
+      </div>
+      
+      <div class="note-card" style="margin-top: 12px;">
+        <strong>Safety Committee Participation:</strong> Like Jonathan, technicians on safety committees should 
+        prepare by <strong>studying error data</strong>, <strong>understanding human factors</strong>, and 
+        <strong>learning quality improvement methodologies</strong>. Technician insights into workflow challenges 
+        are invaluable for developing practical, effective safety solutions.
+      </div>
+    </div>
+    
+    <!-- Key Terms Section -->
+    <div class="key-terms">
+      <div class="key-terms-title">
+        <span>📚</span> Key Medication Safety Terms
+      </div>
+      <div class="term-definition">
+        <div class="term">Medication Error</div>
+        <div class="definition">Any preventable event that may cause inappropriate medication use or patient harm</div>
+      </div>
+      <div class="term-definition">
+        <div class="term">Institute for Safe Medication Practices (ISMP)</div>
+        <div class="definition">Nonprofit organization dedicated to preventing medication errors and promoting safety</div>
+      </div>
+      <div class="term-definition">
+        <div class="term">MedWatch</div>
+        <div class="definition">FDA program for reporting drug safety alerts and adverse events</div>
+      </div>
+      <div class="term-definition">
+        <div class="term">Automated Dispensing System (ADS)</div>
+        <div class="definition">Electronic system that controls medication dispensing to prevent errors</div>
+      </div>
+      <div class="term-definition">
+        <div class="term">Risk Evaluation and Mitigation Strategy (REMS)</div>
+        <div class="definition">Program to manage known or potential serious risks associated with medications</div>
+      </div>
+      <div class="term-definition">
+        <div class="term">National Coordinating Council (NCCMERP)</div>
+        <div class="definition">Multidisciplinary council addressing causes of medication errors and prevention strategies</div>
+      </div>
+      <div class="term-definition">
+        <div class="term">Medication Safety Leader</div>
+        <div class="definition">Designated individual responsible for overseeing medication safety programs and initiatives</div>
+      </div>
+      <div class="term-definition">
+        <div class="term">Quality Assurance</div>
+        <div class="definition">Systematic approach to ensuring medications meet established standards of safety and efficacy</div>
+      </div>
+    </div>
+  </aside>
+</main>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Interactive objective cards
+  const objectiveCards = document.querySelectorAll('.objective-card');
+  
+  objectiveCards.forEach(card => {
+    card.addEventListener('click', function() {
+      // Toggle active state
+      this.classList.toggle('active');
+
+      // Add subtle animation
+      if (this.classList.contains('active')) {
+        const icon = this.querySelector('.objective-icon');
+        icon.style.transform = 'scale(1.2) rotate(10deg)';
+        setTimeout(() => {
+          icon.style.transform = 'scale(1.1)';
+        }, 300);
+      }
+    });
+
+    // Add keyboard navigation
+    card.setAttribute('tabindex', '0');
+    card.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        this.click();
+      }
+    });
+  });
+
+  // Animate counter numbers
+  function animateCounter(element, target, duration) {
+    let start = 0;
+    const increment = target / (duration / 16); // 60fps
+    const timer = setInterval(() => {
+      start += increment;
+      if (start >= target) {
+        element.textContent = target;
+        clearInterval(timer);
+      } else {
+        element.textContent = Math.floor(start);
+      }
+    }, 16);
+  }
+
+  // Start counter animation after page load
+  setTimeout(() => {
+    const counterElement = document.getElementById('total-objectives');
+    animateCounter(counterElement, 10, 1000);
+  }, 1500);
+
+  // Add hover effect to outcomes list items
+  const outcomesItems = document.querySelectorAll('.outcomes-list li');
+  outcomesItems.forEach(item => {
+    item.addEventListener('mouseenter', function() {
+      const dot = this.querySelector('.dot');
+      dot.style.transform = 'scale(1.5)';
+      dot.style.background = 'var(--color-primary)';
+    });
+    item.addEventListener('mouseleave', function() {
+      const dot = this.querySelector('.dot');
+      dot.style.transform = 'scale(1)';
+      dot.style.background = 'var(--color-accent)';
+    });
+  });
+
+  // Add scroll animation for cards
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, observerOptions);
+
+  // Observe all objective cards
+  objectiveCards.forEach(card => {
+    card.style.opacity = '0';
+    card.style.transform = 'translateY(20px)';
+    card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    observer.observe(card);
+  });
+
+  // Add interactivity to case study boxes
+  const caseStudies = document.querySelectorAll('.case-study');
+  caseStudies.forEach(study => {
+    study.addEventListener('mouseenter', function() {
+      this.style.transform = 'translateY(-3px)';
+      this.style.boxShadow = '0 12px 30px rgba(131, 128, 240, 0.2)';
+    });
+    study.addEventListener('mouseleave', function() {
+      this.style.transform = 'translateY(0)';
+      this.style.boxShadow = 'none';
+    });
+  });
+
+  // Add interactivity to patient rights
+  const rightItems = document.querySelectorAll('.right-item');
+  rightItems.forEach(item => {
+    item.addEventListener('mouseenter', function() {
+      this.style.transform = 'translateY(-3px)';
+      this.style.boxShadow = '0 8px 20px rgba(131, 128, 240, 0.15)';
+    });
+    item.addEventListener('mouseleave', function() {
+      this.style.transform = 'translateY(0)';
+      this.style.boxShadow = 'none';
+    });
+  });
+
+  // Add interactivity to key terms
+  const termDefinitions = document.querySelectorAll('.term-definition');
+  termDefinitions.forEach(term => {
+    term.addEventListener('mouseenter', function() {
+      this.style.transform = 'translateX(3px)';
+      this.style.borderLeftColor = 'var(--color-primary)';
+    });
+    term.addEventListener('mouseleave', function() {
+      this.style.transform = 'translateX(0)';
+      this.style.borderLeftColor = 'var(--color-primary-soft)';
+    });
+  });
+
+  // Add interactivity to error items
+  const errorItems = document.querySelectorAll('.error-item');
+  errorItems.forEach(item => {
+    item.addEventListener('mouseenter', function() {
+      this.style.transform = 'translateX(3px)';
+      this.style.background = 'rgba(225, 112, 85, 0.25)';
+    });
+    item.addEventListener('mouseleave', function() {
+      this.style.transform = 'translateX(0)';
+      this.style.background = 'rgba(225, 112, 85, 0.15)';
+    });
+  });
+
+  // Add interactivity to organization items
+  const orgItems = document.querySelectorAll('.org-item');
+  orgItems.forEach(item => {
+    item.addEventListener('mouseenter', function() {
+      this.style.transform = 'translateY(-2px)';
+      this.style.background = 'rgba(15, 23, 42, 0.7)';
+    });
+    item.addEventListener('mouseleave', function() {
+      this.style.transform = 'translateY(0)';
+      this.style.background = 'rgba(15, 23, 42, 0.5)';
+    });
+  });
+});
+</script>
+</body>
+</html>
