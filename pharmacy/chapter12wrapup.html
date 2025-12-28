@@ -6,14 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
         :root {
-            --color-primary: #0ea5e9;
-            --color-primary-soft: #e0f2fe;
-            --color-accent: #3b82f6;
-            --color-bg: #f8fafc;
-            --color-text: #0f172a;
-            --color-muted: #64748b;
+            --color-primary: #af4bef;
+            --color-primary-soft: #d9b8ff;
+            --color-accent: #8380f0;
+            --color-bg: #f7f5fb;
+            --color-text: #1e2030;
+            --color-muted: #727089;
             --radius-lg: 24px;
-            --shadow-soft: 0 18px 45px rgba(30, 41, 59, 0.08);
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
         }
 
         * {
@@ -30,7 +30,7 @@
         body {
             font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
             padding: 24px;
-            background: radial-gradient(circle at top left, #ffffff 0, #f0f9ff 40%, var(--color-bg) 100%);
+            background: radial-gradient(circle at top left, #ffffff 0, #f3edff 40%, var(--color-bg) 100%);
             color: var(--color-text);
             -webkit-text-size-adjust: 100%;
         }
@@ -136,7 +136,7 @@
             gap: 8px;
             padding: 4px 10px;
             border-radius: 999px;
-            background: rgba(14, 165, 233, 0.08);
+            background: rgba(175, 75, 239, 0.08);
             font-size: 0.76rem;
             color: var(--color-primary);
             white-space: normal;
@@ -146,7 +146,7 @@
             width: 8px;
             height: 8px;
             border-radius: 999px;
-            background: #0d9488;
+            background: #00b894;
             flex-shrink: 0;
         }
 
@@ -214,7 +214,7 @@
             margin-bottom: 14px;
             background: linear-gradient(
                 135deg,
-                rgba(14, 165, 233, 0.06),
+                rgba(175, 75, 239, 0.06),
                 rgba(255, 255, 255, 0.98)
             );
         }
@@ -291,15 +291,15 @@
             letter-spacing: 0.05em;
             text-transform: uppercase;
             cursor: pointer;
-            background: linear-gradient(135deg, var(--color-primary), #3b82f6);
+            background: linear-gradient(135deg, var(--color-primary), #7c3aed);
             color: #ffffff;
-            box-shadow: 0 10px 25px rgba(14, 165, 233, 0.3);
+            box-shadow: 0 10px 25px rgba(88, 28, 135, 0.35);
             transition: transform 0.05s ease, box-shadow 0.05s ease;
         }
 
         .btn:active {
             transform: translateY(1px);
-            box-shadow: 0 5px 12px rgba(14, 165, 233, 0.4);
+            box-shadow: 0 5px 12px rgba(88, 28, 135, 0.4);
         }
 
         /* Vocabulary */
@@ -330,7 +330,7 @@
         .vocab-term {
             font-weight: 700;
             margin-bottom: 4px;
-            color: #dbeafe;
+            color: #fef9c3;
         }
 
         .vocab-definition {
@@ -415,7 +415,7 @@
             font-size: 0.8rem;
             text-transform: uppercase;
             letter-spacing: 0.12em;
-            color: #93c5fd;
+            color: #c4b5fd;
             font-weight: 600;
             margin-bottom: 8px;
         }
@@ -440,7 +440,7 @@
             height: 6px;
             margin-top: 7px;
             border-radius: 999px;
-            background: #93c5fd;
+            background: #a5b4fc;
             flex-shrink: 0;
         }
 
@@ -480,7 +480,7 @@
             <p class="subtitle">
                 Use this page to pause and check your understanding of
                 <strong>Chapter 12 — Aseptic Technique and Sterile Compounding</strong>.
-                Review key ideas about USP standards, clean room protocols, and sterile preparation steps so you’re ready to prepare safe, contamination‑free medications.
+                Review key ideas about USP standards, clean room protocols, and sterile preparation steps so you're ready to prepare safe, contamination‑free medications.
             </p>
 
             <!-- QUICK SELF-CHECK QUIZ -->
@@ -526,7 +526,7 @@
                             </li>
                             <li>
                                 <input type="radio" name="q2" value="b" id="q2b" />
-                                <label for="q2b">The manufacturer’s expiration date printed on the vial or ampule.</label>
+                                <label for="q2b">The manufacturer's expiration date printed on the vial or ampule.</label>
                             </li>
                             <li>
                                 <input type="radio" name="q2" value="c" id="q2c" />
@@ -559,7 +559,7 @@
 
                     <div class="quiz-item" data-answer="c">
                         <p class="quiz-question">
-                            4. The term <strong>“critical site”</strong> in sterile compounding refers to:
+                            4. The term <strong>"critical site"</strong> in sterile compounding refers to:
                         </p>
                         <ul class="quiz-options">
                             <li>
