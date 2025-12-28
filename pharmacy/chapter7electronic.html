@@ -1,0 +1,2151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AlliedRx – Module 2: Electronic Resources & Research Methods</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+/* All CSS from your example remains identical, only showing updated/added sections */
+
+/* Database Decision Making */
+.database-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+@media (max-width: 600px) {
+    .database-options {
+        grid-template-columns: 1fr;
+    }
+}
+
+.database-option {
+    background: rgba(12, 10, 24, 0.02);
+    border-radius: var(--radius-sm);
+    padding: 15px;
+    border: 2px solid rgba(12, 10, 24, 0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    user-select: none;
+    text-align: center;
+}
+
+.database-option:hover {
+    background: rgba(175, 75, 239, 0.08);
+    border-color: var(--color-primary-soft);
+    transform: translateY(-2px);
+}
+
+.database-option.selected {
+    background: rgba(0, 184, 148, 0.1);
+    border-color: var(--color-success);
+}
+
+.database-option.incorrect {
+    background: rgba(225, 112, 85, 0.1);
+    border-color: var(--color-error);
+}
+
+.database-icon {
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.database-name {
+    font-weight: 600;
+    color: var(--color-primary);
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+}
+
+.database-description {
+    font-size: 0.8rem;
+    color: var(--color-muted);
+    line-height: 1.4;
+}
+
+/* Internet Research True/False */
+.research-statements {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.research-statement {
+    background: rgba(12, 10, 24, 0.02);
+    border-radius: var(--radius-sm);
+    padding: 15px;
+    border: 2px solid rgba(12, 10, 24, 0.1);
+    cursor: grab;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    user-select: none;
+}
+
+.research-statement:hover {
+    background: rgba(175, 75, 239, 0.08);
+    border-color: var(--color-primary-soft);
+    transform: translateY(-2px);
+}
+
+.research-statement.dragging {
+    opacity: 0.7;
+    transform: scale(0.98);
+}
+
+.research-text {
+    font-size: 0.9rem;
+    color: var(--color-text);
+    flex: 1;
+}
+
+/* True/False Categories */
+.tf-categories {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+@media (max-width: 600px) {
+    .tf-categories {
+        grid-template-columns: 1fr;
+    }
+}
+
+.tf-category {
+    background: rgba(12, 10, 24, 0.02);
+    border-radius: var(--radius-sm);
+    padding: 15px;
+    border: 2px dashed rgba(12, 10, 24, 0.1);
+    min-height: 180px;
+    transition: all 0.3s ease;
+}
+
+.tf-category.hover {
+    border-color: var(--color-primary);
+    background: rgba(175, 75, 239, 0.05);
+}
+
+.tf-category.true {
+    border-color: rgba(0, 184, 148, 0.3);
+}
+
+.tf-category.false {
+    border-color: rgba(131, 128, 240, 0.3);
+}
+
+.tf-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    margin-bottom: 10px;
+    text-align: center;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(12, 10, 24, 0.08);
+}
+
+/* Journal Article Fill-in-the-Blank */
+.journal-article {
+    background: rgba(12, 10, 24, 0.02);
+    border-radius: var(--radius-sm);
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(12, 10, 24, 0.08);
+    font-family: 'Georgia', serif;
+    line-height: 1.6;
+}
+
+.article-header {
+    text-align: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid rgba(12, 10, 24, 0.1);
+}
+
+.article-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: 5px;
+}
+
+.article-meta {
+    font-size: 0.8rem;
+    color: var(--color-muted);
+    font-style: italic;
+}
+
+.article-section {
+    margin-bottom: 15px;
+}
+
+.section-title {
+    font-weight: 600;
+    color: var(--color-primary);
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.section-content {
+    font-size: 0.85rem;
+    color: var(--color-text);
+    margin-bottom: 10px;
+}
+
+.blank-space {
+    display: inline-block;
+    min-width: 120px;
+    height: 30px;
+    background: rgba(175, 75, 239, 0.08);
+    border: 2px dashed rgba(175, 75, 239, 0.3);
+    border-radius: 4px;
+    margin: 0 5px;
+    vertical-align: middle;
+    position: relative;
+}
+
+.blank-space.filled {
+    background: rgba(0, 184, 148, 0.1);
+    border: 2px solid var(--color-success);
+}
+
+.blank-text {
+    font-size: 0.8rem;
+    padding: 5px 10px;
+    display: inline-block;
+}
+
+.blank-words {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.blank-word {
+    background: rgba(12, 10, 24, 0.05);
+    border-radius: 20px;
+    padding: 8px 15px;
+    font-size: 0.85rem;
+    cursor: grab;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.blank-word:hover {
+    background: rgba(175, 75, 239, 0.1);
+    border-color: var(--color-primary-soft);
+    transform: translateY(-2px);
+}
+
+.blank-word.dragging {
+    opacity: 0.7;
+    transform: scale(0.95);
+}
+
+/* Browser Simulation */
+.browser-simulation {
+    background: #f8f9fa;
+    border-radius: var(--radius-sm);
+    border: 1px solid #dee2e6;
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.browser-header {
+    background: #e9ecef;
+    padding: 10px 15px;
+    border-bottom: 1px solid #dee2e6;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.browser-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+.browser-button {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.browser-button.red { background: #ff5f56; }
+.browser-button.yellow { background: #ffbd2e; }
+.browser-button.green { background: #27c93f; }
+
+.browser-url {
+    flex: 1;
+    background: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-family: monospace;
+    color: #495057;
+    border: 1px solid #ced4da;
+}
+
+.browser-content {
+    padding: 20px;
+    min-height: 150px;
+}
+
+.url-evaluation {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.url-item {
+    background: rgba(12, 10, 24, 0.03);
+    border-radius: var(--radius-sm);
+    padding: 12px;
+    border: 2px solid rgba(12, 10, 24, 0.1);
+    cursor: grab;
+    transition: all 0.3s ease;
+    flex: 1;
+    min-width: 200px;
+}
+
+.url-item:hover {
+    background: rgba(175, 75, 239, 0.08);
+    border-color: var(--color-primary-soft);
+    transform: translateY(-2px);
+}
+
+.url-item.dragging {
+    opacity: 0.7;
+    transform: scale(0.98);
+}
+
+.url-display {
+    font-family: monospace;
+    font-size: 0.9rem;
+    color: var(--color-text);
+    margin-bottom: 5px;
+    word-break: break-all;
+}
+
+.url-type {
+    font-size: 0.75rem;
+    color: var(--color-muted);
+}
+
+/* Reliability Rating */
+.reliability-rating {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.rating-item {
+    background: rgba(12, 10, 24, 0.02);
+    border-radius: var(--radius-sm);
+    padding: 15px;
+    border: 2px solid rgba(12, 10, 24, 0.1);
+    cursor: grab;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    user-select: none;
+}
+
+.rating-item:hover {
+    background: rgba(175, 75, 239, 0.08);
+    border-color: var(--color-primary-soft);
+    transform: translateY(-2px);
+}
+
+.rating-item.dragging {
+    opacity: 0.7;
+    transform: scale(0.98);
+}
+
+.rating-text {
+    font-size: 0.9rem;
+    color: var(--color-text);
+    flex: 1;
+}
+
+/* Rating Scale */
+.rating-scale {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.rating-category {
+    background: rgba(12, 10, 24, 0.02);
+    border-radius: var(--radius-sm);
+    padding: 15px;
+    border: 2px dashed rgba(12, 10, 24, 0.1);
+    min-height: 120px;
+    transition: all 0.3s ease;
+    flex: 1;
+    text-align: center;
+}
+
+.rating-category.hover {
+    border-color: var(--color-primary);
+    background: rgba(175, 75, 239, 0.05);
+}
+
+.rating-category-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(12, 10, 24, 0.08);
+}
+
+/* Pharmacy-specific styling */
+.pharmacy-scenario {
+    background: rgba(175, 75, 239, 0.05);
+    padding: 15px;
+    border-radius: var(--radius-sm);
+    margin-bottom: 20px;
+    border-left: 4px solid var(--color-accent);
+}
+
+.scenario-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.scenario-icon {
+    font-size: 1.2rem;
+    color: var(--color-primary);
+}
+
+.scenario-title {
+    font-weight: 600;
+    color: var(--color-primary);
+    font-size: 0.95rem;
+}
+
+.scenario-content {
+    font-size: 0.9rem;
+    color: var(--color-text);
+    line-height: 1.5;
+}
+
+/* Electronic Highlights */
+.electronic-highlight {
+    background: rgba(255, 245, 204, 0.5);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 600;
+    color: #b8860b;
+}
+
+/* PTCB Connection */
+.ptcb-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(0, 56, 168, 0.1);
+    color: #0038a8;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+/* ALL OTHER CSS REMAINS EXACTLY AS YOUR ORIGINAL EXAMPLE */
+:root {
+    --color-primary: #af4bef;
+    --color-primary-soft: #d492ff;
+    --color-accent: #8380f0;
+    --color-success: #00b894;
+    --color-error: #e17055;
+    --color-warning: #fdcb6e;
+    --color-bg: #f7f5fb;
+    --color-text: #2b2b2b;
+    --color-muted: #6c6880;
+    --color-dark: #0c0a18;
+    --radius-lg: 24px;
+    --radius-md: 16px;
+    --radius-sm: 12px;
+    --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+    --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+    --shadow-card: 0 12px 30px rgba(15, 23, 42, 0.1);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    width: 100%;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    padding: 24px;
+    background: radial-gradient(
+        circle at top left,
+        #ffffff 0,
+        #f1ecff 40%,
+        var(--color-bg) 100%
+    );
+    color: var(--color-text);
+    -webkit-text-size-adjust: 100%;
+    line-height: 1.5;
+}
+
+@media (max-width: 600px) {
+    body { padding: 12px; }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+@keyframes checkmarkPop {
+    0% { transform: scale(0); opacity: 0; }
+    70% { transform: scale(1.2); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes slideInRight {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+@keyframes glow {
+    0%, 100% { box-shadow: 0 0 5px rgba(175, 75, 239, 0.5); }
+    50% { box-shadow: 0 0 20px rgba(175, 75, 239, 0.8); }
+}
+
+.page {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-soft);
+    padding: 28px 30px 32px;
+    position: relative;
+    overflow: hidden;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+@media (max-width: 900px) {
+    .page { padding: 22px; }
+}
+
+@media (max-width: 480px) {
+    body { padding: 0; }
+    .page {
+        border-radius: 0;
+        box-shadow: none;
+        padding: 18px 14px 22px;
+    }
+}
+
+/* Header */
+.brand-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    width: 100%;
+    animation: fadeIn 0.6s ease-out 0.2s both;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.brand-logo {
+    height: 40px;
+    width: auto;
+    max-width: 100%;
+    filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+    transition: transform 0.3s ease;
+}
+
+.brand-logo:hover { transform: scale(1.05); }
+
+.course-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    max-width: 100%;
+}
+
+.course-name {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--color-muted);
+    white-space: normal;
+}
+
+.week-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(175, 75, 239, 0.08);
+    font-size: 0.76rem;
+    color: var(--color-primary);
+    white-space: normal;
+}
+
+.week-label-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: var(--color-success);
+    flex-shrink: 0;
+}
+
+.badge-mode {
+    padding: 5px 10px;
+    border-radius: 999px;
+    background: rgba(12, 10, 24, 0.06);
+    border: 1px solid rgba(12, 10, 24, 0.08);
+    font-size: 0.74rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--color-muted);
+    white-space: nowrap;
+    transition: all 0.3s ease;
+}
+
+.badge-mode:hover {
+    background: rgba(175, 75, 239, 0.1);
+    border-color: var(--color-primary-soft);
+    color: var(--color-primary);
+}
+
+@media (max-width: 480px) {
+    .brand-row { flex-direction: column; align-items: flex-start; }
+    .badge-mode { margin-top: 6px; }
+}
+
+h1 {
+    font-size: clamp(1.8rem, 3vw, 2.2rem);
+    line-height: 1.1;
+    color: var(--color-primary);
+    margin-bottom: 6px;
+    animation: fadeInUp 0.6s ease-out 0.3s both;
+}
+
+.module-subtitle {
+    font-size: 0.98rem;
+    color: var(--color-muted);
+    max-width: 600px;
+    margin-bottom: 24px;
+    animation: fadeInUp 0.6s ease-out 0.4s both;
+}
+
+/* Progress Tracker */
+.progress-tracker {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    position: relative;
+    padding: 0 20px;
+}
+
+.progress-tracker::before {
+    content: '';
+    position: absolute;
+    top: 15px;
+    left: 50px;
+    right: 50px;
+    height: 3px;
+    background: rgba(12, 10, 24, 0.08);
+    z-index: 1;
+}
+
+.progress-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+    flex: 1;
+}
+
+.step-circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: white;
+    border: 2px solid rgba(12, 10, 24, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-muted);
+    margin-bottom: 8px;
+    transition: all 0.3s ease;
+}
+
+.progress-step.active .step-circle {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: white;
+    transform: scale(1.1);
+}
+
+.progress-step.completed .step-circle {
+    background: var(--color-success);
+    border-color: var(--color-success);
+    color: white;
+}
+
+.step-label {
+    font-size: 0.75rem;
+    color: var(--color-muted);
+    text-align: center;
+    font-weight: 500;
+}
+
+.progress-step.active .step-label {
+    color: var(--color-primary);
+    font-weight: 600;
+}
+
+/* Progress Summary */
+.progress-summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-bottom: 30px;
+    animation: fadeInUp 0.6s ease-out 0.5s both;
+}
+
+.summary-card {
+    background: rgba(12, 10, 24, 0.02);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    border: 1px solid rgba(12, 10, 24, 0.06);
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.summary-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-card);
+    border-color: var(--color-primary-soft);
+}
+
+.summary-number {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--color-primary);
+    display: block;
+    line-height: 1;
+    margin-bottom: 4px;
+}
+
+.summary-label {
+    font-size: 0.8rem;
+    color: var(--color-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+/* Activity Grid */
+.activity-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+@media (max-width: 900px) {
+    .activity-grid { grid-template-columns: 1fr; }
+}
+
+.activity-card {
+    background: white;
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(12, 10, 24, 0.08);
+    padding: 20px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.activity-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--color-primary);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.activity-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--color-primary-soft);
+}
+
+.activity-card:hover::before { opacity: 1; }
+
+.activity-card.completed {
+    border-color: var(--color-success);
+}
+
+.activity-card.completed::before {
+    background: var(--color-success);
+    opacity: 1;
+}
+
+.activity-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 15px;
+}
+
+.activity-number {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    background: rgba(175, 75, 239, 0.1);
+    padding: 4px 10px;
+    border-radius: 20px;
+}
+
+.activity-status {
+    font-size: 0.75rem;
+    padding: 3px 8px;
+    border-radius: 12px;
+    background: rgba(12, 10, 24, 0.06);
+    color: var(--color-muted);
+}
+
+.activity-card.completed .activity-status {
+    background: rgba(0, 184, 148, 0.1);
+    color: var(--color-success);
+}
+
+.activity-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: 8px;
+}
+
+.activity-description {
+    font-size: 0.9rem;
+    color: var(--color-muted);
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+/* Feedback */
+.feedback-container {
+    background: rgba(12, 10, 24, 0.02);
+    border-radius: var(--radius-sm);
+    padding: 15px;
+    border: 1px solid rgba(12, 10, 24, 0.08);
+    margin-top: 20px;
+    display: none;
+}
+
+.feedback-container.show {
+    display: block;
+    animation: fadeIn 0.5s ease;
+}
+
+.feedback-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.feedback-icon {
+    font-size: 1.2rem;
+}
+
+.feedback-icon.correct { color: var(--color-success); }
+.feedback-icon.incorrect { color: var(--color-error); }
+
+.feedback-content {
+    font-size: 0.85rem;
+    color: var(--color-text);
+    line-height: 1.5;
+}
+
+.feedback-content strong { color: var(--color-primary); }
+
+.correction-details {
+    background: rgba(225, 112, 85, 0.05);
+    border-left: 3px solid var(--color-error);
+    padding: 10px 15px;
+    margin: 10px 0;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 30px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: 12px 24px;
+    border-radius: var(--radius-md);
+    border: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-primary {
+    background: var(--color-primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #9a3bd6;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(175, 75, 239, 0.3);
+}
+
+.btn-secondary {
+    background: rgba(12, 10, 24, 0.06);
+    color: var(--color-text);
+}
+
+.btn-secondary:hover {
+    background: rgba(12, 10, 24, 0.1);
+    transform: translateY(-2px);
+}
+
+.btn-icon { font-size: 1.1em; }
+
+/* Results Panel */
+.results-panel {
+    background: var(--color-dark);
+    color: white;
+    border-radius: var(--radius-md);
+    padding: 30px;
+    margin-top: 30px;
+    display: none;
+    animation: fadeInUp 0.6s ease;
+}
+
+.results-panel.show { display: block; }
+
+.results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.results-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: white;
+}
+
+.score-display {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--color-primary-soft);
+    text-align: center;
+    margin: 20px 0;
+}
+
+.clinical-insights {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-sm);
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.insights-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-primary-soft);
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.insights-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.insights-list li {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    font-size: 0.9rem;
+    color: #e5e7eb;
+}
+
+.insight-dot {
+    width: 6px;
+    height: 6px;
+    margin-top: 6px;
+    border-radius: 999px;
+    background: var(--color-accent);
+    flex-shrink: 0;
+}
+</style>
+</head>
+<body>
+<main class="page" aria-labelledby="module-heading">
+
+<!-- Header -->
+<header class="brand-row">
+<div class="brand">
+<img
+src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+alt="AlliedRx logo"
+class="brand-logo"
+/>
+<div class="course-meta">
+<span class="course-name">Pharmacy Technician • Week 12</span>
+<div class="week-label">
+<span class="week-label-dot"></span>
+<span>Chapter 7: Electronic Resources & Research Methods</span>
+</div>
+</div>
+</div>
+<span class="badge-mode">Campus & Online</span>
+</header>
+
+<h1 id="module-heading">Electronic Resources & Research Methods</h1>
+<p class="module-subtitle">
+Master electronic drug databases, evaluate online resources, and learn professional research methods. Understand the role of journals in continuing education and how to choose appropriate references for different situations.
+</p>
+
+<!-- Progress Tracker -->
+<div class="progress-tracker">
+<div class="progress-step active" data-step="1">
+<div class="step-circle">1</div>
+<div class="step-label">Database Decision</div>
+</div>
+<div class="progress-step" data-step="2">
+<div class="step-circle">2</div>
+<div class="step-label">Research Methods</div>
+</div>
+<div class="progress-step" data-step="3">
+<div class="step-circle">3</div>
+<div class="step-label">Journal Analysis</div>
+</div>
+</div>
+
+<!-- Progress Summary -->
+<div class="progress-summary">
+<div class="summary-card">
+<span class="summary-number" id="completed-count">0</span>
+<span class="summary-label">Activities Completed</span>
+</div>
+<div class="summary-card">
+<span class="summary-number" id="accuracy-rate">0%</span>
+<span class="summary-label">Current Accuracy</span>
+</div>
+<div class="summary-card">
+<span class="summary-number" id="time-spent">0:00</span>
+<span class="summary-label">Time Spent</span>
+</div>
+</div>
+
+<!-- Activity Grid -->
+<div class="activity-grid">
+
+<!-- Activity 1: Database Decision Making -->
+<section class="activity-card" id="activity-1" data-activity="1">
+<div class="activity-header">
+<span class="activity-number">Activity 1</span>
+<span class="activity-status">Not Started</span>
+</div>
+<h3 class="activity-title">Database Decision-Making</h3>
+<div class="pharmacy-scenario">
+<div class="scenario-header">
+<div class="scenario-icon">💻</div>
+<div class="scenario-title">Clinical Scenario</div>
+</div>
+<div class="scenario-content">
+"A patient on <span class="electronic-highlight">Warfarin</span> has been prescribed <span class="electronic-highlight">Bactrim (sulfamethoxazole/trimethoprim)</span> for a UTI. The pharmacist asks you to research the potential drug interaction. Which electronic resource provides the most reliable, evidence-based information?"
+<span class="ptcb-badge">PTCB Objective 5</span>
+</div>
+</div>
+<p class="activity-description">
+Select the BEST electronic resource for this clinical question. Consider reliability, evidence-base, update frequency, and clinical applicability when making your choice.
+</p>
+
+<!-- Database Options -->
+<div class="database-options">
+<div class="database-option" data-database="micromedex" data-correct="true">
+<div class="database-icon">📊</div>
+<div class="database-name">Micromedex</div>
+<div class="database-description">Comprehensive drug info with evidence ratings, FDA-approved</div>
+</div>
+<div class="database-option" data-database="clinical-pharm" data-correct="false">
+<div class="database-icon">🔬</div>
+<div class="database-name">Clinical Pharmacology</div>
+<div class="database-description">Gold Standard/Elsevier product with monographs</div>
+</div>
+<div class="database-option" data-database="google" data-correct="false">
+<div class="database-icon">🌐</div>
+<div class="database-name">Google Search</div>
+<div class="database-description">General internet search engine</div>
+</div>
+<div class="database-option" data-database="pubmed" data-correct="false">
+<div class="database-icon">📚</div>
+<div class="database-name">PubMed</div>
+<div class="database-description">Medical literature database</div>
+</div>
+</div>
+
+<!-- Corrective Feedback -->
+<div class="feedback-container" id="feedback-1">
+<div class="feedback-title">
+<span class="feedback-icon correct">✓</span>
+Database Analysis Complete
+</div>
+<div class="feedback-content">
+<strong>Correct Answer:</strong> <strong>Micromedex</strong><br><br>
+
+<strong>Why Micromedex is Best:</strong><br>
+• <strong>Evidence Ratings:</strong> Provides quality ratings for interaction evidence (excellent, good, fair, poor)<br>
+• <strong>FDA-Approved:</strong> Meets regulatory standards for hospital use<br>
+• <strong>Comprehensive:</strong> Includes mechanism, severity, management recommendations<br>
+• <strong>Clinical Focus:</strong> Designed specifically for healthcare professionals<br><br>
+
+<strong>Other Options Analysis:</strong><br>
+• <strong>Clinical Pharmacology:</strong> Good for monographs but lacks interaction severity ratings<br>
+• <strong>Google Search:</strong> Unreliable - mixes professional with patient/forum information<br>
+• <strong>PubMed:</strong> Shows research articles but requires interpretation - not ready-to-use clinical advice<br><br>
+
+<strong>Clinical Application:</strong> For Warfarin-Bactrim interaction, Micromedex would show:<br>
+• Severity: Major<br>
+• Mechanism: Protein binding displacement + antibacterial effect on gut flora<br>
+• Recommendation: Monitor INR closely, possible Warfarin dose reduction<br><br>
+
+<div class="correction-details" id="correction-details-1" style="display: none;">
+<strong>Your Selection:</strong><br>
+<span id="correction-text-1"></span>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Activity 2: Internet Research Simulation -->
+<section class="activity-card" id="activity-2" data-activity="2">
+<div class="activity-header">
+<span class="activity-number">Activity 2</span>
+<span class="activity-status">Not Started</span>
+</div>
+<h3 class="activity-title">Internet Research Evaluation</h3>
+<div class="pharmacy-scenario">
+<div class="scenario-header">
+<div class="scenario-icon">🔍</div>
+<div class="scenario-title">Patient Education Scenario</div>
+</div>
+<div class="scenario-content">
+"A patient brings in a printout from an online forum claiming <span class="electronic-highlight">'Apple cider vinegar cures diabetes'</span>. Evaluate these search strategies and website URLs for reliability."
+<span class="ptcb-badge">PTCB Objective 5</span>
+</div>
+</div>
+<p class="activity-description">
+Drag each research strategy or website into "Reliable Source" or "Questionable Source" categories. This develops critical evaluation skills for online health information.
+</p>
+
+<!-- True/False Categories -->
+<div class="tf-categories">
+<div class="tf-category true" data-category="reliable" id="reliable-category">
+<div class="tf-title">Reliable Source</div>
+<div class="tf-content"></div>
+</div>
+<div class="tf-category false" data-category="questionable" id="questionable-category">
+<div class="tf-title">Questionable Source</div>
+<div class="tf-content"></div>
+</div>
+</div>
+
+<!-- Research Statements -->
+<div class="research-statements" id="research-statements">
+<div class="research-statement draggable" data-correct="reliable" draggable="true">
+<div class="research-text">Searching "diabetes management site:.gov" to get government sources</div>
+</div>
+<div class="research-statement draggable" data-correct="questionable" draggable="true">
+<div class="research-text">Using first result from search "natural diabetes cures"</div>
+</div>
+<div class="research-statement draggable" data-correct="reliable" draggable="true">
+<div class="research-text">Checking publication date (within last 3 years for medical info)</div>
+</div>
+<div class="research-statement draggable" data-correct="questionable" draggable="true">
+<div class="research-text">Trusting .com sites selling diabetes supplements</div>
+</div>
+<div class="research-statement draggable" data-correct="reliable" draggable="true">
+<div class="research-text">Looking for author credentials (MD, PharmD, RD)</div>
+</div>
+<div class="research-statement draggable" data-correct="questionable" draggable="true">
+<div class="research-text">Believing personal testimonials without evidence</div>
+</div>
+</div>
+
+<!-- Browser Simulation -->
+<div class="browser-simulation">
+<div class="browser-header">
+<div class="browser-buttons">
+<div class="browser-button red"></div>
+<div class="browser-button yellow"></div>
+<div class="browser-button green"></div>
+</div>
+<div class="browser-url" id="browser-url">https://www.diabetes.org/</div>
+</div>
+<div class="browser-content">
+<div class="url-evaluation" id="url-evaluation">
+<div class="url-item draggable" data-correct="reliable" draggable="true">
+<div class="url-display">https://www.cdc.gov/diabetes/</div>
+<div class="url-type">Government (.gov) website</div>
+</div>
+<div class="url-item draggable" data-correct="questionable" draggable="true">
+<div class="url-display">https://www.naturalhealthblog.com/diabetes-cure</div>
+<div class="url-type">Commercial (.com) blog</div>
+</div>
+<div class="url-item draggable" data-correct="reliable" draggable="true">
+<div class="url-display">https://diabetesjournals.org/</div>
+<div class="url-type">Professional organization (.org)</div>
+</div>
+<div class="url-item draggable" data-correct="questionable" draggable="true">
+<div class="url-display">https://miraclecures.store/diabetes-product</div>
+<div class="url-type">E-commerce site selling products</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Corrective Feedback -->
+<div class="feedback-container" id="feedback-2">
+<div class="feedback-title">
+<span class="feedback-icon correct">✓</span>
+Research Evaluation Complete
+</div>
+<div class="feedback-content">
+<strong>Correct Classification:</strong><br>
+<strong>Reliable Sources:</strong><br>
+• Searching "diabetes management site:.gov" to get government sources<br>
+• Checking publication date (within last 3 years for medical info)<br>
+• Looking for author credentials (MD, PharmD, RD)<br>
+• https://www.cdc.gov/diabetes/<br>
+• https://diabetesjournals.org/<br><br>
+
+<strong>Questionable Sources:</strong><br>
+• Using first result from search "natural diabetes cures"<br>
+• Trusting .com sites selling diabetes supplements<br>
+• Believing personal testimonials without evidence<br>
+• https://www.naturalhealthblog.com/diabetes-cure<br>
+• https://miraclecures.store/diabetes-product<br><br>
+
+<strong>Evaluation Criteria:</strong><br>
+1. <strong>Domain Type:</strong> .gov > .edu > .org > .com<br>
+2. <strong>Author Credentials:</strong> MD/PharmD > "Health Coach"<br>
+3. <strong>Evidence Base:</strong> References studies vs. personal stories<br>
+4. <strong>Date:</strong> Medical info should be ≤3 years old<br>
+5. <strong>Bias:</strong> Selling products = conflict of interest<br><br>
+
+<strong>Pharmacy Application:</strong> Technicians should direct patients to reliable sources like:<br>
+• American Diabetes Association (.org)<br>
+• CDC/NIH (.gov)<br>
+• UpToDate (subscription)<br>
+• Pharmacy-specific patient education materials<br><br>
+
+<div class="correction-details" id="correction-details-2" style="display: none;">
+<strong>Your Incorrect Classifications:</strong><br>
+<span id="correction-text-2"></span>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Activity 3: Journal Article Analysis -->
+<section class="activity-card" id="activity-3" data-activity="3">
+<div class="activity-header">
+<span class="activity-number">Activity 3</span>
+<span class="activity-status">Not Started</span>
+</div>
+<h3 class="activity-title">Journal Article Analysis</h3>
+<div class="pharmacy-scenario">
+<div class="scenario-header">
+<div class="scenario-icon">📰</div>
+<div class="scenario-title">Continuing Education Scenario</div>
+</div>
+<div class="scenario-content">
+"Your pharmacist asks you to summarize a new study about <span class="electronic-highlight">DOAC monitoring</span> for the pharmacy team meeting. Fill in the key components of journal article analysis."
+<span class="ptcb-badge">PTCB Objective 6</span>
+</div>
+</div>
+<p class="activity-description">
+Drag the correct terms into the blanks in this journal article excerpt. Understanding article structure helps technicians contribute to evidence-based practice discussions.
+</p>
+
+<!-- Journal Article Excerpt -->
+<div class="journal-article">
+<div class="article-header">
+<div class="article-title">Comparative Effectiveness of Routine vs. Selective Monitoring for Direct Oral Anticoagulants: A Systematic Review</div>
+<div class="article-meta">Journal of Thrombosis and Haemostasis | Volume 21, Issue 3 | March 2023</div>
+</div>
+
+<div class="article-section">
+<div class="section-title">Abstract</div>
+<div class="section-content">
+This <span class="blank-space" id="blank-1" data-correct="systematic-review"></span> examined 15 randomized controlled trials involving 8,542 patients. The <span class="blank-space" id="blank-2" data-correct="primary-outcome"></span> was major bleeding events, while <span class="blank-space" id="blank-3" data-correct="secondary-outcomes"></span> included stroke and all-cause mortality.
+</div>
+</div>
+
+<div class="article-section">
+<div class="section-title">Methods</div>
+<div class="section-content">
+We conducted a comprehensive literature search using <span class="blank-space" id="blank-4" data-correct="pubmed"></span> and Cochrane Library. Studies were assessed using the <span class="blank-space" id="blank-5" data-correct="cochrane-risk"></span> of bias tool. Data were analyzed using <span class="blank-space" id="blank-6" data-correct="meta-analysis"></span> techniques.
+</div>
+</div>
+
+<div class="article-section">
+<div class="section-title">Results</div>
+<div class="section-content">
+Routine monitoring showed no significant reduction in <span class="blank-space" id="blank-7" data-correct="major-bleeding"></span> (RR 0.95, 95% CI 0.82-1.10). The <span class="blank-space" id="blank-8" data-correct="number-needed-to-treat"></span> for preventing one stroke was 125.
+</div>
+</div>
+
+<div class="article-section">
+<div class="section-title">Discussion</div>
+<div class="section-content">
+These findings have important <span class="blank-space" id="blank-9" data-correct="clinical-implications"></span> for pharmacy practice. The <span class="blank-space" id="blank-10" data-correct="limitations"></span> include heterogeneous patient populations across studies.
+</div>
+</div>
+</div>
+
+<!-- Blank Words -->
+<div class="blank-words" id="blank-words">
+<div class="blank-word draggable" data-word="systematic-review" draggable="true">systematic review</div>
+<div class="blank-word draggable" data-word="primary-outcome" draggable="true">primary outcome</div>
+<div class="blank-word draggable" data-word="secondary-outcomes" draggable="true">secondary outcomes</div>
+<div class="blank-word draggable" data-word="pubmed" draggable="true">PubMed</div>
+<div class="blank-word draggable" data-word="cochrane-risk" draggable="true">Cochrane Risk</div>
+<div class="blank-word draggable" data-word="meta-analysis" draggable="true">meta-analysis</div>
+<div class="blank-word draggable" data-word="major-bleeding" draggable="true">major bleeding</div>
+<div class="blank-word draggable" data-word="number-needed-to-treat" draggable="true">number needed to treat</div>
+<div class="blank-word draggable" data-word="clinical-implications" draggable="true">clinical implications</div>
+<div class="blank-word draggable" data-word="limitations" draggable="true">limitations</div>
+</div>
+
+<!-- Corrective Feedback -->
+<div class="feedback-container" id="feedback-3">
+<div class="feedback-title">
+<span class="feedback-icon correct">✓</span>
+Journal Analysis Complete
+</div>
+<div class="feedback-content">
+<strong>Correct Answers:</strong><br>
+1. <strong>systematic review</strong> - A comprehensive literature review method<br>
+2. <strong>primary outcome</strong> - The main result the study is designed to measure<br>
+3. <strong>secondary outcomes</strong> - Additional results of interest<br>
+4. <strong>PubMed</strong> - Primary database for medical literature<br>
+5. <strong>Cochrane Risk</strong> - Standard tool for assessing study quality<br>
+6. <strong>meta-analysis</strong> - Statistical combination of multiple study results<br>
+7. <strong>major bleeding</strong> - Primary safety endpoint for anticoagulant studies<br>
+8. <strong>number needed to treat</strong> - How many patients need treatment to benefit one<br>
+9. <strong>clinical implications</strong> - How findings apply to patient care<br>
+10. <strong>limitations</strong> - Study weaknesses that affect interpretation<br><br>
+
+<strong>Journal Article Structure:</strong><br>
+• <strong>Abstract:</strong> Summary of entire article<br>
+• <strong>Introduction:</strong> Background and study question<br>
+• <strong>Methods:</strong> How the study was conducted<br>
+• <strong>Results:</strong> What was found (data)<br>
+• <strong>Discussion:</strong> Interpretation and implications<br>
+• <strong>Conclusion:</strong> Main takeaway points<br><br>
+
+<strong>CE Relevance:</strong> Pharmacy technicians should understand:<br>
+• How to locate relevant articles (PubMed, journal websites)<br>
+• Basic study designs (RCT, cohort, case-control)<br>
+• Common statistical terms (RR, CI, p-value)<br>
+• How to identify practice-changing findings<br><br>
+
+<strong>Application to DOAC Monitoring:</strong> This study suggests routine lab monitoring may not be necessary for DOACs, unlike Warfarin. Technicians should understand this when preparing patient education materials.<br><br>
+
+<div class="correction-details" id="correction-details-3" style="display: none;">
+<strong>Your Incorrect Placements:</strong><br>
+<span id="correction-text-3"></span>
+</div>
+</div>
+</div>
+</section>
+</div>
+
+<!-- Action Buttons -->
+<div class="action-buttons">
+<button class="btn btn-secondary" id="reset-all-btn">
+<span class="btn-icon">↻</span>
+Reset All Activities
+</button>
+<button class="btn btn-secondary" id="check-answers-btn">
+<span class="btn-icon">✓</span>
+Check All Answers
+</button>
+<button class="btn btn-primary" id="view-results-btn">
+<span class="btn-icon">📊</span>
+View Final Results
+</button>
+</div>
+
+<!-- Results Panel -->
+<div class="results-panel" id="results-panel">
+<div class="results-header">
+<h2 class="results-title">Electronic Research Proficiency</h2>
+<div class="score-display" id="final-score">0%</div>
+</div>
+<div class="clinical-insights">
+<h3 class="insights-title">
+<span>💻</span> Electronic Resource Insights
+</h3>
+<ul class="insights-list">
+<li>
+<span class="insight-dot"></span>
+<span><strong>Database Hierarchy:</strong> Micromedex/Clinical Pharmacology > PubMed > General Google. For clinical decisions, use professional databases. For background research, PubMed. Never use general search engines for clinical questions.</span>
+</li>
+<li>
+<span class="insight-dot"></span>
+<span><strong>URL Evaluation:</strong> .gov and .edu domains are most reliable for medical information. .org domains vary in quality. .com sites often have commercial bias. Check "About Us" sections for author credentials and funding sources.</span>
+</li>
+<li>
+<span class="insight-dot"></span>
+<span><strong>Update Frequency:</strong> Drug information should be updated at least annually. Look for "last reviewed/updated" dates. For rapidly changing fields (oncology, infectious diseases), information should be no more than 6 months old.</span>
+</li>
+</ul>
+</div>
+<div class="clinical-insights" style="margin-top: 20px;">
+<h3 class="insights-title">
+<span>📚</span> Continuing Education & Professional Development
+</h3>
+<ul class="insights-list">
+<li>
+<span class="insight-dot"></span>
+<span><strong>Journal Reading Strategy:</strong> Start with abstract and conclusion. If relevant, read methods and results. Focus on practice implications. Share key findings with pharmacy team during huddles or meetings.</span>
+</li>
+<li>
+<span class="insight-dot"></span>
+<span><strong>CE Requirements:</strong> Most states require 15-20 hours of CE annually for technicians. Electronic resources count when from approved providers. Document all CE activities with certificates for renewal.</span>
+</li>
+<li>
+<span class="insight-dot"></span>
+<span><strong>Research Skills:</strong> Technicians who can efficiently research drug information save pharmacists 30-60 minutes daily. This allows pharmacists more time for clinical services and patient counseling.</span>
+</li>
+</ul>
+</div>
+</div>
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // State Management
+    const state = {
+        activities: {
+            1: { completed: false, correct: 0, total: 1, score: 0, selection: null },
+            2: { completed: false, correct: 0, total: 10, score: 0, placements: {} },
+            3: { completed: false, correct: 0, total: 10, score: 0, blanks: {} }
+        },
+        startedAt: new Date(),
+        timeSpent: 0
+    };
+
+    // Activity 1: Database Selection Data
+    const correctDatabase = 'micromedex';
+
+    // Activity 2: Research Statements Data
+    const researchStatementsData = [
+        { text: 'Searching "diabetes management site:.gov" to get government sources', correct: 'reliable' },
+        { text: 'Using first result from search "natural diabetes cures"', correct: 'questionable' },
+        { text: 'Checking publication date (within last 3 years for medical info)', correct: 'reliable' },
+        { text: 'Trusting .com sites selling diabetes supplements', correct: 'questionable' },
+        { text: 'Looking for author credentials (MD, PharmD, RD)', correct: 'reliable' },
+        { text: 'Believing personal testimonials without evidence', correct: 'questionable' }
+    ];
+
+    const urlItemsData = [
+        { url: 'https://www.cdc.gov/diabetes/', type: 'Government (.gov) website', correct: 'reliable' },
+        { url: 'https://www.naturalhealthblog.com/diabetes-cure', type: 'Commercial (.com) blog', correct: 'questionable' },
+        { url: 'https://diabetesjournals.org/', type: 'Professional organization (.org)', correct: 'reliable' },
+        { url: 'https://miraclecures.store/diabetes-product', type: 'E-commerce site selling products', correct: 'questionable' }
+    ];
+
+    // Activity 3: Journal Article Blanks Data
+    const blankAnswers = {
+        'blank-1': 'systematic-review',
+        'blank-2': 'primary-outcome',
+        'blank-3': 'secondary-outcomes',
+        'blank-4': 'pubmed',
+        'blank-5': 'cochrane-risk',
+        'blank-6': 'meta-analysis',
+        'blank-7': 'major-bleeding',
+        'blank-8': 'number-needed-to-treat',
+        'blank-9': 'clinical-implications',
+        'blank-10': 'limitations'
+    };
+
+    const blankWordsData = [
+        'systematic-review',
+        'primary-outcome',
+        'secondary-outcomes',
+        'pubmed',
+        'cochrane-risk',
+        'meta-analysis',
+        'major-bleeding',
+        'number-needed-to-treat',
+        'clinical-implications',
+        'limitations'
+    ];
+
+    // DOM Elements
+    const progressSteps = document.querySelectorAll('.progress-step');
+    const activityCards = document.querySelectorAll('.activity-card');
+    const completedCount = document.getElementById('completed-count');
+    const accuracyRate = document.getElementById('accuracy-rate');
+    const timeSpentEl = document.getElementById('time-spent');
+    const resetBtn = document.getElementById('reset-all-btn');
+    const checkBtn = document.getElementById('check-answers-btn');
+    const resultsBtn = document.getElementById('view-results-btn');
+    const resultsPanel = document.getElementById('results-panel');
+    const finalScore = document.getElementById('final-score');
+
+    // Helper function to shuffle array (Fisher-Yates algorithm)
+    function shuffleArray(array) {
+        const shuffled = [...array];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        return shuffled;
+    }
+
+    // Timer
+    function updateTimer() {
+        const now = new Date();
+        const diff = Math.floor((now - state.startedAt) / 1000);
+        state.timeSpent = diff;
+        const minutes = Math.floor(diff / 60);
+        const seconds = diff % 60;
+        timeSpentEl.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    }
+    setInterval(updateTimer, 1000);
+
+    // Update Progress Summary
+    function updateProgressSummary() {
+        let completed = 0;
+        let totalCorrect = 0;
+        let totalItems = 0;
+
+        Object.values(state.activities).forEach(activity => {
+            if (activity.completed) completed++;
+            totalCorrect += activity.correct;
+            totalItems += activity.total;
+        });
+
+        completedCount.textContent = completed;
+        const accuracy = totalItems > 0 ? Math.round((totalCorrect / totalItems) * 100) : 0;
+        accuracyRate.textContent = `${accuracy}%`;
+
+        // Update progress steps
+        progressSteps.forEach((step, index) => {
+            if (index < completed) {
+                step.classList.add('completed');
+                step.classList.remove('active');
+            } else if (index === completed) {
+                step.classList.add('active');
+                step.classList.remove('completed');
+            } else {
+                step.classList.remove('active', 'completed');
+            }
+        });
+    }
+
+    // Initialize Activity 1
+    function initActivity1() {
+        const databaseOptions = document.querySelectorAll('.database-option');
+        const feedback = document.getElementById('feedback-1');
+        const status = document.querySelector('#activity-1 .activity-status');
+        const correctionDetails = document.getElementById('correction-details-1');
+        const correctionText = document.getElementById('correction-text-1');
+
+        // Reset all options
+        databaseOptions.forEach(option => {
+            option.classList.remove('selected', 'incorrect');
+            
+            option.addEventListener('click', function() {
+                // Remove selection from all options
+                databaseOptions.forEach(opt => opt.classList.remove('selected', 'incorrect'));
+                
+                // Select this option
+                this.classList.add('selected');
+                state.activities[1].selection = this.dataset.database;
+                
+                // Check answer immediately
+                checkActivity1();
+            });
+        });
+
+        function checkActivity1() {
+            const userSelection = state.activities[1].selection;
+            const isCorrect = userSelection === correctDatabase;
+
+            state.activities[1].completed = true;
+            state.activities[1].correct = isCorrect ? 1 : 0;
+            state.activities[1].score = isCorrect ? 100 : 0;
+            
+            status.textContent = 'Completed';
+            status.style.color = '#00b894';
+            document.querySelector('#activity-1').classList.add('completed');
+            
+            // Update feedback icon
+            const feedbackIcon = feedback.querySelector('.feedback-icon');
+            if (isCorrect) {
+                feedbackIcon.textContent = '✓';
+                feedbackIcon.className = 'feedback-icon correct';
+                correctionDetails.style.display = 'none';
+            } else {
+                feedbackIcon.textContent = '✗';
+                feedbackIcon.className = 'feedback-icon incorrect';
+                correctionDetails.style.display = 'block';
+                
+                // Show what was selected
+                const selectedOption = document.querySelector('.database-option.selected');
+                const selectedName = selectedOption ? selectedOption.querySelector('.database-name').textContent : 'Nothing';
+                correctionText.innerHTML = `You selected <strong>${selectedName}</strong>. The correct answer is <strong>Micromedex</strong>.`;
+                
+                // Mark incorrect option
+                selectedOption.classList.add('incorrect');
+            }
+            
+            feedback.classList.add('show');
+            updateProgressSummary();
+        }
+    }
+
+    // Initialize Activity 2
+    function initActivity2() {
+        const reliableCategory = document.getElementById('reliable-category');
+        const questionableCategory = document.getElementById('questionable-category');
+        const feedback = document.getElementById('feedback-2');
+        const status = document.querySelector('#activity-2 .activity-status');
+        const correctionDetails = document.getElementById('correction-details-2');
+        const correctionText = document.getElementById('correction-text-2');
+
+        // Clear categories
+        reliableCategory.querySelector('.tf-content').innerHTML = '';
+        questionableCategory.querySelector('.tf-content').innerHTML = '';
+
+        // Shuffle statements and URLs
+        const shuffledStatements = shuffleArray([...researchStatementsData]);
+        const shuffledUrls = shuffleArray([...urlItemsData]);
+
+        // Clear and recreate statements container
+        const statementsContainer = document.getElementById('research-statements');
+        statementsContainer.innerHTML = '';
+        
+        // Create statement items
+        shuffledStatements.forEach(statement => {
+            const item = document.createElement('div');
+            item.className = 'research-statement draggable';
+            item.dataset.correct = statement.correct;
+            item.dataset.text = statement.text;
+            item.draggable = true;
+            item.innerHTML = `
+                <div class="research-text">${statement.text}</div>
+            `;
+            statementsContainer.appendChild(item);
+        });
+
+        // Clear and recreate URL container
+        const urlContainer = document.getElementById('url-evaluation');
+        urlContainer.innerHTML = '';
+        
+        // Create URL items
+        shuffledUrls.forEach(urlItem => {
+            const item = document.createElement('div');
+            item.className = 'url-item draggable';
+            item.dataset.correct = urlItem.correct;
+            item.dataset.url = urlItem.url;
+            item.draggable = true;
+            item.innerHTML = `
+                <div class="url-display">${urlItem.url}</div>
+                <div class="url-type">${urlItem.type}</div>
+            `;
+            urlContainer.appendChild(item);
+        });
+
+        const draggableItems = document.querySelectorAll('#activity-2 .draggable');
+        let placedItems = 0;
+        let userPlacements = {};
+
+        // Setup drag and drop
+        draggableItems.forEach(item => {
+            item.addEventListener('dragstart', function(e) {
+                const text = this.dataset.text || this.dataset.url;
+                e.dataTransfer.setData('text/plain', JSON.stringify({
+                    text: text,
+                    correct: this.dataset.correct,
+                    type: this.dataset.text ? 'statement' : 'url'
+                }));
+                this.classList.add('dragging');
+            });
+
+            item.addEventListener('dragend', function() {
+                this.classList.remove('dragging');
+            });
+        });
+
+        [reliableCategory, questionableCategory].forEach(category => {
+            category.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                this.classList.add('hover');
+            });
+
+            category.addEventListener('dragleave', function() {
+                this.classList.remove('hover');
+            });
+
+            category.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.classList.remove('hover');
+
+                const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+                const targetCategory = this.dataset.category;
+
+                // Check if item already placed
+                if (userPlacements[data.text]) return;
+
+                userPlacements[data.text] = targetCategory;
+                state.activities[2].placements = userPlacements;
+
+                const isCorrect = data.correct === targetCategory;
+                const div = document.createElement('div');
+                div.textContent = data.text;
+                div.style.padding = '6px 10px';
+                div.style.margin = '4px 0';
+                div.style.background = isCorrect 
+                    ? (targetCategory === 'reliable' ? 'rgba(0, 184, 148, 0.1)' : 'rgba(131, 128, 240, 0.1)')
+                    : 'rgba(225, 112, 85, 0.1)';
+                div.style.borderRadius = '8px';
+                div.style.fontSize = '0.8rem';
+
+                this.querySelector('.tf-content').appendChild(div);
+
+                // Hide original item
+                const originalItem = Array.from(draggableItems).find(item => 
+                    (item.dataset.text === data.text || item.dataset.url === data.text) &&
+                    item.style.display !== 'none'
+                );
+
+                if (originalItem) {
+                    originalItem.style.display = 'none';
+                    placedItems++;
+                }
+
+                if (placedItems === 10) { // 6 statements + 4 URLs
+                    checkActivity2();
+                }
+            });
+        });
+
+        function checkActivity2() {
+            let correctCount = 0;
+            let correctionMessages = [];
+
+            // Check statements
+            researchStatementsData.forEach(item => {
+                const userCategory = userPlacements[item.text];
+                if (userCategory === item.correct) {
+                    correctCount++;
+                } else {
+                    const correctCat = item.correct === 'reliable' ? 'Reliable Source' : 'Questionable Source';
+                    const userCat = userCategory === 'reliable' ? 'Reliable Source' : 'Questionable Source';
+                    
+                    correctionMessages.push(`• <strong>${item.text}</strong> should be in <strong>${correctCat}</strong> (not "${userCat}")`);
+                }
+            });
+
+            // Check URLs
+            urlItemsData.forEach(item => {
+                const userCategory = userPlacements[item.url];
+                if (userCategory === item.correct) {
+                    correctCount++;
+                } else {
+                    const correctCat = item.correct === 'reliable' ? 'Reliable Source' : 'Questionable Source';
+                    const userCat = userCategory === 'reliable' ? 'Reliable Source' : 'Questionable Source';
+                    
+                    correctionMessages.push(`• <strong>${item.url}</strong> should be in <strong>${correctCat}</strong> (not "${userCat}")`);
+                }
+            });
+
+            state.activities[2].completed = true;
+            state.activities[2].correct = correctCount;
+            state.activities[2].score = Math.round((correctCount / 10) * 100);
+            
+            status.textContent = 'Completed';
+            status.style.color = '#00b894';
+            document.querySelector('#activity-2').classList.add('completed');
+            
+            // Update feedback icon
+            const feedbackIcon = feedback.querySelector('.feedback-icon');
+            if (state.activities[2].score === 100) {
+                feedbackIcon.textContent = '✓';
+                feedbackIcon.className = 'feedback-icon correct';
+            } else {
+                feedbackIcon.textContent = '✗';
+                feedbackIcon.className = 'feedback-icon incorrect';
+            }
+            
+            feedback.classList.add('show');
+
+            if (correctionMessages.length > 0) {
+                correctionDetails.style.display = 'block';
+                correctionText.innerHTML = correctionMessages.join('<br>');
+            } else {
+                correctionDetails.style.display = 'none';
+            }
+
+            updateProgressSummary();
+        }
+    }
+
+    // Initialize Activity 3
+    function initActivity3() {
+        const blankSpaces = document.querySelectorAll('.blank-space');
+        const blankWordsContainer = document.getElementById('blank-words');
+        const feedback = document.getElementById('feedback-3');
+        const status = document.querySelector('#activity-3 .activity-status');
+        const correctionDetails = document.getElementById('correction-details-3');
+        const correctionText = document.getElementById('correction-text-3');
+
+        // Clear blank spaces
+        blankSpaces.forEach(space => {
+            space.innerHTML = '';
+            space.classList.remove('filled');
+            space.dataset.filled = 'false';
+        });
+
+        // Clear and recreate blank words
+        blankWordsContainer.innerHTML = '';
+        const shuffledWords = shuffleArray([...blankWordsData]);
+
+        shuffledWords.forEach(word => {
+            const item = document.createElement('div');
+            item.className = 'blank-word draggable';
+            item.dataset.word = word;
+            item.draggable = true;
+            item.textContent = word.replace(/-/g, ' ');
+            blankWordsContainer.appendChild(item);
+        });
+
+        const blankWords = document.querySelectorAll('.blank-word');
+        let filledBlanks = 0;
+        let userBlanks = {};
+
+        // Setup drag and drop for blank words
+        blankWords.forEach(word => {
+            word.addEventListener('dragstart', function(e) {
+                e.dataTransfer.setData('text/plain', JSON.stringify({
+                    word: this.dataset.word,
+                    text: this.textContent
+                }));
+                this.classList.add('dragging');
+            });
+
+            word.addEventListener('dragend', function() {
+                this.classList.remove('dragging');
+            });
+        });
+
+        // Setup blank spaces as drop targets
+        blankSpaces.forEach(space => {
+            space.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                if (this.dataset.filled !== 'true') {
+                    this.style.background = 'rgba(175, 75, 239, 0.2)';
+                }
+            });
+
+            space.addEventListener('dragleave', function() {
+                if (this.dataset.filled !== 'true') {
+                    this.style.background = 'rgba(175, 75, 239, 0.08)';
+                }
+            });
+
+            space.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.style.background = '';
+
+                if (this.dataset.filled === 'true') return;
+
+                const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+                const blankId = this.id;
+                const correctAnswer = this.dataset.correct;
+
+                // Fill the blank
+                this.innerHTML = `<span class="blank-text">${data.text}</span>`;
+                this.classList.add('filled');
+                this.dataset.filled = 'true';
+                this.dataset.userAnswer = data.word;
+
+                userBlanks[blankId] = data.word;
+                state.activities[3].blanks = userBlanks;
+
+                // Hide the dragged word
+                const draggedWord = Array.from(blankWords).find(word => 
+                    word.dataset.word === data.word && word.style.display !== 'none'
+                );
+
+                if (draggedWord) {
+                    draggedWord.style.display = 'none';
+                    filledBlanks++;
+                }
+
+                if (filledBlanks === 10) {
+                    checkActivity3();
+                }
+            });
+        });
+
+        function checkActivity3() {
+            let correctCount = 0;
+            let correctionMessages = [];
+
+            // Check each blank
+            blankSpaces.forEach(space => {
+                const blankId = space.id;
+                const userAnswer = space.dataset.userAnswer;
+                const correctAnswer = space.dataset.correct;
+
+                if (userAnswer === correctAnswer) {
+                    correctCount++;
+                } else {
+                    const blankNumber = blankId.replace('blank-', '');
+                    const userText = userAnswer ? userAnswer.replace(/-/g, ' ') : 'Left blank';
+                    const correctText = correctAnswer.replace(/-/g, ' ');
+                    
+                    correctionMessages.push(`• <strong>Blank ${blankNumber}</strong>: You put "${userText}" but it should be "${correctText}"`);
+                }
+            });
+
+            state.activities[3].completed = true;
+            state.activities[3].correct = correctCount;
+            state.activities[3].score = Math.round((correctCount / 10) * 100);
+            
+            status.textContent = 'Completed';
+            status.style.color = '#00b894';
+            document.querySelector('#activity-3').classList.add('completed');
+            
+            // Update feedback icon
+            const feedbackIcon = feedback.querySelector('.feedback-icon');
+            if (state.activities[3].score === 100) {
+                feedbackIcon.textContent = '✓';
+                feedbackIcon.className = 'feedback-icon correct';
+            } else {
+                feedbackIcon.textContent = '✗';
+                feedbackIcon.className = 'feedback-icon incorrect';
+            }
+            
+            feedback.classList.add('show');
+
+            if (correctionMessages.length > 0) {
+                correctionDetails.style.display = 'block';
+                correctionText.innerHTML = correctionMessages.join('<br>');
+            } else {
+                correctionDetails.style.display = 'none';
+            }
+
+            updateProgressSummary();
+        }
+    }
+
+    // Reset All Activities
+    function resetAllActivities() {
+        // Reset state
+        Object.keys(state.activities).forEach(key => {
+            state.activities[key] = {
+                completed: false,
+                correct: 0,
+                total: parseInt(key) === 1 ? 1 : parseInt(key) === 2 ? 10 : 10,
+                score: 0,
+                selection: null,
+                placements: {},
+                blanks: {}
+            };
+        });
+
+        // Reset UI
+        activityCards.forEach(card => {
+            card.classList.remove('completed');
+            const status = card.querySelector('.activity-status');
+            status.textContent = 'Not Started';
+            status.style.color = '';
+            const feedback = card.querySelector('.feedback-container');
+            feedback.classList.remove('show');
+            const correctionDetails = card.querySelector('.correction-details');
+            if (correctionDetails) correctionDetails.style.display = 'none';
+            
+            // Reset feedback icons
+            const feedbackIcon = feedback.querySelector('.feedback-icon');
+            if (feedbackIcon) {
+                feedbackIcon.textContent = '✓';
+                feedbackIcon.className = 'feedback-icon correct';
+            }
+        });
+
+        // Re-initialize activities
+        initActivity1();
+        initActivity2();
+        initActivity3();
+
+        // Reset results
+        resultsPanel.classList.remove('show');
+
+        // Update progress
+        updateProgressSummary();
+    }
+
+    // Check All Answers
+    function checkAllAnswers() {
+        // Force check Activity 1 if not completed
+        if (!state.activities[1].completed) {
+            state.activities[1].completed = true;
+            state.activities[1].correct = 1;
+            state.activities[1].score = 100;
+            document.querySelector('#activity-1 .activity-status').textContent = 'Completed';
+            document.querySelector('#activity-1').classList.add('completed');
+            document.querySelector('#feedback-1').classList.add('show');
+            
+            // Select correct option
+            document.querySelector('.database-option[data-database="micromedex"]').classList.add('selected');
+        }
+
+        // Force check Activity 2 if not completed
+        if (!state.activities[2].completed) {
+            state.activities[2].completed = true;
+            state.activities[2].correct = 10;
+            state.activities[2].score = 100;
+            document.querySelector('#activity-2 .activity-status').textContent = 'Completed';
+            document.querySelector('#activity-2').classList.add('completed');
+            document.querySelector('#feedback-2').classList.add('show');
+        }
+
+        // Force check Activity 3 if not completed
+        if (!state.activities[3].completed) {
+            state.activities[3].completed = true;
+            state.activities[3].correct = 10;
+            state.activities[3].score = 100;
+            document.querySelector('#activity-3 .activity-status').textContent = 'Completed';
+            document.querySelector('#activity-3').classList.add('completed');
+            document.querySelector('#feedback-3').classList.add('show');
+        }
+
+        updateProgressSummary();
+    }
+
+    // View Final Results
+    function viewFinalResults() {
+        let totalScore = 0;
+        let activityCount = 0;
+
+        Object.values(state.activities).forEach(activity => {
+            if (activity.completed) {
+                totalScore += activity.score;
+                activityCount++;
+            }
+        });
+
+        const averageScore = activityCount > 0 ? Math.round(totalScore / activityCount) : 0;
+        finalScore.textContent = `${averageScore}%`;
+        resultsPanel.classList.add('show');
+        resultsPanel.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Initialize all activities
+    initActivity1();
+    initActivity2();
+    initActivity3();
+
+    // Event listeners
+    resetBtn.addEventListener('click', resetAllActivities);
+    checkBtn.addEventListener('click', checkAllAnswers);
+    resultsBtn.addEventListener('click', viewFinalResults);
+
+    // Initial progress update
+    updateProgressSummary();
+});
+</script>
+</body>
+</html>
