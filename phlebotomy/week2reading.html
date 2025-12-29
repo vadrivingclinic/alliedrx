@@ -1,0 +1,1523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>AlliedRx - Phlebotomy Week 2 Reading Assignments</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-error: #e17055;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
+            --radius-lg: 24px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(
+                circle at top left,
+                #ffffff 0,
+                #f1ecff 40%,
+                var(--color-bg) 100%
+            );
+            color: var(--color-text);
+            -webkit-text-size-adjust: 100%;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 12px;
+            }
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1120px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px 30px;
+            display: grid;
+            grid-template-columns: minmax(0, 3.1fr) minmax(0, 2.4fr);
+            gap: 28px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes pulseRed {
+            0%, 100% { transform: scale(1); background-color: #ff6b6b; }
+            50% { transform: scale(1.1); background-color: #ff5252; }
+        }
+
+        @media (max-width: 900px) {
+            .page {
+                grid-template-columns: 1fr;
+                padding: 22px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 0;
+            }
+            .page {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 18px 14px 22px;
+                gap: 22px;
+            }
+        }
+
+        img, .page, .column, .reading-card, .side-card {
+            max-width: 100%;
+        }
+
+        .column {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header / branding */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .brand-logo:hover {
+            transform: scale(1.05);
+        }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+            animation: pulse 3s infinite;
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--color-success);
+            flex-shrink: 0;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .badge-mode:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+        @media (max-width: 480px) {
+            .brand-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .badge-mode {
+                margin-top: 6px;
+            }
+        }
+
+        h1 {
+            font-size: clamp(2rem, 3vw, 2.4rem);
+            line-height: 1.05;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 34rem;
+            margin-bottom: 18px;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        .subtitle strong {
+            color: var(--color-primary);
+        }
+
+        /* Special badges - UPDATED WITH BLACK TEXT */
+        .warning-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: rgba(231, 112, 85, 0.1);
+            border: 2px solid rgba(231, 112, 85, 0.3);
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #2b2b2b; /* Changed to black */
+            margin-bottom: 15px;
+            animation: pulseRed 2s infinite;
+        }
+
+        .equipment-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: rgba(74, 144, 226, 0.1);
+            border: 2px solid rgba(74, 144, 226, 0.3);
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #2b2b2b; /* Changed to black */
+            margin-bottom: 15px;
+        }
+
+        .badge-icon {
+            font-size: 1.2em;
+        }
+
+        /* Reading cards */
+        .reading-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 12px;
+        }
+
+        .reading-card {
+            border-radius: 18px;
+            padding: 14px 16px 14px;
+            border: 1px solid rgba(15, 23, 42, 0.06);
+            background: linear-gradient(
+                135deg,
+                rgba(175, 75, 239, 0.07),
+                rgba(255, 255, 255, 0.95)
+            );
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 12px;
+            align-items: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .reading-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.7s ease;
+        }
+
+        .reading-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--color-primary-soft);
+        }
+
+        .reading-card:hover::before {
+            left: 100%;
+        }
+
+        .reading-card.completed {
+            border-color: var(--color-success);
+            background: linear-gradient(
+                135deg,
+                rgba(0, 184, 148, 0.07),
+                rgba(255, 255, 255, 0.95)
+            );
+        }
+
+        .reading-card.critical {
+            border-left: 4px solid #e17055;
+        }
+
+        .reading-card.equipment {
+            border-left: 4px solid #4a90e2;
+        }
+
+        @media (max-width: 600px) {
+            .reading-card {
+                grid-template-columns: 1fr;
+                align-items: flex-start;
+            }
+            .chapter-pill {
+                justify-self: flex-start;
+            }
+            .tag-time {
+                justify-self: flex-start;
+                margin-top: 6px;
+            }
+        }
+
+        .chapter-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px 11px;
+            border-radius: 999px;
+            background: #ffffff;
+            box-shadow: 0 6px 18px rgba(79, 70, 229, 0.16);
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .reading-card:hover .chapter-pill {
+            background: var(--color-primary);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .chapter-main {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .chapter-title {
+            font-size: 0.98rem;
+            font-weight: 700;
+            color: var(--color-text);
+            transition: color 0.3s ease;
+        }
+
+        .reading-card:hover .chapter-title {
+            color: var(--color-primary);
+        }
+
+        .chapter-text {
+            font-size: 0.84rem;
+            color: var(--color-muted);
+            line-height: 1.4;
+        }
+
+        .tag-time {
+            padding: 5px 8px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            font-size: 0.74rem;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .reading-card:hover .tag-time {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        /* Progress tracker */
+        .progress-container {
+            margin: 20px 0;
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: 16px;
+            padding: 16px 18px;
+            border: 1px solid rgba(12, 10, 24, 0.06);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .progress-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-text);
+        }
+
+        .progress-percent {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: rgba(12, 10, 24, 0.08);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+            border-radius: 4px;
+            width: 0%;
+            transition: width 1s ease-out;
+        }
+
+        /* Interactive checklist */
+        .checklist-heading {
+            font-size: 0.86rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-primary);
+            font-weight: 600;
+            margin-top: 24px;
+            margin-bottom: 12px;
+            animation: slideInRight 0.6s ease-out 0.6s both;
+        }
+
+        .checklist {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-size: 0.86rem;
+            color: var(--color-text);
+        }
+
+        .checklist li {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            padding: 8px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .checklist li:hover {
+            background: rgba(175, 75, 239, 0.05);
+            transform: translateX(5px);
+        }
+
+        .checklist li.completed {
+            opacity: 0.7;
+        }
+
+        .check-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 6px;
+            border: 2px solid rgba(148, 163, 184, 0.9);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.72rem;
+            color: rgba(148, 163, 184, 0.9);
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .checklist li:hover .check-dot {
+            border-color: var(--color-primary);
+        }
+
+        .checklist li.completed .check-dot {
+            background: var(--color-success);
+            border-color: var(--color-success);
+            color: white;
+        }
+
+        .reading-notes {
+            font-size: 0.85rem;
+            color: var(--color-muted);
+            line-height: 1.6;
+            margin-top: 16px;
+            animation: fadeIn 0.6s ease-out 0.7s both;
+        }
+
+        .reading-notes strong {
+            color: var(--color-text);
+        }
+
+        .complete-hint {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+            margin-top: 20px;
+            padding: 12px;
+            background: rgba(175, 75, 239, 0.05);
+            border-radius: 12px;
+            border-left: 3px solid var(--color-primary);
+            animation: fadeIn 0.6s ease-out 0.8s both;
+        }
+
+        /* Right column */
+        .section-tag {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-primary);
+            font-weight: 600;
+            margin-bottom: 10px;
+            animation: slideInRight 0.6s ease-out 0.5s both;
+        }
+
+        .side-heading {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--color-text);
+            margin-bottom: 10px;
+            animation: slideInRight 0.6s ease-out 0.6s both;
+        }
+
+        .side-card {
+            background: rgba(12, 10, 24, 0.94);
+            color: #e5e7eb;
+            border-radius: 18px;
+            padding: 16px 18px 18px;
+            font-size: 0.88rem;
+            line-height: 1.7;
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.6);
+            margin-bottom: 14px;
+            transition: transform 0.3s ease;
+            animation: slideInRight 0.6s ease-out 0.7s both;
+        }
+
+        .side-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .side-card strong {
+            color: #ffffff;
+        }
+
+        .side-subheading {
+            font-size: 0.86rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: #c4b5fd;
+            font-weight: 600;
+            margin: 14px 0 10px;
+        }
+
+        .side-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-size: 0.86rem;
+        }
+
+        .side-list li {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            transition: transform 0.3s ease;
+            padding: 4px 0;
+        }
+
+        .side-list li:hover {
+            transform: translateX(5px);
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            margin-top: 6px;
+            border-radius: 999px;
+            background: var(--color-accent);
+            flex-shrink: 0;
+            animation: pulse 2s infinite;
+        }
+
+        .side-list li:hover .dot {
+            background: var(--color-primary);
+            transform: scale(1.3);
+        }
+
+        .note-card {
+            margin-top: 14px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            background: rgba(15, 23, 42, 0.75);
+            padding: 12px 14px;
+            font-size: 0.8rem;
+            color: #e5e7eb;
+            transition: all 0.3s ease;
+        }
+
+        .note-card:hover {
+            border-color: var(--color-primary-soft);
+            background: rgba(15, 23, 42, 0.9);
+        }
+
+        .note-card strong {
+            color: #fef3c7;
+        }
+
+        /* Action buttons */
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 18px;
+            border-radius: 12px;
+            border: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #9a3bd6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(175, 75, 239, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-text);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(12, 10, 24, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-icon {
+            font-size: 1.1em;
+        }
+
+        /* Completion celebration */
+        .completion-celebration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .celebration-content {
+            background: white;
+            padding: 40px;
+            border-radius: var(--radius-lg);
+            text-align: center;
+            max-width: 500px;
+            animation: fadeInUp 0.5s ease;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+        }
+
+        .celebration-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        .celebration-title {
+            font-size: 1.8rem;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+        }
+
+        .celebration-text {
+            color: var(--color-muted);
+            margin-bottom: 20px;
+        }
+
+        .celebration-btn {
+            padding: 12px 24px;
+            background: var(--color-primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .celebration-btn:hover {
+            background: #9a3bd6;
+            transform: scale(1.05);
+        }
+
+        /* Tube color visual */
+        .tube-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .tube-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .tube-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .tube-color {
+            width: 40px;
+            height: 60px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            border: 2px solid rgba(0, 0, 0, 0.2);
+        }
+
+        .tube-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-align: center;
+            color: var(--color-text);
+        }
+
+        .tube-tests {
+            font-size: 0.65rem;
+            color: var(--color-muted);
+            text-align: center;
+            margin-top: 4px;
+        }
+
+        /* PPE Equipment Highlight */
+        .ppe-highlight {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 15px 0;
+            justify-content: center;
+        }
+
+        .ppe-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            padding: 10px;
+            border-radius: 10px;
+            background: rgba(175, 75, 239, 0.05);
+            border: 1px solid rgba(175, 75, 239, 0.1);
+            transition: all 0.3s ease;
+            min-width: 80px;
+        }
+
+        .ppe-item:hover {
+            transform: translateY(-3px);
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+        }
+
+        .ppe-icon {
+            font-size: 1.5rem;
+        }
+
+        .ppe-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            text-align: center;
+        }
+
+        /* Chain of infection visual */
+        .chain-visual {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin: 15px 0;
+            padding: 15px;
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: 12px;
+        }
+
+        .chain-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid rgba(175, 75, 239, 0.2);
+            font-size: 0.75rem;
+            text-align: center;
+            min-width: 80px;
+            color: #2b2b2b;
+            font-weight: 500;
+        }
+
+        .chain-step div:not(.chain-number) {
+            color: #2b2b2b;
+        }
+
+        .chain-number {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--color-primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
+        .chain-arrow {
+            font-size: 1.2rem;
+            color: var(--color-muted);
+            display: flex;
+            align-items: center;
+        }
+
+        @media (max-width: 768px) {
+            .chain-arrow {
+                transform: rotate(90deg);
+            }
+            .chain-visual {
+                flex-direction: column;
+                align-items: center;
+            }
+            .tube-grid {
+                grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="week2-reading-heading">
+        <!-- LEFT COLUMN: title + reading cards + checklist -->
+        <section class="column" aria-label="Week 2 reading assignments">
+            <header class="brand-row">
+                <div class="brand">
+                    <img
+                        src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                        alt="AlliedRx logo"
+                        class="brand-logo"
+                    />
+                    <div class="course-meta">
+                        <span class="course-name">Phlebotomy Technician Program • Campus & Distance Learning</span>
+                        <div class="week-label">
+                            <span class="week-label-dot"></span>
+                            <span>Week 2 --- Safety & Equipment Mastery</span>
+                        </div>
+                    </div>
+                </div>
+                <span class="badge-mode">Campus & Online</span>
+            </header>
+
+            <h1 id="week2-reading-heading">Week 2 Reading Assignments</h1>
+
+            <p class="subtitle">
+                This week combines <strong>critical infection control knowledge</strong> 
+                with <strong>essential equipment proficiency</strong>. These two chapters 
+                together form the foundation of safe, effective phlebotomy practice.
+            </p>
+
+            <div class="warning-badge">
+                <span class="badge-icon">⚠️</span>
+                <span>Chapter 3: Critical Safety Content - Bloodborne Pathogens & PPE</span>
+            </div>
+
+            <div class="equipment-badge">
+                <span class="badge-icon">⚙️</span>
+                <span>Chapter 5: Essential Equipment Knowledge - Tubes, Needles & Devices</span>
+            </div>
+
+            <!-- Progress tracker -->
+            <div class="progress-container">
+                <div class="progress-header">
+                    <span class="progress-title">Reading Progress</span>
+                    <span class="progress-percent" id="progress-percent">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+            </div>
+
+            <!-- Reading cards -->
+            <div class="reading-grid">
+                <!-- Chapter 3: Infectious Diseases and Their Prevention -->
+                <article class="reading-card critical" id="chapter3-card" data-chapter="3">
+                    <div class="chapter-pill">Chapter 3</div>
+                    <div class="chapter-main">
+                        <div class="chapter-title">
+                            Infectious Diseases and Their Prevention
+                        </div>
+                        <p class="chapter-text">
+                            Focus on <strong>bloodborne pathogens (Hepatitis B, C, HIV)</strong>,
+                            <strong>routes of transmission</strong>, <strong>chain of infection</strong>,
+                            <strong>viral/bacterial diseases</strong>, <strong>MDRO importance</strong>,
+                            <strong>PPE usage</strong>, and <strong>Standard/Transmission-Based Precautions</strong>.
+                            Critical for phlebotomist safety.
+                        </p>
+                    </div>
+                    <div class="tag-time" id="chapter3-time">Est. 80-100 min</div>
+                </article>
+
+                <!-- Chapter 5: Equipment -->
+                <article class="reading-card equipment" id="chapter5-card" data-chapter="5">
+                    <div class="chapter-pill">Chapter 5</div>
+                    <div class="chapter-main">
+                        <div class="chapter-title">
+                            Equipment
+                        </div>
+                        <p class="chapter-text">
+                            Master <strong>blood collection tubes & additives</strong>,
+                            <strong>needle types & gauges</strong>, <strong>microcollection devices</strong>,
+                            <strong>proper needle disposal</strong>, <strong>tube holders</strong>,
+                            <strong>vein location techniques</strong>, and <strong>essential phlebotomy equipment</strong>.
+                            Hands-on equipment knowledge.
+                        </p>
+                    </div>
+                    <div class="tag-time" id="chapter5-time">Est. 70-90 min</div>
+                </article>
+            </div>
+
+            <p class="reading-notes">
+                <strong>Textbook:</strong> Phlebotomy Essentials, 7th Edition
+                <br>
+                <strong>Chapter 3 Quote:</strong> "To study the phenomenon of disease without books is to sail an uncharted sea." —Sir William Osler
+            </p>
+
+            <!-- PPE Equipment Highlight -->
+            <p class="checklist-heading">PPE (Personal Protective Equipment)</p>
+            <div class="ppe-highlight">
+                <div class="ppe-item">
+                    <div class="ppe-icon">🧤</div>
+                    <div class="ppe-label">Gloves</div>
+                </div>
+                <div class="ppe-item">
+                    <div class="ppe-icon">🥼</div>
+                    <div class="ppe-label">Gowns</div>
+                </div>
+                <div class="ppe-item">
+                    <div class="ppe-icon">😷</div>
+                    <div class="ppe-label">Masks</div>
+                </div>
+                <div class="ppe-item">
+                    <div class="ppe-icon">🛡️</div>
+                    <div class="ppe-label">Face<br>Shields</div>
+                </div>
+                <div class="ppe-item">
+                    <div class="ppe-icon">👁️</div>
+                    <div class="ppe-label">Eye<br>Protection</div>
+                </div>
+                <div class="ppe-item">
+                    <div class="ppe-icon">🧢</div>
+                    <div class="ppe-label">Head<br>Covers</div>
+                </div>
+                <div class="ppe-item">
+                    <div class="ppe-icon">👢</div>
+                    <div class="ppe-label">Shoe<br>Covers</div>
+                </div>
+            </div>
+
+            <!-- Common Blood Tubes -->
+            <p class="checklist-heading">Common Blood Collection Tubes</p>
+            <div class="tube-grid">
+                <div class="tube-item">
+                    <div class="tube-color" style="background-color: #ff4444;"></div>
+                    <div class="tube-label">Red Top</div>
+                    <div class="tube-tests">Serum tests</div>
+                </div>
+                <div class="tube-item">
+                    <div class="tube-color" style="background-color: #7e57c2;"></div>
+                    <div class="tube-label">Lavender</div>
+                    <div class="tube-tests">CBC, EDTA</div>
+                </div>
+                <div class="tube-item">
+                    <div class="tube-color" style="background-color: #26a69a;"></div>
+                    <div class="tube-label">Green Top</div>
+                    <div class="tube-tests">Heparin tests</div>
+                </div>
+                <div class="tube-item">
+                    <div class="tube-color" style="background-color: #ffb74d;"></div>
+                    <div class="tube-label">Blue Top</div>
+                    <div class="tube-tests">Coagulation</div>
+                </div>
+                <div class="tube-item">
+                    <div class="tube-color" style="background-color: #90a4ae;"></div>
+                    <div class="tube-label">Gray Top</div>
+                    <div class="tube-tests">Glucose</div>
+                </div>
+                <div class="tube-item">
+                    <div class="tube-color" style="background-color: #ec407a;"></div>
+                    <div class="tube-label">Pink Top</div>
+                    <div class="tube-tests">Blood Bank</div>
+                </div>
+            </div>
+
+            <!-- Interactive checklist -->
+            <p class="checklist-heading">Week 2 Learning Activities</p>
+            <ul class="checklist" id="reading-checklist">
+                <li data-index="0">
+                    <span class="check-dot">□</span>
+                    <span>Create flashcards for all bloodborne pathogens (HBV, HCV, HIV) with transmission routes, symptoms, and prevention methods.</span>
+                </li>
+                <li data-index="1">
+                    <span class="check-dot">□</span>
+                    <span>Practice the complete donning and doffing sequence for PPE with proper technique and order of removal.</span>
+                </li>
+                <li data-index="2">
+                    <span class="check-dot">□</span>
+                    <span>Memorize all blood collection tube colors, additives, and common tests (focus on Lavender, Red, Blue, Green, Gray).</span>
+                </li>
+                <li data-index="3">
+                    <span class="check-dot">□</span>
+                    <span>Create a comparison chart of Standard Precautions vs. Transmission-Based Precautions (Contact, Droplet, Airborne).</span>
+                </li>
+                <li data-index="4">
+                    <span class="check-dot">□</span>
+                    <span>Practice identifying vein locations using anatomical landmarks and explaining the three common venipuncture sites.</span>
+                </li>
+                <li data-index="5">
+                    <span class="check-dot">□</span>
+                    <span>Research and document the proper disposal methods for different needle types (21g, 22g, 23g) and safety devices.</span>
+                </li>
+            </ul>
+
+            <!-- Action buttons -->
+            <div class="action-buttons">
+                <button class="btn btn-primary" id="mark-all-read">
+                    <span class="btn-icon">✓</span>
+                    Mark All as Read
+                </button>
+                <button class="btn btn-secondary" id="reset-progress">
+                    <span class="btn-icon">↺</span>
+                    Reset Progress
+                </button>
+            </div>
+
+            <p class="complete-hint">
+                These two chapters are <strong>directly connected</strong>: Safety knowledge (Ch3) informs 
+                equipment use (Ch5). Master both before proceeding to hands-on equipment training in the skills lab.
+            </p>
+        </section>
+
+        <!-- RIGHT COLUMN: framing & why these readings matter -->
+        <aside class="column" aria-label="Why these chapters connect">
+            <p class="section-tag">Clinical Application</p>
+            <h2 class="side-heading">The Safety-Equipment Connection</h2>
+            <div class="side-card">
+                <p>
+                    <strong>Chapter 3 (Infection Control)</strong> and <strong>Chapter 5 (Equipment)</strong> 
+                    are inseparable in practice. Every piece of equipment you'll learn about must be used 
+                    with proper infection control knowledge to ensure safety.
+                </p>
+
+                <p class="side-subheading">How These Chapters Connect in Practice:</p>
+                <ul class="side-list">
+                    <li>
+                        <span class="dot"></span>
+                        <span><strong>PPE (Ch3) + Needles (Ch5):</strong> Proper glove selection impacts your ability to safely handle different needle gauges.</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span><strong>Bloodborne Pathogens (Ch3) + Tube Handling (Ch5):</strong> Understanding transmission routes informs how you handle contaminated tubes.</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span><strong>Standard Precautions (Ch3) + Vein Location (Ch5):</strong> Proper skin prep and draping combine safety with effective technique.</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span><strong>Needle Disposal (Ch5) + MDROs (Ch3):</strong> Proper sharps disposal prevents transmission of multidrug-resistant organisms.</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span><strong>Training Aids (Ch5) + Respiratory Etiquette (Ch3):</strong> Using practice arms safely requires understanding droplet precautions.</span>
+                    </li>
+                </ul>
+
+                <div class="note-card">
+                    <strong>Critical Safety-Equipment Pairings:</strong>
+                    <ul style="margin-top: 8px; padding-left: 20px;">
+                        <li><strong>Gloves (PPE) + Needle Gauge Selection:</strong> Thicker gloves may reduce tactile sensitivity for smaller gauge needles</li>
+                        <li><strong>Face Protection + Tube Capping:</strong> Splash protection is essential when removing needles from tube holders</li>
+                        <li><strong>Gown Selection + Microcollection Devices:</strong> Proper gowning prevents contamination during capillary puncture</li>
+                        <li><strong>Eye Protection + Centrifugation:</strong> Essential when processing tubes that may break during spinning</li>
+                    </ul>
+                </div>
+
+                <div class="note-card" style="margin-top: 12px;">
+                    <strong>Blood Tube Priority Guide:</strong>
+                    <ul style="margin-top: 8px; padding-left: 20px;">
+                        <li><strong>Lavender (EDTA):</strong> CBC, WBC differential - MUST be inverted 8-10 times</li>
+                        <li><strong>Light Blue (Citrate):</strong> Coagulation studies (PT, aPTT) - fill to exact line</li>
+                        <li><strong>Red (No additive):</strong> Serum tests - let clot 30 minutes before spinning</li>
+                        <li><strong>Green (Heparin):</strong> Chemistry STAT tests - inverts 8 times</li>
+                        <li><strong>Gray (Fluoride):</strong> Glucose, alcohol - prevents glycolysis</li>
+                    </ul>
+                </div>
+
+                <div class="note-card" style="margin-top: 12px;">
+                    <strong>Needle Safety Protocol:</strong>
+                    <ul style="margin-top: 8px; padding-left: 20px;">
+                        <li><strong>21g:</strong> Standard adult venipuncture, good blood flow</li>
+                        <li><strong>22g:</strong> Most common, good for most patients</li>
+                        <li><strong>23g:</strong> Pediatric/elderly, fragile veins</li>
+                        <li><strong>Safety Feature:</strong> NEVER recap needles, activate safety immediately after use</li>
+                        <li><strong>Disposal:</strong> Place in sharps container when ¾ full</li>
+                    </ul>
+                </div>
+
+                <p class="side-subheading" style="margin-top: 20px; color: #e5e7eb;">Chain of Infection & Equipment:</p>
+                <div class="chain-visual">
+                    <div class="chain-step">
+                        <div class="chain-number">1</div>
+                        <div>Pathogen</div>
+                    </div>
+                    <div class="chain-arrow">→</div>
+                    <div class="chain-step">
+                        <div class="chain-number">2</div>
+                        <div>Reservoir<br>(Blood tube)</div>
+                    </div>
+                    <div class="chain-arrow">→</div>
+                    <div class="chain-step">
+                        <div class="chain-number">3</div>
+                        <div>Exit<br>(Needlestick)</div>
+                    </div>
+                    <div class="chain-arrow">→</div>
+                    <div class="chain-step">
+                        <div class="chain-number">4</div>
+                        <div>Transmission<br>(Direct contact)</div>
+                    </div>
+                    <div class="chain-arrow">→</div>
+                    <div class="chain-step">
+                        <div class="chain-number">5</div>
+                        <div>Entry<br>(Skin break)</div>
+                    </div>
+                    <div class="chain-arrow">→</div>
+                    <div class="chain-step">
+                        <div class="chain-number">6</div>
+                        <div>Host<br>(Phlebotomist)</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <!-- Completion Celebration Modal -->
+    <div class="completion-celebration" id="celebration-modal">
+        <div class="celebration-content">
+            <div class="celebration-icon">🎉</div>
+            <h2 class="celebration-title">Safety & Equipment Mastered!</h2>
+            <p class="celebration-text">
+                Excellent work completing Chapter 3 (Infection Control) and 
+                Chapter 5 (Equipment). You've built a strong foundation in both 
+                safety protocols and equipment knowledge.
+            </p>
+            <p class="celebration-text">
+                You're now ready for hands-on training with PPE donning/doffing 
+                and blood collection equipment in the skills lab.
+            </p>
+            <button class="celebration-btn" id="close-celebration">Continue to Skills Lab</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // State management
+            let readingState = {
+                chapter3: false,
+                chapter5: false,
+                checklist: [false, false, false, false, false, false]
+            };
+
+            // DOM elements
+            const chapter3Card = document.getElementById('chapter3-card');
+            const chapter5Card = document.getElementById('chapter5-card');
+            const checklistItems = document.querySelectorAll('#reading-checklist li');
+            const progressFill = document.getElementById('progress-fill');
+            const progressPercent = document.getElementById('progress-percent');
+            const markAllBtn = document.getElementById('mark-all-read');
+            const resetBtn = document.getElementById('reset-progress');
+            const celebrationModal = document.getElementById('celebration-modal');
+            const closeCelebrationBtn = document.getElementById('close-celebration');
+
+            // Calculate progress
+            function calculateProgress() {
+                const totalItems = 8; // 2 chapters + 6 checklist items
+                let completed = 0;
+                
+                if (readingState.chapter3) completed++;
+                if (readingState.chapter5) completed++;
+                
+                readingState.checklist.forEach(item => {
+                    if (item) completed++;
+                });
+                
+                const percentage = Math.round((completed / totalItems) * 100);
+                
+                // Update progress bar
+                progressFill.style.width = `${percentage}%`;
+                progressPercent.textContent = `${percentage}%`;
+                
+                // Update progress bar color based on completion
+                if (percentage === 100) {
+                    progressFill.style.background = 'linear-gradient(90deg, var(--color-success), #00d2a0)';
+                    progressPercent.style.color = 'var(--color-success)';
+                    showCelebration();
+                } else if (percentage >= 50) {
+                    progressFill.style.background = 'linear-gradient(90deg, var(--color-primary), var(--color-accent))';
+                    progressPercent.style.color = 'var(--color-primary)';
+                } else {
+                    progressFill.style.background = 'linear-gradient(90deg, var(--color-primary), var(--color-accent))';
+                    progressPercent.style.color = 'var(--color-primary)';
+                }
+                
+                return percentage;
+            }
+
+            // Toggle chapter completion
+            function toggleChapter(chapter) {
+                const card = chapter === 3 ? chapter3Card : chapter5Card;
+                const isCompleted = chapter === 3 ? readingState.chapter3 : readingState.chapter5;
+                
+                if (isCompleted) {
+                    // Mark as incomplete
+                    card.classList.remove('completed');
+                    if (chapter === 3) {
+                        readingState.chapter3 = false;
+                        document.getElementById('chapter3-time').textContent = 'Est. 80-100 min';
+                    } else {
+                        readingState.chapter5 = false;
+                        document.getElementById('chapter5-time').textContent = 'Est. 70-90 min';
+                    }
+                } else {
+                    // Mark as complete
+                    card.classList.add('completed');
+                    if (chapter === 3) {
+                        readingState.chapter3 = true;
+                        document.getElementById('chapter3-time').textContent = '✓ Completed';
+                    } else {
+                        readingState.chapter5 = true;
+                        document.getElementById('chapter5-time').textContent = '✓ Completed';
+                    }
+                    
+                    // Add animation
+                    card.style.transform = 'scale(1.02)';
+                    setTimeout(() => {
+                        card.style.transform = '';
+                    }, 300);
+                }
+                
+                calculateProgress();
+            }
+
+            // Toggle checklist item
+            function toggleChecklistItem(index) {
+                const item = checklistItems[index];
+                const dot = item.querySelector('.check-dot');
+                
+                readingState.checklist[index] = !readingState.checklist[index];
+                
+                if (readingState.checklist[index]) {
+                    item.classList.add('completed');
+                    dot.textContent = '✓';
+                    dot.style.background = 'var(--color-success)';
+                    dot.style.borderColor = 'var(--color-success)';
+                    dot.style.color = 'white';
+                } else {
+                    item.classList.remove('completed');
+                    dot.textContent = '□';
+                    dot.style.background = '';
+                    dot.style.borderColor = 'rgba(148, 163, 184, 0.9)';
+                    dot.style.color = 'rgba(148, 163, 184, 0.9)';
+                }
+                
+                calculateProgress();
+            }
+
+            // Mark all as read
+            function markAllAsRead() {
+                // Mark both chapters
+                readingState.chapter3 = true;
+                readingState.chapter5 = true;
+                chapter3Card.classList.add('completed');
+                chapter5Card.classList.add('completed');
+                document.getElementById('chapter3-time').textContent = '✓ Completed';
+                document.getElementById('chapter5-time').textContent = '✓ Completed';
+                
+                // Mark all checklist items
+                readingState.checklist = [true, true, true, true, true, true];
+                checklistItems.forEach((item, index) => {
+                    item.classList.add('completed');
+                    const dot = item.querySelector('.check-dot');
+                    dot.textContent = '✓';
+                    dot.style.background = 'var(--color-success)';
+                    dot.style.borderColor = 'var(--color-success)';
+                    dot.style.color = 'white';
+                });
+                
+                calculateProgress();
+                
+                // Celebration animation
+                const cards = document.querySelectorAll('.reading-card');
+                cards.forEach(card => {
+                    card.style.transform = 'scale(1.05)';
+                    setTimeout(() => {
+                        card.style.transform = '';
+                    }, 300);
+                });
+            }
+
+            // Reset progress
+            function resetProgress() {
+                // Reset chapters
+                readingState.chapter3 = false;
+                readingState.chapter5 = false;
+                chapter3Card.classList.remove('completed');
+                chapter5Card.classList.remove('completed');
+                document.getElementById('chapter3-time').textContent = 'Est. 80-100 min';
+                document.getElementById('chapter5-time').textContent = 'Est. 70-90 min';
+                
+                // Reset checklist
+                readingState.checklist = [false, false, false, false, false, false];
+                checklistItems.forEach((item, index) => {
+                    item.classList.remove('completed');
+                    const dot = item.querySelector('.check-dot');
+                    dot.textContent = '□';
+                    dot.style.background = '';
+                    dot.style.borderColor = 'rgba(148, 163, 184, 0.9)';
+                    dot.style.color = 'rgba(148, 163, 184, 0.9)';
+                });
+                
+                calculateProgress();
+            }
+
+            // Show celebration modal
+            function showCelebration() {
+                setTimeout(() => {
+                    celebrationModal.style.display = 'flex';
+                }, 500);
+            }
+
+            // Close celebration modal
+            function closeCelebration() {
+                celebrationModal.style.display = 'none';
+            }
+
+            // Event listeners
+            chapter3Card.addEventListener('click', () => toggleChapter(3));
+            chapter5Card.addEventListener('click', () => toggleChapter(5));
+            
+            chapter3Card.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    toggleChapter(3);
+                }
+            });
+            
+            chapter5Card.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    toggleChapter(5);
+                }
+            });
+            
+            checklistItems.forEach((item, index) => {
+                item.addEventListener('click', () => toggleChecklistItem(index));
+                item.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        toggleChecklistItem(index);
+                    }
+                });
+            });
+            
+            markAllBtn.addEventListener('click', markAllAsRead);
+            resetBtn.addEventListener('click', resetProgress);
+            closeCelebrationBtn.addEventListener('click', closeCelebration);
+            
+            // Close modal when clicking outside
+            celebrationModal.addEventListener('click', (e) => {
+                if (e.target === celebrationModal) {
+                    closeCelebration();
+                }
+            });
+
+            // Initialize with some progress for demo
+            setTimeout(() => {
+                // Mark first checklist item as completed for demo
+                toggleChecklistItem(0);
+            }, 1000);
+
+            // Add scroll animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Observe reading cards
+            const readingCards = document.querySelectorAll('.reading-card');
+            readingCards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                observer.observe(card);
+            });
+
+            // Observe checklist items with delay
+            checklistItems.forEach((item, index) => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateX(-20px)';
+                item.style.transition = `opacity 0.5s ease ${index * 0.1}s, transform 0.5s ease ${index * 0.1}s`;
+                observer.observe(item);
+            });
+
+            // Animate tube items
+            const tubeItems = document.querySelectorAll('.tube-item');
+            tubeItems.forEach((item, index) => {
+                item.style.opacity = '0';
+                item.style.transform = 'scale(0.8)';
+                item.style.transition = `opacity 0.5s ease ${index * 0.1}s, transform 0.5s ease ${index * 0.1}s`;
+                setTimeout(() => {
+                    item.style.opacity = '1';
+                    item.style.transform = 'scale(1)';
+                }, 1000 + (index * 100));
+            });
+        });
+    </script>
+</body>
+</html>
