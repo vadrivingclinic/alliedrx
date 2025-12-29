@@ -1,0 +1,1635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AlliedRx -- Chapter 1: Phlebotomy Fundamentals - Module 3</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        /* Import and extend the existing CSS from Chapter 10 */
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-error: #e17055;
+            --color-warning: #fdcb6e;
+            --color-info: #0984e3;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
+            --color-dark: #0c0a18;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+            --shadow-card: 0 12px 30px rgba(15, 23, 42, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(
+                circle at top left,
+                #ffffff 0,
+                #f1ecff 40%,
+                var(--color-bg) 100%
+            );
+            color: var(--color-text);
+            -webkit-text-size-adjust: 100%;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 12px;
+            }
+        }
+
+        /* Animations from Chapter 10 */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes checkmarkPop {
+            0% { transform: scale(0); opacity: 0; }
+            70% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Main Page Container */
+        .page {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 0; }
+            .page {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 18px 14px 22px;
+            }
+        }
+
+        /* Header Styles from Chapter 10 */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .brand-logo:hover { transform: scale(1.05); }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--color-success);
+            flex-shrink: 0;
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .badge-mode:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+        /* Typography */
+        h1 {
+            font-size: clamp(1.8rem, 3vw, 2.2rem);
+            line-height: 1.1;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .module-subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 600px;
+            margin-bottom: 24px;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        /* Module Navigation */
+        .module-nav {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .module-nav { grid-template-columns: 1fr; }
+        }
+
+        .nav-card {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-card);
+            border-color: var(--color-primary-soft);
+        }
+
+        .nav-card.active {
+            background: rgba(175, 75, 239, 0.05);
+            border-color: var(--color-primary);
+        }
+
+        .nav-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: var(--color-primary);
+        }
+
+        .nav-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 8px;
+        }
+
+        .nav-desc {
+            font-size: 0.85rem;
+            color: var(--color-muted);
+        }
+
+        /* Interactive Timeline */
+        .timeline-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .timeline-track {
+            position: relative;
+            height: 4px;
+            background: rgba(12, 10, 24, 0.1);
+            border-radius: 2px;
+            margin: 40px 0;
+        }
+
+        .timeline-marker {
+            position: absolute;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: white;
+            border: 3px solid rgba(12, 10, 24, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+
+        .timeline-marker:hover {
+            transform: translate(-50%, -50%) scale(1.2);
+            border-color: var(--color-primary);
+        }
+
+        .timeline-marker.active {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+            animation: pulse 2s infinite;
+        }
+
+        .era-card {
+            background: white;
+            border-radius: var(--radius-md);
+            padding: 25px;
+            border: 1px solid rgba(12, 10, 24, 0.1);
+            margin-bottom: 20px;
+            display: none;
+            animation: fadeInUp 0.5s ease;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .era-card.active {
+            display: block;
+        }
+
+        .era-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .era-title {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--color-primary);
+        }
+
+        .era-year {
+            font-size: 0.9rem;
+            background: rgba(175, 75, 239, 0.1);
+            padding: 5px 15px;
+            border-radius: 20px;
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        .era-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .era-content { grid-template-columns: 1fr; }
+        }
+
+        .era-image {
+            width: 100%;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+        }
+
+        .era-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .era-description {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--color-text);
+        }
+
+        .era-description blockquote {
+            font-style: italic;
+            border-left: 4px solid var(--color-accent);
+            padding-left: 15px;
+            margin: 15px 0;
+            color: var(--color-muted);
+        }
+
+        /* Poll Component */
+        .poll-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+        }
+
+        .poll-question {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 15px;
+        }
+
+        .poll-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        @media (max-width: 480px) {
+            .poll-options { grid-template-columns: 1fr; }
+        }
+
+        .poll-option {
+            background: white;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .poll-option:hover {
+            border-color: var(--color-primary-soft);
+            background: rgba(175, 75, 239, 0.05);
+        }
+
+        .poll-option.selected {
+            background: rgba(0, 184, 148, 0.1);
+            border-color: var(--color-success);
+            color: var(--color-success);
+            font-weight: 600;
+        }
+
+        /* Communication Network */
+        .network-container {
+            position: relative;
+            height: 500px;
+            margin: 40px 0;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            background: rgba(12, 10, 24, 0.02);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+        }
+
+        .network-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: var(--color-primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(175, 75, 239, 0.3);
+            z-index: 10;
+        }
+
+        .network-node {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid var(--color-accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 5;
+        }
+
+        .network-node:hover {
+            transform: scale(1.1);
+            background: var(--color-accent);
+            color: white;
+            box-shadow: 0 5px 20px rgba(131, 128, 240, 0.3);
+        }
+
+        /* Detective Game */
+        .detective-game {
+            background: var(--color-dark);
+            color: white;
+            border-radius: var(--radius-md);
+            padding: 30px;
+            margin: 30px 0;
+        }
+
+        .game-title {
+            font-size: 1.5rem;
+            color: var(--color-primary-soft);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .scenario-box {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--color-accent);
+        }
+
+        .scenario-text {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+
+        .lab-departments {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 768px) {
+            .lab-departments { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 480px) {
+            .lab-departments { grid-template-columns: 1fr; }
+        }
+
+        .department-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .department-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--color-primary-soft);
+        }
+
+        .department-card.selected {
+            background: rgba(0, 184, 148, 0.2);
+            border-color: var(--color-success);
+            color: var(--color-success);
+        }
+
+        /* Interactive Boxes */
+        .tip-box {
+            background: rgba(253, 203, 110, 0.1);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid var(--color-warning);
+            animation: slideInRight 0.5s ease;
+        }
+
+        .tip-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .tip-icon {
+            font-size: 1.5rem;
+            color: var(--color-warning);
+        }
+
+        .tip-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--color-warning);
+        }
+
+        .tip-content {
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: var(--color-text);
+        }
+
+        .reminder-box {
+            background: rgba(225, 112, 85, 0.1);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid var(--color-error);
+            animation: slideInRight 0.5s ease 0.1s both;
+        }
+
+        .reminder-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .reminder-icon {
+            font-size: 1.5rem;
+            color: var(--color-error);
+        }
+
+        .reminder-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--color-error);
+        }
+
+        .reminder-content {
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: var(--color-text);
+        }
+
+        /* Glossary Terms */
+        .glossary-term {
+            color: var(--color-primary);
+            text-decoration: underline dotted;
+            cursor: help;
+            position: relative;
+        }
+
+        .glossary-tooltip {
+            position: absolute;
+            background: var(--color-dark);
+            color: white;
+            padding: 10px;
+            border-radius: var(--radius-sm);
+            font-size: 0.8rem;
+            width: 200px;
+            z-index: 1000;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            display: none;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .glossary-term:hover .glossary-tooltip {
+            display: block;
+        }
+
+        /* Progress Tracker */
+        .progress-tracker {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            position: relative;
+            padding: 0 20px;
+        }
+
+        .progress-tracker::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 50px;
+            right: 50px;
+            height: 3px;
+            background: rgba(12, 10, 24, 0.08);
+            z-index: 1;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+
+        .step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--color-muted);
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.active .step-circle {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .progress-step.completed .step-circle {
+            background: var(--color-success);
+            border-color: var(--color-success);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.75rem;
+            color: var(--color-muted);
+            text-align: center;
+            font-weight: 500;
+        }
+
+        /* Results Panel */
+        .results-panel {
+            background: var(--color-dark);
+            color: white;
+            border-radius: var(--radius-md);
+            padding: 30px;
+            margin-top: 30px;
+            display: none;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .results-panel.show {
+            display: block;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .results-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .score-display {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--color-primary-soft);
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        /* Meet the Team Avatar */
+        .avatar-guide {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--color-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(175, 75, 239, 0.3);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .avatar-guide:hover {
+            transform: scale(1.1);
+        }
+
+        .avatar-message {
+            position: absolute;
+            bottom: 100%;
+            right: 0;
+            width: 250px;
+            background: white;
+            color: var(--color-text);
+            padding: 15px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-soft);
+            margin-bottom: 10px;
+            display: none;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .avatar-guide:hover .avatar-message {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="module-heading">
+        <!-- Header -->
+        <header class="brand-row">
+            <div class="brand">
+                <img
+                    src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                    alt="AlliedRx logo"
+                    class="brand-logo"
+                />
+                <div class="course-meta">
+                    <span class="course-name">Clinical Medical Assistant • Week 1</span>
+                    <div class="week-label">
+                        <span class="week-label-dot"></span>
+                        <span>Chapter 1: Phlebotomy Fundamentals</span>
+                    </div>
+                </div>
+            </div>
+            <span class="badge-mode">Campus &amp; Online</span>
+        </header>
+
+        <h1 id="module-heading">Journey Through Time & The Lab Team</h1>
+        <p class="module-subtitle">
+            Explore the historical evolution of phlebotomy and understand the phlebotomist's role as a communication hub in the modern healthcare team.
+        </p>
+
+        <!-- Progress Tracker -->
+        <div class="progress-tracker">
+            <div class="progress-step active" data-step="1">
+                <div class="step-circle">1</div>
+                <div class="step-label">Timeline</div>
+            </div>
+            <div class="progress-step" data-step="2">
+                <div class="step-circle">2</div>
+                <div class="step-label">Network</div>
+            </div>
+            <div class="progress-step" data-step="3">
+                <div class="step-circle">3</div>
+                <div class="step-label">Detective</div>
+            </div>
+            <div class="progress-step" data-step="4">
+                <div class="step-circle">4</div>
+                <div class="step-label">Review</div>
+            </div>
+        </div>
+
+        <!-- Module Navigation -->
+        <div class="module-nav">
+            <div class="nav-card active" data-part="1">
+                <div class="nav-icon">⏳</div>
+                <h3 class="nav-title">Phlebotomy Through the Ages</h3>
+                <p class="nav-desc">Interactive timeline from ancient to modern practices</p>
+            </div>
+            <div class="nav-card" data-part="2">
+                <div class="nav-icon">🕸️</div>
+                <h3 class="nav-title">The Communication Web</h3>
+                <p class="nav-desc">Explore phlebotomist's role as communication hub</p>
+            </div>
+            <div class="nav-card" data-part="3">
+                <div class="nav-icon">🕵️</div>
+                <h3 class="nav-title">Lab Department Detective</h3>
+                <p class="nav-desc">Identify lab areas for different tests</p>
+            </div>
+        </div>
+
+        <!-- Part 1: Interactive Timeline -->
+        <section id="part-1" class="module-part active">
+            <h2 style="color: var(--color-primary); margin-bottom: 20px;">Part 1: Phlebotomy Through the Ages</h2>
+            
+            <div class="tip-box">
+                <div class="tip-header">
+                    <div class="tip-icon">💡</div>
+                    <div class="tip-title">Learning Objective</div>
+                </div>
+                <div class="tip-content">
+                    Trace the historical evolution of phlebotomy from a <span class="glossary-term">curative treatment
+                        <span class="glossary-tooltip">Using bloodletting as a treatment for various ailments</span>
+                    </span> to a modern <span class="glossary-term">diagnostic aid
+                        <span class="glossary-tooltip">Using blood samples to diagnose medical conditions</span>
+                    </span>.
+                </div>
+            </div>
+
+            <!-- Timeline -->
+            <div class="timeline-container">
+                <div class="timeline-track">
+                    <div class="timeline-marker" data-era="ancient" style="left: 10%;"></div>
+                    <div class="timeline-marker" data-era="medieval" style="left: 30%;"></div>
+                    <div class="timeline-marker" data-era="renaissance" style="left: 50%;"></div>
+                    <div class="timeline-marker" data-era="modern" style="left: 90%;"></div>
+                </div>
+
+                <!-- Era Cards -->
+                <div class="era-card active" data-era="ancient">
+                    <div class="era-header">
+                        <h3 class="era-title">Ancient World</h3>
+                        <span class="era-year">Hippocrates (460-370 BCE)</span>
+                    </div>
+                    <div class="era-content">
+                        <div class="era-image">
+                            <div style="background: #f0f0f0; height: 200px; display: flex; align-items: center; justify-content: center; color: var(--color-muted);">
+                                🏺 Ancient Greek Medicine
+                            </div>
+                        </div>
+                        <div class="era-description">
+                            <blockquote>
+                                "For extreme diseases, extreme methods of cure... including bloodletting."
+                            </blockquote>
+                            <p>Bloodletting was part of the humoral theory of medicine. Physicians believed that illness was caused by an imbalance of the four bodily humors (blood, phlegm, black bile, yellow bile).</p>
+                            <p>Phlebotomy was used as a <strong>treatment</strong> for various ailments, from fever to headaches.</p>
+                            
+                            <div class="poll-container">
+                                <div class="poll-question">In this era, was phlebotomy primarily used as:</div>
+                                <div class="poll-options">
+                                    <div class="poll-option" data-answer="treatment">Treatment (Curative)</div>
+                                    <div class="poll-option" data-answer="diagnostic">Diagnostic Aid</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="era-card" data-era="medieval">
+                    <div class="era-header">
+                        <h3 class="era-title">Medieval & Islamic Medicine</h3>
+                        <span class="era-year">11th Century</span>
+                    </div>
+                    <div class="era-content">
+                        <div class="era-image">
+                            <div style="background: #f0f0f0; height: 200px; display: flex; align-items: center; justify-content: center; color: var(--color-muted);">
+                                📜 Medieval Manuscripts
+                            </div>
+                        </div>
+                        <div class="era-description">
+                            <p>Arabic physicians like Avicenna (Ibn Sina) refined bloodletting techniques and documented detailed procedures.</p>
+                            <p>The <em>Venesection Man</em> diagram showed specific bloodletting points on the body for different conditions.</p>
+                            <p>Barber-surgeons performed most procedures using lancets and <span class="glossary-term">cupping
+                                <span class="glossary-tooltip">Applying heated cups to the skin to draw blood to the surface</span>
+                            </span> techniques.</p>
+                            
+                            <div class="poll-container">
+                                <div class="poll-question">In this era, was phlebotomy primarily used as:</div>
+                                <div class="poll-options">
+                                    <div class="poll-option" data-answer="treatment">Treatment (Curative)</div>
+                                    <div class="poll-option" data-answer="diagnostic">Diagnostic Aid</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="era-card" data-era="renaissance">
+                    <div class="era-header">
+                        <h3 class="era-title">17th-18th Centuries</h3>
+                        <span class="era-year">1600-1800</span>
+                    </div>
+                    <div class="era-content">
+                        <div class="era-image">
+                            <div style="background: #f0f0f0; height: 200px; display: flex; align-items: center; justify-content: center; color: var(--color-muted);">
+                                🔬 Early Microscopes
+                            </div>
+                        </div>
+                        <div class="era-description">
+                            <p>Bloodletting reached its peak, with George Washington famously receiving extensive treatment before his death.</p>
+                            <p>Leeches became popular tools for "balanced" blood removal from specific areas.</p>
+                            <p>Early microscopes allowed scientists to first observe blood cells, beginning the shift toward understanding blood composition.</p>
+                            
+                            <div class="poll-container">
+                                <div class="poll-question">In this era, was phlebotomy primarily used as:</div>
+                                <div class="poll-options">
+                                    <div class="poll-option" data-answer="treatment">Treatment (Curative)</div>
+                                    <div class="poll-option" data-answer="diagnostic">Diagnostic Aid</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="era-card" data-era="modern">
+                    <div class="era-header">
+                        <h3 class="era-title">Modern Era</h3>
+                        <span class="era-year">20th Century - Present</span>
+                    </div>
+                    <div class="era-content">
+                        <div class="era-image">
+                            <div style="background: #f0f0f0; height: 200px; display: flex; align-items: center; justify-content: center; color: var(--color-muted);">
+                                🏥 Modern Laboratory
+                            </div>
+                        </div>
+                        <div class="era-description">
+                            <p>With germ theory and understanding of disease, phlebotomy evolved from treatment to diagnostic testing.</p>
+                            <p>Vacuum tubes (1940s) and safety-engineered devices revolutionized collection.</p>
+                            <p>Today's phlebotomist focuses on <span class="glossary-term">patient safety
+                                <span class="glossary-tooltip">Preventing harm to patients during healthcare procedures</span>
+                            </span>, quality specimens, and precise technique for accurate diagnostic results.</p>
+                            
+                            <div class="poll-container">
+                                <div class="poll-question">In this era, is phlebotomy primarily used as:</div>
+                                <div class="poll-options">
+                                    <div class="poll-option" data-answer="treatment">Treatment (Curative)</div>
+                                    <div class="poll-option" data-answer="diagnostic">Diagnostic Aid</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reminder-box">
+                <div class="reminder-header">
+                    <div class="reminder-icon">⚠️</div>
+                    <div class="reminder-title">Critical Shift in Purpose</div>
+                </div>
+                <div class="reminder-content">
+                    <strong>The most important historical insight:</strong> Phlebotomy has transformed from a 
+                    <strong>curative treatment</strong> (removing "bad blood" to treat illness) to a 
+                    <strong>diagnostic aid</strong> (collecting specimens to identify illness). This shift fundamentally 
+                    changed the phlebotomist's role from a "treatment provider" to a "diagnostic partner."
+                </div>
+            </div>
+        </section>
+
+        <!-- Part 2: Communication Network -->
+        <section id="part-2" class="module-part" style="display: none;">
+            <h2 style="color: var(--color-primary); margin-bottom: 20px;">Part 2: The Communication Web</h2>
+            
+            <div class="tip-box">
+                <div class="tip-header">
+                    <div class="tip-icon">💡</div>
+                    <div class="tip-title">Learning Objective</div>
+                </div>
+                <div class="tip-content">
+                    Understand the phlebotomist's role as a central communication hub and identify key interactions 
+                    with different members of the healthcare team.
+                </div>
+            </div>
+
+            <div class="network-container">
+                <div class="network-center">Phlebotomist</div>
+                
+                <!-- Network Nodes -->
+                <div class="network-node" style="top: 20%; left: 20%;" data-role="nurse">
+                    Nurse
+                </div>
+                <div class="network-node" style="top: 20%; left: 80%;" data-role="physician">
+                    Physician
+                </div>
+                <div class="network-node" style="top: 40%; left: 10%;" data-role="patient">
+                    Patient
+                </div>
+                <div class="network-node" style="top: 40%; left: 90%;" data-role="lab-tech">
+                    Lab Technician
+                </div>
+                <div class="network-node" style="top: 60%; left: 20%;" data-role="family">
+                    Patient's Family
+                </div>
+                <div class="network-node" style="top: 60%; left: 80%;" data-role="clerk">
+                    Unit Clerk
+                </div>
+                <div class="network-node" style="top: 80%; left: 40%;" data-role="chemist">
+                    Clinical Chemist
+                </div>
+                <div class="network-node" style="top: 80%; left: 60%;" data-role="admin">
+                    Lab Administrator
+                </div>
+            </div>
+
+            <!-- Role Details Panel -->
+            <div class="era-card" id="role-details" style="display: none;">
+                <div class="era-header">
+                    <h3 class="era-title" id="role-title">Communication Partner</h3>
+                    <span class="era-year" id="role-type">Healthcare Team</span>
+                </div>
+                <div class="era-content">
+                    <div class="era-description">
+                        <h4 style="color: var(--color-accent); margin-bottom: 10px;">Typical Communication Topics:</h4>
+                        <p id="role-topics">Loading topics...</p>
+                        
+                        <h4 style="color: var(--color-accent); margin-bottom: 10px;">Key Knowledge Required:</h4>
+                        <p id="role-knowledge">Loading knowledge requirements...</p>
+                        
+                        <h4 style="color: var(--color-accent); margin-bottom: 10px;">Professional Skills:</h4>
+                        <p id="role-skills">Loading skills...</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reminder-box">
+                <div class="reminder-header">
+                    <div class="reminder-icon">💬</div>
+                    <div class="reminder-title">Communication is Key</div>
+                </div>
+                <div class="reminder-content">
+                    As a phlebotomist, you are not just a technician—you are a <strong>communication hub</strong>. 
+                    Effective communication with each team member ensures patient safety, accurate orders, proper 
+                    specimen handling, and timely results. Miscommunication at any point can lead to errors affecting 
+                    patient care.
+                </div>
+            </div>
+        </section>
+
+        <!-- Part 3: Lab Department Detective -->
+        <section id="part-3" class="module-part" style="display: none;">
+            <h2 style="color: var(--color-primary); margin-bottom: 20px;">Part 3: Lab Department Detective</h2>
+            
+            <div class="tip-box">
+                <div class="tip-header">
+                    <div class="tip-icon">💡</div>
+                    <div class="tip-title">Learning Objective</div>
+                </div>
+                <div class="tip-content">
+                    Identify which primary functional area of the laboratory handles specific tests and recognize 
+                    key personnel in each department.
+                </div>
+            </div>
+
+            <div class="detective-game">
+                <h3 class="game-title">🔍 Lab Department Detective</h3>
+                
+                <div class="scenario-box">
+                    <div class="scenario-text">
+                        <strong>Case #1:</strong> Dr. Smith orders a "Prothrombin Time (PT)" test to monitor a patient's 
+                        blood-thinning medication.
+                    </div>
+                    <div class="scenario-text">
+                        <strong>Case #2:</strong> The emergency department needs a "Type and Screen" for a trauma patient 
+                        who may require a blood transfusion.
+                    </div>
+                    <div class="scenario-text">
+                        <strong>Case #3:</strong> A patient with suspected urinary tract infection needs a "Urine Culture 
+                        and Sensitivity" test.
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin: 20px 0;">
+                    <button id="new-case-btn" style="background: var(--color-primary); color: white; border: none; padding: 12px 24px; border-radius: var(--radius-md); font-weight: 600; cursor: pointer;">
+                        Get New Case
+                    </button>
+                </div>
+
+                <div id="current-case" style="background: rgba(255, 255, 255, 0.15); padding: 20px; border-radius: var(--radius-sm); margin: 20px 0; display: none;">
+                    <h4 style="color: var(--color-primary-soft); margin-bottom: 10px;">Current Investigation:</h4>
+                    <p id="case-description" style="font-size: 1.1rem;"></p>
+                </div>
+
+                <h4 style="color: white; text-align: center; margin: 20px 0;">Which lab department handles this test?</h4>
+                
+                <div class="lab-departments">
+                    <div class="department-card" data-dept="hematology">
+                        Hematology
+                    </div>
+                    <div class="department-card" data-dept="chemistry">
+                        Chemistry
+                    </div>
+                    <div class="department-card" data-dept="bloodbank">
+                        Blood Bank
+                    </div>
+                    <div class="department-card" data-dept="microbiology">
+                        Microbiology/Serology
+                    </div>
+                </div>
+
+                <div id="dept-feedback" style="margin-top: 20px; padding: 15px; border-radius: var(--radius-sm); display: none;"></div>
+
+                <div class="tip-box" style="background: rgba(255, 255, 255, 0.1); border-left-color: var(--color-info); margin-top: 20px;">
+                    <div class="tip-header">
+                        <div class="tip-icon">👥</div>
+                        <div class="tip-title">Personnel Connection</div>
+                    </div>
+                    <div class="tip-content" style="color: #e5e7eb;">
+                        After identifying the correct department, think about which personnel from Figure 1-4 
+                        you might interact with. For example, in Chemistry, you might work with a 
+                        <span class="glossary-term">Medical Technologist
+                            <span class="glossary-tooltip">A professional who performs complex laboratory tests</span>
+                        </span> 
+                        or <span class="glossary-term">Clinical Chemist
+                            <span class="glossary-tooltip">A specialist in chemical analysis of body fluids</span>
+                        </span>.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final Review Section -->
+        <section id="part-4" class="module-part" style="display: none;">
+            <h2 style="color: var(--color-primary); margin-bottom: 20px;">Part 4: Chapter Review Quiz</h2>
+            
+            <div class="tip-box">
+                <div class="tip-header">
+                    <div class="tip-icon">📝</div>
+                    <div class="tip-title">Comprehensive Assessment</div>
+                </div>
+                <div class="tip-content">
+                    Complete this 10-question quiz covering all five chapter objectives. Questions will test your 
+                    knowledge of history, communication, lab departments, terminology, and professional roles.
+                </div>
+            </div>
+
+            <div id="quiz-container" style="margin: 30px 0;">
+                <!-- Quiz questions will be dynamically inserted here -->
+                <div style="text-align: center; padding: 40px;">
+                    <div style="font-size: 3rem; color: var(--color-muted); margin-bottom: 20px;">📋</div>
+                    <h3 style="color: var(--color-primary); margin-bottom: 10px;">Ready to Test Your Knowledge?</h3>
+                    <p style="color: var(--color-muted); margin-bottom: 20px;">Complete all three parts above to unlock the final review quiz.</p>
+                    <button id="start-quiz-btn" style="background: var(--color-primary); color: white; border: none; padding: 15px 30px; border-radius: var(--radius-md); font-weight: 600; cursor: pointer; font-size: 1.1rem;">
+                        Start Chapter Review Quiz
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Results Panel -->
+        <div class="results-panel" id="results-panel">
+            <div class="results-header">
+                <h2 class="results-title">Chapter 1: Learning Results</h2>
+            </div>
+            <div class="score-display" id="final-score">0%</div>
+            
+            <div class="era-card" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);">
+                <div class="era-header">
+                    <h3 class="era-title" style="color: white;">Learning Insights</h3>
+                </div>
+                <div class="era-content">
+                    <div class="era-description" style="color: #e5e7eb;">
+                        <h4 style="color: var(--color-primary-soft); margin-bottom: 10px;">Key Takeaways:</h4>
+                        <p><strong>Historical Perspective:</strong> Phlebotomy evolved from curative treatment to diagnostic aid—understanding this history helps appreciate modern standards.</p>
+                        <p><strong>Communication Role:</strong> As a phlebotomist, you're a central communication hub connecting patients, nurses, physicians, and lab staff.</p>
+                        <p><strong>Department Knowledge:</strong> Knowing which lab department handles which tests ensures proper specimen handling and timely results.</p>
+                        <p><strong>Professional Identity:</strong> Modern phlebotomy combines technical skill with patient care, communication, and ethical practice.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Avatar Guide -->
+        <div class="avatar-guide">
+            🩺
+            <div class="avatar-message">
+                <strong>Hi, I'm Phlebie!</strong><br><br>
+                I'm here to guide you through Chapter 1. Remember: history helps us appreciate modern practice, and communication is your most important skill!
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // State management
+            const state = {
+                currentPart: 1,
+                timelineAnswers: {},
+                networkSelections: {},
+                detectiveScore: 0,
+                quizScore: 0,
+                completedParts: new Set([1])
+            };
+
+            // DOM Elements
+            const navCards = document.querySelectorAll('.nav-card');
+            const moduleParts = document.querySelectorAll('.module-part');
+            const progressSteps = document.querySelectorAll('.progress-step');
+            const timelineMarkers = document.querySelectorAll('.timeline-marker');
+            const eraCards = document.querySelectorAll('.era-card');
+            const pollOptions = document.querySelectorAll('.poll-option');
+            const networkNodes = document.querySelectorAll('.network-node');
+            const departmentCards = document.querySelectorAll('.department-card');
+            const startQuizBtn = document.getElementById('start-quiz-btn');
+            const resultsPanel = document.getElementById('results-panel');
+            const finalScore = document.getElementById('final-score');
+            const newCaseBtn = document.getElementById('new-case-btn');
+            const currentCase = document.getElementById('current-case');
+            const caseDescription = document.getElementById('case-description');
+            const deptFeedback = document.getElementById('dept-feedback');
+
+            // Navigation between parts
+            navCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const part = parseInt(this.dataset.part);
+                    navigateToPart(part);
+                });
+            });
+
+            function navigateToPart(part) {
+                // Update navigation cards
+                navCards.forEach(card => {
+                    if (parseInt(card.dataset.part) === part) {
+                        card.classList.add('active');
+                    } else {
+                        card.classList.remove('active');
+                    }
+                });
+
+                // Show selected part, hide others
+                moduleParts.forEach(partEl => {
+                    partEl.style.display = 'none';
+                });
+                document.getElementById(`part-${part}`).style.display = 'block';
+
+                // Update progress tracker
+                progressSteps.forEach(step => {
+                    const stepNum = parseInt(step.dataset.step);
+                    if (stepNum === part) {
+                        step.classList.add('active');
+                        step.classList.remove('completed');
+                    } else if (stepNum < part) {
+                        step.classList.remove('active');
+                        step.classList.add('completed');
+                    } else {
+                        step.classList.remove('active', 'completed');
+                    }
+                });
+
+                state.currentPart = part;
+                state.completedParts.add(part);
+            }
+
+            // Timeline functionality
+            timelineMarkers.forEach(marker => {
+                marker.addEventListener('click', function() {
+                    const era = this.dataset.era;
+                    
+                    // Update marker states
+                    timelineMarkers.forEach(m => m.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Show corresponding era card
+                    eraCards.forEach(card => {
+                        if (card.dataset.era === era) {
+                            card.classList.add('active');
+                        } else {
+                            card.classList.remove('active');
+                        }
+                    });
+                });
+            });
+
+            // Poll functionality
+            pollOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    const pollContainer = this.closest('.poll-container');
+                    const options = pollContainer.querySelectorAll('.poll-option');
+                    
+                    options.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    
+                    const era = this.closest('.era-card').dataset.era;
+                    state.timelineAnswers[era] = this.dataset.answer;
+                });
+            });
+
+            // Network functionality
+            const roleData = {
+                nurse: {
+                    topics: "Stat order priority, patient condition updates, collection timing",
+                    knowledge: "Medical terminology, order of draw, specimen requirements",
+                    skills: "Clear communication, urgency assessment, collaboration"
+                },
+                physician: {
+                    topics: "Test clarification, abnormal results notification, special collection requirements",
+                    knowledge: "Test indications, clinical significance, result interpretation",
+                    skills: "Professional communication, clarity, respect for expertise"
+                },
+                patient: {
+                    topics: "Procedure explanation, anxiety reduction, post-collection instructions",
+                    knowledge: "Patient rights, cultural sensitivity, age-appropriate communication",
+                    skills: "Empathy, clear instructions, reassurance"
+                },
+                'lab-tech': {
+                    topics: "Specimen quality issues, test requirements, collection problems",
+                    knowledge: "Laboratory procedures, specimen acceptability criteria",
+                    skills: "Technical communication, problem-solving"
+                },
+                family: {
+                    topics: "Procedure explanation, patient support, result delivery protocols",
+                    knowledge: "HIPAA regulations, family dynamics, support systems",
+                    skills: "Diplomacy, confidentiality, emotional intelligence"
+                },
+                clerk: {
+                    topics: "Order verification, scheduling, patient information",
+                    knowledge: "Order entry systems, scheduling protocols",
+                    skills: "Efficiency, accuracy, organization"
+                },
+                chemist: {
+                    topics: "Specimen stability, special handling requirements, test methodology",
+                    knowledge: "Chemistry analytes, stability factors, interferences",
+                    skills: "Technical consultation, problem resolution"
+                },
+                admin: {
+                    topics: "Quality metrics, supply needs, procedural updates",
+                    knowledge: "Laboratory operations, regulatory requirements",
+                    skills: "Professional communication, systems thinking"
+                }
+            };
+
+            networkNodes.forEach(node => {
+                node.addEventListener('click', function() {
+                    const role = this.dataset.role;
+                    const details = roleData[role];
+                    
+                    document.getElementById('role-title').textContent = this.textContent;
+                    document.getElementById('role-type').textContent = 'Healthcare Team Member';
+                    document.getElementById('role-topics').textContent = details.topics;
+                    document.getElementById('role-knowledge').textContent = details.knowledge;
+                    document.getElementById('role-skills').textContent = details.skills;
+                    
+                    document.getElementById('role-details').style.display = 'block';
+                    document.getElementById('role-details').scrollIntoView({ behavior: 'smooth' });
+                });
+            });
+
+            // Detective game cases
+            const detectiveCases = [
+                {
+                    description: "Dr. Smith orders a 'Prothrombin Time (PT)' test to monitor a patient's blood-thinning medication.",
+                    correctDept: "hematology",
+                    explanation: "PT tests measure how long it takes blood to clot and are performed in Hematology."
+                },
+                {
+                    description: "The emergency department needs a 'Type and Screen' for a trauma patient who may require a blood transfusion.",
+                    correctDept: "bloodbank",
+                    explanation: "Blood typing and cross-matching are performed in the Blood Bank department."
+                },
+                {
+                    description: "A patient with suspected urinary tract infection needs a 'Urine Culture and Sensitivity' test.",
+                    correctDept: "microbiology",
+                    explanation: "Culture and sensitivity tests for bacterial growth are performed in Microbiology."
+                },
+                {
+                    description: "A diabetic patient needs a 'Hemoglobin A1c' test to monitor long-term blood glucose control.",
+                    correctDept: "chemistry",
+                    explanation: "A1c is a chemistry test that measures average blood sugar over 3 months."
+                },
+                {
+                    description: "A patient with fatigue needs a 'Complete Blood Count (CBC)' to check for anemia.",
+                    correctDept: "hematology",
+                    explanation: "CBC analyzes blood cells and is a core Hematology test."
+                }
+            ];
+
+            let currentCaseIndex = 0;
+
+            function loadNewCase() {
+                currentCaseIndex = Math.floor(Math.random() * detectiveCases.length);
+                const currentCaseData = detectiveCases[currentCaseIndex];
+                
+                caseDescription.textContent = currentCaseData.description;
+                currentCase.style.display = 'block';
+                
+                // Reset department selections
+                departmentCards.forEach(card => card.classList.remove('selected'));
+                deptFeedback.style.display = 'none';
+            }
+
+            newCaseBtn.addEventListener('click', loadNewCase);
+
+            // Department selection
+            departmentCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    if (!currentCase.style.display || currentCase.style.display === 'none') {
+                        return;
+                    }
+                    
+                    departmentCards.forEach(c => c.classList.remove('selected'));
+                    this.classList.add('selected');
+                    
+                    const selectedDept = this.dataset.dept;
+                    const correctDept = detectiveCases[currentCaseIndex].correctDept;
+                    
+                    if (selectedDept === correctDept) {
+                        deptFeedback.innerHTML = `
+                            <div style="color: var(--color-success); background: rgba(0, 184, 148, 0.1); padding: 15px; border-radius: var(--radius-sm); border-left: 4px solid var(--color-success);">
+                                <strong>✓ Correct!</strong> ${detectiveCases[currentCaseIndex].explanation}
+                            </div>
+                        `;
+                        state.detectiveScore++;
+                    } else {
+                        deptFeedback.innerHTML = `
+                            <div style="color: var(--color-error); background: rgba(225, 112, 85, 0.1); padding: 15px; border-radius: var(--radius-sm); border-left: 4px solid var(--color-error);">
+                                <strong>✗ Not quite.</strong> The correct department is <strong>${correctDept.charAt(0).toUpperCase() + correctDept.slice(1)}</strong>. 
+                                ${detectiveCases[currentCaseIndex].explanation}
+                            </div>
+                        `;
+                    }
+                    
+                    deptFeedback.style.display = 'block';
+                    deptFeedback.scrollIntoView({ behavior: 'smooth' });
+                });
+            });
+
+            // Quiz functionality
+            startQuizBtn.addEventListener('click', function() {
+                if (state.completedParts.size < 3) {
+                    alert('Please complete all three parts before taking the quiz!');
+                    return;
+                }
+                
+                navigateToPart(4);
+                loadQuiz();
+            });
+
+            function loadQuiz() {
+                const quizContainer = document.getElementById('quiz-container');
+                quizContainer.innerHTML = `
+                    <div style="background: rgba(12, 10, 24, 0.02); border-radius: var(--radius-md); padding: 30px;">
+                        <h3 style="color: var(--color-primary); margin-bottom: 20px; text-align: center;">Chapter 1 Review Quiz</h3>
+                        <div id="quiz-questions"></div>
+                        <div style="text-align: center; margin-top: 30px;">
+                            <button id="submit-quiz-btn" style="background: var(--color-primary); color: white; border: none; padding: 15px 30px; border-radius: var(--radius-md); font-weight: 600; cursor: pointer; font-size: 1.1rem;">
+                                Submit Quiz
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                // Add quiz questions here
+                const questions = [
+                    {
+                        question: "Which historical figure is most associated with the humoral theory that included bloodletting?",
+                        options: ["Hippocrates", "Florence Nightingale", "Louis Pasteur", "Robert Koch"],
+                        correct: 0
+                    },
+                    {
+                        question: "In the 11th century, what tool was commonly used for bloodletting along with lancets?",
+                        options: ["Syringes", "Leeches", "Vacuum tubes", "Butterfly needles"],
+                        correct: 1
+                    },
+                    {
+                        question: "The most significant shift in phlebotomy's purpose was from:",
+                        options: ["Diagnostic to treatment", "Treatment to diagnostic", "Curative to palliative", "Preventive to reactive"],
+                        correct: 1
+                    },
+                    {
+                        question: "Which department would handle a 'Complete Blood Count (CBC)' test?",
+                        options: ["Chemistry", "Hematology", "Microbiology", "Blood Bank"],
+                        correct: 1
+                    },
+                    {
+                        question: "When communicating with a nurse about a STAT order, what is MOST important?",
+                        options: ["Documentation", "Timing/urgency", "Cost considerations", "Supply inventory"],
+                        correct: 1
+                    },
+                    {
+                        question: "Which personnel would you consult about specimen stability for a chemistry test?",
+                        options: ["Unit Clerk", "Clinical Chemist", "Nurse Manager", "Hospital Administrator"],
+                        correct: 1
+                    },
+                    {
+                        question: "A 'Type and Screen' test would be performed in which department?",
+                        options: ["Chemistry", "Hematology", "Blood Bank", "Microbiology"],
+                        correct: 2
+                    },
+                    {
+                        question: "What is the phlebotomist's primary role in the modern healthcare team?",
+                        options: ["Treatment provider", "Diagnostic partner", "Administrative assistant", "Financial coordinator"],
+                        correct: 1
+                    },
+                    {
+                        question: "Which term refers to using heated cups to draw blood to the skin surface?",
+                        options: ["Venipuncture", "Cupping", "Lanceting", "Leaching"],
+                        correct: 1
+                    },
+                    {
+                        question: "When you notice a potentially unsafe order, what should you do FIRST?",
+                        options: ["Administer as written", "Ask another MA", "Clarify with provider", "Adjust the dose yourself"],
+                        correct: 2
+                    }
+                ];
+                
+                const questionsHTML = questions.map((q, index) => `
+                    <div style="margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px solid rgba(12, 10, 24, 0.1);">
+                        <div style="font-weight: 600; color: var(--color-text); margin-bottom: 10px;">${index + 1}. ${q.question}</div>
+                        <div style="display: grid; gap: 10px;">
+                            ${q.options.map((option, optIndex) => `
+                                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                                    <input type="radio" name="q${index}" value="${optIndex}" style="accent-color: var(--color-primary);">
+                                    <span>${option}</span>
+                                </label>
+                            `).join('')}
+                        </div>
+                    </div>
+                `).join('');
+                
+                document.getElementById('quiz-questions').innerHTML = questionsHTML;
+                
+                document.getElementById('submit-quiz-btn').addEventListener('click', calculateQuizScore);
+            }
+            
+            function calculateQuizScore() {
+                const answers = document.querySelectorAll('input[type="radio"]:checked');
+                let correct = 0;
+                
+                answers.forEach(answer => {
+                    const questionIndex = parseInt(answer.name.substring(1));
+                    const selectedOption = parseInt(answer.value);
+                    
+                    const questions = [
+                        {correct: 0}, {correct: 1}, {correct: 1}, {correct: 1}, {correct: 1},
+                        {correct: 1}, {correct: 2}, {correct: 1}, {correct: 1}, {correct: 2}
+                    ];
+                    
+                    if (selectedOption === questions[questionIndex].correct) {
+                        correct++;
+                    }
+                });
+                
+                state.quizScore = Math.round((correct / 10) * 100);
+                showResults();
+            }
+            
+            function showResults() {
+                // Calculate overall score
+                const timelineScore = Object.keys(state.timelineAnswers).length > 0 ? 25 : 0;
+                const detectiveScore = Math.min(state.detectiveScore * 10, 25);
+                const quizScore = state.quizScore * 0.5; // 50% of total
+                
+                const totalScore = timelineScore + detectiveScore + quizScore;
+                finalScore.textContent = `${totalScore}%`;
+                
+                // Mark part 4 as completed
+                progressSteps[3].classList.add('completed');
+                
+                resultsPanel.classList.add('show');
+                resultsPanel.scrollIntoView({ behavior: 'smooth' });
+            }
+
+            // Initialize
+            loadNewCase();
+            
+            // Auto-advance to next part when timeline is completed
+            document.querySelectorAll('.poll-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    setTimeout(() => {
+                        if (Object.keys(state.timelineAnswers).length === 4) {
+                            // All timeline questions answered
+                            if (!state.completedParts.has(2)) {
+                                setTimeout(() => {
+                                    alert('Great job! Now let\'s explore the communication network.');
+                                    navigateToPart(2);
+                                }, 1000);
+                            }
+                        }
+                    }, 500);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
