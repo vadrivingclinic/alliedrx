@@ -1,0 +1,2718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AlliedRx -- Phlebotomy Tech • Chapter 3: Infectious Diseases - Module 1</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-error: #e17055;
+            --color-warning: #fdcb6e;
+            --color-info: #0984e3;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
+            --color-dark: #0c0a18;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+            --shadow-card: 0 12px 30px rgba(15, 23, 42, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(
+                circle at top left,
+                #ffffff 0,
+                #f1ecff 40%,
+                var(--color-bg) 100%
+            );
+            color: var(--color-text);
+            -webkit-text-size-adjust: 100%;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 12px;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes checkmarkPop {
+            0% { transform: scale(0); opacity: 0; }
+            70% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 5px rgba(175, 75, 239, 0.5); }
+            50% { box-shadow: 0 0 20px rgba(175, 75, 239, 0.8); }
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @media (max-width: 900px) {
+            .page { padding: 22px; }
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 0; }
+            .page {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 18px 14px 22px;
+            }
+        }
+
+        /* Header */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .brand-logo:hover { transform: scale(1.05); }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--color-success);
+            flex-shrink: 0;
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .badge-mode:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+        @media (max-width: 480px) {
+            .brand-row { flex-direction: column; align-items: flex-start; }
+            .badge-mode { margin-top: 6px; }
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 3vw, 2.2rem);
+            line-height: 1.1;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .module-subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 600px;
+            margin-bottom: 24px;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        /* Progress Tracker */
+        .progress-tracker {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            position: relative;
+            padding: 0 20px;
+        }
+
+        .progress-tracker::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 50px;
+            right: 50px;
+            height: 3px;
+            background: rgba(12, 10, 24, 0.08);
+            z-index: 1;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+
+        .step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--color-muted);
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.active .step-circle {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .progress-step.completed .step-circle {
+            background: var(--color-success);
+            border-color: var(--color-success);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.75rem;
+            color: var(--color-muted);
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .progress-step.active .step-label {
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        /* Progress Summary */
+        .progress-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+            animation: fadeInUp 0.6s ease-out 0.5s both;
+        }
+
+        @media (max-width: 600px) {
+            .progress-summary { grid-template-columns: 1fr; }
+        }
+
+        .summary-card {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            border: 1px solid rgba(12, 10, 24, 0.06);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-card);
+            border-color: var(--color-primary-soft);
+        }
+
+        .summary-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--color-primary);
+            display: block;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .summary-label {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Activities Container */
+        .activities-container {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .activity-card {
+            background: white;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            padding: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .activity-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--color-primary);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .activity-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--color-primary-soft);
+        }
+
+        .activity-card:hover::before {
+            opacity: 1;
+        }
+
+        .activity-card.completed {
+            border-color: var(--color-success);
+        }
+
+        .activity-card.completed::before {
+            background: var(--color-success);
+            opacity: 1;
+        }
+
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .activity-number {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .activity-status {
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-muted);
+        }
+
+        .activity-card.completed .activity-status {
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--color-success);
+        }
+
+        .activity-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .activity-icon {
+            font-size: 1.3rem;
+        }
+
+        .activity-description {
+            font-size: 0.95rem;
+            color: var(--color-muted);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        /* Epidemiology Quote */
+        .epidemiology-quote {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--color-accent);
+            font-style: italic;
+        }
+
+        .quote-text {
+            font-size: 0.95rem;
+            color: var(--color-text);
+            line-height: 1.5;
+        }
+
+        .quote-author {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+            text-align: right;
+            margin-top: 10px;
+        }
+
+        /* Pathogen Cards */
+        .pathogen-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 900px) {
+            .pathogen-cards { grid-template-columns: 1fr; }
+        }
+
+        .pathogen-card {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .pathogen-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--color-primary-soft);
+            box-shadow: var(--shadow-card);
+        }
+
+        .pathogen-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(12, 10, 24, 0.08);
+        }
+
+        .pathogen-details {
+            font-size: 0.85rem;
+            color: var(--color-text);
+            line-height: 1.4;
+        }
+
+        .pathogen-details strong {
+            color: var(--color-muted);
+        }
+
+        /* Transmission Routes */
+        .transmission-routes {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .transmission-routes { grid-template-columns: 1fr; }
+        }
+
+        .route-card {
+            background: white;
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            border: 2px dashed rgba(12, 10, 24, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .route-card:hover {
+            border-style: solid;
+            border-color: var(--color-primary-soft);
+            transform: translateY(-3px);
+        }
+
+        .route-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--color-accent);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .route-icon {
+            font-size: 1.2rem;
+        }
+
+        .route-content {
+            font-size: 0.85rem;
+            color: var(--color-text);
+            line-height: 1.5;
+        }
+
+        .route-example {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+            margin-top: 8px;
+            padding: 8px;
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: 6px;
+        }
+
+        /* Interactive Chain of Infection */
+        .chain-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-md);
+            padding: 25px;
+            margin: 20px 0;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+        }
+
+        .chain-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        /* Matching Game Styles */
+        .matching-game-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 768px) {
+            .matching-game-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .matching-column {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            border: 2px solid rgba(12, 10, 24, 0.08);
+        }
+
+        .matching-column-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 15px;
+            text-align: center;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(12, 10, 24, 0.1);
+        }
+
+        .matching-drop-zone {
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 3px dashed rgba(12, 10, 24, 0.1);
+            margin-bottom: 10px;
+            min-height: 90px;
+            transition: all 0.3s ease;
+        }
+
+        .matching-drop-zone.active {
+            border-color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.05);
+            box-shadow: 0 0 15px rgba(175, 75, 239, 0.1);
+        }
+
+        .matching-drop-zone.correct {
+            border-color: var(--color-success);
+            background: rgba(0, 184, 148, 0.05);
+        }
+
+        .matching-drop-zone.incorrect {
+            border-color: var(--color-error);
+            background: rgba(225, 112, 85, 0.05);
+        }
+
+        .matching-drop-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--color-muted);
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .matching-drop-placeholder {
+            font-size: 0.85rem;
+            color: var(--color-muted);
+            text-align: center;
+            padding: 10px;
+            font-style: italic;
+        }
+
+        .matching-items-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .matching-item {
+            background: white;
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            cursor: grab;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .matching-item:hover {
+            border-color: var(--color-primary);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .matching-item:active {
+            cursor: grabbing;
+        }
+
+        .matching-item.dragging {
+            opacity: 0.5;
+            transform: scale(0.95);
+        }
+
+        .matching-item-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--color-text);
+            margin-bottom: 5px;
+        }
+
+        .matching-item-content {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+            line-height: 1.4;
+        }
+
+        .matching-item.matched {
+            border-color: var(--color-success);
+            background: rgba(0, 184, 148, 0.05);
+            cursor: default;
+        }
+
+        .matching-item.matched:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        .matching-game-instructions {
+            background: rgba(9, 132, 227, 0.1);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid var(--color-info);
+            font-size: 0.85rem;
+            color: var(--color-text);
+        }
+
+        .match-check-button {
+            background: var(--color-accent);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 15px auto 0;
+        }
+
+        .match-check-button:hover {
+            background: #6a67d8;
+            transform: translateY(-2px);
+        }
+
+        .match-check-button:disabled {
+            background: var(--color-muted);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Chain of Infection Specific Styles */
+        .chain-sequence-game {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 1200px) {
+            .chain-sequence-game {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .chain-sequence-game {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .chain-sequence-game {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .chain-sequence-slot {
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            border: 3px dashed rgba(12, 10, 24, 0.1);
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .chain-sequence-slot.active {
+            border-color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.05);
+        }
+
+        .chain-sequence-slot.correct {
+            border-color: var(--color-success);
+            background: rgba(0, 184, 148, 0.05);
+        }
+
+        .chain-sequence-slot.incorrect {
+            border-color: var(--color-error);
+            background: rgba(225, 112, 85, 0.05);
+        }
+
+        .sequence-slot-number {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+            width: 30px;
+            height: 30px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--color-primary);
+        }
+
+        .sequence-slot-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--color-muted);
+            margin-bottom: 8px;
+        }
+
+        .sequence-slot-placeholder {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+            font-style: italic;
+        }
+
+        .chain-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        /* Question Components */
+        .question-container {
+            margin-bottom: 20px;
+        }
+
+        .question-text {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--color-text);
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .options-grid {
+            display: grid;
+            gap: 10px;
+        }
+
+        .option-item {
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: var(--radius-sm);
+            padding: 12px 15px;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .option-item:hover {
+            background: rgba(175, 75, 239, 0.08);
+            border-color: var(--color-primary-soft);
+        }
+
+        .option-item.selected {
+            background: rgba(0, 184, 148, 0.1);
+            border-color: var(--color-success);
+        }
+
+        .option-item.wrong {
+            background: rgba(225, 112, 85, 0.1);
+            border-color: var(--color-error);
+            animation: shake 0.5s ease;
+        }
+
+        .option-marker {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid rgba(12, 10, 24, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .option-item.selected .option-marker {
+            background: var(--color-success);
+            border-color: var(--color-success);
+            color: white;
+        }
+
+        .option-item.wrong .option-marker {
+            background: var(--color-error);
+            border-color: var(--color-error);
+            color: white;
+        }
+
+        .option-text {
+            flex: 1;
+            font-size: 0.9rem;
+        }
+
+        /* Pro Tips */
+        .pro-tip {
+            background: rgba(253, 203, 110, 0.1);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin-top: 15px;
+            border-left: 4px solid var(--color-warning);
+        }
+
+        .pro-tip-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--color-warning);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .pro-tip-content {
+            font-size: 0.8rem;
+            color: var(--color-text);
+            line-height: 1.4;
+        }
+
+        /* Critical Reminder */
+        .critical-reminder {
+            background: rgba(225, 112, 85, 0.1);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin-top: 15px;
+            border: 2px solid var(--color-error);
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            animation: glow 2s infinite;
+        }
+
+        .reminder-icon {
+            font-size: 1.5rem;
+            color: var(--color-error);
+            flex-shrink: 0;
+        }
+
+        .reminder-content {
+            flex: 1;
+        }
+
+        .reminder-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--color-error);
+            margin-bottom: 5px;
+        }
+
+        .reminder-text {
+            font-size: 0.85rem;
+            color: var(--color-text);
+        }
+
+        /* Clinical Spotlight */
+        .clinical-spotlight {
+            background: rgba(9, 132, 227, 0.1);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-top: 20px;
+            border-left: 4px solid var(--color-info);
+        }
+
+        .spotlight-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--color-info);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .spotlight-content {
+            font-size: 0.85rem;
+            color: var(--color-text);
+            line-height: 1.5;
+        }
+
+        /* Feedback System */
+        .feedback-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            margin-top: 20px;
+            display: none;
+        }
+
+        .feedback-container.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .feedback-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feedback-icon {
+            font-size: 1.2rem;
+        }
+
+        .feedback-icon.correct {
+            color: var(--color-success);
+        }
+
+        .feedback-icon.incorrect {
+            color: var(--color-error);
+        }
+
+        .feedback-content {
+            font-size: 0.85rem;
+            color: var(--color-text);
+            line-height: 1.5;
+        }
+
+        .feedback-content strong {
+            color: var(--color-primary);
+        }
+
+        /* Inline Feedback */
+        .inline-feedback {
+            font-size: 0.8rem;
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin-top: 8px;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .inline-feedback.correct {
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--color-success);
+            border-left: 3px solid var(--color-success);
+            display: block;
+        }
+
+        .inline-feedback.incorrect {
+            background: rgba(225, 112, 85, 0.1);
+            color: var(--color-error);
+            border-left: 3px solid var(--color-error);
+            display: block;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #9a3bd6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(175, 75, 239, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-text);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(12, 10, 24, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-icon {
+            font-size: 1.1em;
+        }
+
+        /* Results Panel */
+        .results-panel {
+            background: var(--color-dark);
+            color: white;
+            border-radius: var(--radius-md);
+            padding: 30px;
+            margin-top: 30px;
+            display: none;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .results-panel.show {
+            display: block;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .results-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .score-display {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--color-primary-soft);
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .clinical-insights {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .insights-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-primary-soft);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .insights-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .insights-list li {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            font-size: 0.9rem;
+            color: #e5e7eb;
+        }
+
+        .insight-dot {
+            width: 6px;
+            height: 6px;
+            margin-top: 6px;
+            border-radius: 999px;
+            background: var(--color-accent);
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="module-heading">
+        <!-- Header -->
+        <header class="brand-row">
+            <div class="brand">
+                <img
+                    src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                    alt="AlliedRx logo"
+                    class="brand-logo"
+                />
+                <div class="course-meta">
+                    <span class="course-name">Phlebotomy Technician • Week 2</span>
+                    <div class="week-label">
+                        <span class="week-label-dot"></span>
+                        <span>Chapter 3: Infectious Diseases & Their Prevention</span>
+                    </div>
+                </div>
+            </div>
+            <span class="badge-mode">Campus &amp; Online</span>
+        </header>
+
+        <h1 id="module-heading">Bloodborne Pathogens & Transmission Routes</h1>
+        <p class="module-subtitle">
+            Master the essentials of infectious disease prevention. Identify bloodborne pathogens, 
+            understand transmission routes, and learn how to break the chain of infection in clinical settings.
+        </p>
+
+        <!-- Progress Tracker (3-Step) -->
+        <div class="progress-tracker">
+            <div class="progress-step active" data-step="1">
+                <div class="step-circle">1</div>
+                <div class="step-label">Bloodborne Pathogens</div>
+            </div>
+            <div class="progress-step" data-step="2">
+                <div class="step-circle">2</div>
+                <div class="step-label">Transmission Routes</div>
+            </div>
+            <div class="progress-step" data-step="3">
+                <div class="step-circle">3</div>
+                <div class="step-label">Chain of Infection</div>
+            </div>
+        </div>
+
+        <!-- Progress Summary -->
+        <div class="progress-summary">
+            <div class="summary-card">
+                <span class="summary-number" id="completed-count">0</span>
+                <span class="summary-label">Activities Completed</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="accuracy-rate">0%</span>
+                <span class="summary-label">Current Accuracy</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="time-spent">0:00</span>
+                <span class="summary-label">Time Spent</span>
+            </div>
+        </div>
+
+        <!-- Epidemiology Quote -->
+        <div class="epidemiology-quote">
+            <div class="quote-text">
+                "To study the phenomenon of disease without books is to sail an uncharted sea."
+            </div>
+            <div class="quote-author">—Sir William Osler (1849–1919)</div>
+        </div>
+
+        <!-- Activities Container -->
+        <div class="activities-container">
+            
+            <!-- Activity 1: Bloodborne Pathogens -->
+            <section class="activity-card" id="activity-1" data-activity="1">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 1</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">
+                    <span class="activity-icon">🦠</span>
+                    Bloodborne Pathogens Identification
+                </h3>
+                <p class="activity-description">
+                    Identify and understand the three primary bloodborne pathogens that pose significant risks 
+                    to phlebotomists. Learn their characteristics, transmission methods, and clinical significance.
+                </p>
+
+                <!-- Pathogen Cards -->
+                <div class="pathogen-cards">
+                    <div class="pathogen-card">
+                        <div class="pathogen-title">Hepatitis B (HBV)</div>
+                        <div class="pathogen-details">
+                            <strong>Virus Type:</strong> DNA virus<br>
+                            <strong>Incubation:</strong> 60-150 days<br>
+                            <strong>Survival:</strong> 7 days on surfaces<br>
+                            <strong>Vaccine:</strong> Available & recommended<br>
+                            <strong>Risk:</strong> Needlestick transmission risk: 6-30%
+                        </div>
+                    </div>
+                    
+                    <div class="pathogen-card">
+                        <div class="pathogen-title">Hepatitis C (HCV)</div>
+                        <div class="pathogen-details">
+                            <strong>Virus Type:</strong> RNA virus<br>
+                            <strong>Incubation:</strong> 14-180 days<br>
+                            <strong>Survival:</strong> Less stable than HBV<br>
+                            <strong>Vaccine:</strong> No vaccine available<br>
+                            <strong>Risk:</strong> Needlestick transmission risk: 1.8%
+                        </div>
+                    </div>
+                    
+                    <div class="pathogen-card">
+                        <div class="pathogen-title">HIV</div>
+                        <div class="pathogen-details">
+                            <strong>Virus Type:</strong> Retrovirus<br>
+                            <strong>Incubation:</strong> 2-4 weeks (acute)<br>
+                            <strong>Survival:</strong> Hours in dried blood<br>
+                            <strong>Vaccine:</strong> No vaccine available<br>
+                            <strong>Risk:</strong> Needlestick transmission risk: 0.3%
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pro Tip -->
+                <div class="pro-tip">
+                    <div class="pro-tip-title">💡 Clinical Insight</div>
+                    <div class="pro-tip-content">
+                        <strong>HBV is the most stable and infectious bloodborne pathogen.</strong> 
+                        It can survive on environmental surfaces for up to 7 days and is transmitted 
+                        50-100 times more easily than HIV. This is why vaccination is CRITICAL for all healthcare workers.
+                    </div>
+                </div>
+
+                <!-- Question 1: Most Infectious Pathogen -->
+                <div class="question-container">
+                    <div class="question-text">Which bloodborne pathogen is considered the MOST infectious and stable in the environment?</div>
+                    <div class="options-grid">
+                        <div class="option-item" data-option="correct" data-question="pathogen-risk">
+                            <div class="option-marker">A</div>
+                            <div class="option-text">Hepatitis B (HBV) - survives up to 7 days on surfaces</div>
+                        </div>
+                        <div class="option-item" data-option="incorrect" data-question="pathogen-risk">
+                            <div class="option-marker">B</div>
+                            <div class="option-text">Hepatitis C (HCV) - highly stable in dried blood</div>
+                        </div>
+                        <div class="option-item" data-option="incorrect" data-question="pathogen-risk">
+                            <div class="option-marker">C</div>
+                            <div class="option-text">HIV - most infectious through needlesticks</div>
+                        </div>
+                    </div>
+                    <div class="inline-feedback" id="feedback-pathogen-risk"></div>
+                </div>
+
+                <!-- Question 2: Prevention Methods -->
+                <div class="question-container">
+                    <div class="question-text">Select ALL correct statements about bloodborne pathogen prevention:</div>
+                    <div class="options-grid">
+                        <div class="option-item" data-option="correct" data-question="prevention-multi">
+                            <div class="option-marker">A</div>
+                            <div class="option-text">HBV vaccination is required for healthcare workers</div>
+                        </div>
+                        <div class="option-item" data-option="incorrect" data-question="prevention-multi">
+                            <div class="option-marker">B</div>
+                            <div class="option-text">HIV has a vaccine that's optional for phlebotomists</div>
+                        </div>
+                        <div class="option-item" data-option="correct" data-question="prevention-multi">
+                            <div class="option-marker">C</div>
+                            <div class="option-text">Standard Precautions apply to ALL patient contact</div>
+                        </div>
+                        <div class="option-item" data-option="correct" data-question="prevention-multi">
+                            <div class="option-marker">D</div>
+                            <div class="option-text">Proper needle disposal immediately after use is critical</div>
+                        </div>
+                    </div>
+                    <div class="inline-feedback" id="feedback-prevention"></div>
+                </div>
+
+                <!-- Critical Reminder -->
+                <div class="critical-reminder">
+                    <div class="reminder-icon">⚠️</div>
+                    <div class="reminder-content">
+                        <div class="reminder-title">OSHA BLOODBORNE PATHOGENS STANDARD</div>
+                        <div class="reminder-text">
+                            Employers MUST provide: (1) HBV vaccination series, (2) Personal Protective Equipment (PPE), 
+                            (3) Training on bloodborne pathogens, (4) Post-exposure evaluation and follow-up. 
+                            <strong>Non-compliance can result in fines up to $70,000 per violation.</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback-container" id="feedback-1">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Bloodborne Pathogens Mastered!
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Key Takeaways:</strong><br>
+                        1. <strong>HBV is the most infectious</strong> - survives 7 days, transmission risk 6-30%<br>
+                        2. <strong>HCV has no vaccine</strong> - emphasizes need for strict precautions<br>
+                        3. <strong>HIV risk is lower</strong> but consequences are severe<br>
+                        4. <strong>Vaccination + Standard Precautions</strong> = Primary prevention strategy<br><br>
+                        
+                        <strong>Clinical Application:</strong> Always treat ALL blood and body fluids as potentially infectious. 
+                        This universal approach protects you from known AND unknown pathogens.
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity 2: Transmission Routes -->
+            <section class="activity-card" id="activity-2" data-activity="2">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 2</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">
+                    <span class="activity-icon">🔄</span>
+                    Transmission Routes & Prevention Matching
+                </h3>
+                <p class="activity-description">
+                    Match each transmission route with its correct prevention strategy. Drag and drop the prevention 
+                    methods into the correct drop zones next to each transmission route.
+                </p>
+
+                <!-- Transmission Routes Grid -->
+                <div class="transmission-routes">
+                    <div class="route-card">
+                        <div class="route-title">
+                            <span class="route-icon">🩸</span>
+                            Bloodborne Transmission
+                        </div>
+                        <div class="route-content">
+                            Pathogens transmitted through contact with blood or body fluids containing visible blood.
+                        </div>
+                        <div class="route-example">
+                            <strong>Examples:</strong> Needlesticks, blood splashes to mucous membranes, contaminated sharps
+                        </div>
+                    </div>
+                    
+                    <div class="route-card">
+                        <div class="route-title">
+                            <span class="route-icon">🤲</span>
+                            Direct Contact
+                        </div>
+                        <div class="route-content">
+                            Transmission through physical contact between infected person and susceptible host.
+                        </div>
+                        <div class="route-example">
+                            <strong>Examples:</strong> MRSA skin-to-skin contact, herpes simplex, scabies
+                        </div>
+                    </div>
+                    
+                    <div class="route-card">
+                        <div class="route-title">
+                            <span class="route-icon">💦</span>
+                            Droplet Transmission
+                        </div>
+                        <div class="route-content">
+                            Large respiratory droplets (>5μm) traveling short distances (≤3 feet/1 meter).
+                        </div>
+                        <div class="route-example">
+                            <strong>Examples:</strong> Influenza, pertussis, meningococcal disease, COVID-19
+                        </div>
+                    </div>
+                    
+                    <div class="route-card">
+                        <div class="route-title">
+                            <span class="route-icon">🌬️</span>
+                            Airborne Transmission
+                        </div>
+                        <div class="route-content">
+                            Small droplet nuclei (<5μm) remaining suspended in air, traveling long distances.
+                        </div>
+                        <div class="route-example">
+                            <strong>Examples:</strong> Tuberculosis, measles, chickenpox, possibly COVID-19 in certain procedures
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Clinical Spotlight -->
+                <div class="clinical-spotlight">
+                    <div class="spotlight-title">
+                        <span>🩺</span>
+                        Phlebotomy-Specific Risks
+                    </div>
+                    <div class="spotlight-content">
+                        <strong>Highest risk during:</strong> (1) Needle recapping, (2) Transferring blood to tubes, 
+                        (3) Handling used needles/sharps, (4) Cleaning up blood spills.<br><br>
+                        <strong>Prevention:</strong> Never recap needles, use safety-engineered devices, 
+                        immediate disposal in sharps containers, proper spill cleanup with EPA-registered disinfectants.
+                    </div>
+                </div>
+
+                <!-- Question 1: Matching Game -->
+                <div class="question-container">
+                    <div class="question-text">Match each transmission route with its correct prevention strategy:</div>
+                    
+                    <div class="matching-game-instructions">
+                        <strong>Instructions:</strong> Drag the prevention methods from the right column and drop them 
+                        into the correct drop zones next to each transmission route. Each drop zone accepts only one item.
+                    </div>
+                    
+                    <div class="matching-game-container">
+                        <!-- Left Column: Transmission Routes with Drop Zones -->
+                        <div class="matching-column">
+                            <div class="matching-column-title">Transmission Routes</div>
+                            
+                            <!-- Bloodborne Drop Zone -->
+                            <div class="matching-drop-zone" data-match="bloodborne">
+                                <div class="matching-drop-label">🩸 Bloodborne Transmission</div>
+                                <div class="matching-item" data-match="bloodborne" style="display: none;">
+                                    <div class="matching-item-title">Safety-engineered needles</div>
+                                    <div class="matching-item-content">Never recap, immediate disposal in sharps container</div>
+                                </div>
+                                <div class="matching-drop-placeholder" id="bloodborne-placeholder">
+                                    Drop prevention method here
+                                </div>
+                            </div>
+                            
+                            <!-- Direct Contact Drop Zone -->
+                            <div class="matching-drop-zone" data-match="direct-contact">
+                                <div class="matching-drop-label">🤲 Direct Contact</div>
+                                <div class="matching-item" data-match="direct-contact" style="display: none;">
+                                    <div class="matching-item-title">Gloves & Hand Hygiene</div>
+                                    <div class="matching-item-content">Wear gloves, hand washing between patients</div>
+                                </div>
+                                <div class="matching-drop-placeholder" id="direct-contact-placeholder">
+                                    Drop prevention method here
+                                </div>
+                            </div>
+                            
+                            <!-- Droplet Drop Zone -->
+                            <div class="matching-drop-zone" data-match="droplet">
+                                <div class="matching-drop-label">💦 Droplet Transmission</div>
+                                <div class="matching-item" data-match="droplet" style="display: none;">
+                                    <div class="matching-item-title">Surgical Mask & Distance</div>
+                                    <div class="matching-item-content">Wear surgical mask, maintain 3 feet distance</div>
+                                </div>
+                                <div class="matching-drop-placeholder" id="droplet-placeholder">
+                                    Drop prevention method here
+                                </div>
+                            </div>
+                            
+                            <!-- Airborne Drop Zone -->
+                            <div class="matching-drop-zone" data-match="airborne">
+                                <div class="matching-drop-label">🌬️ Airborne Transmission</div>
+                                <div class="matching-item" data-match="airborne" style="display: none;">
+                                    <div class="matching-item-title">N95 Respirator & Isolation</div>
+                                    <div class="matching-item-content">N95 respirator, negative pressure room</div>
+                                </div>
+                                <div class="matching-drop-placeholder" id="airborne-placeholder">
+                                    Drop prevention method here
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Right Column: Prevention Methods -->
+                        <div class="matching-column">
+                            <div class="matching-column-title">Prevention Methods (Drag & Drop)</div>
+                            <div class="matching-items-container">
+                                <!-- Prevention Method 1 -->
+                                <div class="matching-item" draggable="true" data-match="airborne" data-type="prevention">
+                                    <div class="matching-item-title">N95 Respirator & Isolation</div>
+                                    <div class="matching-item-content">N95 respirator, negative pressure room</div>
+                                </div>
+                                
+                                <!-- Prevention Method 2 -->
+                                <div class="matching-item" draggable="true" data-match="direct-contact" data-type="prevention">
+                                    <div class="matching-item-title">Gloves & Hand Hygiene</div>
+                                    <div class="matching-item-content">Wear gloves, hand washing between patients</div>
+                                </div>
+                                
+                                <!-- Prevention Method 3 -->
+                                <div class="matching-item" draggable="true" data-match="droplet" data-type="prevention">
+                                    <div class="matching-item-title">Surgical Mask & Distance</div>
+                                    <div class="matching-item-content">Wear surgical mask, maintain 3 feet distance</div>
+                                </div>
+                                
+                                <!-- Prevention Method 4 -->
+                                <div class="matching-item" draggable="true" data-match="bloodborne" data-type="prevention">
+                                    <div class="matching-item-title">Safety-engineered needles</div>
+                                    <div class="matching-item-content">Never recap, immediate disposal in sharps container</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="match-check-button" id="check-matching-btn">Check My Matches</button>
+                    <div class="inline-feedback" id="feedback-matching"></div>
+                </div>
+
+                <!-- Question 2: Scenario Application -->
+                <div class="question-container">
+                    <div class="question-text">A patient with active influenza needs blood drawn. What transmission precautions are required?</div>
+                    <div class="options-grid">
+                        <div class="option-item" data-option="incorrect" data-question="scenario-flu">
+                            <div class="option-marker">A</div>
+                            <div class="option-text">Standard Precautions only - influenza is common</div>
+                        </div>
+                        <div class="option-item" data-option="correct" data-question="scenario-flu">
+                            <div class="option-marker">B</div>
+                            <div class="option-text">Droplet Precautions - wear surgical mask, maintain 3 feet distance</div>
+                        </div>
+                        <div class="option-item" data-option="incorrect" data-question="scenario-flu">
+                            <div class="option-marker">C</div>
+                            <div class="option-text">Airborne Precautions - N95 respirator required</div>
+                        </div>
+                        <div class="option-item" data-option="incorrect" data-question="scenario-flu">
+                            <div class="option-marker">D</div>
+                            <div class="option-text">Contact Precautions - gown and gloves required</div>
+                        </div>
+                    </div>
+                    <div class="inline-feedback" id="feedback-scenario"></div>
+                </div>
+
+                <!-- Pro Tip -->
+                <div class="pro-tip">
+                    <div class="pro-tip-title">💡 Memory Aid</div>
+                    <div class="pro-tip-content">
+                        <strong>Remember the 3-foot rule:</strong> Droplets travel ≤3 feet, Airborne particles travel further.<br>
+                        <strong>Mnemonic for Airborne diseases:</strong> <em>My Chicken Has TB</em> (Measles, Chickenpox, Herpes zoster [shingles], Tuberculosis)
+                    </div>
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback-container" id="feedback-2">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Transmission Routes Understood!
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Critical Distinctions:</strong><br>
+                        1. <strong>Bloodborne:</strong> Specific to blood/body fluids → Engineering controls<br>
+                        2. <strong>Contact:</strong> Direct/indirect contact → Hand hygiene, gloves<br>
+                        3. <strong>Droplet:</strong> ≤3 feet, large droplets → Surgical mask, distance<br>
+                        4. <strong>Airborne:</strong> Long distances, small particles → N95, negative pressure<br><br>
+                        
+                        <strong>Phlebotomy Application:</strong> Always check precaution signs on patient doors. 
+                        If uncertain, ask nursing staff before entering. Your safety comes first!
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity 3: Chain of Infection -->
+            <section class="activity-card" id="activity-3" data-activity="3">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 3</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">
+                    <span class="activity-icon">⛓️</span>
+                    Breaking the Chain of Infection
+                </h3>
+                <p class="activity-description">
+                    Drag and drop the chain of infection links into the correct sequence. Place each link 
+                    in its numbered position from 1 to 6 in the correct order.
+                </p>
+
+                <!-- Chain Sequence Game -->
+                <div class="chain-container">
+                    <div class="chain-title">The Chain of Infection - Drag Links into Numbered Positions</div>
+                    
+                    <div class="chain-sequence-game">
+                        <!-- Position 1 -->
+                        <div class="chain-sequence-slot" data-position="1" data-correct="infectious-agent">
+                            <div class="sequence-slot-number">1</div>
+                            <div class="sequence-slot-label">First Link</div>
+                            <div class="sequence-slot-placeholder" id="slot-1-placeholder">Drop here</div>
+                            <div class="matching-item" data-link="infectious-agent" style="display: none;">
+                                <div class="matching-item-title">Infectious Agent</div>
+                                <div class="matching-item-content">Pathogen (bacteria, virus, fungus)</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Position 2 -->
+                        <div class="chain-sequence-slot" data-position="2" data-correct="reservoir">
+                            <div class="sequence-slot-number">2</div>
+                            <div class="sequence-slot-label">Second Link</div>
+                            <div class="sequence-slot-placeholder" id="slot-2-placeholder">Drop here</div>
+                            <div class="matching-item" data-link="reservoir" style="display: none;">
+                                <div class="matching-item-title">Reservoir</div>
+                                <div class="matching-item-content">Where pathogen lives (human, animal, environment)</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Position 3 -->
+                        <div class="chain-sequence-slot" data-position="3" data-correct="portal-exit">
+                            <div class="sequence-slot-number">3</div>
+                            <div class="sequence-slot-label">Third Link</div>
+                            <div class="sequence-slot-placeholder" id="slot-3-placeholder">Drop here</div>
+                            <div class="matching-item" data-link="portal-exit" style="display: none;">
+                                <div class="matching-item-title">Portal of Exit</div>
+                                <div class="matching-item-content">How pathogen leaves reservoir (blood, secretions)</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Position 4 -->
+                        <div class="chain-sequence-slot" data-position="4" data-correct="mode-transmission">
+                            <div class="sequence-slot-number">4</div>
+                            <div class="sequence-slot-label">Fourth Link</div>
+                            <div class="sequence-slot-placeholder" id="slot-4-placeholder">Drop here</div>
+                            <div class="matching-item" data-link="mode-transmission" style="display: none;">
+                                <div class="matching-item-title">Mode of Transmission</div>
+                                <div class="matching-item-content">How pathogen travels (direct, indirect, airborne)</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Position 5 -->
+                        <div class="chain-sequence-slot" data-position="5" data-correct="portal-entry">
+                            <div class="sequence-slot-number">5</div>
+                            <div class="sequence-slot-label">Fifth Link</div>
+                            <div class="sequence-slot-placeholder" id="slot-5-placeholder">Drop here</div>
+                            <div class="matching-item" data-link="portal-entry" style="display: none;">
+                                <div class="matching-item-title">Portal of Entry</div>
+                                <div class="matching-item-content">How pathogen enters host (mucous membranes, needlestick)</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Position 6 -->
+                        <div class="chain-sequence-slot" data-position="6" data-correct="susceptible-host">
+                            <div class="sequence-slot-number">6</div>
+                            <div class="sequence-slot-label">Sixth Link</div>
+                            <div class="sequence-slot-placeholder" id="slot-6-placeholder">Drop here</div>
+                            <div class="matching-item" data-link="susceptible-host" style="display: none;">
+                                <div class="matching-item-title">Susceptible Host</div>
+                                <div class="matching-item-content">Person lacking immunity (unvaccinated, immunocompromised)</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Chain Links to Drag -->
+                    <div class="chain-links" id="chain-links-container">
+                        <div class="matching-item" draggable="true" data-link="infectious-agent">
+                            <div class="matching-item-title">Infectious Agent</div>
+                            <div class="matching-item-content">Pathogen (bacteria, virus, fungus)</div>
+                        </div>
+                        <div class="matching-item" draggable="true" data-link="reservoir">
+                            <div class="matching-item-title">Reservoir</div>
+                            <div class="matching-item-content">Where pathogen lives (human, animal, environment)</div>
+                        </div>
+                        <div class="matching-item" draggable="true" data-link="portal-exit">
+                            <div class="matching-item-title">Portal of Exit</div>
+                            <div class="matching-item-content">How pathogen leaves reservoir (blood, secretions)</div>
+                        </div>
+                        <div class="matching-item" draggable="true" data-link="mode-transmission">
+                            <div class="matching-item-title">Mode of Transmission</div>
+                            <div class="matching-item-content">How pathogen travels (direct, indirect, airborne)</div>
+                        </div>
+                        <div class="matching-item" draggable="true" data-link="portal-entry">
+                            <div class="matching-item-title">Portal of Entry</div>
+                            <div class="matching-item-content">How pathogen enters host (mucous membranes, needlestick)</div>
+                        </div>
+                        <div class="matching-item" draggable="true" data-link="susceptible-host">
+                            <div class="matching-item-title">Susceptible Host</div>
+                            <div class="matching-item-content">Person lacking immunity (unvaccinated, immunocompromised)</div>
+                        </div>
+                    </div>
+                    
+                    <button class="match-check-button" id="check-chain-btn" style="margin-top: 20px;">Check Sequence</button>
+                    <div class="inline-feedback" id="feedback-chain-sequence"></div>
+                </div>
+
+                <!-- Question: Break the Chain -->
+                <div class="question-container">
+                    <div class="question-text">Which TWO interventions break the chain at "Mode of Transmission" for bloodborne pathogens?</div>
+                    <div class="options-grid">
+                        <div class="option-item" data-option="correct" data-question="break-chain">
+                            <div class="option-marker">A</div>
+                            <div class="option-text">Using safety-engineered needle devices</div>
+                        </div>
+                        <div class="option-item" data-option="incorrect" data-question="break-chain">
+                            <div class="option-marker">B</div>
+                            <div class="option-text">Administering HBV vaccine to healthcare workers</div>
+                        </div>
+                        <div class="option-item" data-option="correct" data-question="break-chain">
+                            <div class="option-marker">C</div>
+                            <div class="option-text">Proper hand hygiene between patients</div>
+                        </div>
+                        <div class="option-item" data-option="incorrect" data-question="break-chain">
+                            <div class="option-marker">D</div>
+                            <div class="option-text">Treating the infected patient with antibiotics</div>
+                        </div>
+                    </div>
+                    <div class="inline-feedback" id="feedback-break-chain"></div>
+                </div>
+
+                <!-- Critical Reminder -->
+                <div class="critical-reminder">
+                    <div class="reminder-icon">🚨</div>
+                    <div class="reminder-content">
+                        <div class="reminder-title">CHAIN BREAK = INFECTION PREVENTION</div>
+                        <div class="reminder-text">
+                            Breaking ANY link in the chain stops infection transmission. Phlebotomists primarily 
+                            break the chain at: (1) <strong>Mode of Transmission</strong> (PPE, safe devices), 
+                            (2) <strong>Portal of Entry</strong> (no needle recapping), and (3) <strong>Susceptible Host</strong> (vaccinations).
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Clinical Application -->
+                <div class="clinical-spotlight">
+                    <div class="spotlight-title">
+                        <span>💉</span>
+                        Real-World Application: Needlestick Scenario
+                    </div>
+                    <div class="spotlight-content">
+                        <strong>Scenario:</strong> During a routine draw, you get a needlestick from a patient with unknown HIV status.<br><br>
+                        <strong>Chain Analysis:</strong><br>
+                        1. <strong>Infectious Agent:</strong> Possible HIV<br>
+                        2. <strong>Reservoir:</strong> Patient's bloodstream<br>
+                        3. <strong>Portal of Exit:</strong> Blood on contaminated needle<br>
+                        4. <strong>Mode of Transmission:</strong> Percutaneous injury<br>
+                        5. <strong>Portal of Entry:</strong> Your bloodstream via needlestick<br>
+                        6. <strong>Susceptible Host:</strong> You (unless on PEP prophylaxis)<br><br>
+                        <strong>Where could chain have been broken?</strong> Safety device, proper disposal, no recapping.
+                    </div>
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback-container" id="feedback-3">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Chain of Infection Mastered!
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Correct Chain Sequence:</strong><br>
+                        1. Infectious Agent → 2. Reservoir → 3. Portal of Exit → 4. Mode of Transmission → 
+                        5. Portal of Entry → 6. Susceptible Host<br><br>
+                        
+                        <strong>Phlebotomy-Specific Interventions:</strong><br>
+                        • <strong>Transmission:</strong> Safety devices, no needle recapping, proper disposal<br>
+                        • <strong>Portal of Entry:</strong> Intact skin (no cuts), PPE (gloves, face protection)<br>
+                        • <strong>Susceptible Host:</strong> Vaccinations (HBV), good nutrition, adequate rest<br><br>
+                        
+                        <strong>Remember:</strong> You control multiple break points every time you perform phlebotomy. 
+                        Each safe practice is a deliberate break in the chain.
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn btn-secondary" id="reset-all-btn">
+                <span class="btn-icon">↻</span>
+                Reset All Activities
+            </button>
+            <button class="btn btn-secondary" id="check-answers-btn">
+                <span class="btn-icon">✓</span>
+                Check All Answers
+            </button>
+            <button class="btn btn-primary" id="view-results-btn">
+                <span class="btn-icon">📊</span>
+                View Final Results
+            </button>
+        </div>
+
+        <!-- Results Panel -->
+        <div class="results-panel" id="results-panel">
+            <div class="results-header">
+                <h2 class="results-title">Chapter 3 - Module 1 Competency Results</h2>
+            </div>
+            <div class="score-display" id="final-score">0%</div>
+            
+            <div class="clinical-insights">
+                <h3 class="insights-title">
+                    <span>🩺</span> Phlebotomy Safety Insights
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>HBV is the Greatest Threat:</strong> Most stable, most infectious bloodborne pathogen. 
+                        Vaccination is non-negotiable for phlebotomists. Document your vaccination records.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Transmission Route Determines PPE:</strong> Bloodborne = gloves, face protection. 
+                        Droplet = surgical mask + distance. Airborne = N95 + negative pressure room. Contact = gloves + gown.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Chain Breaks Save Lives:</strong> Every safe practice breaks the infection chain. 
+                        Most effective breaks: Engineering controls (safety devices) > Administrative controls (policies) > PPE.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Standard Precautions are UNIVERSAL:</strong> Apply to ALL patients, ALL the time. 
+                        Assume ALL blood and body fluids are infectious. This mindset prevents complacency.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Post-Exposure Protocol:</strong> Know it BEFORE you need it. 
+                        Immediate washing, reporting, baseline testing, and follow-up are time-sensitive. 
+                        Seconds matter for some exposures.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="clinical-insights" style="margin-top: 20px;">
+                <h3 class="insights-title">
+                    <span>📋</span> Professional & Legal Responsibilities
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>OSHA Compliance:</strong> You have the right to a safe workplace. 
+                        Employers must provide training, PPE, vaccinations, and exposure follow-up. 
+                        Report deficiencies through proper channels.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Documentation:</strong> Accurate records protect you legally. 
+                        Document training completion, vaccination dates, exposure incidents, and post-exposure follow-up.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Quality Indicators:</strong> Low needlestick rates = good technique + safety culture. 
+                        High rates indicate systemic problems needing intervention.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Patient Education:</strong> Explain safety measures to patients. 
+                        "I'm wearing gloves to protect both of us." This builds trust and models infection control.</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // State Management
+            const state = {
+                activities: {
+                    1: { completed: false, correct: 0, total: 2, score: 0 },
+                    2: { completed: false, correct: 0, total: 2, score: 0 },
+                    3: { completed: false, correct: 0, total: 2, score: 0 }
+                },
+                startedAt: new Date(),
+                timeSpent: 0,
+                chainSequence: {
+                    1: 'infectious-agent',
+                    2: 'reservoir',
+                    3: 'portal-exit',
+                    4: 'mode-transmission',
+                    5: 'portal-entry',
+                    6: 'susceptible-host'
+                }
+            };
+
+            // DOM Elements
+            const progressSteps = document.querySelectorAll('.progress-step');
+            const activityCards = document.querySelectorAll('.activity-card');
+            const completedCount = document.getElementById('completed-count');
+            const accuracyRate = document.getElementById('accuracy-rate');
+            const timeSpent = document.getElementById('time-spent');
+            const resetBtn = document.getElementById('reset-all-btn');
+            const checkBtn = document.getElementById('check-answers-btn');
+            const resultsBtn = document.getElementById('view-results-btn');
+            const resultsPanel = document.getElementById('results-panel');
+            const finalScore = document.getElementById('final-score');
+            const checkMatchingBtn = document.getElementById('check-matching-btn');
+            const checkChainBtn = document.getElementById('check-chain-btn');
+
+            // Timer for time spent
+            function updateTimer() {
+                const now = new Date();
+                const diff = Math.floor((now - state.startedAt) / 1000);
+                state.timeSpent = diff;
+                const minutes = Math.floor(diff / 60);
+                const seconds = diff % 60;
+                timeSpent.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            }
+            setInterval(updateTimer, 1000);
+
+            // Update Progress Summary
+            function updateProgressSummary() {
+                let completed = 0;
+                let totalCorrect = 0;
+                let totalItems = 0;
+
+                Object.values(state.activities).forEach(activity => {
+                    if (activity.completed) completed++;
+                    totalCorrect += activity.correct;
+                    totalItems += activity.total;
+                });
+
+                completedCount.textContent = completed;
+                const accuracy = totalItems > 0 ? Math.round((totalCorrect / totalItems) * 100) : 0;
+                accuracyRate.textContent = `${accuracy}%`;
+
+                // Update progress steps
+                progressSteps.forEach((step, index) => {
+                    const stepNum = index + 1;
+                    if (state.activities[stepNum]?.completed) {
+                        step.classList.add('completed');
+                        step.classList.remove('active');
+                    } else if (stepNum === 1 || 
+                              (stepNum === 2 && state.activities[1].completed) ||
+                              (stepNum === 3 && state.activities[2].completed)) {
+                        step.classList.add('active');
+                        step.classList.remove('completed');
+                    } else {
+                        step.classList.remove('active', 'completed');
+                    }
+                });
+            }
+
+            // Show inline feedback
+            function showInlineFeedback(elementId, message, isCorrect) {
+                const feedbackEl = document.getElementById(elementId);
+                feedbackEl.textContent = message;
+                feedbackEl.className = `inline-feedback ${isCorrect ? 'correct' : 'incorrect'}`;
+                
+                if (isCorrect) {
+                    setTimeout(() => {
+                        feedbackEl.classList.add('fading');
+                        setTimeout(() => {
+                            feedbackEl.style.display = 'none';
+                            feedbackEl.classList.remove('fading');
+                        }, 800);
+                    }, 3000);
+                }
+            }
+
+            // Setup MCQ options
+            function setupMCQOptions() {
+                document.querySelectorAll('.option-item').forEach(option => {
+                    option.addEventListener('click', function() {
+                        if (this.closest('.activity-card').classList.contains('completed')) return;
+                        
+                        const questionNum = this.dataset.question;
+                        const isCorrect = this.dataset.option === 'correct';
+                        const allOptions = this.parentElement.querySelectorAll('.option-item');
+                        
+                        // For single-select questions, remove other selections
+                        if (!questionNum.includes('multi')) {
+                            allOptions.forEach(opt => {
+                                opt.classList.remove('selected', 'wrong');
+                            });
+                        }
+                        
+                        // Toggle selection for multi-select
+                        if (questionNum.includes('multi')) {
+                            if (this.classList.contains('selected')) {
+                                this.classList.remove('selected');
+                                return;
+                            }
+                        }
+                        
+                        // Mark selected
+                        this.classList.add(isCorrect ? 'selected' : 'wrong');
+                        
+                        // Show feedback
+                        const feedbackId = `feedback-${questionNum}`;
+                        let message = '';
+                        
+                        if (isCorrect) {
+                            message = '✓ Correct! ';
+                            switch(questionNum) {
+                                case 'pathogen-risk':
+                                    message += 'HBV is the most stable and infectious bloodborne pathogen.';
+                                    break;
+                                case 'scenario-flu':
+                                    message += 'Influenza requires Droplet Precautions (surgical mask, 3 feet distance).';
+                                    break;
+                                case 'break-chain':
+                                    message += 'Safety devices and hand hygiene break transmission routes.';
+                                    break;
+                            }
+                        } else {
+                            message = '✗ Incorrect. ';
+                            switch(questionNum) {
+                                case 'pathogen-risk':
+                                    message += 'Review the stability and infectivity comparison chart.';
+                                    break;
+                                case 'scenario-flu':
+                                    message += 'Remember: Influenza = Droplet, Tuberculosis = Airborne.';
+                                    break;
+                                case 'break-chain':
+                                    message += 'Think about what physically prevents pathogen movement.';
+                                    break;
+                            }
+                        }
+                        
+                        showInlineFeedback(feedbackId, message, isCorrect);
+                        
+                        // Check activity completion
+                        const activityNum = this.closest('.activity-card').dataset.activity;
+                        setTimeout(() => checkActivityCompletion(parseInt(activityNum)), 100);
+                    });
+                });
+            }
+
+            // Setup Drag and Drop for Matching Game
+            function setupMatchingGame() {
+                let draggedItem = null;
+                
+                // Make prevention items draggable
+                document.querySelectorAll('.matching-item[draggable="true"]').forEach(item => {
+                    item.addEventListener('dragstart', function(e) {
+                        draggedItem = this;
+                        this.classList.add('dragging');
+                        e.dataTransfer.setData('text/plain', this.dataset.match);
+                        e.dataTransfer.effectAllowed = 'move';
+                    });
+                    
+                    item.addEventListener('dragend', function() {
+                        this.classList.remove('dragging');
+                        draggedItem = null;
+                    });
+                });
+                
+                // Setup drop zones
+                document.querySelectorAll('.matching-drop-zone').forEach(zone => {
+                    zone.addEventListener('dragover', function(e) {
+                        e.preventDefault();
+                        e.dataTransfer.dropEffect = 'move';
+                        this.classList.add('active');
+                    });
+                    
+                    zone.addEventListener('dragenter', function(e) {
+                        e.preventDefault();
+                        this.classList.add('active');
+                    });
+                    
+                    zone.addEventListener('dragleave', function() {
+                        this.classList.remove('active');
+                    });
+                    
+                    zone.addEventListener('drop', function(e) {
+                        e.preventDefault();
+                        this.classList.remove('active');
+                        
+                        if (!draggedItem) return;
+                        
+                        const matchType = e.dataTransfer.getData('text/plain');
+                        const zoneMatch = this.dataset.match;
+                        
+                        // Check if this zone already has an item
+                        const existingItem = this.querySelector('.matching-item');
+                        if (existingItem) {
+                            // Return existing item to the pool
+                            const pool = document.querySelector('.matching-items-container');
+                            const clone = existingItem.cloneNode(true);
+                            clone.style.display = 'block';
+                            clone.draggable = true;
+                            clone.classList.remove('matched');
+                            pool.appendChild(clone);
+                            existingItem.remove();
+                        }
+                        
+                        // Add the dragged item to the zone
+                        const itemClone = draggedItem.cloneNode(true);
+                        itemClone.style.display = 'block';
+                        itemClone.draggable = false;
+                        itemClone.classList.add('matched');
+                        
+                        // Hide the placeholder
+                        const placeholderId = `${zoneMatch}-placeholder`;
+                        document.getElementById(placeholderId).style.display = 'none';
+                        
+                        // Add to zone
+                        this.appendChild(itemClone);
+                        
+                        // Remove the dragged item from the pool
+                        draggedItem.remove();
+                        
+                        // Clear draggedItem reference
+                        draggedItem = null;
+                        
+                        // Update check button state
+                        updateMatchingCheckButton();
+                    });
+                });
+                
+                // Setup chain sequence drag and drop
+                setupChainSequenceGame();
+            }
+            
+            // Setup Chain Sequence Game
+            function setupChainSequenceGame() {
+                let draggedChainItem = null;
+                
+                // Make chain items draggable
+                document.querySelectorAll('#chain-links-container .matching-item').forEach(item => {
+                    item.addEventListener('dragstart', function(e) {
+                        draggedChainItem = this;
+                        this.classList.add('dragging');
+                        e.dataTransfer.setData('text/plain', this.dataset.link);
+                        e.dataTransfer.effectAllowed = 'move';
+                    });
+                    
+                    item.addEventListener('dragend', function() {
+                        this.classList.remove('dragging');
+                        draggedChainItem = null;
+                    });
+                });
+                
+                // Setup sequence slots
+                document.querySelectorAll('.chain-sequence-slot').forEach(slot => {
+                    slot.addEventListener('dragover', function(e) {
+                        e.preventDefault();
+                        e.dataTransfer.dropEffect = 'move';
+                        this.classList.add('active');
+                    });
+                    
+                    slot.addEventListener('dragenter', function(e) {
+                        e.preventDefault();
+                        this.classList.add('active');
+                    });
+                    
+                    slot.addEventListener('dragleave', function() {
+                        this.classList.remove('active');
+                    });
+                    
+                    slot.addEventListener('drop', function(e) {
+                        e.preventDefault();
+                        this.classList.remove('active');
+                        
+                        if (!draggedChainItem) return;
+                        
+                        const linkType = e.dataTransfer.getData('text/plain');
+                        const slotPosition = this.dataset.position;
+                        const correctLink = this.dataset.correct;
+                        
+                        // Check if this slot already has an item
+                        const existingItem = this.querySelector('.matching-item');
+                        if (existingItem) {
+                            // Return existing item to the pool
+                            const pool = document.getElementById('chain-links-container');
+                            const clone = existingItem.cloneNode(true);
+                            clone.style.display = 'block';
+                            clone.draggable = true;
+                            pool.appendChild(clone);
+                            existingItem.remove();
+                        }
+                        
+                        // Add the dragged item to the slot
+                        const itemClone = draggedChainItem.cloneNode(true);
+                        itemClone.style.display = 'block';
+                        itemClone.draggable = false;
+                        
+                        // Hide the placeholder
+                        const placeholderId = `slot-${slotPosition}-placeholder`;
+                        document.getElementById(placeholderId).style.display = 'none';
+                        
+                        // Add to slot
+                        this.appendChild(itemClone);
+                        
+                        // Remove the dragged item from the pool
+                        draggedChainItem.remove();
+                        
+                        // Clear draggedChainItem reference
+                        draggedChainItem = null;
+                        
+                        // Update check button state
+                        updateChainCheckButton();
+                    });
+                });
+            }
+            
+            // Update matching check button state
+            function updateMatchingCheckButton() {
+                const dropZones = document.querySelectorAll('.matching-drop-zone');
+                const allFilled = Array.from(dropZones).every(zone => {
+                    return zone.querySelector('.matching-item') !== null;
+                });
+                checkMatchingBtn.disabled = !allFilled;
+            }
+            
+            // Update chain check button state
+            function updateChainCheckButton() {
+                const sequenceSlots = document.querySelectorAll('.chain-sequence-slot');
+                const allFilled = Array.from(sequenceSlots).every(slot => {
+                    return slot.querySelector('.matching-item') !== null;
+                });
+                checkChainBtn.disabled = !allFilled;
+            }
+            
+            // Check matching game
+            function checkMatchingGame() {
+                const dropZones = document.querySelectorAll('.matching-drop-zone');
+                let correctMatches = 0;
+                let totalMatches = 0;
+                
+                dropZones.forEach(zone => {
+                    const zoneMatch = zone.dataset.match;
+                    const item = zone.querySelector('.matching-item');
+                    
+                    if (item) {
+                        totalMatches++;
+                        const itemMatch = item.dataset.match;
+                        
+                        if (zoneMatch === itemMatch) {
+                            correctMatches++;
+                            zone.classList.add('correct');
+                            zone.classList.remove('incorrect');
+                        } else {
+                            zone.classList.add('incorrect');
+                            zone.classList.remove('correct');
+                        }
+                    }
+                });
+                
+                if (totalMatches === 4 && correctMatches === 4) {
+                    showInlineFeedback('feedback-matching', '✓ Perfect! All transmission routes correctly matched with prevention methods.', true);
+                    state.activities[2].correct = 1;
+                    checkActivityCompletion(2);
+                } else if (totalMatches === 4) {
+                    showInlineFeedback('feedback-matching', `You have ${correctMatches} out of 4 correct matches. Try again!`, false);
+                }
+            }
+            
+            // Check chain sequence
+            function checkChainSequence() {
+                const sequenceSlots = document.querySelectorAll('.chain-sequence-slot');
+                let correctPositions = 0;
+                let totalPositions = 0;
+                
+                sequenceSlots.forEach(slot => {
+                    const slotPosition = parseInt(slot.dataset.position);
+                    const correctLink = slot.dataset.correct;
+                    const item = slot.querySelector('.matching-item');
+                    
+                    if (item) {
+                        totalPositions++;
+                        const itemLink = item.dataset.link;
+                        
+                        if (correctLink === itemLink) {
+                            correctPositions++;
+                            slot.classList.add('correct');
+                            slot.classList.remove('incorrect');
+                        } else {
+                            slot.classList.add('incorrect');
+                            slot.classList.remove('correct');
+                        }
+                    }
+                });
+                
+                if (totalPositions === 6 && correctPositions === 6) {
+                    showInlineFeedback('feedback-chain-sequence', '✓ Perfect sequence! You understand the chain of infection progression.', true);
+                    state.activities[3].correct = 1;
+                    checkActivityCompletion(3);
+                } else if (totalPositions === 6) {
+                    showInlineFeedback('feedback-chain-sequence', `You have ${correctPositions} out of 6 links in the correct position. Try again!`, false);
+                }
+            }
+
+            // Check activity completion
+            function checkActivityCompletion(activityNum) {
+                const activity = state.activities[activityNum];
+                const card = document.getElementById(`activity-${activityNum}`);
+                const status = card.querySelector('.activity-status');
+                const feedback = document.getElementById(`feedback-${activityNum}`);
+                
+                let isComplete = false;
+                
+                switch(activityNum) {
+                    case 1:
+                        const q1Correct = document.querySelector('#activity-1 .option-item[data-option="correct"][data-question="pathogen-risk"].selected');
+                        const preventionSelected = document.querySelectorAll('#activity-1 .option-item[data-option="correct"][data-question="prevention-multi"].selected');
+                        isComplete = q1Correct && preventionSelected.length >= 3;
+                        if (isComplete) {
+                            activity.correct = 2;
+                            activity.score = 100;
+                        }
+                        break;
+                        
+                    case 2:
+                        const scenarioCorrect = document.querySelector('#activity-2 .option-item[data-option="correct"][data-question="scenario-flu"].selected');
+                        const allDropZonesFilled = document.querySelectorAll('.matching-drop-zone').length === 
+                            document.querySelectorAll('.matching-drop-zone .matching-item').length;
+                        const allDropZonesCorrect = document.querySelectorAll('.matching-drop-zone.correct').length === 4;
+                        isComplete = scenarioCorrect && allDropZonesFilled && allDropZonesCorrect;
+                        if (isComplete) {
+                            activity.correct = 2;
+                            activity.score = 100;
+                        }
+                        break;
+                        
+                    case 3:
+                        const breakChainSelected = document.querySelectorAll('#activity-3 .option-item[data-option="correct"][data-question="break-chain"].selected');
+                        const allSlotsFilled = document.querySelectorAll('.chain-sequence-slot').length === 
+                            document.querySelectorAll('.chain-sequence-slot .matching-item').length;
+                        const allSlotsCorrect = document.querySelectorAll('.chain-sequence-slot.correct').length === 6;
+                        isComplete = breakChainSelected.length >= 2 && allSlotsFilled && allSlotsCorrect;
+                        if (isComplete) {
+                            activity.correct = 2;
+                            activity.score = 100;
+                        }
+                        break;
+                }
+                
+                if (isComplete && !activity.completed) {
+                    activity.completed = true;
+                    status.textContent = 'Completed';
+                    status.style.color = '#00b894';
+                    card.classList.add('completed');
+                    feedback.classList.add('show');
+                    updateProgressSummary();
+                }
+            }
+
+            // Reset All Activities
+            function resetAllActivities() {
+                // Reset state
+                Object.keys(state.activities).forEach(key => {
+                    state.activities[key] = {
+                        completed: false,
+                        correct: 0,
+                        total: 2,
+                        score: 0
+                    };
+                });
+
+                // Reset UI
+                activityCards.forEach(card => {
+                    card.classList.remove('completed');
+                    const status = card.querySelector('.activity-status');
+                    status.textContent = 'Not Started';
+                    status.style.color = '';
+                    const feedback = card.querySelector('.feedback-container');
+                    feedback.classList.remove('show');
+                });
+
+                // Reset matching game
+                document.querySelectorAll('.matching-drop-zone').forEach(zone => {
+                    zone.classList.remove('correct', 'incorrect', 'active');
+                    const item = zone.querySelector('.matching-item');
+                    if (item) {
+                        item.remove();
+                    }
+                    const matchType = zone.dataset.match;
+                    const placeholder = document.getElementById(`${matchType}-placeholder`);
+                    if (placeholder) {
+                        placeholder.style.display = 'block';
+                    }
+                });
+                
+                // Reset chain sequence game
+                document.querySelectorAll('.chain-sequence-slot').forEach(slot => {
+                    slot.classList.remove('correct', 'incorrect', 'active');
+                    const item = slot.querySelector('.matching-item');
+                    if (item) {
+                        item.remove();
+                    }
+                    const slotPosition = slot.dataset.position;
+                    const placeholder = document.getElementById(`slot-${slotPosition}-placeholder`);
+                    if (placeholder) {
+                        placeholder.style.display = 'block';
+                    }
+                });
+                
+                // Reset pool items
+                const matchingPool = document.querySelector('.matching-items-container');
+                const chainPool = document.getElementById('chain-links-container');
+                
+                // Clear and rebuild matching pool
+                matchingPool.innerHTML = '';
+                ['airborne', 'direct-contact', 'droplet', 'bloodborne'].forEach(matchType => {
+                    const item = document.createElement('div');
+                    item.className = 'matching-item';
+                    item.draggable = true;
+                    item.dataset.match = matchType;
+                    item.dataset.type = 'prevention';
+                    
+                    let title, content;
+                    switch(matchType) {
+                        case 'airborne':
+                            title = 'N95 Respirator & Isolation';
+                            content = 'N95 respirator, negative pressure room';
+                            break;
+                        case 'direct-contact':
+                            title = 'Gloves & Hand Hygiene';
+                            content = 'Wear gloves, hand washing between patients';
+                            break;
+                        case 'droplet':
+                            title = 'Surgical Mask & Distance';
+                            content = 'Wear surgical mask, maintain 3 feet distance';
+                            break;
+                        case 'bloodborne':
+                            title = 'Safety-engineered needles';
+                            content = 'Never recap, immediate disposal in sharps container';
+                            break;
+                    }
+                    
+                    item.innerHTML = `
+                        <div class="matching-item-title">${title}</div>
+                        <div class="matching-item-content">${content}</div>
+                    `;
+                    
+                    matchingPool.appendChild(item);
+                });
+                
+                // Clear and rebuild chain pool
+                chainPool.innerHTML = '';
+                const chainItems = [
+                    {link: 'infectious-agent', title: 'Infectious Agent', content: 'Pathogen (bacteria, virus, fungus)'},
+                    {link: 'reservoir', title: 'Reservoir', content: 'Where pathogen lives (human, animal, environment)'},
+                    {link: 'portal-exit', title: 'Portal of Exit', content: 'How pathogen leaves reservoir (blood, secretions)'},
+                    {link: 'mode-transmission', title: 'Mode of Transmission', content: 'How pathogen travels (direct, indirect, airborne)'},
+                    {link: 'portal-entry', title: 'Portal of Entry', content: 'How pathogen enters host (mucous membranes, needlestick)'},
+                    {link: 'susceptible-host', title: 'Susceptible Host', content: 'Person lacking immunity (unvaccinated, immunocompromised)'}
+                ];
+                
+                chainItems.forEach(itemData => {
+                    const item = document.createElement('div');
+                    item.className = 'matching-item';
+                    item.draggable = true;
+                    item.dataset.link = itemData.link;
+                    
+                    item.innerHTML = `
+                        <div class="matching-item-title">${itemData.title}</div>
+                        <div class="matching-item-content">${itemData.content}</div>
+                    `;
+                    
+                    chainPool.appendChild(item);
+                });
+
+                // Reset options
+                document.querySelectorAll('.option-item').forEach(option => {
+                    option.classList.remove('selected', 'wrong');
+                });
+                
+                document.querySelectorAll('.inline-feedback').forEach(fb => {
+                    fb.textContent = '';
+                    fb.className = 'inline-feedback';
+                    fb.style.display = 'none';
+                });
+
+                // Reset buttons
+                checkMatchingBtn.disabled = true;
+                checkChainBtn.disabled = true;
+
+                // Reset results
+                resultsPanel.classList.remove('show');
+
+                // Update progress
+                updateProgressSummary();
+                
+                // Re-initialize drag and drop
+                setupMatchingGame();
+            }
+
+            // Check All Answers (Auto-complete)
+            function checkAllAnswers() {
+                // Activity 1
+                if (!state.activities[1].completed) {
+                    document.querySelector('#activity-1 .option-item[data-option="correct"][data-question="pathogen-risk"]').classList.add('selected');
+                    document.querySelectorAll('#activity-1 .option-item[data-option="correct"][data-question="prevention-multi"]').forEach(opt => {
+                        opt.classList.add('selected');
+                    });
+                    state.activities[1].completed = true;
+                    state.activities[1].correct = 2;
+                    state.activities[1].score = 100;
+                    
+                    const card1 = document.getElementById('activity-1');
+                    card1.querySelector('.activity-status').textContent = 'Completed';
+                    card1.querySelector('.activity-status').style.color = '#00b894';
+                    card1.classList.add('completed');
+                    document.getElementById('feedback-1').classList.add('show');
+                }
+
+                // Activity 2
+                if (!state.activities[2].completed) {
+                    // Select correct MCQ
+                    document.querySelector('#activity-2 .option-item[data-option="correct"][data-question="scenario-flu"]').classList.add('selected');
+                    
+                    // Auto-match transmission routes
+                    const correctMatches = {
+                        'bloodborne': 'Safety-engineered needles',
+                        'direct-contact': 'Gloves & Hand Hygiene',
+                        'droplet': 'Surgical Mask & Distance',
+                        'airborne': 'N95 Respirator & Isolation'
+                    };
+                    
+                    Object.keys(correctMatches).forEach(matchType => {
+                        const zone = document.querySelector(`.matching-drop-zone[data-match="${matchType}"]`);
+                        const placeholder = document.getElementById(`${matchType}-placeholder`);
+                        
+                        if (zone && placeholder) {
+                            placeholder.style.display = 'none';
+                            zone.classList.add('correct');
+                            
+                            const item = document.createElement('div');
+                            item.className = 'matching-item matched';
+                            item.dataset.match = matchType;
+                            item.innerHTML = `
+                                <div class="matching-item-title">${correctMatches[matchType]}</div>
+                                <div class="matching-item-content">${getPreventionContent(matchType)}</div>
+                            `;
+                            zone.appendChild(item);
+                        }
+                    });
+                    
+                    // Remove items from pool
+                    document.querySelectorAll('.matching-item[draggable="true"]').forEach(item => {
+                        item.remove();
+                    });
+                    
+                    state.activities[2].completed = true;
+                    state.activities[2].correct = 2;
+                    state.activities[2].score = 100;
+                    
+                    const card2 = document.getElementById('activity-2');
+                    card2.querySelector('.activity-status').textContent = 'Completed';
+                    card2.querySelector('.activity-status').style.color = '#00b894';
+                    card2.classList.add('completed');
+                    document.getElementById('feedback-2').classList.add('show');
+                }
+
+                // Activity 3
+                if (!state.activities[3].completed) {
+                    // Select correct MCQ
+                    document.querySelectorAll('#activity-3 .option-item[data-option="correct"][data-question="break-chain"]').forEach(opt => {
+                        opt.classList.add('selected');
+                    });
+                    
+                    // Auto-fill chain sequence
+                    const chainSequence = state.chainSequence;
+                    Object.keys(chainSequence).forEach(position => {
+                        const linkType = chainSequence[position];
+                        const slot = document.querySelector(`.chain-sequence-slot[data-position="${position}"]`);
+                        const placeholder = document.getElementById(`slot-${position}-placeholder`);
+                        
+                        if (slot && placeholder) {
+                            placeholder.style.display = 'none';
+                            slot.classList.add('correct');
+                            
+                            const item = document.createElement('div');
+                            item.className = 'matching-item';
+                            item.dataset.link = linkType;
+                            item.innerHTML = `
+                                <div class="matching-item-title">${getChainTitle(linkType)}</div>
+                                <div class="matching-item-content">${getChainContent(linkType)}</div>
+                            `;
+                            slot.appendChild(item);
+                        }
+                    });
+                    
+                    // Remove items from pool
+                    document.querySelectorAll('#chain-links-container .matching-item').forEach(item => {
+                        item.remove();
+                    });
+                    
+                    state.activities[3].completed = true;
+                    state.activities[3].correct = 2;
+                    state.activities[3].score = 100;
+                    
+                    const card3 = document.getElementById('activity-3');
+                    card3.querySelector('.activity-status').textContent = 'Completed';
+                    card3.querySelector('.activity-status').style.color = '#00b894';
+                    card3.classList.add('completed');
+                    document.getElementById('feedback-3').classList.add('show');
+                }
+
+                updateProgressSummary();
+            }
+            
+            // Helper functions for auto-complete
+            function getPreventionContent(matchType) {
+                switch(matchType) {
+                    case 'airborne': return 'N95 respirator, negative pressure room';
+                    case 'direct-contact': return 'Wear gloves, hand washing between patients';
+                    case 'droplet': return 'Wear surgical mask, maintain 3 feet distance';
+                    case 'bloodborne': return 'Never recap, immediate disposal in sharps container';
+                    default: return '';
+                }
+            }
+            
+            function getChainTitle(linkType) {
+                switch(linkType) {
+                    case 'infectious-agent': return 'Infectious Agent';
+                    case 'reservoir': return 'Reservoir';
+                    case 'portal-exit': return 'Portal of Exit';
+                    case 'mode-transmission': return 'Mode of Transmission';
+                    case 'portal-entry': return 'Portal of Entry';
+                    case 'susceptible-host': return 'Susceptible Host';
+                    default: return '';
+                }
+            }
+            
+            function getChainContent(linkType) {
+                switch(linkType) {
+                    case 'infectious-agent': return 'Pathogen (bacteria, virus, fungus)';
+                    case 'reservoir': return 'Where pathogen lives (human, animal, environment)';
+                    case 'portal-exit': return 'How pathogen leaves reservoir (blood, secretions)';
+                    case 'mode-transmission': return 'How pathogen travels (direct, indirect, airborne)';
+                    case 'portal-entry': return 'How pathogen enters host (mucous membranes, needlestick)';
+                    case 'susceptible-host': return 'Person lacking immunity (unvaccinated, immunocompromised)';
+                    default: return '';
+                }
+            }
+
+            // View Final Results
+            function viewFinalResults() {
+                let totalScore = 0;
+                let activityCount = 0;
+
+                Object.values(state.activities).forEach(activity => {
+                    if (activity.completed) {
+                        totalScore += activity.score;
+                        activityCount++;
+                    }
+                });
+
+                const averageScore = activityCount > 0 ? Math.round(totalScore / activityCount) : 0;
+                finalScore.textContent = `${averageScore}%`;
+                resultsPanel.classList.add('show');
+                resultsPanel.scrollIntoView({ behavior: 'smooth' });
+            }
+
+            // Initialize
+            setupMCQOptions();
+            setupMatchingGame();
+            updateProgressSummary();
+
+            // Event listeners
+            resetBtn.addEventListener('click', resetAllActivities);
+            checkBtn.addEventListener('click', checkAllAnswers);
+            resultsBtn.addEventListener('click', viewFinalResults);
+            checkMatchingBtn.addEventListener('click', checkMatchingGame);
+            checkChainBtn.addEventListener('click', checkChainSequence);
+        });
+    </script>
+</body>
+</html>
