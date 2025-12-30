@@ -1,0 +1,1582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>AlliedRx - Phlebotomy Week 3 Reading Assignments</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-error: #e17055;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
+            --radius-lg: 24px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(
+                circle at top left,
+                #ffffff 0,
+                #f1ecff 40%,
+                var(--color-bg) 100%
+            );
+            color: var(--color-text);
+            -webkit-text-size-adjust: 100%;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 12px;
+            }
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1120px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px 30px;
+            display: grid;
+            grid-template-columns: minmax(0, 3.1fr) minmax(0, 2.4fr);
+            gap: 28px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        @media (max-width: 900px) {
+            .page {
+                grid-template-columns: 1fr;
+                padding: 22px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 0;
+            }
+            .page {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 18px 14px 22px;
+                gap: 22px;
+            }
+        }
+
+        img, .page, .column, .reading-card, .side-card {
+            max-width: 100%;
+        }
+
+        .column {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header / branding */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .brand-logo:hover {
+            transform: scale(1.05);
+        }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+            animation: pulse 3s infinite;
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--color-success);
+            flex-shrink: 0;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .badge-mode:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+        @media (max-width: 480px) {
+            .brand-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .badge-mode {
+                margin-top: 6px;
+            }
+        }
+
+        h1 {
+            font-size: clamp(2rem, 3vw, 2.4rem);
+            line-height: 1.05;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 34rem;
+            margin-bottom: 18px;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        .subtitle strong {
+            color: var(--color-primary);
+        }
+
+        /* Special badges */
+        .terminology-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: rgba(159, 86, 212, 0.1);
+            border: 2px solid rgba(159, 86, 212, 0.3);
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #2b2b2b;
+            margin-bottom: 15px;
+        }
+
+        .badge-icon {
+            font-size: 1.2em;
+        }
+
+        /* Reading cards */
+        .reading-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 12px;
+        }
+
+        .reading-card {
+            border-radius: 18px;
+            padding: 14px 16px 14px;
+            border: 1px solid rgba(15, 23, 42, 0.06);
+            background: linear-gradient(
+                135deg,
+                rgba(159, 86, 212, 0.07),
+                rgba(255, 255, 255, 0.95)
+            );
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 12px;
+            align-items: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .reading-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.7s ease;
+        }
+
+        .reading-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--color-primary-soft);
+        }
+
+        .reading-card:hover::before {
+            left: 100%;
+        }
+
+        .reading-card.completed {
+            border-color: var(--color-success);
+            background: linear-gradient(
+                135deg,
+                rgba(0, 184, 148, 0.07),
+                rgba(255, 255, 255, 0.95)
+            );
+        }
+
+        @media (max-width: 600px) {
+            .reading-card {
+                grid-template-columns: 1fr;
+                align-items: flex-start;
+            }
+            .chapter-pill {
+                justify-self: flex-start;
+            }
+            .tag-time {
+                justify-self: flex-start;
+                margin-top: 6px;
+            }
+        }
+
+        .chapter-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px 11px;
+            border-radius: 999px;
+            background: #ffffff;
+            box-shadow: 0 6px 18px rgba(159, 86, 212, 0.16);
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .reading-card:hover .chapter-pill {
+            background: var(--color-primary);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .chapter-main {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .chapter-title {
+            font-size: 0.98rem;
+            font-weight: 700;
+            color: var(--color-text);
+            transition: color 0.3s ease;
+        }
+
+        .reading-card:hover .chapter-title {
+            color: var(--color-primary);
+        }
+
+        .chapter-text {
+            font-size: 0.84rem;
+            color: var(--color-muted);
+            line-height: 1.4;
+        }
+
+        .tag-time {
+            padding: 5px 8px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            font-size: 0.74rem;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .reading-card:hover .tag-time {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        /* Progress tracker */
+        .progress-container {
+            margin: 20px 0;
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: 16px;
+            padding: 16px 18px;
+            border: 1px solid rgba(12, 10, 24, 0.06);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .progress-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-text);
+        }
+
+        .progress-percent {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: rgba(12, 10, 24, 0.08);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+            border-radius: 4px;
+            width: 0%;
+            transition: width 1s ease-out;
+        }
+
+        /* Interactive checklist */
+        .checklist-heading {
+            font-size: 0.86rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-primary);
+            font-weight: 600;
+            margin-top: 24px;
+            margin-bottom: 12px;
+            animation: slideInRight 0.6s ease-out 0.6s both;
+        }
+
+        .checklist {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-size: 0.86rem;
+            color: var(--color-text);
+        }
+
+        .checklist li {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            padding: 8px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .checklist li:hover {
+            background: rgba(175, 75, 239, 0.05);
+            transform: translateX(5px);
+        }
+
+        .checklist li.completed {
+            opacity: 0.7;
+        }
+
+        .check-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 6px;
+            border: 2px solid rgba(148, 163, 184, 0.9);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.72rem;
+            color: rgba(148, 163, 184, 0.9);
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .checklist li:hover .check-dot {
+            border-color: var(--color-primary);
+        }
+
+        .checklist li.completed .check-dot {
+            background: var(--color-success);
+            border-color: var(--color-success);
+            color: white;
+        }
+
+        .reading-notes {
+            font-size: 0.85rem;
+            color: var(--color-muted);
+            line-height: 1.6;
+            margin-top: 16px;
+            animation: fadeIn 0.6s ease-out 0.7s both;
+        }
+
+        .reading-notes strong {
+            color: var(--color-text);
+        }
+
+        .complete-hint {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+            margin-top: 20px;
+            padding: 12px;
+            background: rgba(175, 75, 239, 0.05);
+            border-radius: 12px;
+            border-left: 3px solid var(--color-primary);
+            animation: fadeIn 0.6s ease-out 0.8s both;
+        }
+
+        /* Right column */
+        .section-tag {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-primary);
+            font-weight: 600;
+            margin-bottom: 10px;
+            animation: slideInRight 0.6s ease-out 0.5s both;
+        }
+
+        .side-heading {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--color-text);
+            margin-bottom: 10px;
+            animation: slideInRight 0.6s ease-out 0.6s both;
+        }
+
+        .side-card {
+            background: rgba(12, 10, 24, 0.94);
+            color: #e5e7eb;
+            border-radius: 18px;
+            padding: 16px 18px 18px;
+            font-size: 0.88rem;
+            line-height: 1.7;
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.6);
+            margin-bottom: 14px;
+            transition: transform 0.3s ease;
+            animation: slideInRight 0.6s ease-out 0.7s both;
+        }
+
+        .side-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .side-card strong {
+            color: #ffffff;
+        }
+
+        .side-subheading {
+            font-size: 0.86rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: #c4b5fd;
+            font-weight: 600;
+            margin: 14px 0 10px;
+        }
+
+        .side-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-size: 0.86rem;
+        }
+
+        .side-list li {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            transition: transform 0.3s ease;
+            padding: 4px 0;
+        }
+
+        .side-list li:hover {
+            transform: translateX(5px);
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            margin-top: 6px;
+            border-radius: 999px;
+            background: var(--color-accent);
+            flex-shrink: 0;
+            animation: pulse 2s infinite;
+        }
+
+        .side-list li:hover .dot {
+            background: var(--color-primary);
+            transform: scale(1.3);
+        }
+
+        .note-card {
+            margin-top: 14px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            background: rgba(15, 23, 42, 0.75);
+            padding: 12px 14px;
+            font-size: 0.8rem;
+            color: #e5e7eb;
+            transition: all 0.3s ease;
+        }
+
+        .note-card:hover {
+            border-color: var(--color-primary-soft);
+            background: rgba(15, 23, 42, 0.9);
+        }
+
+        .note-card strong {
+            color: #fef3c7;
+        }
+
+        /* Action buttons */
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 18px;
+            border-radius: 12px;
+            border: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #9a3bd6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(175, 75, 239, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-text);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(12, 10, 24, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-icon {
+            font-size: 1.1em;
+        }
+
+        /* Completion celebration */
+        .completion-celebration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .celebration-content {
+            background: white;
+            padding: 40px;
+            border-radius: var(--radius-lg);
+            text-align: center;
+            max-width: 500px;
+            animation: fadeInUp 0.5s ease;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+        }
+
+        .celebration-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        .celebration-title {
+            font-size: 1.8rem;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+        }
+
+        .celebration-text {
+            color: var(--color-muted);
+            margin-bottom: 20px;
+        }
+
+        .celebration-btn {
+            padding: 12px 24px;
+            background: var(--color-primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .celebration-btn:hover {
+            background: #9a3bd6;
+            transform: scale(1.05);
+        }
+
+        /* Medical Terminology Components */
+        .term-components {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 15px 0;
+            justify-content: center;
+        }
+
+        .term-component {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding: 15px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            min-width: 120px;
+            text-align: center;
+        }
+
+        .term-component:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .term-icon {
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+
+        .term-label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+
+        .term-example {
+            font-size: 0.75rem;
+            color: var(--color-text);
+            margin-top: 3px;
+        }
+
+        /* Term Breakdown Visual */
+        .term-breakdown {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: 12px;
+            flex-wrap: wrap;
+        }
+
+        .term-part {
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+
+        .term-part:hover {
+            transform: scale(1.05);
+        }
+
+        .term-part.prefix {
+            background: rgba(255, 107, 107, 0.2);
+            color: #ff4444;
+            border: 2px solid rgba(255, 107, 107, 0.3);
+        }
+
+        .term-part.root {
+            background: rgba(52, 152, 219, 0.2);
+            color: #2980b9;
+            border: 2px solid rgba(52, 152, 219, 0.3);
+        }
+
+        .term-part.vowel {
+            background: rgba(46, 204, 113, 0.2);
+            color: #27ae60;
+            border: 2px solid rgba(46, 204, 113, 0.3);
+            font-style: italic;
+        }
+
+        .term-part.suffix {
+            background: rgba(155, 89, 182, 0.2);
+            color: #8e44ad;
+            border: 2px solid rgba(155, 89, 182, 0.3);
+        }
+
+        .term-arrow {
+            font-size: 1.2rem;
+            color: var(--color-muted);
+        }
+
+        /* Tables for prefixes, suffixes, word roots */
+        .term-table-container {
+            margin: 15px 0;
+            max-height: 300px;
+            overflow-y: auto;
+            border-radius: 12px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .term-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.8rem;
+        }
+
+        .term-table th {
+            background: rgba(175, 75, 239, 0.1);
+            color: var(--color-primary);
+            font-weight: 600;
+            padding: 10px;
+            text-align: left;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .term-table td {
+            padding: 8px 10px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .term-table tr:nth-child(even) {
+            background: rgba(0, 0, 0, 0.02);
+        }
+
+        .term-table tr:hover {
+            background: rgba(175, 75, 239, 0.05);
+        }
+
+        /* Abbreviations grid */
+        .abbrev-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 8px;
+            margin: 15px 0;
+        }
+
+        .abbrev-item {
+            display: flex;
+            flex-direction: column;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .abbrev-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .abbrev-key {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 2px;
+        }
+
+        .abbrev-value {
+            font-size: 0.7rem;
+            color: var(--color-text);
+        }
+
+        @media (max-width: 768px) {
+            .term-components {
+                gap: 10px;
+            }
+            .term-component {
+                min-width: 100px;
+                padding: 12px;
+            }
+            .abbrev-grid {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="week3-reading-heading">
+        <!-- LEFT COLUMN: title + reading cards + checklist -->
+        <section class="column" aria-label="Week 3 reading assignments">
+            <header class="brand-row">
+                <div class="brand">
+                    <img
+                        src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                        alt="AlliedRx logo"
+                        class="brand-logo"
+                    />
+                    <div class="course-meta">
+                        <span class="course-name">Phlebotomy Technician Program • Campus & Distance Learning</span>
+                        <div class="week-label">
+                            <span class="week-label-dot"></span>
+                            <span>Week 3 --- Medical Terminology Foundation</span>
+                        </div>
+                    </div>
+                </div>
+                <span class="badge-mode">Campus & Online</span>
+            </header>
+
+            <h1 id="week3-reading-heading">Week 3 Reading Assignments</h1>
+
+            <p class="subtitle">
+                This week focuses on <strong>medical terminology basics</strong> - 
+                the essential language of healthcare. Master these components to 
+                communicate effectively and understand medical documentation.
+            </p>
+
+            <div class="terminology-badge">
+                <span class="badge-icon">📚</span>
+                <span>Chapter 4: Medical Terminology - Learning the Language of Healthcare</span>
+            </div>
+
+            <!-- Progress tracker -->
+            <div class="progress-container">
+                <div class="progress-header">
+                    <span class="progress-title">Reading Progress</span>
+                    <span class="progress-percent" id="progress-percent">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+            </div>
+
+            <!-- Reading cards -->
+            <div class="reading-grid">
+                <!-- Chapter 4: Medical Terminology -->
+                <article class="reading-card" id="chapter4-card" data-chapter="4">
+                    <div class="chapter-pill">Chapter 4</div>
+                    <div class="chapter-main">
+                        <div class="chapter-title">
+                            Medical Terminology
+                        </div>
+                        <p class="chapter-text">
+                            Master <strong>word parts (prefixes, suffixes, word roots)</strong>,
+                            <strong>combining vowels</strong>, <strong>plural formations</strong>,
+                            and <strong>common medical abbreviations</strong>. Learn to decode 
+                            medical terms like "venipuncture" and "phlebotomy" by understanding 
+                            their components.
+                        </p>
+                    </div>
+                    <div class="tag-time" id="chapter4-time">Est. 90-120 min</div>
+                </article>
+            </div>
+
+            <p class="reading-notes">
+                <strong>Textbook:</strong> Phlebotomy Essentials, 7th Edition
+                <br>
+                <strong>Key Insight:</strong> "Learning medical terminology can be somewhat like learning a new language... The more experience one receives in the medical professions, the easier it becomes."
+            </p>
+
+            <!-- Medical Term Components -->
+            <div class="term-components">
+                <div class="term-component">
+                    <div class="term-icon">🔤</div>
+                    <div class="term-label">Prefix</div>
+                    <div class="term-example">Beginning of word<br>Changes meaning</div>
+                </div>
+                <div class="term-component">
+                    <div class="term-icon">📖</div>
+                    <div class="term-label">Word Root</div>
+                    <div class="term-example">Main meaning<br>Core of the term</div>
+                </div>
+                <div class="term-component">
+                    <div class="term-icon">🔗</div>
+                    <div class="term-label">Combining Vowel</div>
+                    <div class="term-example">Usually "o"<br>Eases pronunciation</div>
+                </div>
+                <div class="term-component">
+                    <div class="term-icon">🏁</div>
+                    <div class="term-label">Suffix</div>
+                    <div class="term-example">End of word<br>Adds information</div>
+                </div>
+            </div>
+
+            <!-- Term Breakdown Example -->
+            <p class="checklist-heading">Term Breakdown Example</p>
+            <div class="term-breakdown">
+                <div class="term-part prefix" title="Prefix: Vein">Phleb</div>
+                <div class="term-arrow">+</div>
+                <div class="term-part vowel" title="Combining Vowel: 'o'">o</div>
+                <div class="term-arrow">+</div>
+                <div class="term-part suffix" title="Suffix: To cut">tomy</div>
+                <div class="term-arrow">=</div>
+                <div style="font-weight: 700; color: var(--color-primary);">Phlebotomy</div>
+            </div>
+
+            <!-- Interactive checklist -->
+            <p class="checklist-heading">Week 3 Learning Activities</p>
+            <ul class="checklist" id="reading-checklist">
+                <li data-index="0">
+                    <span class="check-dot">□</span>
+                    <span>Create flashcards for 20 common prefixes, 20 word roots, and 20 suffixes from Chapter 4 tables.</span>
+                </li>
+                <li data-index="1">
+                    <span class="check-dot">□</span>
+                    <span>Practice breaking down 15 medical terms into their components (prefix + root + suffix).</span>
+                </li>
+                <li data-index="2">
+                    <span class="check-dot">□</span>
+                    <span>Memorize the plural formations for medical terms (e.g., -a to -ae, -um to -a, -us to -i).</span>
+                </li>
+                <li data-index="3">
+                    <span class="check-dot">□</span>
+                    <span>Create your own medical terms by combining different prefixes, roots, and suffixes with correct combining vowels.</span>
+                </li>
+                <li data-index="4">
+                    <span class="check-dot">□</span>
+                    <span>Practice writing out common medical abbreviations from memory (CBC, Hgb, WBC, etc.).</span>
+                </li>
+                <li data-index="5">
+                    <span class="check-dot">□</span>
+                    <span>Explain the difference between word roots and combining forms to a study partner.</span>
+                </li>
+            </ul>
+
+            <!-- Action buttons -->
+            <div class="action-buttons">
+                <button class="btn btn-primary" id="mark-all-read">
+                    <span class="btn-icon">✓</span>
+                    Mark All as Read
+                </button>
+                <button class="btn btn-secondary" id="reset-progress">
+                    <span class="btn-icon">↺</span>
+                    Reset Progress
+                </button>
+            </div>
+
+            <p class="complete-hint">
+                Medical terminology is the <strong>universal language of healthcare</strong>. 
+                Mastering these basics will help you understand orders, communicate with 
+                healthcare team members, and document procedures accurately.
+            </p>
+        </section>
+
+        <!-- RIGHT COLUMN: framing & why these readings matter -->
+        <aside class="column" aria-label="Why medical terminology matters">
+            <p class="section-tag">Clinical Application</p>
+            <h2 class="side-heading">Why Medical Terminology is Essential for Phlebotomists</h2>
+            <div class="side-card">
+                <p>
+                    <strong>Chapter 4 (Medical Terminology)</strong> teaches you to decode 
+                    the language of healthcare. While phlebotomists aren't expected to be 
+                    fluent, understanding common terms is critical for safe practice and 
+                    professional communication.
+                </p>
+
+                <p class="side-subheading">Common Phlebotomy Terms You MUST Know:</p>
+                <ul class="side-list">
+                    <li>
+                        <span class="dot"></span>
+                        <span><strong>Venipuncture:</strong> veni (vein) + puncture (to puncture) = to puncture a vein</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span><strong>Phlebotomy:</strong> phleb (vein) + o (combining vowel) + tomy (to cut) = to cut into a vein</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span><strong>Hematoma:</strong> hemat (blood) + oma (tumor/swelling) = swelling of blood</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span><strong>Antecubital:</strong> ante (before) + cubitum (elbow) = in front of the elbow</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span><strong>Hemolysis:</strong> hemo (blood) + lysis (destruction) = destruction of red blood cells</span>
+                    </li>
+                </ul>
+
+                <div class="note-card">
+                    <strong>Essential Prefixes for Phlebotomy:</strong>
+                    <div class="term-table-container">
+                        <table class="term-table">
+                            <thead>
+                                <tr>
+                                    <th>Prefix</th>
+                                    <th>Meaning</th>
+                                    <th>Example</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>a-</strong></td>
+                                    <td>absence</td>
+                                    <td>apathy</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>ante-</strong></td>
+                                    <td>before</td>
+                                    <td>antepartum</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>anti-</strong></td>
+                                    <td>opposed</td>
+                                    <td>anticoagulant</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>hyper-</strong></td>
+                                    <td>above</td>
+                                    <td>hypertension</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>hypo-</strong></td>
+                                    <td>below</td>
+                                    <td>hypodermic</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>intra-</strong></td>
+                                    <td>within</td>
+                                    <td>intramuscular</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>peri-</strong></td>
+                                    <td>around</td>
+                                    <td>pericardium</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="note-card" style="margin-top: 12px;">
+                    <strong>Critical Word Roots for Blood Collection:</strong>
+                    <div class="term-table-container">
+                        <table class="term-table">
+                            <thead>
+                                <tr>
+                                    <th>Root</th>
+                                    <th>Meaning</th>
+                                    <th>Example</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>phleb</strong></td>
+                                    <td>vein</td>
+                                    <td>phlebotomy</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>ven</strong></td>
+                                    <td>vein</td>
+                                    <td>venipuncture</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>hem/hemat</strong></td>
+                                    <td>blood</td>
+                                    <td>hematology</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>arteri</strong></td>
+                                    <td>artery</td>
+                                    <td>arteriosclerosis</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>vas</strong></td>
+                                    <td>vessel</td>
+                                    <td>vascular</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>cubitum</strong></td>
+                                    <td>elbow</td>
+                                    <td>antecubital</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>cutane</strong></td>
+                                    <td>skin</td>
+                                    <td>percutaneous</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="note-card" style="margin-top: 12px;">
+                    <strong>Essential Medical Abbreviations:</strong>
+                    <div class="abbrev-grid">
+                        <div class="abbrev-item">
+                            <div class="abbrev-key">CBC</div>
+                            <div class="abbrev-value">Complete Blood Count</div>
+                        </div>
+                        <div class="abbrev-item">
+                            <div class="abbrev-key">Hgb/Hb</div>
+                            <div class="abbrev-value">Hemoglobin</div>
+                        </div>
+                        <div class="abbrev-item">
+                            <div class="abbrev-key">Hct</div>
+                            <div class="abbrev-value">Hematocrit</div>
+                        </div>
+                        <div class="abbrev-item">
+                            <div class="abbrev-key">WBC</div>
+                            <div class="abbrev-value">White Blood Cell</div>
+                        </div>
+                        <div class="abbrev-item">
+                            <div class="abbrev-key">RBC</div>
+                            <div class="abbrev-value">Red Blood Cell</div>
+                        </div>
+                        <div class="abbrev-item">
+                            <div class="abbrev-key">PT</div>
+                            <div class="abbrev-value">Prothrombin Time</div>
+                        </div>
+                        <div class="abbrev-item">
+                            <div class="abbrev-key">PTT</div>
+                            <div class="abbrev-value">Partial Thromboplastin Time</div>
+                        </div>
+                        <div class="abbrev-item">
+                            <div class="abbrev-key">UA</div>
+                            <div class="abbrev-value">Urinalysis</div>
+                        </div>
+                        <div class="abbrev-item">
+                            <div class="abbrev-key">UTI</div>
+                            <div class="abbrev-value">Urinary Tract Infection</div>
+                        </div>
+                        <div class="abbrev-item">
+                            <div class="abbrev-key">bid</div>
+                            <div class="abbrev-value">Twice daily</div>
+                        </div>
+                        <div class="abbrev-item">
+                            <div class="abbrev-key">QNS</div>
+                            <div class="abbrev-value">Quantity Not Sufficient</div>
+                        </div>
+                        <div class="abbrev-item">
+                            <div class="abbrev-key">T&C</div>
+                            <div class="abbrev-value">Type and Crossmatch</div>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="side-subheading" style="margin-top: 20px; color: #e5e7eb;">Why This Matters in Practice:</p>
+                <ul class="side-list">
+                    <li>
+                        <span class="dot"></span>
+                        <span>Understanding orders: "Collect CBC, PT, PTT STAT"</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span>Documenting complications: "Small hematoma at antecubital site"</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span>Communicating with nurses: "Possible hemolysis in lavender top tube"</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span>Reading patient charts: "History of thrombocytopenia"</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span>Following protocols: "Use aseptic technique for all venipunctures"</span>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+    </main>
+
+    <!-- Completion Celebration Modal -->
+    <div class="completion-celebration" id="celebration-modal">
+        <div class="celebration-content">
+            <div class="celebration-icon">🎓</div>
+            <h2 class="celebration-title">Medical Terminology Mastered!</h2>
+            <p class="celebration-text">
+                Excellent work completing Chapter 4 (Medical Terminology). You've learned 
+                to decode the language of healthcare - a critical skill for professional 
+                communication and patient safety.
+            </p>
+            <p class="celebration-text">
+                You're now ready to apply these terminology skills in clinical documentation 
+                and team communication scenarios.
+            </p>
+            <button class="celebration-btn" id="close-celebration">Continue to Documentation Practice</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // State management
+            let readingState = {
+                chapter4: false,
+                checklist: [false, false, false, false, false, false]
+            };
+
+            // DOM elements
+            const chapter4Card = document.getElementById('chapter4-card');
+            const checklistItems = document.querySelectorAll('#reading-checklist li');
+            const progressFill = document.getElementById('progress-fill');
+            const progressPercent = document.getElementById('progress-percent');
+            const markAllBtn = document.getElementById('mark-all-read');
+            const resetBtn = document.getElementById('reset-progress');
+            const celebrationModal = document.getElementById('celebration-modal');
+            const closeCelebrationBtn = document.getElementById('close-celebration');
+
+            // Calculate progress
+            function calculateProgress() {
+                const totalItems = 7; // 1 chapter + 6 checklist items
+                let completed = 0;
+                
+                if (readingState.chapter4) completed++;
+                
+                readingState.checklist.forEach(item => {
+                    if (item) completed++;
+                });
+                
+                const percentage = Math.round((completed / totalItems) * 100);
+                
+                // Update progress bar
+                progressFill.style.width = `${percentage}%`;
+                progressPercent.textContent = `${percentage}%`;
+                
+                // Update progress bar color based on completion
+                if (percentage === 100) {
+                    progressFill.style.background = 'linear-gradient(90deg, var(--color-success), #00d2a0)';
+                    progressPercent.style.color = 'var(--color-success)';
+                    showCelebration();
+                } else if (percentage >= 50) {
+                    progressFill.style.background = 'linear-gradient(90deg, var(--color-primary), var(--color-accent))';
+                    progressPercent.style.color = 'var(--color-primary)';
+                } else {
+                    progressFill.style.background = 'linear-gradient(90deg, var(--color-primary), var(--color-accent))';
+                    progressPercent.style.color = 'var(--color-primary)';
+                }
+                
+                return percentage;
+            }
+
+            // Toggle chapter completion
+            function toggleChapter(chapter) {
+                const card = chapter4Card;
+                const isCompleted = readingState.chapter4;
+                
+                if (isCompleted) {
+                    // Mark as incomplete
+                    card.classList.remove('completed');
+                    readingState.chapter4 = false;
+                    document.getElementById('chapter4-time').textContent = 'Est. 90-120 min';
+                } else {
+                    // Mark as complete
+                    card.classList.add('completed');
+                    readingState.chapter4 = true;
+                    document.getElementById('chapter4-time').textContent = '✓ Completed';
+                    
+                    // Add animation
+                    card.style.transform = 'scale(1.02)';
+                    setTimeout(() => {
+                        card.style.transform = '';
+                    }, 300);
+                }
+                
+                calculateProgress();
+            }
+
+            // Toggle checklist item
+            function toggleChecklistItem(index) {
+                const item = checklistItems[index];
+                const dot = item.querySelector('.check-dot');
+                
+                readingState.checklist[index] = !readingState.checklist[index];
+                
+                if (readingState.checklist[index]) {
+                    item.classList.add('completed');
+                    dot.textContent = '✓';
+                    dot.style.background = 'var(--color-success)';
+                    dot.style.borderColor = 'var(--color-success)';
+                    dot.style.color = 'white';
+                } else {
+                    item.classList.remove('completed');
+                    dot.textContent = '□';
+                    dot.style.background = '';
+                    dot.style.borderColor = 'rgba(148, 163, 184, 0.9)';
+                    dot.style.color = 'rgba(148, 163, 184, 0.9)';
+                }
+                
+                calculateProgress();
+            }
+
+            // Mark all as read
+            function markAllAsRead() {
+                // Mark chapter
+                readingState.chapter4 = true;
+                chapter4Card.classList.add('completed');
+                document.getElementById('chapter4-time').textContent = '✓ Completed';
+                
+                // Mark all checklist items
+                readingState.checklist = [true, true, true, true, true, true];
+                checklistItems.forEach((item, index) => {
+                    item.classList.add('completed');
+                    const dot = item.querySelector('.check-dot');
+                    dot.textContent = '✓';
+                    dot.style.background = 'var(--color-success)';
+                    dot.style.borderColor = 'var(--color-success)';
+                    dot.style.color = 'white';
+                });
+                
+                calculateProgress();
+                
+                // Celebration animation
+                chapter4Card.style.transform = 'scale(1.05)';
+                setTimeout(() => {
+                    chapter4Card.style.transform = '';
+                }, 300);
+            }
+
+            // Reset progress
+            function resetProgress() {
+                // Reset chapter
+                readingState.chapter4 = false;
+                chapter4Card.classList.remove('completed');
+                document.getElementById('chapter4-time').textContent = 'Est. 90-120 min';
+                
+                // Reset checklist
+                readingState.checklist = [false, false, false, false, false, false];
+                checklistItems.forEach((item, index) => {
+                    item.classList.remove('completed');
+                    const dot = item.querySelector('.check-dot');
+                    dot.textContent = '□';
+                    dot.style.background = '';
+                    dot.style.borderColor = 'rgba(148, 163, 184, 0.9)';
+                    dot.style.color = 'rgba(148, 163, 184, 0.9)';
+                });
+                
+                calculateProgress();
+            }
+
+            // Show celebration modal
+            function showCelebration() {
+                setTimeout(() => {
+                    celebrationModal.style.display = 'flex';
+                }, 500);
+            }
+
+            // Close celebration modal
+            function closeCelebration() {
+                celebrationModal.style.display = 'none';
+            }
+
+            // Event listeners
+            chapter4Card.addEventListener('click', () => toggleChapter(4));
+            
+            chapter4Card.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    toggleChapter(4);
+                }
+            });
+            
+            checklistItems.forEach((item, index) => {
+                item.addEventListener('click', () => toggleChecklistItem(index));
+                item.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        toggleChecklistItem(index);
+                    }
+                });
+            });
+            
+            markAllBtn.addEventListener('click', markAllAsRead);
+            resetBtn.addEventListener('click', resetProgress);
+            closeCelebrationBtn.addEventListener('click', closeCelebration);
+            
+            // Close modal when clicking outside
+            celebrationModal.addEventListener('click', (e) => {
+                if (e.target === celebrationModal) {
+                    closeCelebration();
+                }
+            });
+
+            // Initialize with some progress for demo
+            setTimeout(() => {
+                // Mark first checklist item as completed for demo
+                toggleChecklistItem(0);
+            }, 1000);
+
+            // Add scroll animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Observe reading cards
+            const readingCards = document.querySelectorAll('.reading-card');
+            readingCards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                observer.observe(card);
+            });
+
+            // Observe checklist items with delay
+            checklistItems.forEach((item, index) => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateX(-20px)';
+                item.style.transition = `opacity 0.5s ease ${index * 0.1}s, transform 0.5s ease ${index * 0.1}s`;
+                observer.observe(item);
+            });
+
+            // Animate term components
+            const termComponents = document.querySelectorAll('.term-component');
+            termComponents.forEach((item, index) => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateY(20px)';
+                item.style.transition = `opacity 0.5s ease ${index * 0.2}s, transform 0.5s ease ${index * 0.2}s`;
+                setTimeout(() => {
+                    item.style.opacity = '1';
+                    item.style.transform = 'translateY(0)';
+                }, 800 + (index * 200));
+            });
+
+            // Add hover effect to term parts
+            const termParts = document.querySelectorAll('.term-part');
+            termParts.forEach(part => {
+                part.addEventListener('mouseenter', () => {
+                    part.style.transform = 'scale(1.05)';
+                });
+                part.addEventListener('mouseleave', () => {
+                    part.style.transform = 'scale(1)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
