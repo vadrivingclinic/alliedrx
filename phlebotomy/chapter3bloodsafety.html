@@ -1,0 +1,2502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AlliedRx – Module 3: PPE & Bloodborne Pathogens</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+/* ======== CSS VARIABLES (CONSISTENT WITH PREVIOUS MODULES) ======== */
+:root {
+    --color-primary: #af4bef;
+    --color-primary-soft: #d492ff;
+    --color-accent: #8380f0;
+    --color-success: #00b894;
+    --color-error: #e17055;
+    --color-warning: #fdcb6e;
+    --color-bg: #f7f5fb;
+    --color-text: #2b2b2b;
+    --color-muted: #6c6880;
+    --color-dark: #0c0a18;
+    --radius-lg: 24px;
+    --radius-md: 16px;
+    --radius-sm: 12px;
+    --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+    --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+    --shadow-card: 0 12px 30px rgba(15, 23, 42, 0.1);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    width: 100%;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    padding: 24px;
+    background: radial-gradient(
+        circle at top left,
+        #ffffff 0,
+        #f1ecff 40%,
+        var(--color-bg) 100%
+    );
+    color: var(--color-text);
+    -webkit-text-size-adjust: 100%;
+    line-height: 1.5;
+}
+
+@media (max-width: 600px) {
+    body { padding: 12px; }
+}
+
+/* ======== ANIMATIONS ======== */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+@keyframes checkmarkPop {
+    0% { transform: scale(0); opacity: 0; }
+    70% { transform: scale(1.2); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes slideInRight {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+@keyframes glow {
+    0%, 100% { box-shadow: 0 0 5px rgba(175, 75, 239, 0.5); }
+    50% { box-shadow: 0 0 20px rgba(175, 75, 239, 0.8); }
+}
+
+@keyframes contaminationFlash {
+    0%, 100% { background-color: transparent; }
+    50% { background-color: rgba(225, 112, 85, 0.3); }
+}
+
+@keyframes pulseWarning {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(253, 203, 110, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(253, 203, 110, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(253, 203, 110, 0); }
+}
+
+/* ======== PAGE STRUCTURE ======== */
+.page {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-soft);
+    padding: 28px 30px 32px;
+    position: relative;
+    overflow: hidden;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+@media (max-width: 900px) {
+    .page { padding: 22px; }
+}
+
+@media (max-width: 480px) {
+    body { padding: 0; }
+    .page {
+        border-radius: 0;
+        box-shadow: none;
+        padding: 18px 14px 22px;
+    }
+}
+
+/* ======== HEADER/BRANDING ======== */
+.brand-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    width: 100%;
+    animation: fadeIn 0.6s ease-out 0.2s both;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.brand-logo {
+    height: 40px;
+    width: auto;
+    max-width: 100%;
+    filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+    transition: transform 0.3s ease;
+}
+
+.brand-logo:hover { transform: scale(1.05); }
+
+.course-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    max-width: 100%;
+}
+
+.course-name {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--color-muted);
+    white-space: normal;
+}
+
+.week-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(175, 75, 239, 0.08);
+    font-size: 0.76rem;
+    color: var(--color-primary);
+    white-space: normal;
+}
+
+.week-label-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: var(--color-success);
+    flex-shrink: 0;
+}
+
+.badge-mode {
+    padding: 5px 10px;
+    border-radius: 999px;
+    background: rgba(12, 10, 24, 0.06);
+    border: 1px solid rgba(12, 10, 24, 0.08);
+    font-size: 0.74rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--color-muted);
+    white-space: nowrap;
+    transition: all 0.3s ease;
+}
+
+.badge-mode:hover {
+    background: rgba(175, 75, 239, 0.1);
+    border-color: var(--color-primary-soft);
+    color: var(--color-primary);
+}
+
+@media (max-width: 480px) {
+    .brand-row { flex-direction: column; align-items: flex-start; }
+    .badge-mode { margin-top: 6px; }
+}
+
+/* ======== TYPOGRAPHY ======== */
+h1 {
+    font-size: clamp(1.8rem, 3vw, 2.2rem);
+    line-height: 1.1;
+    color: var(--color-primary);
+    margin-bottom: 6px;
+    animation: fadeInUp 0.6s ease-out 0.3s both;
+}
+
+.module-subtitle {
+    font-size: 0.98rem;
+    color: var(--color-muted);
+    max-width: 600px;
+    margin-bottom: 24px;
+    animation: fadeInUp 0.6s ease-out 0.4s both;
+}
+
+/* ======== PROGRESS TRACKER ======== */
+.progress-tracker {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    position: relative;
+    padding: 0 20px;
+}
+
+.progress-tracker::before {
+    content: '';
+    position: absolute;
+    top: 15px;
+    left: 50px;
+    right: 50px;
+    height: 3px;
+    background: rgba(12, 10, 24, 0.08);
+    z-index: 1;
+}
+
+.progress-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+    flex: 1;
+}
+
+.step-circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: white;
+    border: 2px solid rgba(12, 10, 24, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-muted);
+    margin-bottom: 8px;
+    transition: all 0.3s ease;
+}
+
+.progress-step.active .step-circle {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: white;
+    transform: scale(1.1);
+}
+
+.progress-step.completed .step-circle {
+    background: var(--color-success);
+    border-color: var(--color-success);
+    color: white;
+}
+
+.step-label {
+    font-size: 0.75rem;
+    color: var(--color-muted);
+    text-align: center;
+    font-weight: 500;
+}
+
+.progress-step.active .step-label {
+    color: var(--color-primary);
+    font-weight: 600;
+}
+
+/* ======== PROGRESS SUMMARY ======== */
+.progress-summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-bottom: 30px;
+    animation: fadeInUp 0.6s ease-out 0.5s both;
+}
+
+.summary-card {
+    background: rgba(12, 10, 24, 0.02);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    border: 1px solid rgba(12, 10, 24, 0.06);
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.summary-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-card);
+    border-color: var(--color-primary-soft);
+}
+
+.summary-number {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--color-primary);
+    display: block;
+    line-height: 1;
+    margin-bottom: 4px;
+}
+
+.summary-label {
+    font-size: 0.8rem;
+    color: var(--color-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+/* ======== ACTIVITY GRID ======== */
+.activity-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+@media (max-width: 900px) {
+    .activity-grid { grid-template-columns: 1fr; }
+}
+
+.activity-card {
+    background: white;
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(12, 10, 24, 0.08);
+    padding: 20px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.activity-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--color-primary);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.activity-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--color-primary-soft);
+}
+
+.activity-card:hover::before { opacity: 1; }
+
+.activity-card.completed {
+    border-color: var(--color-success);
+}
+
+.activity-card.completed::before {
+    background: var(--color-success);
+    opacity: 1;
+}
+
+.activity-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 15px;
+}
+
+.activity-number {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    background: rgba(175, 75, 239, 0.1);
+    padding: 4px 10px;
+    border-radius: 20px;
+}
+
+.activity-status {
+    font-size: 0.75rem;
+    padding: 3px 8px;
+    border-radius: 12px;
+    background: rgba(12, 10, 24, 0.06);
+    color: var(--color-muted);
+}
+
+.activity-card.completed .activity-status {
+    background: rgba(0, 184, 148, 0.1);
+    color: var(--color-success);
+}
+
+.activity-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: 8px;
+}
+
+.activity-description {
+    font-size: 0.9rem;
+    color: var(--color-muted);
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+/* ======== ACTIVITY 1: PPE VIRTUAL COACH ======== */
+.ppe-selector-container {
+    background: rgba(12, 10, 24, 0.02);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    margin: 20px 0;
+    border: 2px solid rgba(12, 10, 24, 0.08);
+}
+
+.ppe-selector-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-accent);
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.ppe-scenario-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.ppe-scenario-card {
+    background: white;
+    border-radius: var(--radius-sm);
+    padding: 15px;
+    border: 2px solid rgba(12, 10, 24, 0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.ppe-scenario-card:hover {
+    border-color: var(--color-primary-soft);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(175, 75, 239, 0.1);
+}
+
+.ppe-scenario-card.selected {
+    border-color: var(--color-success);
+    background: rgba(0, 184, 148, 0.08);
+}
+
+.ppe-scenario-icon {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+}
+
+.ppe-scenario-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: 5px;
+}
+
+.ppe-scenario-desc {
+    font-size: 0.75rem;
+    color: var(--color-muted);
+}
+
+/* PPE Locker Room */
+.ppe-locker-room {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 20px;
+    margin: 25px 0;
+    min-height: 400px;
+}
+
+@media (max-width: 768px) {
+    .ppe-locker-room {
+        grid-template-columns: 1fr;
+    }
+}
+
+.ppe-cart {
+    background: rgba(12, 10, 24, 0.02);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    border: 2px dashed rgba(12, 10, 24, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.ppe-cart-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    text-align: center;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(12, 10, 24, 0.08);
+}
+
+.ppe-items-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 10px;
+    flex: 1;
+}
+
+.ppe-item {
+    background: white;
+    border-radius: var(--radius-sm);
+    padding: 12px;
+    border: 2px solid rgba(12, 10, 24, 0.1);
+    cursor: grab;
+    transition: all 0.3s ease;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    user-select: none;
+}
+
+.ppe-item:hover {
+    border-color: var(--color-primary-soft);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(175, 75, 239, 0.1);
+}
+
+.ppe-item.dragging {
+    opacity: 0.5;
+    transform: scale(0.95);
+}
+
+.ppe-item.used {
+    opacity: 0.5;
+    cursor: not-allowed;
+    border-style: dashed;
+}
+
+.ppe-item-icon {
+    font-size: 1.5rem;
+}
+
+.ppe-item-name {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+.ppe-donning-area {
+    background: rgba(12, 10, 24, 0.02);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    border: 2px dashed rgba(12, 10, 24, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-height: 400px;
+}
+
+.ppe-donning-area.hover {
+    border-color: var(--color-primary);
+    background: rgba(175, 75, 239, 0.05);
+}
+
+.donning-step {
+    background: white;
+    border-radius: var(--radius-sm);
+    padding: 15px;
+    border: 2px solid rgba(12, 10, 24, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    transition: all 0.3s ease;
+}
+
+.donning-step.correct {
+    border-color: var(--color-success);
+    background: rgba(0, 184, 148, 0.1);
+}
+
+.donning-step.incorrect {
+    border-color: var(--color-error);
+    background: rgba(225, 112, 85, 0.1);
+    animation: contaminationFlash 0.5s ease;
+}
+
+.donning-step-number {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: rgba(12, 10, 24, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    color: var(--color-text);
+    flex-shrink: 0;
+}
+
+.donning-step-content {
+    flex: 1;
+    font-size: 0.9rem;
+    color: var(--color-text);
+}
+
+.donning-step-actions {
+    display: flex;
+    gap: 8px;
+}
+
+/* Coach Instructions */
+.coach-instructions {
+    background: rgba(175, 75, 239, 0.05);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid var(--color-primary);
+}
+
+.coach-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.coach-message {
+    font-size: 0.95rem;
+    color: var(--color-text);
+    line-height: 1.6;
+    padding: 10px 0;
+}
+
+.coach-message strong {
+    color: var(--color-primary);
+}
+
+.timer-display {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    background: rgba(12, 10, 24, 0.08);
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    margin-top: 10px;
+}
+
+.timer-display.warning {
+    animation: pulseWarning 1.5s infinite;
+    background: rgba(253, 203, 110, 0.2);
+    color: var(--color-warning);
+}
+
+/* Contamination Alert */
+.contamination-alert {
+    background: rgba(225, 112, 85, 0.1);
+    border-radius: var(--radius-md);
+    padding: 15px;
+    margin: 15px 0;
+    border: 2px solid var(--color-error);
+    display: none;
+    animation: fadeIn 0.3s ease;
+}
+
+.contamination-alert.show {
+    display: block;
+}
+
+.alert-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--color-error);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.alert-content {
+    font-size: 0.85rem;
+    color: var(--color-text);
+    line-height: 1.5;
+}
+
+/* ======== ACTIVITY 2: BLOODBORNE PATHOGEN SIMULATOR ======== */
+.scenario-container {
+    background: rgba(12, 10, 24, 0.02);
+    border-radius: var(--radius-md);
+    padding: 25px;
+    margin: 20px 0;
+    border: 2px solid rgba(12, 10, 24, 0.08);
+    position: relative;
+    overflow: hidden;
+}
+
+.scenario-container::before {
+    content: '⚠️ EMERGENCY SCENARIO';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: var(--color-warning);
+    color: var(--color-dark);
+    text-align: center;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 4px;
+}
+
+.scenario-content {
+    margin-top: 20px;
+}
+
+.scenario-text {
+    font-size: 1rem;
+    color: var(--color-text);
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.scenario-text strong {
+    color: var(--color-error);
+}
+
+.timed-quiz {
+    background: rgba(12, 10, 24, 0.03);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    margin: 20px 0;
+    border: 2px solid var(--color-warning);
+}
+
+.quiz-timer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(12, 10, 24, 0.08);
+}
+
+.timer-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-warning);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.time-remaining {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--color-error);
+    font-family: monospace;
+}
+
+.quiz-question {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: 15px;
+}
+
+.quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.quiz-option {
+    background: white;
+    border-radius: var(--radius-sm);
+    padding: 15px;
+    border: 2px solid rgba(12, 10, 24, 0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+    color: var(--color-text);
+}
+
+.quiz-option:hover {
+    border-color: var(--color-primary-soft);
+    transform: translateX(5px);
+}
+
+.quiz-option.selected {
+    border-color: var(--color-success);
+    background: rgba(0, 184, 148, 0.1);
+}
+
+.quiz-option.incorrect {
+    border-color: var(--color-error);
+    background: rgba(225, 112, 85, 0.1);
+}
+
+.quiz-option.correct {
+    border-color: var(--color-success);
+    background: rgba(0, 184, 148, 0.1);
+}
+
+/* Flowchart Navigation */
+.flowchart-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+    margin: 25px 0;
+}
+
+.flowchart-step {
+    background: white;
+    border-radius: var(--radius-md);
+    padding: 20px;
+    border: 2px solid rgba(12, 10, 24, 0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+}
+
+.flowchart-step:hover {
+    border-color: var(--color-primary-soft);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(175, 75, 239, 0.1);
+}
+
+.flowchart-step.completed {
+    border-color: var(--color-success);
+    background: rgba(0, 184, 148, 0.08);
+}
+
+.flowchart-step.current {
+    border-color: var(--color-primary);
+    background: rgba(175, 75, 239, 0.08);
+    animation: glow 2s infinite;
+}
+
+.flowchart-step-number {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+}
+
+.flowchart-step.completed .flowchart-step-number {
+    background: var(--color-success);
+}
+
+.flowchart-step-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: 8px;
+}
+
+.flowchart-step-desc {
+    font-size: 0.8rem;
+    color: var(--color-muted);
+    line-height: 1.4;
+}
+
+/* Pathogen Results */
+.pathogen-results {
+    background: rgba(12, 10, 24, 0.03);
+    border-radius: var(--radius-md);
+    padding: 25px;
+    margin: 20px 0;
+    border-left: 4px solid var(--color-error);
+    display: none;
+}
+
+.pathogen-results.show {
+    display: block;
+    animation: fadeIn 0.5s ease;
+}
+
+.results-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.results-icon {
+    font-size: 2rem;
+}
+
+.results-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--color-error);
+}
+
+.results-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.result-card {
+    background: white;
+    border-radius: var(--radius-sm);
+    padding: 15px;
+    border: 1px solid rgba(12, 10, 24, 0.08);
+}
+
+.result-card-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(12, 10, 24, 0.08);
+}
+
+.result-card-content {
+    font-size: 0.85rem;
+    color: var(--color-text);
+    line-height: 1.5;
+}
+
+/* OSHA Form Simulation */
+.osha-form {
+    background: white;
+    border-radius: var(--radius-md);
+    padding: 25px;
+    margin: 20px 0;
+    border: 2px solid rgba(12, 10, 24, 0.1);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.form-header {
+    text-align: center;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid rgba(12, 10, 24, 0.1);
+}
+
+.form-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--color-dark);
+    margin-bottom: 5px;
+}
+
+.form-subtitle {
+    font-size: 0.85rem;
+    color: var(--color-muted);
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+.form-input {
+    padding: 10px 12px;
+    border: 1px solid rgba(12, 10, 24, 0.1);
+    border-radius: var(--radius-sm);
+    font-size: 0.9rem;
+    color: var(--color-text);
+    transition: all 0.3s ease;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(175, 75, 239, 0.1);
+}
+
+.form-textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+/* ======== FEEDBACK ======== */
+.feedback-container {
+    background: rgba(12, 10, 24, 0.02);
+    border-radius: var(--radius-sm);
+    padding: 15px;
+    border: 1px solid rgba(12, 10, 24, 0.08);
+    margin-top: 20px;
+    display: none;
+}
+
+.feedback-container.show {
+    display: block;
+    animation: fadeIn 0.5s ease;
+}
+
+.feedback-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.feedback-icon {
+    font-size: 1.2rem;
+}
+
+.feedback-icon.correct { color: var(--color-success); }
+.feedback-icon.incorrect { color: var(--color-error); }
+
+.feedback-content {
+    font-size: 0.85rem;
+    color: var(--color-text);
+    line-height: 1.5;
+}
+
+.feedback-content strong { color: var(--color-primary); }
+
+.correction-details {
+    background: rgba(225, 112, 85, 0.05);
+    border-left: 3px solid var(--color-error);
+    padding: 10px 15px;
+    margin: 10px 0;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+/* ======== ACTION BUTTONS ======== */
+.action-buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 30px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: 12px 24px;
+    border-radius: var(--radius-md);
+    border: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-primary {
+    background: var(--color-primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #9a3bd6;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(175, 75, 239, 0.3);
+}
+
+.btn-secondary {
+    background: rgba(12, 10, 24, 0.06);
+    color: var(--color-text);
+}
+
+.btn-secondary:hover {
+    background: rgba(12, 10, 24, 0.1);
+    transform: translateY(-2px);
+}
+
+.btn-warning {
+    background: var(--color-warning);
+    color: var(--color-dark);
+}
+
+.btn-warning:hover {
+    background: #f7b84b;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(253, 203, 110, 0.3);
+}
+
+.btn-icon { font-size: 1.1em; }
+
+/* ======== RESULTS PANEL ======== */
+.results-panel {
+    background: var(--color-dark);
+    color: white;
+    border-radius: var(--radius-md);
+    padding: 30px;
+    margin-top: 30px;
+    display: none;
+    animation: fadeInUp 0.6s ease;
+}
+
+.results-panel.show { display: block; }
+
+.results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.results-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: white;
+}
+
+.score-display {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--color-primary-soft);
+    text-align: center;
+    margin: 20px 0;
+}
+
+.clinical-insights {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-sm);
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.insights-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-primary-soft);
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.insights-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.insights-list li {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    font-size: 0.9rem;
+    color: #e5e7eb;
+}
+
+.insight-dot {
+    width: 6px;
+    height: 6px;
+    margin-top: 6px;
+    border-radius: 999px;
+    background: var(--color-accent);
+    flex-shrink: 0;
+}
+
+/* ======== RESPONSIVE ADJUSTMENTS ======== */
+@media (max-width: 768px) {
+    .ppe-locker-room {
+        grid-template-columns: 1fr;
+    }
+    
+    .ppe-items-grid {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    }
+    
+    .flowchart-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .results-content {
+        grid-template-columns: 1fr;
+    }
+    
+    .ppe-scenario-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .ppe-scenario-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+    }
+    
+    .action-buttons .btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</head>
+<body>
+<main class="page" aria-labelledby="module-heading">
+<!-- Header -->
+<header class="brand-row">
+    <div class="brand">
+        <img
+            src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+            alt="AlliedRx logo"
+            class="brand-logo"
+        />
+        <div class="course-meta">
+            <span class="course-name">Pharmacy Technician • Week 3</span>
+            <div class="week-label">
+                <span class="week-label-dot"></span>
+                <span>Chapter 3: PPE & Bloodborne Pathogens</span>
+            </div>
+        </div>
+    </div>
+    <span class="badge-mode">Campus & Online</span>
+</header>
+
+<h1 id="module-heading">PPE & Bloodborne Pathogen Safety</h1>
+<p class="module-subtitle">
+Master proper PPE donning/doffing sequences and navigate bloodborne pathogen exposure protocols with realistic simulations and emergency scenarios.
+</p>
+
+<!-- Progress Tracker -->
+<div class="progress-tracker">
+    <div class="progress-step active" data-step="1">
+        <div class="step-circle">1</div>
+        <div class="step-label">PPE Virtual Coach</div>
+    </div>
+    <div class="progress-step" data-step="2">
+        <div class="step-circle">2</div>
+        <div class="step-label">Exposure Response</div>
+    </div>
+    <div class="progress-step" data-step="3">
+        <div class="step-circle">3</div>
+        <div class="step-label">Documentation</div>
+    </div>
+</div>
+
+<!-- Progress Summary -->
+<div class="progress-summary">
+    <div class="summary-card">
+        <span class="summary-number" id="completed-count">0</span>
+        <span class="summary-label">Activities Completed</span>
+    </div>
+    <div class="summary-card">
+        <span class="summary-number" id="accuracy-rate">0%</span>
+        <span class="summary-label">Current Accuracy</span>
+    </div>
+    <div class="summary-card">
+        <span class="summary-number" id="time-spent">0:00</span>
+        <span class="summary-label">Time Spent</span>
+    </div>
+</div>
+
+<!-- Activity Grid -->
+<div class="activity-grid">
+    <!-- Activity 1: PPE Virtual Coach -->
+    <section class="activity-card" id="activity-1" data-activity="1">
+        <div class="activity-header">
+            <span class="activity-number">Activity 1</span>
+            <span class="activity-status">Not Started</span>
+        </div>
+        <h3 class="activity-title">PPE Donning & Doffing Virtual Coach</h3>
+        <p class="activity-description">
+            Select a precaution scenario, then don PPE in the correct sequence. The virtual coach will guide you and alert you to critical errors.
+        </p>
+        
+        <!-- Scenario Selection -->
+        <div class="ppe-selector-container">
+            <div class="ppe-selector-title">
+                <span>🦺</span>
+                Select Precautions Scenario
+            </div>
+            <div class="ppe-scenario-grid" id="ppe-scenario-selector">
+                <div class="ppe-scenario-card" data-scenario="standard">
+                    <div class="ppe-scenario-icon">🩺</div>
+                    <div class="ppe-scenario-name">Standard Precautions</div>
+                    <div class="ppe-scenario-desc">Routine patient care</div>
+                </div>
+                <div class="ppe-scenario-card" data-scenario="contact">
+                    <div class="ppe-scenario-icon">🧤</div>
+                    <div class="ppe-scenario-name">Contact Precautions</div>
+                    <div class="ppe-scenario-desc">MRSA, C. diff, VRE</div>
+                </div>
+                <div class="ppe-scenario-card" data-scenario="droplet">
+                    <div class="ppe-scenario-icon">😷</div>
+                    <div class="ppe-scenario-name">Droplet Precautions</div>
+                    <div class="ppe-scenario-desc">Influenza, Pertussis</div>
+                </div>
+                <div class="ppe-scenario-card" data-scenario="airborne">
+                    <div class="ppe-scenario-icon">🦠</div>
+                    <div class="ppe-scenario-name">Airborne Precautions</div>
+                    <div class="ppe-scenario-desc">TB, Measles, Chickenpox</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Coach Instructions -->
+        <div class="coach-instructions" id="coach-instructions">
+            <div class="coach-title">
+                <span>🎯</span>
+                Virtual Coach Instructions
+            </div>
+            <div class="coach-message" id="coach-message">
+                <strong>Step 1:</strong> Select a precautions scenario above to begin.<br>
+                <strong>Step 2:</strong> Drag PPE items from the cart to your donning area in the correct sequence.<br>
+                <strong>Step 3:</strong> Listen for error alerts – contamination events will flash red.
+            </div>
+            <div class="timer-display" id="ppe-timer" style="display: none;">
+                ⏱️ Time: <span id="timer-display">0:00</span>
+            </div>
+        </div>
+        
+        <!-- Contamination Alert -->
+        <div class="contamination-alert" id="contamination-alert">
+            <div class="alert-title">
+                <span>⚠️</span>
+                Contamination Alert!
+            </div>
+            <div class="alert-content" id="alert-content">
+                Critical error detected. This action could lead to self-contamination or exposure.
+            </div>
+        </div>
+        
+        <!-- PPE Locker Room -->
+        <div class="ppe-locker-room">
+            <!-- PPE Cart -->
+            <div class="ppe-cart">
+                <div class="ppe-cart-title">PPE Cart</div>
+                <div class="ppe-items-grid" id="ppe-cart-items">
+                    <div class="ppe-item" data-item="gown" draggable="true">
+                        <div class="ppe-item-icon">🥼</div>
+                        <div class="ppe-item-name">Gown</div>
+                    </div>
+                    <div class="ppe-item" data-item="mask" draggable="true">
+                        <div class="ppe-item-icon">😷</div>
+                        <div class="ppe-item-name">Surgical Mask</div>
+                    </div>
+                    <div class="ppe-item" data-item="n95" draggable="true">
+                        <div class="ppe-item-icon">🩹</div>
+                        <div class="ppe-item-name">N95 Respirator</div>
+                    </div>
+                    <div class="ppe-item" data-item="goggles" draggable="true">
+                        <div class="ppe-item-icon">🥽</div>
+                        <div class="ppe-item-name">Goggles</div>
+                    </div>
+                    <div class="ppe-item" data-item="face-shield" draggable="true">
+                        <div class="ppe-item-icon">🛡️</div>
+                        <div class="ppe-item-name">Face Shield</div>
+                    </div>
+                    <div class="ppe-item" data-item="gloves" draggable="true">
+                        <div class="ppe-item-icon">🧤</div>
+                        <div class="ppe-item-name">Gloves</div>
+                    </div>
+                    <div class="ppe-item" data-item="bonnet" draggable="true">
+                        <div class="ppe-item-icon">🧢</div>
+                        <div class="ppe-item-name">Hair Cover</div>
+                    </div>
+                    <div class="ppe-item" data-item="shoe-covers" draggable="true">
+                        <div class="ppe-item-icon">👟</div>
+                        <div class="ppe-item-name">Shoe Covers</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Donning Area -->
+            <div class="ppe-donning-area" id="donning-area">
+                <div class="ppe-cart-title">Donning Sequence</div>
+                <div id="donning-steps">
+                    <!-- Steps will be added here dynamically -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mode Selection -->
+        <div style="margin: 20px 0; text-align: center;">
+            <div class="coach-title" style="justify-content: center;">
+                <span>⚡</span>
+                Practice Mode
+            </div>
+            <div style="display: flex; gap: 15px; justify-content: center; margin-top: 15px;">
+                <button class="btn btn-secondary" id="practice-mode-btn">
+                    <span class="btn-icon">📚</span>
+                    Practice Mode
+                </button>
+                <button class="btn btn-warning" id="timed-mode-btn">
+                    <span class="btn-icon">⏱️</span>
+                    Timed Mode (Emergency)
+                </button>
+            </div>
+        </div>
+        
+        <!-- Corrective Feedback -->
+        <div class="feedback-container" id="feedback-1">
+            <div class="feedback-title">
+                <span class="feedback-icon correct">✓</span>
+                PPE Proficiency Complete
+            </div>
+            <div class="feedback-content">
+                <strong>Correct Donning Sequence for Airborne Precautions:</strong><br>
+                1. Perform hand hygiene<br>
+                2. Put on gown<br>
+                3. Put on N95 respirator (perform seal check)<br>
+                4. Put on goggles or face shield<br>
+                5. Put on gloves (extend over gown cuffs)<br><br>
+                
+                <strong>Correct Doffing Sequence:</strong><br>
+                1. Remove gloves (inside out, one glove at a time)<br>
+                2. Perform hand hygiene<br>
+                3. Remove gown (unfasten ties, pull away from body)<br>
+                4. Perform hand hygiene<br>
+                5. Remove goggles/face shield (by headband)<br>
+                6. Remove N95 (by straps, don't touch front)<br>
+                7. Perform hand hygiene<br><br>
+                
+                <strong>Critical Errors to Avoid:</strong><br>
+                • Adjusting goggles after gloving (contaminates gloves)<br>
+                • Touching front of gown during removal<br>
+                • Failing N95 seal check (allows airborne entry)<br>
+                • Removing PPE in wrong order (self-contamination risk)<br><br>
+                
+                <div class="correction-details" id="correction-details-1" style="display: none;">
+                    <strong>Your Errors:</strong><br>
+                    <span id="correction-text-1"></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Activity 2: Bloodborne Pathogen Exposure Simulator -->
+    <section class="activity-card" id="activity-2" data-activity="2">
+        <div class="activity-header">
+            <span class="activity-number">Activity 2</span>
+            <span class="activity-status">Not Started</span>
+        </div>
+        <h3 class="activity-title">Bloodborne Pathogen Exposure Simulator</h3>
+        <p class="activity-description">
+            Navigate a needlestick incident from immediate response through follow-up protocol. Make critical decisions under time pressure.
+        </p>
+        
+        <!-- Emergency Scenario -->
+        <div class="scenario-container">
+            <div class="scenario-content">
+                <div class="scenario-text">
+                    <strong>🚨 EMERGENCY SCENARIO:</strong> While performing a routine blood draw on a patient with unknown status, you experience a needlestick injury. The needle penetrated your glove and skin. Blood is visible at the puncture site.
+                </div>
+                
+                <!-- Timed Quiz -->
+                <div class="timed-quiz" id="timed-quiz">
+                    <div class="quiz-timer">
+                        <div class="timer-label">
+                            <span>⏱️</span>
+                            Immediate Response Timer
+                        </div>
+                        <div class="time-remaining" id="time-remaining">01:00</div>
+                    </div>
+                    <div class="quiz-question">
+                        What is your FIRST action following this needlestick injury?
+                    </div>
+                    <div class="quiz-options" id="quiz-options">
+                        <div class="quiz-option" data-answer="A">Check the patient's medical record for infection status</div>
+                        <div class="quiz-option" data-answer="B">Immediately wash the site with soap and running water</div>
+                        <div class="quiz-option" data-answer="C">Notify your supervisor about the incident</div>
+                        <div class="quiz-option" data-answer="D">Complete an incident report form</div>
+                    </div>
+                </div>
+                
+                <!-- Flowchart Navigation -->
+                <div style="margin-top: 30px;">
+                    <div class="coach-title">
+                        <span>🗺️</span>
+                        Exposure Protocol Flowchart
+                    </div>
+                    <div class="flowchart-container" id="flowchart-steps">
+                        <div class="flowchart-step" data-step="1">
+                            <div class="flowchart-step-number">1</div>
+                            <div class="flowchart-step-title">Immediate First Aid</div>
+                            <div class="flowchart-step-desc">Clean wound, encourage bleeding, wash thoroughly</div>
+                        </div>
+                        <div class="flowchart-step" data-step="2">
+                            <div class="flowchart-step-number">2</div>
+                            <div class="flowchart-step-title">Report Incident</div>
+                            <div class="flowchart-step-desc">Notify supervisor and occupational health immediately</div>
+                        </div>
+                        <div class="flowchart-step" data-step="3">
+                            <div class="flowchart-step-number">3</div>
+                            <div class="flowchart-step-title">Documentation</div>
+                            <div class="flowchart-step-desc">Complete OSHA 300 log and incident report</div>
+                        </div>
+                        <div class="flowchart-step" data-step="4">
+                            <div class="flowchart-step-number">4</div>
+                            <div class="flowchart-step-title">Medical Evaluation</div>
+                            <div class="flowchart-step-desc">Baseline testing and PEP decision</div>
+                        </div>
+                        <div class="flowchart-step" data-step="5">
+                            <div class="flowchart-step-number">5</div>
+                            <div class="flowchart-step-title">Follow-up Testing</div>
+                            <div class="flowchart-step-desc">6 weeks, 3 months, and 6 months post-exposure</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pathogen Results -->
+                <div class="pathogen-results" id="pathogen-results">
+                    <div class="results-header">
+                        <div class="results-icon">🩸</div>
+                        <div class="results-title">Patient Test Results: Hepatitis C Positive</div>
+                    </div>
+                    <div class="results-content">
+                        <div class="result-card">
+                            <div class="result-card-title">Transmission Risk</div>
+                            <div class="result-card-content">
+                                • HCV transmission risk: 1.8% per needlestick<br>
+                                • Higher with hollow-bore needles<br>
+                                • Risk increases with deep injury
+                            </div>
+                        </div>
+                        <div class="result-card">
+                            <div class="result-card-title">Post-Exposure Protocol</div>
+                            <div class="result-card-content">
+                                • No PEP available for HCV<br>
+                                • Baseline HCV testing immediately<br>
+                                • Follow-up testing at 4-6 weeks<br>
+                                • Monitor for symptoms
+                            </div>
+                        </div>
+                        <div class="result-card">
+                            <div class="result-card-title">Long-term Monitoring</div>
+                            <div class="result-card-content">
+                                • 75-85% develop chronic infection<br>
+                                • 20-30% develop cirrhosis over 20-30 years<br>
+                                • Regular liver function tests required
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- OSHA Form Simulation -->
+        <div class="osha-form" id="osha-form" style="display: none;">
+            <div class="form-header">
+                <div class="form-title">OSHA 300 Log - Needlestick Injury Report</div>
+                <div class="form-subtitle">Occupational Safety and Health Administration - Required Documentation</div>
+            </div>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="form-label">Employee Name</label>
+                    <input type="text" class="form-input" id="employee-name" placeholder="Enter your name">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Date of Injury</label>
+                    <input type="date" class="form-input" id="injury-date">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Time of Injury</label>
+                    <input type="time" class="form-input" id="injury-time">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Location of Incident</label>
+                    <input type="text" class="form-input" id="incident-location" placeholder="e.g., Pharmacy, Room 205">
+                </div>
+            </div>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="form-label">Type of Device</label>
+                    <select class="form-input" id="device-type">
+                        <option value="">Select device type</option>
+                        <option value="hollow-bore">Hollow-bore needle</option>
+                        <option value="butterfly">Butterfly needle</option>
+                        <option value="syringe">Syringe with needle</option>
+                        <option value="lancet">Lancet</option>
+                        <option value="other">Other sharp device</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Body Part Affected</label>
+                    <select class="form-input" id="body-part">
+                        <option value="">Select body part</option>
+                        <option value="finger">Finger</option>
+                        <option value="hand">Hand</option>
+                        <option value="arm">Arm</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">PPE Worn</label>
+                    <select class="form-input" id="ppe-worn">
+                        <option value="">Select PPE</option>
+                        <option value="gloves">Gloves only</option>
+                        <option value="full">Full PPE</option>
+                        <option value="none">No PPE</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Description of Incident</label>
+                <textarea class="form-input form-textarea" id="incident-description" placeholder="Provide detailed description of how the incident occurred..."></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Immediate Actions Taken</label>
+                <textarea class="form-input form-textarea" id="actions-taken" placeholder="Describe first aid and reporting actions taken..."></textarea>
+            </div>
+            
+            <div style="text-align: center; margin-top: 25px;">
+                <button class="btn btn-primary" id="submit-osha-form">
+                    <span class="btn-icon">📄</span>
+                    Submit OSHA Report
+                </button>
+            </div>
+        </div>
+        
+        <!-- Corrective Feedback -->
+        <div class="feedback-container" id="feedback-2">
+            <div class="feedback-title">
+                <span class="feedback-icon correct">✓</span>
+                Exposure Protocol Complete
+            </div>
+            <div class="feedback-content">
+                <strong>Correct Immediate Response:</strong> Immediately wash site with soap and running water<br>
+                <strong>Rationale:</strong> Washing within minutes reduces infection risk by 50%. Patient status check can wait.<br><br>
+                
+                <strong>Complete Exposure Protocol:</strong><br>
+                1. <strong>Immediate:</strong> Wash with soap/water, encourage bleeding<br>
+                2. <strong>Within 15 minutes:</strong> Report to supervisor<br>
+                3. <strong>Within 24 hours:</strong> Complete OSHA documentation<br>
+                4. <strong>Within 2 hours:</strong> Medical evaluation for PEP consideration<br>
+                5. <strong>Follow-up:</strong> Testing at 6w, 3m, 6m<br><br>
+                
+                <strong>HCV-Specific Considerations:</strong><br>
+                • No PEP available, unlike HIV/HBV<br>
+                • Early diagnosis (4-6 weeks) allows for effective treatment<br>
+                • 95% cure rate with modern antiviral therapy<br>
+                • Must monitor liver function long-term<br><br>
+                
+                <strong>Legal Requirements:</strong><br>
+                • OSHA 300 log must be completed within 24 hours<br>
+                • Records maintained for 30+ years<br>
+                • Failure to report can lead to citations and fines<br><br>
+                
+                <div class="correction-details" id="correction-details-2" style="display: none;">
+                    <strong>Your Errors:</strong><br>
+                    <span id="correction-text-2"></span>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Action Buttons -->
+<div class="action-buttons">
+    <button class="btn btn-secondary" id="reset-all-btn">
+        <span class="btn-icon">↻</span>
+        Reset All Activities
+    </button>
+    <button class="btn btn-secondary" id="check-answers-btn">
+        <span class="btn-icon">✓</span>
+        Check All Answers
+    </button>
+    <button class="btn btn-primary" id="view-results-btn">
+        <span class="btn-icon">📊</span>
+        View Final Results
+    </button>
+</div>
+
+<!-- Results Panel -->
+<div class="results-panel" id="results-panel">
+    <div class="results-header">
+        <h2 class="results-title">PPE & Bloodborne Pathogen Proficiency</h2>
+        <div class="score-display" id="final-score">0%</div>
+    </div>
+    
+    <div class="clinical-insights">
+        <h3 class="insights-title">
+            <span>🦺</span> PPE & Infection Control Insights
+        </h3>
+        <ul class="insights-list">
+            <li>
+                <span class="insight-dot"></span>
+                <span><strong>Sequence Matters:</strong> Donning/doffing sequence is critical. Wrong order (e.g., adjusting goggles after gloving) leads to self-contamination. Airborne precautions require N95 seal check—a failed check is as effective as no mask.</span>
+            </li>
+            <li>
+                <span class="insight-dot"></span>
+                <span><strong>Time-Critical Actions:</strong> Immediate washing reduces bloodborne pathogen transmission by 50%. PEP for HIV must begin within 2 hours (ideal), up to 72 hours. Delayed reporting increases legal liability and health risks.</span>
+            </li>
+            <li>
+                <span class="insight-dot"></span>
+                <span><strong>Documentation is Protection:</strong> OSHA 300 logs are legal documents maintained for 30+ years. Incomplete documentation can void workers' compensation claims and lead to regulatory citations.</span>
+            </li>
+        </ul>
+    </div>
+    
+    <div class="clinical-insights" style="margin-top: 20px;">
+        <h3 class="insights-title">
+            <span>💊</span> Pharmacy Technician Connection
+        </h3>
+        <ul class="insights-list">
+            <li>
+                <span class="insight-dot"></span>
+                <span><strong>Sterile Compounding PPE:</strong> Beyond standard precautions, USP <797> requires specific PPE for hazardous drug compounding. Glove thickness matters—chemotherapy requires thicker gloves than standard procedures.</span>
+            </li>
+            <li>
+                <span class="insight-dot"></span>
+                <span><strong>Sharps in Pharmacy:</strong> Technicians handle insulin pens, lancets, and other sharps from returns. These carry the same bloodborne pathogen risks as clinical sharps. Proper disposal and immediate incident reporting are equally critical.</span>
+            </li>
+            <li>
+                <span class="insight-dot"></span>
+                <span><strong>Emergency Preparedness:</strong> Pharmacy technicians may be first responders to spills or exposures in medication areas. Knowing immediate response protocols protects both staff and medication integrity.</span>
+            </li>
+        </ul>
+    </div>
+</div>
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // State Management
+    const state = {
+        activities: {
+            1: { completed: false, correct: 0, total: 10, score: 0, scenario: null, steps: [], errors: 0, time: 0 },
+            2: { completed: false, correct: 0, total: 8, score: 0, quizAnswered: false, flowchartCompleted: false, formCompleted: false }
+        },
+        startedAt: new Date(),
+        timeSpent: 0,
+        timers: {}
+    };
+
+    // DOM Elements
+    const progressSteps = document.querySelectorAll('.progress-step');
+    const activityCards = document.querySelectorAll('.activity-card');
+    const completedCount = document.getElementById('completed-count');
+    const accuracyRate = document.getElementById('accuracy-rate');
+    const timeSpentEl = document.getElementById('time-spent');
+    const resetBtn = document.getElementById('reset-all-btn');
+    const checkBtn = document.getElementById('check-answers-btn');
+    const resultsBtn = document.getElementById('view-results-btn');
+    const resultsPanel = document.getElementById('results-panel');
+    const finalScore = document.getElementById('final-score');
+
+    // Timer for time spent
+    function updateTimer() {
+        const now = new Date();
+        const diff = Math.floor((now - state.startedAt) / 1000);
+        state.timeSpent = diff;
+        const minutes = Math.floor(diff / 60);
+        const seconds = diff % 60;
+        timeSpentEl.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    }
+    setInterval(updateTimer, 1000);
+
+    // Update Progress Summary
+    function updateProgressSummary() {
+        let completed = 0;
+        let totalCorrect = 0;
+        let totalItems = 0;
+        
+        Object.values(state.activities).forEach(activity => {
+            if (activity.completed) completed++;
+            totalCorrect += activity.correct;
+            totalItems += activity.total;
+        });
+        
+        completedCount.textContent = completed;
+        const accuracy = totalItems > 0 ? Math.round((totalCorrect / totalItems) * 100) : 0;
+        accuracyRate.textContent = `${accuracy}%`;
+        
+        // Update progress steps
+        progressSteps.forEach((step, index) => {
+            if (index < completed) {
+                step.classList.add('completed');
+                step.classList.remove('active');
+            } else if (index === completed) {
+                step.classList.add('active');
+                step.classList.remove('completed');
+            } else {
+                step.classList.remove('active', 'completed');
+            }
+        });
+    }
+
+    // ========= ACTIVITY 1: PPE VIRTUAL COACH =========
+    function initActivity1() {
+        const scenarioCards = document.querySelectorAll('#ppe-scenario-selector .ppe-scenario-card');
+        const ppeItems = document.querySelectorAll('#ppe-cart-items .ppe-item');
+        const donningArea = document.getElementById('donning-area');
+        const donningSteps = document.getElementById('donning-steps');
+        const coachMessage = document.getElementById('coach-message');
+        const ppeTimer = document.getElementById('ppe-timer');
+        const timerDisplay = document.getElementById('timer-display');
+        const contaminationAlert = document.getElementById('contamination-alert');
+        const alertContent = document.getElementById('alert-content');
+        const practiceBtn = document.getElementById('practice-mode-btn');
+        const timedBtn = document.getElementById('timed-mode-btn');
+        const feedback = document.getElementById('feedback-1');
+        const status = document.querySelector('#activity-1 .activity-status');
+        const correctionDetails = document.getElementById('correction-details-1');
+        const correctionText = document.getElementById('correction-text-1');
+        
+        let selectedScenario = null;
+        let currentStep = 0;
+        let placedItems = 0;
+        let userSequence = [];
+        let isTimedMode = false;
+        let timerInterval = null;
+        let elapsedTime = 0;
+        
+        // Correct sequences for each scenario
+        const correctSequences = {
+            standard: ['gloves'],
+            contact: ['gown', 'gloves'],
+            droplet: ['mask', 'goggles', 'gloves'],
+            airborne: ['gown', 'n95', 'goggles', 'gloves']
+        };
+        
+        const stepInstructions = {
+            'gown': 'Put on gown, fasten at neck and waist',
+            'mask': 'Put on surgical mask, secure ties',
+            'n95': 'Put on N95 respirator, perform seal check',
+            'goggles': 'Put on goggles or face shield',
+            'face-shield': 'Put on face shield',
+            'gloves': 'Put on gloves, extend over gown cuffs',
+            'bonnet': 'Put on hair cover',
+            'shoe-covers': 'Put on shoe covers'
+        };
+        
+        // Scenario selection
+        scenarioCards.forEach(card => {
+            card.addEventListener('click', function() {
+                // Remove selection from all cards
+                scenarioCards.forEach(c => c.classList.remove('selected'));
+                
+                // Select this card
+                this.classList.add('selected');
+                selectedScenario = this.dataset.scenario;
+                state.activities[1].scenario = selectedScenario;
+                
+                // Update coach message
+                const scenarioNames = {
+                    'standard': 'Standard Precautions',
+                    'contact': 'Contact Precautions',
+                    'droplet': 'Droplet Precautions',
+                    'airborne': 'Airborne Precautions'
+                };
+                
+                coachMessage.innerHTML = `
+                    <strong>Selected:</strong> ${scenarioNames[selectedScenario]}<br>
+                    <strong>Required PPE:</strong> ${correctSequences[selectedScenario].map(item => item.charAt(0).toUpperCase() + item.slice(1)).join(', ')}<br>
+                    <strong>Instruction:</strong> Drag items from cart to donning area in correct sequence.
+                `;
+                
+                // Clear previous steps
+                donningSteps.innerHTML = '';
+                userSequence = [];
+                placedItems = 0;
+                currentStep = 0;
+                
+                // Reset PPE items
+                ppeItems.forEach(item => {
+                    item.style.display = '';
+                    item.classList.remove('used', 'dragging');
+                });
+                
+                // Show timer if in timed mode
+                if (isTimedMode) {
+                    startPPETimer();
+                }
+            });
+        });
+        
+        // Setup draggable PPE items
+        ppeItems.forEach(item => {
+            item.addEventListener('dragstart', function(e) {
+                if (this.classList.contains('used') || !selectedScenario) return;
+                
+                e.dataTransfer.setData('text/plain', JSON.stringify({
+                    item: this.dataset.item,
+                    name: this.querySelector('.ppe-item-name').textContent
+                }));
+                this.classList.add('dragging');
+            });
+            
+            item.addEventListener('dragend', function() {
+                this.classList.remove('dragging');
+            });
+        });
+        
+        // Donning area drop zone
+        donningArea.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            if (!selectedScenario) return;
+            this.classList.add('hover');
+        });
+        
+        donningArea.addEventListener('dragleave', function() {
+            this.classList.remove('hover');
+        });
+        
+        donningArea.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.classList.remove('hover');
+            if (!selectedScenario) return;
+            
+            const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+            const itemId = data.item;
+            
+            // Check if already placed
+            if (userSequence.includes(itemId)) return;
+            
+            // Check if this is the correct next item
+            const correctSequence = correctSequences[selectedScenario];
+            const isCorrect = itemId === correctSequence[currentStep];
+            
+            // Add to user sequence
+            userSequence.push(itemId);
+            state.activities[1].steps = userSequence;
+            
+            // Create donning step
+            const stepDiv = document.createElement('div');
+            stepDiv.className = `donning-step ${isCorrect ? 'correct' : 'incorrect'}`;
+            stepDiv.innerHTML = `
+                <div class="donning-step-number">${userSequence.length}</div>
+                <div class="donning-step-content">
+                    <strong>${data.name}</strong><br>
+                    <small>${stepInstructions[itemId] || 'Place item correctly'}</small>
+                </div>
+            `;
+            
+            donningSteps.appendChild(stepDiv);
+            
+            // Mark PPE item as used
+            const usedItem = document.querySelector(`[data-item="${itemId}"]`);
+            if (usedItem) {
+                usedItem.classList.add('used');
+                usedItem.style.display = 'none';
+            }
+            
+            // Check for errors
+            if (!isCorrect) {
+                state.activities[1].errors++;
+                showContaminationAlert(`Incorrect sequence! ${data.name} should come ${currentStep > 0 ? 'after ' + correctSequence[currentStep-1] : 'first'}.`);
+            } else {
+                currentStep++;
+            }
+            
+            // Check if sequence is complete
+            if (userSequence.length === correctSequence.length) {
+                validatePPESequence();
+            }
+        });
+        
+        // Mode selection
+        practiceBtn.addEventListener('click', function() {
+            isTimedMode = false;
+            ppeTimer.style.display = 'none';
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+            
+            practiceBtn.classList.add('selected');
+            timedBtn.classList.remove('selected');
+        });
+        
+        timedBtn.addEventListener('click', function() {
+            isTimedMode = true;
+            ppeTimer.style.display = 'inline-flex';
+            practiceBtn.classList.remove('selected');
+            timedBtn.classList.add('selected');
+            
+            if (selectedScenario) {
+                startPPETimer();
+            }
+        });
+        
+        function startPPETimer() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
+            
+            elapsedTime = 0;
+            timerInterval = setInterval(() => {
+                elapsedTime++;
+                const minutes = Math.floor(elapsedTime / 60);
+                const seconds = elapsedTime % 60;
+                timerDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                
+                // Add warning class after 2 minutes
+                if (elapsedTime > 120) {
+                    ppeTimer.classList.add('warning');
+                }
+                
+                // Auto-fail after 5 minutes
+                if (elapsedTime > 300) {
+                    clearInterval(timerInterval);
+                    showContaminationAlert('Time exceeded! In emergency situations, slow donning increases exposure risk.');
+                    validatePPESequence();
+                }
+            }, 1000);
+        }
+        
+        function showContaminationAlert(message) {
+            alertContent.textContent = message;
+            contaminationAlert.classList.add('show');
+            
+            setTimeout(() => {
+                contaminationAlert.classList.remove('show');
+            }, 3000);
+        }
+        
+        function validatePPESequence() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                state.activities[1].time = elapsedTime;
+            }
+            
+            const correctSequence = correctSequences[selectedScenario] || [];
+            let correctCount = 0;
+            let correctionMessages = [];
+            
+            // Check each step
+            userSequence.forEach((item, index) => {
+                if (item === correctSequence[index]) {
+                    correctCount++;
+                } else {
+                    correctionMessages.push(`• Step ${index + 1}: You used "${item}" but should have used "${correctSequence[index]}"`);
+                }
+            });
+            
+            // Check for missing steps
+            if (userSequence.length < correctSequence.length) {
+                for (let i = userSequence.length; i < correctSequence.length; i++) {
+                    correctionMessages.push(`• Missing step ${i + 1}: "${correctSequence[i]}" was not used`);
+                }
+            }
+            
+            // Calculate score
+            let score = correctCount;
+            
+            // Penalize errors
+            score -= state.activities[1].errors * 0.5;
+            
+            // Time penalty for timed mode
+            if (isTimedMode && elapsedTime > 60) {
+                score -= Math.floor((elapsedTime - 60) / 30) * 0.5;
+            }
+            
+            score = Math.max(0, score);
+            state.activities[1].correct = Math.round(score);
+            state.activities[1].score = Math.round((score / correctSequence.length) * 100);
+            
+            // Complete activity
+            state.activities[1].completed = true;
+            status.textContent = 'Completed';
+            status.style.color = '#00b894';
+            document.querySelector('#activity-1').classList.add('completed');
+            feedback.classList.add('show');
+            
+            if (correctionMessages.length > 0) {
+                correctionDetails.style.display = 'block';
+                correctionText.innerHTML = correctionMessages.join('<br>');
+            }
+            
+            updateProgressSummary();
+        }
+    }
+
+    // ========= ACTIVITY 2: BLOODBORNE PATHOGEN SIMULATOR =========
+    function initActivity2() {
+        const quizOptions = document.querySelectorAll('#quiz-options .quiz-option');
+        const timeRemaining = document.getElementById('time-remaining');
+        const flowchartSteps = document.querySelectorAll('#flowchart-steps .flowchart-step');
+        const pathogenResults = document.getElementById('pathogen-results');
+        const oshaForm = document.getElementById('osha-form');
+        const submitFormBtn = document.getElementById('submit-osha-form');
+        const feedback = document.getElementById('feedback-2');
+        const status = document.querySelector('#activity-2 .activity-status');
+        const correctionDetails = document.getElementById('correction-details-2');
+        const correctionText = document.getElementById('correction-text-2');
+        
+        let quizAnswered = false;
+        let quizTimer = 60;
+        let quizTimerInterval = null;
+        let currentFlowchartStep = 0;
+        let formCompleted = false;
+        
+        // Start quiz timer
+        startQuizTimer();
+        
+        // Quiz option selection
+        quizOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                if (quizAnswered) return;
+                
+                // Remove selection from all options
+                quizOptions.forEach(opt => opt.classList.remove('selected', 'correct', 'incorrect'));
+                
+                // Select this option
+                this.classList.add('selected');
+                
+                // Check answer
+                const isCorrect = this.dataset.answer === 'B'; // Correct answer is B
+                
+                if (isCorrect) {
+                    this.classList.add('correct');
+                    state.activities[2].correct = 1;
+                    state.activities[2].quizAnswered = true;
+                    
+                    // Move to next step after delay
+                    setTimeout(() => {
+                        advanceFlowchart();
+                    }, 1500);
+                } else {
+                    this.classList.add('incorrect');
+                    
+                    // Show correct answer
+                    quizOptions.forEach(opt => {
+                        if (opt.dataset.answer === 'B') {
+                            opt.classList.add('correct');
+                        }
+                    });
+                    
+                    // Still advance but with penalty
+                    setTimeout(() => {
+                        advanceFlowchart();
+                    }, 1500);
+                }
+                
+                quizAnswered = true;
+                clearInterval(quizTimerInterval);
+            });
+        });
+        
+        // Flowchart navigation
+        flowchartSteps.forEach((step, index) => {
+            step.addEventListener('click', function() {
+                if (index <= currentFlowchartStep) {
+                    // Mark as current
+                    flowchartSteps.forEach(s => s.classList.remove('current'));
+                    this.classList.add('current');
+                    
+                    // If this is step 3, show OSHA form
+                    if (index === 2) {
+                        setTimeout(() => {
+                            oshaForm.style.display = 'block';
+                            oshaForm.scrollIntoView({ behavior: 'smooth' });
+                        }, 500);
+                    }
+                    
+                    // If this is step 4, show pathogen results
+                    if (index === 3) {
+                        setTimeout(() => {
+                            pathogenResults.classList.add('show');
+                            pathogenResults.scrollIntoView({ behavior: 'smooth' });
+                        }, 500);
+                    }
+                    
+                    // If this is the last step, validate
+                    if (index === 4) {
+                        state.activities[2].flowchartCompleted = true;
+                        validateActivity2();
+                    }
+                }
+            });
+        });
+        
+        // OSHA form submission
+        submitFormBtn.addEventListener('click', function() {
+            // Simple validation
+            const employeeName = document.getElementById('employee-name').value;
+            const incidentDesc = document.getElementById('incident-description').value;
+            
+            if (!employeeName || !incidentDesc) {
+                alert('Please complete all required fields before submitting.');
+                return;
+            }
+            
+            // Mark form as completed
+            formCompleted = true;
+            state.activities[2].formCompleted = true;
+            
+            // Show success message
+            this.innerHTML = '<span class="btn-icon">✓</span> Report Submitted';
+            this.classList.remove('btn-primary');
+            this.classList.add('btn-success');
+            this.disabled = true;
+            
+            // Advance to next step
+            setTimeout(() => {
+                flowchartSteps[3].click();
+            }, 1000);
+        });
+        
+        function startQuizTimer() {
+            quizTimerInterval = setInterval(() => {
+                quizTimer--;
+                const minutes = Math.floor(quizTimer / 60);
+                const seconds = quizTimer % 60;
+                timeRemaining.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                // Add warning class when time is low
+                if (quizTimer <= 10) {
+                    timeRemaining.style.color = 'var(--color-error)';
+                }
+                
+                // Auto-advance when time runs out
+                if (quizTimer <= 0) {
+                    clearInterval(quizTimerInterval);
+                    if (!quizAnswered) {
+                        // Auto-select wrong answer (A) and show correct
+                        quizOptions.forEach(opt => {
+                            opt.classList.remove('selected', 'correct', 'incorrect');
+                            if (opt.dataset.answer === 'A') {
+                                opt.classList.add('selected', 'incorrect');
+                            }
+                            if (opt.dataset.answer === 'B') {
+                                opt.classList.add('correct');
+                            }
+                        });
+                        
+                        setTimeout(() => {
+                            advanceFlowchart();
+                        }, 1500);
+                    }
+                }
+            }, 1000);
+        }
+        
+        function advanceFlowchart() {
+            if (currentFlowchartStep < flowchartSteps.length) {
+                flowchartSteps[currentFlowchartStep].classList.add('completed');
+                currentFlowchartStep++;
+                
+                if (currentFlowchartStep < flowchartSteps.length) {
+                    flowchartSteps[currentFlowchartStep].click();
+                }
+            }
+        }
+        
+        function validateActivity2() {
+            let score = state.activities[2].correct; // Start with quiz score
+            
+            // Add points for completing flowchart
+            if (state.activities[2].flowchartCompleted) {
+                score += 4; // 4 steps after quiz
+            }
+            
+            // Add points for completing form
+            if (state.activities[2].formCompleted) {
+                score += 3;
+            }
+            
+            state.activities[2].correct = Math.min(score, 8);
+            state.activities[2].score = Math.round((score / 8) * 100);
+            state.activities[2].completed = true;
+            
+            status.textContent = 'Completed';
+            status.style.color = '#00b894';
+            document.querySelector('#activity-2').classList.add('completed');
+            feedback.classList.add('show');
+            
+            updateProgressSummary();
+        }
+    }
+
+    // ========= RESET ALL ACTIVITIES =========
+    function resetAllActivities() {
+        // Reset state
+        state.activities = {
+            1: { completed: false, correct: 0, total: 10, score: 0, scenario: null, steps: [], errors: 0, time: 0 },
+            2: { completed: false, correct: 0, total: 8, score: 0, quizAnswered: false, flowchartCompleted: false, formCompleted: false }
+        };
+        
+        // Clear any timers
+        if (state.timers.ppeTimer) clearInterval(state.timers.ppeTimer);
+        if (state.timers.quizTimer) clearInterval(state.timers.quizTimer);
+        
+        // Reset UI
+        activityCards.forEach(card => {
+            card.classList.remove('completed');
+            const status = card.querySelector('.activity-status');
+            status.textContent = 'Not Started';
+            status.style.color = '';
+            const feedback = card.querySelector('.feedback-container');
+            feedback.classList.remove('show');
+            const correctionDetails = card.querySelector('.correction-details');
+            if (correctionDetails) correctionDetails.style.display = 'none';
+        });
+        
+        // Reset Activity 1
+        document.querySelectorAll('#ppe-scenario-selector .ppe-scenario-card').forEach(card => {
+            card.classList.remove('selected');
+        });
+        
+        document.getElementById('donning-steps').innerHTML = '';
+        document.getElementById('coach-message').innerHTML = `
+            <strong>Step 1:</strong> Select a precautions scenario above to begin.<br>
+            <strong>Step 2:</strong> Drag PPE items from the cart to your donning area in the correct sequence.<br>
+            <strong>Step 3:</strong> Listen for error alerts – contamination events will flash red.
+        `;
+        
+        document.getElementById('ppe-timer').style.display = 'none';
+        document.getElementById('contamination-alert').classList.remove('show');
+        
+        document.querySelectorAll('#ppe-cart-items .ppe-item').forEach(item => {
+            item.style.display = '';
+            item.classList.remove('used', 'dragging');
+        });
+        
+        // Reset Activity 2
+        document.querySelectorAll('#quiz-options .quiz-option').forEach(option => {
+            option.classList.remove('selected', 'correct', 'incorrect');
+        });
+        
+        document.getElementById('time-remaining').textContent = '01:00';
+        document.getElementById('time-remaining').style.color = '';
+        
+        document.querySelectorAll('#flowchart-steps .flowchart-step').forEach(step => {
+            step.classList.remove('completed', 'current');
+        });
+        
+        document.getElementById('pathogen-results').classList.remove('show');
+        document.getElementById('osha-form').style.display = 'none';
+        
+        // Reset form
+        document.getElementById('employee-name').value = '';
+        document.getElementById('injury-date').value = '';
+        document.getElementById('injury-time').value = '';
+        document.getElementById('incident-location').value = '';
+        document.getElementById('device-type').value = '';
+        document.getElementById('body-part').value = '';
+        document.getElementById('ppe-worn').value = '';
+        document.getElementById('incident-description').value = '';
+        document.getElementById('actions-taken').value = '';
+        
+        const submitBtn = document.getElementById('submit-osha-form');
+        submitBtn.innerHTML = '<span class="btn-icon">📄</span> Submit OSHA Report';
+        submitBtn.classList.remove('btn-success');
+        submitBtn.classList.add('btn-primary');
+        submitBtn.disabled = false;
+        
+        // Reset results
+        resultsPanel.classList.remove('show');
+        
+        // Reinitialize timers
+        if (typeof initActivity2 === 'function') {
+            initActivity2();
+        }
+        
+        // Update progress
+        updateProgressSummary();
+    }
+
+    // ========= CHECK ALL ANSWERS =========
+    function checkAllAnswers() {
+        // Force check Activity 1
+        if (!state.activities[1].completed) {
+            state.activities[1].completed = true;
+            state.activities[1].correct = 10;
+            state.activities[1].score = 100;
+            document.querySelector('#activity-1 .activity-status').textContent = 'Completed';
+            document.querySelector('#activity-1').classList.add('completed');
+            document.querySelector('#feedback-1').classList.add('show');
+        }
+        
+        // Force check Activity 2
+        if (!state.activities[2].completed) {
+            // Complete quiz
+            document.querySelectorAll('#quiz-options .quiz-option').forEach(opt => {
+                opt.classList.remove('selected', 'correct', 'incorrect');
+                if (opt.dataset.answer === 'B') {
+                    opt.classList.add('correct');
+                }
+            });
+            
+            // Complete flowchart
+            document.querySelectorAll('#flowchart-steps .flowchart-step').forEach(step => {
+                step.classList.add('completed');
+            });
+            
+            // Complete form
+            document.getElementById('osha-form').style.display = 'block';
+            document.getElementById('pathogen-results').classList.add('show');
+            
+            state.activities[2].completed = true;
+            state.activities[2].correct = 8;
+            state.activities[2].score = 100;
+            document.querySelector('#activity-2 .activity-status').textContent = 'Completed';
+            document.querySelector('#activity-2').classList.add('completed');
+            document.querySelector('#feedback-2').classList.add('show');
+        }
+        
+        updateProgressSummary();
+    }
+
+    // ========= VIEW FINAL RESULTS =========
+    function viewFinalResults() {
+        let totalScore = 0;
+        let activityCount = 0;
+        
+        Object.values(state.activities).forEach(activity => {
+            if (activity.completed) {
+                totalScore += activity.score;
+                activityCount++;
+            }
+        });
+        
+        const averageScore = activityCount > 0 ? Math.round(totalScore / activityCount) : 0;
+        finalScore.textContent = `${averageScore}%`;
+        
+        resultsPanel.classList.add('show');
+        resultsPanel.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // ========= INITIALIZE ALL ACTIVITIES =========
+    initActivity1();
+    initActivity2();
+    
+    // Event listeners
+    resetBtn.addEventListener('click', resetAllActivities);
+    checkBtn.addEventListener('click', checkAllAnswers);
+    resultsBtn.addEventListener('click', viewFinalResults);
+    
+    // Initial progress update
+    updateProgressSummary();
+});
+</script>
+</body>
+</html>
