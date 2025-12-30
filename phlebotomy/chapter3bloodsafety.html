@@ -570,6 +570,7 @@ h1 {
 .ppe-item.dragging {
     opacity: 0.5;
     transform: scale(0.95);
+    cursor: grabbing;
 }
 
 .ppe-item.used {
@@ -597,6 +598,7 @@ h1 {
     flex-direction: column;
     gap: 10px;
     min-height: 400px;
+    transition: all 0.3s ease;
 }
 
 .ppe-donning-area.hover {
@@ -1142,6 +1144,17 @@ h1 {
     background: #f7b84b;
     transform: translateY(-2px);
     box-shadow: 0 10px 25px rgba(253, 203, 110, 0.3);
+}
+
+.btn-success {
+    background: var(--color-success);
+    color: white;
+}
+
+.btn-success:hover {
+    background: #00a085;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0, 184, 148, 0.3);
 }
 
 .btn-icon { font-size: 1.1em; }
@@ -1795,8 +1808,7 @@ document.addEventListener('DOMContentLoaded', function() {
             2: { completed: false, correct: 0, total: 8, score: 0, quizAnswered: false, flowchartCompleted: false, formCompleted: false }
         },
         startedAt: new Date(),
-        timeSpent: 0,
-        timers: {}
+        timeSpent: 0
     };
 
     // DOM Elements
@@ -1852,7 +1864,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // ========= ACTIVITY 1: PPE VIRTUAL COACH =========
+    // ========= ACTIVITY 1: PPE VIRTUAL COACH - WORKING DRAG AND DROP =========
     function initActivity1() {
         const scenarioCards = document.querySelectorAll('#ppe-scenario-selector .ppe-scenario-card');
         const ppeItems = document.querySelectorAll('#ppe-cart-items .ppe-item');
@@ -1872,7 +1884,6 @@ document.addEventListener('DOMContentLoaded', function() {
         
         let selectedScenario = null;
         let currentStep = 0;
-        let placedItems = 0;
         let userSequence = [];
         let isTimedMode = false;
         let timerInterval = null;
@@ -1900,15 +1911,11 @@ document.addEventListener('DOMContentLoaded', function() {
         // Scenario selection
         scenarioCards.forEach(card => {
             card.addEventListener('click', function() {
-                // Remove selection from all cards
                 scenarioCards.forEach(c => c.classList.remove('selected'));
-                
-                // Select this card
                 this.classList.add('selected');
                 selectedScenario = this.dataset.scenario;
                 state.activities[1].scenario = selectedScenario;
                 
-                // Update coach message
                 const scenarioNames = {
                     'standard': 'Standard Precautions',
                     'contact': 'Contact Precautions',
@@ -1922,19 +1929,17 @@ document.addEventListener('DOMContentLoaded', function() {
                     <strong>Instruction:</strong> Drag items from cart to donning area in correct sequence.
                 `;
                 
-                // Clear previous steps
                 donningSteps.innerHTML = '';
                 userSequence = [];
-                placedItems = 0;
                 currentStep = 0;
                 
-                // Reset PPE items
                 ppeItems.forEach(item => {
-                    item.style.display = '';
                     item.classList.remove('used', 'dragging');
+                    item.style.opacity = '1';
+                    item.style.cursor = 'grab';
+                    item.setAttribute('draggable', 'true');
                 });
                 
-                // Show timer if in timed mode
                 if (isTimedMode) {
                     startPPETimer();
                 }
@@ -1943,13 +1948,23 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Setup draggable PPE items
         ppeItems.forEach(item => {
+            // Ensure draggable attribute is set
+            item.setAttribute('draggable', 'true');
+            
             item.addEventListener('dragstart', function(e) {
-                if (this.classList.contains('used') || !selectedScenario) return;
+                if (this.classList.contains('used') || !selectedScenario) {
+                    e.preventDefault();
+                    return false;
+                }
                 
-                e.dataTransfer.setData('text/plain', JSON.stringify({
+                const itemData = {
                     item: this.dataset.item,
-                    name: this.querySelector('.ppe-item-name').textContent
-                }));
+                    name: this.querySelector('.ppe-item-name').textContent,
+                    icon: this.querySelector('.ppe-item-icon').textContent
+                };
+                
+                e.dataTransfer.setData('text/plain', JSON.stringify(itemData));
+                e.dataTransfer.effectAllowed = 'move';
                 this.classList.add('dragging');
             });
             
@@ -1963,6 +1978,8 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             if (!selectedScenario) return;
             this.classList.add('hover');
+            e.dataTransfer.dropEffect = 'move';
+            return false;
         });
         
         donningArea.addEventListener('dragleave', function() {
@@ -1972,53 +1989,78 @@ document.addEventListener('DOMContentLoaded', function() {
         donningArea.addEventListener('drop', function(e) {
             e.preventDefault();
             this.classList.remove('hover');
-            if (!selectedScenario) return;
             
-            const data = JSON.parse(e.dataTransfer.getData('text/plain'));
-            const itemId = data.item;
-            
-            // Check if already placed
-            if (userSequence.includes(itemId)) return;
-            
-            // Check if this is the correct next item
-            const correctSequence = correctSequences[selectedScenario];
-            const isCorrect = itemId === correctSequence[currentStep];
-            
-            // Add to user sequence
-            userSequence.push(itemId);
-            state.activities[1].steps = userSequence;
-            
-            // Create donning step
-            const stepDiv = document.createElement('div');
-            stepDiv.className = `donning-step ${isCorrect ? 'correct' : 'incorrect'}`;
-            stepDiv.innerHTML = `
-                <div class="donning-step-number">${userSequence.length}</div>
-                <div class="donning-step-content">
-                    <strong>${data.name}</strong><br>
-                    <small>${stepInstructions[itemId] || 'Place item correctly'}</small>
-                </div>
-            `;
-            
-            donningSteps.appendChild(stepDiv);
-            
-            // Mark PPE item as used
-            const usedItem = document.querySelector(`[data-item="${itemId}"]`);
-            if (usedItem) {
-                usedItem.classList.add('used');
-                usedItem.style.display = 'none';
+            if (!selectedScenario) {
+                showContaminationAlert('Please select a scenario first!');
+                return;
             }
             
-            // Check for errors
-            if (!isCorrect) {
-                state.activities[1].errors++;
-                showContaminationAlert(`Incorrect sequence! ${data.name} should come ${currentStep > 0 ? 'after ' + correctSequence[currentStep-1] : 'first'}.`);
-            } else {
-                currentStep++;
-            }
-            
-            // Check if sequence is complete
-            if (userSequence.length === correctSequence.length) {
-                validatePPESequence();
+            try {
+                const dataText = e.dataTransfer.getData('text/plain');
+                if (!dataText) return;
+                
+                const itemData = JSON.parse(dataText);
+                const itemId = itemData.item;
+                
+                if (userSequence.includes(itemId)) {
+                    showContaminationAlert('This item has already been placed!');
+                    return;
+                }
+                
+                const correctSequence = correctSequences[selectedScenario];
+                const isCorrect = itemId === correctSequence[currentStep];
+                
+                userSequence.push(itemId);
+                state.activities[1].steps = userSequence;
+                
+                // Create donning step
+                const stepDiv = document.createElement('div');
+                stepDiv.className = `donning-step ${isCorrect ? 'correct' : 'incorrect'}`;
+                stepDiv.innerHTML = `
+                    <div class="donning-step-number">${userSequence.length}</div>
+                    <div class="donning-step-content">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 1.2rem;">${itemData.icon}</span>
+                            <div>
+                                <strong>${itemData.name}</strong><br>
+                                <small style="font-size: 0.8rem; color: var(--color-muted);">${stepInstructions[itemId] || 'Place item correctly'}</small>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                donningSteps.appendChild(stepDiv);
+                
+                // Mark item as used in cart
+                const originalItem = document.querySelector(`.ppe-item[data-item="${itemId}"]:not(.used)`);
+                if (originalItem) {
+                    originalItem.classList.add('used');
+                    originalItem.style.opacity = '0.5';
+                    originalItem.style.cursor = 'not-allowed';
+                    originalItem.setAttribute('draggable', 'false');
+                }
+                
+                // Check for errors
+                if (!isCorrect) {
+                    state.activities[1].errors++;
+                    const shouldBe = correctSequence[currentStep];
+                    const shouldBeItem = document.querySelector(`.ppe-item[data-item="${shouldBe}"]`);
+                    const shouldBeName = shouldBeItem ? shouldBeItem.querySelector('.ppe-item-name').textContent : shouldBe;
+                    showContaminationAlert(`Incorrect sequence! ${itemData.name} should come ${currentStep > 0 ? 'after ' + shouldBeName : 'first'}.`);
+                } else {
+                    currentStep++;
+                }
+                
+                // Check if sequence is complete
+                if (userSequence.length === correctSequence.length) {
+                    setTimeout(() => {
+                        validatePPESequence();
+                    }, 500);
+                }
+                
+            } catch (error) {
+                console.log('Drop error:', error);
+                showContaminationAlert('Error placing item. Please try again.');
             }
         });
         
@@ -2026,11 +2068,7 @@ document.addEventListener('DOMContentLoaded', function() {
         practiceBtn.addEventListener('click', function() {
             isTimedMode = false;
             ppeTimer.style.display = 'none';
-            if (timerInterval) {
-                clearInterval(timerInterval);
-                timerInterval = null;
-            }
-            
+            if (timerInterval) clearInterval(timerInterval);
             practiceBtn.classList.add('selected');
             timedBtn.classList.remove('selected');
         });
@@ -2040,34 +2078,25 @@ document.addEventListener('DOMContentLoaded', function() {
             ppeTimer.style.display = 'inline-flex';
             practiceBtn.classList.remove('selected');
             timedBtn.classList.add('selected');
-            
-            if (selectedScenario) {
-                startPPETimer();
-            }
+            if (selectedScenario) startPPETimer();
         });
         
         function startPPETimer() {
-            if (timerInterval) {
-                clearInterval(timerInterval);
-            }
-            
+            if (timerInterval) clearInterval(timerInterval);
             elapsedTime = 0;
+            timerDisplay.textContent = '0:00';
+            
             timerInterval = setInterval(() => {
                 elapsedTime++;
                 const minutes = Math.floor(elapsedTime / 60);
                 const seconds = elapsedTime % 60;
                 timerDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
                 
-                // Add warning class after 2 minutes
-                if (elapsedTime > 120) {
-                    ppeTimer.classList.add('warning');
-                }
-                
-                // Auto-fail after 5 minutes
+                if (elapsedTime > 120) ppeTimer.classList.add('warning');
                 if (elapsedTime > 300) {
                     clearInterval(timerInterval);
                     showContaminationAlert('Time exceeded! In emergency situations, slow donning increases exposure risk.');
-                    validatePPESequence();
+                    setTimeout(() => validatePPESequence(), 1000);
                 }
             }, 1000);
         }
@@ -2075,10 +2104,7 @@ document.addEventListener('DOMContentLoaded', function() {
         function showContaminationAlert(message) {
             alertContent.textContent = message;
             contaminationAlert.classList.add('show');
-            
-            setTimeout(() => {
-                contaminationAlert.classList.remove('show');
-            }, 3000);
+            setTimeout(() => contaminationAlert.classList.remove('show'), 3000);
         }
         
         function validatePPESequence() {
@@ -2091,39 +2117,37 @@ document.addEventListener('DOMContentLoaded', function() {
             let correctCount = 0;
             let correctionMessages = [];
             
-            // Check each step
             userSequence.forEach((item, index) => {
                 if (item === correctSequence[index]) {
                     correctCount++;
                 } else {
-                    correctionMessages.push(`• Step ${index + 1}: You used "${item}" but should have used "${correctSequence[index]}"`);
+                    const itemElement = document.querySelector(`.ppe-item[data-item="${item}"]`);
+                    const correctItemElement = document.querySelector(`.ppe-item[data-item="${correctSequence[index]}"]`);
+                    const itemName = itemElement ? itemElement.querySelector('.ppe-item-name').textContent : item;
+                    const correctItemName = correctItemElement ? correctItemElement.querySelector('.ppe-item-name').textContent : correctSequence[index];
+                    correctionMessages.push(`• Step ${index + 1}: You used "${itemName}" but should have used "${correctItemName}"`);
                 }
             });
             
-            // Check for missing steps
             if (userSequence.length < correctSequence.length) {
                 for (let i = userSequence.length; i < correctSequence.length; i++) {
-                    correctionMessages.push(`• Missing step ${i + 1}: "${correctSequence[i]}" was not used`);
+                    const correctItemElement = document.querySelector(`.ppe-item[data-item="${correctSequence[i]}"]`);
+                    const correctItemName = correctItemElement ? correctItemElement.querySelector('.ppe-item-name').textContent : correctSequence[i];
+                    correctionMessages.push(`• Missing step ${i + 1}: "${correctItemName}" was not used`);
                 }
             }
             
-            // Calculate score
             let score = correctCount;
-            
-            // Penalize errors
             score -= state.activities[1].errors * 0.5;
-            
-            // Time penalty for timed mode
             if (isTimedMode && elapsedTime > 60) {
                 score -= Math.floor((elapsedTime - 60) / 30) * 0.5;
             }
-            
             score = Math.max(0, score);
+            
             state.activities[1].correct = Math.round(score);
             state.activities[1].score = Math.round((score / correctSequence.length) * 100);
-            
-            // Complete activity
             state.activities[1].completed = true;
+            
             status.textContent = 'Completed';
             status.style.color = '#00b894';
             document.querySelector('#activity-1').classList.add('completed');
@@ -2165,38 +2189,22 @@ document.addEventListener('DOMContentLoaded', function() {
             option.addEventListener('click', function() {
                 if (quizAnswered) return;
                 
-                // Remove selection from all options
                 quizOptions.forEach(opt => opt.classList.remove('selected', 'correct', 'incorrect'));
-                
-                // Select this option
                 this.classList.add('selected');
                 
-                // Check answer
-                const isCorrect = this.dataset.answer === 'B'; // Correct answer is B
+                const isCorrect = this.dataset.answer === 'B';
                 
                 if (isCorrect) {
                     this.classList.add('correct');
                     state.activities[2].correct = 1;
                     state.activities[2].quizAnswered = true;
-                    
-                    // Move to next step after delay
-                    setTimeout(() => {
-                        advanceFlowchart();
-                    }, 1500);
+                    setTimeout(() => advanceFlowchart(), 1500);
                 } else {
                     this.classList.add('incorrect');
-                    
-                    // Show correct answer
                     quizOptions.forEach(opt => {
-                        if (opt.dataset.answer === 'B') {
-                            opt.classList.add('correct');
-                        }
+                        if (opt.dataset.answer === 'B') opt.classList.add('correct');
                     });
-                    
-                    // Still advance but with penalty
-                    setTimeout(() => {
-                        advanceFlowchart();
-                    }, 1500);
+                    setTimeout(() => advanceFlowchart(), 1500);
                 }
                 
                 quizAnswered = true;
@@ -2208,11 +2216,9 @@ document.addEventListener('DOMContentLoaded', function() {
         flowchartSteps.forEach((step, index) => {
             step.addEventListener('click', function() {
                 if (index <= currentFlowchartStep) {
-                    // Mark as current
                     flowchartSteps.forEach(s => s.classList.remove('current'));
                     this.classList.add('current');
                     
-                    // If this is step 3, show OSHA form
                     if (index === 2) {
                         setTimeout(() => {
                             oshaForm.style.display = 'block';
@@ -2220,7 +2226,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         }, 500);
                     }
                     
-                    // If this is step 4, show pathogen results
                     if (index === 3) {
                         setTimeout(() => {
                             pathogenResults.classList.add('show');
@@ -2228,7 +2233,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         }, 500);
                     }
                     
-                    // If this is the last step, validate
                     if (index === 4) {
                         state.activities[2].flowchartCompleted = true;
                         validateActivity2();
@@ -2239,7 +2243,6 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // OSHA form submission
         submitFormBtn.addEventListener('click', function() {
-            // Simple validation
             const employeeName = document.getElementById('employee-name').value;
             const incidentDesc = document.getElementById('incident-description').value;
             
@@ -2248,17 +2251,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
             
-            // Mark form as completed
             formCompleted = true;
             state.activities[2].formCompleted = true;
             
-            // Show success message
             this.innerHTML = '<span class="btn-icon">✓</span> Report Submitted';
             this.classList.remove('btn-primary');
             this.classList.add('btn-success');
             this.disabled = true;
             
-            // Advance to next step
             setTimeout(() => {
                 flowchartSteps[3].click();
             }, 1000);
@@ -2271,29 +2271,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 const seconds = quizTimer % 60;
                 timeRemaining.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
                 
-                // Add warning class when time is low
-                if (quizTimer <= 10) {
-                    timeRemaining.style.color = 'var(--color-error)';
-                }
-                
-                // Auto-advance when time runs out
+                if (quizTimer <= 10) timeRemaining.style.color = 'var(--color-error)';
                 if (quizTimer <= 0) {
                     clearInterval(quizTimerInterval);
                     if (!quizAnswered) {
-                        // Auto-select wrong answer (A) and show correct
                         quizOptions.forEach(opt => {
                             opt.classList.remove('selected', 'correct', 'incorrect');
-                            if (opt.dataset.answer === 'A') {
-                                opt.classList.add('selected', 'incorrect');
-                            }
-                            if (opt.dataset.answer === 'B') {
-                                opt.classList.add('correct');
-                            }
+                            if (opt.dataset.answer === 'A') opt.classList.add('selected', 'incorrect');
+                            if (opt.dataset.answer === 'B') opt.classList.add('correct');
                         });
-                        
-                        setTimeout(() => {
-                            advanceFlowchart();
-                        }, 1500);
+                        setTimeout(() => advanceFlowchart(), 1500);
                     }
                 }
             }, 1000);
@@ -2303,7 +2290,6 @@ document.addEventListener('DOMContentLoaded', function() {
             if (currentFlowchartStep < flowchartSteps.length) {
                 flowchartSteps[currentFlowchartStep].classList.add('completed');
                 currentFlowchartStep++;
-                
                 if (currentFlowchartStep < flowchartSteps.length) {
                     flowchartSteps[currentFlowchartStep].click();
                 }
@@ -2311,17 +2297,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         function validateActivity2() {
-            let score = state.activities[2].correct; // Start with quiz score
-            
-            // Add points for completing flowchart
-            if (state.activities[2].flowchartCompleted) {
-                score += 4; // 4 steps after quiz
-            }
-            
-            // Add points for completing form
-            if (state.activities[2].formCompleted) {
-                score += 3;
-            }
+            let score = state.activities[2].correct;
+            if (state.activities[2].flowchartCompleted) score += 4;
+            if (state.activities[2].formCompleted) score += 3;
             
             state.activities[2].correct = Math.min(score, 8);
             state.activities[2].score = Math.round((score / 8) * 100);
@@ -2338,17 +2316,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // ========= RESET ALL ACTIVITIES =========
     function resetAllActivities() {
-        // Reset state
         state.activities = {
             1: { completed: false, correct: 0, total: 10, score: 0, scenario: null, steps: [], errors: 0, time: 0 },
             2: { completed: false, correct: 0, total: 8, score: 0, quizAnswered: false, flowchartCompleted: false, formCompleted: false }
         };
         
-        // Clear any timers
-        if (state.timers.ppeTimer) clearInterval(state.timers.ppeTimer);
-        if (state.timers.quizTimer) clearInterval(state.timers.quizTimer);
-        
-        // Reset UI
         activityCards.forEach(card => {
             card.classList.remove('completed');
             const status = card.querySelector('.activity-status');
@@ -2376,8 +2348,10 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('contamination-alert').classList.remove('show');
         
         document.querySelectorAll('#ppe-cart-items .ppe-item').forEach(item => {
-            item.style.display = '';
             item.classList.remove('used', 'dragging');
+            item.style.opacity = '1';
+            item.style.cursor = 'grab';
+            item.setAttribute('draggable', 'true');
         });
         
         // Reset Activity 2
@@ -2395,7 +2369,6 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('pathogen-results').classList.remove('show');
         document.getElementById('osha-form').style.display = 'none';
         
-        // Reset form
         document.getElementById('employee-name').value = '';
         document.getElementById('injury-date').value = '';
         document.getElementById('injury-time').value = '';
@@ -2412,21 +2385,17 @@ document.addEventListener('DOMContentLoaded', function() {
         submitBtn.classList.add('btn-primary');
         submitBtn.disabled = false;
         
-        // Reset results
         resultsPanel.classList.remove('show');
         
-        // Reinitialize timers
-        if (typeof initActivity2 === 'function') {
-            initActivity2();
-        }
+        // Reinitialize
+        initActivity1();
+        initActivity2();
         
-        // Update progress
         updateProgressSummary();
     }
 
     // ========= CHECK ALL ANSWERS =========
     function checkAllAnswers() {
-        // Force check Activity 1
         if (!state.activities[1].completed) {
             state.activities[1].completed = true;
             state.activities[1].correct = 10;
@@ -2436,22 +2405,16 @@ document.addEventListener('DOMContentLoaded', function() {
             document.querySelector('#feedback-1').classList.add('show');
         }
         
-        // Force check Activity 2
         if (!state.activities[2].completed) {
-            // Complete quiz
             document.querySelectorAll('#quiz-options .quiz-option').forEach(opt => {
                 opt.classList.remove('selected', 'correct', 'incorrect');
-                if (opt.dataset.answer === 'B') {
-                    opt.classList.add('correct');
-                }
+                if (opt.dataset.answer === 'B') opt.classList.add('correct');
             });
             
-            // Complete flowchart
             document.querySelectorAll('#flowchart-steps .flowchart-step').forEach(step => {
                 step.classList.add('completed');
             });
             
-            // Complete form
             document.getElementById('osha-form').style.display = 'block';
             document.getElementById('pathogen-results').classList.add('show');
             
@@ -2480,7 +2443,6 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const averageScore = activityCount > 0 ? Math.round(totalScore / activityCount) : 0;
         finalScore.textContent = `${averageScore}%`;
-        
         resultsPanel.classList.add('show');
         resultsPanel.scrollIntoView({ behavior: 'smooth' });
     }
