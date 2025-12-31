@@ -1,0 +1,1669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>AlliedRx - Phlebotomy Week 4 Reading Assignments</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-error: #e17055;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
+            --radius-lg: 24px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(
+                circle at top left,
+                #ffffff 0,
+                #f1ecff 40%,
+                var(--color-bg) 100%
+            );
+            color: var(--color-text);
+            -webkit-text-size-adjust: 100%;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 12px;
+            }
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1120px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px 30px;
+            display: grid;
+            grid-template-columns: minmax(0, 3.1fr) minmax(0, 2.4fr);
+            gap: 28px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+
+        @media (max-width: 900px) {
+            .page {
+                grid-template-columns: 1fr;
+                padding: 22px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 0;
+            }
+            .page {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 18px 14px 22px;
+                gap: 22px;
+            }
+        }
+
+        img, .page, .column, .reading-card, .side-card {
+            max-width: 100%;
+        }
+
+        .column {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header / branding */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .brand-logo:hover {
+            transform: scale(1.05);
+        }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+            animation: pulse 3s infinite;
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--color-success);
+            flex-shrink: 0;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .badge-mode:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+        @media (max-width: 480px) {
+            .brand-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .badge-mode {
+                margin-top: 6px;
+            }
+        }
+
+        h1 {
+            font-size: clamp(2rem, 3vw, 2.4rem);
+            line-height: 1.05;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 34rem;
+            margin-bottom: 18px;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        .subtitle strong {
+            color: var(--color-primary);
+        }
+
+        /* Special badges */
+        .technique-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: rgba(52, 152, 219, 0.1);
+            border: 2px solid rgba(52, 152, 219, 0.3);
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #2b2b2b;
+            margin-bottom: 10px;
+        }
+
+        .special-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: rgba(155, 89, 182, 0.1);
+            border: 2px solid rgba(155, 89, 182, 0.3);
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #2b2b2b;
+            margin-bottom: 10px;
+        }
+
+        .badge-icon {
+            font-size: 1.2em;
+        }
+
+        /* Reading cards */
+        .reading-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 12px;
+        }
+
+        .reading-card {
+            border-radius: 18px;
+            padding: 14px 16px 14px;
+            border: 1px solid rgba(15, 23, 42, 0.06);
+            background: linear-gradient(
+                135deg,
+                rgba(175, 75, 239, 0.07),
+                rgba(255, 255, 255, 0.95)
+            );
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 12px;
+            align-items: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .reading-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.7s ease;
+        }
+
+        .reading-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--color-primary-soft);
+        }
+
+        .reading-card:hover::before {
+            left: 100%;
+        }
+
+        .reading-card.completed {
+            border-color: var(--color-success);
+            background: linear-gradient(
+                135deg,
+                rgba(0, 184, 148, 0.07),
+                rgba(255, 255, 255, 0.95)
+            );
+        }
+
+        .reading-card.technique {
+            border-left: 4px solid #3498db;
+        }
+
+        .reading-card.special {
+            border-left: 4px solid #9b59b6;
+        }
+
+        @media (max-width: 600px) {
+            .reading-card {
+                grid-template-columns: 1fr;
+                align-items: flex-start;
+            }
+            .chapter-pill {
+                justify-self: flex-start;
+            }
+            .tag-time {
+                justify-self: flex-start;
+                margin-top: 6px;
+            }
+        }
+
+        .chapter-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px 11px;
+            border-radius: 999px;
+            background: #ffffff;
+            box-shadow: 0 6px 18px rgba(79, 70, 229, 0.16);
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .reading-card:hover .chapter-pill {
+            background: var(--color-primary);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .chapter-main {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .chapter-title {
+            font-size: 0.98rem;
+            font-weight: 700;
+            color: var(--color-text);
+            transition: color 0.3s ease;
+        }
+
+        .reading-card:hover .chapter-title {
+            color: var(--color-primary);
+        }
+
+        .chapter-text {
+            font-size: 0.84rem;
+            color: var(--color-muted);
+            line-height: 1.4;
+        }
+
+        .tag-time {
+            padding: 5px 8px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            font-size: 0.74rem;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .reading-card:hover .tag-time {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        /* Progress tracker */
+        .progress-container {
+            margin: 20px 0;
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: 16px;
+            padding: 16px 18px;
+            border: 1px solid rgba(12, 10, 24, 0.06);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .progress-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-text);
+        }
+
+        .progress-percent {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: rgba(12, 10, 24, 0.08);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+            border-radius: 4px;
+            width: 0%;
+            transition: width 1s ease-out;
+        }
+
+        /* Interactive checklist */
+        .checklist-heading {
+            font-size: 0.86rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-primary);
+            font-weight: 600;
+            margin-top: 24px;
+            margin-bottom: 12px;
+            animation: slideInRight 0.6s ease-out 0.6s both;
+        }
+
+        .checklist {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-size: 0.86rem;
+            color: var(--color-text);
+        }
+
+        .checklist li {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            padding: 8px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .checklist li:hover {
+            background: rgba(175, 75, 239, 0.05);
+            transform: translateX(5px);
+        }
+
+        .checklist li.completed {
+            opacity: 0.7;
+        }
+
+        .check-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 6px;
+            border: 2px solid rgba(148, 163, 184, 0.9);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.72rem;
+            color: rgba(148, 163, 184, 0.9);
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .checklist li:hover .check-dot {
+            border-color: var(--color-primary);
+        }
+
+        .checklist li.completed .check-dot {
+            background: var(--color-success);
+            border-color: var(--color-success);
+            color: white;
+        }
+
+        .reading-notes {
+            font-size: 0.85rem;
+            color: var(--color-muted);
+            line-height: 1.6;
+            margin-top: 16px;
+            animation: fadeIn 0.6s ease-out 0.7s both;
+        }
+
+        .reading-notes strong {
+            color: var(--color-text);
+        }
+
+        .complete-hint {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+            margin-top: 20px;
+            padding: 12px;
+            background: rgba(175, 75, 239, 0.05);
+            border-radius: 12px;
+            border-left: 3px solid var(--color-primary);
+            animation: fadeIn 0.6s ease-out 0.8s both;
+        }
+
+        /* Right column */
+        .section-tag {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-primary);
+            font-weight: 600;
+            margin-bottom: 10px;
+            animation: slideInRight 0.6s ease-out 0.5s both;
+        }
+
+        .side-heading {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--color-text);
+            margin-bottom: 10px;
+            animation: slideInRight 0.6s ease-out 0.6s both;
+        }
+
+        .side-card {
+            background: rgba(12, 10, 24, 0.94);
+            color: #e5e7eb;
+            border-radius: 18px;
+            padding: 16px 18px 18px;
+            font-size: 0.88rem;
+            line-height: 1.7;
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.6);
+            margin-bottom: 14px;
+            transition: transform 0.3s ease;
+            animation: slideInRight 0.6s ease-out 0.7s both;
+        }
+
+        .side-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .side-card strong {
+            color: #ffffff;
+        }
+
+        .side-subheading {
+            font-size: 0.86rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: #c4b5fd;
+            font-weight: 600;
+            margin: 14px 0 10px;
+        }
+
+        .side-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-size: 0.86rem;
+        }
+
+        .side-list li {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            transition: transform 0.3s ease;
+            padding: 4px 0;
+        }
+
+        .side-list li:hover {
+            transform: translateX(5px);
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            margin-top: 6px;
+            border-radius: 999px;
+            background: var(--color-accent);
+            flex-shrink: 0;
+            animation: pulse 2s infinite;
+        }
+
+        .side-list li:hover .dot {
+            background: var(--color-primary);
+            transform: scale(1.3);
+        }
+
+        .note-card {
+            margin-top: 14px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            background: rgba(15, 23, 42, 0.75);
+            padding: 12px 14px;
+            font-size: 0.8rem;
+            color: #e5e7eb;
+            transition: all 0.3s ease;
+        }
+
+        .note-card:hover {
+            border-color: var(--color-primary-soft);
+            background: rgba(15, 23, 42, 0.9);
+        }
+
+        .note-card strong {
+            color: #fef3c7;
+        }
+
+        /* Action buttons */
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 18px;
+            border-radius: 12px;
+            border: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #9a3bd6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(175, 75, 239, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-text);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(12, 10, 24, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-icon {
+            font-size: 1.1em;
+        }
+
+        /* Completion celebration */
+        .completion-celebration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .celebration-content {
+            background: white;
+            padding: 40px;
+            border-radius: var(--radius-lg);
+            text-align: center;
+            max-width: 500px;
+            animation: fadeInUp 0.5s ease;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+        }
+
+        .celebration-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        .celebration-title {
+            font-size: 1.8rem;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+        }
+
+        .celebration-text {
+            color: var(--color-muted);
+            margin-bottom: 20px;
+        }
+
+        .celebration-btn {
+            padding: 12px 24px;
+            background: var(--color-primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .celebration-btn:hover {
+            background: #9a3bd6;
+            transform: scale(1.05);
+        }
+
+        /* Venipuncture Steps */
+        .procedure-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .step-item {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .step-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .step-number {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--color-primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 3px;
+        }
+
+        .step-description {
+            font-size: 0.8rem;
+            color: var(--color-text);
+        }
+
+        /* Order of Draw Visual */
+        .order-of-draw {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: 12px;
+        }
+
+        .draw-step {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .draw-step:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .draw-number {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--color-primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        .draw-tube {
+            width: 30px;
+            height: 45px;
+            border-radius: 4px;
+            margin-right: 5px;
+            border: 2px solid rgba(0, 0, 0, 0.2);
+        }
+
+        .draw-info {
+            flex: 1;
+        }
+
+        .draw-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--color-text);
+        }
+
+        .draw-tests {
+            font-size: 0.7rem;
+            color: var(--color-muted);
+        }
+
+        .draw-arrow {
+            font-size: 1.2rem;
+            color: var(--color-muted);
+            margin-left: auto;
+        }
+
+        /* Special Procedures Grid */
+        .procedure-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .procedure-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .procedure-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .procedure-icon {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+
+        .procedure-name {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 4px;
+        }
+
+        .procedure-desc {
+            font-size: 0.7rem;
+            color: var(--color-text);
+        }
+
+        /* Physiological Factors */
+        .factors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .factor-item {
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .factor-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .factor-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 3px;
+        }
+
+        .factor-desc {
+            font-size: 0.7rem;
+            color: var(--color-text);
+        }
+
+        @media (max-width: 768px) {
+            .procedure-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+            .factors-grid {
+                grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="week4-reading-heading">
+        <!-- LEFT COLUMN: title + reading cards + checklist -->
+        <section class="column" aria-label="Week 4 reading assignments">
+            <header class="brand-row">
+                <div class="brand">
+                    <img
+                        src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                        alt="AlliedRx logo"
+                        class="brand-logo"
+                    />
+                    <div class="course-meta">
+                        <span class="course-name">Phlebotomy Technician Program • Campus & Distance Learning</span>
+                        <div class="week-label">
+                            <span class="week-label-dot"></span>
+                            <span>Week 4 --- Core Techniques & Advanced Procedures</span>
+                        </div>
+                    </div>
+                </div>
+                <span class="badge-mode">Campus & Online</span>
+            </header>
+
+            <h1 id="week4-reading-heading">Week 4 Reading Assignments</h1>
+
+            <p class="subtitle">
+                This week combines <strong>routine venipuncture mastery</strong> with 
+                <strong>specialized collection procedures</strong>. These chapters form 
+                the core technical skillset every phlebotomist must master.
+            </p>
+
+            <div class="technique-badge">
+                <span class="badge-icon">🎯</span>
+                <span>Chapter 6: Proper Venipuncture Procedures - Core Technique Mastery</span>
+            </div>
+
+            <div class="special-badge">
+                <span class="badge-icon">⚡</span>
+                <span>Chapter 7: Special Collection Procedures - Advanced Skill Development</span>
+            </div>
+
+            <!-- Progress tracker -->
+            <div class="progress-container">
+                <div class="progress-header">
+                    <span class="progress-title">Reading Progress</span>
+                    <span class="progress-percent" id="progress-percent">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+            </div>
+
+            <!-- Reading cards -->
+            <div class="reading-grid">
+                <!-- Chapter 6: Proper Procedures for Venipuncture -->
+                <article class="reading-card technique" id="chapter6-card" data-chapter="6">
+                    <div class="chapter-pill">Chapter 6</div>
+                    <div class="chapter-main">
+                        <div class="chapter-title">
+                            Proper Procedures for Venipuncture
+                        </div>
+                        <p class="chapter-text">
+                            Master <strong>routine venipuncture technique</strong>,
+                            <strong>patient identification</strong>, <strong>evacuated tube system</strong>,
+                            <strong>microcapillary collection</strong>, <strong>butterfly needle use</strong>,
+                            <strong>order of draw</strong>, and <strong>factors affecting results</strong>.
+                        </p>
+                    </div>
+                    <div class="tag-time" id="chapter6-time">Est. 90-110 min</div>
+                </article>
+
+                <!-- Chapter 7: Special Collection Procedures -->
+                <article class="reading-card special" id="chapter7-card" data-chapter="7">
+                    <div class="chapter-pill">Chapter 7</div>
+                    <div class="chapter-main">
+                        <div class="chapter-title">
+                            Special Collection Procedures
+                        </div>
+                        <p class="chapter-text">
+                            Learn <strong>specialized procedures</strong> including 
+                            <strong>blood cultures</strong>, <strong>arterial blood gases</strong>,
+                            <strong>glucose tolerance</strong>, <strong>bleeding time</strong>,
+                            <strong>syringe venipuncture</strong>, and <strong>blood smears</strong>.
+                            Advanced phlebotomy skills.
+                        </p>
+                    </div>
+                    <div class="tag-time" id="chapter7-time">Est. 80-100 min</div>
+                </article>
+            </div>
+
+            <p class="reading-notes">
+                <strong>Textbook:</strong> Phlebotomy Essentials, 7th Edition
+                <br>
+                <strong>Ch6 Quote:</strong> "Great dancers are not great because of their technique; they are great because of their passion." —Martha Graham
+                <br>
+                <strong>Ch7 Quote:</strong> "Let each man pass his days in that wherein his skill is greatest." —Sextus Propertius
+            </p>
+
+            <!-- Order of Draw -->
+            <p class="checklist-heading">Order of Draw (Critical)</p>
+            <div class="order-of-draw">
+                <div class="draw-step">
+                    <div class="draw-number">1</div>
+                    <div class="draw-tube" style="background-color: #ff6b6b;"></div>
+                    <div class="draw-info">
+                        <div class="draw-label">Blood Culture Bottles</div>
+                        <div class="draw-tests">Aerobic → Anaerobic</div>
+                    </div>
+                    <div class="draw-arrow">→</div>
+                </div>
+                <div class="draw-step">
+                    <div class="draw-number">2</div>
+                    <div class="draw-tube" style="background-color: #3498db;"></div>
+                    <div class="draw-info">
+                        <div class="draw-label">Light Blue Top</div>
+                        <div class="draw-tests">Sodium Citrate (Coagulation)</div>
+                    </div>
+                    <div class="draw-arrow">→</div>
+                </div>
+                <div class="draw-step">
+                    <div class="draw-number">3</div>
+                    <div class="draw-tube" style="background-color: #ff4444;"></div>
+                    <div class="draw-info">
+                        <div class="draw-label">Red / Gold / Serum Separator</div>
+                        <div class="draw-tests">Clot Activator (Serum)</div>
+                    </div>
+                    <div class="draw-arrow">→</div>
+                </div>
+                <div class="draw-step">
+                    <div class="draw-number">4</div>
+                    <div class="draw-tube" style="background-color: #26a69a;"></div>
+                    <div class="draw-info">
+                        <div class="draw-label">Green Top</div>
+                        <div class="draw-tests">Heparin (Plasma)</div>
+                    </div>
+                    <div class="draw-arrow">→</div>
+                </div>
+                <div class="draw-step">
+                    <div class="draw-number">5</div>
+                    <div class="draw-tube" style="background-color: #7e57c2;"></div>
+                    <div class="draw-info">
+                        <div class="draw-label">Lavender Top</div>
+                        <div class="draw-tests">EDTA (Hematology)</div>
+                    </div>
+                    <div class="draw-arrow">→</div>
+                </div>
+                <div class="draw-step">
+                    <div class="draw-number">6</div>
+                    <div class="draw-tube" style="background-color: #90a4ae;"></div>
+                    <div class="draw-info">
+                        <div class="draw-label">Gray Top</div>
+                        <div class="draw-tests">Fluoride (Glucose)</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Venipuncture Steps -->
+            <p class="checklist-heading">Venipuncture Procedure Steps</p>
+            <div class="procedure-steps">
+                <div class="step-item">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <div class="step-title">Patient Identification</div>
+                        <div class="step-description">Greet patient, verify identity using 2 identifiers, explain procedure</div>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <div class="step-title">Hand Hygiene & PPE</div>
+                        <div class="step-description">Wash hands, don gloves and appropriate PPE</div>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <div class="step-title">Site Selection & Preparation</div>
+                        <div class="step-description">Select appropriate vein, apply tourniquet, clean site with alcohol</div>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <div class="step-title">Venipuncture</div>
+                        <div class="step-description">Anchor vein, insert needle at 15-30° angle, establish blood flow</div>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <div class="step-title">Tube Filling & Mixing</div>
+                        <div class="step-description">Fill tubes in correct order, gently invert additive tubes 8-10 times</div>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">6</div>
+                    <div class="step-content">
+                        <div class="step-title">Needle Removal & Site Care</div>
+                        <div class="step-description">Release tourniquet, remove needle, apply pressure, bandage</div>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">7</div>
+                    <div class="step-content">
+                        <div class="step-title">Specimen Labeling & Disposal</div>
+                        <div class="step-description">Label at bedside, activate safety device, dispose in sharps container</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive checklist -->
+            <p class="checklist-heading">Week 4 Learning Activities</p>
+            <ul class="checklist" id="reading-checklist">
+                <li data-index="0">
+                    <span class="check-dot">□</span>
+                    <span>Practice the complete venipuncture procedure sequence from patient greeting to specimen labeling.</span>
+                </li>
+                <li data-index="1">
+                    <span class="check-dot">□</span>
+                    <span>Memorize the order of draw and create flashcards for each tube type, additive, and common tests.</span>
+                </li>
+                <li data-index="2">
+                    <span class="check-dot">□</span>
+                    <span>Compare and contrast routine venipuncture site prep with blood culture site preparation requirements.</span>
+                </li>
+                <li data-index="3">
+                    <span class="check-dot">□</span>
+                    <span>Practice performing peripheral blood smears using correct technique and angle.</span>
+                </li>
+                <li data-index="4">
+                    <span class="check-dot">□</span>
+                    <span>Create a comparison chart of evacuated tube, syringe, and butterfly collection techniques.</span>
+                </li>
+                <li data-index="5">
+                    <span class="check-dot">□</span>
+                    <span>Research and document the specific requirements for glucose tolerance test collections.</span>
+                </li>
+            </ul>
+
+            <!-- Action buttons -->
+            <div class="action-buttons">
+                <button class="btn btn-primary" id="mark-all-read">
+                    <span class="btn-icon">✓</span>
+                    Mark All as Read
+                </button>
+                <button class="btn btn-secondary" id="reset-progress">
+                    <span class="btn-icon">↺</span>
+                    Reset Progress
+                </button>
+            </div>
+
+            <p class="complete-hint">
+                These chapters represent the <strong>core technical skills</strong> of phlebotomy. 
+                Master both routine procedures (Ch6) and special collections (Ch7) before 
+                hands-on practice in the skills lab.
+            </p>
+        </section>
+
+        <!-- RIGHT COLUMN: framing & why these readings matter -->
+        <aside class="column" aria-label="Why these procedures matter">
+            <p class="section-tag">Clinical Application</p>
+            <h2 class="side-heading">From Routine to Specialized: The Complete Phlebotomist</h2>
+            <div class="side-card">
+                <p>
+                    <strong>Chapter 6 (Routine Venipuncture)</strong> and <strong>Chapter 7 (Special Procedures)</strong> 
+                    together define the complete phlebotomist's skillset. Mastery of both is what separates 
+                    competent phlebotomists from exceptional ones.
+                </p>
+
+                <p class="side-subheading">Physiological Factors Affecting Results (Ch6):</p>
+                <div class="factors-grid">
+                    <div class="factor-item">
+                        <div class="factor-label">Basal State</div>
+                        <div class="factor-desc">Fasting 12 hrs, no exercise</div>
+                    </div>
+                    <div class="factor-item">
+                        <div class="factor-label">Circadian Rhythm</div>
+                        <div class="factor-desc">Daily biological cycles</div>
+                    </div>
+                    <div class="factor-item">
+                        <div class="factor-label">Diurnal Variation</div>
+                        <div class="factor-desc">Daytime fluctuations</div>
+                    </div>
+                    <div class="factor-item">
+                        <div class="factor-label">Posture</div>
+                        <div class="factor-desc">Sitting vs. standing</div>
+                    </div>
+                    <div class="factor-item">
+                        <div class="factor-label">Exercise</div>
+                        <div class="factor-desc">Muscle breakdown effects</div>
+                    </div>
+                    <div class="factor-item">
+                        <div class="factor-label">Stress</div>
+                        <div class="factor-desc">Cortisol release</div>
+                    </div>
+                </div>
+
+                <p class="side-subheading">Special Procedures You Must Master (Ch7):</p>
+                <div class="procedure-grid">
+                    <div class="procedure-item">
+                        <div class="procedure-icon">🩸</div>
+                        <div class="procedure-name">Blood Cultures</div>
+                        <div class="procedure-desc">Aerobic & anaerobic, strict aseptic technique</div>
+                    </div>
+                    <div class="procedure-item">
+                        <div class="procedure-icon">💨</div>
+                        <div class="procedure-name">Arterial Blood Gases</div>
+                        <div class="procedure-desc">Allen test, ice transport, arterial puncture</div>
+                    </div>
+                    <div class="procedure-item">
+                        <div class="procedure-icon">🍬</div>
+                        <div class="procedure-name">Glucose Tolerance</div>
+                        <div class="procedure-desc">Timed collections, patient monitoring</div>
+                    </div>
+                    <div class="procedure-item">
+                        <div class="procedure-icon">⏱️</div>
+                        <div class="procedure-name">Bleeding Time</div>
+                        <div class="procedure-desc">Ivy or template method, platelet function</div>
+                    </div>
+                    <div class="procedure-item">
+                        <div class="procedure-icon">💉</div>
+                        <div class="procedure-name">Syringe Venipuncture</div>
+                        <div class="procedure-desc">Difficult veins, gentle aspiration</div>
+                    </div>
+                    <div class="procedure-item">
+                        <div class="procedure-icon">🔬</div>
+                        <div class="procedure-name">Blood Smears</div>
+                        <div class="procedure-desc">Wedge technique, proper drying</div>
+                    </div>
+                </div>
+
+                <div class="note-card">
+                    <strong>Critical Procedure Differences:</strong>
+                    <ul style="margin-top: 8px; padding-left: 20px;">
+                        <li><strong>Blood Culture vs Routine:</strong> Double skin prep (alcohol → chlorhexidine), larger volume (10-20mL)</li>
+                        <li><strong>Arterial vs Venous:</strong> Radial/brachial arteries, heparinized syringe, ice transport</li>
+                        <li><strong>Butterfly vs ETS:</strong> 21-23g wings, flexible tubing, Luer adapter, 10-15° angle</li>
+                        <li><strong>Microcapillary vs Venipuncture:</strong> Finger/heel stick, lancets, EDTA-coated tubes</li>
+                        <li><strong>Therapeutic Collection:</strong> Polycythemia vera, hemochromatosis, large volume removal</li>
+                    </ul>
+                </div>
+
+                <div class="note-card" style="margin-top: 12px;">
+                    <strong>Patient Safety Protocols:</strong>
+                    <ul style="margin-top: 8px; padding-left: 20px;">
+                        <li><strong>2-Patient Identifiers:</strong> Always verify name & date of birth BEFORE collection</li>
+                        <li><strong>Time-Critical Collections:</strong> Glucose tolerance, peak/trough drug levels, STAT orders</li>
+                        <li><strong>Special Handling:</strong> Light protection (bilirubin), ice (ABGs), warmth (cold agglutinins)</li>
+                        <li><strong>Infection Control:</strong> Blood cultures require maximal barrier precautions</li>
+                        <li><strong>Documentation:</strong> Time, site, technique, patient tolerance, complications</li>
+                    </ul>
+                </div>
+
+                <div class="note-card" style="margin-top: 12px;">
+                    <strong>When to Use Each Technique:</strong>
+                    <ul style="margin-top: 8px; padding-left: 20px;">
+                        <li><strong>Evacuated Tube System:</strong> Routine collections, most adult patients</li>
+                        <li><strong>Butterfly Needle:</strong> Fragile veins, hand veins, pediatric patients</li>
+                        <li><strong>Syringe:</strong> Difficult veins, small volume needs, no vacuum pressure</li>
+                        <li><strong>Microcapillary:</strong> Pediatric patients, point-of-care testing, small volumes</li>
+                        <li><strong>Arterial Puncture:</strong> ABG analysis, respiratory status monitoring</li>
+                    </ul>
+                </div>
+
+                <p class="side-subheading" style="margin-top: 20px; color: #e5e7eb;">Clinical Scenarios to Anticipate:</p>
+                <ul class="side-list">
+                    <li>
+                        <span class="dot"></span>
+                        <span>Collecting blood cultures on a febrile patient with suspected septicemia</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span>Performing timed collections for a 3-hour glucose tolerance test</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span>Using butterfly technique on an elderly patient with fragile, rolling veins</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span>Collecting therapeutic phlebotomy for polycythemia vera patient</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span>Preparing perfect blood smears for malaria parasite examination</span>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+    </main>
+
+    <!-- Completion Celebration Modal -->
+    <div class="completion-celebration" id="celebration-modal">
+        <div class="celebration-content">
+            <div class="celebration-icon">🏆</div>
+            <h2 class="celebration-title">Procedure Mastery Achieved!</h2>
+            <p class="celebration-text">
+                Excellent work completing Chapter 6 (Routine Venipuncture) and 
+                Chapter 7 (Special Procedures). You've mastered both the foundation 
+                and advanced techniques of phlebotomy.
+            </p>
+            <p class="celebration-text">
+                You're now ready for supervised clinical practice, where you'll 
+                apply these techniques to real patients under instructor guidance.
+            </p>
+            <button class="celebration-btn" id="close-celebration">Continue to Clinical Practice</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // State management
+            let readingState = {
+                chapter6: false,
+                chapter7: false,
+                checklist: [false, false, false, false, false, false]
+            };
+
+            // DOM elements
+            const chapter6Card = document.getElementById('chapter6-card');
+            const chapter7Card = document.getElementById('chapter7-card');
+            const checklistItems = document.querySelectorAll('#reading-checklist li');
+            const progressFill = document.getElementById('progress-fill');
+            const progressPercent = document.getElementById('progress-percent');
+            const markAllBtn = document.getElementById('mark-all-read');
+            const resetBtn = document.getElementById('reset-progress');
+            const celebrationModal = document.getElementById('celebration-modal');
+            const closeCelebrationBtn = document.getElementById('close-celebration');
+
+            // Calculate progress
+            function calculateProgress() {
+                const totalItems = 8; // 2 chapters + 6 checklist items
+                let completed = 0;
+                
+                if (readingState.chapter6) completed++;
+                if (readingState.chapter7) completed++;
+                
+                readingState.checklist.forEach(item => {
+                    if (item) completed++;
+                });
+                
+                const percentage = Math.round((completed / totalItems) * 100);
+                
+                // Update progress bar
+                progressFill.style.width = `${percentage}%`;
+                progressPercent.textContent = `${percentage}%`;
+                
+                // Update progress bar color based on completion
+                if (percentage === 100) {
+                    progressFill.style.background = 'linear-gradient(90deg, var(--color-success), #00d2a0)';
+                    progressPercent.style.color = 'var(--color-success)';
+                    showCelebration();
+                } else if (percentage >= 50) {
+                    progressFill.style.background = 'linear-gradient(90deg, var(--color-primary), var(--color-accent))';
+                    progressPercent.style.color = 'var(--color-primary)';
+                } else {
+                    progressFill.style.background = 'linear-gradient(90deg, var(--color-primary), var(--color-accent))';
+                    progressPercent.style.color = 'var(--color-primary)';
+                }
+                
+                return percentage;
+            }
+
+            // Toggle chapter completion
+            function toggleChapter(chapter) {
+                const card = chapter === 6 ? chapter6Card : chapter7Card;
+                const isCompleted = chapter === 6 ? readingState.chapter6 : readingState.chapter7;
+                
+                if (isCompleted) {
+                    // Mark as incomplete
+                    card.classList.remove('completed');
+                    if (chapter === 6) {
+                        readingState.chapter6 = false;
+                        document.getElementById('chapter6-time').textContent = 'Est. 90-110 min';
+                    } else {
+                        readingState.chapter7 = false;
+                        document.getElementById('chapter7-time').textContent = 'Est. 80-100 min';
+                    }
+                } else {
+                    // Mark as complete
+                    card.classList.add('completed');
+                    if (chapter === 6) {
+                        readingState.chapter6 = true;
+                        document.getElementById('chapter6-time').textContent = '✓ Completed';
+                    } else {
+                        readingState.chapter7 = true;
+                        document.getElementById('chapter7-time').textContent = '✓ Completed';
+                    }
+                    
+                    // Add animation
+                    card.style.transform = 'scale(1.02)';
+                    setTimeout(() => {
+                        card.style.transform = '';
+                    }, 300);
+                }
+                
+                calculateProgress();
+            }
+
+            // Toggle checklist item
+            function toggleChecklistItem(index) {
+                const item = checklistItems[index];
+                const dot = item.querySelector('.check-dot');
+                
+                readingState.checklist[index] = !readingState.checklist[index];
+                
+                if (readingState.checklist[index]) {
+                    item.classList.add('completed');
+                    dot.textContent = '✓';
+                    dot.style.background = 'var(--color-success)';
+                    dot.style.borderColor = 'var(--color-success)';
+                    dot.style.color = 'white';
+                } else {
+                    item.classList.remove('completed');
+                    dot.textContent = '□';
+                    dot.style.background = '';
+                    dot.style.borderColor = 'rgba(148, 163, 184, 0.9)';
+                    dot.style.color = 'rgba(148, 163, 184, 0.9)';
+                }
+                
+                calculateProgress();
+            }
+
+            // Mark all as read
+            function markAllAsRead() {
+                // Mark both chapters
+                readingState.chapter6 = true;
+                readingState.chapter7 = true;
+                chapter6Card.classList.add('completed');
+                chapter7Card.classList.add('completed');
+                document.getElementById('chapter6-time').textContent = '✓ Completed';
+                document.getElementById('chapter7-time').textContent = '✓ Completed';
+                
+                // Mark all checklist items
+                readingState.checklist = [true, true, true, true, true, true];
+                checklistItems.forEach((item, index) => {
+                    item.classList.add('completed');
+                    const dot = item.querySelector('.check-dot');
+                    dot.textContent = '✓';
+                    dot.style.background = 'var(--color-success)';
+                    dot.style.borderColor = 'var(--color-success)';
+                    dot.style.color = 'white';
+                });
+                
+                calculateProgress();
+                
+                // Celebration animation
+                const cards = document.querySelectorAll('.reading-card');
+                cards.forEach(card => {
+                    card.style.transform = 'scale(1.05)';
+                    setTimeout(() => {
+                        card.style.transform = '';
+                    }, 300);
+                });
+            }
+
+            // Reset progress
+            function resetProgress() {
+                // Reset chapters
+                readingState.chapter6 = false;
+                readingState.chapter7 = false;
+                chapter6Card.classList.remove('completed');
+                chapter7Card.classList.remove('completed');
+                document.getElementById('chapter6-time').textContent = 'Est. 90-110 min';
+                document.getElementById('chapter7-time').textContent = 'Est. 80-100 min';
+                
+                // Reset checklist
+                readingState.checklist = [false, false, false, false, false, false];
+                checklistItems.forEach((item, index) => {
+                    item.classList.remove('completed');
+                    const dot = item.querySelector('.check-dot');
+                    dot.textContent = '□';
+                    dot.style.background = '';
+                    dot.style.borderColor = 'rgba(148, 163, 184, 0.9)';
+                    dot.style.color = 'rgba(148, 163, 184, 0.9)';
+                });
+                
+                calculateProgress();
+            }
+
+            // Show celebration modal
+            function showCelebration() {
+                setTimeout(() => {
+                    celebrationModal.style.display = 'flex';
+                }, 500);
+            }
+
+            // Close celebration modal
+            function closeCelebration() {
+                celebrationModal.style.display = 'none';
+            }
+
+            // Event listeners
+            chapter6Card.addEventListener('click', () => toggleChapter(6));
+            chapter7Card.addEventListener('click', () => toggleChapter(7));
+            
+            chapter6Card.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    toggleChapter(6);
+                }
+            });
+            
+            chapter7Card.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    toggleChapter(7);
+                }
+            });
+            
+            checklistItems.forEach((item, index) => {
+                item.addEventListener('click', () => toggleChecklistItem(index));
+                item.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        toggleChecklistItem(index);
+                    }
+                });
+            });
+            
+            markAllBtn.addEventListener('click', markAllAsRead);
+            resetBtn.addEventListener('click', resetProgress);
+            closeCelebrationBtn.addEventListener('click', closeCelebration);
+            
+            // Close modal when clicking outside
+            celebrationModal.addEventListener('click', (e) => {
+                if (e.target === celebrationModal) {
+                    closeCelebration();
+                }
+            });
+
+            // Initialize with some progress for demo
+            setTimeout(() => {
+                // Mark first checklist item as completed for demo
+                toggleChecklistItem(0);
+            }, 1000);
+
+            // Add scroll animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Observe reading cards
+            const readingCards = document.querySelectorAll('.reading-card');
+            readingCards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                observer.observe(card);
+            });
+
+            // Observe checklist items with delay
+            checklistItems.forEach((item, index) => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateX(-20px)';
+                item.style.transition = `opacity 0.5s ease ${index * 0.1}s, transform 0.5s ease ${index * 0.1}s`;
+                observer.observe(item);
+            });
+
+            // Animate order of draw steps
+            const drawSteps = document.querySelectorAll('.draw-step');
+            drawSteps.forEach((step, index) => {
+                step.style.opacity = '0';
+                step.style.transform = 'translateX(-20px)';
+                step.style.transition = `opacity 0.5s ease ${index * 0.1}s, transform 0.5s ease ${index * 0.1}s`;
+                setTimeout(() => {
+                    step.style.opacity = '1';
+                    step.style.transform = 'translateX(0)';
+                }, 800 + (index * 100));
+            });
+
+            // Animate procedure steps
+            const stepItems = document.querySelectorAll('.step-item');
+            stepItems.forEach((step, index) => {
+                step.style.opacity = '0';
+                step.style.transform = 'translateX(-20px)';
+                step.style.transition = `opacity 0.5s ease ${index * 0.1}s, transform 0.5s ease ${index * 0.1}s`;
+                setTimeout(() => {
+                    step.style.opacity = '1';
+                    step.style.transform = 'translateX(0)';
+                }, 1000 + (index * 100));
+            });
+        });
+    </script>
+</body>
+</html>
