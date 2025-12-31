@@ -1,0 +1,1364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>AlliedRx -- Phlebotomy Week 5 Objectives</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-error: #e17055;
+            --color-warning: #fdcb6e;
+            --color-info: #0984e3;
+            --color-geriatric: #6c5ce7;
+            --color-neonatal: #fd79a8;
+            --color-complication: #e17055;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
+            --radius-lg: 24px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 60px rgba(175, 75, 239, 0.25);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(
+                circle at top left,
+                #ffffff 0,
+                #f1ecff 40%,
+                var(--color-bg) 100%
+            );
+            color: var(--color-text);
+            -webkit-text-size-adjust: 100%;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 12px;
+            }
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1120px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px 30px;
+            display: grid;
+            grid-template-columns: minmax(0, 3.1fr) minmax(0, 2.4fr);
+            gap: 28px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .page {
+                grid-template-columns: 1fr;
+                padding: 22px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 0;
+            }
+            .page {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 18px 14px 22px;
+                gap: 22px;
+            }
+        }
+
+        img,
+        .page,
+        .column,
+        .objective-card,
+        .week-overview {
+            max-width: 100%;
+        }
+
+        .column {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .brand-logo:hover {
+            transform: scale(1.05);
+        }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { background-color: rgba(175, 75, 239, 0.08); }
+            50% { background-color: rgba(175, 75, 239, 0.15); }
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--color-error);
+            flex-shrink: 0;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .badge-mode:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+        @media (max-width: 480px) {
+            .brand-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .badge-mode {
+                margin-top: 6px;
+            }
+        }
+
+        h1 {
+            font-size: clamp(2rem, 3vw, 2.4rem);
+            line-height: 1.05;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 34rem;
+            margin-bottom: 18px;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        /* Objectives list */
+        .objectives-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .objective-card {
+            background: #08070a;
+            color: #ffffff;
+            border-radius: 18px;
+            padding: 10px 16px 14px;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .objective-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.7s ease;
+        }
+
+        .objective-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .objective-card:hover::before {
+            left: 100%;
+        }
+
+        .objective-card.active {
+            background: linear-gradient(135deg, #0f172a, #1e1b4b);
+            border-left: 4px solid var(--color-accent);
+        }
+
+        @media (max-width: 480px) {
+            .objective-card {
+                grid-template-columns: auto 1fr;
+                grid-template-rows: auto auto;
+            }
+            .objective-icon {
+                justify-self: flex-end;
+            }
+        }
+
+        .objective-number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 999px;
+            background: #ffffff;
+            color: #111827;
+            font-weight: 700;
+            font-size: 1.05rem;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .objective-card:hover .objective-number {
+            background: var(--color-primary-soft);
+            transform: rotate(5deg);
+        }
+
+        .objective-main {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .objective-verb {
+            font-size: 0.98rem;
+            font-weight: 700;
+            color: var(--color-primary-soft);
+            transition: color 0.3s ease;
+        }
+
+        .objective-card:hover .objective-verb {
+            color: #ffffff;
+        }
+
+        .objective-text {
+            font-size: 0.84rem;
+            color: #e5e7eb;
+            line-height: 1.4;
+        }
+
+        .objective-icon {
+            width: 26px;
+            height: 26px;
+            border-radius: 999px;
+            border: 1px solid rgba(250, 250, 250, 0.16);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: #f9fafb;
+            background: linear-gradient(
+                135deg,
+                rgba(175, 75, 239, 0.1),
+                rgba(0, 0, 0, 0.4)
+            );
+            transition: all 0.3s ease;
+        }
+
+        .objective-card:hover .objective-icon {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+            transform: scale(1.1);
+        }
+
+        /* Chapter color coding */
+        .objective-card[data-chapter="chapter8"] {
+            border-left: 3px solid var(--color-neonatal);
+        }
+
+        .objective-card[data-chapter="chapter9"] {
+            border-left: 3px solid var(--color-complication);
+        }
+
+        .objective-card[data-chapter="chapter8"] .objective-verb {
+            color: #fd79a8;
+        }
+
+        .objective-card[data-chapter="chapter9"] .objective-verb {
+            color: #ffa8a8;
+        }
+
+        /* Interactive filter buttons */
+        .chapter-filter {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border-radius: 20px;
+            background: rgba(12, 10, 24, 0.05);
+            border: 1px solid rgba(12, 10, 24, 0.1);
+            color: var(--color-text);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+        .filter-btn.active {
+            background: var(--color-primary);
+            color: white;
+            border-color: var(--color-primary);
+        }
+
+        .filter-btn[data-filter="chapter8"] {
+            border-color: rgba(253, 121, 168, 0.3);
+        }
+
+        .filter-btn[data-filter="chapter9"] {
+            border-color: rgba(225, 112, 85, 0.3);
+        }
+
+        /* Right-hand content */
+        .objectives-header {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--color-text);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.5s both;
+        }
+
+        .section-tag {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-primary);
+            font-weight: 600;
+            margin-bottom: 10px;
+            animation: fadeInUp 0.6s ease-out 0.6s both;
+        }
+
+        .week-overview {
+            background: rgba(12, 10, 24, 0.94);
+            border-radius: 18px;
+            padding: 16px 18px 18px;
+            color: #e5e7eb;
+            font-size: 0.88rem;
+            line-height: 1.7;
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.6);
+            margin-bottom: 16px;
+            animation: fadeInUp 0.6s ease-out 0.7s both;
+            transition: transform 0.3s ease;
+        }
+
+        .week-overview:hover {
+            transform: translateY(-2px);
+        }
+
+        .week-overview strong {
+            color: #ffffff;
+        }
+
+        .mini-heading {
+            font-size: 0.86rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: #c4b5fd;
+            font-weight: 600;
+            margin: 8px 0 10px;
+        }
+
+        .outcomes-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-size: 0.86rem;
+            color: #f9fafb;
+        }
+
+        .outcomes-list li {
+            display: flex;
+            gap: 8px;
+            align-items: flex-start;
+            transition: transform 0.3s ease;
+        }
+
+        .outcomes-list li:hover {
+            transform: translateX(5px);
+        }
+
+        .dot {
+            width: 6px;
+            height: 6px;
+            margin-top: 6px;
+            border-radius: 999px;
+            background: var(--color-accent);
+            flex-shrink: 0;
+            animation: pulse 2s infinite;
+        }
+
+        .note-card {
+            margin-top: 14px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            background: rgba(15, 23, 42, 0.7);
+            padding: 10px 12px;
+            font-size: 0.78rem;
+            color: #e5e7eb;
+            transition: all 0.3s ease;
+        }
+
+        .note-card:hover {
+            border-color: var(--color-primary-soft);
+            background: rgba(15, 23, 42, 0.9);
+        }
+
+        .note-card strong {
+            color: #fef3c7;
+        }
+
+        /* Interactive counter */
+        .progress-counter {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(175, 75, 239, 0.05);
+            border-radius: 16px;
+            padding: 12px 18px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(175, 75, 239, 0.1);
+        }
+
+        .counter-item {
+            text-align: center;
+        }
+
+        .counter-number {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--color-primary);
+            display: block;
+        }
+
+        .counter-label {
+            font-size: 0.75rem;
+            color: var(--color-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Animation for counter */
+        @keyframes countUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .counter-item {
+            animation: countUp 0.6s ease-out forwards;
+        }
+
+        .counter-item:nth-child(1) { animation-delay: 0.8s; }
+        .counter-item:nth-child(2) { animation-delay: 1s; }
+        .counter-item:nth-child(3) { animation-delay: 1.2s; }
+
+        /* Neonatal Box */
+        .neonatal-box {
+            background: linear-gradient(135deg, rgba(253, 121, 168, 0.1), rgba(175, 75, 239, 0.1));
+            border-radius: 16px;
+            padding: 16px;
+            margin-top: 20px;
+            border: 1px solid rgba(253, 121, 168, 0.3);
+        }
+
+        .neonatal-title {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--color-neonatal);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .newborn-tests {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 10px;
+        }
+
+        .test-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .test-name {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+
+        .test-purpose {
+            font-size: 0.72rem;
+            color: #a5b4cb;
+        }
+
+        /* Geriatric Box */
+        .geriatric-box {
+            background: linear-gradient(135deg, rgba(108, 92, 231, 0.1), rgba(131, 128, 240, 0.1));
+            border-radius: 16px;
+            padding: 16px;
+            margin-top: 20px;
+            border: 1px solid rgba(108, 92, 231, 0.3);
+        }
+
+        .geriatric-title {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--color-geriatric);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .geriatric-considerations {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+        }
+
+        .consideration-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 10px;
+            border-left: 4px solid var(--color-geriatric);
+        }
+
+        .consideration-name {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 6px;
+        }
+
+        .consideration-desc {
+            font-size: 0.72rem;
+            color: #a5b4cb;
+        }
+
+        /* Complications Box */
+        .complications-box {
+            background: linear-gradient(135deg, rgba(225, 112, 85, 0.1), rgba(253, 203, 110, 0.1));
+            border-radius: 16px;
+            padding: 16px;
+            margin-top: 20px;
+            border: 1px solid rgba(225, 112, 85, 0.3);
+        }
+
+        .complications-title {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--color-complication);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .complication-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 10px;
+        }
+
+        .complication-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .complication-name {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+
+        .complication-action {
+            font-size: 0.72rem;
+            color: #a5b4cb;
+        }
+
+        /* Key Terms Box */
+        .key-terms-box {
+            background: linear-gradient(135deg, rgba(108, 92, 231, 0.1), rgba(253, 121, 168, 0.1));
+            border-radius: 16px;
+            padding: 16px;
+            margin-top: 16px;
+            border: 1px solid rgba(108, 92, 231, 0.2);
+        }
+
+        .key-terms-title {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--color-geriatric);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .key-terms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 8px;
+            font-size: 0.8rem;
+            color: #e5e7eb;
+        }
+
+        .key-term {
+            padding: 6px 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* Statistics Box */
+        .stats-box {
+            background: linear-gradient(135deg, rgba(0, 184, 148, 0.1), rgba(131, 128, 240, 0.1));
+            border-radius: 16px;
+            padding: 16px;
+            margin-top: 20px;
+            border: 1px solid rgba(0, 184, 148, 0.3);
+        }
+
+        .stats-title {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--color-success);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-label {
+            font-size: 0.82rem;
+            color: #e5e7eb;
+        }
+
+        .stat-value {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        @media (max-width: 600px) {
+            .key-terms-grid,
+            .newborn-tests,
+            .geriatric-considerations,
+            .complication-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="week5-heading">
+        <!-- LEFT COLUMN: title + objective cards -->
+        <section class="column" aria-label="Week 5 objectives list">
+            <header class="brand-row">
+                <div class="brand">
+                    <img
+                        src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                        alt="AlliedRx logo"
+                        class="brand-logo"
+                    />
+                    <div class="course-meta">
+                        <span class="course-name">Phlebotomy Technician Program • PBT</span>
+                        <div class="week-label">
+                            <span class="week-label-dot"></span>
+                            <span>Week 5 --- Special Populations & Complications</span>
+                        </div>
+                    </div>
+                </div>
+                <span class="badge-mode">Campus &amp; Online</span>
+            </header>
+
+            <h1 id="week5-heading">Week 5 Objectives</h1>
+            <p class="subtitle">
+                Master procedures for <strong>vulnerable populations</strong> and learn to 
+                <strong>prevent and manage complications</strong> for safe, effective phlebotomy 
+                across all patient demographics.
+            </p>
+
+            <!-- Interactive filter buttons -->
+            <div class="chapter-filter">
+                <button class="filter-btn active" data-filter="all">All Objectives</button>
+                <button class="filter-btn" data-filter="chapter8">Chapter 8: Neonatal/Geriatric</button>
+                <button class="filter-btn" data-filter="chapter9">Chapter 9: Complications</button>
+            </div>
+
+            <!-- Progress counter -->
+            <div class="progress-counter">
+                <div class="counter-item">
+                    <span class="counter-number" id="total-objectives">13</span>
+                    <span class="counter-label">Total Objectives</span>
+                </div>
+                <div class="counter-item">
+                    <span class="counter-number">2</span>
+                    <span class="counter-label">Chapters</span>
+                </div>
+                <div class="counter-item">
+                    <span class="counter-number">22</span>
+                    <span class="counter-label">Key Terms</span>
+                </div>
+            </div>
+
+            <div class="objectives-list" id="objectives-container">
+                <!-- Chapter 8: Neonatal and Geriatric Procedures -->
+                <article class="objective-card" data-chapter="chapter8">
+                    <div class="objective-number">01</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Name</div>
+                        <p class="objective-text">
+                            Name common tests performed on newborn infants.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">👶</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter8">
+                    <div class="objective-number">02</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Describe</div>
+                        <p class="objective-text">
+                            Describe the procedure for collecting blood from newborns.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">💉</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter8">
+                    <div class="objective-number">03</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Define</div>
+                        <p class="objective-text">
+                            Define iatrogenic anemia.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🔬</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter8">
+                    <div class="objective-number">04</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Describe</div>
+                        <p class="objective-text">
+                            Describe the scope of the geriatric population in relation to the total U.S. population.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">📊</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter8">
+                    <div class="objective-number">05</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Discuss</div>
+                        <p class="objective-text">
+                            Discuss the major medical considerations associated with aging when performing phlebotomy.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">👵</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter8">
+                    <div class="objective-number">06</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Describe</div>
+                        <p class="objective-text">
+                            Describe the phlebotomy considerations relevant to the major medical conditions associated with aging.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🏥</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter8">
+                    <div class="objective-number">07</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Explain</div>
+                        <p class="objective-text">
+                            Explain why arthritis may make phlebotomy more difficult.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🦴</div>
+                </article>
+
+                <!-- Chapter 9: Considerations and Complications -->
+                <article class="objective-card" data-chapter="chapter9">
+                    <div class="objective-number">08</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">List & Address</div>
+                        <p class="objective-text">
+                            List situations when phlebotomists may encounter an uncooperative or absent patient and know how to address each.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🚫</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter9">
+                    <div class="objective-number">09</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">List & Address</div>
+                        <p class="objective-text">
+                            List and address common considerations of phlebotomy.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">📝</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter9">
+                    <div class="objective-number">10</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">List & Address</div>
+                        <p class="objective-text">
+                            List and address common complications of venipuncture.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">⚠️</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter9">
+                    <div class="objective-number">11</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Describe</div>
+                        <p class="objective-text">
+                            Describe less common complications of venipuncture.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🩺</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter9">
+                    <div class="objective-number">12</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Describe</div>
+                        <p class="objective-text">
+                            Describe various technical problems associated with phlebotomy practice.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🔧</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter9">
+                    <div class="objective-number">13</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Discuss</div>
+                        <p class="objective-text">
+                            Discuss how to avoid unacceptable specimens.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">✅</div>
+                </article>
+            </div>
+        </section>
+
+        <!-- RIGHT COLUMN: narrative + outcomes framing -->
+        <aside class="column" aria-label="Overview of this week's content">
+            <h2 class="objectives-header">Specialized Care & Complication Management</h2>
+            <p class="section-tag">Vulnerable Populations • Problem-Solving • Safety Protocols</p>
+
+            <div class="week-overview">
+                <p>
+                    Week 5 addresses the <strong>unique challenges</strong> of working with 
+                    vulnerable populations and managing complications. You'll learn specialized 
+                    techniques for neonates and geriatric patients while developing skills to 
+                    prevent and respond to phlebotomy complications.
+                </p>
+
+                <p>
+                    These chapters are interconnected: <strong>understanding special populations 
+                    helps prevent complications</strong>. Age-related changes, medical conditions, 
+                    and patient cooperation levels all influence technique and outcomes. 
+                    Proactive management reduces risks.
+                </p>
+
+                <!-- Newborn Testing Section -->
+                <div class="neonatal-box">
+                    <div class="neonatal-title">
+                        <span>👶</span> Common Newborn Tests & Collection
+                    </div>
+                    <div class="newborn-tests">
+                        <div class="test-item">
+                            <div class="test-name">PKU Screening</div>
+                            <div class="test-purpose">Phenylketonuria detection</div>
+                        </div>
+                        <div class="test-item">
+                            <div class="test-name">Galactosemia</div>
+                            <div class="test-purpose">Galactose metabolism</div>
+                        </div>
+                        <div class="test-item">
+                            <div class="test-name">Bilirubin</div>
+                            <div class="test-purpose">Jaundice assessment</div>
+                        </div>
+                        <div class="test-item">
+                            <div class="test-name">Hemoglobin</div>
+                            <div class="test-purpose">Anemia screening</div>
+                        </div>
+                        <div class="test-item">
+                            <div class="test-name">Blood Typing</div>
+                            <div class="test-purpose">ABO/Rh determination</div>
+                        </div>
+                        <div class="test-item">
+                            <div class="test-name">CBC</div>
+                            <div class="test-purpose">Complete blood count</div>
+                        </div>
+                    </div>
+                    <div class="note-card" style="margin-top: 12px; background: rgba(253, 121, 168, 0.1);">
+                        <strong>⚠️ IATROGENIC ANEMIA:</strong> Caused by excessive blood draws in infants. 
+                        Collect <strong>minimum volume required</strong>, use microcollection techniques, 
+                        and coordinate tests to avoid multiple draws.
+                    </div>
+                </div>
+
+                <!-- Geriatric Statistics -->
+                <div class="stats-box">
+                    <div class="stats-title">
+                        <span>📊</span> Geriatric Population Statistics (US)
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Population 65+</span>
+                        <span class="stat-value">54 million</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Percentage of US Population</span>
+                        <span class="stat-value">16.5%</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Projected 2030 Population</span>
+                        <span class="stat-value">74 million</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Healthcare Utilization Rate</span>
+                        <span class="stat-value">3× higher than younger adults</span>
+                    </div>
+                </div>
+
+                <!-- Geriatric Considerations -->
+                <div class="geriatric-box">
+                    <div class="geriatric-title">
+                        <span>👵</span> Geriatric Phlebotomy Considerations
+                    </div>
+                    <div class="geriatric-considerations">
+                        <div class="consideration-item">
+                            <div class="consideration-name">Skin Changes</div>
+                            <div class="consideration-desc">Thinner, fragile skin, decreased elasticity</div>
+                        </div>
+                        <div class="consideration-item">
+                            <div class="consideration-name">Vein Accessibility</div>
+                            <div class="consideration-desc">Rolling, fragile, harder to palpate veins</div>
+                        </div>
+                        <div class="consideration-item">
+                            <div class="consideration-name">Arthritis Impact</div>
+                            <div class="consideration-desc">Limited joint mobility affects positioning</div>
+                        </div>
+                        <div class="consideration-item">
+                            <div class="consideration-name">Cognitive Changes</div>
+                            <div class="consideration-desc">Dementia may affect cooperation</div>
+                        </div>
+                        <div class="consideration-item">
+                            <div class="consideration-name">Multiple Medications</div>
+                            <div class="consideration-desc">Increased risk of bleeding/bruising</div>
+                        </div>
+                        <div class="consideration-item">
+                            <div class="consideration-name">Visual/Hearing</div>
+                            <div class="consideration-desc">Cataracts, hearing loss affect communication</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Common Complications -->
+                <div class="complications-box">
+                    <div class="complications-title">
+                        <span>⚠️</span> Common Phlebotomy Complications
+                    </div>
+                    <div class="complication-grid">
+                        <div class="complication-item">
+                            <div class="complication-name">Hematoma</div>
+                            <div class="complication-action">Apply pressure immediately</div>
+                        </div>
+                        <div class="complication-item">
+                            <div class="complication-name">Syncope (Fainting)</div>
+                            <div class="complication-action">Lower head, ensure safety</div>
+                        </div>
+                        <div class="complication-item">
+                            <div class="complication-name">Hemolysis</div>
+                            <div class="complication-action">Gentle technique, proper tube filling</div>
+                        </div>
+                        <div class="complication-item">
+                            <div class="complication-name">Nerve Injury</div>
+                            <div class="complication-action">Avoid median nerve area</div>
+                        </div>
+                        <div class="complication-item">
+                            <div class="complication-name">Infection</div>
+                            <div class="complication-action">Proper aseptic technique</div>
+                        </div>
+                        <div class="complication-item">
+                            <div class="complication-name">Short Draw</div>
+                            <div class="complication-action">Ensure proper blood:additive ratio</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Key Terms Box -->
+                <div class="key-terms-box">
+                    <div class="key-terms-title">
+                        <span>📖</span> Key Terminology
+                    </div>
+                    <div class="key-terms-grid">
+                        <div class="key-term">iatrogenic anemia</div>
+                        <div class="key-term">hemolytic disease</div>
+                        <div class="key-term">phenylalanine</div>
+                        <div class="key-term">galactose</div>
+                        <div class="key-term">arthritis</div>
+                        <div class="key-term">dementia</div>
+                        <div class="key-term">cataract</div>
+                        <div class="key-term">elasticity</div>
+                        <div class="key-term">hematoma</div>
+                        <div class="key-term">syncope</div>
+                        <div class="key-term">hemolysis</div>
+                        <div class="key-term">edema</div>
+                        <div class="key-term">mastectomy</div>
+                        <div class="key-term">short draw</div>
+                    </div>
+                </div>
+
+                <p class="mini-heading">By the end of this week, you will be able to:</p>
+                <ul class="outcomes-list">
+                    <li>
+                        <span class="dot"></span>
+                        <span>Perform safe blood collection from newborns using heel stick techniques.</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span>Adapt venipuncture techniques for geriatric patients with age-related changes.</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span>Prevent and manage common phlebotomy complications like hematomas and syncope.</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span>Address uncooperative patients and difficult situations professionally.</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span>Recognize and avoid technical problems that lead to unacceptable specimens.</span>
+                    </li>
+                </ul>
+
+                <div class="note-card">
+                    <strong>Newborn Heel Stick Protocol:</strong> Use the <strong>lateral plantar surface</strong> 
+                    of heel, not the center (avoids calcaneus bone). Warm heel first to increase blood flow. 
+                    Puncture <strong>no deeper than 2.0mm</strong> to avoid bone injury. Wipe away first drop 
+                    (contains tissue fluid).
+                </div>
+
+                <div class="note-card" style="margin-top: 12px;">
+                    <strong>Geriatric Vein Techniques:</strong> For fragile veins: <strong>use smaller gauge 
+                    needles (23g)</strong>, <strong>avoid tourniquet if possible</strong>, or use very loose 
+                    application. Apply pressure <strong>longer after draw</strong> (3-5 minutes). Consider 
+                    butterfly needles for better control.
+                </div>
+
+                <div class="note-card" style="margin-top: 12px;">
+                    <strong>Syncope Management:</strong> Watch for warning signs: <strong>pallor, sweating, 
+                    nausea, lightheadedness</strong>. If patient faints: <strong>lower head immediately</strong>, 
+                    ensure airway is clear, monitor breathing. Never leave patient unattended. Have ammonia 
+                    inhalants available.
+                </div>
+
+                <div class="note-card" style="margin-top: 12px;">
+                    <strong>Uncooperative Patients:</strong> For dementia/confusion: <strong>simple, clear 
+                    instructions</strong>, involve family/caregiver. For anxious patients: <strong>calm 
+                    reassurance</strong>, distraction techniques. For combative patients: <strong>stop procedure</strong>, 
+                    seek assistance, document behavior. Never force a procedure.
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Filter functionality
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const objectiveCards = document.querySelectorAll('.objective-card');
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Update active button
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+
+                    const filter = this.getAttribute('data-filter');
+
+                    // Filter cards
+                    objectiveCards.forEach(card => {
+                        if (filter === 'all') {
+                            card.style.display = 'grid';
+                            setTimeout(() => {
+                                card.style.opacity = '1';
+                                card.style.transform = 'translateY(0)';
+                            }, 10);
+                        } else {
+                            if (card.getAttribute('data-chapter') === filter) {
+                                card.style.display = 'grid';
+                                setTimeout(() => {
+                                    card.style.opacity = '1';
+                                    card.style.transform = 'translateY(0)';
+                                }, 10);
+                            } else {
+                                card.style.opacity = '0';
+                                card.style.transform = 'translateY(10px)';
+                                setTimeout(() => {
+                                    card.style.display = 'none';
+                                }, 300);
+                            }
+                        }
+                    });
+                });
+            });
+
+            // Interactive objective cards
+            objectiveCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    // Toggle active state
+                    this.classList.toggle('active');
+
+                    // Add subtle animation
+                    if (this.classList.contains('active')) {
+                        const icon = this.querySelector('.objective-icon');
+                        icon.style.transform = 'scale(1.2) rotate(10deg)';
+                        setTimeout(() => {
+                            icon.style.transform = 'scale(1.1)';
+                        }, 300);
+                    }
+                });
+
+                // Add keyboard navigation
+                card.setAttribute('tabindex', '0');
+                card.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        this.click();
+                    }
+                });
+            });
+
+            // Animate counter numbers
+            function animateCounter(element, target, duration) {
+                let start = 0;
+                const increment = target / (duration / 16); // 60fps
+                const timer = setInterval(() => {
+                    start += increment;
+                    if (start >= target) {
+                        element.textContent = target;
+                        clearInterval(timer);
+                    } else {
+                        element.textContent = Math.floor(start);
+                    }
+                }, 16);
+            }
+
+            // Start counter animation after page load
+            setTimeout(() => {
+                const counterElement = document.getElementById('total-objectives');
+                animateCounter(counterElement, 13, 1000);
+            }, 1500);
+
+            // Add hover effect to outcomes list items
+            const outcomesItems = document.querySelectorAll('.outcomes-list li');
+            outcomesItems.forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    const dot = this.querySelector('.dot');
+                    dot.style.transform = 'scale(1.5)';
+                    dot.style.background = 'var(--color-primary)';
+                });
+
+                item.addEventListener('mouseleave', function() {
+                    const dot = this.querySelector('.dot');
+                    dot.style.transform = 'scale(1)';
+                    dot.style.background = 'var(--color-accent)';
+                });
+            });
+
+            // Add scroll animation for cards
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all objective cards
+            objectiveCards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                observer.observe(card);
+            });
+
+            // Add interactivity to test items
+            const testItems = document.querySelectorAll('.test-item, .consideration-item, .complication-item');
+            testItems.forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-3px)';
+                    this.style.boxShadow = '0 8px 20px rgba(0, 0, 0, 0.3)';
+                });
+
+                item.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                    this.style.boxShadow = 'none';
+                });
+            });
+
+            // Add interactivity to stat items
+            const statItems = document.querySelectorAll('.stat-item');
+            statItems.forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    this.style.backgroundColor = 'rgba(255, 255, 255, 0.05)';
+                });
+
+                item.addEventListener('mouseleave', function() {
+                    this.style.backgroundColor = '';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
