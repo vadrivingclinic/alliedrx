@@ -1,0 +1,2200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AlliedRx -  Medical Term Construction & Analysis</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-error: #e17055;
+            --color-warning: #fdcb6e;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
+            --color-dark: #0c0a18;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+            --shadow-card: 0 12px 30px rgba(15, 23, 42, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(
+                circle at top left,
+                #ffffff 0,
+                #f1ecff 40%,
+                var(--color-bg) 100%
+            );
+            color: var(--color-text);
+            -webkit-text-size-adjust: 100%;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 12px; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes highlight {
+            0%, 100% { background-color: transparent; }
+            50% { background-color: rgba(175, 75, 239, 0.1); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @media (max-width: 900px) {
+            .page { padding: 22px; }
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 0; }
+            .page {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 18px 14px 22px;
+            }
+        }
+
+        /* Header */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .brand-logo:hover { transform: scale(1.05); }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--color-success);
+            flex-shrink: 0;
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .badge-mode:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+        @media (max-width: 480px) {
+            .brand-row { flex-direction: column; align-items: flex-start; }
+            .badge-mode { margin-top: 6px; }
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 3vw, 2.2rem);
+            line-height: 1.1;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .module-subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 600px;
+            margin-bottom: 24px;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        /* Progress Tracker */
+        .progress-tracker {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            position: relative;
+            padding: 0 20px;
+        }
+
+        .progress-tracker::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 50px;
+            right: 50px;
+            height: 3px;
+            background: rgba(12, 10, 24, 0.08);
+            z-index: 1;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+
+        .step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--color-muted);
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.active .step-circle {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .progress-step.completed .step-circle {
+            background: var(--color-success);
+            border-color: var(--color-success);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.75rem;
+            color: var(--color-muted);
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .progress-step.active .step-label {
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        /* Progress Summary */
+        .progress-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+            animation: fadeInUp 0.6s ease-out 0.5s both;
+        }
+
+        .summary-card {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            border: 1px solid rgba(12, 10, 24, 0.06);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-card);
+            border-color: var(--color-primary-soft);
+        }
+
+        .summary-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--color-primary);
+            display: block;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .summary-label {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Activity Container */
+        .activity-container {
+            margin-bottom: 30px;
+        }
+
+        .activity-card {
+            background: white;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            padding: 25px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .activity-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--color-primary);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .activity-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--color-primary-soft);
+        }
+
+        .activity-card:hover::before { opacity: 1; }
+
+        .activity-card.completed {
+            border-color: var(--color-success);
+        }
+
+        .activity-card.completed::before {
+            background: var(--color-success);
+            opacity: 1;
+        }
+
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .activity-number {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .activity-status {
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-muted);
+        }
+
+        .activity-card.completed .activity-status {
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--color-success);
+        }
+
+        .activity-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 10px;
+        }
+
+        .activity-description {
+            font-size: 0.9rem;
+            color: var(--color-muted);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        /* Component Bank */
+        .component-bank {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 2px solid rgba(12, 10, 24, 0.08);
+        }
+
+        .bank-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .bank-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .bank-item {
+            padding: 10px 15px;
+            background: rgba(175, 75, 239, 0.1);
+            border-radius: var(--radius-sm);
+            border: 2px solid transparent;
+            cursor: grab;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .bank-item:hover {
+            background: rgba(175, 75, 239, 0.2);
+            border-color: var(--color-primary);
+            transform: translateY(-2px);
+        }
+
+        .bank-item.dragging {
+            opacity: 0.7;
+            transform: scale(0.95);
+        }
+
+        .bank-item.used {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: rgba(12, 10, 24, 0.05);
+        }
+
+        /* Construction Area */
+        .construction-area {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-md);
+            padding: 25px;
+            margin-bottom: 15px;
+            border: 3px dashed rgba(12, 10, 24, 0.1);
+            min-height: 150px;
+            transition: all 0.3s ease;
+        }
+
+        .construction-area.hover {
+            border-color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.05);
+        }
+
+        .construction-area.empty::after {
+            content: 'Drag components here to build medical terms';
+            color: var(--color-muted);
+            text-align: center;
+            font-size: 0.9rem;
+            display: block;
+            margin-top: 50px;
+        }
+
+        .constructed-term {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 5px;
+            min-height: 80px;
+        }
+
+        .term-component {
+            padding: 12px 20px;
+            border-radius: var(--radius-sm);
+            font-weight: 700;
+            font-size: 1.2rem;
+            display: inline-block;
+            margin: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .component-prefix {
+            background: rgba(255, 152, 0, 0.15);
+            border: 2px solid rgba(255, 152, 0, 0.3);
+            color: #ff9800;
+        }
+
+        .component-root {
+            background: rgba(33, 150, 243, 0.15);
+            border: 2px solid rgba(33, 150, 243, 0.3);
+            color: #2196f3;
+        }
+
+        .component-vowel {
+            background: rgba(76, 175, 80, 0.15);
+            border: 2px solid rgba(76, 175, 80, 0.3);
+            color: #4caf50;
+            font-style: italic;
+        }
+
+        .component-suffix {
+            background: rgba(156, 39, 176, 0.15);
+            border: 2px solid rgba(156, 39, 176, 0.3);
+            color: #9c27b0;
+        }
+
+        /* Construction Instructions */
+        .construction-instructions {
+            background: rgba(175, 75, 239, 0.05);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--color-primary);
+        }
+
+        .instruction-text {
+            font-size: 0.9rem;
+            color: var(--color-text);
+        }
+
+        .instruction-text strong {
+            color: var(--color-primary);
+        }
+
+        /* Term Meaning Display */
+        .term-meaning-display {
+            font-size: 1.1rem;
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: var(--radius-md);
+            border: 2px solid rgba(12, 10, 24, 0.08);
+            font-weight: 600;
+            color: var(--color-primary);
+        }
+
+        /* Deconstruction Activity */
+        .deconstruction-container {
+            margin-bottom: 25px;
+        }
+
+        .deconstruction-term {
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-align: center;
+            margin: 25px 0;
+            padding: 20px;
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-md);
+            border: 2px solid rgba(12, 10, 24, 0.08);
+            letter-spacing: 1px;
+        }
+
+        .component-slots {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .component-slots { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 480px) {
+            .component-slots { grid-template-columns: 1fr; }
+        }
+
+        .component-slot {
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            border: 2px dashed rgba(12, 10, 24, 0.1);
+            text-align: center;
+            min-height: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .component-slot.hover {
+            border-color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.05);
+        }
+
+        .component-slot.filled {
+            border: 2px solid var(--color-primary-soft);
+            background: rgba(175, 75, 239, 0.08);
+        }
+
+        .component-slot.correct {
+            border-color: var(--color-success);
+            background: rgba(0, 184, 148, 0.1);
+        }
+
+        .component-slot.incorrect {
+            border-color: var(--color-error);
+            background: rgba(225, 112, 85, 0.1);
+            animation: shake 0.5s ease;
+        }
+
+        .slot-label {
+            font-size: 0.75rem;
+            color: var(--color-muted);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .slot-content {
+            font-size: 1.1rem;
+            font-weight: 700;
+            min-height: 24px;
+        }
+
+        /* Fill-in-the-Blank Activity */
+        .fill-blank-container {
+            margin-bottom: 25px;
+        }
+
+        .blank-term {
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin: 25px 0;
+            padding: 20px;
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-md);
+            border: 2px solid rgba(12, 10, 24, 0.08);
+            letter-spacing: 1px;
+        }
+
+        .blank-space {
+            display: inline-block;
+            width: 40px;
+            text-align: center;
+            border-bottom: 2px solid var(--color-primary);
+            margin: 0 5px;
+        }
+
+        .blank-options {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .blank-option {
+            padding: 12px 25px;
+            background: rgba(175, 75, 239, 0.1);
+            border: 2px solid rgba(175, 75, 239, 0.3);
+            border-radius: var(--radius-sm);
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--color-primary);
+        }
+
+        .blank-option:hover {
+            transform: scale(1.05);
+            background: rgba(175, 75, 239, 0.2);
+        }
+
+        .blank-option.selected {
+            background: rgba(175, 75, 239, 0.3);
+            border-color: var(--color-primary);
+            box-shadow: 0 0 15px rgba(175, 75, 239, 0.3);
+        }
+
+        .blank-option.correct {
+            background: rgba(0, 184, 148, 0.2);
+            border-color: var(--color-success);
+            color: var(--color-success);
+        }
+
+        .blank-option.incorrect {
+            background: rgba(225, 112, 85, 0.2);
+            border-color: var(--color-error);
+            color: var(--color-error);
+        }
+
+        /* Quiz Activity */
+        .quiz-container {
+            margin-bottom: 25px;
+        }
+
+        .quiz-question {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 2px solid rgba(12, 10, 24, 0.08);
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--color-text);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .quiz-option {
+            padding: 15px 20px;
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: var(--radius-sm);
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .quiz-option:hover {
+            background: rgba(175, 75, 239, 0.08);
+            border-color: var(--color-primary-soft);
+            transform: translateX(5px);
+        }
+
+        .quiz-option.selected {
+            background: rgba(175, 75, 239, 0.15);
+            border-color: var(--color-primary);
+        }
+
+        .quiz-option.correct {
+            background: rgba(0, 184, 148, 0.1);
+            border-color: var(--color-success);
+            color: var(--color-success);
+        }
+
+        .quiz-option.incorrect {
+            background: rgba(225, 112, 85, 0.1);
+            border-color: var(--color-error);
+            color: var(--color-error);
+        }
+
+        .option-letter {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: rgba(12, 10, 24, 0.1);
+            text-align: center;
+            line-height: 24px;
+            margin-right: 10px;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+
+        .quiz-option.selected .option-letter {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        /* Activity Reset Buttons */
+        .activity-reset-btn {
+            padding: 8px 16px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.1);
+            border-radius: var(--radius-sm);
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--color-muted);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 10px;
+        }
+
+        .activity-reset-btn:hover {
+            background: rgba(12, 10, 24, 0.1);
+            color: var(--color-text);
+            transform: translateY(-2px);
+        }
+
+        /* Feedback */
+        .feedback-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            margin-top: 20px;
+            display: none;
+        }
+
+        .feedback-container.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .feedback-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feedback-icon {
+            font-size: 1.2rem;
+        }
+
+        .feedback-icon.correct { color: var(--color-success); }
+        .feedback-icon.incorrect { color: var(--color-error); }
+
+        .feedback-content {
+            font-size: 0.85rem;
+            color: var(--color-text);
+            line-height: 1.5;
+        }
+
+        .feedback-content strong { color: var(--color-primary); }
+
+        .term-analysis-result {
+            background: rgba(175, 75, 239, 0.05);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 3px solid var(--color-primary);
+        }
+
+        .result-title {
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 8px;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #9a3bd6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(175, 75, 239, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-text);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(12, 10, 24, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-icon { font-size: 1.1em; }
+
+        /* Results Panel */
+        .results-panel {
+            background: var(--color-dark);
+            color: white;
+            border-radius: var(--radius-md);
+            padding: 30px;
+            margin-top: 30px;
+            display: none;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .results-panel.show { display: block; }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .results-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .score-display {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--color-primary-soft);
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .clinical-insights {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .insights-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-primary-soft);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .insights-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .insights-list li {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            font-size: 0.9rem;
+            color: #e5e7eb;
+        }
+
+        .insight-dot {
+            width: 6px;
+            height: 6px;
+            margin-top: 6px;
+            border-radius: 999px;
+            background: var(--color-accent);
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="module-heading">
+        <!-- Header -->
+        <header class="brand-row">
+            <div class="brand">
+                <img
+                    src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                    alt="AlliedRx logo"
+                    class="brand-logo"
+                />
+                <div class="course-meta">
+                    <span class="course-name">Phlebotomy Technician • Week 3</span>
+                    <div class="week-label">
+                        <span class="week-label-dot"></span>
+                        <span>Chapter 4: Medical Terminology</span>
+                    </div>
+                </div>
+            </div>
+            <span class="badge-mode">Interactive Module</span>
+        </header>
+
+        <h1 id="module-heading">Medical Term Construction & Analysis</h1>
+        <p class="module-subtitle">
+            Build medical terms from components and analyze complete terms. Apply your knowledge to construct and deconstruct phlebotomy-related medical terminology.
+        </p>
+
+        <!-- Progress Tracker -->
+        <div class="progress-tracker">
+            <div class="progress-step active" data-step="1">
+                <div class="step-circle">1</div>
+                <div class="step-label">Construction</div>
+            </div>
+            <div class="progress-step" data-step="2">
+                <div class="step-circle">2</div>
+                <div class="step-label">Deconstruction</div>
+            </div>
+            <div class="progress-step" data-step="3">
+                <div class="step-circle">3</div>
+                <div class="step-label">Analysis</div>
+            </div>
+        </div>
+
+        <!-- Progress Summary -->
+        <div class="progress-summary">
+            <div class="summary-card">
+                <span class="summary-number" id="completed-count">0</span>
+                <span class="summary-label">Activities Completed</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="accuracy-rate">0%</span>
+                <span class="summary-label">Current Accuracy</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="time-spent">0:00</span>
+                <span class="summary-label">Time Spent</span>
+            </div>
+        </div>
+
+        <!-- Activity Container -->
+        <div class="activity-container">
+            
+            <!-- Activity 1: Medical Term Construction -->
+            <section class="activity-card" id="activity-1" data-activity="1">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 1</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">Build Medical Terms from Meaning</h3>
+                <p class="activity-description">
+                    Given the meaning, drag components from the bank to construct the correct medical term. Pay attention to combining vowels.
+                </p>
+
+                <div class="construction-instructions">
+                    <div class="instruction-text">
+                        <strong>Current Task:</strong> Build the term that means "study of blood"
+                    </div>
+                </div>
+
+                <div class="term-meaning-display" id="current-meaning">
+                    Study of blood
+                </div>
+
+                <!-- Component Bank -->
+                <div class="component-bank">
+                    <div class="bank-title">
+                        <span>📚</span> Component Bank - Drag from here
+                    </div>
+                    <div class="bank-items" id="component-bank">
+                        <div class="bank-item draggable" data-type="prefix" data-value="hemo" data-id="hemo" draggable="true">hemo-</div>
+                        <div class="bank-item draggable" data-type="root" data-value="hemat" data-id="hemat" draggable="true">hemat</div>
+                        <div class="bank-item draggable" data-type="vowel" data-value="o" data-id="vowel-o" draggable="true">o</div>
+                        <div class="bank-item draggable" data-type="vowel" data-value="i" data-id="vowel-i" draggable="true">i</div>
+                        <div class="bank-item draggable" data-type="suffix" data-value="logy" data-id="logy" draggable="true">-logy</div>
+                        <div class="bank-item draggable" data-type="suffix" data-value="tomy" data-id="tomy" draggable="true">-tomy</div>
+                        <div class="bank-item draggable" data-type="prefix" data-value="hyper" data-id="hyper" draggable="true">hyper-</div>
+                        <div class="bank-item draggable" data-type="root" data-value="glyc" data-id="glyc" draggable="true">glyc</div>
+                    </div>
+                </div>
+
+                <!-- Construction Area -->
+                <div class="construction-area empty" id="construction-area"></div>
+
+                <!-- Activity 1 Reset Button -->
+                <div style="text-align: center; margin-top: 10px;">
+                    <button class="activity-reset-btn" id="reset-activity-1">
+                        <span>↻</span>
+                        Reset This Activity
+                    </button>
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback-container" id="feedback-1">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Term Construction Complete
+                    </div>
+                    <div class="feedback-content">
+                        <div class="term-analysis-result">
+                            <div class="result-title">Correct Construction:</div>
+                            <strong>hemato</strong> (hem = blood + o = combining vowel) + <strong>logy</strong> (study of) = <strong>hematology</strong><br><br>
+                            
+                            <strong>Alternative:</strong> "hemo-" + "logy" could also work, but "hematology" is the standard term.<br><br>
+                            
+                            <strong>Clinical Application:</strong> Hematology is the medical specialty dealing with blood disorders. As a phlebotomist, you'll collect specimens for hematology tests like CBC (complete blood count).
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity 2: Term Deconstruction -->
+            <section class="activity-card" id="activity-2" data-activity="2">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 2</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">Deconstruct Medical Terms</h3>
+                <p class="activity-description">
+                    Break down complete medical terms into their components. Drag each part of the term to the correct component slot.
+                </p>
+
+                <div class="deconstruction-container">
+                    <div class="construction-instructions">
+                        <div class="instruction-text">
+                            <strong>Current Term:</strong> Drag each part of "thrombocytopenia" to its correct component type
+                        </div>
+                    </div>
+
+                    <div class="deconstruction-term" id="deconstruction-term">
+                        thrombocytopenia
+                    </div>
+
+                    <div class="component-slots">
+                        <div class="component-slot" data-type="prefix" id="slot-prefix">
+                            <div class="slot-label">Prefix (if present)</div>
+                            <div class="slot-content">Drag here</div>
+                        </div>
+                        <div class="component-slot" data-type="root1" id="slot-root1">
+                            <div class="slot-label">First Word Root</div>
+                            <div class="slot-content">Drag here</div>
+                        </div>
+                        <div class="component-slot" data-type="vowel1" id="slot-vowel1">
+                            <div class="slot-label">Combining Vowel</div>
+                            <div class="slot-content">Drag here</div>
+                        </div>
+                        <div class="component-slot" data-type="root2" id="slot-root2">
+                            <div class="slot-label">Second Word Root</div>
+                            <div class="slot-content">Drag here</div>
+                        </div>
+                        <div class="component-slot" data-type="suffix" id="slot-suffix">
+                            <div class="slot-label">Suffix</div>
+                            <div class="slot-content">Drag here</div>
+                        </div>
+                    </div>
+
+                    <!-- Term Parts -->
+                    <div class="bank-items" style="justify-content: center; margin-top: 20px; margin-bottom: 10px;" id="activity2-parts">
+                        <div class="bank-item draggable" data-part="thrombo" data-id="thrombo" draggable="true">thrombo</div>
+                        <div class="bank-item draggable" data-part="cyto" data-id="cyto" draggable="true">cyto</div>
+                        <div class="bank-item draggable" data-part="penia" data-id="penia" draggable="true">penia</div>
+                        <div class="bank-item draggable" data-part="o" data-id="vowel-o2" draggable="true">o</div>
+                    </div>
+
+                    <!-- Activity 2 Reset Button -->
+                    <div style="text-align: center; margin-top: 10px;">
+                        <button class="activity-reset-btn" id="reset-activity-2">
+                            <span>↻</span>
+                            Reset This Activity
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback-container" id="feedback-2">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Term Deconstruction Complete
+                    </div>
+                    <div class="feedback-content">
+                        <div class="term-analysis-result">
+                            <div class="result-title">Thrombocytopenia Analysis:</div>
+                            • <strong>thrombo</strong> = clot (first word root)<br>
+                            • <strong>o</strong> = combining vowel<br>
+                            • <strong>cyto</strong> = cell (second word root)<br>
+                            • <strong>penia</strong> = deficiency (suffix)<br><br>
+                            
+                            <strong>Full Meaning:</strong> Deficiency of clotting cells (low platelet count)<br><br>
+                            
+                            <strong>Phlebotomy Significance:</strong> Patients with thrombocytopenia have increased bleeding risk. You must apply pressure longer after venipuncture and watch for hematoma formation.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity 3: Fill-in-the-Blank Practice -->
+            <section class="activity-card" id="activity-3" data-activity="3">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 3</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">Combining Vowel Fill-in-the-Blank</h3>
+                <p class="activity-description">
+                    Complete the medical terms by selecting the correct combining vowel. Some terms may not need a combining vowel.
+                </p>
+
+                <div class="fill-blank-container">
+                    <div class="construction-instructions">
+                        <div class="instruction-text">
+                            <strong>Exercise 1:</strong> Select the correct combining vowel for "hyperglycemia"
+                        </div>
+                    </div>
+
+                    <div class="blank-term" id="blank-term-1">
+                        hyper<span class="blank-space" id="blank-1">__</span>glyc<span class="blank-space" id="blank-2">__</span>emia
+                    </div>
+
+                    <div class="blank-options">
+                        <div class="blank-option" data-exercise="1" data-blank="1" data-choice="o">o</div>
+                        <div class="blank-option" data-exercise="1" data-blank="1" data-choice="i">i</div>
+                        <div class="blank-option" data-exercise="1" data-blank="1" data-choice="none">(none)</div>
+                    </div>
+
+                    <div class="construction-instructions" style="margin-top: 30px;">
+                        <div class="instruction-text">
+                            <strong>Exercise 2:</strong> Select the correct combining vowel for "phlebitis"
+                        </div>
+                    </div>
+
+                    <div class="blank-term" id="blank-term-2">
+                        phleb<span class="blank-space" id="blank-3">__</span>itis
+                    </div>
+
+                    <div class="blank-options">
+                        <div class="blank-option" data-exercise="2" data-blank="3" data-choice="o">o</div>
+                        <div class="blank-option" data-exercise="2" data-blank="3" data-choice="i">i</div>
+                        <div class="blank-option" data-exercise="2" data-blank="3" data-choice="none">(none)</div>
+                    </div>
+
+                    <!-- Activity 3 Reset Button -->
+                    <div style="text-align: center; margin-top: 20px;">
+                        <button class="activity-reset-btn" id="reset-activity-3">
+                            <span>↻</span>
+                            Reset This Activity
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback-container" id="feedback-3">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Fill-in-the-Blank Complete
+                    </div>
+                    <div class="feedback-content">
+                        <div class="term-analysis-result">
+                            <div class="result-title">Correct Answers:</div>
+                            • <strong>hyperglycemia</strong>: hyper + glyc + emia (no combining vowel needed because "glyc" ends with "c" and "emia" starts with vowel)<br>
+                            • <strong>phlebitis</strong>: phleb + itis (no combining vowel needed because "itis" starts with vowel)<br><br>
+                            
+                            <strong>Combining Vowel Rules:</strong><br>
+                            1. Use "o" when next component starts with consonant (hemat-o-logy)<br>
+                            2. No vowel needed when suffix starts with vowel (phleb-itis)<br>
+                            3. Some roots use specific vowels (ven-i-puncture)<br><br>
+                            
+                            <strong>Clinical Terms:</strong><br>
+                            • Hyperglycemia = high blood sugar (common in diabetic patients)<br>
+                            • Phlebitis = vein inflammation (complication to monitor for)
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity 4: Component Function Quiz -->
+            <section class="activity-card" id="activity-4" data-activity="4">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 4</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">Component Function Knowledge Check</h3>
+                <p class="activity-description">
+                    Test your understanding of medical term components with multiple-choice questions about their functions and placements.
+                </p>
+
+                <div class="quiz-container">
+                    <!-- Question 1 -->
+                    <div class="quiz-question" id="question-1">
+                        <div class="question-text">
+                            1. What does a combining vowel do in a medical term?
+                        </div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" data-question="1" data-option="a">
+                                <span class="option-letter">A</span>
+                                Changes the meaning of the word root
+                            </div>
+                            <div class="quiz-option" data-question="1" data-option="b">
+                                <span class="option-letter">B</span>
+                                Connects word parts for easier pronunciation
+                            </div>
+                            <div class="quiz-option" data-question="1" data-option="c">
+                                <span class="option-letter">C</span>
+                                Indicates plural form of the term
+                            </div>
+                            <div class="quiz-option" data-question="1" data-option="d">
+                                <span class="option-letter">D</span>
+                                Shows the word is of Greek origin
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Question 2 -->
+                    <div class="quiz-question" id="question-2">
+                        <div class="question-text">
+                            2. Where does a prefix appear in a medical term?
+                        </div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" data-question="2" data-option="a">
+                                <span class="option-letter">A</span>
+                                At the end of the word
+                            </div>
+                            <div class="quiz-option" data-question="2" data-option="b">
+                                <span class="option-letter">B</span>
+                                In the middle of the word
+                            </div>
+                            <div class="quiz-option" data-question="2" data-option="c">
+                                <span class="option-letter">C</span>
+                                At the beginning of the word
+                            </div>
+                            <div class="quiz-option" data-question="2" data-option="d">
+                                <span class="option-letter">D</span>
+                                After the combining vowel
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Question 3 -->
+                    <div class="quiz-question" id="question-3">
+                        <div class="question-text">
+                            3. What does the word root provide in a medical term?
+                        </div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" data-question="3" data-option="a">
+                                <span class="option-letter">A</span>
+                                The core meaning or subject
+                            </div>
+                            <div class="quiz-option" data-question="3" data-option="b">
+                                <span class="option-letter">B</span>
+                                Grammatical tense
+                            </div>
+                            <div class="quiz-option" data-question="3" data-option="c">
+                                <span class="option-letter">C</span>
+                                Plurality information
+                            </div>
+                            <div class="quiz-option" data-question="3" data-option="d">
+                                <span class="option-letter">D</span>
+                                Pronunciation guide
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Question 4 -->
+                    <div class="quiz-question" id="question-4">
+                        <div class="question-text">
+                            4. Which suffix means "inflammation"?
+                        </div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" data-question="4" data-option="a">
+                                <span class="option-letter">A</span>
+                                -tomy
+                            </div>
+                            <div class="quiz-option" data-question="4" data-option="b">
+                                <span class="option-letter">B</span>
+                                -emia
+                            </div>
+                            <div class="quiz-option" data-question="4" data-option="c">
+                                <span class="option-letter">C</span>
+                                -itis
+                            </div>
+                            <div class="quiz-option" data-question="4" data-option="d">
+                                <span class="option-letter">D</span>
+                                -osis
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Activity 4 Reset Button -->
+                    <div style="text-align: center; margin-top: 10px;">
+                        <button class="activity-reset-btn" id="reset-activity-4">
+                            <span>↻</span>
+                            Reset This Activity
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback-container" id="feedback-4">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Quiz Complete
+                    </div>
+                    <div class="feedback-content">
+                        <div class="term-analysis-result">
+                            <div class="result-title">Correct Answers:</div>
+                            1. <strong>B</strong> - Connects word parts for easier pronunciation<br>
+                            2. <strong>C</strong> - At the beginning of the word<br>
+                            3. <strong>A</strong> - The core meaning or subject<br>
+                            4. <strong>C</strong> - -itis means inflammation<br><br>
+                            
+                            <strong>Key Takeaways:</strong><br>
+                            • Combining vowels (usually "o") make medical terms easier to pronounce<br>
+                            • Prefixes modify meaning from the beginning<br>
+                            • Word roots give the primary meaning<br>
+                            • Suffixes modify meaning from the end<br><br>
+                            
+                            <strong>Phlebotomy Examples:</strong><br>
+                            • Phleb-<strong>itis</strong> = vein inflammation (complication)<br>
+                            • Hemat-<strong>oma</strong> = blood swelling (bruise)<br>
+                            • Anti-<strong>coagulant</strong> = against clotting (tube additive)
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn btn-secondary" id="reset-all-btn">
+                <span class="btn-icon">↻</span>
+                Reset All Activities
+            </button>
+            <button class="btn btn-secondary" id="check-answers-btn">
+                <span class="btn-icon">✓</span>
+                Check All Answers
+            </button>
+            <button class="btn btn-primary" id="view-results-btn">
+                <span class="btn-icon">📊</span>
+                View Final Results
+            </button>
+        </div>
+
+        <!-- Results Panel -->
+        <div class="results-panel" id="results-panel">
+            <div class="results-header">
+                <h2 class="results-title">Term Construction & Analysis Proficiency</h2>
+                <div class="score-display" id="final-score">0%</div>
+            </div>
+            
+            <div class="clinical-insights">
+                <h3 class="insights-title">
+                    <span>🏥</span> Clinical Application Mastery
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Lab Order Comprehension:</strong> When you see "STAT hematology panel for thrombocytopenia monitoring," you now understand this means immediate blood tests to check platelet levels in a patient with low platelets.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Procedure Documentation:</strong> Accurate use of "phlebitis" vs "hematoma" in incident reports shows professional competency and ensures proper follow-up care.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Patient Communication:</strong> You can explain "hyperglycemia" as "hyper" (high) + "glyc" (sugar) + "emia" (blood condition) = high blood sugar, helping diabetic patients understand their condition.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Specimen Handling:</strong> Understanding "anticoagulant" helps you explain why certain tubes need to be inverted and why timing matters for coagulation studies.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="clinical-insights" style="margin-top: 20px;">
+                <h3 class="insights-title">
+                    <span>🔬</span> Advanced Phlebotomy Terminology
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Hemolysis:</strong> hemo (blood) + lysis (destruction) = broken blood cells. Understanding this helps prevent specimen rejection by using proper technique.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Leukocytosis:</strong> leuko (white) + cyt (cell) + osis (condition) = high white blood cell count. Often indicates infection or inflammation.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Polycythemia:</strong> poly (many) + cyt (cell) + hemia (blood condition) = too many red blood cells. Affects blood viscosity and draw difficulty.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Hypovolemia:</strong> hypo (low) + vol (volume) + emia (blood condition) = low blood volume. Important for assessing dehydration in patients.</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // State Management
+            const state = {
+                activities: {
+                    1: { 
+                        completed: false, 
+                        correct: 0, 
+                        total: 1, 
+                        score: 0,
+                        constructedParts: []
+                    },
+                    2: { 
+                        completed: false, 
+                        correct: 0, 
+                        total: 4, 
+                        score: 0,
+                        placedParts: []
+                    },
+                    3: { 
+                        completed: false, 
+                        correct: 0, 
+                        total: 2, 
+                        score: 0,
+                        answers: {}
+                    },
+                    4: { 
+                        completed: false, 
+                        correct: 0, 
+                        total: 4, 
+                        score: 0,
+                        answers: {}
+                    }
+                },
+                startedAt: new Date(),
+                timeSpent: 0
+            };
+
+            // Correct answers
+            const correctAnswers = {
+                activity1: {
+                    'hematology': ['hemat', 'o', 'logy']
+                },
+                activity2: {
+                    'prefix': '',
+                    'root1': 'thrombo',
+                    'vowel1': 'o',
+                    'root2': 'cyto',
+                    'suffix': 'penia'
+                },
+                activity3: {
+                    'blank-1': 'none',
+                    'blank-3': 'none'
+                },
+                activity4: {
+                    '1': 'b',
+                    '2': 'c',
+                    '3': 'a',
+                    '4': 'c'
+                }
+            };
+
+            // DOM Elements
+            const progressSteps = document.querySelectorAll('.progress-step');
+            const activityCards = document.querySelectorAll('.activity-card');
+            const completedCount = document.getElementById('completed-count');
+            const accuracyRate = document.getElementById('accuracy-rate');
+            const timeSpentEl = document.getElementById('time-spent');
+            const resetBtn = document.getElementById('reset-all-btn');
+            const checkBtn = document.getElementById('check-answers-btn');
+            const resultsBtn = document.getElementById('view-results-btn');
+            const resultsPanel = document.getElementById('results-panel');
+            const finalScore = document.getElementById('final-score');
+
+            // Timer for time spent
+            function updateTimer() {
+                const now = new Date();
+                const diff = Math.floor((now - state.startedAt) / 1000);
+                state.timeSpent = diff;
+                const minutes = Math.floor(diff / 60);
+                const seconds = diff % 60;
+                timeSpentEl.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            }
+            setInterval(updateTimer, 1000);
+
+            // Update Progress Summary
+            function updateProgressSummary() {
+                let completed = 0;
+                let totalCorrect = 0;
+                let totalItems = 0;
+
+                Object.values(state.activities).forEach(activity => {
+                    if (activity.completed) completed++;
+                    totalCorrect += activity.correct;
+                    totalItems += activity.total;
+                });
+
+                completedCount.textContent = completed;
+                const accuracy = totalItems > 0 ? Math.round((totalCorrect / totalItems) * 100) : 0;
+                accuracyRate.textContent = `${accuracy}%`;
+
+                // Update progress steps
+                progressSteps.forEach((step, index) => {
+                    if (index < completed) {
+                        step.classList.add('completed');
+                        step.classList.remove('active');
+                    } else if (index === completed) {
+                        step.classList.add('active');
+                        step.classList.remove('completed');
+                    } else {
+                        step.classList.remove('active', 'completed');
+                    }
+                });
+            }
+
+            // Activity 1: Medical Term Construction
+            function initActivity1() {
+                const bankItems = document.querySelectorAll('#activity-1 .bank-item');
+                const constructionArea = document.getElementById('construction-area');
+                const resetBtn = document.getElementById('reset-activity-1');
+                const feedback = document.getElementById('feedback-1');
+                const status = document.querySelector('#activity-1 .activity-status');
+
+                // Setup draggable items
+                bankItems.forEach(item => {
+                    item.addEventListener('dragstart', function(e) {
+                        if (this.classList.contains('used')) return;
+                        
+                        e.dataTransfer.setData('text/plain', JSON.stringify({
+                            type: this.dataset.type,
+                            value: this.dataset.value,
+                            text: this.textContent,
+                            id: this.dataset.id
+                        }));
+                        this.classList.add('dragging');
+                    });
+
+                    item.addEventListener('dragend', function() {
+                        this.classList.remove('dragging');
+                    });
+                });
+
+                // Setup construction area
+                constructionArea.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    this.classList.add('hover');
+                    this.classList.remove('empty');
+                });
+
+                constructionArea.addEventListener('dragleave', function() {
+                    this.classList.remove('hover');
+                });
+
+                constructionArea.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('hover');
+                    
+                    const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+                    
+                    // Check if already used
+                    const alreadyUsed = Array.from(bankItems).find(item => 
+                        item.dataset.id === data.id && item.classList.contains('used')
+                    );
+                    
+                    if (alreadyUsed) return;
+                    
+                    // Add to constructed parts
+                    state.activities[1].constructedParts.push(data);
+                    
+                    // Update construction area
+                    updateConstructionArea();
+                    
+                    // Mark item as used
+                    const usedItem = Array.from(bankItems).find(item => 
+                        item.dataset.id === data.id && !item.classList.contains('used')
+                    );
+                    
+                    if (usedItem) {
+                        usedItem.classList.add('used');
+                    }
+                    
+                    // Check if term is complete
+                    if (state.activities[1].constructedParts.length >= 2) {
+                        checkConstructedTerm();
+                    }
+                });
+
+                function updateConstructionArea() {
+                    constructionArea.innerHTML = '';
+                    
+                    const constructedDiv = document.createElement('div');
+                    constructedDiv.className = 'constructed-term';
+                    
+                    state.activities[1].constructedParts.forEach((part, index) => {
+                        const partDiv = document.createElement('span');
+                        partDiv.className = `term-component component-${part.type}`;
+                        partDiv.textContent = part.text;
+                        partDiv.dataset.type = part.type;
+                        partDiv.dataset.value = part.value;
+                        
+                        constructedDiv.appendChild(partDiv);
+                        
+                        // Add plus sign between parts (except after last)
+                        if (index < state.activities[1].constructedParts.length - 1) {
+                            const plusSpan = document.createElement('span');
+                            plusSpan.textContent = ' + ';
+                            plusSpan.style.color = 'var(--color-muted)';
+                            plusSpan.style.fontSize = '1.2rem';
+                            plusSpan.style.margin = '0 5px';
+                            constructedDiv.appendChild(plusSpan);
+                        }
+                    });
+                    
+                    constructionArea.appendChild(constructedDiv);
+                }
+
+                function checkConstructedTerm() {
+                    const termValues = state.activities[1].constructedParts.map(part => part.value);
+                    const correctTerm = correctAnswers.activity1.hematology;
+                    
+                    // Check if constructed term matches hematology
+                    const isHematology = JSON.stringify(termValues) === JSON.stringify(['hemat', 'o', 'logy']) ||
+                                         JSON.stringify(termValues) === JSON.stringify(['hemo', 'logy']);
+                    
+                    if (isHematology) {
+                        state.activities[1].completed = true;
+                        state.activities[1].correct = 1;
+                        state.activities[1].score = 100;
+                        status.textContent = 'Completed';
+                        document.querySelector('#activity-1').classList.add('completed');
+                        feedback.classList.add('show');
+                        updateProgressSummary();
+                    }
+                }
+
+                // Reset Activity 1
+                resetBtn.addEventListener('click', function() {
+                    // Reset state
+                    state.activities[1].constructedParts = [];
+                    state.activities[1].completed = false;
+                    state.activities[1].correct = 0;
+                    state.activities[1].score = 0;
+                    
+                    // Reset UI
+                    bankItems.forEach(item => {
+                        item.classList.remove('used', 'dragging');
+                        item.style.opacity = '1';
+                        item.style.cursor = 'grab';
+                    });
+                    
+                    constructionArea.innerHTML = '';
+                    constructionArea.classList.add('empty');
+                    
+                    feedback.classList.remove('show');
+                    document.querySelector('#activity-1').classList.remove('completed');
+                    status.textContent = 'Not Started';
+                    
+                    updateProgressSummary();
+                });
+            }
+
+            // Activity 2: Term Deconstruction
+            function initActivity2() {
+                const draggableParts = document.querySelectorAll('#activity-2 .bank-item');
+                const componentSlots = document.querySelectorAll('#activity-2 .component-slot');
+                const resetBtn = document.getElementById('reset-activity-2');
+                const feedback = document.getElementById('feedback-2');
+                const status = document.querySelector('#activity-2 .activity-status');
+
+                // Setup draggable parts
+                draggableParts.forEach(part => {
+                    part.addEventListener('dragstart', function(e) {
+                        if (this.style.opacity === '0.3') return; // Don't drag used items
+                        
+                        e.dataTransfer.setData('text/plain', JSON.stringify({
+                            part: this.dataset.part,
+                            text: this.textContent,
+                            id: this.dataset.id
+                        }));
+                        this.classList.add('dragging');
+                    });
+
+                    part.addEventListener('dragend', function() {
+                        this.classList.remove('dragging');
+                    });
+                });
+
+                // Setup component slots
+                componentSlots.forEach(slot => {
+                    slot.addEventListener('dragover', function(e) {
+                        e.preventDefault();
+                        if (!this.classList.contains('filled')) {
+                            this.classList.add('hover');
+                        }
+                    });
+
+                    slot.addEventListener('dragleave', function() {
+                        this.classList.remove('hover');
+                    });
+
+                    slot.addEventListener('drop', function(e) {
+                        e.preventDefault();
+                        this.classList.remove('hover');
+                        
+                        if (this.classList.contains('filled')) return;
+                        
+                        const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+                        const slotType = this.dataset.type;
+                        
+                        // Check if this part is correct for this slot
+                        const isCorrect = correctAnswers.activity2[slotType] === data.part;
+                        
+                        // Fill the slot
+                        this.classList.add('filled');
+                        this.querySelector('.slot-content').textContent = data.text;
+                        this.dataset.placedPart = data.id;
+                        
+                        // Visual feedback
+                        if (isCorrect) {
+                            this.classList.add('correct');
+                            state.activities[2].correct++;
+                        } else {
+                            this.classList.add('incorrect');
+                            // Show correct answer immediately
+                            setTimeout(() => {
+                                const correctText = correctAnswers.activity2[slotType] || 'None';
+                                this.querySelector('.slot-content').textContent = correctText;
+                                this.classList.remove('incorrect');
+                                this.classList.add('correct');
+                            }, 1000);
+                        }
+                        
+                        // Fade the draggable part (don't remove it)
+                        const originalPart = Array.from(draggableParts).find(part => 
+                            part.dataset.id === data.id
+                        );
+                        
+                        if (originalPart) {
+                            originalPart.style.opacity = '0.3';
+                            originalPart.style.cursor = 'not-allowed';
+                            state.activities[2].placedParts.push(data.id);
+                        }
+                        
+                        // Check if all parts placed
+                        if (state.activities[2].placedParts.length === 4) {
+                            state.activities[2].completed = true;
+                            state.activities[2].score = Math.round((state.activities[2].correct / 4) * 100);
+                            status.textContent = 'Completed';
+                            document.querySelector('#activity-2').classList.add('completed');
+                            feedback.classList.add('show');
+                            updateProgressSummary();
+                        }
+                    });
+                });
+
+                // Reset Activity 2
+                resetBtn.addEventListener('click', function() {
+                    // Reset state
+                    state.activities[2].placedParts = [];
+                    state.activities[2].completed = false;
+                    state.activities[2].correct = 0;
+                    state.activities[2].score = 0;
+                    
+                    // Reset UI
+                    draggableParts.forEach(part => {
+                        part.style.opacity = '1';
+                        part.style.cursor = 'grab';
+                        part.classList.remove('dragging');
+                    });
+                    
+                    componentSlots.forEach(slot => {
+                        slot.classList.remove('filled', 'correct', 'incorrect', 'hover');
+                        slot.querySelector('.slot-content').textContent = 'Drag here';
+                        delete slot.dataset.placedPart;
+                    });
+                    
+                    feedback.classList.remove('show');
+                    document.querySelector('#activity-2').classList.remove('completed');
+                    status.textContent = 'Not Started';
+                    
+                    updateProgressSummary();
+                });
+            }
+
+            // Activity 3: Fill-in-the-Blank Practice
+            function initActivity3() {
+                const blankOptions = document.querySelectorAll('#activity-3 .blank-option');
+                const resetBtn = document.getElementById('reset-activity-3');
+                const feedback = document.getElementById('feedback-3');
+                const status = document.querySelector('#activity-3 .activity-status');
+                const blanks = {
+                    'blank-1': document.getElementById('blank-1'),
+                    'blank-3': document.getElementById('blank-3')
+                };
+
+                blankOptions.forEach(option => {
+                    option.addEventListener('click', function() {
+                        const exerciseNum = this.dataset.exercise;
+                        const blankId = `blank-${this.dataset.blank}`;
+                        const choice = this.dataset.choice;
+                        
+                        // Reset all options for this exercise
+                        document.querySelectorAll(`[data-exercise="${exerciseNum}"]`).forEach(opt => {
+                            opt.classList.remove('selected', 'correct', 'incorrect');
+                        });
+                        
+                        this.classList.add('selected');
+                        
+                        // Check answer
+                        const isCorrect = correctAnswers.activity3[blankId] === choice;
+                        
+                        if (isCorrect) {
+                            this.classList.add('correct');
+                            state.activities[3].answers[blankId] = choice;
+                            state.activities[3].correct = Object.keys(state.activities[3].answers).length;
+                            
+                            // Update blank display
+                            const blankEl = blanks[blankId];
+                            if (blankEl) {
+                                if (choice === 'none') {
+                                    blankEl.textContent = '';
+                                } else {
+                                    blankEl.textContent = choice;
+                                }
+                                blankEl.style.color = 'var(--color-success)';
+                                blankEl.style.fontWeight = 'bold';
+                            }
+                            
+                            // Check if all blanks answered
+                            if (state.activities[3].correct === 2) {
+                                state.activities[3].completed = true;
+                                state.activities[3].score = 100;
+                                status.textContent = 'Completed';
+                                document.querySelector('#activity-3').classList.add('completed');
+                                feedback.classList.add('show');
+                                updateProgressSummary();
+                            }
+                        } else {
+                            this.classList.add('incorrect');
+                            // Show correct option
+                            document.querySelectorAll(`[data-exercise="${exerciseNum}"]`).forEach(opt => {
+                                if (opt.dataset.choice === correctAnswers.activity3[blankId]) {
+                                    opt.classList.add('correct');
+                                }
+                            });
+                        }
+                    });
+                });
+
+                // Reset Activity 3
+                resetBtn.addEventListener('click', function() {
+                    // Reset state
+                    state.activities[3].answers = {};
+                    state.activities[3].completed = false;
+                    state.activities[3].correct = 0;
+                    state.activities[3].score = 0;
+                    
+                    // Reset UI
+                    blankOptions.forEach(opt => {
+                        opt.classList.remove('selected', 'correct', 'incorrect');
+                    });
+                    
+                    // Reset blank displays
+                    Object.values(blanks).forEach(blank => {
+                        if (blank) {
+                            blank.textContent = '__';
+                            blank.style.color = '';
+                            blank.style.fontWeight = '';
+                        }
+                    });
+                    
+                    feedback.classList.remove('show');
+                    document.querySelector('#activity-3').classList.remove('completed');
+                    status.textContent = 'Not Started';
+                    
+                    updateProgressSummary();
+                });
+            }
+
+            // Activity 4: Component Function Quiz
+            function initActivity4() {
+                const quizOptions = document.querySelectorAll('#activity-4 .quiz-option');
+                const resetBtn = document.getElementById('reset-activity-4');
+                const feedback = document.getElementById('feedback-4');
+                const status = document.querySelector('#activity-4 .activity-status');
+
+                quizOptions.forEach(option => {
+                    option.addEventListener('click', function() {
+                        const questionNum = this.dataset.question;
+                        const selectedOption = this.dataset.option;
+                        
+                        // Reset all options for this question
+                        document.querySelectorAll(`[data-question="${questionNum}"]`).forEach(opt => {
+                            opt.classList.remove('selected', 'correct', 'incorrect');
+                        });
+                        
+                        this.classList.add('selected');
+                        
+                        // Check answer
+                        const isCorrect = correctAnswers.activity4[questionNum] === selectedOption;
+                        
+                        if (isCorrect) {
+                            this.classList.add('correct');
+                            state.activities[4].answers[questionNum] = selectedOption;
+                            state.activities[4].correct = Object.keys(state.activities[4].answers).size;
+                            
+                            // Check if all questions answered
+                            if (Object.keys(state.activities[4].answers).length === 4) {
+                                state.activities[4].completed = true;
+                                state.activities[4].score = 100;
+                                status.textContent = 'Completed';
+                                document.querySelector('#activity-4').classList.add('completed');
+                                feedback.classList.add('show');
+                                updateProgressSummary();
+                            }
+                        } else {
+                            this.classList.add('incorrect');
+                            // Show correct option
+                            document.querySelectorAll(`[data-question="${questionNum}"]`).forEach(opt => {
+                                if (opt.dataset.option === correctAnswers.activity4[questionNum]) {
+                                    opt.classList.add('correct');
+                                }
+                            });
+                        }
+                    });
+                });
+
+                // Reset Activity 4
+                resetBtn.addEventListener('click', function() {
+                    // Reset state
+                    state.activities[4].answers = {};
+                    state.activities[4].completed = false;
+                    state.activities[4].correct = 0;
+                    state.activities[4].score = 0;
+                    
+                    // Reset UI
+                    quizOptions.forEach(opt => {
+                        opt.classList.remove('selected', 'correct', 'incorrect');
+                    });
+                    
+                    feedback.classList.remove('show');
+                    document.querySelector('#activity-4').classList.remove('completed');
+                    status.textContent = 'Not Started';
+                    
+                    updateProgressSummary();
+                });
+            }
+
+            // Reset All Activities
+            function resetAllActivities() {
+                // Reset state
+                Object.keys(state.activities).forEach(key => {
+                    state.activities[key] = {
+                        completed: false,
+                        correct: 0,
+                        total: parseInt(key) === 1 ? 1 : parseInt(key) === 2 ? 4 : parseInt(key) === 3 ? 2 : 4,
+                        score: 0,
+                        constructedParts: [],
+                        placedParts: [],
+                        answers: {}
+                    };
+                });
+                
+                // Reset UI for all activities
+                activityCards.forEach(card => {
+                    card.classList.remove('completed');
+                    const status = card.querySelector('.activity-status');
+                    status.textContent = 'Not Started';
+                    status.style.color = '';
+                    const feedback = card.querySelector('.feedback-container');
+                    feedback.classList.remove('show');
+                });
+                
+                // Reset Activity 1
+                document.querySelectorAll('#activity-1 .bank-item').forEach(item => {
+                    item.classList.remove('used', 'dragging');
+                    item.style.opacity = '1';
+                    item.style.cursor = 'grab';
+                });
+                const constructionArea = document.getElementById('construction-area');
+                constructionArea.innerHTML = '';
+                constructionArea.classList.add('empty');
+                
+                // Reset Activity 2
+                document.querySelectorAll('#activity-2 .bank-item').forEach(item => {
+                    item.style.opacity = '1';
+                    item.style.cursor = 'grab';
+                    item.classList.remove('dragging');
+                });
+                document.querySelectorAll('#activity-2 .component-slot').forEach(slot => {
+                    slot.classList.remove('filled', 'correct', 'incorrect', 'hover');
+                    slot.querySelector('.slot-content').textContent = 'Drag here';
+                    delete slot.dataset.placedPart;
+                });
+                
+                // Reset Activity 3
+                document.querySelectorAll('#activity-3 .blank-option').forEach(opt => {
+                    opt.classList.remove('selected', 'correct', 'incorrect');
+                });
+                document.querySelectorAll('.blank-space').forEach(blank => {
+                    blank.textContent = '__';
+                    blank.style.color = '';
+                    blank.style.fontWeight = '';
+                });
+                
+                // Reset Activity 4
+                document.querySelectorAll('#activity-4 .quiz-option').forEach(opt => {
+                    opt.classList.remove('selected', 'correct', 'incorrect');
+                });
+                
+                // Reset results
+                resultsPanel.classList.remove('show');
+                
+                // Update progress
+                updateProgressSummary();
+            }
+
+            // Check All Answers
+            function checkAllAnswers() {
+                // Complete Activity 1
+                if (!state.activities[1].completed) {
+                    state.activities[1].completed = true;
+                    state.activities[1].correct = 1;
+                    state.activities[1].score = 100;
+                    document.querySelector('#activity-1 .activity-status').textContent = 'Completed';
+                    document.querySelector('#activity-1').classList.add('completed');
+                    document.querySelector('#feedback-1').classList.add('show');
+                }
+                
+                // Complete Activity 2
+                if (!state.activities[2].completed) {
+                    state.activities[2].completed = true;
+                    state.activities[2].correct = 4;
+                    state.activities[2].score = 100;
+                    document.querySelector('#activity-2 .activity-status').textContent = 'Completed';
+                    document.querySelector('#activity-2').classList.add('completed');
+                    document.querySelector('#feedback-2').classList.add('show');
+                }
+                
+                // Complete Activity 3
+                if (!state.activities[3].completed) {
+                    state.activities[3].completed = true;
+                    state.activities[3].correct = 2;
+                    state.activities[3].score = 100;
+                    document.querySelector('#activity-3 .activity-status').textContent = 'Completed';
+                    document.querySelector('#activity-3').classList.add('completed');
+                    document.querySelector('#feedback-3').classList.add('show');
+                }
+                
+                // Complete Activity 4
+                if (!state.activities[4].completed) {
+                    state.activities[4].completed = true;
+                    state.activities[4].correct = 4;
+                    state.activities[4].score = 100;
+                    document.querySelector('#activity-4 .activity-status').textContent = 'Completed';
+                    document.querySelector('#activity-4').classList.add('completed');
+                    document.querySelector('#feedback-4').classList.add('show');
+                }
+                
+                updateProgressSummary();
+            }
+
+            // View Final Results
+            function viewFinalResults() {
+                let totalScore = 0;
+                let activityCount = 0;
+                
+                Object.values(state.activities).forEach(activity => {
+                    if (activity.completed) {
+                        totalScore += activity.score;
+                        activityCount++;
+                    }
+                });
+                
+                const averageScore = activityCount > 0 ? Math.round(totalScore / activityCount) : 0;
+                finalScore.textContent = `${averageScore}%`;
+                resultsPanel.classList.add('show');
+                resultsPanel.scrollIntoView({ behavior: 'smooth' });
+            }
+
+            // Initialize all activities
+            initActivity1();
+            initActivity2();
+            initActivity3();
+            initActivity4();
+
+            // Event listeners
+            resetBtn.addEventListener('click', resetAllActivities);
+            checkBtn.addEventListener('click', checkAllAnswers);
+            resultsBtn.addEventListener('click', viewFinalResults);
+
+            // Initial progress update
+            updateProgressSummary();
+        });
+    </script>
+</body>
+</html>
