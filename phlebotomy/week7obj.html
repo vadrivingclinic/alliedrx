@@ -1,0 +1,1442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>AlliedRx -- Phlebotomy Week 7 Objectives</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-error: #e17055;
+            --color-warning: #fdcb6e;
+            --color-info: #0984e3;
+            --color-management: #6c5ce7;
+            --color-quality: #00b894;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
+            --radius-lg: 24px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 60px rgba(175, 75, 239, 0.25);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(
+                circle at top left,
+                #ffffff 0,
+                #f1ecff 40%,
+                var(--color-bg) 100%
+            );
+            color: var(--color-text);
+            -webkit-text-size-adjust: 100%;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 12px;
+            }
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1120px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px 30px;
+            display: grid;
+            grid-template-columns: minmax(0, 3.1fr) minmax(0, 2.4fr);
+            gap: 28px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .page {
+                grid-template-columns: 1fr;
+                padding: 22px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 0;
+            }
+            .page {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 18px 14px 22px;
+                gap: 22px;
+            }
+        }
+
+        img,
+        .page,
+        .column,
+        .objective-card,
+        .week-overview {
+            max-width: 100%;
+        }
+
+        .column {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .brand-logo:hover {
+            transform: scale(1.05);
+        }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { background-color: rgba(175, 75, 239, 0.08); }
+            50% { background-color: rgba(175, 75, 239, 0.15); }
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--color-management);
+            flex-shrink: 0;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .badge-mode:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+        @media (max-width: 480px) {
+            .brand-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .badge-mode {
+                margin-top: 6px;
+            }
+        }
+
+        h1 {
+            font-size: clamp(2rem, 3vw, 2.4rem);
+            line-height: 1.05;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 34rem;
+            margin-bottom: 18px;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        /* Objectives list */
+        .objectives-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .objective-card {
+            background: #08070a;
+            color: #ffffff;
+            border-radius: 18px;
+            padding: 10px 16px 14px;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .objective-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.7s ease;
+        }
+
+        .objective-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .objective-card:hover::before {
+            left: 100%;
+        }
+
+        .objective-card.active {
+            background: linear-gradient(135deg, #0f172a, #1e1b4b);
+            border-left: 4px solid var(--color-accent);
+        }
+
+        @media (max-width: 480px) {
+            .objective-card {
+                grid-template-columns: auto 1fr;
+                grid-template-rows: auto auto;
+            }
+            .objective-icon {
+                justify-self: flex-end;
+            }
+        }
+
+        .objective-number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 999px;
+            background: #ffffff;
+            color: #111827;
+            font-weight: 700;
+            font-size: 1.05rem;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .objective-card:hover .objective-number {
+            background: var(--color-primary-soft);
+            transform: rotate(5deg);
+        }
+
+        .objective-main {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .objective-verb {
+            font-size: 0.98rem;
+            font-weight: 700;
+            color: var(--color-primary-soft);
+            transition: color 0.3s ease;
+        }
+
+        .objective-card:hover .objective-verb {
+            color: #ffffff;
+        }
+
+        .objective-text {
+            font-size: 0.84rem;
+            color: #e5e7eb;
+            line-height: 1.4;
+        }
+
+        .objective-icon {
+            width: 26px;
+            height: 26px;
+            border-radius: 999px;
+            border: 1px solid rgba(250, 250, 250, 0.16);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: #f9fafb;
+            background: linear-gradient(
+                135deg,
+                rgba(175, 75, 239, 0.1),
+                rgba(0, 0, 0, 0.4)
+            );
+            transition: all 0.3s ease;
+        }
+
+        .objective-card:hover .objective-icon {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+            transform: scale(1.1);
+        }
+
+        /* Chapter color coding */
+        .objective-card[data-chapter="chapter12"] {
+            border-left: 3px solid var(--color-management);
+        }
+
+        .objective-card[data-chapter="chapter13"] {
+            border-left: 3px solid var(--color-quality);
+        }
+
+        .objective-card[data-chapter="chapter12"] .objective-verb {
+            color: #a29bfe;
+        }
+
+        .objective-card[data-chapter="chapter13"] .objective-verb {
+            color: #55efc4;
+        }
+
+        /* Interactive filter buttons */
+        .chapter-filter {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border-radius: 20px;
+            background: rgba(12, 10, 24, 0.05);
+            border: 1px solid rgba(12, 10, 24, 0.1);
+            color: var(--color-text);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+        .filter-btn.active {
+            background: var(--color-primary);
+            color: white;
+            border-color: var(--color-primary);
+        }
+
+        .filter-btn[data-filter="chapter12"] {
+            border-color: rgba(108, 92, 231, 0.3);
+        }
+
+        .filter-btn[data-filter="chapter13"] {
+            border-color: rgba(0, 184, 148, 0.3);
+        }
+
+        /* Right-hand content */
+        .objectives-header {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--color-text);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.5s both;
+        }
+
+        .section-tag {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-primary);
+            font-weight: 600;
+            margin-bottom: 10px;
+            animation: fadeInUp 0.6s ease-out 0.6s both;
+        }
+
+        .week-overview {
+            background: rgba(12, 10, 24, 0.94);
+            border-radius: 18px;
+            padding: 16px 18px 18px;
+            color: #e5e7eb;
+            font-size: 0.88rem;
+            line-height: 1.7;
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.6);
+            margin-bottom: 16px;
+            animation: fadeInUp 0.6s ease-out 0.7s both;
+            transition: transform 0.3s ease;
+        }
+
+        .week-overview:hover {
+            transform: translateY(-2px);
+        }
+
+        .week-overview strong {
+            color: #ffffff;
+        }
+
+        .mini-heading {
+            font-size: 0.86rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: #c4b5fd;
+            font-weight: 600;
+            margin: 8px 0 10px;
+        }
+
+        .outcomes-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-size: 0.86rem;
+            color: #f9fafb;
+        }
+
+        .outcomes-list li {
+            display: flex;
+            gap: 8px;
+            align-items: flex-start;
+            transition: transform 0.3s ease;
+        }
+
+        .outcomes-list li:hover {
+            transform: translateX(5px);
+        }
+
+        .dot {
+            width: 6px;
+            height: 6px;
+            margin-top: 6px;
+            border-radius: 999px;
+            background: var(--color-accent);
+            flex-shrink: 0;
+            animation: pulse 2s infinite;
+        }
+
+        .note-card {
+            margin-top: 14px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            background: rgba(15, 23, 42, 0.7);
+            padding: 10px 12px;
+            font-size: 0.78rem;
+            color: #e5e7eb;
+            transition: all 0.3s ease;
+        }
+
+        .note-card:hover {
+            border-color: var(--color-primary-soft);
+            background: rgba(15, 23, 42, 0.9);
+        }
+
+        .note-card strong {
+            color: #fef3c7;
+        }
+
+        /* Interactive counter */
+        .progress-counter {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(175, 75, 239, 0.05);
+            border-radius: 16px;
+            padding: 12px 18px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(175, 75, 239, 0.1);
+        }
+
+        .counter-item {
+            text-align: center;
+        }
+
+        .counter-number {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--color-primary);
+            display: block;
+        }
+
+        .counter-label {
+            font-size: 0.75rem;
+            color: var(--color-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Animation for counter */
+        @keyframes countUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .counter-item {
+            animation: countUp 0.6s ease-out forwards;
+        }
+
+        .counter-item:nth-child(1) { animation-delay: 0.8s; }
+        .counter-item:nth-child(2) { animation-delay: 1s; }
+        .counter-item:nth-child(3) { animation-delay: 1.2s; }
+
+        /* Management Box */
+        .management-box {
+            background: linear-gradient(135deg, rgba(108, 92, 231, 0.1), rgba(131, 128, 240, 0.1));
+            border-radius: 16px;
+            padding: 16px;
+            margin-top: 20px;
+            border: 1px solid rgba(108, 92, 231, 0.3);
+        }
+
+        .management-title {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--color-management);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .management-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 12px;
+        }
+
+        .management-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 12px;
+            border-left: 4px solid var(--color-management);
+        }
+
+        .management-name {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 6px;
+        }
+
+        .management-desc {
+            font-size: 0.72rem;
+            color: #a5b4cb;
+        }
+
+        /* Quality Box */
+        .quality-box {
+            background: linear-gradient(135deg, rgba(0, 184, 148, 0.1), rgba(131, 128, 240, 0.1));
+            border-radius: 16px;
+            padding: 16px;
+            margin-top: 20px;
+            border: 1px solid rgba(0, 184, 148, 0.3);
+        }
+
+        .quality-title {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--color-quality);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .quality-definitions {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 12px;
+        }
+
+        .quality-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 12px;
+        }
+
+        .quality-term {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 6px;
+            font-family: monospace;
+        }
+
+        .quality-def {
+            font-size: 0.75rem;
+            color: #a5b4cb;
+        }
+
+        /* Draw Station Layout */
+        .layout-box {
+            background: linear-gradient(135deg, rgba(9, 132, 227, 0.1), rgba(116, 185, 255, 0.1));
+            border-radius: 16px;
+            padding: 16px;
+            margin-top: 20px;
+            border: 1px solid rgba(9, 132, 227, 0.3);
+        }
+
+        .layout-title {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--color-info);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .layout-elements {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .layout-item {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            font-size: 0.82rem;
+            color: #e5e7eb;
+        }
+
+        .layout-bullet {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--color-info);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        /* Preanalytical Errors */
+        .errors-box {
+            background: linear-gradient(135deg, rgba(225, 112, 85, 0.1), rgba(253, 203, 110, 0.1));
+            border-radius: 16px;
+            padding: 16px;
+            margin-top: 20px;
+            border: 1px solid rgba(225, 112, 85, 0.3);
+        }
+
+        .errors-title {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--color-error);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .errors-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 10px;
+        }
+
+        .error-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .error-name {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+
+        .error-desc {
+            font-size: 0.7rem;
+            color: #a5b4cb;
+        }
+
+        /* Key Terms Box */
+        .key-terms-box {
+            background: linear-gradient(135deg, rgba(108, 92, 231, 0.1), rgba(0, 184, 148, 0.1));
+            border-radius: 16px;
+            padding: 16px;
+            margin-top: 16px;
+            border: 1px solid rgba(108, 92, 231, 0.2);
+        }
+
+        .key-terms-title {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--color-management);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .key-terms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 8px;
+            font-size: 0.8rem;
+            color: #e5e7eb;
+        }
+
+        .key-term {
+            padding: 6px 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* Procedure Manual Box */
+        .manual-box {
+            background: linear-gradient(135deg, rgba(253, 203, 110, 0.1), rgba(225, 112, 85, 0.1));
+            border-radius: 16px;
+            padding: 16px;
+            margin-top: 20px;
+            border: 1px solid rgba(253, 203, 110, 0.3);
+        }
+
+        .manual-title {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--color-warning);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .manual-sections {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .manual-item {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            font-size: 0.82rem;
+            color: #e5e7eb;
+        }
+
+        .manual-number {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--color-warning);
+            color: #2d3436;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 600px) {
+            .key-terms-grid,
+            .management-grid,
+            .quality-definitions,
+            .errors-list {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="week7-heading">
+        <!-- LEFT COLUMN: title + objective cards -->
+        <section class="column" aria-label="Week 7 objectives list">
+            <header class="brand-row">
+                <div class="brand">
+                    <img
+                        src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                        alt="AlliedRx logo"
+                        class="brand-logo"
+                    />
+                    <div class="course-meta">
+                        <span class="course-name">Phlebotomy Technician Program • PBT</span>
+                        <div class="week-label">
+                            <span class="week-label-dot"></span>
+                            <span>Week 7 --- Management & Quality Systems</span>
+                        </div>
+                    </div>
+                </div>
+                <span class="badge-mode">Campus &amp; Online</span>
+            </header>
+
+            <h1 id="week7-heading">Week 7 Objectives</h1>
+            <p class="subtitle">
+                Understand <strong>department management principles</strong> and master 
+                <strong>quality systems</strong> to contribute to organizational excellence 
+                and ensure optimal phlebotomy service delivery.
+            </p>
+
+            <!-- Interactive filter buttons -->
+            <div class="chapter-filter">
+                <button class="filter-btn active" data-filter="all">All Objectives</button>
+                <button class="filter-btn" data-filter="chapter12">Chapter 12: Department Management</button>
+                <button class="filter-btn" data-filter="chapter13">Chapter 13: Total Quality</button>
+            </div>
+
+            <!-- Progress counter -->
+            <div class="progress-counter">
+                <div class="counter-item">
+                    <span class="counter-number" id="total-objectives">11</span>
+                    <span class="counter-label">Total Objectives</span>
+                </div>
+                <div class="counter-item">
+                    <span class="counter-number">2</span>
+                    <span class="counter-label">Chapters</span>
+                </div>
+                <div class="counter-item">
+                    <span class="counter-number">20+</span>
+                    <span class="counter-label">Quality Elements</span>
+                </div>
+            </div>
+
+            <div class="objectives-list" id="objectives-container">
+                <!-- Chapter 12: Phlebotomy Department Management -->
+                <article class="objective-card" data-chapter="chapter12">
+                    <div class="objective-number">01</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Describe</div>
+                        <p class="objective-text">
+                            Describe the role of the phlebotomy department.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🏢</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter12">
+                    <div class="objective-number">02</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">List</div>
+                        <p class="objective-text">
+                            List key elements for a new-hire training and orientation program.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🎓</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter12">
+                    <div class="objective-number">03</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Describe</div>
+                        <p class="objective-text">
+                            Describe layout of an outpatient draw station.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🗺️</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter12">
+                    <div class="objective-number">04</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Explain</div>
+                        <p class="objective-text">
+                            Explain the need for an inpatient collection schedule.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">📅</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter12">
+                    <div class="objective-number">05</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Explain</div>
+                        <p class="objective-text">
+                            Explain the need for a Quality Improvement Program.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">📈</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter12">
+                    <div class="objective-number">06</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Describe</div>
+                        <p class="objective-text">
+                            Describe the responsibilities of managing a phlebotomy department.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">👨‍💼</div>
+                </article>
+
+                <!-- Chapter 13: Total Quality in Phlebotomy Service -->
+                <article class="objective-card" data-chapter="chapter13">
+                    <div class="objective-number">07</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Define</div>
+                        <p class="objective-text">
+                            Define: Quality, Quality Control, Quality Assurance, Quality Improvement.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">📚</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter13">
+                    <div class="objective-number">08</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Explain</div>
+                        <p class="objective-text">
+                            Explain the importance of a well-defined quality program.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">⭐</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter13">
+                    <div class="objective-number">09</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">List</div>
+                        <p class="objective-text">
+                            List preanalytical errors associated with phlebotomy.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">⚠️</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter13">
+                    <div class="objective-number">10</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Discuss</div>
+                        <p class="objective-text">
+                            Discuss the importance of a procedure manual.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">📖</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter13">
+                    <div class="objective-number">11</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Explain</div>
+                        <p class="objective-text">
+                            Explain the role of the phlebotomist in the quality of phlebotomy service.
+                        </p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">👩‍⚕️</div>
+                </article>
+            </div>
+        </section>
+
+        <!-- RIGHT COLUMN: narrative + outcomes framing -->
+        <aside class="column" aria-label="Overview of this week's content">
+            <h2 class="objectives-header">Organizational Excellence & Continuous Improvement</h2>
+            <p class="section-tag">Department Management • Quality Systems • Process Optimization</p>
+
+            <div class="week-overview">
+                <p>
+                    Week 7 explores the <strong>organizational aspects</strong> of phlebotomy services 
+                    and the <strong>quality systems</strong> that ensure excellence. Understanding 
+                    management principles and quality frameworks helps phlebotomists contribute 
+                    to broader organizational goals beyond individual patient interactions.
+                </p>
+
+                <p>
+                    These chapters are interconnected: <strong>effective management enables quality 
+                    implementation</strong>. Department organization, training programs, and scheduling 
+                    systems all support the consistent delivery of high-quality phlebotomy services 
+                    that meet regulatory standards and patient needs.
+                </p>
+
+                <!-- Management Responsibilities -->
+                <div class="management-box">
+                    <div class="management-title">
+                        <span>👨‍💼</span> Phlebotomy Department Management Responsibilities
+                    </div>
+                    <div class="management-grid">
+                        <div class="management-item">
+                            <div class="management-name">Staff Management</div>
+                            <div class="management-desc">Scheduling, training, performance evaluation</div>
+                        </div>
+                        <div class="management-item">
+                            <div class="management-name">Quality Assurance</div>
+                            <div class="management-desc">Monitoring, audits, corrective actions</div>
+                        </div>
+                        <div class="management-item">
+                            <div class="management-name">Budget Management</div>
+                            <div class="management-desc">Revenues, expenditures, resource allocation</div>
+                        </div>
+                        <div class="management-item">
+                            <div class="management-name">Compliance</div>
+                            <div class="management-desc">Regulatory standards, accreditation requirements</div>
+                        </div>
+                        <div class="management-item">
+                            <div class="management-name">Operational Planning</div>
+                            <div class="management-desc">Scheduling, workflow optimization, efficiency</div>
+                        </div>
+                        <div class="management-item">
+                            <div class="management-name">Equipment Management</div>
+                            <div class="management-desc">Procurement, maintenance, inventory control</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quality Definitions -->
+                <div class="quality-box">
+                    <div class="quality-title">
+                        <span>⭐</span> Quality System Definitions
+                    </div>
+                    <div class="quality-definitions">
+                        <div class="quality-item">
+                            <div class="quality-term">Quality</div>
+                            <div class="quality-def">Degree to which health services increase likelihood of desired health outcomes</div>
+                        </div>
+                        <div class="quality-item">
+                            <div class="quality-term">Quality Control (QC)</div>
+                            <div class="quality-def">Day-to-day activities ensuring consistency and reliability of testing</div>
+                        </div>
+                        <div class="quality-item">
+                            <div class="quality-term">Quality Assurance (QA)</div>
+                            <div class="quality-def">Systematic monitoring and evaluation to ensure standards are met</div>
+                        </div>
+                        <div class="quality-item">
+                            <div class="quality-term">Quality Improvement (QI)</div>
+                            <div class="quality-def">Continuous process to enhance services and outcomes over time</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Outpatient Draw Station Layout -->
+                <div class="layout-box">
+                    <div class="layout-title">
+                        <span>🗺️</span> Outpatient Draw Station Layout Elements
+                    </div>
+                    <div class="layout-elements">
+                        <div class="layout-item">
+                            <div class="layout-bullet">1</div>
+                            <span><strong>Reception/Waiting Area:</strong> Comfortable seating, clear signage, privacy considerations</span>
+                        </div>
+                        <div class="layout-item">
+                            <div class="layout-bullet">2</div>
+                            <span><strong>Registration Area:</strong> Computer stations, privacy screens, accessible design</span>
+                        </div>
+                        <div class="layout-item">
+                            <div class="layout-bullet">3</div>
+                            <span><strong>Collection Rooms:</strong> Adequate lighting, adjustable chairs, emergency equipment</span>
+                        </div>
+                        <div class="layout-item">
+                            <div class="layout-bullet">4</div>
+                            <span><strong>Specimen Processing:</strong> Centrifuge area, labeling station, proper storage</span>
+                        </div>
+                        <div class="layout-item">
+                            <div class="layout-bullet">5</div>
+                            <span><strong>Storage Areas:</strong> Supplies, reagents, patient records (secure)</span>
+                        </div>
+                        <div class="layout-item">
+                            <div class="layout-bullet">6</div>
+                            <span><strong>Staff Areas:</strong> Break room, locker facilities, administrative offices</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Preanalytical Errors -->
+                <div class="errors-box">
+                    <div class="errors-title">
+                        <span>⚠️</span> Common Preanalytical Errors in Phlebotomy
+                    </div>
+                    <div class="errors-list">
+                        <div class="error-item">
+                            <div class="error-name">Patient Misidentification</div>
+                            <div class="error-desc">Wrong patient or mislabeled specimens</div>
+                        </div>
+                        <div class="error-item">
+                            <div class="error-name">Wrong Tube/Additive</div>
+                            <div class="error-desc">Incorrect tube selection for ordered tests</div>
+                        </div>
+                        <div class="error-item">
+                            <div class="error-name">Incorrect Order of Draw</div>
+                            <div class="error-desc">Additive carryover affecting test results</div>
+                        </div>
+                        <div class="error-item">
+                            <div class="error-name">Hemolysis</div>
+                            <div class="error-desc">Rough handling, small needle, vigorous mixing</div>
+                        </div>
+                        <div class="error-item">
+                            <div class="error-name">Insufficient Volume</div>
+                            <div class="error-desc">Short draws affecting additive:blood ratio</div>
+                        </div>
+                        <div class="error-item">
+                            <div class="error-name">Improper Storage/Transport</div>
+                            <div class="error-desc">Temperature extremes, delayed processing</div>
+                        </div>
+                        <div class="error-item">
+                            <div class="error-name">Tourniquet Issues</div>
+                            <div class="error-desc">Too tight, left on too long (>1 minute)</div>
+                        </div>
+                        <div class="error-item">
+                            <div class="error-name">Fasting Non-Compliance</div>
+                            <div class="error-desc">Patient not fasting when required</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Procedure Manual Importance -->
+                <div class="manual-box">
+                    <div class="manual-title">
+                        <span>📖</span> Procedure Manual Essential Sections
+                    </div>
+                    <div class="manual-sections">
+                        <div class="manual-item">
+                            <div class="manual-number">1</div>
+                            <span><strong>Standard Operating Procedures:</strong> Step-by-step instructions for all procedures</span>
+                        </div>
+                        <div class="manual-item">
+                            <div class="manual-number">2</div>
+                            <span><strong>Quality Control Protocols:</strong> Daily QC procedures, troubleshooting</span>
+                        </div>
+                        <div class="manual-item">
+                            <div class="manual-number">3</div>
+                            <span><strong>Safety Protocols:</strong> Infection control, hazardous material handling</span>
+                        </div>
+                        <div class="manual-item">
+                            <div class="manual-number">4</div>
+                            <span><strong>Equipment Manuals:</strong> Operation, maintenance, calibration procedures</span>
+                        </div>
+                        <div class="manual-item">
+                            <div class="manual-number">5</div>
+                            <span><strong>Regulatory Compliance:</strong> CLIA, CAP, OSHA requirements documentation</span>
+                        </div>
+                        <div class="manual-item">
+                            <div class="manual-number">6</div>
+                            <span><strong>Training Documentation:</strong> Competency checklists, annual reviews</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Key Terms Box -->
+                <div class="key-terms-box">
+                    <div class="key-terms-title">
+                        <span>📖</span> Key Terminology
+                    </div>
+                    <div class="key-terms-grid">
+                        <div class="key-term">ambulatory</div>
+                        <div class="key-term">collection schedule</div>
+                        <div class="key-term">operational plan</div>
+                        <div class="key-term">expenditures</div>
+                        <div class="key-term">revenues</div>
+                        <div class="key-term">quality assurance</div>
+                        <div class="key-term">quality control</div>
+                        <div class="key-term">quality improvement</div>
+                        <div class="key-term">preanalytical</div>
+                        <div class="key-term">postanalytical</div>
+                        <div class="key-term">corrective action</div>
+                        <div class="key-term">indicators</div>
+                        <div class="key-term">thresholds</div>
+                        <div class="key-term">product review committee</div>
+                    </div>
+                </div>
+
+                <p class="mini-heading">By the end of this week, you will be able to:</p>
+                <ul class="outcomes-list">
+                    <li>
+                        <span class="dot"></span>
+                        <span>Understand departmental roles and contribute to organizational goals.</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span>Recognize and prevent preanalytical errors that affect test results.</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span>Apply quality control principles in daily phlebotomy practice.</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span>Utilize procedure manuals as reference tools for consistent practice.</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span>Contribute to quality improvement initiatives through documentation and feedback.</span>
+                    </li>
+                </ul>
+
+                <div class="note-card">
+                    <strong>Inpatient Collection Scheduling:</strong> Critical for <strong>patient care coordination</strong> 
+                    and <strong>resource optimization</strong>. Factors include: <strong>patient acuity</strong> (ICU vs. general floor), 
+                    <strong>test priority</strong> (STAT vs routine), <strong>medication schedules</strong> (peak/trough levels), 
+                    and <strong>staff availability</strong>. Reduces patient disturbance and improves workflow efficiency.
+                </div>
+
+                <div class="note-card" style="margin-top: 12px;">
+                    <strong>New-Hire Training Elements:</strong> Comprehensive program includes: 
+                    <strong>orientation to policies/procedures</strong>, <strong>supervised practice sessions</strong>, 
+                    <strong>competency assessments</strong>, <strong>safety training</strong> (OSHA, HIPAA), 
+                    <strong>quality system education</strong>, and <strong>mentoring/transition support</strong>. 
+                    Typically 2-4 weeks depending on experience level.
+                </div>
+
+                <div class="note-card" style="margin-top: 12px;">
+                    <strong>Phlebotomist's Quality Role:</strong> Every phlebotomist contributes to quality through: 
+                    <strong>accurate patient identification</strong>, <strong>proper technique</strong>, 
+                    <strong>correct specimen handling</strong>, <strong>timely documentation</strong>, 
+                    <strong>equipment maintenance</strong>, and <strong>incident reporting</strong>. 
+                    Quality is everyone's responsibility, not just management's.
+                </div>
+
+                <div class="note-card" style="margin-top: 12px;">
+                    <strong>Quality Program Importance:</strong> Well-defined quality programs: 
+                    <strong>ensure patient safety</strong>, <strong>maintain regulatory compliance</strong>, 
+                    <strong>reduce errors and costs</strong>, <strong>improve patient outcomes</strong>, 
+                    <strong>enhance staff competency</strong>, and <strong>support continuous improvement</strong>. 
+                    Documentation provides evidence of quality for accreditation surveys.
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Filter functionality
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const objectiveCards = document.querySelectorAll('.objective-card');
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Update active button
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+
+                    const filter = this.getAttribute('data-filter');
+
+                    // Filter cards
+                    objectiveCards.forEach(card => {
+                        if (filter === 'all') {
+                            card.style.display = 'grid';
+                            setTimeout(() => {
+                                card.style.opacity = '1';
+                                card.style.transform = 'translateY(0)';
+                            }, 10);
+                        } else {
+                            if (card.getAttribute('data-chapter') === filter) {
+                                card.style.display = 'grid';
+                                setTimeout(() => {
+                                    card.style.opacity = '1';
+                                    card.style.transform = 'translateY(0)';
+                                }, 10);
+                            } else {
+                                card.style.opacity = '0';
+                                card.style.transform = 'translateY(10px)';
+                                setTimeout(() => {
+                                    card.style.display = 'none';
+                                }, 300);
+                            }
+                        }
+                    });
+                });
+            });
+
+            // Interactive objective cards
+            objectiveCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    // Toggle active state
+                    this.classList.toggle('active');
+
+                    // Add subtle animation
+                    if (this.classList.contains('active')) {
+                        const icon = this.querySelector('.objective-icon');
+                        icon.style.transform = 'scale(1.2) rotate(10deg)';
+                        setTimeout(() => {
+                            icon.style.transform = 'scale(1.1)';
+                        }, 300);
+                    }
+                });
+
+                // Add keyboard navigation
+                card.setAttribute('tabindex', '0');
+                card.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        this.click();
+                    }
+                });
+            });
+
+            // Animate counter numbers
+            function animateCounter(element, target, duration) {
+                let start = 0;
+                const increment = target / (duration / 16); // 60fps
+                const timer = setInterval(() => {
+                    start += increment;
+                    if (start >= target) {
+                        element.textContent = target;
+                        clearInterval(timer);
+                    } else {
+                        element.textContent = Math.floor(start);
+                    }
+                }, 16);
+            }
+
+            // Start counter animation after page load
+            setTimeout(() => {
+                const counterElement = document.getElementById('total-objectives');
+                animateCounter(counterElement, 11, 1000);
+            }, 1500);
+
+            // Add hover effect to outcomes list items
+            const outcomesItems = document.querySelectorAll('.outcomes-list li');
+            outcomesItems.forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    const dot = this.querySelector('.dot');
+                    dot.style.transform = 'scale(1.5)';
+                    dot.style.background = 'var(--color-primary)';
+                });
+
+                item.addEventListener('mouseleave', function() {
+                    const dot = this.querySelector('.dot');
+                    dot.style.transform = 'scale(1)';
+                    dot.style.background = 'var(--color-accent)';
+                });
+            });
+
+            // Add scroll animation for cards
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all objective cards
+            objectiveCards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                observer.observe(card);
+            });
+
+            // Add interactivity to management items
+            const managementItems = document.querySelectorAll('.management-item, .quality-item, .error-item');
+            managementItems.forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-3px)';
+                    this.style.boxShadow = '0 8px 20px rgba(0, 0, 0, 0.3)';
+                });
+
+                item.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                    this.style.boxShadow = 'none';
+                });
+            });
+
+            // Add interactivity to layout items
+            const layoutItems = document.querySelectorAll('.layout-item, .manual-item');
+            layoutItems.forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    this.style.backgroundColor = 'rgba(255, 255, 255, 0.05)';
+                    this.style.paddingLeft = '12px';
+                    this.style.borderRadius = '8px';
+                });
+
+                item.addEventListener('mouseleave', function() {
+                    this.style.backgroundColor = '';
+                    this.style.paddingLeft = '10px';
+                    this.style.borderRadius = '0';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
