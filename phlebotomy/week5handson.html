@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Week 4 -- Phlebotomy Lab Course</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d9b8ff;
+            --color-accent: #8380f0;
+            --color-bg: #f7f5fb;
+            --color-text: #1e2030;
+            --color-muted: #727089;
+            --radius-lg: 24px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 18px 14px 24px;
+            background: radial-gradient(circle at top left, #ffffff 0, #f3edff 40%, var(--color-bg) 100%);
+            color: var(--color-text);
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1120px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 22px 20px 26px;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr);
+            gap: 22px;
+            position: relative;
+        }
+
+        @media (min-width: 900px) {
+            .page {
+                grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+            }
+        }
+
+        .column {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            min-width: 0;
+        }
+
+        /* Header / branding */
+        .brand-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: nowrap;
+            min-width: 0;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+        }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            min-width: 0;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: #00b894;
+            flex-shrink: 0;
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+        }
+
+        h1 {
+            font-size: clamp(1.9rem, 3vw, 2.3rem);
+            line-height: 1.1;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+        }
+
+        .subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 36rem;
+            margin-bottom: 18px;
+        }
+
+        .subtitle strong {
+            color: var(--color-primary);
+        }
+
+        /* Sections */
+        .section-label {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-primary);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--color-text);
+        }
+
+        .card {
+            border-radius: 18px;
+            border: 1px solid rgba(15, 23, 42, 0.06);
+            padding: 14px 16px 16px;
+            margin-bottom: 14px;
+            background: linear-gradient(
+                135deg,
+                rgba(175, 75, 239, 0.06),
+                rgba(255, 255, 255, 0.98)
+            );
+            width: 100%;
+        }
+
+        .card p {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--color-text);
+        }
+
+        .small {
+            font-size: 0.82rem;
+            color: var(--color-muted);
+        }
+
+        /* Welcome Banner */
+        .welcome-banner {
+            background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+            color: white;
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.3);
+        }
+
+        .welcome-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .welcome-subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-bottom: 16px;
+        }
+
+        /* Skills Progress */
+        .skills-container {
+            margin: 24px 0;
+        }
+
+        .skill-item {
+            margin-bottom: 24px;
+            padding: 16px;
+            background: rgba(248, 250, 252, 0.9);
+            border-radius: 14px;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+        }
+
+        .skill-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .skill-dots {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+
+        .skill-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #d1d5db;
+        }
+
+        .skill-dot.active {
+            background: var(--color-primary);
+        }
+
+        .skill-dot.completed {
+            background: #10b981;
+        }
+
+        /* Focus Cards */
+        .focus-card {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.08), rgba(255, 255, 255, 0.95));
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 16px;
+            padding: 18px;
+            margin: 16px 0;
+        }
+
+        .focus-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .focus-icon {
+            font-size: 1.5rem;
+        }
+
+        .focus-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #8b5cf6;
+        }
+
+        .focus-content {
+            padding-left: 44px;
+        }
+
+        /* Objectives List */
+        .objectives-list {
+            list-style: none;
+            margin-top: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .objective-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+        }
+
+        .objective-icon {
+            color: #8b5cf6;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        /* Specialized Cards */
+        .specialized-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .specialized-card {
+            background: white;
+            border-radius: 12px;
+            padding: 14px;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .specialized-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #8b5cf6;
+            margin-bottom: 6px;
+        }
+
+        .specialized-desc {
+            font-size: 0.85rem;
+            color: var(--color-muted);
+        }
+
+        /* Right column cards */
+        .side-card {
+            background: rgba(12, 10, 24, 0.96);
+            color: #e5e7eb;
+            border-radius: 18px;
+            padding: 16px 18px 18px;
+            font-size: 0.88rem;
+            line-height: 1.7;
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.6);
+            margin-bottom: 16px;
+            width: 100%;
+        }
+
+        .side-card strong {
+            color: #ffffff;
+        }
+
+        .side-subtitle {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #c4b5fd;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .side-list {
+            list-style: none;
+            margin-top: 6px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            font-size: 0.86rem;
+        }
+
+        .side-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 7px;
+        }
+
+        .dot {
+            width: 6px;
+            height: 6px;
+            margin-top: 7px;
+            border-radius: 999px;
+            background: #a5b4fc;
+            flex-shrink: 0;
+        }
+
+        .completion-card {
+            border-radius: 18px;
+            border: 1px dashed rgba(148, 163, 184, 0.7);
+            padding: 12px 14px;
+            font-size: 0.84rem;
+            color: var(--color-muted);
+            background: rgba(248, 250, 252, 0.9);
+            width: 100%;
+        }
+
+        .complication-card {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.08), rgba(255, 255, 255, 0.95));
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 12px;
+            padding: 14px;
+            margin: 10px 0;
+        }
+
+        .complication-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #ef4444;
+            margin-bottom: 6px;
+        }
+
+        .complication-desc {
+            font-size: 0.85rem;
+            color: var(--color-muted);
+        }
+
+        .difficulty-card {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.08), rgba(255, 255, 255, 0.95));
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            border-radius: 12px;
+            padding: 14px;
+            margin: 10px 0;
+        }
+
+        .difficulty-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #f59e0b;
+            margin-bottom: 6px;
+        }
+
+        .difficulty-desc {
+            font-size: 0.85rem;
+            color: var(--color-muted);
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="week4-heading">
+        <!-- LEFT COLUMN -->
+        <section class="column">
+            <header class="brand-row">
+                <div class="brand">
+                    <img
+                        src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                        alt="AlliedRx logo"
+                        class="brand-logo"
+                    />
+                    <div class="course-meta">
+                        <span class="course-name">Phlebotomy Lab Course • Hands-on Skills Training</span>
+                        <div class="week-label">
+                            <span class="week-label-dot"></span>
+                            <span>Week 4 — Difficult Draws & Advanced Venipuncture</span>
+                        </div>
+                    </div>
+                </div>
+                <span class="badge-mode">Advanced Techniques Lab</span>
+            </header>
+
+            <h1 id="week4-heading">Week 4: Difficult Draws & Advanced Venipuncture</h1>
+
+            <p class="subtitle">
+                Master <strong>advanced venipuncture techniques</strong> for challenging patients and learn 
+                specialized approaches for difficult veins, obesity, edema, and other complex scenarios.
+            </p>
+
+            <!-- WELCOME BANNER -->
+            <div class="welcome-banner">
+                <div class="welcome-title">Advanced Venipuncture Challenges</div>
+                <div class="welcome-subtitle">Week 4 • Difficult Veins, Special Techniques & Problem Solving</div>
+            </div>
+
+            <!-- SKILLS PROGRESS -->
+            <section aria-label="week 4 skills progress">
+                <p class="section-label">Course Progress</p>
+                <h2 class="section-title">Skill Development Tracking</h2>
+                
+                <div class="skills-container">
+                    <div class="skill-item">
+                        <div class="skill-title">
+                            <span>SKILL 01 - Venipuncture</span>
+                        </div>
+                        <div class="skill-dots">
+                            <div class="skill-dot completed"></div>
+                            <div class="skill-dot completed"></div>
+                            <div class="skill-dot completed"></div>
+                            <div class="skill-dot completed"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot"></div>
+                            <div class="skill-dot"></div>
+                            <div class="skill-dot"></div>
+                            <div class="skill-dot"></div>
+                        </div>
+                        <p class="small" style="margin-top: 8px;">
+                            <strong>Week 4 Focus:</strong> Advanced techniques for difficult veins and complex patients
+                        </p>
+                    </div>
+
+                    <div class="skill-item">
+                        <div class="skill-title">
+                            <span>SKILL 02 - Capillary & Labs</span>
+                        </div>
+                        <div class="skill-dots">
+                            <div class="skill-dot completed"></div>
+                            <div class="skill-dot completed"></div>
+                            <div class="skill-dot completed"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot"></div>
+                            <div class="skill-dot"></div>
+                            <div class="skill-dot"></div>
+                            <div class="skill-dot"></div>
+                        </div>
+                        <p class="small" style="margin-top: 8px;">
+                            <strong>Continued Practice:</strong> Advanced capillary techniques and troubleshooting
+                        </p>
+                    </div>
+
+                    <div class="skill-item">
+                        <div class="skill-title">
+                            <span>SKILL 03 - Patient Care</span>
+                        </div>
+                        <div class="skill-dots">
+                            <div class="skill-dot completed"></div>
+                            <div class="skill-dot completed"></div>
+                            <div class="skill-dot completed"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot"></div>
+                            <div class="skill-dot"></div>
+                            <div class="skill-dot"></div>
+                            <div class="skill-dot"></div>
+                            <div class="skill-dot"></div>
+                        </div>
+                        <p class="small" style="margin-top: 8px;">
+                            <strong>Advanced Communication:</strong> Managing patient anxiety and building trust
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- WEEK 4 FOCUS -->
+            <section aria-label="week 4 focus">
+                <p class="section-label">Week 4 Objectives</p>
+                <h2 class="section-title">Mastering Difficult Venipuncture</h2>
+                
+                <div class="focus-card">
+                    <div class="focus-header">
+                        <span class="focus-icon">🎯</span>
+                        <span class="focus-title">Primary Focus: Challenging Patient Scenarios</span>
+                    </div>
+                    <div class="focus-content">
+                        <p class="small">
+                            This week focuses on developing advanced skills for patients with difficult venous access 
+                            and complex medical conditions that make standard venipuncture challenging.
+                        </p>
+                        
+                        <ul class="objectives-list">
+                            <li class="objective-item">
+                                <span class="objective-icon">✓</span>
+                                <span>Advanced vein location and assessment techniques</span>
+                            </li>
+                            <li class="objective-item">
+                                <span class="objective-icon">✓</span>
+                                <span>Special approaches for obese patients and edema</span>
+                            </li>
+                            <li class="objective-item">
+                                <span class="objective-icon">✓</span>
+                                <span>Techniques for fragile, rolling, and collapsing veins</span>
+                            </li>
+                            <li class="objective-item">
+                                <span class="objective-icon">✓</span>
+                                <span>Alternative site selection and positioning strategies</span>
+                            </li>
+                            <li class="objective-item">
+                                <span class="objective-icon">✓</span>
+                                <span>When to use syringe method vs. evacuated tube system</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ADVANCED TECHNIQUES -->
+            <section aria-label="advanced techniques">
+                <p class="section-label">Hands-on Training</p>
+                <h2 class="section-title">Specialized Approaches</h2>
+                
+                <div class="card">
+                    <p class="small">
+                        Master these advanced techniques for challenging venipuncture scenarios:
+                    </p>
+                    
+                    <div class="specialized-grid">
+                        <div class="specialized-card">
+                            <div class="specialized-title">Syringe Method</div>
+                            <div class="specialized-desc">
+                                Controlled blood draw for fragile veins and small volumes
+                            </div>
+                        </div>
+                        <div class="specialized-card">
+                            <div class="specialized-title">Butterfly Needles</div>
+                            <div class="specialized-desc">
+                                Proper use for superficial, small, or fragile veins
+                            </div>
+                        </div>
+                        <div class="specialized-card">
+                            <div class="specialized-title">Hand & Wrist Draws</div>
+                            <div class="specialized-desc">
+                                Alternative site selection and specialized techniques
+                            </div>
+                        </div>
+                        <div class="specialized-card">
+                            <div class="specialized-title">Warming Techniques</div>
+                            <div class="specialized-desc">
+                                Improving venous dilation for better access
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- RIGHT COLUMN -->
+        <aside class="column" aria-label="difficult scenarios and troubleshooting">
+            <!-- CHALLENGING SCENARIOS -->
+            <section>
+                <p class="section-label">Clinical Scenarios</p>
+                <h2 class="section-title">Difficult Patient Scenarios</h2>
+                
+                <div class="side-card">
+                    <p class="side-subtitle">Advanced Problem Solving</p>
+                    <p>
+                        Develop strategies for these challenging patient situations:
+                    </p>
+                    
+                    <ul class="side-list" style="margin-top: 12px;">
+                        <li>
+                            <span class="dot"></span>
+                            <span><strong>Obese Patients:</strong> Deep vein location and extended needle use</span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span><strong>Elderly Patients:</strong> Fragile veins and skin considerations</span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span><strong>IV Drug Users:</strong> Scarred veins and alternative sites</span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span><strong>Cancer Patients:</strong> Chemotherapy effects and limited access</span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span><strong>Burn Patients:</strong> Limited sites and specialized techniques</span>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- COMPLICATION MANAGEMENT -->
+            <section>
+                <p class="section-label">Troubleshooting</p>
+                <h2 class="section-title">Advanced Complication Management</h2>
+                
+                <div class="card">
+                    <p class="small">
+                        Learn to recognize and manage advanced venipuncture complications:
+                    </p>
+                    
+                    <div class="complication-card">
+                        <div class="complication-title">Hematoma Formation</div>
+                        <div class="complication-desc">
+                            Prevention and management techniques for difficult veins
+                        </div>
+                    </div>
+                    
+                    <div class="difficulty-card">
+                        <div class="difficulty-title">Vein Collapse</div>
+                        <div class="difficulty-desc">
+                            Techniques to prevent and manage collapsing veins
+                        </div>
+                    </div>
+                    
+                    <div class="complication-card">
+                        <div class="complication-title">Infiltration</div>
+                        <div class="complication-desc">
+                            Recognition and immediate response procedures
+                        </div>
+                    </div>
+                    
+                    <div class="difficulty-card">
+                        <div class="difficulty-title">Multiple Attempts</div>
+                        <div class="difficulty-desc">
+                            Protocol for when to stop and seek assistance
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- EQUIPMENT & DECISION MAKING -->
+            <section>
+                <p class="section-label">Clinical Judgment</p>
+                <h2 class="section-title">Equipment Selection & Decision Making</h2>
+                
+                <div class="side-card">
+                    <p class="side-subtitle">Advanced Clinical Skills</p>
+                    <p>
+                        Develop critical thinking skills for equipment selection:
+                    </p>
+                    
+                    <ul class="side-list" style="margin-top: 12px;">
+                        <li>
+                            <span class="dot"></span>
+                            <span><strong>Needle Gauge Selection:</strong> Matching gauge to patient and vein</span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span><strong>Syringe vs. Vacutainer:</strong> When to use each method</span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span><strong>Butterfly Applications:</strong> Specific indications and techniques</span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span><strong>Tourniquet Alternatives:</strong> When standard tourniquets fail</span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span><strong>When to Stop:</strong> Recognizing limits and seeking assistance</span>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- COMPETENCY CHECKLIST -->
+            <section>
+                <p class="section-label">Assessment</p>
+                <h2 class="section-title">Week 4 Competency Checklist</h2>
+                
+                <div class="completion-card">
+                    <p>
+                        By the end of Week 4, you should be able to demonstrate:
+                    </p>
+                    
+                    <ul class="side-list" style="margin-top: 8px;">
+                        <li>
+                            <span class="dot"></span>
+                            <span>Advanced <strong>vein assessment</strong> and location techniques</span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span>Proper use of <strong>syringe method</strong> for difficult draws</span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span>Correct <strong>butterfly needle</strong> technique and indications</span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span>Alternative <strong>site selection</strong> for challenging patients</span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span>Management of <strong>common complications</strong> in difficult draws</span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span>Clinical judgment for <strong>when to seek assistance</strong></span>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+        </aside>
+    </main>
+</body>
+</html>
