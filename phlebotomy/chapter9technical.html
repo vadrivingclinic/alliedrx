@@ -1,0 +1,2331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AlliedRx – Chapter 9: Technical Problems & Unacceptable Specimens</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+    --color-primary: #af4bef;
+    --color-primary-soft: #d492ff;
+    --color-accent: #8380f0;
+    --color-success: #00b894;
+    --color-error: #e17055;
+    --color-warning: #fdcb6e;
+    --color-info: #0984e3;
+    --color-bg: #f7f5fb;
+    --color-text: #2b2b2b;
+    --color-muted: #6c6880;
+    --color-dark: #0c0a18;
+    --radius-lg: 24px;
+    --radius-md: 16px;
+    --radius-sm: 12px;
+    --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+    --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+    --shadow-card: 0 12px 30px rgba(15, 23, 42, 0.1);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    width: 100%;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    padding: 24px;
+    background: radial-gradient(
+        circle at top left,
+        #ffffff 0,
+        #f1ecff 40%,
+        var(--color-bg) 100%
+    );
+    color: var(--color-text);
+    line-height: 1.5;
+}
+
+@media (max-width: 600px) {
+    body { padding: 12px; }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+@keyframes checkmarkPop {
+    0% { transform: scale(0); opacity: 0; }
+    70% { transform: scale(1.2); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+@keyframes highlight {
+    0%, 100% { background-color: transparent; }
+    50% { background-color: rgba(225, 112, 85, 0.2); }
+}
+
+.page {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-soft);
+    padding: 28px 30px 32px;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+@media (max-width: 900px) { .page { padding: 22px; } }
+@media (max-width: 480px) { 
+    body { padding: 0; }
+    .page { border-radius: 0; box-shadow: none; padding: 18px 14px 22px; }
+}
+
+/* Header */
+.brand-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    animation: fadeIn 0.6s ease-out 0.2s both;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.brand-logo {
+    height: 40px;
+    width: auto;
+    max-width: 100%;
+    filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+    transition: transform 0.3s ease;
+}
+
+.brand-logo:hover { transform: scale(1.05); }
+
+.course-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    max-width: 100%;
+}
+
+.course-name {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--color-muted);
+}
+
+.week-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(175, 75, 239, 0.08);
+    font-size: 0.76rem;
+    color: var(--color-primary);
+}
+
+.week-label-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: var(--color-success);
+    flex-shrink: 0;
+}
+
+.badge-mode {
+    padding: 5px 10px;
+    border-radius: 999px;
+    background: rgba(12, 10, 24, 0.06);
+    border: 1px solid rgba(12, 10, 24, 0.08);
+    font-size: 0.74rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--color-muted);
+    transition: all 0.3s ease;
+}
+
+.badge-mode:hover {
+    background: rgba(175, 75, 239, 0.1);
+    border-color: var(--color-primary-soft);
+    color: var(--color-primary);
+}
+
+@media (max-width: 480px) {
+    .brand-row { flex-direction: column; align-items: flex-start; }
+    .badge-mode { margin-top: 6px; }
+}
+
+h1 {
+    font-size: clamp(1.8rem, 3vw, 2.2rem);
+    line-height: 1.1;
+    color: var(--color-primary);
+    margin-bottom: 6px;
+    animation: fadeInUp 0.6s ease-out 0.3s both;
+}
+
+.module-subtitle {
+    font-size: 0.98rem;
+    color: var(--color-muted);
+    max-width: 600px;
+    margin-bottom: 24px;
+    animation: fadeInUp 0.6s ease-out 0.4s both;
+}
+
+/* Progress Tracker */
+.progress-tracker {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 30px;
+    position: relative;
+    padding: 0 20px;
+    gap: 60px;
+}
+
+.progress-tracker::before {
+    content: '';
+    position: absolute;
+    top: 15px;
+    left: 25%;
+    right: 25%;
+    height: 3px;
+    background: rgba(12, 10, 24, 0.08);
+    z-index: 1;
+}
+
+.progress-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+}
+
+.step-circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: white;
+    border: 2px solid rgba(12, 10, 24, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-muted);
+    margin-bottom: 8px;
+    transition: all 0.3s ease;
+}
+
+.progress-step.active .step-circle {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: white;
+    transform: scale(1.1);
+}
+
+.progress-step.completed .step-circle {
+    background: var(--color-success);
+    border-color: var(--color-success);
+    color: white;
+}
+
+.step-label {
+    font-size: 0.75rem;
+    color: var(--color-muted);
+    text-align: center;
+    font-weight: 500;
+}
+
+.progress-step.active .step-label {
+    color: var(--color-primary);
+    font-weight: 600;
+}
+
+/* Progress Summary */
+.progress-summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-bottom: 30px;
+    animation: fadeInUp 0.6s ease-out 0.5s both;
+}
+
+.summary-card {
+    background: rgba(12, 10, 24, 0.02);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    border: 1px solid rgba(12, 10, 24, 0.06);
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.summary-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-card);
+    border-color: var(--color-primary-soft);
+}
+
+.summary-number {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--color-primary);
+    display: block;
+    line-height: 1;
+    margin-bottom: 4px;
+}
+
+.summary-label {
+    font-size: 0.8rem;
+    color: var(--color-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+/* Activity Grid */
+.activity-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.activity-card {
+    background: white;
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(12, 10, 24, 0.08);
+    padding: 20px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.activity-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--color-primary);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.activity-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--color-primary-soft);
+}
+
+.activity-card:hover::before { opacity: 1; }
+
+.activity-card.completed {
+    border-color: var(--color-success);
+}
+
+.activity-card.completed::before {
+    background: var(--color-success);
+    opacity: 1;
+}
+
+.activity-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 15px;
+}
+
+.activity-number {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    background: rgba(175, 75, 239, 0.1);
+    padding: 4px 10px;
+    border-radius: 20px;
+}
+
+.activity-status {
+    font-size: 0.75rem;
+    padding: 3px 8px;
+    border-radius: 12px;
+    background: rgba(12, 10, 24, 0.06);
+    color: var(--color-muted);
+}
+
+.activity-card.completed .activity-status {
+    background: rgba(0, 184, 148, 0.1);
+    color: var(--color-success);
+}
+
+.activity-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.activity-description {
+    font-size: 0.9rem;
+    color: var(--color-muted);
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+/* Activity 1: Specimen Rejection Diagnosis */
+.diagnosis-challenge {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.case-scenario {
+    background: rgba(12, 10, 24, 0.02);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    border: 2px solid rgba(12, 10, 24, 0.08);
+    margin-bottom: 15px;
+}
+
+.case-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.case-icon {
+    font-size: 1.5rem;
+}
+
+.case-title {
+    font-weight: 600;
+    color: var(--color-primary);
+}
+
+.case-text {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--color-text);
+}
+
+.case-details {
+    margin-top: 10px;
+    padding: 10px;
+    background: rgba(12, 10, 24, 0.03);
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+    color: var(--color-muted);
+}
+
+.diagnosis-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-top: 15px;
+}
+
+@media (max-width: 600px) {
+    .diagnosis-options {
+        grid-template-columns: 1fr;
+    }
+}
+
+.diagnosis-option {
+    padding: 12px 15px;
+    background: rgba(12, 10, 24, 0.03);
+    border: 2px solid rgba(12, 10, 24, 0.1);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: left;
+    font-size: 0.9rem;
+}
+
+.diagnosis-option:hover {
+    background: rgba(175, 75, 239, 0.08);
+    border-color: var(--color-primary-soft);
+    transform: translateY(-2px);
+}
+
+.diagnosis-option.selected.correct {
+    background: rgba(0, 184, 148, 0.1);
+    border-color: var(--color-success);
+    color: var(--color-success);
+}
+
+.diagnosis-option.selected.incorrect {
+    background: rgba(225, 112, 85, 0.1);
+    border-color: var(--color-error);
+    color: var(--color-error);
+    animation: shake 0.5s ease;
+}
+
+.case-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.case-counter {
+    font-size: 0.9rem;
+    color: var(--color-muted);
+}
+
+/* Activity 2: Order of Draw & Contamination */
+.order-of-draw {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.phase-indicator {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.phase-tab {
+    padding: 8px 16px;
+    background: rgba(12, 10, 24, 0.06);
+    border: 2px solid rgba(12, 10, 24, 0.1);
+    border-radius: var(--radius-sm);
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-muted);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.phase-tab.active {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: white;
+}
+
+.tube-sequence {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.sequence-step {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    background: rgba(12, 10, 24, 0.02);
+    border-radius: var(--radius-md);
+    border: 2px solid rgba(12, 10, 24, 0.08);
+    transition: all 0.3s ease;
+    cursor: grab;
+}
+
+.sequence-step.dragging {
+    opacity: 0.7;
+    transform: scale(0.98);
+}
+
+.sequence-step.correct {
+    border-color: var(--color-success);
+    background: rgba(0, 184, 148, 0.05);
+}
+
+.step-number {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(12, 10, 24, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    color: var(--color-text);
+    flex-shrink: 0;
+    font-size: 1.2rem;
+}
+
+.step-number.correct {
+    background: var(--color-success);
+    color: white;
+}
+
+.tube-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+}
+
+.tube-color-sample {
+    width: 20px;
+    height: 40px;
+    border-radius: 4px;
+    border: 2px solid rgba(12, 10, 24, 0.2);
+}
+
+.tube-name {
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.tube-additive {
+    font-size: 0.85rem;
+    color: var(--color-muted);
+}
+
+.contamination-question {
+    background: rgba(12, 10, 24, 0.02);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    border: 2px solid rgba(12, 10, 24, 0.08);
+    margin-top: 20px;
+    display: none;
+}
+
+.contamination-question.active {
+    display: block;
+    animation: fadeIn 0.5s ease;
+}
+
+.contamination-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.contamination-icon {
+    font-size: 1.5rem;
+    color: var(--color-error);
+}
+
+.contamination-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+@media (max-width: 600px) {
+    .contamination-options {
+        grid-template-columns: 1fr;
+    }
+}
+
+.contamination-option {
+    padding: 12px 15px;
+    background: white;
+    border: 2px solid rgba(12, 10, 24, 0.1);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: left;
+    font-size: 0.9rem;
+}
+
+.contamination-option:hover {
+    border-color: var(--color-primary-soft);
+    transform: translateY(-2px);
+}
+
+.contamination-option.selected.correct {
+    background: rgba(0, 184, 148, 0.1);
+    border-color: var(--color-success);
+}
+
+.contamination-option.selected.incorrect {
+    background: rgba(225, 112, 85, 0.1);
+    border-color: var(--color-error);
+    animation: shake 0.5s ease;
+}
+
+/* Activity 3: Error Identification */
+.error-identification {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.procedure-text {
+    background: rgba(12, 10, 24, 0.02);
+    border-radius: var(--radius-md);
+    padding: 25px;
+    border: 2px solid rgba(12, 10, 24, 0.08);
+    line-height: 1.8;
+    font-size: 0.95rem;
+    position: relative;
+    min-height: 300px;
+}
+
+.procedure-text p {
+    margin-bottom: 15px;
+}
+
+.error-highlight {
+    background: rgba(225, 112, 85, 0.1);
+    border-radius: 3px;
+    padding: 2px 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+}
+
+.error-highlight:hover {
+    background: rgba(225, 112, 85, 0.2);
+    border-color: var(--color-error);
+}
+
+.error-highlight.identified {
+    background: rgba(225, 112, 85, 0.3);
+    border-color: var(--color-error);
+    text-decoration: line-through;
+}
+
+.error-highlight.missed {
+    animation: highlight 2s ease-in-out;
+}
+
+.error-feedback {
+    position: absolute;
+    background: white;
+    border: 2px solid var(--color-error);
+    border-radius: var(--radius-sm);
+    padding: 10px 15px;
+    font-size: 0.85rem;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    z-index: 10;
+    max-width: 300px;
+    display: none;
+}
+
+.error-feedback.show {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+.identification-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.error-counter {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.error-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(12, 10, 24, 0.1);
+}
+
+.error-dot.identified {
+    background: var(--color-error);
+}
+
+.error-dot.missed {
+    background: var(--color-warning);
+    animation: pulse 1s infinite;
+}
+
+/* Performance Indicators */
+.performance-indicator {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 15px;
+    padding: 10px;
+    background: rgba(12, 10, 24, 0.02);
+    border-radius: var(--radius-sm);
+}
+
+.perf-label {
+    font-size: 0.8rem;
+    color: var(--color-muted);
+}
+
+.perf-value {
+    font-weight: 600;
+    color: var(--color-primary);
+}
+
+.perf-bar {
+    flex: 1;
+    height: 6px;
+    background: rgba(12, 10, 24, 0.1);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.perf-fill {
+    height: 100%;
+    background: var(--color-success);
+    transition: width 0.5s ease;
+}
+
+/* Feedback */
+.feedback-container {
+    background: rgba(12, 10, 24, 0.02);
+    border-radius: var(--radius-sm);
+    padding: 15px;
+    border: 1px solid rgba(12, 10, 24, 0.08);
+    margin-top: 20px;
+    display: none;
+}
+
+.feedback-container.show {
+    display: block;
+    animation: fadeIn 0.5s ease;
+}
+
+.feedback-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.feedback-icon {
+    font-size: 1.2rem;
+}
+
+.feedback-icon.correct { color: var(--color-success); }
+.feedback-icon.incorrect { color: var(--color-error); }
+
+.feedback-content {
+    font-size: 0.85rem;
+    color: var(--color-text);
+    line-height: 1.5;
+}
+
+.feedback-content strong { color: var(--color-primary); }
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 30px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: 12px 24px;
+    border-radius: var(--radius-md);
+    border: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-primary {
+    background: var(--color-primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #9a3bd6;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(175, 75, 239, 0.3);
+}
+
+.btn-secondary {
+    background: rgba(12, 10, 24, 0.06);
+    color: var(--color-text);
+}
+
+.btn-secondary:hover {
+    background: rgba(12, 10, 24, 0.1);
+    transform: translateY(-2px);
+}
+
+.btn-icon { font-size: 1.1em; }
+
+/* Results Panel */
+.results-panel {
+    background: var(--color-dark);
+    color: white;
+    border-radius: var(--radius-md);
+    padding: 30px;
+    margin-top: 30px;
+    display: none;
+    animation: fadeInUp 0.6s ease;
+}
+
+.results-panel.show { display: block; }
+
+.results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.results-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: white;
+}
+
+.score-display {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--color-primary-soft);
+    text-align: center;
+    margin: 20px 0;
+}
+
+.clinical-insights {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-sm);
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.insights-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-primary-soft);
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.insights-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.insights-list li {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    font-size: 0.9rem;
+    color: #e5e7eb;
+}
+
+.insight-dot {
+    width: 6px;
+    height: 6px;
+    margin-top: 6px;
+    border-radius: 999px;
+    background: var(--color-accent);
+    flex-shrink: 0;
+}
+</style>
+</head>
+<body>
+<main class="page" aria-labelledby="module-heading">
+    <!-- Header -->
+    <header class="brand-row">
+        <div class="brand">
+            <img src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png" alt="AlliedRx logo" class="brand-logo">
+            <div class="course-meta">
+                <span class="course-name">Phlebotomy Technician • Week 9</span>
+                <div class="week-label">
+                    <span class="week-label-dot"></span>
+                    <span>Chapter 9: Considerations & Complications of Phlebotomy</span>
+                </div>
+            </div>
+        </div>
+        <span class="badge-mode">Campus & Online</span>
+    </header>
+
+    <h1 id="module-heading">Module 9.3: Technical Problems & Unacceptable Specimens</h1>
+    
+    <p class="module-subtitle">
+        Diagnose specimen rejection causes, master order of draw to prevent contamination, 
+        and identify procedural errors that compromise specimen quality.
+    </p>
+
+    <!-- Progress Tracker -->
+    <div class="progress-tracker">
+        <div class="progress-step active" data-step="1">
+            <div class="step-circle">1</div>
+            <div class="step-label">Specimen Diagnosis</div>
+        </div>
+        <div class="progress-step" data-step="2">
+            <div class="step-circle">2</div>
+            <div class="step-label">Order of Draw</div>
+        </div>
+    </div>
+
+    <!-- Progress Summary -->
+    <div class="progress-summary">
+        <div class="summary-card">
+            <span class="summary-number" id="completed-count">0</span>
+            <span class="summary-label">Activities Completed</span>
+        </div>
+        <div class="summary-card">
+            <span class="summary-number" id="accuracy-rate">0%</span>
+            <span class="summary-label">Current Accuracy</span>
+        </div>
+        <div class="summary-card">
+            <span class="summary-number" id="time-spent">0:00</span>
+            <span class="summary-label">Time Spent</span>
+        </div>
+    </div>
+
+    <!-- Activity Grid -->
+    <div class="activity-grid">
+        <!-- Activity 1: Specimen Rejection Diagnosis -->
+        <section class="activity-card" id="activity-1" data-activity="1" aria-label="Activity 1: Specimen Rejection Diagnosis">
+            <div class="activity-header">
+                <span class="activity-number">Activity 1</span>
+                <span class="activity-status">Not Started</span>
+            </div>
+            <h3 class="activity-title">
+                <span>🔬</span>
+                Specimen Rejection Diagnosis Challenge
+            </h3>
+            <p class="activity-description">
+                Review lab technician notes for rejected specimens and identify the most likely cause. 
+                Each case tests your understanding of specimen quality indicators.
+            </p>
+
+            <div class="diagnosis-challenge">
+                <!-- Case 1 -->
+                <div class="case-scenario" id="case-1" style="display: block;">
+                    <div class="case-header">
+                        <span class="case-icon">📄</span>
+                        <span class="case-title">Case 1: Chemistry Panel Rejection</span>
+                    </div>
+                    <div class="case-text">
+                        Specimen received for STAT electrolytes and renal panel. Serum appears markedly pink/red. 
+                        Potassium result is 6.8 mEq/L (normal range 3.5-5.0). All other results are within normal limits.
+                    </div>
+                    <div class="case-details">
+                        <strong>Test Ordered:</strong> Chemistry panel, Potassium (K+)<br>
+                        <strong>Collection Time:</strong> 08:30 AM<br>
+                        <strong>Receipt Time:</strong> 09:15 AM
+                    </div>
+                    
+                    <div class="diagnosis-options" id="options-1">
+                        <!-- Options will be inserted by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Case 2 -->
+                <div class="case-scenario" id="case-2" style="display: none;">
+                    <div class="case-header">
+                        <span class="case-icon">📄</span>
+                        <span class="case-title">Case 2: Coagulation Study Rejection</span>
+                    </div>
+                    <div class="case-text">
+                        Light blue top tube received for PT/INR and PTT. Tube is only 50% filled. 
+                        Specimen appears adequately mixed with no visible clots.
+                    </div>
+                    <div class="case-details">
+                        <strong>Test Ordered:</strong> PT/INR, PTT<br>
+                        <strong>Tube Type:</strong> Light Blue Top (3.2% Sodium Citrate)<br>
+                        <strong>Fill Volume:</strong> Approximately 2.0 mL (should be 4.5 mL)
+                    </div>
+                    
+                    <div class="diagnosis-options" id="options-2">
+                        <!-- Options will be inserted by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Case 3 -->
+                <div class="case-scenario" id="case-3" style="display: none;">
+                    <div class="case-header">
+                        <span class="case-icon">📄</span>
+                        <span class="case-title">Case 3: CBC Rejection</span>
+                    </div>
+                    <div class="case-text">
+                        Lavender top tube received for complete blood count. Small fibrin strands visible 
+                        throughout specimen. Automated analyzer flags "clot detected."
+                    </div>
+                    <div class="case-details">
+                        <strong>Test Ordered:</strong> Complete Blood Count (CBC)<br>
+                        <strong>Tube Type:</strong> Lavender Top (K2 EDTA)<br>
+                        <strong>Collection Note:</strong> Difficult draw, multiple attempts
+                    </div>
+                    
+                    <div class="diagnosis-options" id="options-3">
+                        <!-- Options will be inserted by JavaScript -->
+                    </div>
+                </div>
+
+                <div class="case-navigation">
+                    <button class="btn btn-secondary" id="prev-case" disabled>
+                        <span class="btn-icon">←</span>
+                        Previous Case
+                    </button>
+                    <div class="case-counter">
+                        Case <span id="current-case">1</span> of 3
+                    </div>
+                    <button class="btn btn-secondary" id="next-case">
+                        Next Case
+                        <span class="btn-icon">→</span>
+                    </button>
+                </div>
+
+                <div class="performance-indicator">
+                    <span class="perf-label">Diagnosis Accuracy:</span>
+                    <div class="perf-bar">
+                        <div class="perf-fill" id="perf-fill-1" style="width: 0%"></div>
+                    </div>
+                    <span class="perf-value" id="perf-value-1">0/3</span>
+                </div>
+            </div>
+
+            <!-- Feedback -->
+            <div class="feedback-container" id="feedback-1">
+                <div class="feedback-title">
+                    <span class="feedback-icon correct">✓</span>
+                    Specimen Rejection Analysis
+                </div>
+                <div class="feedback-content" id="feedback-content-1">
+                    <!-- Dynamic feedback will appear here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Activity 2: Order of Draw & Contamination -->
+        <section class="activity-card" id="activity-2" data-activity="2" aria-label="Activity 2: Order of Draw & Contamination">
+            <div class="activity-header">
+                <span class="activity-number">Activity 2</span>
+                <span class="activity-status">Not Started</span>
+            </div>
+            <h3 class="activity-title">
+                <span>🧪</span>
+                Order of Draw & Additive Contamination
+            </h3>
+            <p class="activity-description">
+                First arrange tubes in correct order of draw, then answer questions about additive 
+                contamination consequences. Understand why proper sequence is critical.
+            </p>
+
+            <div class="order-of-draw">
+                <!-- Phase Tabs -->
+                <div class="phase-indicator">
+                    <div class="phase-tab active" data-phase="ordering">Step 1: Arrange Order of Draw</div>
+                    <div class="phase-tab" data-phase="contamination">Step 2: Contamination Questions</div>
+                </div>
+
+                <!-- Ordering Phase -->
+                <div id="ordering-phase">
+                    <div class="tube-sequence" id="tube-sequence">
+                        <!-- Tube sequence steps will be inserted by JavaScript -->
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 20px;">
+                        <button class="btn btn-primary" id="check-order-btn">
+                            <span class="btn-icon">✓</span>
+                            Check Order of Draw
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Contamination Questions -->
+                <div id="contamination-phase" style="display: none;">
+                    <!-- Question 1 -->
+                    <div class="contamination-question active" id="contamination-1">
+                        <div class="contamination-header">
+                            <span class="contamination-icon">⚠️</span>
+                            <div>
+                                <strong>Question 1:</strong> If trace amounts of EDTA from a lavender top tube 
+                                contaminate a light blue top (citrate) tube, what is the primary concern?
+                            </div>
+                        </div>
+                        <div class="contamination-options" id="options-contam-1">
+                            <!-- Options will be inserted by JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- Question 2 -->
+                    <div class="contamination-question" id="contamination-2">
+                        <div class="contamination-header">
+                            <span class="contamination-icon">⚠️</span>
+                            <div>
+                                <strong>Question 2:</strong> If heparin from a green top tube contaminates 
+                                a lavender top (EDTA) tube for CBC, what effect might this have?
+                            </div>
+                        </div>
+                        <div class="contamination-options" id="options-contam-2">
+                            <!-- Options will be inserted by JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- Question 3 -->
+                    <div class="contamination-question" id="contamination-3">
+                        <div class="contamination-header">
+                            <span class="contamination-icon">⚠️</span>
+                            <div>
+                                <strong>Question 3:</strong> Why is the light blue top (citrate) tube 
+                                drawn before tubes containing clot activators like SST?
+                            </div>
+                        </div>
+                        <div class="contamination-options" id="options-contam-3">
+                            <!-- Options will be inserted by JavaScript -->
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; margin-top: 20px;">
+                        <button class="btn btn-secondary" id="prev-question" disabled>
+                            <span class="btn-icon">←</span>
+                            Previous Question
+                        </button>
+                        <button class="btn btn-primary" id="next-question">
+                            Next Question
+                            <span class="btn-icon">→</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="performance-indicator">
+                    <span class="perf-label">Progress:</span>
+                    <div class="perf-bar">
+                        <div class="perf-fill" id="perf-fill-2" style="width: 0%"></div>
+                    </div>
+                    <span class="perf-value" id="perf-value-2">Phase 1: 0/1</span>
+                </div>
+            </div>
+
+            <!-- Feedback -->
+            <div class="feedback-container" id="feedback-2">
+                <div class="feedback-title">
+                    <span class="feedback-icon correct">✓</span>
+                    Order of Draw Principles
+                </div>
+                <div class="feedback-content" id="feedback-content-2">
+                    <!-- Dynamic feedback will appear here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Activity 3: Error Identification -->
+        <section class="activity-card" id="activity-3" data-activity="3" aria-label="Activity 3: Error Identification">
+            <div class="activity-header">
+                <span class="activity-number">Activity 3</span>
+                <span class="activity-status">Not Started</span>
+            </div>
+            <h3 class="activity-title">
+                <span>🔍</span>
+                Identify the Preventable Error
+            </h3>
+            <p class="activity-description">
+                Read the procedure description and click on phrases containing errors. 
+                Identify all preventable mistakes that compromise specimen quality.
+            </p>
+
+            <div class="error-identification">
+                <!-- Procedure Text with Embedded Errors -->
+                <div class="procedure-text" id="procedure-text">
+                    <p>
+                        The phlebotomist prepares for a routine blood draw. After greeting the patient, 
+                        they <span class="error-highlight" data-error="1" data-feedback="Error: Should verify patient identity using TWO identifiers (name and date of birth or medical record number)">check the patient's armband against the requisition form</span> and begin setting up.
+                    </p>
+                    <p>
+                        They apply the tourniquet <span class="error-highlight" data-error="2" data-feedback="Error: Tourniquet should be applied 3-4 inches above puncture site, not directly on">directly over the intended puncture site</span> and wait while 
+                        searching for a vein. After <span class="error-highlight" data-error="3" data-feedback="Error: Tourniquet should not remain on for more than 1 minute to prevent hemoconcentration and hemolysis">leaving the tourniquet on for 3 minutes</span>, they find a suitable vein.
+                    </p>
+                    <p>
+                        The site is cleaned with an alcohol swab using a circular motion, 
+                        but the phlebotomist <span class="error-highlight" data-error="4" data-feedback="Error: Must allow alcohol to dry completely (30 seconds) to prevent hemolysis and ensure proper antiseptic action">immediately proceeds with venipuncture before the alcohol dries</span>.
+                    </p>
+                    <p>
+                        After successful puncture and blood flow, they fill a light blue top tube 
+                        <span class="error-highlight" data-error="5" data-feedback="Error: Light blue top must be filled to the proper line (usually 4.5 mL) to maintain 9:1 blood-to-citrate ratio">only halfway full</span> before switching to a lavender top tube.
+                    </p>
+                    <p>
+                        Once collection is complete, they <span class="error-highlight" data-error="6" data-feedback="Error: Should gently invert tubes 8-10 times, not shake. Shaking causes hemolysis">vigorously shake the serum tubes to mix them</span> and apply a cotton ball 
+                        with minimal pressure before sending the patient on their way.
+                    </p>
+                    <p>
+                        The specimens are delivered to the lab <span class="error-highlight" data-error="7" data-feedback="Error: STAT specimens should be delivered immediately, routine within 30-45 minutes">2 hours later</span> without any special handling.
+                    </p>
+                </div>
+
+                <div class="identification-controls">
+                    <div class="error-counter">
+                        <span>Errors Identified:</span>
+                        <div class="error-dots" id="error-dots">
+                            <!-- Error dots will be inserted by JavaScript -->
+                        </div>
+                        <span id="error-count">0/7</span>
+                    </div>
+                    <button class="btn btn-primary" id="check-errors-btn">
+                        <span class="btn-icon">✓</span>
+                        Check All Errors
+                    </button>
+                </div>
+
+                <div class="performance-indicator">
+                    <span class="perf-label">Error Detection:</span>
+                    <div class="perf-bar">
+                        <div class="perf-fill" id="perf-fill-3" style="width: 0%"></div>
+                    </div>
+                    <span class="perf-value" id="perf-value-3">0/7</span>
+                </div>
+            </div>
+
+            <!-- Feedback -->
+            <div class="feedback-container" id="feedback-3">
+                <div class="feedback-title">
+                    <span class="feedback-icon correct">✓</span>
+                    Procedure Error Analysis
+                </div>
+                <div class="feedback-content" id="feedback-content-3">
+                    <!-- Dynamic feedback will appear here -->
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+        <button class="btn btn-secondary" id="reset-all-btn" aria-label="Reset all activities">
+            <span class="btn-icon">↻</span>
+            Reset All Activities
+        </button>
+        <button class="btn btn-secondary" id="check-answers-btn" aria-label="Check all answers">
+            <span class="btn-icon">✓</span>
+            Check All Answers
+        </button>
+        <button class="btn btn-primary" id="view-results-btn" aria-label="View final results">
+            <span class="btn-icon">📊</span>
+            View Final Results
+        </button>
+    </div>
+
+    <!-- Results Panel -->
+    <div class="results-panel" id="results-panel">
+        <div class="results-header">
+            <h2 class="results-title">Specimen Quality Assurance Proficiency</h2>
+            <div class="score-display" id="final-score">0%</div>
+        </div>
+        
+        <div class="clinical-insights">
+            <h3 class="insights-title">
+                <span>🧪</span> Specimen Quality Insights
+            </h3>
+            <ul class="insights-list">
+                <li>
+                    <span class="insight-dot"></span>
+                    <span><strong>Hemolysis Recognition:</strong> Pink/red serum indicates red cell rupture. Potassium elevates because intracellular K+ leaks into serum. Prevent by using proper needle size, avoiding frothing, and allowing alcohol to dry.</span>
+                </li>
+                <li>
+                    <span class="insight-dot"></span>
+                    <span><strong>Proper Fill Volumes:</strong> Citrate tubes require exact 9:1 blood-to-anticoagulant ratio. Underfilling prolongs coagulation times; overfilling shortens them. EDTA tubes tolerate 80-120% fill for CBC.</span>
+                </li>
+                <li>
+                    <span class="insight-dot"></span>
+                    <span><strong>Order of Draw Rationale:</strong> Blood culture tubes first to prevent contamination. Citrate tubes before clot activators to prevent false coagulation results. EDTA tubes before glycolytic inhibitors for glucose accuracy.</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="clinical-insights" style="margin-top: 20px;">
+            <h3 class="insights-title">
+                <span>📋</span> Technician Responsibilities
+            </h3>
+            <ul class="insights-list">
+                <li>
+                    <span class="insight-dot"></span>
+                    <span><strong>Rejection Prevention:</strong> Recognize when a specimen should not be sent to lab. Short draws, clots, improper tubes, or gross hemolysis require recollection, not submission.</span>
+                </li>
+                <li>
+                    <span class="insight-dot"></span>
+                    <span><strong>Timely Processing:</strong> STAT specimens within 15 minutes, routine within 45 minutes. Some tests (ammonia, blood gases) require immediate ice slurry transport.</span>
+                </li>
+                <li>
+                    <span class="insight-dot"></span>
+                    <span><strong>Documentation Accuracy:</strong> Document all deviations from standard procedure: difficult draws, patient reactions, collection times, and any specimen condition concerns.</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // State Management
+    const state = {
+        activities: {
+            1: { completed: false, correct: 0, total: 3, score: 0, caseAnswers: {} },
+            2: { completed: false, correct: 0, total: 4, score: 0, phase: 'ordering', orderCorrect: false, contamAnswers: {} },
+            3: { completed: false, correct: 0, total: 7, score: 0, errorsIdentified: [] }
+        },
+        startedAt: new Date(),
+        timeSpent: 0,
+        currentCase: 1,
+        currentQuestion: 1
+    };
+
+    // DOM Elements
+    const progressSteps = document.querySelectorAll('.progress-step');
+    const activityCards = document.querySelectorAll('.activity-card');
+    const completedCount = document.getElementById('completed-count');
+    const accuracyRate = document.getElementById('accuracy-rate');
+    const timeSpentEl = document.getElementById('time-spent');
+    const resetBtn = document.getElementById('reset-all-btn');
+    const checkBtn = document.getElementById('check-answers-btn');
+    const resultsBtn = document.getElementById('view-results-btn');
+    const resultsPanel = document.getElementById('results-panel');
+    const finalScore = document.getElementById('final-score');
+
+    // Timer
+    function updateTimer() {
+        const now = new Date();
+        const diff = Math.floor((now - state.startedAt) / 1000);
+        state.timeSpent = diff;
+        const minutes = Math.floor(diff / 60);
+        const seconds = diff % 60;
+        timeSpentEl.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    }
+    setInterval(updateTimer, 1000);
+
+    // Update Progress Summary
+    function updateProgressSummary() {
+        let completed = 0;
+        let totalCorrect = 0;
+        let totalItems = 0;
+        
+        Object.values(state.activities).forEach(activity => {
+            if (activity.completed) completed++;
+            totalCorrect += activity.correct;
+            totalItems += activity.total;
+        });
+        
+        completedCount.textContent = completed;
+        const accuracy = totalItems > 0 ? Math.round((totalCorrect / totalItems) * 100) : 0;
+        accuracyRate.textContent = `${accuracy}%`;
+        
+        // Update progress steps
+        progressSteps.forEach((step, index) => {
+            if (index < completed) {
+                step.classList.add('completed');
+                step.classList.remove('active');
+            } else if (index === completed) {
+                step.classList.add('active');
+                step.classList.remove('completed');
+            } else {
+                step.classList.remove('active', 'completed');
+            }
+        });
+        
+        // Update activity statuses
+        activityCards.forEach(card => {
+            const activityId = card.dataset.activity;
+            const status = card.querySelector('.activity-status');
+            if (state.activities[activityId].completed) {
+                status.textContent = 'Completed';
+                status.style.color = '#00b894';
+                card.classList.add('completed');
+            }
+        });
+    }
+
+    // Shuffle Array Function
+    function shuffleArray(array) {
+        const shuffled = [...array];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        return shuffled;
+    }
+
+    // Activity 1: Specimen Rejection Diagnosis
+    function initActivity1() {
+        const cases = [
+            {
+                id: 1,
+                correctAnswer: 'hemolysis',
+                options: [
+                    { id: 'hemolysis', text: 'Hemolysis', explanation: 'Pink/red serum indicates red cell rupture, which falsely elevates potassium.' },
+                    { id: 'lipemia', text: 'Lipemia', explanation: 'Would make serum milky/white, not red.' },
+                    { id: 'icterus', text: 'Icterus', explanation: 'Causes yellow serum, not red.' },
+                    { id: 'clotted', text: 'Clotted specimen', explanation: 'Would not cause pink/red color.' }
+                ]
+            },
+            {
+                id: 2,
+                correctAnswer: 'short-draw',
+                options: [
+                    { id: 'hemolysis', text: 'Hemolysis', explanation: 'Would not affect citrate ratio specifically.' },
+                    { id: 'short-draw', text: 'Short draw (incorrect fill volume)', explanation: 'Citrate tubes require exact 9:1 blood-to-anticoagulant ratio.' },
+                    { id: 'clotted', text: 'Clotted specimen', explanation: 'Not indicated in description.' },
+                    { id: 'wrong-tube', text: 'Wrong tube type', explanation: 'Tube is correct type, just underfilled.' }
+                ]
+            },
+            {
+                id: 3,
+                correctAnswer: 'clotted',
+                options: [
+                    { id: 'clotted', text: 'Clotted specimen', explanation: 'Fibrin strands and analyzer "clot detected" flag indicate inadequate mixing.' },
+                    { id: 'hemolysis', text: 'Hemolysis', explanation: 'Would not cause fibrin strands.' },
+                    { id: 'short-draw', text: 'Short draw', explanation: 'Not indicated in description.' },
+                    { id: 'old-specimen', text: 'Old specimen', explanation: 'No time information suggests age issue.' }
+                ]
+            }
+        ];
+
+        const currentCaseEl = document.getElementById('current-case');
+        const prevCaseBtn = document.getElementById('prev-case');
+        const nextCaseBtn = document.getElementById('next-case');
+        const perfFill1 = document.getElementById('perf-fill-1');
+        const perfValue1 = document.getElementById('perf-value-1');
+        const feedback1 = document.getElementById('feedback-1');
+        const feedbackContent1 = document.getElementById('feedback-content-1');
+
+        // Initialize cases with shuffled options
+        cases.forEach(caseData => {
+            const optionsContainer = document.getElementById(`options-${caseData.id}`);
+            const shuffledOptions = shuffleArray(caseData.options);
+            
+            shuffledOptions.forEach(option => {
+                const optionEl = document.createElement('button');
+                optionEl.className = 'diagnosis-option';
+                optionEl.textContent = option.text;
+                optionEl.dataset.id = option.id;
+                optionEl.dataset.case = caseData.id;
+                optionEl.dataset.explanation = option.explanation;
+                optionEl.addEventListener('click', () => selectDiagnosis(optionEl));
+                optionsContainer.appendChild(optionEl);
+            });
+        });
+
+        function selectDiagnosis(optionEl) {
+            const caseId = parseInt(optionEl.dataset.case);
+            const caseData = cases.find(c => c.id === caseId);
+            const isCorrect = optionEl.dataset.id === caseData.correctAnswer;
+            
+            // Clear previous selections for this case
+            document.querySelectorAll(`#options-${caseId} .diagnosis-option`).forEach(opt => {
+                opt.classList.remove('selected', 'correct', 'incorrect');
+            });
+            
+            // Mark selected option
+            optionEl.classList.add('selected');
+            optionEl.classList.add(isCorrect ? 'correct' : 'incorrect');
+            
+            // Record answer
+            state.activities[1].caseAnswers[caseId] = {
+                selected: optionEl.dataset.id,
+                correct: caseData.correctAnswer,
+                isCorrect: isCorrect
+            };
+            
+            // If incorrect, show correct answer
+            if (!isCorrect) {
+                const correctOption = document.querySelector(`#options-${caseId} [data-id="${caseData.correctAnswer}"]`);
+                setTimeout(() => {
+                    correctOption.classList.add('selected', 'correct');
+                }, 500);
+            }
+            
+            // Check if all cases answered
+            checkActivity1Completion();
+        }
+
+        function checkActivity1Completion() {
+            const answeredCount = Object.keys(state.activities[1].caseAnswers).length;
+            const correctCount = Object.values(state.activities[1].caseAnswers)
+                .filter(answer => answer.isCorrect).length;
+            
+            // Update progress
+            const progress = Math.round((answeredCount / cases.length) * 100);
+            perfFill1.style.width = `${progress}%`;
+            perfValue1.textContent = `${answeredCount}/${cases.length}`;
+            
+            if (answeredCount === cases.length) {
+                state.activities[1].completed = true;
+                state.activities[1].correct = correctCount;
+                state.activities[1].score = Math.round((correctCount / cases.length) * 100);
+                
+                // Generate feedback
+                feedbackContent1.innerHTML = generateActivity1Feedback(state.activities[1].caseAnswers, cases);
+                feedback1.classList.add('show');
+                
+                updateProgressSummary();
+            }
+        }
+
+        function generateActivity1Feedback(answers, cases) {
+            let feedback = '<strong>Specimen Rejection Analysis:</strong><br><br>';
+            
+            cases.forEach(caseData => {
+                const answer = answers[caseData.id];
+                const correctOption = caseData.options.find(o => o.id === caseData.correctAnswer);
+                const icon = answer?.isCorrect ? '✓' : '✗';
+                const color = answer?.isCorrect ? 'var(--color-success)' : 'var(--color-error)';
+                
+                feedback += `${icon} <strong style="color: ${color}">Case ${caseData.id}:</strong><br>`;
+                feedback += `• Correct diagnosis: ${correctOption.text}<br>`;
+                feedback += `• Reason: ${correctOption.explanation}<br><br>`;
+            });
+            
+            feedback += '<strong>Key Learning Points:</strong><br>';
+            feedback += '• <strong>Hemolysis:</strong> Red serum = red cell rupture → falsely ↑ K+<br>';
+            feedback += '• <strong>Short draws:</strong> Critical for citrate tubes (9:1 ratio required)<br>';
+            feedback += '• <strong>Clots in EDTA tubes:</strong> Inadequate mixing → recollection needed<br>';
+            
+            return feedback;
+        }
+
+        // Case navigation
+        function showCase(caseNumber) {
+            document.querySelectorAll('.case-scenario').forEach(el => {
+                el.style.display = 'none';
+            });
+            document.getElementById(`case-${caseNumber}`).style.display = 'block';
+            currentCaseEl.textContent = caseNumber;
+            state.currentCase = caseNumber;
+            
+            // Update button states
+            prevCaseBtn.disabled = caseNumber === 1;
+            nextCaseBtn.disabled = caseNumber === cases.length;
+        }
+
+        prevCaseBtn.addEventListener('click', () => {
+            if (state.currentCase > 1) {
+                showCase(state.currentCase - 1);
+            }
+        });
+
+        nextCaseBtn.addEventListener('click', () => {
+            if (state.currentCase < cases.length) {
+                showCase(state.currentCase + 1);
+            }
+        });
+
+        // Initialize
+        showCase(1);
+    }
+
+    // Activity 2: Order of Draw & Contamination
+    function initActivity2() {
+        const correctOrder = [
+            { id: 'blood-culture', name: 'Blood Culture', color: '#8B4513', additive: 'SPS media' },
+            { id: 'light-blue', name: 'Light Blue Top', color: '#add8e6', additive: '3.2% Sodium Citrate' },
+            { id: 'red', name: 'Red Top', color: '#ff6b6b', additive: 'No additive / Clot activator' },
+            { id: 'sst', name: 'SST / Tiger Top', color: '#ffd700', additive: 'Clot activator / Gel separator' },
+            { id: 'green', name: 'Green Top', color: '#90ee90', additive: 'Heparin (Li, Na, NH₄)' },
+            { id: 'lavender', name: 'Lavender Top', color: '#d8bfd8', additive: 'K₂ or K₃ EDTA' },
+            { id: 'gray', name: 'Gray Top', color: '#d3d3d3', additive: 'Sodium Fluoride / Potassium Oxalate' }
+        ];
+
+        const contaminationQuestions = [
+            {
+                id: 1,
+                correctAnswer: 'coagulation',
+                options: [
+                    { id: 'coagulation', text: 'Falsely prolonged coagulation times', explanation: 'EDTA binds calcium, which is essential for coagulation cascade.' },
+                    { id: 'electrolytes', text: 'Falsely elevated electrolytes', explanation: 'EDTA affects calcium but not other electrolytes significantly.' },
+                    { id: 'cell-counts', text: 'Inaccurate cell counts', explanation: 'Would affect EDTA tube, not citrate tube.' },
+                    { id: 'glucose', text: 'False glucose elevation', explanation: 'Fluoride tubes affect glucose, not EDTA contamination.' }
+                ]
+            },
+            {
+                id: 2,
+                correctAnswer: 'microclots',
+                options: [
+                    { id: 'microclots', text: 'Microclots forming in CBC', explanation: 'Heparin is less effective anticoagulant than EDTA for CBC.' },
+                    { id: 'hemolysis', text: 'Hemolysis of red cells', explanation: 'Heparin does not typically cause hemolysis.' },
+                    { id: 'cell-shrinkage', text: 'Cell shrinkage', explanation: 'EDTA causes shrinkage, not heparin contamination.' },
+                    { id: 'platelet-clumping', text: 'Platelet clumping', explanation: 'EDTA can cause clumping, not heparin.' }
+                ]
+            },
+            {
+                id: 3,
+                correctAnswer: 'clot-activator',
+                options: [
+                    { id: 'clot-activator', text: 'Clot activators interfere with coagulation tests', explanation: 'Correct - silica particles activate clotting, invalidating coagulation studies.' },
+                    { id: 'gel-separator', text: 'Gel separator contaminates citrate', explanation: 'Gel does not interfere with coagulation tests directly.' },
+                    { id: 'additive-mixing', text: 'Additives mix during draw', explanation: 'Not the primary reason.' },
+                    { id: 'tube-color', text: 'Color coding confusion', explanation: 'Not a technical reason.' }
+                ]
+            }
+        ];
+
+        const phaseTabs = document.querySelectorAll('.phase-tab');
+        const orderingPhase = document.getElementById('ordering-phase');
+        const contaminationPhase = document.getElementById('contamination-phase');
+        const tubeSequence = document.getElementById('tube-sequence');
+        const checkOrderBtn = document.getElementById('check-order-btn');
+        const prevQuestionBtn = document.getElementById('prev-question');
+        const nextQuestionBtn = document.getElementById('next-question');
+        const perfFill2 = document.getElementById('perf-fill-2');
+        const perfValue2 = document.getElementById('perf-value-2');
+        const feedback2 = document.getElementById('feedback-2');
+        const feedbackContent2 = document.getElementById('feedback-content-2');
+
+        let currentOrder = shuffleArray([...correctOrder]);
+        let currentQuestion = 1;
+
+        // Initialize tube sequence
+        function renderTubeSequence() {
+            tubeSequence.innerHTML = '';
+            currentOrder.forEach((tube, index) => {
+                const step = document.createElement('div');
+                step.className = 'sequence-step draggable';
+                step.dataset.id = tube.id;
+                step.setAttribute('draggable', 'true');
+                step.innerHTML = `
+                    <div class="step-number">≡</div>
+                    <div class="tube-info">
+                        <div class="tube-color-sample" style="background: ${tube.color}"></div>
+                        <div>
+                            <div class="tube-name">${tube.name}</div>
+                            <div class="tube-additive">${tube.additive}</div>
+                        </div>
+                    </div>
+                `;
+                tubeSequence.appendChild(step);
+            });
+            
+            setupDragAndDrop();
+        }
+
+        function setupDragAndDrop() {
+            const steps = document.querySelectorAll('.sequence-step');
+            let draggedStep = null;
+            
+            steps.forEach(step => {
+                step.addEventListener('dragstart', function() {
+                    draggedStep = this;
+                    setTimeout(() => this.classList.add('dragging'), 0);
+                });
+                
+                step.addEventListener('dragend', function() {
+                    this.classList.remove('dragging');
+                    draggedStep = null;
+                });
+                
+                step.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                });
+                
+                step.addEventListener('dragenter', function(e) {
+                    e.preventDefault();
+                    if (this !== draggedStep) {
+                        this.style.borderColor = 'var(--color-primary)';
+                    }
+                });
+                
+                step.addEventListener('dragleave', function() {
+                    this.style.borderColor = '';
+                });
+                
+                step.addEventListener('drop', function() {
+                    if (this !== draggedStep) {
+                        const allSteps = Array.from(tubeSequence.children);
+                        const draggedIndex = allSteps.indexOf(draggedStep);
+                        const targetIndex = allSteps.indexOf(this);
+                        
+                        if (draggedIndex < targetIndex) {
+                            tubeSequence.insertBefore(draggedStep, this.nextSibling);
+                        } else {
+                            tubeSequence.insertBefore(draggedStep, this);
+                        }
+                        
+                        // Update current order
+                        currentOrder = Array.from(tubeSequence.children).map(step => 
+                            correctOrder.find(tube => tube.id === step.dataset.id)
+                        );
+                        
+                        this.style.borderColor = '';
+                    }
+                });
+            });
+        }
+
+        function checkOrder() {
+            const isCorrect = currentOrder.every((tube, index) => tube.id === correctOrder[index].id);
+            
+            if (isCorrect) {
+                // Mark all steps as correct
+                document.querySelectorAll('.sequence-step').forEach((step, index) => {
+                    step.classList.add('correct');
+                    step.querySelector('.step-number').classList.add('correct');
+                    step.querySelector('.step-number').textContent = index + 1;
+                });
+                
+                state.activities[2].orderCorrect = true;
+                state.activities[2].correct = 1;
+                
+                // Show success feedback
+                checkOrderBtn.innerHTML = '<span class="btn-icon">✓</span> Correct Order!';
+                checkOrderBtn.disabled = true;
+                checkOrderBtn.style.background = 'var(--color-success)';
+                
+                // Move to contamination phase
+                setTimeout(() => {
+                    switchPhase('contamination');
+                }, 1000);
+            } else {
+                // Shake animation for incorrect
+                tubeSequence.style.animation = 'shake 0.5s ease';
+                setTimeout(() => {
+                    tubeSequence.style.animation = '';
+                }, 500);
+            }
+        }
+
+        function switchPhase(phase) {
+            state.activities[2].phase = phase;
+            
+            phaseTabs.forEach(tab => {
+                tab.classList.remove('active');
+                if (tab.dataset.phase === phase) {
+                    tab.classList.add('active');
+                }
+            });
+            
+            if (phase === 'ordering') {
+                orderingPhase.style.display = 'block';
+                contaminationPhase.style.display = 'none';
+            } else {
+                orderingPhase.style.display = 'none';
+                contaminationPhase.style.display = 'block';
+                initializeContaminationQuestions();
+            }
+            
+            updateActivity2Progress();
+        }
+
+        function initializeContaminationQuestions() {
+            contaminationQuestions.forEach((question, index) => {
+                const container = document.getElementById(`contamination-${question.id}`);
+                const optionsContainer = document.getElementById(`options-contam-${question.id}`);
+                
+                // Clear and shuffle options
+                optionsContainer.innerHTML = '';
+                const shuffledOptions = shuffleArray(question.options);
+                
+                shuffledOptions.forEach(option => {
+                    const optionEl = document.createElement('button');
+                    optionEl.className = 'contamination-option';
+                    optionEl.textContent = option.text;
+                    optionEl.dataset.id = option.id;
+                    optionEl.dataset.question = question.id;
+                    optionEl.dataset.explanation = option.explanation;
+                    optionEl.addEventListener('click', () => selectContaminationAnswer(optionEl));
+                    optionsContainer.appendChild(optionEl);
+                });
+                
+                // Show first question, hide others
+                container.style.display = index === 0 ? 'block' : 'none';
+            });
+            
+            updateQuestionNavigation();
+        }
+
+        function selectContaminationAnswer(optionEl) {
+            const questionId = parseInt(optionEl.dataset.question);
+            const question = contaminationQuestions.find(q => q.id === questionId);
+            const isCorrect = optionEl.dataset.id === question.correctAnswer;
+            
+            // Clear previous selections for this question
+            document.querySelectorAll(`#options-contam-${questionId} .contamination-option`).forEach(opt => {
+                opt.classList.remove('selected', 'correct', 'incorrect');
+            });
+            
+            // Mark selected option
+            optionEl.classList.add('selected');
+            optionEl.classList.add(isCorrect ? 'correct' : 'incorrect');
+            
+            // Record answer
+            state.activities[2].contamAnswers[questionId] = {
+                selected: optionEl.dataset.id,
+                correct: question.correctAnswer,
+                isCorrect: isCorrect
+            };
+            
+            // If incorrect, show correct answer
+            if (!isCorrect) {
+                const correctOption = document.querySelector(
+                    `#options-contam-${questionId} [data-id="${question.correctAnswer}"]`
+                );
+                setTimeout(() => {
+                    correctOption.classList.add('selected', 'correct');
+                }, 500);
+            }
+            
+            // Check completion
+            checkActivity2Completion();
+        }
+
+        function showQuestion(questionNumber) {
+            contaminationQuestions.forEach((question, index) => {
+                const container = document.getElementById(`contamination-${question.id}`);
+                container.style.display = index === questionNumber - 1 ? 'block' : 'none';
+            });
+            
+            currentQuestion = questionNumber;
+            updateQuestionNavigation();
+        }
+
+        function updateQuestionNavigation() {
+            prevQuestionBtn.disabled = currentQuestion === 1;
+            nextQuestionBtn.disabled = currentQuestion === contaminationQuestions.length;
+            
+            // Update next button text on last question
+            if (currentQuestion === contaminationQuestions.length) {
+                nextQuestionBtn.innerHTML = 'Complete Activity <span class="btn-icon">✓</span>';
+            } else {
+                nextQuestionBtn.innerHTML = 'Next Question <span class="btn-icon">→</span>';
+            }
+        }
+
+        function checkActivity2Completion() {
+            const answeredQuestions = Object.keys(state.activities[2].contamAnswers).length;
+            const correctAnswers = Object.values(state.activities[2].contamAnswers)
+                .filter(answer => answer.isCorrect).length;
+            
+            // Calculate total correct (order correct = 1 point, each contamination question = 1 point)
+            const totalCorrect = (state.activities[2].orderCorrect ? 1 : 0) + correctAnswers;
+            const totalPossible = 1 + contaminationQuestions.length;
+            
+            state.activities[2].correct = totalCorrect;
+            state.activities[2].total = totalPossible;
+            
+            const progress = Math.round((answeredQuestions / contaminationQuestions.length) * 100);
+            perfFill2.style.width = `${progress}%`;
+            perfValue2.textContent = `Phase 2: ${answeredQuestions}/${contaminationQuestions.length}`;
+            
+            if (answeredQuestions === contaminationQuestions.length) {
+                state.activities[2].completed = true;
+                state.activities[2].score = Math.round((totalCorrect / totalPossible) * 100);
+                
+                // Generate feedback
+                feedbackContent2.innerHTML = generateActivity2Feedback(
+                    state.activities[2].orderCorrect,
+                    state.activities[2].contamAnswers,
+                    contaminationQuestions
+                );
+                feedback2.classList.add('show');
+                
+                updateProgressSummary();
+            }
+        }
+
+        function generateActivity2Feedback(orderCorrect, contamAnswers, questions) {
+            let feedback = '<strong>Order of Draw & Contamination Principles:</strong><br><br>';
+            
+            feedback += `<strong>Order of Draw:</strong> ${orderCorrect ? '✓ Correct' : '✗ Incorrect'}<br>`;
+            feedback += '• Blood Cultures → Light Blue → Red → SST → Green → Lavender → Gray<br><br>';
+            
+            feedback += '<strong>Contamination Questions:</strong><br>';
+            questions.forEach(question => {
+                const answer = contamAnswers[question.id];
+                const correctOption = question.options.find(o => o.id === question.correctAnswer);
+                const icon = answer?.isCorrect ? '✓' : '✗';
+                const color = answer?.isCorrect ? 'var(--color-success)' : 'var(--color-error)';
+                
+                feedback += `${icon} <strong style="color: ${color}">Q${question.id}:</strong> ${correctOption.explanation}<br>`;
+            });
+            
+            feedback += '<br><strong>Key Rationale:</strong><br>';
+            feedback += '• EDTA contamination of citrate tubes → binds calcium → invalid coagulation<br>';
+            feedback += '• Heparin contamination of EDTA tubes → inadequate anticoagulation → microclots<br>';
+            feedback += '• Clot activators before citrate → premature activation → false coagulation results<br>';
+            
+            return feedback;
+        }
+
+        function updateActivity2Progress() {
+            const phase = state.activities[2].phase;
+            if (phase === 'ordering') {
+                perfValue2.textContent = 'Phase 1: Order of Draw';
+            } else {
+                const answered = Object.keys(state.activities[2].contamAnswers).length;
+                perfValue2.textContent = `Phase 2: ${answered}/${contaminationQuestions.length}`;
+            }
+        }
+
+        // Event listeners
+        phaseTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                if (tab.dataset.phase === 'contamination' && !state.activities[2].orderCorrect) {
+                    return; // Don't allow skipping to contamination without correct order
+                }
+                switchPhase(tab.dataset.phase);
+            });
+        });
+
+        checkOrderBtn.addEventListener('click', checkOrder);
+        
+        prevQuestionBtn.addEventListener('click', () => {
+            if (currentQuestion > 1) {
+                showQuestion(currentQuestion - 1);
+            }
+        });
+
+        nextQuestionBtn.addEventListener('click', () => {
+            if (currentQuestion < contaminationQuestions.length) {
+                showQuestion(currentQuestion + 1);
+            } else if (currentQuestion === contaminationQuestions.length) {
+                checkActivity2Completion();
+            }
+        });
+
+        // Initialize
+        renderTubeSequence();
+        switchPhase('ordering');
+    }
+
+    // Activity 3: Error Identification
+    function initActivity3() {
+        const errorHighlights = document.querySelectorAll('.error-highlight');
+        const procedureText = document.getElementById('procedure-text');
+        const checkErrorsBtn = document.getElementById('check-errors-btn');
+        const errorDots = document.getElementById('error-dots');
+        const errorCount = document.getElementById('error-count');
+        const perfFill3 = document.getElementById('perf-fill-3');
+        const perfValue3 = document.getElementById('perf-value-3');
+        const feedback3 = document.getElementById('feedback-3');
+        const feedbackContent3 = document.getElementById('feedback-content-3');
+
+        let errorFeedback = null;
+
+        // Create error dots
+        errorHighlights.forEach((highlight, index) => {
+            const dot = document.createElement('div');
+            dot.className = 'error-dot';
+            dot.dataset.error = highlight.dataset.error;
+            errorDots.appendChild(dot);
+        });
+
+        // Initialize error identification
+        errorHighlights.forEach(highlight => {
+            highlight.addEventListener('click', function() {
+                if (state.activities[3].errorsIdentified.includes(parseInt(this.dataset.error))) {
+                    // Already identified, do nothing
+                    return;
+                }
+                
+                // Mark as identified
+                this.classList.add('identified');
+                state.activities[3].errorsIdentified.push(parseInt(this.dataset.error));
+                
+                // Show feedback tooltip
+                if (errorFeedback) {
+                    errorFeedback.remove();
+                }
+                
+                errorFeedback = document.createElement('div');
+                errorFeedback.className = 'error-feedback show';
+                errorFeedback.textContent = this.dataset.feedback;
+                errorFeedback.style.position = 'absolute';
+                errorFeedback.style.left = `${this.offsetLeft}px`;
+                errorFeedback.style.top = `${this.offsetTop + this.offsetHeight + 5}px`;
+                procedureText.appendChild(errorFeedback);
+                
+                // Hide feedback after 3 seconds
+                setTimeout(() => {
+                    if (errorFeedback) {
+                        errorFeedback.classList.remove('show');
+                        setTimeout(() => {
+                            if (errorFeedback && errorFeedback.parentNode) {
+                                errorFeedback.remove();
+                                errorFeedback = null;
+                            }
+                        }, 300);
+                    }
+                }, 3000);
+                
+                updateActivity3Progress();
+            });
+        });
+
+        function updateActivity3Progress() {
+            const identifiedCount = state.activities[3].errorsIdentified.length;
+            const totalErrors = errorHighlights.length;
+            
+            // Update dots
+            document.querySelectorAll('.error-dot').forEach((dot, index) => {
+                const errorNum = parseInt(dot.dataset.error);
+                if (state.activities[3].errorsIdentified.includes(errorNum)) {
+                    dot.classList.add('identified');
+                    dot.classList.remove('missed');
+                } else {
+                    dot.classList.remove('identified');
+                }
+            });
+            
+            // Update counts
+            const progress = Math.round((identifiedCount / totalErrors) * 100);
+            perfFill3.style.width = `${progress}%`;
+            perfValue3.textContent = `${identifiedCount}/${totalErrors}`;
+            errorCount.textContent = `${identifiedCount}/${totalErrors}`;
+            
+            // Check if all errors identified
+            if (identifiedCount === totalErrors) {
+                checkActivity3Answers();
+            }
+        }
+
+        function checkActivity3Answers() {
+            state.activities[3].completed = true;
+            state.activities[3].correct = state.activities[3].errorsIdentified.length;
+            state.activities[3].score = Math.round((state.activities[3].correct / errorHighlights.length) * 100);
+            
+            // Check for missed errors
+            const allErrors = Array.from(errorHighlights).map(h => parseInt(h.dataset.error));
+            const missedErrors = allErrors.filter(e => !state.activities[3].errorsIdentified.includes(e));
+            
+            // Highlight missed errors
+            missedErrors.forEach(errorNum => {
+                const highlight = document.querySelector(`[data-error="${errorNum}"]`);
+                highlight.classList.add('missed');
+                const dot = document.querySelector(`.error-dot[data-error="${errorNum}"]`);
+                dot.classList.add('missed');
+            });
+            
+            // Generate feedback
+            feedbackContent3.innerHTML = generateActivity3Feedback(state.activities[3].errorsIdentified, errorHighlights);
+            feedback3.classList.add('show');
+            
+            updateProgressSummary();
+        }
+
+        function generateActivity3Feedback(identifiedErrors, highlights) {
+            let feedback = '<strong>Procedure Error Analysis:</strong><br><br>';
+            
+            Array.from(highlights).forEach(highlight => {
+                const errorNum = parseInt(highlight.dataset.error);
+                const wasIdentified = identifiedErrors.includes(errorNum);
+                const icon = wasIdentified ? '✓' : '✗';
+                const color = wasIdentified ? 'var(--color-success)' : 'var(--color-error)';
+                
+                feedback += `${icon} <strong style="color: ${color}">Error ${errorNum}:</strong> ${highlight.dataset.feedback}<br><br>`;
+            });
+            
+            feedback += '<strong>Correct Procedure Summary:</strong><br>';
+            feedback += '1. Verify patient with TWO identifiers<br>';
+            feedback += '2. Apply tourniquet 3-4" above site, ≤1 minute<br>';
+            feedback += '3. Allow alcohol to dry 30 seconds before puncture<br>';
+            feedback += '4. Fill citrate tubes to proper line (9:1 ratio)<br>';
+            feedback += '5. Gently invert tubes 8-10 times (no shaking)<br>';
+            feedback += '6. Apply firm pressure 3-5 minutes<br>';
+            feedback += '7. Deliver STAT specimens immediately<br>';
+            
+            return feedback;
+        }
+
+        checkErrorsBtn.addEventListener('click', checkActivity3Answers);
+
+        // Initialize
+        updateActivity3Progress();
+    }
+
+    // Reset All Activities
+    function resetAllActivities() {
+        // Reset state
+        state.activities = {
+            1: { completed: false, correct: 0, total: 3, score: 0, caseAnswers: {} },
+            2: { completed: false, correct: 0, total: 4, score: 0, phase: 'ordering', orderCorrect: false, contamAnswers: {} },
+            3: { completed: false, correct: 0, total: 7, score: 0, errorsIdentified: [] }
+        };
+        
+        state.currentCase = 1;
+        state.currentQuestion = 1;
+        
+        // Reset UI
+        activityCards.forEach(card => {
+            card.classList.remove('completed');
+            const status = card.querySelector('.activity-status');
+            status.textContent = 'Not Started';
+            status.style.color = '';
+            
+            const feedback = card.querySelector('.feedback-container');
+            feedback.classList.remove('show');
+        });
+        
+        // Reset Activity 1
+        document.querySelectorAll('.diagnosis-option').forEach(opt => {
+            opt.classList.remove('selected', 'correct', 'incorrect');
+        });
+        document.getElementById('current-case').textContent = '1';
+        document.getElementById('prev-case').disabled = true;
+        document.getElementById('perf-fill-1').style.width = '0%';
+        document.getElementById('perf-value-1').textContent = '0/3';
+        
+        // Show first case
+        document.querySelectorAll('.case-scenario').forEach((el, index) => {
+            el.style.display = index === 0 ? 'block' : 'none';
+        });
+        
+        // Reset Activity 2
+        document.querySelectorAll('.phase-tab').forEach((tab, index) => {
+            if (index === 0) {
+                tab.classList.add('active');
+            } else {
+                tab.classList.remove('active');
+            }
+        });
+        
+        document.getElementById('ordering-phase').style.display = 'block';
+        document.getElementById('contamination-phase').style.display = 'none';
+        
+        document.getElementById('check-order-btn').innerHTML = '<span class="btn-icon">✓</span> Check Order of Draw';
+        document.getElementById('check-order-btn').disabled = false;
+        document.getElementById('check-order-btn').style.background = '';
+        
+        document.querySelectorAll('.sequence-step').forEach(step => {
+            step.classList.remove('correct');
+            step.querySelector('.step-number')?.classList.remove('correct');
+        });
+        
+        document.querySelectorAll('.contamination-option').forEach(opt => {
+            opt.classList.remove('selected', 'correct', 'incorrect');
+        });
+        
+        document.getElementById('perf-fill-2').style.width = '0%';
+        document.getElementById('perf-value-2').textContent = 'Phase 1: 0/1';
+        
+        // Reset Activity 3
+        document.querySelectorAll('.error-highlight').forEach(highlight => {
+            highlight.classList.remove('identified', 'missed');
+        });
+        
+        document.querySelectorAll('.error-dot').forEach(dot => {
+            dot.classList.remove('identified', 'missed');
+        });
+        
+        document.getElementById('perf-fill-3').style.width = '0%';
+        document.getElementById('perf-value-3').textContent = '0/7';
+        document.getElementById('error-count').textContent = '0/7';
+        
+        // Remove any feedback tooltips
+        const feedbackTooltip = document.querySelector('.error-feedback');
+        if (feedbackTooltip) {
+            feedbackTooltip.remove();
+        }
+        
+        // Reset results
+        resultsPanel.classList.remove('show');
+        
+        // Update progress
+        updateProgressSummary();
+        
+        // Reinitialize activities
+        setTimeout(() => {
+            initActivity1();
+            initActivity2();
+            initActivity3();
+        }, 100);
+    }
+
+    // Check All Answers
+    function checkAllAnswers() {
+        // Force complete all activities with perfect scores for testing
+        state.activities[1].completed = true;
+        state.activities[1].correct = 3;
+        state.activities[1].score = 100;
+        
+        state.activities[2].completed = true;
+        state.activities[2].correct = 4;
+        state.activities[2].score = 100;
+        
+        state.activities[3].completed = true;
+        state.activities[3].correct = 7;
+        state.activities[3].score = 100;
+        
+        // Update UI
+        activityCards.forEach((card, index) => {
+            const activityId = index + 1;
+            const status = card.querySelector('.activity-status');
+            status.textContent = 'Completed';
+            status.style.color = '#00b894';
+            card.classList.add('completed');
+            
+            const feedback = card.querySelector('.feedback-container');
+            if (!feedback.classList.contains('show')) {
+                feedback.classList.add('show');
+            }
+        });
+        
+        updateProgressSummary();
+    }
+
+    // View Final Results
+    function viewFinalResults() {
+        let totalScore = 0;
+        let activityCount = 0;
+        
+        Object.values(state.activities).forEach(activity => {
+            if (activity.completed) {
+                totalScore += activity.score;
+                activityCount++;
+            }
+        });
+        
+        const averageScore = activityCount > 0 ? Math.round(totalScore / activityCount) : 0;
+        finalScore.textContent = `${averageScore}%`;
+        
+        resultsPanel.classList.add('show');
+        resultsPanel.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Initialize all activities
+    initActivity1();
+    initActivity2();
+    initActivity3();
+
+    // Event listeners
+    resetBtn.addEventListener('click', resetAllActivities);
+    checkBtn.addEventListener('click', checkAllAnswers);
+    resultsBtn.addEventListener('click', viewFinalResults);
+
+    // Initial progress update
+    updateProgressSummary();
+});
+</script>
+</body>
+</html>
