@@ -1,0 +1,1825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AlliedRx – Module 6.2: Venipuncture Technique Simulator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-error: #e17055;
+            --color-warning: #fdcb6e;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
+            --color-dark: #0c0a18;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+            --shadow-card: 0 12px 30px rgba(15, 23, 42, 0.1);
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(
+                circle at top left,
+                #ffffff 0,
+                #f1ecff 40%,
+                var(--color-bg) 100%
+            );
+            color: var(--color-text);
+            -webkit-text-size-adjust: 100%;
+            line-height: 1.5;
+        }
+        
+        @media (max-width: 600px) {
+            body { padding: 12px; }
+        }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        @keyframes checkmarkPop {
+            0% { transform: scale(0); opacity: 0; }
+            70% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 5px rgba(175, 75, 239, 0.5); }
+            50% { box-shadow: 0 0 20px rgba(175, 75, 239, 0.8); }
+        }
+        
+        .page {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+        
+        @media (max-width: 900px) {
+            .page { padding: 22px; }
+        }
+        
+        @media (max-width: 480px) {
+            body { padding: 0; }
+            .page {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 18px 14px 22px;
+            }
+        }
+        
+        /* Header */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+        
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+        
+        .brand-logo:hover { transform: scale(1.05); }
+        
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+        
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+        
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+        }
+        
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--color-success);
+            flex-shrink: 0;
+        }
+        
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+        
+        .badge-mode:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+        
+        @media (max-width: 480px) {
+            .brand-row { flex-direction: column; align-items: flex-start; }
+            .badge-mode { margin-top: 6px; }
+        }
+        
+        h1 {
+            font-size: clamp(1.8rem, 3vw, 2.2rem);
+            line-height: 1.1;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+        
+        .module-subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 600px;
+            margin-bottom: 24px;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+        
+        /* Progress Tracker */
+        .progress-tracker {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            position: relative;
+            padding: 0 20px;
+        }
+        
+        .progress-tracker::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 50px;
+            right: 50px;
+            height: 3px;
+            background: rgba(12, 10, 24, 0.08);
+            z-index: 1;
+        }
+        
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+        
+        .step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--color-muted);
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .progress-step.active .step-circle {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+            color: white;
+            transform: scale(1.1);
+        }
+        
+        .progress-step.completed .step-circle {
+            background: var(--color-success);
+            border-color: var(--color-success);
+            color: white;
+        }
+        
+        .step-label {
+            font-size: 0.75rem;
+            color: var(--color-muted);
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .progress-step.active .step-label {
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+        
+        /* Progress Summary */
+        .progress-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+            animation: fadeInUp 0.6s ease-out 0.5s both;
+        }
+        
+        .summary-card {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            border: 1px solid rgba(12, 10, 24, 0.06);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .summary-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-card);
+            border-color: var(--color-primary-soft);
+        }
+        
+        .summary-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--color-primary);
+            display: block;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+        
+        .summary-label {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        
+        /* Activity Grid */
+        .activity-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        @media (max-width: 900px) {
+            .activity-grid { grid-template-columns: 1fr; }
+        }
+        
+        .activity-card {
+            background: white;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            padding: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .activity-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--color-primary);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .activity-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--color-primary-soft);
+        }
+        
+        .activity-card:hover::before { opacity: 1; }
+        
+        .activity-card.completed {
+            border-color: var(--color-success);
+        }
+        
+        .activity-card.completed::before {
+            background: var(--color-success);
+            opacity: 1;
+        }
+        
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+        
+        .activity-number {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+        
+        .activity-status {
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-muted);
+        }
+        
+        .activity-card.completed .activity-status {
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--color-success);
+        }
+        
+        .activity-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 8px;
+        }
+        
+        .activity-description {
+            font-size: 0.9rem;
+            color: var(--color-muted);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        
+        /* TIP BOXES */
+        .tip-box {
+            background: linear-gradient(135deg, rgba(253, 203, 110, 0.1) 0%, rgba(253, 203, 110, 0.05) 100%);
+            border-left: 4px solid var(--color-warning);
+            padding: 16px 20px;
+            margin: 20px 0;
+            border-radius: var(--radius-sm);
+            position: relative;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .tip-box::before {
+            content: "💡";
+            position: absolute;
+            left: -35px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+            background: var(--color-warning);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .tip-title {
+            font-weight: 700;
+            color: var(--color-dark);
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .tip-content {
+            font-size: 0.9rem;
+            color: var(--color-muted);
+            line-height: 1.5;
+        }
+        
+        /* DID YOU KNOW - Monospace */
+        .did-you-know {
+            font-family: 'Courier New', monospace;
+            background: rgba(12, 10, 24, 0.03);
+            border: 2px solid var(--color-primary-soft);
+            padding: 18px;
+            margin: 20px 0;
+            border-radius: var(--radius-sm);
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: var(--color-text);
+            border-left: 4px solid var(--color-primary);
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .did-you-know strong {
+            color: var(--color-primary);
+            font-weight: 700;
+        }
+        
+        /* Patient Scenario */
+        .patient-scenario {
+            background: rgba(175, 75, 239, 0.05);
+            border: 2px solid rgba(175, 75, 239, 0.1);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            margin: 20px 0;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .patient-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin: 15px 0;
+        }
+        
+        .info-item {
+            background: white;
+            border-radius: var(--radius-sm);
+            padding: 12px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.9rem;
+        }
+        
+        .info-item strong {
+            color: var(--color-primary);
+            display: block;
+            font-size: 0.8rem;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        /* Equipment Options */
+        .equipment-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .equipment-options {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .equipment-option {
+            background: white;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            user-select: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .equipment-option:hover {
+            border-color: var(--color-primary-soft);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(175, 75, 239, 0.1);
+        }
+        
+        .equipment-option.selected {
+            border-color: var(--color-success);
+            background: rgba(0, 184, 148, 0.1);
+            transform: translateY(-3px);
+        }
+        
+        .equipment-option.wrong {
+            border-color: var(--color-error);
+            background: rgba(225, 112, 85, 0.1);
+            animation: shake 0.5s ease;
+        }
+        
+        .equipment-icon {
+            font-size: 2.5rem;
+            color: var(--color-primary);
+        }
+        
+        .equipment-name {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--color-text);
+        }
+        
+        .equipment-description {
+            font-size: 0.85rem;
+            color: var(--color-muted);
+            text-align: center;
+        }
+        
+        /* Steps Container */
+        .steps-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 20px 0;
+        }
+        
+        .step-item {
+            background: white;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            cursor: grab;
+            transition: all 0.3s ease;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+        }
+        
+        .step-item:hover {
+            border-color: var(--color-primary-soft);
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(175, 75, 239, 0.1);
+        }
+        
+        .step-item.dragging {
+            opacity: 0.7;
+            transform: scale(0.98);
+            border-color: var(--color-primary);
+        }
+        
+        .step-drag-handle {
+            color: var(--color-primary);
+            font-size: 1.2rem;
+            cursor: grab;
+            flex-shrink: 0;
+        }
+        
+        .step-text {
+            font-size: 0.9rem;
+            color: var(--color-text);
+            flex-grow: 1;
+        }
+        
+        /* Steps Drop Zone */
+        .steps-dropzone {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-md);
+            padding: 25px;
+            border: 3px dashed rgba(12, 10, 24, 0.15);
+            min-height: 300px;
+            margin: 25px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .steps-dropzone.empty::after {
+            content: 'Drag procedure steps here in correct clinical sequence';
+            color: var(--color-muted);
+            text-align: center;
+            font-size: 1rem;
+            margin: auto;
+            font-style: italic;
+            padding: 20px;
+        }
+        
+        .steps-dropzone.hover {
+            border-color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.05);
+            animation: glow 2s infinite;
+        }
+        
+        .step-slot {
+            background: white;
+            border: 2px dashed rgba(12, 10, 24, 0.15);
+            border-radius: var(--radius-sm);
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .step-slot.hover {
+            border-color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.08);
+        }
+        
+        .step-slot.filled {
+            border: 2px solid var(--color-primary-soft);
+            background: rgba(175, 75, 239, 0.05);
+        }
+        
+        .step-slot.correct {
+            border-color: var(--color-success);
+            background: rgba(0, 184, 148, 0.1);
+        }
+        
+        .step-slot.incorrect {
+            border-color: var(--color-error);
+            background: rgba(225, 112, 85, 0.1);
+        }
+        
+        .slot-position {
+            background: var(--color-primary);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        
+        .slot-step-text {
+            font-size: 0.9rem;
+            color: var(--color-text);
+        }
+        
+        /* Score Board */
+        .score-board {
+            background: linear-gradient(135deg, var(--color-dark) 0%, #1a1730 100%);
+            color: white;
+            padding: 20px;
+            border-radius: var(--radius-md);
+            margin: 20px 0;
+            text-align: center;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .score-number {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--color-primary-soft);
+            margin: 10px 0;
+            text-shadow: 0 2px 10px rgba(175, 75, 239, 0.5);
+        }
+        
+        .score-label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        
+        /* Progress Bar */
+        .progress-bar {
+            height: 12px;
+            background: rgba(12, 10, 24, 0.08);
+            border-radius: 6px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 6px;
+        }
+        
+        /* Feedback */
+        .feedback-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .feedback-container.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .feedback-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .feedback-icon {
+            font-size: 1.2rem;
+        }
+        
+        .feedback-icon.correct { color: var(--color-success); }
+        .feedback-icon.incorrect { color: var(--color-error); }
+        
+        .feedback-content {
+            font-size: 0.9rem;
+            color: var(--color-text);
+            line-height: 1.6;
+        }
+        
+        .feedback-content strong { color: var(--color-primary); }
+        
+        .correction-details {
+            background: rgba(225, 112, 85, 0.05);
+            border-left: 3px solid var(--color-error);
+            padding: 12px 16px;
+            margin: 12px 0;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            font-size: 0.85rem;
+        }
+        
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #9a3bd6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(175, 75, 239, 0.3);
+        }
+        
+        .btn-secondary {
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-text);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(12, 10, 24, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .btn-icon { font-size: 1.1em; }
+        
+        /* Results Panel */
+        .results-panel {
+            background: var(--color-dark);
+            color: white;
+            border-radius: var(--radius-md);
+            padding: 30px;
+            margin-top: 30px;
+            display: none;
+            animation: fadeInUp 0.6s ease;
+        }
+        
+        .results-panel.show { display: block; }
+        
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .results-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+        }
+        
+        .score-display {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--color-primary-soft);
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .clinical-insights {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .insights-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-primary-soft);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .insights-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .insights-list li {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            font-size: 0.9rem;
+            color: #e5e7eb;
+        }
+        
+        .insight-dot {
+            width: 6px;
+            height: 6px;
+            margin-top: 6px;
+            border-radius: 999px;
+            background: var(--color-accent);
+            flex-shrink: 0;
+        }
+        
+        /* Perfect Score Celebration */
+        .celebration {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(12, 10, 24, 0.9);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .celebration.show {
+            display: flex;
+        }
+        
+        .celebration-content {
+            background: white;
+            padding: 40px;
+            border-radius: var(--radius-lg);
+            text-align: center;
+            max-width: 500px;
+            animation: fadeInUp 0.6s ease;
+        }
+        
+        .celebration-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: var(--color-success);
+        }
+        
+        .celebration-title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--color-primary);
+            margin-bottom: 15px;
+        }
+        
+        .celebration-text {
+            color: var(--color-muted);
+            margin-bottom: 25px;
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="module-heading">
+        <!-- Header -->
+        <header class="brand-row">
+            <div class="brand">
+                <img
+                    src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                    alt="AlliedRx logo"
+                    class="brand-logo"
+                />
+                <div class="course-meta">
+                    <span class="course-name">Phlebotomy Technician • Week 1</span>
+                    <div class="week-label">
+                        <span class="week-label-dot"></span>
+                        <span>Chapter 6: Proper Procedures for Venipuncture</span>
+                    </div>
+                </div>
+            </div>
+            <span class="badge-mode">Campus & Online</span>
+        </header>
+
+        <h1 id="module-heading">Module 6.2: Venipuncture Technique Simulator</h1>
+        <p class="module-subtitle">
+            Master equipment selection and proper venipuncture sequencing. Practice clinical decision-making with randomized scenarios and achieve perfect procedural sequencing.
+        </p>
+
+        <!-- Progress Tracker -->
+        <div class="progress-tracker">
+            <div class="progress-step active" data-step="1">
+                <div class="step-circle">1</div>
+                <div class="step-label">Equipment Selection</div>
+            </div>
+            <div class="progress-step" data-step="2">
+                <div class="step-circle">2</div>
+                <div class="step-label">Procedure Sequence</div>
+            </div>
+            <div class="progress-step" data-step="3">
+                <div class="step-circle">3</div>
+                <div class="step-label">Proficiency</div>
+            </div>
+        </div>
+
+        <!-- Progress Summary -->
+        <div class="progress-summary">
+            <div class="summary-card">
+                <span class="summary-number" id="completed-count">0</span>
+                <span class="summary-label">Activities Completed</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="accuracy-rate">0%</span>
+                <span class="summary-label">Current Accuracy</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="time-spent">0:00</span>
+                <span class="summary-label">Time Spent</span>
+            </div>
+        </div>
+
+        <!-- Tip Box -->
+        <div class="tip-box">
+            <div class="tip-title">
+                <span>⚕️</span> CLINICAL TIP: Equipment Selection
+            </div>
+            <div class="tip-content">
+                Choose equipment based on patient factors, not convenience. Butterfly needles for fragile veins, evacuated tubes for routine draws, microcapillary for pediatric/difficult access. Always select the least traumatic option that ensures specimen quality.
+            </div>
+        </div>
+
+        <!-- Activity Grid -->
+        <div class="activity-grid">
+            <!-- Activity 1: Equipment Selection -->
+            <section class="activity-card" id="activity-1" data-activity="1">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 1</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">Equipment Selection Quiz</h3>
+                <p class="activity-description">
+                    Select the appropriate venipuncture equipment based on patient factors and test requirements. Randomized scenarios ensure diverse practice.
+                </p>
+
+                <!-- Did You Know -->
+                <div class="did-you-know">
+                    <strong>DID YOU KNOW?</strong> Using the wrong equipment increases hemolysis rates by 40%. Proper equipment selection is the first defense against pre-analytical errors.
+                </div>
+
+                <!-- Patient Scenario -->
+                <div class="patient-scenario">
+                    <h4 style="color: var(--color-primary); margin-bottom: 15px;">Clinical Scenario #<span id="scenario-number">1</span></h4>
+                    <div class="patient-info" id="patient-info">
+                        <!-- Dynamically filled -->
+                    </div>
+                </div>
+
+                <!-- Equipment Options -->
+                <div class="equipment-options" id="equipment-options">
+                    <!-- Dynamically filled -->
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback-container" id="feedback-1">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Equipment Analysis Complete
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Clinical Rationale:</strong><br>
+                        <span id="rationale-text"></span><br><br>
+                        <strong>Equipment Guidelines:</strong><br>
+                        • Butterfly (23-25g): Pediatric, elderly, fragile veins, small volume<br>
+                        • Evacuated Tube System (21g): Most adults, routine testing<br>
+                        • Microcapillary: Infants, difficult access, point-of-care testing<br><br>
+                        <div class="correction-details" id="correction-details-1" style="display: none;">
+                            <strong>Learning Point:</strong><br>
+                            <span id="correction-text-1"></span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity 2: Procedure Steps -->
+            <section class="activity-card" id="activity-2" data-activity="2">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 2</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">Procedure Steps Sequence</h3>
+                <p class="activity-description">
+                    Drag and drop 15+ venipuncture steps in the correct clinical sequence. Must achieve 100% correct order to demonstrate mastery.
+                </p>
+
+                <!-- Did You Know -->
+                <div class="did-you-know">
+                    <strong>DID YOU KNOW?</strong> Perfect procedural sequencing reduces patient discomfort by 60% and specimen rejection by 85%. Muscle memory from proper sequencing prevents critical errors.
+                </div>
+
+                <!-- Steps Container -->
+                <div class="steps-container" id="steps-container">
+                    <!-- Steps will be created here -->
+                </div>
+
+                <!-- Steps Drop Zone -->
+                <div class="steps-dropzone empty" id="steps-dropzone">
+                    <!-- Step slots will be created here -->
+                </div>
+
+                <!-- Score Board -->
+                <div class="score-board">
+                    <div class="score-label">Sequence Accuracy</div>
+                    <div class="score-number" id="score-2">0%</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-2"></div>
+                    </div>
+                    <div class="score-label" id="sequence-status">0/15 steps placed</div>
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback-container" id="feedback-2">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Sequence Analysis
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Perfect Venipuncture Sequence:</strong><br>
+                        1. Patient identification → 2. Greet and explain → 3. Verify requisition → 4. Assemble equipment → 5. Hand hygiene → 6. Apply tourniquet → 7. Select site → 8. Clean site → 9. Anchor vein → 10. Insert needle → 11. Fill tubes → 12. Release tourniquet → 13. Withdraw needle → 14. Apply pressure → 15. Label tubes → 16. Dispose sharps → 17. Document procedure<br><br>
+                        <strong>Critical Safety Order:</strong> Tourniquet must be released BEFORE needle withdrawal to prevent hematoma.<br><br>
+                        <div class="correction-details" id="correction-details-2" style="display: none;">
+                            <strong>Sequence Errors:</strong><br>
+                            <span id="correction-text-2"></span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn btn-secondary" id="reset-all-btn">
+                <span class="btn-icon">↻</span>
+                Reset All Activities
+            </button>
+            <button class="btn btn-secondary" id="new-scenario-btn">
+                <span class="btn-icon">🔄</span>
+                New Scenario
+            </button>
+            <button class="btn btn-primary" id="view-results-btn">
+                <span class="btn-icon">📊</span>
+                View Final Results
+            </button>
+        </div>
+
+        <!-- Results Panel -->
+        <div class="results-panel" id="results-panel">
+            <div class="results-header">
+                <h2 class="results-title">Venipuncture Technique Proficiency</h2>
+                <div class="score-display" id="final-score">0%</div>
+            </div>
+            
+            <div class="clinical-insights">
+                <h3 class="insights-title">
+                    <span>🩸</span> Clinical Technique Insights
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Equipment Mastery:</strong> Expert phlebotomists select equipment 30% faster with 95% accuracy. This speed comes from recognizing patterns: elderly + fragile veins = butterfly, routine adult = 21g evacuated, pediatric = microcapillary.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Sequencing Impact:</strong> Perfect procedural sequencing reduces failed sticks by 70%. The most common error (40% of students) is releasing tourniquet after needle removal, leading to hematomas.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Patient Factors:</strong> Vein selection changes with age: elderly have rolling veins requiring firm anchoring, pediatric veins are superficial but fragile, obese patients need deeper palpation.</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="clinical-insights" style="margin-top: 20px;">
+                <h3 class="insights-title">
+                    <span>📋</span> Technician Skill Development
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Cognitive Load Management:</strong> Novices must consciously think through each step. Experts automate the sequence, freeing mental capacity for patient assessment and complication prevention.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Error Prevention:</strong> Each correctly sequenced step creates a safety checkpoint. Misplaced steps create cascade errors: unlabeled tubes lead to specimen rejection, improper cleaning causes contamination.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Career Advancement:</strong> Mastery of equipment selection and procedural sequencing is the primary differentiator between entry-level and senior phlebotomists in clinical settings.</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Celebration Modal -->
+        <div class="celebration" id="celebration">
+            <div class="celebration-content">
+                <div class="celebration-icon">🎯</div>
+                <h2 class="celebration-title">Perfect Sequence Achieved!</h2>
+                <p class="celebration-text">
+                    You've demonstrated mastery of venipuncture procedural sequencing. 
+                    Perfect sequencing like this in clinical practice reduces errors by 85% 
+                    and increases patient satisfaction by 90%.
+                </p>
+                <button class="btn btn-primary" onclick="closeCelebration()">
+                    Continue Learning
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // State Management
+        const state = {
+            activities: {
+                1: { completed: false, correct: false, score: 0, scenarioId: null },
+                2: { completed: false, correct: 0, total: 15, score: 0, stepsPlaced: 0 }
+            },
+            startedAt: new Date(),
+            timeSpent: 0,
+            usedScenarios: [],
+            currentDragStep: null,
+            stepOrder: [] // Store the correct order without visible numbers
+        };
+
+        // Equipment Data
+        const equipmentTypes = [
+            {
+                id: 'butterfly',
+                name: 'Butterfly Needle',
+                description: '23-25 gauge, winged infusion set',
+                icon: '🦋',
+                rationale: 'For pediatric, elderly, fragile, or small veins. Causes less trauma and better for difficult access.'
+            },
+            {
+                id: 'evacuated',
+                name: 'Evacuated Tube System',
+                description: '21 gauge, standard multi-sample needle',
+                icon: '💉',
+                rationale: 'For most adult patients with good venous access. Efficient for multiple tube draws.'
+            },
+            {
+                id: 'microcapillary',
+                name: 'Microcapillary',
+                description: 'Skin puncture for small volumes',
+                icon: '👶',
+                rationale: 'For infants, neonates, or when venous access is impossible. Minimally invasive.'
+            }
+        ];
+
+        // Clinical Scenarios
+        const scenarios = [
+            {
+                id: 1,
+                patient: "Pediatric - 6 months old",
+                condition: "Well-baby checkup",
+                tests: "Newborn screening, CBC",
+                vein: "Difficult, tiny veins",
+                volume: "2-3 mL maximum",
+                correct: "microcapillary",
+                rationale: "Infants under 1 year require microcapillary/skin puncture to avoid venous trauma and excessive blood volume removal."
+            },
+            {
+                id: 2,
+                patient: "Elderly - 82 years old",
+                condition: "Geriatric, fragile skin",
+                tests: "Therapeutic drug monitoring",
+                vein: "Thin, rolling veins",
+                volume: "5 mL needed",
+                correct: "butterfly",
+                rationale: "Fragile elderly veins require butterfly needles (23-25g) to prevent hematoma formation and vein damage."
+            },
+            {
+                id: 3,
+                patient: "Adult - 35 years old",
+                condition: "Routine physical",
+                tests: "CMP, Lipid panel, CBC",
+                vein: "Good cephalic access",
+                volume: "15 mL total",
+                correct: "evacuated",
+                rationale: "Healthy adults with good venous access should use standard evacuated tube systems for efficiency and specimen quality."
+            },
+            {
+                id: 4,
+                patient: "Oncology - 45 years old",
+                condition: "Chemotherapy patient",
+                tests: "CBC with differential",
+                vein: "Fragile from treatment",
+                volume: "5 mL needed",
+                correct: "butterfly",
+                rationale: "Chemotherapy patients have fragile veins prone to collapse; butterfly reduces trauma and preserves access sites."
+            },
+            {
+                id: 5,
+                patient: "Neonate - 2 days old",
+                condition: "NICU admission",
+                tests: "Bilirubin, Glucose, CBC",
+                vein: "Very difficult access",
+                volume: "1-2 mL maximum",
+                correct: "microcapillary",
+                rationale: "Neonates have extremely limited blood volume; microcapillary is standard to avoid anemia and complications."
+            }
+        ];
+
+        // Venipuncture Steps - NO NUMBERS IN TEXT
+        const venipunctureSteps = [
+            { id: 1, text: "Perform hand hygiene and don gloves" },
+            { id: 2, text: "Verify patient identity using two identifiers" },
+            { id: 3, text: "Greet patient and explain the procedure" },
+            { id: 4, text: "Check requisition for tests ordered" },
+            { id: 5, text: "Assemble equipment and verify supplies" },
+            { id: 6, text: "Position patient comfortably" },
+            { id: 7, text: "Apply tourniquet 3-4 inches above site" },
+            { id: 8, text: "Palpate and select appropriate vein" },
+            { id: 9, text: "Release tourniquet after vein selection" },
+            { id: 10, text: "Clean site with alcohol for 30 seconds" },
+            { id: 11, text: "Allow antiseptic to dry completely" },
+            { id: 12, text: "Reapply tourniquet" },
+            { id: 13, text: "Anchor vein below puncture site" },
+            { id: 14, text: "Insert needle at 15-30 degree angle" },
+            { id: 15, text: "Fill tubes in correct order of draw" },
+            { id: 16, text: "Release tourniquet before last tube fills" },
+            { id: 17, text: "Place gauze, withdraw needle smoothly" },
+            { id: 18, text: "Apply firm pressure for 2-3 minutes" },
+            { id: 19, text: "Dispose of needle in sharps container" },
+            { id: 20, text: "Label tubes immediately at bedside" },
+            { id: 21, text: "Check patient and site before leaving" },
+            { id: 22, text: "Document procedure in medical record" },
+            { id: 23, text: "Remove gloves and perform hand hygiene" }
+        ];
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeActivity1();
+            initializeActivity2();
+            setupEventListeners();
+            startTimer();
+            updateProgressSummary();
+        });
+
+        // Activity 1: Equipment Selection
+        function initializeActivity1() {
+            loadRandomScenario();
+            createEquipmentOptions();
+        }
+
+        function loadRandomScenario() {
+            const availableScenarios = scenarios.filter(s => !state.usedScenarios.includes(s.id));
+            let scenario;
+            
+            if (availableScenarios.length === 0) {
+                state.usedScenarios = [];
+                scenario = scenarios[Math.floor(Math.random() * scenarios.length)];
+            } else {
+                scenario = availableScenarios[Math.floor(Math.random() * availableScenarios.length)];
+            }
+            
+            state.usedScenarios.push(scenario.id);
+            state.activities[1].scenarioId = scenario.id;
+            
+            document.getElementById('scenario-number').textContent = scenario.id;
+            
+            document.getElementById('patient-info').innerHTML = `
+                <div class="info-item">
+                    <strong>Patient Profile</strong>
+                    ${scenario.patient}
+                </div>
+                <div class="info-item">
+                    <strong>Clinical Condition</strong>
+                    ${scenario.condition}
+                </div>
+                <div class="info-item">
+                    <strong>Tests Required</strong>
+                    ${scenario.tests}
+                </div>
+                <div class="info-item">
+                    <strong>Venous Access</strong>
+                    ${scenario.vein}
+                </div>
+                <div class="info-item">
+                    <strong>Volume Needed</strong>
+                    ${scenario.volume}
+                </div>
+            `;
+            
+            document.getElementById('patient-info').dataset.correctAnswer = scenario.correct;
+            document.getElementById('patient-info').dataset.rationale = scenario.rationale;
+            
+            document.getElementById('feedback-1').classList.remove('show');
+            document.getElementById('correction-details-1').style.display = 'none';
+        }
+
+        function createEquipmentOptions() {
+            const container = document.getElementById('equipment-options');
+            container.innerHTML = '';
+            
+            const shuffledEquipment = [...equipmentTypes].sort(() => Math.random() - 0.5);
+            
+            shuffledEquipment.forEach(equipment => {
+                const option = document.createElement('div');
+                option.className = 'equipment-option';
+                option.dataset.id = equipment.id;
+                option.innerHTML = `
+                    <div class="equipment-icon">${equipment.icon}</div>
+                    <div class="equipment-name">${equipment.name}</div>
+                    <div class="equipment-description">${equipment.description}</div>
+                `;
+                
+                option.addEventListener('click', function() {
+                    selectEquipment(this);
+                });
+                
+                container.appendChild(option);
+            });
+        }
+
+        function selectEquipment(element) {
+            document.querySelectorAll('.equipment-option').forEach(opt => {
+                opt.classList.remove('selected', 'wrong');
+            });
+            
+            element.classList.add('selected');
+            
+            const correctAnswer = document.getElementById('patient-info').dataset.correctAnswer;
+            const isCorrect = element.dataset.id === correctAnswer;
+            
+            if (isCorrect) {
+                state.activities[1].completed = true;
+                state.activities[1].correct = true;
+                state.activities[1].score = 100;
+                
+                document.querySelector('#activity-1 .activity-status').textContent = 'Completed';
+                document.querySelector('#activity-1 .activity-status').style.color = '#00b894';
+                document.getElementById('activity-1').classList.add('completed');
+                
+                const feedback = document.getElementById('feedback-1');
+                feedback.classList.add('show');
+                document.getElementById('rationale-text').textContent = 
+                    document.getElementById('patient-info').dataset.rationale;
+            } else {
+                element.classList.add('wrong');
+                
+                const feedback = document.getElementById('feedback-1');
+                feedback.classList.add('show');
+                
+                const correctEquipment = equipmentTypes.find(e => e.id === correctAnswer);
+                document.getElementById('rationale-text').textContent = 
+                    document.getElementById('patient-info').dataset.rationale;
+                
+                document.getElementById('correction-text-1').textContent = 
+                    `Incorrect selection. The appropriate equipment for this scenario is ${correctEquipment.name}. ${correctEquipment.rationale}`;
+                document.getElementById('correction-details-1').style.display = 'block';
+                
+                state.activities[1].completed = true;
+                state.activities[1].correct = false;
+                state.activities[1].score = 0;
+            }
+            
+            updateProgressSummary();
+        }
+
+        // Activity 2: Procedure Steps - FIXED: NO VISIBLE NUMBERS
+        function initializeActivity2() {
+            createSteps();
+            createStepSlots();
+            setupStepDragAndDrop();
+        }
+
+        function createSteps() {
+            const container = document.getElementById('steps-container');
+            container.innerHTML = '';
+            
+            // Select 15 random steps (different each time)
+            const selectedSteps = [...venipunctureSteps]
+                .sort(() => Math.random() - 0.5)
+                .slice(0, 15);
+            
+            // Store the correct order internally (not visible to user)
+            state.stepOrder = selectedSteps.map(step => ({ id: step.id, text: step.text }));
+            
+            // Create draggable steps in random order
+            const shuffledSteps = [...selectedSteps].sort(() => Math.random() - 0.5);
+            
+            shuffledSteps.forEach(step => {
+                const stepElement = document.createElement('div');
+                stepElement.className = 'step-item';
+                stepElement.dataset.id = step.id;
+                stepElement.dataset.text = step.text;
+                stepElement.draggable = true;
+                stepElement.innerHTML = `
+                    <div class="step-drag-handle">☰</div>
+                    <div class="step-text">${step.text}</div>
+                `;
+                
+                container.appendChild(stepElement);
+            });
+        }
+
+        function createStepSlots() {
+            const dropzone = document.getElementById('steps-dropzone');
+            dropzone.innerHTML = '';
+            dropzone.classList.add('empty');
+            
+            // Create 15 slots with position numbers (these show 1-15 for where to place, not step numbers)
+            for (let i = 1; i <= 15; i++) {
+                const slot = document.createElement('div');
+                slot.className = 'step-slot';
+                slot.dataset.position = i;
+                slot.innerHTML = `
+                    <div class="slot-position">${i}</div>
+                    <div class="slot-step-text">Drag step here</div>
+                `;
+                dropzone.appendChild(slot);
+            }
+            
+            // Reset state
+            state.activities[2].stepsPlaced = 0;
+            updateSequenceStatus();
+        }
+
+        function setupStepDragAndDrop() {
+            const steps = document.querySelectorAll('.step-item');
+            const slots = document.querySelectorAll('.step-slot');
+            
+            steps.forEach(step => {
+                step.addEventListener('dragstart', handleStepDragStart);
+                step.addEventListener('dragend', handleStepDragEnd);
+            });
+            
+            slots.forEach(slot => {
+                slot.addEventListener('dragover', handleStepDragOver);
+                slot.addEventListener('dragenter', handleStepDragEnter);
+                slot.addEventListener('dragleave', handleStepDragLeave);
+                slot.addEventListener('drop', handleStepDrop);
+            });
+        }
+
+        function handleStepDragStart(e) {
+            state.currentDragStep = this;
+            this.style.opacity = '0.4';
+            this.classList.add('dragging');
+            e.dataTransfer.setData('text/plain', JSON.stringify({
+                id: this.dataset.id,
+                text: this.dataset.text
+            }));
+        }
+
+        function handleStepDragEnd() {
+            this.style.opacity = '1';
+            this.classList.remove('dragging');
+            state.currentDragStep = null;
+            
+            document.querySelectorAll('.step-slot').forEach(slot => {
+                slot.classList.remove('hover');
+            });
+        }
+
+        function handleStepDragOver(e) {
+            e.preventDefault();
+        }
+
+        function handleStepDragEnter(e) {
+            e.preventDefault();
+            if (!this.classList.contains('filled')) {
+                this.classList.add('hover');
+            }
+        }
+
+        function handleStepDragLeave() {
+            this.classList.remove('hover');
+        }
+
+        function handleStepDrop(e) {
+            e.preventDefault();
+            this.classList.remove('hover');
+            
+            if (this.classList.contains('filled')) return;
+            
+            const dataText = e.dataTransfer.getData('text/plain');
+            if (!dataText) return;
+            
+            const data = JSON.parse(dataText);
+            const stepElement = document.querySelector(`.step-item[data-id="${data.id}"]`);
+            
+            if (!stepElement) return;
+            
+            // Fill the slot
+            this.classList.add('filled');
+            this.dataset.stepId = data.id;
+            this.dataset.stepText = data.text;
+            this.innerHTML = `
+                <div class="slot-position">${this.dataset.position}</div>
+                <div class="slot-step-text">${data.text}</div>
+            `;
+            
+            // Hide the dragged step
+            stepElement.style.display = 'none';
+            
+            // Update state
+            state.activities[2].stepsPlaced++;
+            updateSequenceStatus();
+            
+            // Remove empty class if needed
+            const dropzone = document.getElementById('steps-dropzone');
+            if (state.activities[2].stepsPlaced > 0) {
+                dropzone.classList.remove('empty');
+            }
+            
+            // Check if all steps placed
+            if (state.activities[2].stepsPlaced === 15) {
+                checkStepSequence();
+            }
+        }
+
+        function updateSequenceStatus() {
+            const status = document.getElementById('sequence-status');
+            if (status) {
+                status.textContent = `${state.activities[2].stepsPlaced}/15 steps placed`;
+            }
+        }
+
+        function checkStepSequence() {
+            const slots = document.querySelectorAll('.step-slot');
+            
+            let correctCount = 0;
+            let correctionMessages = [];
+            
+            // Check each slot against the correct sequence
+            slots.forEach((slot, index) => {
+                const stepId = parseInt(slot.dataset.stepId);
+                const correctStep = state.stepOrder[index];
+                
+                if (stepId === correctStep.id) {
+                    correctCount++;
+                    slot.classList.add('correct');
+                    slot.classList.remove('incorrect');
+                } else {
+                    slot.classList.add('incorrect');
+                    slot.classList.remove('correct');
+                    
+                    // Find what step should be here
+                    const currentStepText = slot.dataset.stepText || "No step";
+                    correctionMessages.push(`Position ${index + 1}: Should be "${correctStep.text.substring(0, 50)}...", not "${currentStepText.substring(0, 50)}..."`);
+                }
+            });
+            
+            // Update state
+            state.activities[2].completed = true;
+            state.activities[2].correct = correctCount;
+            state.activities[2].score = Math.round((correctCount / 15) * 100);
+            
+            // Update UI
+            const activity2Status = document.querySelector('#activity-2 .activity-status');
+            if (activity2Status) {
+                activity2Status.textContent = 'Completed';
+                activity2Status.style.color = '#00b894';
+            }
+            document.getElementById('activity-2').classList.add('completed');
+            
+            // Update score display
+            document.getElementById('score-2').textContent = `${state.activities[2].score}%`;
+            document.getElementById('progress-2').style.width = `${state.activities[2].score}%`;
+            
+            // Show feedback
+            const feedback = document.getElementById('feedback-2');
+            feedback.classList.add('show');
+            
+            if (correctionMessages.length > 0) {
+                document.getElementById('correction-text-2').innerHTML = correctionMessages.join('<br>');
+                document.getElementById('correction-details-2').style.display = 'block';
+            }
+            
+            // Show celebration if perfect
+            if (state.activities[2].score === 100) {
+                setTimeout(() => {
+                    document.getElementById('celebration').classList.add('show');
+                }, 500);
+            }
+            
+            updateProgressSummary();
+        }
+
+        // Global Functions
+        window.closeCelebration = function() {
+            document.getElementById('celebration').classList.remove('show');
+        }
+
+        // Progress Tracking
+        function updateProgressSummary() {
+            let completed = 0;
+            let totalScore = 0;
+            let activityCount = 0;
+            
+            Object.values(state.activities).forEach(activity => {
+                if (activity.completed) completed++;
+                if (activity.score > 0) {
+                    totalScore += activity.score;
+                    activityCount++;
+                }
+            });
+            
+            document.getElementById('completed-count').textContent = completed;
+            
+            const accuracy = activityCount > 0 ? Math.round(totalScore / activityCount) : 0;
+            document.getElementById('accuracy-rate').textContent = `${accuracy}%`;
+            
+            // Update progress steps
+            const progressSteps = document.querySelectorAll('.progress-step');
+            progressSteps.forEach((step, index) => {
+                if (index < completed) {
+                    step.classList.add('completed');
+                    step.classList.remove('active');
+                } else if (index === completed) {
+                    step.classList.add('active');
+                    step.classList.remove('completed');
+                } else {
+                    step.classList.remove('active', 'completed');
+                }
+            });
+        }
+
+        // Timer
+        function startTimer() {
+            setInterval(() => {
+                const now = new Date();
+                const diff = Math.floor((now - state.startedAt) / 1000);
+                state.timeSpent = diff;
+                const minutes = Math.floor(diff / 60);
+                const seconds = diff % 60;
+                document.getElementById('time-spent').textContent = 
+                    `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        // Event Listeners
+        function setupEventListeners() {
+            document.getElementById('reset-all-btn').addEventListener('click', function() {
+                resetAllActivities();
+            });
+            
+            document.getElementById('new-scenario-btn').addEventListener('click', function() {
+                state.activities[1].completed = false;
+                state.activities[1].correct = false;
+                state.activities[1].score = 0;
+                
+                document.querySelector('#activity-1 .activity-status').textContent = 'Not Started';
+                document.querySelector('#activity-1 .activity-status').style.color = '';
+                document.getElementById('activity-1').classList.remove('completed');
+                document.getElementById('feedback-1').classList.remove('show');
+                
+                loadRandomScenario();
+                createEquipmentOptions();
+                updateProgressSummary();
+            });
+            
+            document.getElementById('view-results-btn').addEventListener('click', function() {
+                let totalScore = 0;
+                let activityCount = 0;
+                
+                Object.values(state.activities).forEach(activity => {
+                    if (activity.completed && activity.score > 0) {
+                        totalScore += activity.score;
+                        activityCount++;
+                    }
+                });
+                
+                const averageScore = activityCount > 0 ? Math.round(totalScore / activityCount) : 0;
+                document.getElementById('final-score').textContent = `${averageScore}%`;
+                document.getElementById('results-panel').classList.add('show');
+                document.getElementById('results-panel').scrollIntoView({ behavior: 'smooth' });
+            });
+        }
+
+        // Reset All Activities
+        function resetAllActivities() {
+            state.activities = {
+                1: { completed: false, correct: false, score: 0, scenarioId: null },
+                2: { completed: false, correct: 0, total: 15, score: 0, stepsPlaced: 0 }
+            };
+            state.stepOrder = [];
+            
+            document.querySelectorAll('.activity-card').forEach(card => {
+                card.classList.remove('completed');
+                const status = card.querySelector('.activity-status');
+                if (status) {
+                    status.textContent = 'Not Started';
+                    status.style.color = '';
+                }
+                const feedback = card.querySelector('.feedback-container');
+                if (feedback) {
+                    feedback.classList.remove('show');
+                }
+            });
+            
+            initializeActivity1();
+            initializeActivity2();
+            
+            document.getElementById('results-panel').classList.remove('show');
+            
+            updateProgressSummary();
+        }
+    </script>
+</body>
+</html>
