@@ -13,6 +13,8 @@
             --color-text: #1e2030;
             --color-muted: #727089;
             --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
             --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
         }
 
@@ -426,6 +428,8 @@
             border-radius: 8px;
             border: 1px solid rgba(0,0,0,0.1);
             font-size: 0.85rem;
+            /* FIX: Ensure high contrast text inside white boxes */
+            color: var(--color-text);
         }
 
         .area-label {
