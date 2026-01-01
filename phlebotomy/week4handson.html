@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Week 3 -- Phlebotomy Lab Course</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d9b8ff;
+            --color-accent: #8380f0;
+            --color-bg: #f7f5fb;
+            --color-text: #1e2030;
+            --color-muted: #727089;
+            --radius-lg: 24px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 18px 14px 24px;
+            background: radial-gradient(circle at top left, #ffffff 0, #f3edff 40%, var(--color-bg) 100%);
+            color: var(--color-text);
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1120px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 22px 20px 26px;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr);
+            gap: 22px;
+            position: relative;
+        }
+
+        @media (min-width: 900px) {
+            .page {
+                grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+            }
+        }
+
+        .column {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            min-width: 0;
+        }
+
+        /* Header / branding */
+        .brand-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: nowrap;
+            min-width: 0;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+        }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            min-width: 0;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: #00b894;
+            flex-shrink: 0;
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+        }
+
+        h1 {
+            font-size: clamp(1.9rem, 3vw, 2.3rem);
+            line-height: 1.1;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+        }
+
+        .subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 36rem;
+            margin-bottom: 18px;
+        }
+
+        .subtitle strong {
+            color: var(--color-primary);
+        }
+
+        /* Sections */
+        .section-label {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-primary);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--color-text);
+        }
+
+        .card {
+            border-radius: 18px;
+            border: 1px solid rgba(15, 23, 42, 0.06);
+            padding: 14px 16px 16px;
+            margin-bottom: 14px;
+            background: linear-gradient(
+                135deg,
+                rgba(175, 75, 239, 0.06),
+                rgba(255, 255, 255, 0.98)
+            );
+            width: 100%;
+        }
+
+        .card p {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--color-text);
+        }
+
+        .small {
+            font-size: 0.82rem;
+            color: var(--color-muted);
+        }
+
+        /* Welcome Banner */
+        .welcome-banner {
+            background: linear-gradient(135deg, #3b82f6, #6366f1);
+            color: white;
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+        }
+
+        .welcome-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .welcome-subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-bottom: 16px;
+        }
+
+        /* Skills Progress */
+        .skills-container {
+            margin: 24px 0;
+        }
+
+        .skill-item {
+            margin-bottom: 24px;
+            padding: 16px;
+            background: rgba(248, 250, 252, 0.9);
+            border-radius: 14px;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+        }
+
+        .skill-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .skill-dots {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+
+        .skill-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #d1d5db;
+        }
+
+        .skill-dot.active {
+            background: var(--color-primary);
+        }
+
+        .skill-dot.completed {
+            background: #10b981;
+        }
+
+        /* Focus Cards */
+        .focus-card {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(255, 255, 255, 0.95));
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 16px;
+            padding: 18px;
+            margin: 16px 0;
+        }
+
+        .focus-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .focus-icon {
+            font-size: 1.5rem;
+        }
+
+        .focus-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #3b82f6;
+        }
+
+        .focus-content {
+            padding-left: 44px;
+        }
+
+        /* Objectives List */
+        .objectives-list {
+            list-style: none;
+            margin-top: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .objective-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+        }
+
+        .objective-icon {
+            color: #3b82f6;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        /* Technique Cards */
+        .technique-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .technique-card {
+            background: white;
+            border-radius: 12px;
+            padding: 14px;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .technique-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #3b82f6;
+            margin-bottom: 6px;
+        }
+
+        .technique-desc {
+            font-size: 0.85rem;
+            color: var(--color-muted);
+        }
+
+        /* Right column cards */
+        .side-card {
+            background: rgba(12, 10, 24, 0.96);
+            color: #e5e7eb;
+            border-radius: 18px;
+            padding: 16px 18px 18px;
+            font-size: 0.88rem;
+            line-height: 1.7;
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.6);
+            margin-bottom: 16px;
+            width: 100%;
+        }
+
+        .side-card strong {
+            color: #ffffff;
+        }
+
+        .side-subtitle {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #c4b5fd;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .side-list {
+            list-style: none;
+            margin-top: 6px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            font-size: 0.86rem;
+        }
+
+        .side-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 7px;
+        }
+
+        .dot {
+            width: 6px;
+            height: 6px;
+            margin-top: 7px;
+            border-radius: 999px;
+            background: #a5b4fc;
+            flex-shrink: 0;
+        }
+
+        .completion-card {
+            border-radius: 18px;
+            border: 1px dashed rgba(148, 163, 184, 0.7);
+            padding: 12px 14px;
+            font-size: 0.84rem;
+            color: var(--color-muted);
+            background: rgba(248, 250, 252, 0.9);
+            width: 100%;
+        }
+
+        .complication-card {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.08), rgba(255, 255, 255, 0.95));
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 12px;
+            padding: 14px;
+            margin: 10px 0;
+        }
+
+        .complication-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #ef4444;
+            margin-bottom: 6px;
+        }
+
+        .complication-desc {
+            font-size: 0.85rem;
+            color: var(--color-muted);
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="week3-heading">
+        <!-- LEFT COLUMN -->
+        <section class="column">
+            <header class="brand-row">
+                <div class="brand">
+                    <img
+                        src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                        alt="AlliedRx logo"
+                        class="brand-logo"
+                    />
+                    <div class="course-meta">
+                        <span class="course-name">Phlebotomy Lab Course • Hands-on Skills Training</span>
+                        <div class="week-label">
+                            <span class="week-label-dot"></span>
+                            <span>Week 3 — Capillary Collection & Special Techniques</span>
+                        </div>
+                    </div>
+                </div>
+                <span class="badge-mode">Specialized Skills Lab</span>
+            </header>
+
+            <h1 id="week3-heading">Week 3: Capillary Collection & Special Techniques</h1>
+
+            <p class="subtitle">
+                Master <strong>capillary blood collection methods</strong> and learn specialized techniques for 
+                pediatric, geriatric, and difficult-draw patients.
+            </p>
+
+            <!-- WELCOME BANNER -->
+            <div class="welcome-banner">
+                <div class="welcome-title">Specialized Collection Methods</div>
+                <div class="welcome-subtitle">Week 3 • Fingerstick, Heelstick & Special Populations</div>
+            </div>
+
+            <!-- SKILLS PROGRESS -->
+            <section aria-label="week 3 skills progress">
+                <p class="section-label">Course Progress</p>
+                <h2 class="section-title">Skill Development Tracking</h2>
+                
+                <div class="skills-container">
+                    <div class="skill-item">
+                        <div class="skill-title">
+                            <span>SKILL 01 - Venipuncture</span>
+                        </div>
+                        <div class="skill-dots">
+                            <div class="skill-dot completed"></div>
+                            <div class="skill-dot completed"></div>
+                            <div class="skill-dot completed"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot"></div>
+                            <div class="skill-dot"></div>
+                            <div class="skill-dot"></div>
+                            <div class="skill-dot"></div>
+                            <div class="skill-dot"></div>
+                        </div>
+                        <p class="small" style="margin-top: 8px;">
+                            <strong>Continued Practice:</strong> Building speed and confidence with standard venipuncture
+                        </p>
+                    </div>
+
+                    <div class="skill-item">
+                        <div class="skill-title">
+                            <span>SKILL 02 - Capillary & Labs</span>
+                        </div>
+                        <div class="skill-dots">
+                            <div class="skill-dot completed"></div>
+                            <div class="skill-dot completed"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot"></div>
+                            <div class="skill-dot"></div>
+                            <div class="skill-dot"></div>
+                            <div class="skill-dot"></div>
+                            <div class="skill-dot"></div>
+                        </div>
+                        <p class="small" style="margin-top: 8px;">
+                            <strong>Week 3 Focus:</strong> Fingerstick and heelstick capillary collection techniques
+                        </p>
+                    </div>
+
+                    <div class="skill-item">
+                        <div class="skill-title">
+                            <span>SKILL 03 - Patient Care</span>
+                        </div>
+                        <div class="skill-dots">
+                            <div class="skill-dot completed"></div>
+                            <div class="skill-dot completed"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot"></div>
+                            <div class="skill-dot"></div>
+                            <div class="skill-dot"></div>
+                            <div class="skill-dot"></div>
+                            <div class="skill-dot"></div>
+                            <div class="skill-dot"></div>
+                            <div class="skill-dot"></div>
+                        </div>
+                        <p class="small" style="margin-top: 8px;">
+                            <strong>Special Populations:</strong> Communication techniques for pediatric and geriatric patients
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- WEEK 3 FOCUS -->
+            <section aria-label="week 3 focus">
+                <p class="section-label">Week 3 Objectives</p>
+                <h2 class="section-title">Capillary Collection Mastery</h2>
+                
+                <div class="focus-card">
+                    <div class="focus-header">
+                        <span class="focus-icon">🎯</span>
+                        <span class="focus-title">Primary Focus: Microcollection Techniques</span>
+                    </div>
+                    <div class="focus-content">
+                        <p class="small">
+                            This week focuses on mastering capillary blood collection methods for patients where 
+                            venipuncture may not be appropriate or possible.
+                        </p>
+                        
+                        <ul class="objectives-list">
+                            <li class="objective-item">
+                                <span class="objective-icon">✓</span>
+                                <span>Proper fingerstick technique and site selection</span>
+                            </li>
+                            <li class="objective-item">
+                                <span class="objective-icon">✓</span>
+                                <span>Safe heelstick procedures for infants</span>
+                            </li>
+                            <li class="objective-item">
+                                <span class="objective-icon">✓</span>
+                                <span>Microcollection tube handling and filling</span>
+                            </li>
+                            <li class="objective-item">
+                                <span class="objective-icon">✓</span>
+                                <span>Point-of-care testing device operation</span>
+                            </li>
+                            <li class="objective-item">
+                                <span class="objective-icon">✓</span>
+                                <span>Special considerations for pediatric patients</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TECHNIQUE TRAINING -->
+            <section aria-label="technique training">
+                <p class="section-label">Hands-on Training</p>
+                <h2 class="section-title">Specialized Techniques</h2>
+                
+                <div class="card">
+                    <p class="small">
+                        Master these specialized collection methods for different patient populations:
+                    </p>
+                    
+                    <div class="technique-grid">
+                        <div class="technique-card">
+                            <div class="technique-title">Fingerstick Collection</div>
+                            <div class="technique-desc">
+                                Proper lancet use, site selection, and blood drop collection
+                            </div>
+                        </div>
+                        <div class="technique-card">
+                            <div class="technique-title">Heelstick Procedures</div>
+                            <div class="technique-desc">
+                                Safe techniques for neonatal and infant blood collection
+                            </div>
+                        </div>
+                        <div class="technique-card">
+                            <div class="technique-title">Microcollection Tubes</div>
+                            <div class="technique-desc">
+                                Proper handling and filling of small-volume collection tubes
+                            </div>
+                        </div>
+                        <div class="technique-card">
+                            <div class="technique-title">Pediatric Approaches</div>
+                            <div class="technique-desc">
+                                Age-appropriate communication and comfort techniques
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- RIGHT COLUMN -->
+        <aside class="column" aria-label="special techniques and complications">
+            <!-- SPECIAL POPULATIONS -->
+            <section>
+                <p class="section-label">Patient Care</p>
+                <h2 class="section-title">Special Population Considerations</h2>
+                
+                <div class="side-card">
+                    <p class="side-subtitle">Adapting Techniques</p>
+                    <p>
+                        Learn to adapt your approach for different patient populations:
+                    </p>
+                    
+                    <ul class="side-list" style="margin-top: 12px;">
+                        <li>
+                            <span class="dot"></span>
+                            <span><strong>Pediatric Patients:</strong> Age-appropriate explanations, distraction techniques</span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span><strong>Geriatric Patients:</strong> Fragile skin considerations, positioning assistance</span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span><strong>Needle-Phobic Patients:</strong> Anxiety reduction techniques</span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span><strong>Patients with Disabilities:</strong> Adaptive positioning and communication</span>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- COMPLICATION MANAGEMENT -->
+            <section>
+                <p class="section-label">Troubleshooting</p>
+                <h2 class="section-title">Capillary Collection Complications</h2>
+                
+                <div class="card">
+                    <p class="small">
+                        Learn to recognize and manage common capillary collection issues:
+                    </p>
+                    
+                    <div class="complication-card">
+                        <div class="complication-title">Insufficient Sample</div>
+                        <div class="complication-desc">
+                            Techniques to improve blood flow and adequate collection
+                        </div>
+                    </div>
+                    
+                    <div class="complication-card">
+                        <div class="complication-title">Hemolysis Prevention</div>
+                        <div class="complication-desc">
+                            Proper technique to avoid red blood cell destruction
+                        </div>
+                    </div>
+                    
+                    <div class="complication-card">
+                        <div class="complication-title">Clotting Issues</div>
+                        <div class="complication-desc">
+                            Managing rapid clotting in small volume samples
+                        </div>
+                    </div>
+                    
+                    <div class="complication-card">
+                        <div class="complication-title">Site Bleeding</div>
+                        <div class="complication-desc">
+                            Proper pressure application and follow-up care
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- EQUIPMENT FOCUS -->
+            <section>
+                <p class="section-label">Equipment</p>
+                <h2 class="section-title">Week 3 Equipment Focus</h2>
+                
+                <div class="side-card">
+                    <p class="side-subtitle">Specialized Tools</p>
+                    <p>
+                        Master these capillary collection devices and tools:
+                    </p>
+                    
+                    <ul class="side-list" style="margin-top: 12px;">
+                        <li>
+                            <span class="dot"></span>
+                            <span><strong>Safety Lancets:</strong> Different depths for various patient types</span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span><strong>Microcollection Tubes:</strong> Proper filling and handling</span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span><strong>Capillary Tubes:</strong> Heparinized vs. plain tubes</span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span><strong>Point-of-Care Devices:</strong> Glucose meters, coagulation monitors</span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span><strong>Warming Devices:</strong> Improving circulation for better samples</span>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- COMPETENCY CHECKLIST -->
+            <section>
+                <p class="section-label">Assessment</p>
+                <h2 class="section-title">Week 3 Competency Checklist</h2>
+                
+                <div class="completion-card">
+                    <p>
+                        By the end of Week 3, you should be able to demonstrate:
+                    </p>
+                    
+                    <ul class="side-list" style="margin-top: 8px;">
+                        <li>
+                            <span class="dot"></span>
+                            <span>Proper <strong>fingerstick technique</strong> and site selection</span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span>Safe <strong>heelstick procedures</strong> for infant patients</span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span>Correct <strong>microcollection tube</strong> handling and filling</span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span>Appropriate <strong>pediatric communication</strong> techniques</span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span>Proper <strong>point-of-care device</strong> operation</span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span>Management of <strong>common complications</strong> in capillary collection</span>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+        </aside>
+    </main>
+</body>
+</html>
