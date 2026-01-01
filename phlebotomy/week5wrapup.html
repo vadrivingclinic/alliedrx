@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Week 5 Wrap-Up — Neonatal/Geriatric Procedures & Phlebotomy Complications</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d9b8ff;
+            --color-accent: #8380f0;
+            --color-bg: #f7f5fb;
+            --color-text: #1e2030;
+            --color-muted: #727089;
+            --radius-lg: 24px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(circle at top left, #ffffff 0, #f3edff 40%, var(--color-bg) 100%);
+            color: var(--color-text);
+            -webkit-text-size-adjust: 100%;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 12px;
+            }
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1120px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px;
+            display: grid;
+            grid-template-columns: minmax(0, 3.1fr) minmax(0, 2.4fr);
+            gap: 28px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @media (max-width: 900px) {
+            .page {
+                grid-template-columns: 1fr;
+                padding: 22px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 0;
+            }
+            .page {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 18px 14px 22px;
+                gap: 22px;
+            }
+            h1 {
+                font-size: 1.7rem;
+            }
+            .section-title {
+                font-size: 1rem;
+            }
+        }
+
+        .column {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header / branding */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+        }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--color-primary);
+            flex-shrink: 0;
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+        }
+
+        @media (max-width: 480px) {
+            .brand-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .badge-mode {
+                margin-top: 6px;
+            }
+        }
+
+        h1 {
+            font-size: clamp(1.9rem, 3vw, 2.3rem);
+            line-height: 1.05;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+        }
+
+        .subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 36rem;
+            margin-bottom: 18px;
+        }
+
+        .subtitle strong {
+            color: var(--color-primary);
+        }
+
+        /* Sections */
+        .section-label {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-primary);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--color-text);
+        }
+
+        .card {
+            border-radius: 18px;
+            border: 1px solid rgba(15, 23, 42, 0.06);
+            padding: 14px 16px 16px;
+            margin-bottom: 14px;
+            background: linear-gradient(
+                135deg,
+                rgba(175, 75, 239, 0.06),
+                rgba(255, 255, 255, 0.98)
+            );
+        }
+
+        .card p {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--color-text);
+        }
+
+        .small {
+            font-size: 0.82rem;
+            color: var(--color-muted);
+        }
+
+        /* Quiz styles */
+        .quiz-item {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px dashed rgba(148, 163, 184, 0.7);
+        }
+
+        .quiz-question {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .quiz-options {
+            list-style: none;
+            padding-left: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            font-size: 0.88rem;
+        }
+
+        .quiz-options li {
+            display: flex;
+            align-items: flex-start;
+            gap: 6px;
+        }
+
+        .quiz-options input {
+            margin-top: 3px;
+            cursor: pointer;
+        }
+
+        .quiz-feedback {
+            font-size: 0.82rem;
+            margin-top: 5px;
+            min-height: 1.1em;
+        }
+
+        .quiz-feedback.correct {
+            color: #15803d;
+        }
+
+        .quiz-feedback.incorrect {
+            color: #b91c1c;
+        }
+
+        .btn {
+            border-radius: 999px;
+            border: none;
+            padding: 7px 14px;
+            margin-top: 10px;
+            font-size: 0.84rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            cursor: pointer;
+            background: linear-gradient(135deg, var(--color-primary), #7c3aed);
+            color: #ffffff;
+            box-shadow: 0 10px 25px rgba(88, 28, 135, 0.35);
+            transition: transform 0.05s ease, box-shadow 0.05s ease;
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 5px 12px rgba(88, 28, 135, 0.4);
+        }
+
+        /* Vocabulary flashcards */
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+            margin-top: 4px;
+        }
+
+        @media (max-width: 900px) {
+            .vocab-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .vocab-card {
+            border-radius: 14px;
+            padding: 10px 12px;
+            background: rgba(12, 10, 24, 0.94);
+            color: #e5e7eb;
+            font-size: 0.86rem;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .vocab-term {
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: #fef9c3;
+        }
+
+        .vocab-definition {
+            font-size: 0.82rem;
+            line-height: 1.5;
+            display: none;
+        }
+
+        .vocab-card.active .vocab-definition {
+            display: block;
+        }
+
+        .vocab-card::after {
+            content: "Tap to flip";
+            position: absolute;
+            right: 10px;
+            bottom: 8px;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #a5b4fc;
+        }
+
+        .vocab-card.active::after {
+            content: "Hide";
+        }
+
+        /* Right column cards */
+        .side-card {
+            background: rgba(12, 10, 24, 0.96);
+            color: #e5e7eb;
+            border-radius: 18px;
+            padding: 16px 18px 18px;
+            font-size: 0.88rem;
+            line-height: 1.7;
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.6);
+            margin-bottom: 16px;
+        }
+
+        .side-card strong {
+            color: #ffffff;
+        }
+
+        .side-subtitle {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #c4b5fd;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .side-list {
+            list-style: none;
+            margin-top: 6px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            font-size: 0.86rem;
+        }
+
+        .side-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 7px;
+        }
+
+        .dot {
+            width: 6px;
+            height: 6px;
+            margin-top: 7px;
+            border-radius: 999px;
+            background: #a5b4fc;
+            flex-shrink: 0;
+        }
+
+        .completion-card {
+            border-radius: 18px;
+            border: 1px dashed rgba(148, 163, 184, 0.7);
+            padding: 12px 14px;
+            font-size: 0.84rem;
+            color: var(--color-muted);
+            background: rgba(248, 250, 252, 0.9);
+        }
+
+        /* Comparison Tables */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 0.85rem;
+        }
+
+        .comparison-table th {
+            background: rgba(175, 75, 239, 0.1);
+            padding: 8px 10px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--color-primary);
+        }
+
+        .comparison-table td {
+            padding: 8px 10px;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            vertical-align: top;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: rgba(175, 75, 239, 0.03);
+        }
+
+        .age-group {
+            font-weight: 600;
+            color: var(--color-primary);
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 80px;
+            border-radius: 12px;
+            border: 1px solid rgba(148, 163, 184, 0.7);
+            padding: 10px 11px;
+            font-family: inherit;
+            font-size: 0.88rem;
+            resize: vertical;
+            margin-top: 6px;
+        }
+
+        textarea:focus {
+            outline: 2px solid var(--color-primary-soft);
+            border-color: var(--color-primary);
+        }
+
+        .checklist {
+            list-style: none;
+            margin-top: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            font-size: 0.86rem;
+        }
+
+        .checklist li {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .checklist input {
+            margin-top: 2px;
+        }
+
+        /* Warning and Caution Boxes */
+        .warning-box {
+            background: rgba(239, 68, 68, 0.1);
+            border-left: 3px solid #dc2626;
+            padding: 10px 12px;
+            border-radius: 4px;
+            margin-top: 10px;
+            font-size: 0.85rem;
+        }
+
+        .caution-box {
+            background: rgba(245, 158, 11, 0.1);
+            border-left: 3px solid #d97706;
+            padding: 10px 12px;
+            border-radius: 4px;
+            margin-top: 10px;
+            font-size: 0.85rem;
+        }
+
+        .success-box {
+            background: rgba(34, 197, 94, 0.1);
+            border-left: 3px solid #16a34a;
+            padding: 10px 12px;
+            border-radius: 4px;
+            margin-top: 10px;
+            font-size: 0.85rem;
+        }
+
+        /* Neonatal Test Grid */
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 600px) {
+            .test-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .test-item {
+            background: rgba(175, 75, 239, 0.05);
+            padding: 8px 10px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+        }
+
+        .test-name {
+            font-weight: 600;
+            color: var(--color-primary);
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="wrapup-heading">
+        <!-- LEFT COLUMN -->
+        <section class="column">
+            <header class="brand-row">
+                <div class="brand">
+                    <img src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png" alt="AlliedRx logo" class="brand-logo">
+                    <div class="course-meta">
+                        <span class="course-name">Phlebotomy Technician Program • Campus & Distance Learning</span>
+                        <div class="week-label">
+                            <span class="week-label-dot"></span>
+                            <span>Week 5 Wrap-Up — Neonatal/Geriatric Procedures & Complications</span>
+                        </div>
+                    </div>
+                </div>
+                <span class="badge-mode">Interactive Review</span>
+            </header>
+
+            <h1 id="wrapup-heading">Special Populations & Phlebotomy Challenges</h1>
+            <p class="subtitle">
+                Use this page to review <strong>Chapters 8 & 9 — Neonatal/Geriatric Procedures & Phlebotomy Complications</strong>. 
+                Learn how to adapt your techniques for special populations and handle common complications.
+            </p>
+
+            <!-- QUICK SELF-CHECK QUIZ -->
+            <section aria-label="quick self check">
+                <p class="section-label">Step 1</p>
+                <h2 class="section-title">Quick Self-Check</h2>
+                <div class="card" id="quiz-card">
+                    <p class="small">
+                        Choose the best answer for each question, then select <strong>Check answers</strong>. 
+                        This is low-stakes practice to help you spot any concepts you need to review.
+                    </p>
+
+                    <div class="quiz-item" data-answer="c">
+                        <p class="quiz-question">
+                            1. Iatrogenic anemia in newborns refers to:
+                        </p>
+                        <ul class="quiz-options">
+                            <li><input type="radio" name="q1" value="a" id="q1a"><label for="q1a">Genetic anemia present at birth</label></li>
+                            <li><input type="radio" name="q1" value="b" id="q1b"><label for="q1b">Anemia caused by maternal factors</label></li>
+                            <li><input type="radio" name="q1" value="c" id="q1c"><label for="q1c">Anemia caused by excessive blood draws for testing</label></li>
+                        </ul>
+                        <div class="quiz-feedback" id="q1-feedback"></div>
+                    </div>
+
+                    <div class="quiz-item" data-answer="a">
+                        <p class="quiz-question">
+                            2. The most common site for heel sticks in newborns is:
+                        </p>
+                        <ul class="quiz-options">
+                            <li><input type="radio" name="q2" value="a" id="q2a"><label for="q2a">The medial or lateral plantar surfaces of the heel</label></li>
+                            <li><input type="radio" name="q2" value="b" id="q2b"><label for="q2b">The center of the heel</label></li>
+                            <li><input type="radio" name="q2" value="c" id="q2c"><label for="q2c">The arch of the foot</label></li>
+                        </ul>
+                        <div class="quiz-feedback" id="q2-feedback"></div>
+                    </div>
+
+                    <div class="quiz-item" data-answer="b">
+                        <p class="quiz-question">
+                            3. When collecting from a patient with a mastectomy on one side, you should:
+                        </p>
+                        <ul class="quiz-options">
+                            <li><input type="radio" name="q3" value="a" id="q3a"><label for="q3a">Always use the affected side for venipuncture</label></li>
+                            <li><input type="radio" name="q3" value="b" id="q3b"><label for="q3b">Avoid the affected arm and use the opposite arm</label></li>
+                            <li><input type="radio" name="q3" value="c" id="q3c"><label for="q3c">Use either arm as they are equally suitable</label></li>
+                        </ul>
+                        <div class="quiz-feedback" id="q3-feedback"></div>
+                    </div>
+
+                    <div class="quiz-item" data-answer="c">
+                        <p class="quiz-question">
+                            4. The most appropriate action when a patient begins to faint during venipuncture is to:
+                        </p>
+                        <ul class="quiz-options">
+                            <li><input type="radio" name="q4" value="a" id="q4a"><label for="q4a">Quickly finish the draw and then help them</label></li>
+                            <li><input type="radio" name="q4" value="b" id="q4b"><label for="q4b">Have them stand up and walk around</label></li>
+                            <li><input type="radio" name="q4" value="c" id="q4c"><label for="q4c">Immediately remove the needle, call for help, and lower their head</label></li>
+                        </ul>
+                        <div class="quiz-feedback" id="q4-feedback"></div>
+                    </div>
+
+                    <button class="btn" type="button" onclick="checkQuiz()">Check answers</button>
+                </div>
+            </section>
+
+            <!-- NEONATAL TESTING -->
+            <section aria-label="neonatal testing">
+                <p class="section-label">Step 2</p>
+                <h2 class="section-title">Newborn Screening Tests</h2>
+                <div class="card">
+                    <p class="small">
+                        Common tests performed on newborn infants. Understanding these helps minimize blood draws and prevent iatrogenic anemia.
+                    </p>
+                    <div class="test-grid">
+                        <div class="test-item">
+                            <div class="test-name">Phenylketonuria (PKU)</div>
+                            <div>Tests for phenylalanine levels to detect metabolic disorder</div>
+                        </div>
+                        <div class="test-item">
+                            <div class="test-name">Galactosemia</div>
+                            <div>Tests for galactose metabolism disorder</div>
+                        </div>
+                        <div class="test-item">
+                            <div class="test-name">Thyroid Function (TSH)</div>
+                            <div>Screens for congenital hypothyroidism</div>
+                        </div>
+                        <div class="test-item">
+                            <div class="test-name">Hemoglobinopathies</div>
+                            <div>Screens for sickle cell disease and other hemoglobin disorders</div>
+                        </div>
+                        <div class="test-item">
+                            <div class="test-name">Bilirubin</div>
+                            <div>Monitors for jaundice and liver function</div>
+                        </div>
+                        <div class="test-item">
+                            <div class="test-name">Blood Cultures</div>
+                            <div>If infection (sepsis) is suspected</div>
+                        </div>
+                    </div>
+                    
+                    <div class="warning-box">
+                        <strong>Critical Consideration:</strong> Newborns have small blood volumes (80-100 mL/kg). Excessive draws can cause iatrogenic anemia. Always use microcollection techniques and coordinate draws between departments.
+                    </div>
+                </div>
+            </section>
+
+            <!-- VOCABULARY FLASHCARDS -->
+            <section aria-label="vocabulary practice">
+                <p class="section-label">Step 3</p>
+                <h2 class="section-title">Key Vocabulary Flashcards</h2>
+                <div class="card">
+                    <p class="small">
+                        Select each card to reveal the definition. These terms are essential for understanding special populations and complications.
+                    </p>
+                    <div class="vocab-grid">
+                        <div class="vocab-card" onclick="toggleVocab(this)">
+                            <div class="vocab-term">Iatrogenic Anemia</div>
+                            <div class="vocab-definition">
+                                Anemia caused by medical treatment, particularly excessive blood draws in newborns or critically ill patients.
+                            </div>
+                        </div>
+                        <div class="vocab-card" onclick="toggleVocab(this)">
+                            <div class="vocab-term">Hemolytic Disease of the Newborn</div>
+                            <div class="vocab-definition">
+                                Condition where maternal antibodies attack fetal red blood cells, often requiring monitoring through blood tests.
+                            </div>
+                        </div>
+                        <div class="vocab-card" onclick="toggleVocab(this)">
+                            <div class="vocab-term">Dementia</div>
+                            <div class="vocab-definition">
+                                Progressive cognitive decline affecting memory, thinking, and behavior; common in geriatric patients requiring special communication approaches.
+                            </div>
+                        </div>
+                        <div class="vocab-card" onclick="toggleVocab(this)">
+                            <div class="vocab-term">Hematoma</div>
+                            <div class="vocab-definition">
+                                A collection of blood outside blood vessels, often caused by needle penetration through vein walls during venipuncture.
+                            </div>
+                        </div>
+                        <div class="vocab-card" onclick="toggleVocab(this)">
+                            <div class="vocab-term">Hemolysis</div>
+                            <div class="vocab-definition">
+                                Rupture of red blood cells, which can occur from improper technique (vigorous shaking, small needle, drawing from hematoma).
+                            </div>
+                        </div>
+                        <div class="vocab-card" onclick="toggleVocab(this)">
+                            <div class="vocab-term">Syncope</div>
+                            <div class="vocab-definition">
+                                Fainting or loss of consciousness, a common complication during venipuncture often related to anxiety or vasovagal response.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- RIGHT COLUMN -->
+        <aside class="column" aria-label="apply it to practice">
+            <!-- POPULATION COMPARISON -->
+            <section>
+                <p class="section-label">Apply it</p>
+                <h2 class="section-title">Age-Specific Considerations</h2>
+                <div class="side-card">
+                    <p class="side-subtitle">Neonatal vs. Geriatric Phlebotomy</p>
+                    
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Consideration</th>
+                                <th>Neonatal (Newborns)</th>
+                                <th>Geriatric (Older Adults)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Primary Sites</strong></td>
+                                <td>Heel stick (plantar surfaces), occasionally venous if large volume needed</td>
+                                <td>Antecubital veins (may be fragile), hand veins, forearm veins</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Skin & Vein Characteristics</strong></td>
+                                <td>Thin skin, minimal subcutaneous fat, delicate veins</td>
+                                <td>Thin, fragile skin, loss of elasticity, veins may roll or collapse</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Blood Volume Concerns</strong></td>
+                                <td>Very limited total volume (iatrogenic anemia risk)</td>
+                                <td>May have reduced volume, dehydration common</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Communication Approach</strong></td>
+                                <td>Parent/guardian communication, gentle handling</td>
+                                <td>Clear, simple instructions, may need repetition, address hearing/vision impairments</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Common Challenges</strong></td>
+                                <td>Minimizing pain, preventing nerve/bone damage, coordinating multiple tests</td>
+                                <td>Arthritis limitations, dementia, multiple medications, chronic conditions</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <p class="side-subtitle" style="margin-top:12px;">Scenario Reflection</p>
+                    <p>
+                        You need to draw blood from an 85-year-old patient with arthritis in both hands, mild dementia, and very fragile veins.
+                    </p>
+                    
+                    <label class="small" for="geriatric-notes" style="display:block;margin-top:10px;">
+                        Describe your approach to this challenging collection:
+                    </label>
+                    <textarea id="geriatric-notes" placeholder="Consider: 1) How would you position the patient? 2) What equipment would you choose? 3) How would you communicate? 4) What special precautions would you take?"></textarea>
+                </div>
+            </section>
+
+            <!-- COMPLICATIONS GUIDE -->
+            <section>
+                <p class="section-label">Step 4</p>
+                <h2 class="section-title">Common Complications & Solutions</h2>
+                <div class="side-card">
+                    <p class="side-subtitle">Prevention and Management</p>
+                    
+                    <div class="caution-box">
+                        <strong>Hematoma (Bruising)</strong><br>
+                        <strong>Cause:</strong> Needle through vein wall, insufficient pressure<br>
+                        <strong>Prevention:</strong> Proper needle angle, adequate pressure (3-5 minutes), avoid probing<br>
+                        <strong>Management:</strong> Apply pressure, ice pack, elevate limb
+                    </div>
+                    
+                    <div class="caution-box">
+                        <strong>Syncope (Fainting)</strong><br>
+                        <strong>Cause:</strong> Anxiety, vasovagal response, fear of needles<br>
+                        <strong>Prevention:</strong> Have patient seated/laying, conversation distraction, monitor for pallor/sweating<br>
+                        <strong>Management:</strong> Remove needle immediately, lower head, call for help if unresponsive
+                    </div>
+                    
+                    <div class="caution-box">
+                        <strong>Hemolysis</strong><br>
+                        <strong>Cause:</strong> Vigorous mixing, small needle, drawing from hematoma, pulling syringe plunger too fast<br>
+                        <strong>Prevention:</strong> Gentle tube mixing, proper needle size, avoid difficult draws<br>
+                        <strong>Management:</strong> Redraw specimen if possible, document occurrence
+                    </div>
+                    
+                    <div class="caution-box">
+                        <strong>Failed Draw (No Blood Return)</strong><br>
+                        <strong>Cause:</strong> Collapsed vein, bevel against wall, needle dislodged<br>
+                        <strong>Prevention:</strong> Proper tourniquet, good anchoring, correct angle<br>
+                        <strong>Management:</strong> Release tourniquet, withdraw slightly, adjust angle, try different site if needed
+                    </div>
+                    
+                    <div class="success-box" style="margin-top: 12px;">
+                        <strong>Pro Tips:</strong> Always have emergency equipment accessible. Document all complications accurately. Never attempt more than 2 venipunctures on one patient—seek assistance or alternative collection methods.
+                    </div>
+                </div>
+            </section>
+
+            <!-- TECHNIQUE MASTERY CHECKLIST -->
+            <section>
+                <p class="section-label">Step 5</p>
+                <h2 class="section-title">Special Population Competency Checklist</h2>
+                <div class="side-card">
+                    <p>
+                        Mark each item when you can confidently perform or explain the procedure:
+                    </p>
+                    <ul class="checklist" style="margin-top:10px;">
+                        <li>
+                            <input type="checkbox" id="skill-heelstick">
+                            <label for="skill-heelstick">
+                                I can describe proper <strong>heel stick technique</strong> for newborns including site selection and depth limitations.
+                            </label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="skill-geriatric">
+                            <label for="skill-geriatric">
+                                I can list <strong>3 adaptations</strong> needed for geriatric patients (skin fragility, arthritis, communication).
+                            </label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="skill-complications">
+                            <label for="skill-complications">
+                                I can identify and describe management for <strong>4 common venipuncture complications</strong>.
+                            </label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="skill-mastectomy">
+                            <label for="skill-mastectomy">
+                                I understand the <strong>contraindications for drawing from mastectomy arms</strong> and alternative approaches.
+                            </label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="skill-iatrogenic">
+                            <label for="skill-iatrogenic">
+                                I can explain <strong>iatrogenic anemia</strong> and strategies to minimize blood loss in vulnerable patients.
+                            </label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="skill-uncooperative">
+                            <label for="skill-uncooperative">
+                                I can describe approaches for <strong>uncooperative or anxious patients</strong> of different ages.
+                            </label>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- COMPLETION REMINDER -->
+            <section>
+                <p class="section-label">Step 6</p>
+                <h2 class="section-title">Ready to Move On?</h2>
+                <div class="completion-card">
+                    <p>Before you mark this unit complete, make sure you have:</p>
+                    <ul class="side-list" style="margin-top:8px;">
+                        <li><span class="dot"></span><span>Answered the <strong>Quick Self-Check</strong> questions and reviewed incorrect answers.</span></li>
+                        <li><span class="dot"></span><span>Reviewed the <strong>newborn screening tests</strong> and their purposes.</span></li>
+                        <li><span class="dot"></span><span>Practiced all <strong>vocabulary terms</strong> until you can define them without looking.</span></li>
+                        <li><span class="dot"></span><span>Compared <strong>neonatal vs. geriatric considerations</strong> in the reflection box.</span></li>
+                        <li><span class="dot"></span><span>Checked off all items in the <strong>Competency Checklist</strong>.</span></li>
+                        <li><span class="dot"></span><span>Reviewed the <strong>complications guide</strong> and can explain prevention strategies.</span></li>
+                    </ul>
+                    <p style="margin-top:8px;">
+                        When you feel confident with these special population considerations and complication management, return to your course and continue to the next activity.
+                    </p>
+                </div>
+            </section>
+        </aside>
+    </main>
+
+    <script>
+        // Quiz logic
+        function checkQuiz() {
+            const items = document.querySelectorAll('.quiz-item');
+            items.forEach((item, index) => {
+                const correct = item.getAttribute('data-answer');
+                const name = 'q' + (index + 1);
+                const selected = document.querySelector('input[name="' + name + '"]:checked');
+                const feedback = document.getElementById(name + '-feedback');
+                
+                if (!selected) {
+                    feedback.textContent = 'Choose an answer.';
+                    feedback.className = 'quiz-feedback';
+                    return;
+                }
+                
+                if (selected.value === correct) {
+                    feedback.textContent = 'Correct! Nice work.';
+                    feedback.className = 'quiz-feedback correct';
+                } else {
+                    feedback.textContent = 'Not quite—review this concept in your notes and try again.';
+                    feedback.className = 'quiz-feedback incorrect';
+                }
+            });
+        }
+
+        // Vocabulary flip
+        function toggleVocab(card) {
+            card.classList.toggle('active');
+        }
+
+        // Checklist persistence
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load saved checkbox states
+            const checkboxes = document.querySelectorAll('.checklist input');
+            checkboxes.forEach(checkbox => {
+                const saved = localStorage.getItem(checkbox.id);
+                if (saved === 'true') {
+                    checkbox.checked = true;
+                }
+                
+                checkbox.addEventListener('change', function() {
+                    localStorage.setItem(this.id, this.checked);
+                });
+            });
+            
+            // Load saved textarea content
+            const textarea = document.getElementById('geriatric-notes');
+            const savedText = localStorage.getItem('geriatric-notes');
+            if (savedText) {
+                textarea.value = savedText;
+            }
+            
+            textarea.addEventListener('input', function() {
+                localStorage.setItem('geriatric-notes', this.value);
+            });
+        });
+    </script>
+</body>
+</html>
