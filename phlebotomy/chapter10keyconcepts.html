@@ -1,0 +1,1639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AlliedRx – Chapter 10: Key Concepts & Terminology</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        :root {
+            --color-primary: #af4bef; /* Purple - main brand color */
+            --color-primary-soft: #d492ff; /* Light purple */
+            --color-accent: #8380f0; /* Blue-purple accent */
+            --color-success: #00b894; /* Green for correct/success */
+            --color-error: #e17055; /* Red/Orange for errors */
+            --color-warning: #fdcb6e; /* Yellow for warnings */
+            --color-info: #0984e3; /* Blue for info */
+            --color-bg: #f7f5fb; /* Light background */
+            --color-text: #2b2b2b; /* Dark text */
+            --color-muted: #6c6880; /* Muted text */
+            --color-dark: #0c0a18; /* Dark background */
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+            --shadow-card: 0 12px 30px rgba(15, 23, 42, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(
+                circle at top left,
+                #ffffff 0,
+                #f1ecff 40%,
+                var(--color-bg) 100%
+            );
+            color: var(--color-text);
+            -webkit-text-size-adjust: 100%;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 12px; }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes checkmarkPop {
+            0% { transform: scale(0); opacity: 0; }
+            70% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @media (max-width: 900px) {
+            .page { padding: 22px; }
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 0; }
+            .page {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 18px 14px 22px;
+            }
+        }
+
+        /* Header */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .brand-logo:hover { transform: scale(1.05); }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--color-success);
+            flex-shrink: 0;
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .badge-mode:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+        @media (max-width: 480px) {
+            .brand-row { flex-direction: column; align-items: flex-start; }
+            .badge-mode { margin-top: 6px; }
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 3vw, 2.2rem);
+            line-height: 1.1;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .module-subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 600px;
+            margin-bottom: 24px;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        /* Progress Tracker */
+        .progress-tracker {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            position: relative;
+            padding: 0 20px;
+        }
+
+        .progress-tracker::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 50px;
+            right: 50px;
+            height: 3px;
+            background: rgba(12, 10, 24, 0.08);
+            z-index: 1;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+
+        .step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--color-muted);
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.active .step-circle {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .progress-step.completed .step-circle {
+            background: var(--color-success);
+            border-color: var(--color-success);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.75rem;
+            color: var(--color-muted);
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .progress-step.active .step-label {
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        /* Progress Summary */
+        .progress-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+            animation: fadeInUp 0.6s ease-out 0.5s both;
+        }
+
+        .summary-card {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            border: 1px solid rgba(12, 10, 24, 0.06);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-card);
+            border-color: var(--color-primary-soft);
+        }
+
+        .summary-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--color-primary);
+            display: block;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .summary-label {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Activity Grid - SINGLE COLUMN FOR 2 ACTIVITIES */
+        .activity-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .activity-card {
+            background: white;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            padding: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .activity-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--color-primary);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .activity-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--color-primary-soft);
+        }
+
+        .activity-card:hover::before { opacity: 1; }
+
+        .activity-card.completed {
+            border-color: var(--color-success);
+        }
+
+        .activity-card.completed::before {
+            background: var(--color-success);
+            opacity: 1;
+        }
+
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .activity-number {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .activity-status {
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-muted);
+        }
+
+        .activity-card.completed .activity-status {
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--color-success);
+        }
+
+        .activity-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .activity-icon {
+            font-size: 1.2em;
+        }
+
+        .activity-description {
+            font-size: 0.9rem;
+            color: var(--color-muted);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        /* Term Matching Activity */
+        .matching-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+            min-height: 300px;
+        }
+
+        @media (max-width: 600px) {
+            .matching-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .matching-column {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 2px dashed rgba(12, 10, 24, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .matching-column-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            text-align: center;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(12, 10, 24, 0.08);
+            margin-bottom: 10px;
+        }
+
+        .matching-item {
+            background: rgba(175, 75, 239, 0.08);
+            border-radius: var(--radius-sm);
+            padding: 12px 15px;
+            cursor: grab;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            user-select: none;
+            font-size: 0.85rem;
+            color: var(--color-text);
+        }
+
+        .matching-item:hover {
+            background: rgba(175, 75, 239, 0.15);
+            border-color: var(--color-primary-soft);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(175, 75, 239, 0.1);
+        }
+
+        .matching-item.dragging {
+            opacity: 0.7;
+            transform: scale(0.98);
+        }
+
+        .matching-item.matched {
+            background: rgba(0, 184, 148, 0.1);
+            border-color: var(--color-success);
+            cursor: default;
+        }
+
+        .matching-item.incorrect {
+            background: rgba(225, 112, 85, 0.1);
+            border-color: var(--color-error);
+            animation: shake 0.5s ease;
+        }
+
+        /* Match Area */
+        .match-area {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+            min-height: 200px;
+        }
+
+        .match-pair {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .match-slot {
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 2px dashed rgba(12, 10, 24, 0.1);
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .match-slot.hover {
+            border-color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.05);
+        }
+
+        .match-slot.filled {
+            border: 2px solid var(--color-primary-soft);
+            background: rgba(175, 75, 239, 0.08);
+        }
+
+        .match-slot.correct {
+            border-color: var(--color-success);
+            background: rgba(0, 184, 148, 0.1);
+        }
+
+        .match-slot.incorrect {
+            border-color: var(--color-error);
+            background: rgba(225, 112, 85, 0.1);
+        }
+
+        .match-label {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+            text-align: center;
+            margin-top: 5px;
+        }
+
+        /* Multiple Choice Activity */
+        .mcq-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .mcq-option {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .mcq-option:hover {
+            background: rgba(175, 75, 239, 0.05);
+            border-color: var(--color-primary-soft);
+            transform: translateY(-2px);
+        }
+
+        .mcq-option.selected {
+            background: rgba(175, 75, 239, 0.08);
+            border-color: var(--color-primary);
+        }
+
+        .mcq-option.correct {
+            background: rgba(0, 184, 148, 0.1);
+            border-color: var(--color-success);
+        }
+
+        .mcq-option.incorrect {
+            background: rgba(225, 112, 85, 0.1);
+            border-color: var(--color-error);
+            animation: shake 0.5s ease;
+        }
+
+        .option-letter {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(12, 10, 24, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--color-text);
+            flex-shrink: 0;
+        }
+
+        .mcq-option.selected .option-letter {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .mcq-option.correct .option-letter {
+            background: var(--color-success);
+            color: white;
+        }
+
+        .mcq-option.incorrect .option-letter {
+            background: var(--color-error);
+            color: white;
+        }
+
+        .option-text {
+            font-size: 0.9rem;
+            color: var(--color-text);
+            flex: 1;
+        }
+
+        /* Feedback */
+        .feedback-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            margin-top: 20px;
+            display: none;
+        }
+
+        .feedback-container.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .feedback-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feedback-icon {
+            font-size: 1.2rem;
+        }
+
+        .feedback-icon.correct { color: var(--color-success); }
+        .feedback-icon.incorrect { color: var(--color-error); }
+
+        .feedback-content {
+            font-size: 0.85rem;
+            color: var(--color-text);
+            line-height: 1.5;
+        }
+
+        .feedback-content strong { color: var(--color-primary); }
+
+        .correction-details {
+            background: rgba(225, 112, 85, 0.05);
+            border-left: 3px solid var(--color-error);
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #9a3bd6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(175, 75, 239, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-text);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(12, 10, 24, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-icon { font-size: 1.1em; }
+
+        /* Results Panel */
+        .results-panel {
+            background: var(--color-dark);
+            color: white;
+            border-radius: var(--radius-md);
+            padding: 30px;
+            margin-top: 30px;
+            display: none;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .results-panel.show { display: block; }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .results-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .score-display {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--color-primary-soft);
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .clinical-insights {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .insights-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-primary-soft);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .insights-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .insights-list li {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            font-size: 0.9rem;
+            color: #e5e7eb;
+        }
+
+        .insight-dot {
+            width: 6px;
+            height: 6px;
+            margin-top: 6px;
+            border-radius: 999px;
+            background: var(--color-accent);
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="module-heading">
+        <!-- Header -->
+        <header class="brand-row">
+            <div class="brand">
+                <img
+                    src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                    alt="AlliedRx logo"
+                    class="brand-logo"
+                />
+                <div class="course-meta">
+                    <span class="course-name">Phlebotomy Technician • Week 6</span>
+                    <div class="week-label">
+                        <span class="week-label-dot"></span>
+                        <span>Chapter 10: Multiskilling & Point-of-Care</span>
+                    </div>
+                </div>
+            </div>
+            <span class="badge-mode">Campus & Online</span>
+        </header>
+
+        <h1 id="module-heading">Key Concepts & Terminology</h1>
+        <p class="module-subtitle">
+            Master essential terminology and apply knowledge through comprehensive review of multiskilling, POCT, and quality control concepts.
+        </p>
+
+        <!-- Progress Tracker (2-STEP ONLY) -->
+        <div class="progress-tracker">
+            <div class="progress-step active" data-step="1">
+                <div class="step-circle">1</div>
+                <div class="step-label">Term Matching</div>
+            </div>
+            <div class="progress-step" data-step="2">
+                <div class="step-circle">2</div>
+                <div class="step-label">Comprehensive Review</div>
+            </div>
+        </div>
+
+        <!-- Progress Summary -->
+        <div class="progress-summary">
+            <div class="summary-card">
+                <span class="summary-number" id="completed-count">0</span>
+                <span class="summary-label">Activities Completed</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="accuracy-rate">0%</span>
+                <span class="summary-label">Current Accuracy</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="time-spent">0:00</span>
+                <span class="summary-label">Time Spent</span>
+            </div>
+        </div>
+
+        <!-- Activity Grid (SINGLE COLUMN - 2 ACTIVITIES) -->
+        <div class="activity-grid">
+            <!-- Activity 1: Key Term Matching -->
+            <section class="activity-card" id="activity-1" data-activity="1" aria-label="Activity 1: Key Term Matching">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 1</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">
+                    <span class="activity-icon">🔤</span>
+                    Key Terminology Matching
+                </h3>
+                <p class="activity-description">
+                    Match each key term from Chapter 10 with its correct definition. Understanding these terms is essential for certification and practice.
+                </p>
+
+                <!-- Match Area -->
+                <div class="match-area" id="match-area">
+                    <div class="match-pair" data-pair="1">
+                        <div class="match-slot" data-type="term" id="slot-term-1">
+                            Drag term here
+                        </div>
+                        <div class="match-slot" data-type="definition" id="slot-def-1">
+                            Drag definition here
+                        </div>
+                        <div class="match-label">Pair 1</div>
+                    </div>
+                    <div class="match-pair" data-pair="2">
+                        <div class="match-slot" data-type="term" id="slot-term-2">
+                            Drag term here
+                        </div>
+                        <div class="match-slot" data-type="definition" id="slot-def-2">
+                            Drag definition here
+                        </div>
+                        <div class="match-label">Pair 2</div>
+                    </div>
+                    <div class="match-pair" data-pair="3">
+                        <div class="match-slot" data-type="term" id="slot-term-3">
+                            Drag term here
+                        </div>
+                        <div class="match-slot" data-type="definition" id="slot-def-3">
+                            Drag definition here
+                        </div>
+                        <div class="match-label">Pair 3</div>
+                    </div>
+                    <div class="match-pair" data-pair="4">
+                        <div class="match-slot" data-type="term" id="slot-term-4">
+                            Drag term here
+                        </div>
+                        <div class="match-slot" data-type="definition" id="slot-def-4">
+                            Drag definition here
+                        </div>
+                        <div class="match-label">Pair 4</div>
+                    </div>
+                </div>
+
+                <!-- Items to Drag -->
+                <div class="matching-grid">
+                    <div class="matching-column" id="terms-column">
+                        <div class="matching-column-title">Key Terms</div>
+                        <div class="matching-item draggable" data-term="multiskilling" draggable="true">Multiskilling</div>
+                        <div class="matching-item draggable" data-term="poct" draggable="true">Point-of-Care Testing (POCT)</div>
+                        <div class="matching-item draggable" data-term="quality-control" draggable="true">Quality Control</div>
+                        <div class="matching-item draggable" data-term="waived-testing" draggable="true">Waived Testing</div>
+                    </div>
+                    <div class="matching-column" id="definitions-column">
+                        <div class="matching-column-title">Definitions</div>
+                        <div class="matching-item draggable" data-definition="multiskilling" draggable="true">Being proficient at more than one job; cross-training</div>
+                        <div class="matching-item draggable" data-definition="poct" draggable="true">Testing performed at or near the patient for immediate results</div>
+                        <div class="matching-item draggable" data-definition="quality-control" draggable="true">Procedures to ensure test accuracy before patient testing</div>
+                        <div class="matching-item draggable" data-definition="waived-testing" draggable="true">Simple tests with low risk of error, often performed as POCT</div>
+                    </div>
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback-container" id="feedback-1">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Terminology Mastery
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Correct Matches:</strong><br>
+                        • <strong>Multiskilling</strong> → Being proficient at more than one job; cross-training<br>
+                        • <strong>Point-of-Care Testing (POCT)</strong> → Testing performed at or near the patient for immediate results<br>
+                        • <strong>Quality Control</strong> → Procedures to ensure test accuracy before patient testing<br>
+                        • <strong>Waived Testing</strong> → Simple tests with low risk of error, often performed as POCT<br><br>
+                        
+                        <strong>Additional Key Terms:</strong><br>
+                        • <strong>Glucometer:</strong> Device for measuring blood glucose levels<br>
+                        • <strong>Electrocardiography (ECG):</strong> Recording of heart's electrical activity<br>
+                        • <strong>Calibration:</strong> Adjusting equipment to match known standards<br>
+                        • <strong>Clinical Assistant:</strong> Multiskilled technician working under supervision<br><br>
+                        
+                        <strong>Certification Importance:</strong> These terms frequently appear on phlebotomy certification exams. Understanding them demonstrates comprehensive knowledge.
+                        <div class="correction-details" id="correction-details-1" style="display: none;">
+                            <strong>Terminology Clarifications:</strong><br>
+                            <span id="correction-text-1"></span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity 2: Comprehensive Review -->
+            <section class="activity-card" id="activity-2" data-activity="2" aria-label="Activity 2: Comprehensive Review">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 2</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">
+                    <span class="activity-icon">🧠</span>
+                    Chapter 10 Comprehensive Review
+                </h3>
+                <p class="activity-description">
+                    Test your understanding of Chapter 10 concepts with these review questions covering all learning objectives.
+                </p>
+
+                <!-- Multiple Choice Questions -->
+                <div class="mcq-options" id="mcq-container-2">
+                    <!-- Questions will be populated by JavaScript -->
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback-container" id="feedback-2">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Chapter Review Complete
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Chapter 10 Key Concepts Review:</strong><br><br>
+                        
+                        <strong>1. Multiskilling Benefits:</strong><br>
+                        • Increased job security in changing healthcare environments<br>
+                        • Better marketability for diverse roles (PCT, Clinical Assistant, etc.)<br>
+                        • Potential for higher pay with additional responsibilities<br>
+                        • Adaptation to hospital patient care team models<br><br>
+                        
+                        <strong>2. Common POCT Tests:</strong><br>
+                        • Blood glucose monitoring<br>
+                        • Rapid strep tests<br>
+                        • Urinalysis dipsticks<br>
+                        • Hemoglobin by cuvette<br>
+                        • Pregnancy tests<br>
+                        • INR/coagulation monitoring<br><br>
+                        
+                        <strong>3. Quality Control Non-Negotiables:</strong><br>
+                        • Perform QC BEFORE patient testing<br>
+                        • Document all QC results<br>
+                        • Remove faulty equipment from service<br>
+                        • Understand consequences of skipping QC<br><br>
+                        
+                        <strong>4. Career Applications:</strong><br>
+                        • Multiskilling opens doors to supervisory roles<br>
+                        • POCT skills are in high demand<br>
+                        • Quality assurance knowledge is valuable in all settings<br>
+                        • Continuing education maintains certification and skills
+                        <div class="correction-details" id="correction-details-2" style="display: none;">
+                            <strong>Review These Concepts:</strong><br>
+                            <span id="correction-text-2"></span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn btn-secondary" id="reset-all-btn" aria-label="Reset all activities">
+                <span class="btn-icon">↻</span>
+                Reset All Activities
+            </button>
+            <button class="btn btn-secondary" id="check-answers-btn" aria-label="Check all answers">
+                <span class="btn-icon">✓</span>
+                Check All Answers
+            </button>
+            <button class="btn btn-primary" id="view-results-btn" aria-label="View final results">
+                <span class="btn-icon">📊</span>
+                View Final Results
+            </button>
+        </div>
+
+        <!-- Results Panel -->
+        <div class="results-panel" id="results-panel">
+            <div class="results-header">
+                <h2 class="results-title">Chapter 10 Mastery Assessment</h2>
+                <div class="score-display" id="final-score">0%</div>
+            </div>
+            
+            <div class="clinical-insights">
+                <h3 class="insights-title">
+                    <span>🎯</span> Chapter 10 Learning Objectives Achieved
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Objective 1:</strong> Explain multiskilling and how it applies to phlebotomists - You can now describe cross-training benefits and career applications.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Objective 2:</strong> Explain the various tests the phlebotomist may perform - You can identify POCT vs central lab tests and understand waived testing.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Objective 3:</strong> Describe why it is important to perform Quality Control prior to testing patients - You understand the critical safety reasons for QC.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Objective 4:</strong> Explain point-of-care testing and name several examples - You can define POCT and list common applications.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="clinical-insights" style="margin-top: 20px;">
+                <h3 class="insights-title">
+                    <span>💼</span> Real-World Applications
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Job Interviews:</strong> Use your multiskilling knowledge to discuss career flexibility. Mention specific POCT tests you can perform.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Daily Practice:</strong> Apply QC principles every shift. Document properly. Educate patients about POCT vs lab testing differences.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Career Advancement:</strong> Consider pursuing Patient Care Technician certification or POCT coordinator roles using this foundation.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="clinical-insights" style="margin-top: 20px; background: rgba(0, 184, 148, 0.1); border: 1px solid rgba(0, 184, 148, 0.3);">
+                <h3 class="insights-title">
+                    <span>📚</span> Next Steps in Your Learning Journey
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot" style="background: var(--color-success);"></span>
+                        <span><strong>Practice Application:</strong> Review facility-specific POCT procedures and QC documentation requirements at your clinical site.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot" style="background: var(--color-success);"></span>
+                        <span><strong>Certification Prep:</strong> These concepts appear on NHA, ASCP, and AMT exams. Create flashcards for key terms.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot" style="background: var(--color-success);"></span>
+                        <span><strong>Skill Development:</strong> Seek opportunities to observe or assist with POCT procedures during clinical rotations.</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // State Management for 2 ACTIVITIES
+            const state = {
+                activities: {
+                    1: { 
+                        completed: false, 
+                        correct: 0, 
+                        total: 8,  // 8 items (4 terms + 4 definitions)
+                        score: 0,
+                        matches: {}
+                    },
+                    2: { 
+                        completed: false, 
+                        correct: 0, 
+                        total: 5,  // 5 review questions
+                        score: 0,
+                        userAnswers: []
+                    }
+                },
+                startedAt: new Date(),
+                timeSpent: 0
+            };
+
+            // Activity 2: Review Questions
+            const reviewQuestions = [
+                {
+                    question: "Which of the following BEST describes the primary benefit of multiskilling for phlebotomists in today's healthcare environment?",
+                    options: [
+                        { text: "It allows them to work fewer hours", correct: false },
+                        { text: "It increases job security and marketability", correct: true, explanation: "Multiskilling makes phlebotomists adaptable to changing healthcare models, securing their positions and making them attractive to more employers." },
+                        { text: "It eliminates the need for certification", correct: false },
+                        { text: "It reduces the need for continuing education", correct: false }
+                    ]
+                },
+                {
+                    question: "A phlebotomist is about to perform glucose testing on three patients. What is the FIRST step they should take?",
+                    options: [
+                        { text: "Verify patient identities", correct: false },
+                        { text: "Perform quality control on the glucometer", correct: true, explanation: "QC MUST come before any patient testing to ensure device accuracy and patient safety." },
+                        { text: "Select the appropriate test strips", correct: false },
+                        { text: "Explain the procedure to the patients", correct: false }
+                    ]
+                },
+                {
+                    question: "Which of these tests would typically be performed as point-of-care testing rather than in the central lab?",
+                    options: [
+                        { text: "Complete Blood Count (CBC)", correct: false },
+                        { text: "Blood culture for sepsis", correct: false },
+                        { text: "Rapid Strep A throat swab", correct: true, explanation: "Rapid strep tests are designed for immediate results at point-of-care, while CBC and blood cultures require central lab equipment." },
+                        { text: "Comprehensive Metabolic Panel", correct: false }
+                    ]
+                },
+                {
+                    question: "What is the PRIMARY risk if a phlebotomist skips quality control on a POCT device?",
+                    options: [
+                        { text: "The device batteries might drain faster", correct: false },
+                        { text: "All patient results could be inaccurate", correct: true, explanation: "Without QC verification, there's no assurance the device is working correctly, potentially leading to inaccurate results and improper treatment." },
+                        { text: "The test strips will expire sooner", correct: false },
+                        { text: "The supervisor might get angry", correct: false }
+                    ]
+                },
+                {
+                    question: "Which job title would MOST LIKELY describe a multiskilled phlebotomist working on a hospital patient care team?",
+                    options: [
+                        { text: "Venipuncture Specialist", correct: false },
+                        { text: "Blood Collection Technician", correct: false },
+                        { text: "Patient Care Technician", correct: true, explanation: "Patient Care Technician is a common title for multiskilled roles that include phlebotomy along with other patient care duties." },
+                        { text: "Laboratory Analyst", correct: false }
+                    ]
+                }
+            ];
+
+            // DOM Elements
+            const progressSteps = document.querySelectorAll('.progress-step');
+            const activityCards = document.querySelectorAll('.activity-card');
+            const completedCount = document.getElementById('completed-count');
+            const accuracyRate = document.getElementById('accuracy-rate');
+            const timeSpentEl = document.getElementById('time-spent');
+            const resetBtn = document.getElementById('reset-all-btn');
+            const checkBtn = document.getElementById('check-answers-btn');
+            const resultsBtn = document.getElementById('view-results-btn');
+            const resultsPanel = document.getElementById('results-panel');
+            const finalScore = document.getElementById('final-score');
+            const mcqContainer = document.getElementById('mcq-container-2');
+
+            // Correct matches for Activity 1
+            const correctMatches = {
+                'multiskilling': 'multiskilling',
+                'poct': 'poct',
+                'quality-control': 'quality-control',
+                'waived-testing': 'waived-testing'
+            };
+
+            // Timer
+            function updateTimer() {
+                const now = new Date();
+                const diff = Math.floor((now - state.startedAt) / 1000);
+                state.timeSpent = diff;
+                const minutes = Math.floor(diff / 60);
+                const seconds = diff % 60;
+                timeSpentEl.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            }
+            setInterval(updateTimer, 1000);
+
+            // Update Progress Summary
+            function updateProgressSummary() {
+                let completed = 0;
+                let totalCorrect = 0;
+                let totalItems = 0;
+
+                Object.values(state.activities).forEach(activity => {
+                    if (activity.completed) completed++;
+                    totalCorrect += activity.correct;
+                    totalItems += activity.total;
+                });
+
+                completedCount.textContent = completed;
+                const accuracy = totalItems > 0 ? Math.round((totalCorrect / totalItems) * 100) : 0;
+                accuracyRate.textContent = `${accuracy}%`;
+
+                // Update progress steps
+                progressSteps.forEach((step, index) => {
+                    const stepNum = index + 1;
+                    if (stepNum <= completed) {
+                        step.classList.add('completed');
+                        step.classList.remove('active');
+                    } else if (stepNum === completed + 1) {
+                        step.classList.add('active');
+                        step.classList.remove('completed');
+                    } else {
+                        step.classList.remove('active', 'completed');
+                    }
+                });
+            }
+
+            // Initialize Activity 1: Term Matching
+            function initActivity1() {
+                const draggableItems = document.querySelectorAll('#activity-1 .matching-item');
+                const matchSlots = document.querySelectorAll('#activity-1 .match-slot');
+                let placedItems = 0;
+
+                // Make ALL items draggable
+                draggableItems.forEach(item => {
+                    item.addEventListener('dragstart', function(e) {
+                        const type = this.dataset.term ? 'term' : 'definition';
+                        const id = this.dataset.term || this.dataset.definition;
+                        e.dataTransfer.setData('text/plain', JSON.stringify({
+                            type: type,
+                            id: id,
+                            text: this.textContent
+                        }));
+                        this.classList.add('dragging');
+                    });
+                    
+                    item.addEventListener('dragend', function() {
+                        this.classList.remove('dragging');
+                    });
+                });
+
+                // Setup match slots
+                matchSlots.forEach(slot => {
+                    slot.addEventListener('dragover', function(e) {
+                        e.preventDefault();
+                        if (!this.classList.contains('filled')) {
+                            this.classList.add('hover');
+                        }
+                    });
+                    
+                    slot.addEventListener('dragleave', function() {
+                        this.classList.remove('hover');
+                    });
+                    
+                    slot.addEventListener('drop', function(e) {
+                        e.preventDefault();
+                        this.classList.remove('hover');
+                        if (this.classList.contains('filled')) return;
+
+                        const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+                        const slotType = this.dataset.type;
+
+                        // Check if this type of item can go in this slot
+                        if (data.type !== slotType) {
+                            this.classList.add('incorrect');
+                            setTimeout(() => {
+                                this.classList.remove('incorrect');
+                            }, 500);
+                            return;
+                        }
+
+                        // Check if this item is already placed elsewhere
+                        const alreadyPlaced = Array.from(matchSlots).some(slot =>
+                            slot.textContent.includes(data.text)
+                        );
+                        if (alreadyPlaced) return;
+
+                        // Place the item
+                        this.classList.add('filled');
+                        this.innerHTML = `<strong>${data.text}</strong>`;
+                        this.dataset.itemId = data.id;
+
+                        // Hide the original draggable item
+                        const originalItem = data.type === 'term'
+                            ? document.querySelector(`[data-term="${data.id}"]`)
+                            : document.querySelector(`[data-definition="${data.id}"]`);
+                        if (originalItem) {
+                            originalItem.style.display = 'none';
+                            placedItems++;
+                        }
+
+                        // Record the placement
+                        const pairNumber = this.closest('.match-pair').dataset.pair;
+                        if (!state.activities[1].matches[pairNumber]) {
+                            state.activities[1].matches[pairNumber] = {};
+                        }
+                        state.activities[1].matches[pairNumber][slotType] = data.id;
+
+                        // Check if pair is complete and validate
+                        if (state.activities[1].matches[pairNumber].term && 
+                            state.activities[1].matches[pairNumber].definition) {
+                            const isCorrect = state.activities[1].matches[pairNumber].term === 
+                                            state.activities[1].matches[pairNumber].definition;
+                            
+                            const termSlot = document.querySelector(`#slot-term-${pairNumber}`);
+                            const defSlot = document.querySelector(`#slot-def-${pairNumber}`);
+                            
+                            if (isCorrect) {
+                                termSlot.classList.add('correct');
+                                defSlot.classList.add('correct');
+                            } else {
+                                termSlot.classList.add('incorrect');
+                                defSlot.classList.add('incorrect');
+                                setTimeout(() => {
+                                    termSlot.classList.remove('incorrect');
+                                    defSlot.classList.remove('incorrect');
+                                }, 1000);
+                            }
+                        }
+
+                        // Check if all items are placed
+                        if (placedItems === 8) {
+                            checkActivity1();
+                        }
+                    });
+                });
+            }
+
+            function checkActivity1() {
+                let correctCount = 0;
+                let correctionMessages = [];
+
+                // Check each pair
+                Object.keys(state.activities[1].matches).forEach(pairNumber => {
+                    const pair = state.activities[1].matches[pairNumber];
+                    if (pair.term && pair.definition) {
+                        const isCorrect = pair.term === pair.definition;
+                        if (isCorrect) {
+                            correctCount += 2; // Both items in the pair are correct
+                        } else {
+                            const termText = document.querySelector(`[data-term="${pair.term}"]`).textContent;
+                            const definitionText = document.querySelector(`[data-definition="${pair.definition}"]`).textContent;
+                            const correctDefinition = document.querySelector(`[data-definition="${pair.term}"]`).textContent;
+                            correctionMessages.push(`• "${termText}" should match with "${correctDefinition}" not "${definitionText}"`);
+                        }
+                    }
+                });
+
+                state.activities[1].completed = true;
+                state.activities[1].correct = correctCount;
+                state.activities[1].score = Math.round((correctCount / 8) * 100);
+                
+                const status = document.querySelector('#activity-1 .activity-status');
+                status.textContent = 'Completed';
+                status.style.color = '#00b894';
+                document.querySelector('#activity-1').classList.add('completed');
+                
+                const feedback = document.getElementById('feedback-1');
+                feedback.classList.add('show');
+                
+                if (correctionMessages.length > 0) {
+                    const correctionDetails = document.getElementById('correction-details-1');
+                    const correctionText = document.getElementById('correction-text-1');
+                    correctionDetails.style.display = 'block';
+                    correctionText.innerHTML = correctionMessages.join('<br>');
+                    
+                    // Update feedback icon
+                    const feedbackIcon = feedback.querySelector('.feedback-icon');
+                    feedbackIcon.textContent = correctCount === 8 ? '✓' : '⚠';
+                    feedbackIcon.classList.toggle('correct', correctCount === 8);
+                    feedbackIcon.classList.toggle('incorrect', correctCount < 8);
+                }
+                
+                updateProgressSummary();
+            }
+
+            // Initialize Activity 2: Review Questions
+            function initActivity2() {
+                // Randomize question order
+                const shuffledQuestions = [...reviewQuestions].sort(() => Math.random() - 0.5);
+                
+                shuffledQuestions.forEach((q, qIndex) => {
+                    // Randomize options
+                    const shuffledOptions = [...q.options].sort(() => Math.random() - 0.5);
+                    
+                    const questionDiv = document.createElement('div');
+                    questionDiv.className = 'mcq-question';
+                    questionDiv.style.marginBottom = '25px';
+                    questionDiv.innerHTML = `
+                        <div style="margin-bottom: 12px; font-weight: 600; color: var(--color-text);">${qIndex + 1}. ${q.question}</div>
+                    `;
+                    
+                    const optionsDiv = document.createElement('div');
+                    optionsDiv.className = 'mcq-options';
+                    
+                    shuffledOptions.forEach((option, oIndex) => {
+                        const optionDiv = document.createElement('div');
+                        optionDiv.className = 'mcq-option';
+                        optionDiv.dataset.questionIndex = qIndex;
+                        optionDiv.dataset.optionIndex = oIndex;
+                        optionDiv.dataset.correct = option.correct;
+                        if (option.explanation) {
+                            optionDiv.dataset.explanation = option.explanation;
+                        }
+                        optionDiv.innerHTML = `
+                            <div class="option-letter">${String.fromCharCode(65 + oIndex)}</div>
+                            <div class="option-text">${option.text}</div>
+                        `;
+                        
+                        optionDiv.addEventListener('click', function() {
+                            if (state.activities[2].completed) return;
+                            
+                            // Remove selected class from other options in this question
+                            const allOptions = this.parentElement.querySelectorAll('.mcq-option');
+                            allOptions.forEach(opt => {
+                                opt.classList.remove('selected');
+                                opt.classList.remove('correct', 'incorrect');
+                            });
+                            
+                            // Add selected class and show correctness
+                            this.classList.add('selected');
+                            if (option.correct) {
+                                this.classList.add('correct');
+                            } else {
+                                this.classList.add('incorrect');
+                                // Show which one was correct
+                                allOptions.forEach(opt => {
+                                    if (opt.dataset.correct === 'true') {
+                                        opt.classList.add('correct');
+                                    }
+                                });
+                            }
+                            
+                            // Store user answer
+                            state.activities[2].userAnswers[qIndex] = option.correct;
+                            
+                            // Check if all questions answered
+                            const answeredQuestions = Object.keys(state.activities[2].userAnswers).length;
+                            if (answeredQuestions === reviewQuestions.length) {
+                                setTimeout(() => checkActivity2(), 500);
+                            }
+                        });
+                        
+                        optionsDiv.appendChild(optionDiv);
+                    });
+                    
+                    questionDiv.appendChild(optionsDiv);
+                    mcqContainer.appendChild(questionDiv);
+                });
+            }
+
+            function checkActivity2() {
+                let correctCount = 0;
+                let correctionMessages = [];
+                
+                state.activities[2].userAnswers.forEach((isCorrect, index) => {
+                    if (isCorrect === 'true') {
+                        correctCount++;
+                    } else {
+                        // Find the question
+                        const questionElement = mcqContainer.children[index];
+                        const questionText = questionElement.querySelector('.mcq-question div').textContent;
+                        
+                        // Find correct option explanation
+                        const correctOption = questionElement.querySelector('.mcq-option[data-correct="true"]');
+                        const explanation = correctOption.dataset.explanation || '';
+                        
+                        correctionMessages.push(`• Question ${index + 1}: ${explanation}`);
+                    }
+                });
+
+                state.activities[2].completed = true;
+                state.activities[2].correct = correctCount;
+                state.activities[2].score = Math.round((correctCount / reviewQuestions.length) * 100);
+                
+                const status = document.querySelector('#activity-2 .activity-status');
+                status.textContent = 'Completed';
+                status.style.color = '#00b894';
+                document.querySelector('#activity-2').classList.add('completed');
+                
+                const feedback = document.getElementById('feedback-2');
+                feedback.classList.add('show');
+                
+                if (correctionMessages.length > 0) {
+                    const correctionDetails = document.getElementById('correction-details-2');
+                    const correctionText = document.getElementById('correction-text-2');
+                    correctionDetails.style.display = 'block';
+                    correctionText.innerHTML = correctionMessages.join('<br><br>');
+                    
+                    // Update feedback icon
+                    const feedbackIcon = feedback.querySelector('.feedback-icon');
+                    feedbackIcon.textContent = correctCount === reviewQuestions.length ? '✓' : '⚠';
+                    feedbackIcon.classList.toggle('correct', correctCount === reviewQuestions.length);
+                    feedbackIcon.classList.toggle('incorrect', correctCount < reviewQuestions.length);
+                }
+                
+                updateProgressSummary();
+            }
+
+            // Reset All Activities
+            function resetAllActivities() {
+                // Reset state
+                state.activities[1] = {
+                    completed: false,
+                    correct: 0,
+                    total: 8,
+                    score: 0,
+                    matches: {}
+                };
+                
+                state.activities[2] = {
+                    completed: false,
+                    correct: 0,
+                    total: 5,
+                    score: 0,
+                    userAnswers: []
+                };
+
+                // Reset UI
+                activityCards.forEach(card => {
+                    card.classList.remove('completed');
+                    const status = card.querySelector('.activity-status');
+                    status.textContent = 'Not Started';
+                    status.style.color = '';
+                    const feedback = card.querySelector('.feedback-container');
+                    feedback.classList.remove('show');
+                    const correctionDetails = card.querySelector('.correction-details');
+                    if (correctionDetails) correctionDetails.style.display = 'none';
+                });
+
+                // Reset Activity 1
+                document.querySelectorAll('#activity-1 .matching-item').forEach(item => {
+                    item.style.display = '';
+                    item.classList.remove('dragging');
+                });
+                
+                document.querySelectorAll('#activity-1 .match-slot').forEach(slot => {
+                    slot.classList.remove('filled', 'correct', 'incorrect', 'hover');
+                    slot.innerHTML = slot.dataset.type === 'term' ? 'Drag term here' : 'Drag definition here';
+                    delete slot.dataset.itemId;
+                });
+
+                // Reset Activity 2
+                mcqContainer.innerHTML = '';
+                initActivity2();
+
+                // Reset results
+                resultsPanel.classList.remove('show');
+
+                // Reset timer
+                state.startedAt = new Date();
+                updateTimer();
+
+                updateProgressSummary();
+            }
+
+            // Check All Answers
+            function checkAllAnswers() {
+                if (!state.activities[1].completed) {
+                    // Check if matching is complete
+                    const placedPairs = Object.keys(state.activities[1].matches).length;
+                    if (placedPairs < 4) {
+                        // Fill missing with incorrect matches
+                        for (let i = 1; i <= 4; i++) {
+                            if (!state.activities[1].matches[i]) {
+                                state.activities[1].matches[i] = {
+                                    term: 'multiskilling',
+                                    definition: 'poct' // Incorrect match
+                                };
+                            }
+                        }
+                    }
+                    checkActivity1();
+                }
+
+                if (!state.activities[2].completed) {
+                    // Fill any unanswered questions
+                    const totalQuestions = reviewQuestions.length;
+                    const answered = Object.keys(state.activities[2].userAnswers).length;
+                    for (let i = answered; i < totalQuestions; i++) {
+                        // Mark as incorrect
+                        state.activities[2].userAnswers[i] = 'false';
+                    }
+                    checkActivity2();
+                }
+            }
+
+            // View Final Results
+            function viewFinalResults() {
+                let totalScore = 0;
+                let activityCount = 0;
+                
+                Object.values(state.activities).forEach(activity => {
+                    if (activity.completed) {
+                        totalScore += activity.score;
+                        activityCount++;
+                    }
+                });
+                
+                const averageScore = activityCount > 0 ? Math.round(totalScore / activityCount) : 0;
+                finalScore.textContent = `${averageScore}%`;
+                resultsPanel.classList.add('show');
+                resultsPanel.scrollIntoView({ behavior: 'smooth' });
+            }
+
+            // Initialize all activities
+            initActivity1();
+            initActivity2();
+
+            // Event listeners
+            resetBtn.addEventListener('click', resetAllActivities);
+            checkBtn.addEventListener('click', checkAllAnswers);
+            resultsBtn.addEventListener('click', viewFinalResults);
+
+            // Initial progress update
+            updateProgressSummary();
+        });
+    </script>
+</body>
+</html>
