@@ -1,0 +1,1527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AlliedRx – Chapter 8: Geriatric Conditions & Phlebotomy</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-error: #e17055;
+            --color-warning: #fdcb6e;
+            --color-info: #0984e3;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
+            --color-dark: #0c0a18;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+            --shadow-card: 0 12px 30px rgba(15, 23, 42, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(
+                circle at top left,
+                #ffffff 0,
+                #f1ecff 40%,
+                var(--color-bg) 100%
+            );
+            color: var(--color-text);
+            line-height: 1.5;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 12px; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        /* Header */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .brand-logo:hover { transform: scale(1.05); }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--color-success);
+            flex-shrink: 0;
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .badge-mode:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 3vw, 2.2rem);
+            line-height: 1.1;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .module-subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 600px;
+            margin-bottom: 24px;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        /* Progress Tracker */
+        .progress-tracker {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            position: relative;
+            padding: 0 20px;
+        }
+
+        .progress-tracker::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 50px;
+            right: 50px;
+            height: 3px;
+            background: rgba(12, 10, 24, 0.08);
+            z-index: 1;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+
+        .step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--color-muted);
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.active .step-circle {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .progress-step.completed .step-circle {
+            background: var(--color-success);
+            border-color: var(--color-success);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.75rem;
+            color: var(--color-muted);
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .progress-step.active .step-label {
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        /* Progress Summary */
+        .progress-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+            animation: fadeInUp 0.6s ease-out 0.5s both;
+        }
+
+        .summary-card {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            border: 1px solid rgba(12, 10, 24, 0.06);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .summary-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--color-primary);
+            display: block;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .summary-label {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Activity Grid */
+        .activity-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .activity-card {
+            background: white;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            padding: 24px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .activity-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--color-primary-soft);
+        }
+
+        .activity-card.completed {
+            border-color: var(--color-success);
+        }
+
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .activity-number {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .activity-status {
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-muted);
+        }
+
+        .activity-card.completed .activity-status {
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--color-success);
+        }
+
+        .activity-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .activity-description {
+            font-size: 0.9rem;
+            color: var(--color-muted);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        /* Scenario Cards */
+        .scenario-card {
+            background: rgba(175, 75, 239, 0.05);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--color-primary);
+        }
+
+        .scenario-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .scenario-content {
+            font-size: 0.85rem;
+            line-height: 1.6;
+            color: var(--color-text);
+        }
+
+        .scenario-patient {
+            display: inline-block;
+            padding: 4px 8px;
+            background: rgba(0, 184, 148, 0.1);
+            border-radius: 6px;
+            font-size: 0.8rem;
+            color: var(--color-success);
+            margin-top: 10px;
+        }
+
+        /* Branching Case Study */
+        .case-study-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+        }
+
+        .case-step {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .case-step.active {
+            display: block;
+        }
+
+        .case-question {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .case-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .case-option {
+            background: rgba(12, 10, 24, 0.03);
+            border-radius: var(--radius-sm);
+            padding: 14px 18px;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .case-option:hover {
+            background: rgba(175, 75, 239, 0.08);
+            border-color: var(--color-primary-soft);
+            transform: translateY(-2px);
+        }
+
+        .case-option.selected {
+            border-color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.1);
+        }
+
+        .option-indicator {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: rgba(12, 10, 24, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .case-option.selected .option-indicator {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .case-feedback {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin-top: 15px;
+            border-left: 3px solid var(--color-info);
+            display: none;
+        }
+
+        .case-feedback.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .case-consequence {
+            font-size: 0.85rem;
+            color: var(--color-text);
+            margin-bottom: 10px;
+            font-style: italic;
+        }
+
+        .case-explanation {
+            font-size: 0.85rem;
+            color: var(--color-text);
+            line-height: 1.5;
+        }
+
+        .case-explanation strong {
+            color: var(--color-primary);
+        }
+
+        /* Complication Identification */
+        .complication-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 768px) {
+            .complication-container { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 480px) {
+            .complication-container { grid-template-columns: 1fr; }
+        }
+
+        .complication-category {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 2px dashed rgba(12, 10, 24, 0.1);
+            min-height: 200px;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .complication-category.hover {
+            border-color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.05);
+        }
+
+        .category-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            text-align: center;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid rgba(12, 10, 24, 0.08);
+        }
+
+        .category-description {
+            font-size: 0.75rem;
+            color: var(--color-muted);
+            text-align: center;
+            margin-bottom: 15px;
+            flex-grow: 0;
+        }
+
+        .category-items {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            min-height: 120px;
+        }
+
+        .complication-item {
+            background: rgba(175, 75, 239, 0.08);
+            border-radius: var(--radius-sm);
+            padding: 8px 12px;
+            cursor: grab;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            user-select: none;
+            font-size: 0.8rem;
+            color: var(--color-text);
+            margin-bottom: 5px;
+        }
+
+        .complication-item:hover {
+            background: rgba(175, 75, 239, 0.15);
+            border-color: var(--color-primary-soft);
+            transform: translateY(-2px);
+        }
+
+        .complication-item.dragging {
+            opacity: 0.7;
+            transform: scale(0.98);
+        }
+
+        /* Matching Items Container for Pool */
+        .matching-items-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+            justify-content: center;
+        }
+
+        /* Error Identification */
+        .error-identification {
+            margin: 20px 0;
+        }
+
+        .error-text {
+            background: white;
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            border: 1px solid rgba(12, 10, 24, 0.1);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--color-text);
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .error-highlight {
+            background: rgba(225, 112, 85, 0.1);
+            border-bottom: 2px dashed var(--color-error);
+            cursor: pointer;
+            padding: 2px 4px;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .error-highlight:hover {
+            background: rgba(225, 112, 85, 0.2);
+        }
+
+        .error-highlight.correct {
+            background: rgba(0, 184, 148, 0.1);
+            border-bottom: 2px solid var(--color-success);
+        }
+
+        .error-tooltip {
+            position: absolute;
+            background: var(--color-dark);
+            color: white;
+            padding: 10px 15px;
+            border-radius: var(--radius-sm);
+            font-size: 0.8rem;
+            z-index: 100;
+            max-width: 300px;
+            display: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .error-tooltip.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #9a3bd6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(175, 75, 239, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-text);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(12, 10, 24, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-icon { font-size: 1.1em; }
+
+        /* Results Panel */
+        .results-panel {
+            background: var(--color-dark);
+            color: white;
+            border-radius: var(--radius-md);
+            padding: 30px;
+            margin-top: 30px;
+            display: none;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .results-panel.show { display: block; }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .results-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .score-display {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--color-primary-soft);
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .clinical-insights {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .insights-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-primary-soft);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .insights-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .insights-list li {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            font-size: 0.9rem;
+            color: #e5e7eb;
+        }
+
+        .insight-dot {
+            width: 6px;
+            height: 6px;
+            margin-top: 6px;
+            border-radius: 999px;
+            background: var(--color-accent);
+            flex-shrink: 0;
+        }
+
+        .check-button {
+            margin: 20px auto;
+            padding: 12px 30px;
+            background: var(--color-primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: block;
+        }
+
+        .check-button:hover {
+            background: #9a3bd6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(175, 75, 239, 0.2);
+        }
+
+        .check-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Feedback */
+        .feedback-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            margin-top: 20px;
+            display: none;
+        }
+
+        .feedback-container.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .feedback-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feedback-icon {
+            font-size: 1.2rem;
+        }
+
+        .feedback-icon.correct { color: var(--color-success); }
+        .feedback-icon.incorrect { color: var(--color-error); }
+
+        .feedback-content {
+            font-size: 0.85rem;
+            color: var(--color-text);
+            line-height: 1.5;
+        }
+
+        .correction-details {
+            background: rgba(225, 112, 85, 0.05);
+            border-left: 3px solid var(--color-error);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="module-heading">
+        <!-- Header -->
+        <header class="brand-row">
+            <div class="brand">
+                <img
+                    src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                    alt="AlliedRx logo"
+                    class="brand-logo"
+                />
+                <div class="course-meta">
+                    <span class="course-name">Pharmacy Technician • Week 8</span>
+                    <div class="week-label">
+                        <span class="week-label-dot"></span>
+                        <span>Chapter 8: Neonatal & Geriatric Procedures</span>
+                    </div>
+                </div>
+            </div>
+            <span class="badge-mode">Campus & Online</span>
+        </header>
+
+        <h1 id="module-heading">Geriatric Conditions: Phlebotomy Applications</h1>
+        <p class="module-subtitle">
+            Apply knowledge of geriatric conditions to realistic clinical scenarios, 
+            identifying complications and adapting phlebotomy techniques for patient safety.
+        </p>
+
+        <!-- Progress Tracker -->
+        <div class="progress-tracker">
+            <div class="progress-step active" data-step="1">
+                <div class="step-circle">1</div>
+                <div class="step-label">Complex Case Study</div>
+            </div>
+            <div class="progress-step" data-step="2">
+                <div class="step-circle">2</div>
+                <div class="step-label">Complication Analysis</div>
+            </div>
+        </div>
+
+        <!-- Progress Summary -->
+        <div class="progress-summary">
+            <div class="summary-card">
+                <span class="summary-number" id="completed-count">0</span>
+                <span class="summary-label">Activities Completed</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="accuracy-rate">0%</span>
+                <span class="summary-label">Current Accuracy</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="time-spent">0:00</span>
+                <span class="summary-label">Time Spent</span>
+            </div>
+        </div>
+
+        <!-- Activity Grid -->
+        <div class="activity-grid">
+            <!-- Activity 1: Complex Case Study -->
+            <section class="activity-card" id="activity-1" data-activity="1" aria-label="Activity 1: Complex Geriatric Case Study">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 1</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">
+                    <span class="activity-icon">🏥</span>
+                    Complex Geriatric Case Study
+                </h3>
+                <p class="activity-description">
+                    Navigate a realistic clinical scenario with Mr. Johnson, an 82-year-old patient 
+                    with multiple comorbidities. Make sequential decisions that affect patient outcomes.
+                </p>
+
+                <!-- Case Study Header -->
+                <div class="scenario-card">
+                    <div class="scenario-title">
+                        <span>📋</span> Patient Profile: Mr. Harold Johnson
+                    </div>
+                    <div class="scenario-content">
+                        <strong>Age:</strong> 82 years<br>
+                        <strong>Diagnoses:</strong> Moderate dementia, macular degeneration (severe vision loss), 
+                        osteoarthritis (both hands), osteoporosis, atrial fibrillation on warfarin<br>
+                        <strong>Admission:</strong> Suspected osteomyelitis (bone infection) in right foot<br>
+                        <strong>Setting:</strong> Hospital inpatient, room 402<br>
+                        <strong>Time:</strong> 2:00 PM - Afternoon medication administration time
+                    </div>
+                    <div class="scenario-patient">Complex geriatric patient with multiple interacting conditions</div>
+                </div>
+
+                <!-- Branching Case Study -->
+                <div class="case-study-container" id="case-study">
+                    <!-- Step 1: Initial Approach -->
+                    <div class="case-step active" id="step-1" data-step="1">
+                        <div class="case-question">
+                            <span>1️⃣</span> You enter Mr. Johnson's room. He's sitting in a chair but appears anxious, 
+                            repeatedly asking "Where's my daughter?" What is your FIRST verbal action?
+                        </div>
+                        <div class="case-options">
+                            <!-- Wrong paths redirect to Agitated Step -->
+                            <div class="case-option" data-option="A" data-next="step-2a">
+                                <div class="option-indicator">A</div>
+                                <div>Explain the entire blood draw procedure in detail to reassure him</div>
+                            </div>
+                            <!-- Correct path -->
+                            <div class="case-option" data-option="B" data-next="step-2b">
+                                <div class="option-indicator">B</div>
+                                <div>Greet him and identify yourself clearly in a calm voice</div>
+                            </div>
+                            <!-- Wrong paths -->
+                            <div class="case-option" data-option="C" data-next="step-2a">
+                                <div class="option-indicator">C</div>
+                                <div>Ask him to hold his arm perfectly still for the procedure</div>
+                            </div>
+                            <div class="case-option" data-option="D" data-next="step-2a">
+                                <div class="option-indicator">D</div>
+                                <div>Tell him it will only hurt for a second to minimize his anxiety</div>
+                            </div>
+                        </div>
+                        <div class="case-feedback" id="feedback-step-1">
+                            <div class="case-consequence" id="consequence-step-1"></div>
+                            <div class="case-explanation" id="explanation-step-1"></div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2A: Agitated Patient (From incorrect Step 1) -->
+                    <div class="case-step" id="step-2a" data-step="2">
+                        <div class="case-question">
+                            <span>2️⃣</span> Mr. Johnson becomes more agitated, saying "Too many words! I don't understand!" 
+                            The nurse confirms moderate dementia. What do you do NEXT?
+                        </div>
+                        <div class="case-options">
+                            <div class="case-option" data-option="A" data-next="step-failure">
+                                <div class="option-indicator">A</div>
+                                <div>Repeat the explanation more slowly and loudly</div>
+                            </div>
+                            <div class="case-option" data-option="B" data-next="step-failure">
+                                <div class="option-indicator">B</div>
+                                <div>Ask the nurse to restrain him so you can proceed quickly</div>
+                            </div>
+                            <!-- Correct Recovery -->
+                            <div class="case-option" data-option="C" data-next="step-3g">
+                                <div class="option-indicator">C</div>
+                                <div>Use simple, concrete language: "I need to check your blood"</div>
+                            </div>
+                            <div class="case-option" data-option="D" data-next="step-failure">
+                                <div class="option-indicator">D</div>
+                                <div>Cancel the draw and document "patient refused"</div>
+                            </div>
+                        </div>
+                        <div class="case-feedback" id="feedback-step-2a">
+                            <div class="case-consequence" id="consequence-step-2a"></div>
+                            <div class="case-explanation" id="explanation-step-2a"></div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2B: Calm Patient (From correct Step 1) -->
+                    <div class="case-step" id="step-2b" data-step="2">
+                        <div class="case-question">
+                            <span>2️⃣</span> He seems slightly less anxious. You notice his hands are contracted into fists. 
+                            How do you proceed with CONSENT for the procedure?
+                        </div>
+                        <div class="case-options">
+                            <div class="case-option" data-option="A" data-next="step-failure">
+                                <div class="option-indicator">A</div>
+                                <div>Assume implied consent since he's hospitalized</div>
+                            </div>
+                            <div class="case-option" data-option="B" data-next="step-failure">
+                                <div class="option-indicator">B</div>
+                                <div>Ask his daughter for consent (she's listed as emergency contact)</div>
+                            </div>
+                            <!-- Correct -->
+                            <div class="case-option" data-option="C" data-next="step-3g">
+                                <div class="option-indicator">C</div>
+                                <div>Check the chart for documented capacity assessment</div>
+                            </div>
+                            <div class="case-option" data-option="D" data-next="step-failure">
+                                <div class="option-indicator">D</div>
+                                <div>Ask simple yes/no questions: "May I check your blood today?"</div>
+                            </div>
+                        </div>
+                        <div class="case-feedback" id="feedback-step-2b">
+                            <div class="case-consequence" id="consequence-step-2b"></div>
+                            <div class="case-explanation" id="explanation-step-2b"></div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3G: Communication (From correct Step 2) -->
+                    <div class="case-step" id="step-3g" data-step="3">
+                        <div class="case-question">
+                            <span>3️⃣</span> The chart confirms capacity for simple procedures. 
+                            Considering his SEVERE MACULAR DEGENERATION, how do you communicate?
+                        </div>
+                        <div class="case-options">
+                            <div class="case-option" data-option="A" data-next="final-step">
+                                <div class="option-indicator">A</div>
+                                <div>Show him the equipment so he can see what you're using</div>
+                            </div>
+                            <div class="case-option" data-option="B" data-next="final-step">
+                                <div class="option-indicator">B</div>
+                                <div>Verbally describe each step before doing it</div>
+                            </div>
+                            <div class="case-option" data-option="C" data-next="final-step">
+                                <div class="option-indicator">C</div>
+                                <div>Guide his hand to touch the equipment for sensory input</div>
+                            </div>
+                            <!-- Correct -->
+                            <div class="case-option" data-option="D" data-next="final-step">
+                                <div class="option-indicator">D</div>
+                                <div>All of the above approaches combined</div>
+                            </div>
+                        </div>
+                        <div class="case-feedback" id="feedback-step-3g">
+                            <div class="case-consequence" id="consequence-step-3g"></div>
+                            <div class="case-explanation" id="explanation-step-3g"></div>
+                        </div>
+                    </div>
+
+                    <!-- Step Failure: Generic Safety Stop -->
+                    <div class="case-step" id="step-failure" data-step="failure">
+                        <div class="scenario-card" style="background: rgba(225, 112, 85, 0.05); border-left-color: var(--color-error);">
+                            <div class="scenario-title">
+                                <span>⚠️</span> Patient Safety Stop
+                            </div>
+                            <div class="scenario-content">
+                                <p><strong>The procedure was halted.</strong> The selected approach either violated safety protocols, 
+                                increased patient agitation, or failed to secure proper consent.</p>
+                                <p>Please review the feedback provided and try the case study again.</p>
+                                <button class="btn btn-primary" onclick="location.reload()" style="margin-top: 15px;">
+                                    Restart Case Study
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Final Step -->
+                    <div class="case-step" id="final-step" data-step="4">
+                        <div class="scenario-card" style="background: rgba(0, 184, 148, 0.05); border-left-color: var(--color-success);">
+                            <div class="scenario-title">
+                                <span>✅</span> Case Study Complete
+                            </div>
+                            <div class="scenario-content">
+                                <strong>Optimal Approach Summary:</strong><br><br>
+                                1. <strong>Initial greeting</strong> with calm identification<br>
+                                2. <strong>Check capacity documentation</strong> before proceeding<br>
+                                3. <strong>Multi-modal communication</strong> for visual impairment:<br>
+                                &nbsp;&nbsp;&nbsp;• Verbal description<br>
+                                &nbsp;&nbsp;&nbsp;• Tactile exploration<br>
+                                &nbsp;&nbsp;&nbsp;• Simple, concrete language
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Check Button -->
+                <button class="check-button" id="check-activity1" disabled>
+                    Complete Case Study Analysis
+                </button>
+
+                <!-- Feedback -->
+                <div class="feedback-container" id="feedback-1">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Case Study Analysis Complete
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Optimal Decision Pathway:</strong><br>
+                        <strong>Step 1 → B:</strong> Greet and identify calmly<br>
+                        <strong>Step 2 → C:</strong> Check chart for capacity assessment<br>
+                        <strong>Step 3 → D:</strong> Multi-modal communication<br><br>
+                        
+                        <strong>Geriatric-Specific Considerations:</strong><br>
+                        1. <strong>Dementia:</strong> Simple language, repetition, concrete terms<br>
+                        2. <strong>Visual Impairment:</strong> Verbal description + tactile experience<br>
+                        3. <strong>Safety:</strong> Avoiding restraints and ensuring legal consent
+                        
+                        <div class="correction-details" id="correction-details-1" style="display: none;">
+                            <strong>Learning Opportunities:</strong><br>
+                            <span id="correction-text-1"></span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity 2: Complication Identification -->
+            <section class="activity-card" id="activity-2" data-activity="2" aria-label="Activity 2: Complication Identification">
+                <div class="activity-header">
+                    <span class="activity-number">Activity 2</span>
+                    <span class="activity-status">Not Started</span>
+                </div>
+                <h3 class="activity-title">
+                    <span class="activity-icon">⚠️</span>
+                    Complication Identification & Error Analysis
+                </h3>
+                <p class="activity-description">
+                    Categorize potential complications in geriatric phlebotomy and identify 
+                    preventable errors in a procedural description.
+                </p>
+
+                <!-- Complication Categorization -->
+                <div class="scenario-card" style="background: rgba(131, 128, 240, 0.05); border-left-color: var(--color-accent);">
+                    <div class="scenario-title">
+                        <span>📊</span> Complication Categorization
+                    </div>
+                    <div class="scenario-content">
+                        <strong>Drag each complication to the correct category.</strong>
+                    </div>
+                </div>
+
+                <!-- Complication Items -->
+                <div class="matching-items-container" id="complications-pool">
+                    <div class="complication-item draggable" data-complication="hematoma" draggable="true" id="comp-hematoma">Hematoma</div>
+                    <div class="complication-item draggable" data-complication="syncope" draggable="true" id="comp-syncope">Syncope</div>
+                    <div class="complication-item draggable" data-complication="difficulty-finding" draggable="true" id="comp-difficulty">Difficulty finding veins</div>
+                    <div class="complication-item draggable" data-complication="hemolysis" draggable="true" id="comp-hemolysis">Hemolysis</div>
+                    <div class="complication-item draggable" data-complication="arterial" draggable="true" id="comp-arterial">Arterial puncture</div>
+                    <div class="complication-item draggable" data-complication="anxiety" draggable="true" id="comp-anxiety">Patient anxiety</div>
+                    <div class="complication-item draggable" data-complication="bone-puncture" draggable="true" id="comp-bone">Bone puncture</div>
+                    <div class="complication-item draggable" data-complication="instructions" draggable="true" id="comp-instructions">Inability to follow instructions</div>
+                </div>
+
+                <!-- Complication Categories -->
+                <div class="complication-container">
+                    <div class="complication-category" data-category="common" id="category-common">
+                        <div class="category-title">More Common in Geriatric Patients</div>
+                        <div class="category-items"></div>
+                    </div>
+                    <div class="complication-category" data-category="risk" id="category-risk">
+                        <div class="category-title">Risk During Phlebotomy</div>
+                        <div class="category-items"></div>
+                    </div>
+                    <div class="complication-category" data-category="unrelated" id="category-unrelated">
+                        <div class="category-title">Largely Unrelated</div>
+                        <div class="category-items"></div>
+                    </div>
+                </div>
+
+                <!-- Error Identification Exercise -->
+                <div class="scenario-card" style="margin-top: 30px;">
+                    <div class="scenario-title">
+                        <span>🔍</span> Error Identification Exercise
+                    </div>
+                    <div class="error-identification">
+                        <div class="scenario-content" style="margin-bottom: 15px;">
+                            Read this description and <strong>click on the errors</strong> (find 6):
+                        </div>
+                        
+                        <div class="error-text" id="error-text">
+                            The phlebotomist entered the room and immediately asked the 85-year-old patient 
+                            to extend her arm. <span class="error-highlight" data-error="1">Without explaining the procedure</span>, 
+                            she applied the tourniquet very tightly and left it on for 
+                            <span class="error-highlight" data-error="2">3 minutes</span> while searching for a vein. 
+                            Finding a small rolling vein, she <span class="error-highlight" data-error="3">vigorously slapped the area</span> 
+                            to make it more visible. After insertion, blood flow was slow, so she 
+                            <span class="error-highlight" data-error="4">asked the patient to pump her fist repeatedly</span>. 
+                            The <span class="error-highlight" data-error="5">light blue top tube was only half filled</span> 
+                            before she removed it. Finally, she <span class="error-highlight" data-error="6">applied pressure for only 15 seconds</span> 
+                            before applying the bandage.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Prevention Strategy -->
+                <div class="scenario-card">
+                    <div class="scenario-title">
+                        <span>❓</span> Prevention Strategy
+                    </div>
+                    <div class="case-options" style="flex-direction: column; margin-top: 15px;">
+                        <div class="case-question" style="margin-bottom: 15px;">
+                            Which strategy is MOST effective for preventing complications?
+                        </div>
+                        <div class="case-option" data-option="A">
+                            <div class="option-indicator">A</div>
+                            <div>Use large needles and tight tourniquets</div>
+                        </div>
+                        <div class="case-option" data-option="B">
+                            <div class="option-indicator">B</div>
+                            <div>Warm the site, use small needles, limit tourniquet time</div>
+                        </div>
+                        <div class="case-option" data-option="C">
+                            <div class="option-indicator">C</div>
+                            <div>Use only antecubital veins with multiple attempts</div>
+                        </div>
+                        <div class="case-option" data-option="D">
+                            <div class="option-indicator">D</div>
+                            <div>Work quickly without explaining to reduce anxiety</div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="check-button" id="check-activity2" disabled>
+                    Complete Complication Analysis
+                </button>
+
+                <div class="feedback-container" id="feedback-2">
+                    <div class="feedback-title">
+                        <span class="feedback-icon correct">✓</span>
+                        Analysis Complete
+                    </div>
+                    <div class="feedback-content">
+                        <strong>Correct Categorization:</strong><br>
+                        • <strong>Common:</strong> Difficulty finding veins, Inability to follow instructions<br>
+                        • <strong>Risk:</strong> Hematoma, Hemolysis, Syncope<br>
+                        • <strong>Unrelated:</strong> Arterial puncture, Anxiety, Bone puncture<br><br>
+                        
+                        <strong>Errors Identified:</strong><br>
+                        1. No explanation (Consent violation)<br>
+                        2. 3 min tourniquet (Hemoconcentration)<br>
+                        3. Slapping (Hemolysis)<br>
+                        4. Fist pumping (Potassium alteration)<br>
+                        5. Short draw (Invalid coagulation test)<br>
+                        6. 15s pressure (Bleeding risk)<br><br>
+                        
+                        <strong>Correct Strategy: B</strong> (Warming, small needles, short tourniquet time)
+                        
+                        <div class="correction-details" id="correction-details-2" style="display: none;">
+                            <strong>Review Needed:</strong><br>
+                            <span id="correction-text-2"></span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn btn-secondary" id="reset-all-btn">
+                <span class="btn-icon">↻</span> Reset All
+            </button>
+            <button class="btn btn-primary" id="view-results-btn">
+                <span class="btn-icon">📊</span> View Results
+            </button>
+        </div>
+
+        <!-- Results Panel -->
+        <div class="results-panel" id="results-panel">
+            <div class="results-header">
+                <h2 class="results-title">Geriatric Phlebotomy Mastery</h2>
+                <div class="score-display" id="final-score">0%</div>
+            </div>
+            <div class="clinical-insights">
+                <h3 class="insights-title"><span>🎯</span> Competency Summary</h3>
+                <ul class="insights-list">
+                    <li><span class="insight-dot"></span><span><strong>Complex Decision-Making:</strong> Demonstrated ability to navigate multi-factorial geriatric cases.</span></li>
+                    <li><span class="insight-dot"></span><span><strong>Risk Anticipation:</strong> Identified common complications and procedural risks.</span></li>
+                    <li><span class="insight-dot"></span><span><strong>Error Recognition:</strong> Spotted procedural errors that compromise safety.</span></li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const state = {
+                activities: {
+                    1: { completed: false, correct: 0, total: 3, score: 0, decisions: [], pathCompleted: false },
+                    2: { completed: false, correct: 0, total: 15, score: 0, complications: {}, errorsFound: [], preventionAnswer: null }
+                },
+                startedAt: new Date()
+            };
+
+            const correctAnswers = {
+                activity1: { optimalPath: ['B', 'C', 'D'] },
+                activity2: {
+                    complications: {
+                        'difficulty-finding': 'common', 'instructions': 'common',
+                        'hematoma': 'risk', 'hemolysis': 'risk', 'syncope': 'risk',
+                        'arterial': 'unrelated', 'anxiety': 'unrelated', 'bone-puncture': 'unrelated'
+                    },
+                    prevention: 'B'
+                }
+            };
+
+            // Activity 1 Logic
+            function initActivity1() {
+                const caseOptions = document.querySelectorAll('#activity-1 .case-option');
+                const checkBtn = document.getElementById('check-activity1');
+                let userDecisions = [];
+
+                caseOptions.forEach(option => {
+                    option.addEventListener('click', function() {
+                        if (this.classList.contains('selected')) return;
+                        
+                        const stepId = this.closest('.case-step').id;
+                        const nextStep = this.dataset.next;
+                        const optionValue = this.dataset.option;
+                        
+                        userDecisions.push({ step: stepId, option: optionValue });
+                        
+                        // Feedback Logic
+                        const feedback = document.getElementById(`feedback-${stepId}`);
+                        const cons = document.getElementById(`consequence-${stepId}`);
+                        const expl = document.getElementById(`explanation-${stepId}`);
+                        
+                        // Set specific feedback messages based on step and choice
+                        let msg = '', exp = '';
+                        if (stepId === 'step-1') {
+                            if (optionValue === 'B') {
+                                msg = 'Good choice! Calm greeting establishes rapport.';
+                                exp = 'Simple identification is least threatening.';
+                            } else {
+                                msg = 'This increased anxiety.';
+                                exp = 'Avoid detailed explanations or demands initially.';
+                            }
+                        } else if (stepId === 'step-2a') {
+                             if (optionValue === 'C') {
+                                msg = 'Correct correction.';
+                                exp = 'Concrete language helps dementia patients.';
+                            } else {
+                                msg = 'Failed to de-escalate.';
+                                exp = 'Repeating loudly or restraining causes harm.';
+                            }
+                        } else if (stepId === 'step-2b') {
+                            if (optionValue === 'C') {
+                                msg = 'Correct. Legal capacity must be verified.';
+                                exp = 'Capacity assessment is crucial.';
+                            } else {
+                                msg = 'Inappropriate consent method.';
+                                exp = 'Implied or proxy consent requires specific conditions.';
+                            }
+                        } else if (stepId === 'step-3g') {
+                            if (optionValue === 'D') {
+                                msg = 'Excellent adaptation.';
+                                exp = 'Multi-modal approach covers sensory deficits.';
+                            } else {
+                                msg = 'Incomplete adaptation.';
+                                exp = 'Single modes are insufficient.';
+                            }
+                        }
+
+                        if (cons) cons.textContent = msg;
+                        if (expl) expl.textContent = exp;
+                        if (feedback) feedback.classList.add('show');
+
+                        this.classList.add('selected');
+                        
+                        setTimeout(() => {
+                            document.getElementById(stepId).classList.remove('active');
+                            const nextEl = document.getElementById(nextStep);
+                            if (nextEl) {
+                                nextEl.classList.add('active');
+                                if (nextStep === 'final-step') {
+                                    state.activities[1].pathCompleted = true;
+                                    checkBtn.disabled = false;
+                                }
+                            }
+                        }, 2000);
+                    });
+                });
+
+                checkBtn.addEventListener('click', () => {
+                    // Score based on final outcome being reached via optimal path
+                    // Simplified: if they reached final-step, give points based on optimal selections
+                    let correct = 0;
+                    const path = userDecisions.map(d => d.option);
+                    // Check against optimal B -> C -> D sequence
+                    // Note: User might have taken a detour (Step 1 A -> Step 2a C -> Step 3g D)
+                    // We check if they eventually picked the 'right' logic nodes
+                    
+                    // Simple heuristic for demo:
+                    if (path.includes('B')) correct++;
+                    if (path.includes('C')) correct++;
+                    if (path.includes('D')) correct++;
+                    
+                    state.activities[1].completed = true;
+                    state.activities[1].correct = correct;
+                    state.activities[1].score = Math.round((correct/3)*100);
+                    
+                    document.getElementById('feedback-1').classList.add('show');
+                    document.querySelector('#activity-1 .activity-status').textContent = 'Completed';
+                    document.querySelector('#activity-1').classList.add('completed');
+                    checkBtn.disabled = true;
+                    updateSummary();
+                });
+            }
+
+            // Activity 2 Logic
+            function initActivity2() {
+                const items = document.querySelectorAll('.complication-item');
+                const categories = document.querySelectorAll('.complication-category');
+                const errors = document.querySelectorAll('.error-highlight');
+                const prevOpts = document.querySelectorAll('#activity-2 .case-option');
+                const checkBtn = document.getElementById('check-activity2');
+                
+                let placed = {}, errs = [], prev = null;
+
+                // Drag Drop
+                items.forEach(i => {
+                    i.addEventListener('dragstart', e => {
+                        e.dataTransfer.setData('text/plain', JSON.stringify({id: i.dataset.complication, text: i.innerText, elId: i.id}));
+                    });
+                });
+
+                categories.forEach(c => {
+                    c.addEventListener('dragover', e => { e.preventDefault(); c.classList.add('hover'); });
+                    c.addEventListener('dragleave', () => c.classList.remove('hover'));
+                    c.addEventListener('drop', e => {
+                        e.preventDefault(); c.classList.remove('hover');
+                        const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+                        if (placed[data.id]) return;
+                        
+                        const div = document.createElement('div');
+                        div.className = 'complication-item placed';
+                        div.innerText = data.text;
+                        c.querySelector('.category-items').appendChild(div);
+                        document.getElementById(data.elId).style.display = 'none';
+                        placed[data.id] = c.dataset.category;
+                        checkStatus();
+                    });
+                });
+
+                // Error Clicking
+                errors.forEach(e => {
+                    e.addEventListener('click', () => {
+                        if (e.classList.contains('correct')) return;
+                        e.classList.add('correct');
+                        errs.push(e.dataset.error);
+                        
+                        // Tooltip
+                        const tip = document.createElement('div');
+                        tip.className = 'error-tooltip show';
+                        tip.innerText = "Error Identified!";
+                        e.appendChild(tip);
+                        setTimeout(() => tip.remove(), 1000);
+                        
+                        checkStatus();
+                    });
+                });
+
+                // Prevention Option
+                prevOpts.forEach(o => {
+                    o.addEventListener('click', () => {
+                        prevOpts.forEach(x => x.classList.remove('selected'));
+                        o.classList.add('selected');
+                        prev = o.dataset.option;
+                        checkStatus();
+                    });
+                });
+
+                function checkStatus() {
+                    const allPlaced = Object.keys(placed).length === 8;
+                    const allErrs = errs.length === 6;
+                    const prevSel = !!prev;
+                    checkBtn.disabled = !(allPlaced && allErrs && prevSel);
+                }
+
+                checkBtn.addEventListener('click', () => {
+                    let correct = 0;
+                    Object.keys(placed).forEach(k => { if(placed[k] === correctAnswers.activity2.complications[k]) correct++; });
+                    if(errs.length === 6) correct += 6;
+                    if(prev === 'B') correct++;
+
+                    state.activities[2].completed = true;
+                    state.activities[2].correct = correct;
+                    state.activities[2].score = Math.round((correct/15)*100);
+
+                    document.getElementById('feedback-2').classList.add('show');
+                    document.querySelector('#activity-2 .activity-status').textContent = 'Completed';
+                    document.querySelector('#activity-2').classList.add('completed');
+                    checkBtn.disabled = true;
+                    updateSummary();
+                });
+            }
+
+            function updateSummary() {
+                let comp = 0, correct = 0, total = 0;
+                Object.values(state.activities).forEach(a => {
+                    if(a.completed) comp++;
+                    correct += a.correct;
+                    total += a.total;
+                });
+                document.getElementById('completed-count').innerText = comp;
+                document.getElementById('accuracy-rate').innerText = total ? Math.round((correct/total)*100) + '%' : '0%';
+            }
+
+            // Results View
+            document.getElementById('view-results-btn').addEventListener('click', () => {
+                let totalScore = 0, count = 0;
+                Object.values(state.activities).forEach(a => { if(a.completed) { totalScore += a.score; count++; }});
+                const avg = count ? Math.round(totalScore/count) : 0;
+                document.getElementById('final-score').innerText = avg + '%';
+                document.getElementById('results-panel').classList.add('show');
+                document.getElementById('results-panel').scrollIntoView({behavior: 'smooth'});
+            });
+
+            document.getElementById('reset-all-btn').addEventListener('click', () => location.reload());
+
+            initActivity1();
+            initActivity2();
+        });
+    </script>
+</body>
+</html>
