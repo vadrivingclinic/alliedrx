@@ -1,0 +1,1624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AlliedRx – Module 12.2: Operational Design & Scheduling</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+/* CSS VARIABLES - EXACT BRAND COLORS */
+:root {
+  --color-primary: #af4bef; /* Purple - main brand color */
+  --color-primary-soft: #d492ff; /* Light purple */
+  --color-accent: #8380f0; /* Blue-purple accent */
+  --color-success: #00b894; /* Green for correct/success */
+  --color-error: #e17055; /* Red/Orange for errors */
+  --color-warning: #fdcb6e; /* Yellow for warnings */
+  --color-info: #0984e3; /* Blue for info */
+  --color-bg: #f7f5fb; /* Light background */
+  --color-text: #2b2b2b; /* Dark text */
+  --color-muted: #6c6880; /* Muted text */
+  --color-dark: #0c0a18; /* Dark background */
+  --radius-lg: 24px;
+  --radius-md: 16px;
+  --radius-sm: 12px;
+  --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+  --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+  --shadow-card: 0 12px 30px rgba(15, 23, 42, 0.1);
+}
+
+/* REQUIRED ANIMATIONS */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+@keyframes checkmarkPop {
+  0% { transform: scale(0); opacity: 0; }
+  70% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 5px rgba(175, 75, 239, 0.5); }
+  50% { box-shadow: 0 0 20px rgba(175, 75, 239, 0.8); }
+}
+
+/* BASE STYLES */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+html, body {
+  width: 100%;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  padding: 24px;
+  background: radial-gradient(
+    circle at top left,
+    #ffffff 0,
+    #f1ecff 40%,
+    var(--color-bg) 100%
+  );
+  color: var(--color-text);
+  -webkit-text-size-adjust: 100%;
+  line-height: 1.5;
+}
+@media (max-width: 600px) {
+  body { padding: 12px; }
+}
+
+/* PAGE CONTAINER */
+.page {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  background: #ffffff;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  padding: 28px 30px 32px;
+  position: relative;
+  overflow: hidden;
+  animation: fadeInUp 0.8s ease-out;
+}
+@media (max-width: 900px) {
+  .page { padding: 22px; }
+}
+@media (max-width: 480px) {
+  body { padding: 0; }
+  .page {
+    border-radius: 0;
+    box-shadow: none;
+    padding: 18px 14px 22px;
+  }
+}
+
+/* HEADER - EXACT BRAND TEMPLATE */
+.brand-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  width: 100%;
+  animation: fadeIn 0.6s ease-out 0.2s both;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.brand-logo {
+  height: 40px;
+  width: auto;
+  max-width: 100%;
+  filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+  transition: transform 0.3s ease;
+}
+.brand-logo:hover { transform: scale(1.05); }
+.course-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-width: 100%;
+}
+.course-name {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--color-muted);
+  white-space: normal;
+}
+.week-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(175, 75, 239, 0.08);
+  font-size: 0.76rem;
+  color: var(--color-primary);
+  white-space: normal;
+}
+.week-label-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--color-success);
+  flex-shrink: 0;
+}
+.badge-mode {
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: rgba(12, 10, 24, 0.06);
+  border: 1px solid rgba(12, 10, 24, 0.08);
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--color-muted);
+  white-space: nowrap;
+  transition: all 0.3s ease;
+}
+.badge-mode:hover {
+  background: rgba(175, 75, 239, 0.1);
+  border-color: var(--color-primary-soft);
+  color: var(--color-primary);
+}
+@media (max-width: 480px) {
+  .brand-row { flex-direction: column; align-items: flex-start; }
+  .badge-mode { margin-top: 6px; }
+}
+
+/* TYPOGRAPHY */
+h1 {
+  font-size: clamp(1.8rem, 3vw, 2.2rem);
+  line-height: 1.1;
+  color: var(--color-primary);
+  margin-bottom: 6px;
+  animation: fadeInUp 0.6s ease-out 0.3s both;
+}
+.module-subtitle {
+  font-size: 0.98rem;
+  color: var(--color-muted);
+  max-width: 600px;
+  margin-bottom: 24px;
+  animation: fadeInUp 0.6s ease-out 0.4s both;
+}
+
+/* PROGRESS TRACKER - 2-STEP ONLY */
+.progress-tracker {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  position: relative;
+  padding: 0 20px;
+}
+.progress-tracker::before {
+  content: '';
+  position: absolute;
+  top: 15px;
+  left: 50px;
+  right: 50px;
+  height: 3px;
+  background: rgba(12, 10, 24, 0.08);
+  z-index: 1;
+}
+.progress-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  flex: 1;
+}
+.step-circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: white;
+  border: 2px solid rgba(12, 10, 24, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-muted);
+  margin-bottom: 8px;
+  transition: all 0.3s ease;
+}
+.progress-step.active .step-circle {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: white;
+  transform: scale(1.1);
+}
+.progress-step.completed .step-circle {
+  background: var(--color-success);
+  border-color: var(--color-success);
+  color: white;
+}
+.step-label {
+  font-size: 0.75rem;
+  color: var(--color-muted);
+  text-align: center;
+  font-weight: 500;
+}
+.progress-step.active .step-label {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+/* PROGRESS SUMMARY */
+.progress-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin-bottom: 30px;
+  animation: fadeInUp 0.6s ease-out 0.5s both;
+}
+.summary-card {
+  background: rgba(12, 10, 24, 0.02);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  border: 1px solid rgba(12, 10, 24, 0.06);
+  text-align: center;
+  transition: all 0.3s ease;
+}
+.summary-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-card);
+  border-color: var(--color-primary-soft);
+}
+.summary-number {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--color-primary);
+  display: block;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.summary-label {
+  font-size: 0.8rem;
+  color: var(--color-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* ACTIVITY GRID - SINGLE COLUMN FOR 2 ACTIVITIES */
+.activity-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+/* ACTIVITY CARD - EXACT STRUCTURE */
+.activity-card {
+  background: white;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(12, 10, 24, 0.08);
+  padding: 20px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+.activity-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--color-primary);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.activity-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-hover);
+  border-color: var(--color-primary-soft);
+}
+.activity-card:hover::before { opacity: 1; }
+.activity-card.completed {
+  border-color: var(--color-success);
+}
+.activity-card.completed::before {
+  background: var(--color-success);
+  opacity: 1;
+}
+.activity-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 15px;
+}
+.activity-number {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  background: rgba(175, 75, 239, 0.1);
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+.activity-status {
+  font-size: 0.75rem;
+  padding: 3px 8px;
+  border-radius: 12px;
+  background: rgba(12, 10, 24, 0.06);
+  color: var(--color-muted);
+}
+.activity-card.completed .activity-status {
+  background: rgba(0, 184, 148, 0.1);
+  color: var(--color-success);
+}
+.activity-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.activity-icon {
+  font-size: 1.2rem;
+}
+.activity-description {
+  font-size: 0.9rem;
+  color: var(--color-muted);
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+/* SCENARIO BOX */
+.scenario-box {
+  background: rgba(175, 75, 239, 0.05);
+  border-radius: var(--radius-sm);
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(175, 75, 239, 0.1);
+}
+.scenario-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  margin-bottom: 8px;
+}
+.scenario-text {
+  font-size: 0.85rem;
+  color: var(--color-text);
+  line-height: 1.5;
+}
+
+/* ACTIVITY 1: LAYOUT DESIGN */
+.layout-design-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.layout-diagram {
+  background: rgba(12, 10, 24, 0.02);
+  border-radius: var(--radius-sm);
+  padding: 20px;
+  border: 2px dashed rgba(12, 10, 24, 0.1);
+  min-height: 300px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 15px;
+  margin-bottom: 20px;
+}
+.layout-cell {
+  background: white;
+  border: 2px solid rgba(12, 10, 24, 0.1);
+  border-radius: var(--radius-sm);
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--color-muted);
+  transition: all 0.3s ease;
+  min-height: 80px;
+}
+
+/* NEW: Zone classes for color coding */
+.zone-entry {
+  background-color: rgba(175, 75, 239, 0.1);
+  border-color: rgba(175, 75, 239, 0.3);
+}
+.zone-patient {
+  background-color: rgba(0, 184, 148, 0.1);
+  border-color: rgba(0, 184, 148, 0.3);
+}
+.zone-staff {
+  background-color: rgba(131, 128, 240, 0.1);
+  border-color: rgba(131, 128, 240, 0.3);
+}
+.zone-processing {
+  background-color: rgba(253, 203, 110, 0.1);
+  border-color: rgba(253, 203, 110, 0.3);
+}
+
+.layout-cell.hover {
+  border-color: var(--color-primary);
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 10px rgba(175, 75, 239, 0.2);
+}
+
+.layout-cell.filled {
+  border-color: var(--color-primary-soft);
+  /* Use a subtle overlay instead of solid color to keep zone hint visible */
+  background-image: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)); 
+  color: var(--color-text);
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.layout-legend {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  color: var(--color-text);
+}
+.legend-color {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+.layout-items-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.layout-item {
+  background: white;
+  border-radius: var(--radius-sm);
+  padding: 10px 15px;
+  font-size: 0.85rem;
+  cursor: grab;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(12, 10, 24, 0.1);
+  user-select: none;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+.layout-item:hover {
+  background: #fafafa;
+  border-color: var(--color-primary-soft);
+  transform: translateY(-2px);
+}
+.layout-item.dragging {
+  opacity: 0.7;
+  transform: scale(0.95);
+}
+
+/* ACTIVITY 2: SCHEDULING SIMULATION */
+.scheduling-interface {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.parameters-display {
+  background: rgba(12, 10, 24, 0.02);
+  border-radius: var(--radius-sm);
+  padding: 15px;
+  border: 1px solid rgba(12, 10, 24, 0.08);
+}
+.parameter-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.parameter-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-primary);
+}
+.parameter-value {
+  font-size: 0.85rem;
+  color: var(--color-text);
+  background: rgba(175, 75, 239, 0.05);
+  padding: 4px 8px;
+  border-radius: 6px;
+  text-align: center;
+}
+.scheduling-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+@media (max-width: 600px) {
+  .scheduling-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+.schedule-slot {
+  background: rgba(12, 10, 24, 0.02);
+  border-radius: var(--radius-sm);
+  padding: 15px;
+  border: 2px dashed rgba(12, 10, 24, 0.1);
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+.schedule-slot.hover {
+  border-color: var(--color-primary);
+  background: rgba(175, 75, 239, 0.05);
+}
+.schedule-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  text-align: center;
+  padding-bottom: 5px;
+  border-bottom: 1px solid rgba(12, 10, 24, 0.08);
+}
+.schedule-count {
+  font-size: 0.75rem;
+  color: var(--color-muted);
+  text-align: center;
+}
+.staff-items-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.staff-item {
+  background: white;
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  cursor: grab;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(12, 10, 24, 0.1);
+  user-select: none;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+.staff-item:hover {
+  background: #fafafa;
+  border-color: var(--color-primary-soft);
+  transform: translateY(-2px);
+}
+.staff-item.dragging {
+  opacity: 0.7;
+  transform: scale(0.95);
+}
+
+/* FEEDBACK CONTAINER - EXACT STRUCTURE */
+.feedback-container {
+  background: rgba(12, 10, 24, 0.02);
+  border-radius: var(--radius-sm);
+  padding: 15px;
+  border: 1px solid rgba(12, 10, 24, 0.08);
+  margin-top: 20px;
+  display: none;
+}
+.feedback-container.show {
+  display: block;
+  animation: fadeIn 0.5s ease;
+}
+.feedback-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.feedback-icon {
+  font-size: 1.2rem;
+}
+.feedback-icon.correct { color: var(--color-success); }
+.feedback-icon.incorrect { color: var(--color-error); }
+.feedback-content {
+  font-size: 0.85rem;
+  color: var(--color-text);
+  line-height: 1.5;
+}
+.feedback-content strong { color: var(--color-primary); }
+.clinical-insight {
+  background: rgba(0, 184, 148, 0.05);
+  border-left: 3px solid var(--color-success);
+  padding: 10px 15px;
+  margin: 10px 0;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+/* ACTION BUTTONS */
+.action-buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 30px;
+  flex-wrap: wrap;
+}
+.btn {
+  padding: 12px 24px;
+  border-radius: var(--radius-md);
+  border: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-primary {
+  background: var(--color-primary);
+  color: white;
+}
+.btn-primary:hover {
+  background: #9a3bd6;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(175, 75, 239, 0.3);
+}
+.btn-secondary {
+  background: rgba(12, 10, 24, 0.06);
+  color: var(--color-text);
+}
+.btn-secondary:hover {
+  background: rgba(12, 10, 24, 0.1);
+  transform: translateY(-2px);
+}
+.btn-icon { font-size: 1.1em; }
+
+/* RESULTS PANEL */
+.results-panel {
+  background: var(--color-dark);
+  color: white;
+  border-radius: var(--radius-md);
+  padding: 30px;
+  margin-top: 30px;
+  display: none;
+  animation: fadeInUp 0.6s ease;
+}
+.results-panel.show { display: block; }
+.results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.results-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: white;
+}
+.score-display {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--color-primary-soft);
+  text-align: center;
+  margin: 20px 0;
+}
+.clinical-insights {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-sm);
+  padding: 20px;
+  margin-top: 20px;
+}
+.insights-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-primary-soft);
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.insights-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.insights-list li {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 0.9rem;
+  color: #e5e7eb;
+}
+.insight-dot {
+  width: 6px;
+  height: 6px;
+  margin-top: 6px;
+  border-radius: 999px;
+  background: var(--color-accent);
+  flex-shrink: 0;
+}
+</style>
+</head>
+<body>
+<main class="page" aria-labelledby="module-heading">
+  <!-- HEADER - EXACT TEMPLATE -->
+  <header class="brand-row">
+    <div class="brand">
+      <img
+        src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+        alt="AlliedRx logo"
+        class="brand-logo"
+      />
+      <div class="course-meta">
+        <span class="course-name">Clinical Medical Assistant • Chapter 12</span>
+        <div class="week-label">
+          <span class="week-label-dot"></span>
+          <span>Chapter 12: Phlebotomy Department Management</span>
+        </div>
+      </div>
+    </div>
+    <span class="badge-mode">Campus & Online</span>
+  </header>
+
+  <h1 id="module-heading">Operational Design & Scheduling</h1>
+  <p class="module-subtitle">
+    Master the principles of outpatient draw station layout and inpatient collection scheduling. 
+    Learn to optimize workflow, minimize patient wait times, and allocate staff effectively for maximum efficiency.
+  </p>
+
+  <!-- PROGRESS TRACKER - 2-STEP ONLY -->
+  <div class="progress-tracker">
+    <div class="progress-step active" data-step="1">
+      <div class="step-circle">1</div>
+      <div class="step-label">Outpatient Layout Design</div>
+    </div>
+    <div class="progress-step" data-step="2">
+      <div class="step-circle">2</div>
+      <div class="step-label">Inpatient Staff Scheduling</div>
+    </div>
+  </div>
+
+  <!-- PROGRESS SUMMARY -->
+  <div class="progress-summary">
+    <div class="summary-card">
+      <span class="summary-number" id="completed-count">0</span>
+      <span class="summary-label">Activities Completed</span>
+    </div>
+    <div class="summary-card">
+      <span class="summary-number" id="accuracy-rate">0%</span>
+      <span class="summary-label">Current Accuracy</span>
+    </div>
+    <div class="summary-card">
+      <span class="summary-number" id="time-spent">0:00</span>
+      <span class="summary-label">Time Spent</span>
+    </div>
+  </div>
+
+  <!-- ACTIVITY GRID - SINGLE COLUMN FOR 2 ACTIVITIES -->
+  <div class="activity-grid">
+    <!-- ACTIVITY 1: OUTPATIENT LAYOUT DESIGN -->
+    <section class="activity-card" id="activity-1" data-activity="1" aria-label="Activity 1: Outpatient Draw Station Layout Design">
+      <div class="activity-header">
+        <span class="activity-number">Activity 1</span>
+        <span class="activity-status">Not Started</span>
+      </div>
+      <h3 class="activity-title">
+        <span class="activity-icon">🏥</span>
+        Outpatient Draw Station Layout Design
+      </h3>
+      <p class="activity-description">
+        Design an optimal outpatient phlebotomy draw station layout. Drag each station component into the 
+        appropriate colored zone below to create an efficient patient flow. The colors indicate the function of each area.
+      </p>
+
+      <!-- Scenario Box -->
+      <div class="scenario-box">
+        <div class="scenario-title">Design Challenge</div>
+        <div class="scenario-text">
+          You're designing a new outpatient phlebotomy station. Use the colored zones to guide your placement:
+          <br><br>
+          <strong>Purple Zones:</strong> Entry/Exit points<br>
+          <strong>Green Zones:</strong> Patient care (prep, draw, recovery)<br>
+          <strong>Blue Zones:</strong> Staff work areas (storage)<br>
+          <strong>Yellow Zones:</strong> Specimen processing
+        </div>
+      </div>
+
+      <!-- Layout Legend -->
+      <div class="layout-legend">
+        <div class="legend-item">
+          <div class="legend-color" style="background: rgba(175, 75, 239, 0.1); border: 1px solid rgba(175, 75, 239, 0.3);"></div>
+          <span>Entry/Exit Areas</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color" style="background: rgba(0, 184, 148, 0.1); border: 1px solid rgba(0, 184, 148, 0.3);"></div>
+          <span>Patient Care Areas</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color" style="background: rgba(131, 128, 240, 0.1); border: 1px solid rgba(131, 128, 240, 0.3);"></div>
+          <span>Staff Work Areas</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color" style="background: rgba(253, 203, 110, 0.1); border: 1px solid rgba(253, 203, 110, 0.3);"></div>
+          <span>Specimen Processing</span>
+        </div>
+      </div>
+
+      <!-- Layout Diagram -->
+      <div class="layout-diagram" id="layout-diagram">
+        <!-- Grid cells pre-colored for guidance -->
+        <!-- Row A: Entry/Exit -->
+        <div class="layout-cell zone-entry" data-cell="A1" data-type="empty"></div>
+        <div class="layout-cell zone-entry" data-cell="A2" data-type="empty"></div>
+        <div class="layout-cell zone-entry" data-cell="A3" data-type="empty"></div>
+        
+        <!-- Row B: Patient Care -->
+        <div class="layout-cell zone-patient" data-cell="B1" data-type="empty"></div>
+        <div class="layout-cell zone-patient" data-cell="B2" data-type="empty"></div>
+        <div class="layout-cell zone-patient" data-cell="B3" data-type="empty"></div>
+        
+        <!-- Row C: Staff/Patient/Processing -->
+        <div class="layout-cell zone-staff" data-cell="C1" data-type="empty"></div>
+        <div class="layout-cell zone-patient" data-cell="C2" data-type="empty"></div>
+        <div class="layout-cell zone-processing" data-cell="C3" data-type="empty"></div>
+      </div>
+
+      <!-- Layout Items -->
+      <div class="layout-items-container" id="layout-items">
+        <div class="layout-item draggable" data-item="waiting" draggable="true">Waiting Area (6 chairs)</div>
+        <div class="layout-item draggable" data-item="checkin" draggable="true">Check-in Desk</div>
+        <div class="layout-item draggable" data-item="prep" draggable="true">Patient Preparation Chair</div>
+        <div class="layout-item draggable" data-item="draw1" draggable="true">Blood Draw Chair #1</div>
+        <div class="layout-item draggable" data-item="draw2" draggable="true">Blood Draw Chair #2</div>
+        <div class="layout-item draggable" data-item="recovery" draggable="true">Post-Draw Recovery Area</div>
+        <div class="layout-item draggable" data-item="processing" draggable="true">Specimen Processing Station</div>
+        <div class="layout-item draggable" data-item="storage" draggable="true">Supply Storage</div>
+        <div class="layout-item draggable" data-item="exit" draggable="true">Exit</div>
+      </div>
+
+      <!-- Feedback -->
+      <div class="feedback-container" id="feedback-1">
+        <div class="feedback-title">
+          <span class="feedback-icon correct">✓</span>
+          Layout Design Analysis
+        </div>
+        <div class="feedback-content">
+          <strong>Optimal Layout Principles:</strong><br>
+          1. <strong>Linear Patient Flow:</strong> Waiting → Check-in → Prep → Draw → Recovery → Exit<br>
+          2. <strong>Privacy Zones:</strong> Draw chairs should not face waiting areas; use partitions or angled positioning<br>
+          3. <strong>Infection Control:</strong> Separate clean (supply storage) from potentially contaminated areas (specimen processing)<br>
+          4. <strong>Efficiency:</strong> Processing station near exit to minimize specimen transport time<br>
+          5. <strong>Safety:</strong> Recovery area visible from check-in desk for patient monitoring<br><br>
+
+          <strong>Clinical Reasoning:</strong><br>
+          • <strong>Waiting Area Placement:</strong> Near entrance but not blocking flow. Should accommodate 6+ patients during peak times.<br>
+          • <strong>Check-in Desk:</strong> Positioned to control entry and monitor waiting area. Provides privacy for patient registration.<br>
+          • <strong>Draw Chairs:</strong> Spaced at least 6 feet apart for privacy. Preferably with curtains or partitions.<br>
+          • <strong>Recovery Area:</strong> Essential for patients who feel lightheaded. Should have seating and be monitored.<br>
+          • <strong>Processing Station:</strong> Should have biohazard disposal nearby and be separated from patient areas.<br><br>
+
+          <div class="clinical-insight">
+            <strong>Pro Tip:</strong> The most common outpatient layout error is placing the check-in desk too far from the entrance, 
+            causing congestion. Another common mistake is having the exit flow back through the waiting area, increasing 
+            anxiety for waiting patients. Always design with patient psychology in mind.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ACTIVITY 2: INPATIENT STAFF SCHEDULING -->
+    <section class="activity-card" id="activity-2" data-activity="2" aria-label="Activity 2: Inpatient Staff Scheduling Simulation">
+      <div class="activity-header">
+        <span class="activity-number">Activity 2</span>
+        <span class="activity-status">Not Started</span>
+      </div>
+      <h3 class="activity-title">
+        <span class="activity-icon">📅</span>
+        Inpatient Staff Scheduling Simulation
+      </h3>
+      <p class="activity-description">
+        Allocate 8 phlebotomy staff members across different hospital units based on the generated parameters. 
+        Drag staff icons to appropriate units considering patient acuity, STAT frequency, and collection complexity.
+      </p>
+
+      <!-- Scenario Box -->
+      <div class="scenario-box">
+        <div class="scenario-title">Scheduling Parameters</div>
+        <div class="scenario-text" id="scheduling-parameters">
+          <!-- Parameters will be generated by JavaScript -->
+        </div>
+      </div>
+
+      <!-- Parameters Display -->
+      <div class="parameters-display">
+        <div class="parameter-row">
+          <div class="parameter-label">Hospital Size:</div>
+          <div class="parameter-value" id="param-size">Loading...</div>
+        </div>
+        <div class="parameter-row">
+          <div class="parameter-label">Shift Time:</div>
+          <div class="parameter-value" id="param-shift">Loading...</div>
+        </div>
+        <div class="parameter-row">
+          <div class="parameter-label">Special Units:</div>
+          <div class="parameter-value" id="param-units">Loading...</div>
+        </div>
+        <div class="parameter-row">
+          <div class="parameter-label">Total Staff Available:</div>
+          <div class="parameter-value">8 Phlebotomists</div>
+        </div>
+      </div>
+
+      <!-- Scheduling Grid -->
+      <div class="scheduling-grid">
+        <div class="schedule-slot" data-unit="routine" id="slot-routine">
+          <div class="schedule-title">Routine Floors</div>
+          <div class="schedule-count">Staff: <span id="count-routine">0</span></div>
+        </div>
+        <div class="schedule-slot" data-unit="stat" id="slot-stat">
+          <div class="schedule-title">STAT Team</div>
+          <div class="schedule-count">Staff: <span id="count-stat">0</span></div>
+        </div>
+        <div class="schedule-slot" data-unit="special" id="slot-special">
+          <div class="schedule-title">Special Units</div>
+          <div class="schedule-count">Staff: <span id="count-special">0</span></div>
+        </div>
+        <div class="schedule-slot" data-unit="outpatient" id="slot-outpatient">
+          <div class="schedule-title">Outpatient</div>
+          <div class="schedule-count">Staff: <span id="count-outpatient">0</span></div>
+        </div>
+      </div>
+
+      <!-- Staff Items -->
+      <div class="staff-items-container" id="staff-items">
+        <!-- Staff items will be generated by JavaScript (8 total) -->
+      </div>
+
+      <!-- Feedback -->
+      <div class="feedback-container" id="feedback-2">
+        <div class="feedback-title">
+          <span class="feedback-icon correct">✓</span>
+          Staff Allocation Analysis
+        </div>
+        <div class="feedback-content">
+          <strong>Optimal Staff Allocation Principles:</strong><br>
+          1. <strong>STAT Team Priority:</strong> Critical results require immediate response; allocate based on hospital acuity<br>
+          2. <strong>Special Units:</strong> ICU, Oncology, Pediatrics often require specialized skills; allocate accordingly<br>
+          3. <strong>Routine Floors:</strong> Balance efficiency with thoroughness; don't overstaff at expense of critical areas<br>
+          4. <strong>Outpatient:</strong> Schedule based on appointment volume; mornings typically busier than afternoons<br><br>
+
+          <strong>Parameter-Specific Reasoning:</strong><br>
+          <span id="parameter-reasoning">Reasoning will appear based on generated parameters...</span><br><br>
+
+          <strong>Common Scheduling Errors:</strong><br>
+          • <strong>Understaffing STAT Teams:</strong> Leads to delayed critical results and patient safety issues<br>
+          • <strong>Overstaffing Routine Areas:</strong> Wastes resources that could be used in high-acuity areas<br>
+          • <strong>Ignoring Skill Matching:</strong> Not assigning specialized phlebotomists to appropriate units (e.g., pediatric specialists to Pediatrics)<br>
+          • <strong>Poor Timing:</strong> Not adjusting for shift patterns (mornings busier for routine labs, evenings for STATs)<br><br>
+
+          <div class="clinical-insight">
+            <strong>Pro Tip:</strong> The best collection schedules consider not just patient numbers, but also 
+            <em>collection complexity</em> and <em>result urgency</em>. A single ICU patient might require more 
+            time and skill than three routine floor patients. Always allocate staff based on acuity, not just volume.
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ACTION BUTTONS -->
+  <div class="action-buttons">
+    <button class="btn btn-secondary" id="reset-all-btn" aria-label="Reset all activities">
+      <span class="btn-icon">↻</span>
+      Reset All Activities
+    </button>
+    <button class="btn btn-secondary" id="check-answers-btn" aria-label="Check all answers">
+      <span class="btn-icon">✓</span>
+      Check All Answers
+    </button>
+    <button class="btn btn-primary" id="view-results-btn" aria-label="View final results">
+      <span class="btn-icon">📊</span>
+      View Final Results
+    </button>
+  </div>
+
+  <!-- RESULTS PANEL -->
+  <div class="results-panel" id="results-panel">
+    <div class="results-header">
+      <h2 class="results-title">Operational Design Proficiency</h2>
+      <div class="score-display" id="final-score">0%</div>
+    </div>
+    <div class="clinical-insights">
+      <h3 class="insights-title">
+        <span>🏥</span> Facility Design Insights
+      </h3>
+      <ul class="insights-list">
+        <li>
+          <span class="insight-dot"></span>
+          <span><strong>Patient Flow is Everything:</strong> Well-designed outpatient layouts reduce wait times by 30-40%. Linear flow (entrance → check-in → draw → exit) minimizes confusion and congestion. Poor layout leads to patient frustration and staff inefficiency.</span>
+        </li>
+        <li>
+          <span class="insight-dot"></span>
+          <span><strong>Privacy vs. Efficiency Balance:</strong> The ideal draw station provides visual privacy without isolating staff. Curtained bays or angled chairs maintain dignity while allowing staff to monitor multiple patients. Complete isolation rooms reduce efficiency by 25%.</span>
+        </li>
+        <li>
+          <span class="insight-dot"></span>
+          <span><strong>Infection Control Zones:</strong> Effective layouts create clear separation between clean (supply storage), patient care, and biohazard (specimen processing) areas. Cross-contamination risks increase when these zones overlap.</span>
+        </li>
+      </ul>
+    </div>
+    <div class="clinical-insights" style="margin-top: 20px;">
+      <h3 class="insights-title">
+        <span>📅</span> Scheduling & Staffing Insights
+      </h3>
+      <ul class="insights-list">
+        <li>
+          <span class="insight-dot"></span>
+          <span><strong>Acuity-Based Allocation:</strong> Smart scheduling allocates staff based on patient acuity, not just patient numbers. One ICU patient often requires more time and skill than three routine floor patients. STAT teams should be sized for peak demand, not average volume.</span>
+        </li>
+        <li>
+          <span class="insight-dot"></span>
+          <span><strong>Specialization Matters:</strong> Pediatric, geriatric, and oncology phlebotomy require specialized techniques. Effective schedules match staff skills to patient populations. Cross-training 20-30% of staff provides scheduling flexibility.</span>
+        </li>
+        <li>
+          <span class="insight-dot"></span>
+          <span><strong>Predictive Scheduling:</strong> The best managers analyze historical data: Monday mornings have highest outpatient volume, post-surgical units peak mid-morning, and ICUs have consistent STAT needs. Proactive scheduling beats reactive scrambling.</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // STATE MANAGEMENT - 2 ACTIVITIES ONLY
+  const state = {
+    activities: {
+      1: { completed: false, correct: 0, total: 9, score: 0, layout: {} },
+      2: { completed: false, correct: 0, total: 8, score: 0, allocation: {} }
+    },
+    startedAt: new Date(),
+    timeSpent: 0,
+    schedulingParams: null
+  };
+
+  // Correct layout positions (optimized flow)
+  const optimalLayout = {
+    'A1': 'waiting',
+    'A2': 'checkin',
+    'A3': 'exit',
+    'B1': 'prep',
+    'B2': 'draw1',
+    'B3': 'recovery',
+    'C1': 'storage',
+    'C2': 'draw2',
+    'C3': 'processing'
+  };
+
+  // Optimal allocations based on parameters
+  const optimalAllocations = {
+    'small-morning-basic': { routine: 3, stat: 2, special: 2, outpatient: 1 },
+    'small-morning-complex': { routine: 2, stat: 2, special: 3, outpatient: 1 },
+    'small-evening-basic': { routine: 2, stat: 3, special: 2, outpatient: 1 },
+    'small-evening-complex': { routine: 1, stat: 3, special: 3, outpatient: 1 },
+    'large-morning-basic': { routine: 4, stat: 2, special: 1, outpatient: 1 },
+    'large-morning-complex': { routine: 3, stat: 2, special: 2, outpatient: 1 },
+    'large-evening-basic': { routine: 3, stat: 3, special: 1, outpatient: 1 },
+    'large-evening-complex': { routine: 2, stat: 3, special: 2, outpatient: 1 }
+  };
+
+  // DOM Elements
+  const progressSteps = document.querySelectorAll('.progress-step');
+  const activityCards = document.querySelectorAll('.activity-card');
+  const completedCount = document.getElementById('completed-count');
+  const accuracyRate = document.getElementById('accuracy-rate');
+  const timeSpentEl = document.getElementById('time-spent');
+  const resetBtn = document.getElementById('reset-all-btn');
+  const checkBtn = document.getElementById('check-answers-btn');
+  const resultsBtn = document.getElementById('view-results-btn');
+  const resultsPanel = document.getElementById('results-panel');
+  const finalScore = document.getElementById('final-score');
+  const schedulingParamsEl = document.getElementById('scheduling-parameters');
+  const paramSizeEl = document.getElementById('param-size');
+  const paramShiftEl = document.getElementById('param-shift');
+  const paramUnitsEl = document.getElementById('param-units');
+  const parameterReasoningEl = document.getElementById('parameter-reasoning');
+
+  // RANDOMIZE ACTIVITY 1 ITEMS ON LOAD
+  function randomizeLayoutItems() {
+    const container = document.getElementById('layout-items');
+    const items = Array.from(container.querySelectorAll('.layout-item'));
+    
+    // Shuffle array using Fisher-Yates algorithm
+    for (let i = items.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      container.appendChild(items[j]);
+    }
+  }
+
+  // GENERATE RANDOM SCHEDULING PARAMETERS
+  function generateSchedulingParameters() {
+    const hospitalSizes = [
+      { name: 'Small Hospital', beds: '200 beds', key: 'small' },
+      { name: 'Large Hospital', beds: '600 beds', key: 'large' }
+    ];
+    
+    const shifts = [
+      { name: 'Morning Shift', time: '6:00 AM - 2:00 PM', key: 'morning' },
+      { name: 'Evening Shift', time: '2:00 PM - 10:00 PM', key: 'evening' }
+    ];
+    
+    const unitComplexities = [
+      { name: 'Basic Units', units: 'Medical/Surgical floors only', key: 'basic' },
+      { name: 'Complex Units', units: 'ICU + Oncology + Pediatrics', key: 'complex' }
+    ];
+    
+    const size = hospitalSizes[Math.floor(Math.random() * hospitalSizes.length)];
+    const shift = shifts[Math.floor(Math.random() * shifts.length)];
+    const units = unitComplexities[Math.floor(Math.random() * unitComplexities.length)];
+    
+    state.schedulingParams = {
+      size: size,
+      shift: shift,
+      units: units,
+      key: `${size.key}-${shift.key}-${units.key}`
+    };
+    
+    // Update display
+    paramSizeEl.textContent = size.beds;
+    paramShiftEl.textContent = shift.time;
+    paramUnitsEl.textContent = units.units;
+    
+    schedulingParamsEl.innerHTML = `
+      <strong>${size.name}</strong> (${size.beds}) • 
+      <strong>${shift.name}</strong> (${shift.time}) • 
+      <strong>${units.name}</strong> (${units.units})
+    `;
+    
+    // Set reasoning text
+    let reasoning = '';
+    if (state.schedulingParams.key.includes('small')) {
+      reasoning += 'Small hospitals have fewer total patients but often higher acuity ratios. ';
+    } else {
+      reasoning += 'Large hospitals have higher volume but may have more standardized routines. ';
+    }
+    
+    if (state.schedulingParams.key.includes('morning')) {
+      reasoning += 'Morning shifts handle routine draws, fasting labs, and pre-op collections. ';
+    } else {
+      reasoning += 'Evening shifts handle more STAT requests and post-procedure collections. ';
+    }
+    
+    if (state.schedulingParams.key.includes('complex')) {
+      reasoning += 'Complex units (ICU, Oncology, Pediatrics) require specialized skills and more time per patient.';
+    } else {
+      reasoning += 'Basic medical/surgical units are more predictable but require efficient routing.';
+    }
+    
+    parameterReasoningEl.textContent = reasoning;
+    
+    // Generate staff items
+    generateStaffItems();
+  }
+
+  // GENERATE STAFF ITEMS
+  function generateStaffItems() {
+    const container = document.getElementById('staff-items');
+    container.innerHTML = '';
+    
+    for (let i = 1; i <= 8; i++) {
+      const staffDiv = document.createElement('div');
+      staffDiv.className = 'staff-item draggable';
+      staffDiv.setAttribute('draggable', 'true');
+      staffDiv.setAttribute('data-staff', `staff-${i}`);
+      staffDiv.textContent = `Phlebotomist ${i}`;
+      container.appendChild(staffDiv);
+    }
+    
+    // Reset counts
+    document.getElementById('count-routine').textContent = '0';
+    document.getElementById('count-stat').textContent = '0';
+    document.getElementById('count-special').textContent = '0';
+    document.getElementById('count-outpatient').textContent = '0';
+  }
+
+  // TIMER
+  function updateTimer() {
+    const now = new Date();
+    const diff = Math.floor((now - state.startedAt) / 1000);
+    state.timeSpent = diff;
+    const minutes = Math.floor(diff / 60);
+    const seconds = diff % 60;
+    timeSpentEl.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+  }
+  setInterval(updateTimer, 1000);
+
+  // UPDATE PROGRESS SUMMARY
+  function updateProgressSummary() {
+    let completed = 0;
+    let totalCorrect = 0;
+    let totalItems = 0;
+
+    Object.values(state.activities).forEach(activity => {
+      if (activity.completed) completed++;
+      totalCorrect += activity.correct;
+      totalItems += activity.total;
+    });
+
+    completedCount.textContent = completed;
+    const accuracy = totalItems > 0 ? Math.round((totalCorrect / totalItems) * 100) : 0;
+    accuracyRate.textContent = `${accuracy}%`;
+
+    // Update progress steps
+    progressSteps.forEach((step, index) => {
+      if (index < completed) {
+        step.classList.add('completed');
+        step.classList.remove('active');
+      } else if (index === completed) {
+        step.classList.add('active');
+        step.classList.remove('completed');
+      } else {
+        step.classList.remove('active', 'completed');
+      }
+    });
+  }
+
+  // ACTIVITY 1: LAYOUT DESIGN
+  function initActivity1() {
+    const layoutItems = document.querySelectorAll('#activity-1 .layout-item');
+    const layoutCells = document.querySelectorAll('#activity-1 .layout-cell');
+    const feedback = document.getElementById('feedback-1');
+    const status = document.querySelector('#activity-1 .activity-status');
+
+    let placedItems = 0;
+    let userLayout = {};
+
+    layoutItems.forEach(item => {
+      item.addEventListener('dragstart', function(e) {
+        e.dataTransfer.setData('text/plain', JSON.stringify({
+          item: this.dataset.item,
+          text: this.textContent
+        }));
+        this.classList.add('dragging');
+      });
+
+      item.addEventListener('dragend', function() {
+        this.classList.remove('dragging');
+      });
+    });
+
+    layoutCells.forEach(cell => {
+      cell.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        if (!this.classList.contains('filled')) {
+          this.classList.add('hover');
+        }
+      });
+
+      cell.addEventListener('dragleave', function() {
+        this.classList.remove('hover');
+      });
+
+      cell.addEventListener('drop', function(e) {
+        e.preventDefault();
+        this.classList.remove('hover');
+        
+        if (this.classList.contains('filled')) return;
+        
+        const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+        
+        this.classList.add('filled');
+        this.textContent = data.text;
+        this.dataset.item = data.item;
+        
+        userLayout[this.dataset.cell] = data.item;
+        state.activities[1].layout = userLayout;
+        
+        const originalItem = document.querySelector(`#activity-1 .layout-item[data-item="${data.item}"]`);
+        if (originalItem) {
+          originalItem.style.display = 'none';
+          placedItems++;
+        }
+
+        if (placedItems === 9) {
+          checkActivity1();
+        }
+      });
+    });
+
+    function checkActivity1() {
+      let correctCount = 0;
+      let flowScore = 0;
+      
+      // Check exact matches
+      Object.keys(optimalLayout).forEach(cell => {
+        if (userLayout[cell] === optimalLayout[cell]) {
+          correctCount++;
+        }
+      });
+      
+      // Calculate flow efficiency bonus
+      const userFlow = getUserFlow(userLayout);
+      const optimalFlow = ['waiting', 'checkin', 'prep', 'draw1', 'recovery', 'exit'];
+      
+      let flowMatches = 0;
+      userFlow.forEach((item, index) => {
+        if (item === optimalFlow[index]) flowMatches++;
+      });
+      
+      flowScore = Math.round((flowMatches / optimalFlow.length) * 2); // Bonus points
+      
+      state.activities[1].completed = true;
+      state.activities[1].correct = correctCount + flowScore;
+      state.activities[1].score = Math.round(((correctCount + flowScore) / 11) * 100); // 9 items + 2 bonus
+      
+      status.textContent = 'Completed';
+      status.style.color = '#00b894';
+      document.querySelector('#activity-1').classList.add('completed');
+      feedback.classList.add('show');
+      
+      updateProgressSummary();
+    }
+
+    function getUserFlow(layout) {
+      // Determine flow based on layout
+      const flow = [];
+      const cells = ['A1', 'A2', 'A3', 'B1', 'B2', 'B3', 'C1', 'C2', 'C3'];
+      
+      cells.forEach(cell => {
+        if (layout[cell]) {
+          flow.push(layout[cell]);
+        }
+      });
+      
+      return flow;
+    }
+  }
+
+  // ACTIVITY 2: STAFF SCHEDULING
+  function initActivity2() {
+    const scheduleSlots = document.querySelectorAll('#activity-2 .schedule-slot');
+    const feedback = document.getElementById('feedback-2');
+    const status = document.querySelector('#activity-2 .activity-status');
+
+    let staffAllocation = {
+      routine: [],
+      stat: [],
+      special: [],
+      outpatient: []
+    };
+
+    // Setup staff item drag
+    document.addEventListener('dragstart', function(e) {
+      if (e.target.classList.contains('staff-item') && e.target.getAttribute('draggable') === 'true') {
+        e.dataTransfer.setData('text/plain', JSON.stringify({
+          staff: e.target.dataset.staff,
+          text: e.target.textContent
+        }));
+        e.target.classList.add('dragging');
+      }
+    });
+
+    document.addEventListener('dragend', function(e) {
+      if (e.target.classList.contains('staff-item')) {
+        e.target.classList.remove('dragging');
+      }
+    });
+
+    scheduleSlots.forEach(slot => {
+      slot.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        this.classList.add('hover');
+      });
+
+      slot.addEventListener('dragleave', function() {
+        this.classList.remove('hover');
+      });
+
+      slot.addEventListener('drop', function(e) {
+        e.preventDefault();
+        this.classList.remove('hover');
+        
+        const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+        const unit = this.dataset.unit;
+        
+        // Check if staff is already placed elsewhere
+        let alreadyPlaced = false;
+        Object.keys(staffAllocation).forEach(key => {
+          if (staffAllocation[key].includes(data.staff)) {
+            alreadyPlaced = true;
+            // Remove from previous unit
+            const index = staffAllocation[key].indexOf(data.staff);
+            if (index > -1) {
+              staffAllocation[key].splice(index, 1);
+              updateUnitCount(key);
+            }
+          }
+        });
+        
+        // Add to new unit
+        if (!staffAllocation[unit].includes(data.staff)) {
+          staffAllocation[unit].push(data.staff);
+        }
+        
+        state.activities[2].allocation = staffAllocation;
+        updateUnitCount(unit);
+        
+        // Check if all staff are allocated
+        const totalAllocated = Object.values(staffAllocation).reduce((sum, arr) => sum + arr.length, 0);
+        if (totalAllocated === 8) {
+          checkActivity2();
+        }
+      });
+    });
+
+    function updateUnitCount(unit) {
+      const count = staffAllocation[unit].length;
+      document.getElementById(`count-${unit}`).textContent = count;
+    }
+
+    function checkActivity2() {
+      const optimal = optimalAllocations[state.schedulingParams.key];
+      let correctCount = 0;
+      
+      // Calculate closeness score (within 1 gets partial credit)
+      Object.keys(optimal).forEach(unit => {
+        const userCount = staffAllocation[unit].length;
+        const optimalCount = optimal[unit];
+        const difference = Math.abs(userCount - optimalCount);
+        
+        if (difference === 0) {
+          correctCount += 2; // Full points for exact match
+        } else if (difference === 1) {
+          correctCount += 1; // Partial credit for close
+        }
+        // No points for difference > 1
+      });
+      
+      state.activities[2].completed = true;
+      state.activities[2].correct = correctCount;
+      state.activities[2].score = Math.round((correctCount / 8) * 100); // Max 8 points (4 units × 2)
+      
+      status.textContent = 'Completed';
+      status.style.color = '#00b894';
+      document.querySelector('#activity-2').classList.add('completed');
+      feedback.classList.add('show');
+      
+      // Update feedback with specific optimal allocation
+      const optimalText = `For ${state.schedulingParams.size.name} (${state.schedulingParams.shift.name}) with ${state.schedulingParams.units.name}, optimal allocation is: Routine Floors: ${optimal.routine}, STAT Team: ${optimal.stat}, Special Units: ${optimal.special}, Outpatient: ${optimal.outpatient}`;
+      parameterReasoningEl.innerHTML = optimalText + '<br><br>' + parameterReasoningEl.textContent;
+      
+      updateProgressSummary();
+    }
+  }
+
+  // RESET ALL ACTIVITIES
+  function resetAllActivities() {
+    Object.keys(state.activities).forEach(key => {
+      state.activities[key] = {
+        completed: false,
+        correct: 0,
+        total: parseInt(key) === 1 ? 9 : 8,
+        score: 0,
+        layout: {},
+        allocation: {}
+      };
+    });
+
+    activityCards.forEach(card => {
+      card.classList.remove('completed');
+      const status = card.querySelector('.activity-status');
+      status.textContent = 'Not Started';
+      status.style.color = '';
+      const feedback = card.querySelector('.feedback-container');
+      feedback.classList.remove('show');
+    });
+
+    // Reset Activity 1
+    document.querySelectorAll('#activity-1 .layout-cell').forEach(cell => {
+      cell.classList.remove('filled', 'hover');
+      cell.textContent = '';
+      delete cell.dataset.item;
+    });
+    document.querySelectorAll('#activity-1 .layout-item').forEach(item => {
+      item.style.display = '';
+      item.classList.remove('dragging');
+    });
+    randomizeLayoutItems();
+
+    // Reset Activity 2
+    generateSchedulingParameters(); // Regenerate parameters
+    document.querySelectorAll('#activity-2 .schedule-slot').forEach(slot => {
+      slot.classList.remove('hover');
+    });
+
+    resultsPanel.classList.remove('show');
+    updateProgressSummary();
+  }
+
+  // CHECK ALL ANSWERS
+  function checkAllAnswers() {
+    if (!state.activities[1].completed) {
+      // Auto-complete Activity 1 with perfect score
+      state.activities[1].completed = true;
+      state.activities[1].correct = 11; // 9 items + 2 bonus
+      state.activities[1].score = 100;
+      document.querySelector('#activity-1 .activity-status').textContent = 'Completed';
+      document.querySelector('#activity-1').classList.add('completed');
+      document.querySelector('#feedback-1').classList.add('show');
+    }
+
+    if (!state.activities[2].completed) {
+      // Auto-complete Activity 2 with perfect score
+      state.activities[2].completed = true;
+      state.activities[2].correct = 8;
+      state.activities[2].score = 100;
+      document.querySelector('#activity-2 .activity-status').textContent = 'Completed';
+      document.querySelector('#activity-2').classList.add('completed');
+      document.querySelector('#feedback-2').classList.add('show');
+    }
+
+    updateProgressSummary();
+  }
+
+  // VIEW FINAL RESULTS
+  function viewFinalResults() {
+    let totalScore = 0;
+    let activityCount = 0;
+    
+    Object.values(state.activities).forEach(activity => {
+      if (activity.completed) {
+        totalScore += activity.score;
+        activityCount++;
+      }
+    });
+    
+    const averageScore = activityCount > 0 ? Math.round(totalScore / activityCount) : 0;
+    finalScore.textContent = `${averageScore}%`;
+    resultsPanel.classList.add('show');
+    resultsPanel.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  // INITIALIZE
+  randomizeLayoutItems();
+  generateSchedulingParameters();
+  initActivity1();
+  initActivity2();
+  
+  resetBtn.addEventListener('click', resetAllActivities);
+  checkBtn.addEventListener('click', checkAllAnswers);
+  resultsBtn.addEventListener('click', viewFinalResults);
+  
+  updateProgressSummary();
+  updateTimer();
+});
+</script>
+</body>
+</html>
