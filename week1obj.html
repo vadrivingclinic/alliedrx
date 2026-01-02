@@ -1,1007 +1,1129 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>AlliedRx – Week 1 Objectives</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <style>
-    :root {
-      --color-primary: #af4bef;
-      --color-primary-soft: #d492ff;
-      --color-accent: #ff4fcf;
-      --color-success: #00b894;
-      --color-error: #e17055;
-      --color-bg: #f7f5fb;
-      --color-text: #2b2b2b;
-      --color-muted: #6c6880;
-      --radius-lg: 24px;
-      --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
-      --shadow-hover: 0 25px 60px rgba(175, 75, 239, 0.25);
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html,
-    body {
-      width: 100%;
-      overflow-x: hidden;
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      padding: 24px;
-      background: radial-gradient(
-        circle at top left,
-        #ffffff 0,
-        #f1ecff 40%,
-        var(--color-bg) 100%
-      );
-      color: var(--color-text);
-      -webkit-text-size-adjust: 100%;
-    }
-
-    @media (max-width: 600px) {
-      body {
-        padding: 12px;
-      }
-    }
-
-    .page {
-      width: 100%;
-      max-width: 1120px;
-      margin: 0 auto;
-      background: #ffffff;
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-soft);
-      padding: 28px 30px 32px 30px;
-      display: grid;
-      grid-template-columns: minmax(0, 3.1fr) minmax(0, 2.4fr);
-      gap: 28px;
-      position: relative;
-      overflow: hidden;
-      animation: fadeInUp 0.8s ease-out;
-    }
-
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    @keyframes pulse {
-      0%, 100% { background-color: rgba(175, 75, 239, 0.08); }
-      50% { background-color: rgba(175, 75, 239, 0.15); }
-    }
-
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
-    }
-
-    @keyframes countUp {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes slideInRight {
-      from {
-        opacity: 0;
-        transform: translateX(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateX(0);
-      }
-    }
-
-    @media (max-width: 900px) {
-      .page {
-        grid-template-columns: 1fr;
-        padding: 22px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      body {
-        padding: 0;
-      }
-      .page {
-        border-radius: 0;
-        box-shadow: none;
-        padding: 18px 14px 22px;
-        gap: 22px;
-      }
-    }
-
-    img,
-    .page,
-    .column,
-    .objective-card,
-    .week-overview {
-      max-width: 100%;
-    }
-
-    .column {
-      position: relative;
-      z-index: 1;
-    }
-
-    /* Header */
-    .brand-row {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 14px;
-      margin-bottom: 8px;
-      flex-wrap: wrap;
-      width: 100%;
-      animation: fadeIn 0.6s ease-out 0.2s both;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .brand-logo {
-      height: 40px;
-      width: auto;
-      max-width: 100%;
-      filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
-      transition: transform 0.3s ease;
-    }
-
-    .brand-logo:hover {
-      transform: scale(1.05);
-    }
-
-    .course-meta {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      max-width: 100%;
-    }
-
-    .course-name {
-      font-size: 0.78rem;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      color: var(--color-muted);
-      white-space: normal;
-    }
-
-    .week-label {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 4px 10px;
-      border-radius: 999px;
-      background: rgba(175, 75, 239, 0.08);
-      font-size: 0.76rem;
-      color: var(--color-primary);
-      white-space: normal;
-      animation: pulse 2s infinite;
-    }
-
-    .week-label-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 999px;
-      background: var(--color-success);
-      flex-shrink: 0;
-      animation: blink 1.5s infinite;
-    }
-
-    .badge-mode {
-      padding: 5px 10px;
-      border-radius: 999px;
-      background: rgba(12, 10, 24, 0.06);
-      border: 1px solid rgba(12, 10, 24, 0.08);
-      font-size: 0.74rem;
-      text-transform: uppercase;
-      letter-spacing: 0.14em;
-      color: var(--color-muted);
-      white-space: nowrap;
-      transition: all 0.3s ease;
-    }
-
-    .badge-mode:hover {
-      background: rgba(175, 75, 239, 0.1);
-      border-color: var(--color-primary-soft);
-      color: var(--color-primary);
-    }
-
-    @media (max-width: 480px) {
-      .brand-row {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      .badge-mode {
-        margin-top: 6px;
-      }
-    }
-
-    h1 {
-      font-size: clamp(2rem, 3vw, 2.4rem);
-      line-height: 1.05;
-      color: var(--color-primary);
-      margin-bottom: 6px;
-      animation: fadeInUp 0.6s ease-out 0.3s both;
-    }
-
-    .subtitle {
-      font-size: 0.98rem;
-      color: var(--color-muted);
-      max-width: 34rem;
-      margin-bottom: 18px;
-      animation: fadeInUp 0.6s ease-out 0.4s both;
-    }
-
-    .subtitle strong {
-      color: var(--color-primary);
-    }
-
-    /* Interactive filter buttons */
-    .chapter-filter {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-      animation: slideInRight 0.6s ease-out 0.5s both;
-    }
-
-    .filter-btn {
-      padding: 8px 16px;
-      border-radius: 20px;
-      background: rgba(12, 10, 24, 0.05);
-      border: 1px solid rgba(12, 10, 24, 0.1);
-      color: var(--color-text);
-      font-size: 0.85rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .filter-btn:hover {
-      background: rgba(175, 75, 239, 0.1);
-      border-color: var(--color-primary-soft);
-      color: var(--color-primary);
-      transform: translateY(-2px);
-    }
-
-    .filter-btn.active {
-      background: var(--color-primary);
-      color: white;
-      border-color: var(--color-primary);
-    }
-
-    /* Progress counter */
-    .progress-counter {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: rgba(175, 75, 239, 0.05);
-      border-radius: 16px;
-      padding: 12px 18px;
-      margin-bottom: 20px;
-      border: 1px solid rgba(175, 75, 239, 0.1);
-      animation: slideInRight 0.6s ease-out 0.6s both;
-    }
-
-    .counter-item {
-      text-align: center;
-      animation: countUp 0.6s ease-out forwards;
-      opacity: 0;
-    }
-
-    .counter-item:nth-child(1) { animation-delay: 0.8s; }
-    .counter-item:nth-child(2) { animation-delay: 1s; }
-    .counter-item:nth-child(3) { animation-delay: 1.2s; }
-
-    .counter-number {
-      font-size: 1.8rem;
-      font-weight: 800;
-      color: var(--color-primary);
-      display: block;
-    }
-
-    .counter-label {
-      font-size: 0.75rem;
-      color: var(--color-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-    }
-
-    /* Objectives list */
-    .objectives-list {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .objective-card {
-      background: #08070a;
-      color: #ffffff;
-      border-radius: 18px;
-      padding: 10px 16px 14px;
-      display: grid;
-      grid-template-columns: auto 1fr auto;
-      align-items: center;
-      gap: 12px;
-      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
-      transition: all 0.3s ease;
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .objective-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-      transition: left 0.7s ease;
-    }
-
-    .objective-card:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow-hover);
-    }
-
-    .objective-card:hover::before {
-      left: 100%;
-    }
-
-    .objective-card.active {
-      background: linear-gradient(135deg, #0f172a, #1e1b4b);
-      border-left: 4px solid var(--color-accent);
-    }
-
-    @media (max-width: 480px) {
-      .objective-card {
-        grid-template-columns: auto 1fr;
-        grid-template-rows: auto auto;
-      }
-      .objective-icon {
-        justify-self: flex-end;
-      }
-    }
-
-    .objective-number {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 40px;
-      height: 40px;
-      border-radius: 999px;
-      background: #ffffff;
-      color: #111827;
-      font-weight: 700;
-      font-size: 1.05rem;
-      flex-shrink: 0;
-      transition: all 0.3s ease;
-    }
-
-    .objective-card:hover .objective-number {
-      background: var(--color-primary-soft);
-      transform: rotate(5deg);
-    }
-
-    .objective-main {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .objective-verb {
-      font-size: 0.98rem;
-      font-weight: 700;
-      color: var(--color-primary-soft);
-      transition: color 0.3s ease;
-    }
-
-    .objective-card:hover .objective-verb {
-      color: #ffffff;
-    }
-
-    .objective-text {
-      font-size: 0.84rem;
-      color: #e5e7eb;
-      line-height: 1.4;
-    }
-
-    .objective-icon {
-      width: 26px;
-      height: 26px;
-      border-radius: 999px;
-      border: 1px solid rgba(250, 250, 250, 0.16);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.7rem;
-      color: #f9fafb;
-      background: linear-gradient(
-        135deg,
-        rgba(175, 75, 239, 0.1),
-        rgba(0, 0, 0, 0.4)
-      );
-      transition: all 0.3s ease;
-    }
-
-    .objective-card:hover .objective-icon {
-      background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
-      transform: scale(1.1);
-    }
-
-    /* Right-hand content */
-    .objectives-header {
-      font-size: 1.3rem;
-      font-weight: 800;
-      color: var(--color-text);
-      margin-bottom: 6px;
-      animation: slideInRight 0.6s ease-out 0.7s both;
-    }
-
-    .section-tag {
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.14em;
-      color: var(--color-primary);
-      font-weight: 600;
-      margin-bottom: 10px;
-      animation: slideInRight 0.6s ease-out 0.8s both;
-    }
-
-    .week-overview {
-      background: rgba(12, 10, 24, 0.94);
-      border-radius: 18px;
-      padding: 16px 18px 18px;
-      color: #e5e7eb;
-      font-size: 0.88rem;
-      line-height: 1.7;
-      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.6);
-      margin-bottom: 16px;
-      animation: slideInRight 0.6s ease-out 0.9s both;
-      transition: transform 0.3s ease;
-    }
-
-    .week-overview:hover {
-      transform: translateY(-2px);
-    }
-
-    .week-overview strong {
-      color: #ffffff;
-    }
-
-    .mini-heading {
-      font-size: 0.86rem;
-      text-transform: uppercase;
-      letter-spacing: 0.14em;
-      color: #c4b5fd;
-      font-weight: 600;
-      margin: 8px 0 10px;
-    }
-
-    .outcomes-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      font-size: 0.86rem;
-      color: #f9fafb;
-    }
-
-    .outcomes-list li {
-      display: flex;
-      gap: 8px;
-      align-items: flex-start;
-      transition: transform 0.3s ease;
-      padding: 4px 0;
-    }
-
-    .outcomes-list li:hover {
-      transform: translateX(5px);
-    }
-
-    .dot {
-      width: 6px;
-      height: 6px;
-      margin-top: 6px;
-      border-radius: 999px;
-      background: var(--color-accent);
-      flex-shrink: 0;
-      animation: pulse 2s infinite;
-      transition: all 0.3s ease;
-    }
-
-    .outcomes-list li:hover .dot {
-      background: var(--color-primary);
-      transform: scale(1.5);
-    }
-
-    .note-card {
-      margin-top: 14px;
-      border-radius: 16px;
-      border: 1px solid rgba(255, 255, 255, 0.16);
-      background: rgba(15, 23, 42, 0.7);
-      padding: 10px 12px;
-      font-size: 0.78rem;
-      color: #e5e7eb;
-      transition: all 0.3s ease;
-    }
-
-    .note-card:hover {
-      border-color: var(--color-primary-soft);
-      background: rgba(15, 23, 42, 0.9);
-    }
-
-    .note-card strong {
-      color: #fef3c7;
-    }
-
-    /* Completion celebration */
-    .completion-celebration {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.7);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-      animation: fadeIn 0.5s ease;
-    }
-
-    .celebration-content {
-      background: white;
-      padding: 40px;
-      border-radius: var(--radius-lg);
-      text-align: center;
-      max-width: 500px;
-      animation: fadeInUp 0.5s ease;
-      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
-    }
-
-    .celebration-icon {
-      font-size: 4rem;
-      margin-bottom: 20px;
-      animation: pulse 2s infinite;
-    }
-
-    .celebration-title {
-      font-size: 1.8rem;
-      color: var(--color-primary);
-      margin-bottom: 10px;
-    }
-
-    .celebration-text {
-      color: var(--color-muted);
-      margin-bottom: 20px;
-    }
-
-    .celebration-btn {
-      padding: 12px 24px;
-      background: var(--color-primary);
-      color: white;
-      border: none;
-      border-radius: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .celebration-btn:hover {
-      background: #9a3bd6;
-      transform: scale(1.05);
-    }
-  </style>
-</head>
-
-<body>
-  <main class="page" aria-labelledby="week1-heading">
-    <!-- LEFT COLUMN: title + objective cards -->
-    <section class="column" aria-label="Week 1 objectives list">
-      <header class="brand-row">
-        <div class="brand">
-          <img
-            src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
-            alt="AlliedRx logo"
-            class="brand-logo"
-          />
-          <div class="course-meta">
-            <span class="course-name">Campus & Distance Learning • CCMA</span>
-            <div class="week-label">
-              <span class="week-label-dot"></span>
-              <span>Week 1 — Intro / Objectives / Reading</span>
-            </div>
-          </div>
-        </div>
-
-        <span class="badge-mode">Online &amp; Self-Paced</span>
-      </header>
-
-      <h1 id="week1-heading">Week 1 Objectives</h1>
-      <p class="subtitle">
-        This week launches your AlliedRx journey. You'll explore how
-        <strong>competency-based education</strong> works, why portfolios matter,
-        and how your personal learning style can support your success.
-      </p>
-
-      <!-- Interactive filter buttons -->
-      <div class="chapter-filter">
-        <button class="filter-btn active" data-filter="all">All Objectives</button>
-        <button class="filter-btn" data-filter="foundation">Foundation</button>
-        <button class="filter-btn" data-filter="application">Application</button>
-      </div>
-
-      <!-- Progress counter -->
-      <div class="progress-counter">
-        <div class="counter-item">
-          <span class="counter-number" id="total-objectives">4</span>
-          <span class="counter-label">Total Objectives</span>
-        </div>
-        <div class="counter-item">
-          <span class="counter-number">2</span>
-          <span class="counter-label">Chapters</span>
-        </div>
-        <div class="counter-item">
-          <span class="counter-number">7</span>
-          <span class="counter-label">Key Terms</span>
-        </div>
-      </div>
-
-      <div class="objectives-list" id="objectives-container">
-        <!-- Objective 1 -->
-        <article class="objective-card" data-category="foundation" id="obj1">
-          <div class="objective-number">01</div>
-          <div class="objective-main">
-            <div class="objective-verb">Define</div>
-            <p class="objective-text">
-              Define, spell, and correctly pronounce key vocabulary terms related
-              to competency-based education and adult learning.
-            </p>
-          </div>
-          <div class="objective-icon" aria-hidden="true">
-            📚
-          </div>
-        </article>
-
-        <!-- Objective 2 -->
-        <article class="objective-card" data-category="foundation" id="obj2">
-          <div class="objective-number">02</div>
-          <div class="objective-main">
-            <div class="objective-verb">Discuss</div>
-            <p class="objective-text">
-              Discuss the principles of competency-based education and explain how
-              they apply to you as an adult learner at AlliedRx.
-            </p>
-          </div>
-          <div class="objective-icon" aria-hidden="true">
-            💬
-          </div>
-        </article>
-
-        <!-- Objective 3 -->
-        <article class="objective-card" data-category="application" id="obj3">
-          <div class="objective-number">03</div>
-          <div class="objective-main">
-            <div class="objective-verb">Summarize</div>
-            <p class="objective-text">
-              Summarize the importance of maintaining a student portfolio to
-              document academic progress and skill competency.
-            </p>
-          </div>
-          <div class="objective-icon" aria-hidden="true">
-            📁
-          </div>
-        </article>
-
-        <!-- Objective 4 -->
-        <article class="objective-card" data-category="application" id="obj4">
-          <div class="objective-number">04</div>
-          <div class="objective-main">
-            <div class="objective-verb">Examine</div>
-            <p class="objective-text">
-              Examine your own learning preferences and interpret how your
-              learning style may support or challenge your success as a student.
-            </p>
-          </div>
-          <div class="objective-icon" aria-hidden="true">
-            🔍
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <!-- RIGHT COLUMN: narrative + outcomes framing -->
-    <aside class="column" aria-label="Overview of this week's content">
-      <h2 class="objectives-header">What we're covering this week</h2>
-      <p class="section-tag">Big picture</p>
-
-      <div class="week-overview">
-        <p>
-          This week's lesson focuses on <strong>competency-based education</strong>
-          and how it shapes your learning experience at AlliedRx. Instead of only
-          counting hours or seat time, competency-based education emphasizes the
-          <strong>skills you can demonstrate</strong> in real clinical settings.
-        </p>
-
-        <p class="mini-heading">By the end of this week, you will be able to:</p>
-        <ul class="outcomes-list">
-          <li>
-            <span class="dot"></span>
-            <span>Recognize how your program is structured around clearly defined competencies.</span>
-          </li>
-          <li>
-            <span class="dot"></span>
-            <span>Connect your coursework, labs, and portfolio artifacts to your future role as a medical assistant.</span>
-          </li>
-          <li>
-            <span class="dot"></span>
-            <span>Identify strategies to study more effectively based on your learning preferences.</span>
-          </li>
-        </ul>
-
-        <div class="note-card">
-          <strong>Pro tip:</strong> Keep a running list of key terms, portfolio
-          pieces, and "aha" moments from this week. You'll refer back to these
-          throughout the program and when you prepare for your NHA exam.
-        </div>
-      </div>
-    </aside>
-  </main>
-
-  <!-- Completion Celebration Modal -->
-  <div class="completion-celebration" id="celebration-modal">
-    <div class="celebration-content">
-      <div class="celebration-icon">🎓</div>
-      <h2 class="celebration-title">Objectives Mastered!</h2>
-      <p class="celebration-text">
-        Congratulations! You've completed all Week 1 objectives and built a strong
-        foundation in competency-based education and adult learning principles.
-      </p>
-      <p class="celebration-text">
-        You're now ready to apply these concepts throughout your CCMA program
-        and begin building your professional portfolio.
-      </p>
-      <button class="celebration-btn" id="close-celebration">Continue to Reading</button>
-    </div>
-  </div>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // State management
-      let completedObjectives = {
-        obj1: false,
-        obj2: false,
-        obj3: false,
-        obj4: false
-      };
-
-      let totalCompleted = 0;
-
-      // DOM elements
-      const objectiveCards = document.querySelectorAll('.objective-card');
-      const filterButtons = document.querySelectorAll('.filter-btn');
-      const counterNumber = document.getElementById('total-objectives');
-      const celebrationModal = document.getElementById('celebration-modal');
-      const closeCelebrationBtn = document.getElementById('close-celebration');
-
-      // Filter functionality
-      filterButtons.forEach(button => {
-        button.addEventListener('click', function() {
-          // Update active button
-          filterButtons.forEach(btn => btn.classList.remove('active'));
-          this.classList.add('active');
-          
-          const filter = this.getAttribute('data-filter');
-          
-          // Filter cards
-          objectiveCards.forEach(card => {
-            if (filter === 'all') {
-              card.style.display = 'grid';
-              setTimeout(() => {
-                card.style.opacity = '1';
-                card.style.transform = 'translateY(0)';
-              }, 10);
-            } else {
-              if (card.getAttribute('data-category') === filter) {
-                card.style.display = 'grid';
-                setTimeout(() => {
-                  card.style.opacity = '1';
-                  card.style.transform = 'translateY(0)';
-                }, 10);
-              } else {
-                card.style.opacity = '0';
-                card.style.transform = 'translateY(10px)';
-                setTimeout(() => {
-                  card.style.display = 'none';
-                }, 300);
-              }
+    <meta charset="UTF-8" />
+    <title>AlliedRx • Week 1 Objectives</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-warning: #fdcb6e;
+            --color-error: #e17055;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
+            --radius-lg: 24px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(circle at top left, #ffffff 0%, #f1ecff 40%, var(--color-bg) 100%);
+            color: var(--color-text);
+            -webkit-text-size-adjust: 100%;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 12px;
             }
-          });
-        });
-      });
-
-      // Toggle objective completion
-      function toggleObjective(cardId) {
-        const card = document.getElementById(cardId);
-        const isCompleted = completedObjectives[cardId];
-        
-        if (isCompleted) {
-          // Mark as incomplete
-          card.classList.remove('active');
-          completedObjectives[cardId] = false;
-          totalCompleted--;
-          updateCounter();
-        } else {
-          // Mark as complete
-          card.classList.add('active');
-          completedObjectives[cardId] = true;
-          totalCompleted++;
-          updateCounter();
-          
-          // Add animation
-          const icon = card.querySelector('.objective-icon');
-          icon.style.transform = 'scale(1.2) rotate(10deg)';
-          setTimeout(() => {
-            icon.style.transform = 'scale(1.1)';
-          }, 300);
-          
-          // Check if all objectives are completed
-          if (totalCompleted === 4) {
-            showCelebration();
-          }
         }
-      }
 
-      // Update counter
-      function updateCounter() {
-        // Animate the counter number
-        let current = parseInt(counterNumber.textContent);
-        let target = totalCompleted;
-        
-        // Simple animation for counter
-        counterNumber.style.color = '#00b894';
-        setTimeout(() => {
-          counterNumber.style.color = 'var(--color-primary)';
-        }, 300);
-        
-        counterNumber.textContent = target;
-      }
-
-      // Show celebration modal
-      function showCelebration() {
-        setTimeout(() => {
-          celebrationModal.style.display = 'flex';
-        }, 500);
-      }
-
-      // Close celebration modal
-      function closeCelebration() {
-        celebrationModal.style.display = 'none';
-      }
-
-      // Interactive objective cards
-      objectiveCards.forEach(card => {
-        card.addEventListener('click', function() {
-          const cardId = this.id;
-          toggleObjective(cardId);
-        });
-        
-        // Add keyboard navigation
-        card.setAttribute('tabindex', '0');
-        card.addEventListener('keydown', function(e) {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            const cardId = this.id;
-            toggleObjective(cardId);
-          }
-        });
-      });
-
-      // Animate counter numbers
-      function animateCounter(element, target, duration) {
-        let start = 0;
-        const increment = target / (duration / 16); // 60fps
-        const timer = setInterval(() => {
-          start += increment;
-          if (start >= target) {
-            element.textContent = target;
-            clearInterval(timer);
-          } else {
-            element.textContent = Math.floor(start);
-          }
-        }, 16);
-      }
-      
-      // Start counter animation after page load
-      setTimeout(() => {
-        const counterElements = document.querySelectorAll('.counter-number');
-        const targets = [4, 2, 7];
-        
-        counterElements.forEach((element, index) => {
-          animateCounter(element, targets[index], 1000);
-        });
-      }, 1500);
-
-      // Add hover effect to outcomes list items
-      const outcomesItems = document.querySelectorAll('.outcomes-list li');
-      outcomesItems.forEach(item => {
-        item.addEventListener('mouseenter', function() {
-          const dot = this.querySelector('.dot');
-          dot.style.transform = 'scale(1.5)';
-          dot.style.background = 'var(--color-primary)';
-        });
-        
-        item.addEventListener('mouseleave', function() {
-          const dot = this.querySelector('.dot');
-          dot.style.transform = 'scale(1)';
-          dot.style.background = 'var(--color-accent)';
-        });
-      });
-
-      // Add scroll animation for cards
-      const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-      };
-      
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateY(0)';
-          }
-        });
-      }, observerOptions);
-      
-      // Observe all objective cards
-      objectiveCards.forEach(card => {
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(20px)';
-        card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-        observer.observe(card);
-      });
-
-      // Event listeners for celebration modal
-      closeCelebrationBtn.addEventListener('click', closeCelebration);
-      
-      // Close modal when clicking outside
-      celebrationModal.addEventListener('click', (e) => {
-        if (e.target === celebrationModal) {
-          closeCelebration();
+        .page {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px 30px;
+            display: grid;
+            grid-template-columns: minmax(0, 3.1fr) minmax(0, 2.4fr);
+            gap: 28px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
         }
-      });
 
-      // Initialize with first objective completed for demo
-      setTimeout(() => {
-        toggleObjective('obj1');
-      }, 2000);
-    });
-  </script>
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        @media (max-width: 900px) {
+            .page {
+                grid-template-columns: 1fr;
+                padding: 22px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 0;
+            }
+            .page {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 18px 14px 22px;
+                gap: 22px;
+            }
+        }
+
+        /* Header & branding */
+        .brand-row {
+            display: flex;
+            align-items: center; /* Fixed alignment */
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .brand-logo:hover { transform: scale(1.05); }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        /* Fixed Week Label Styles */
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08); /* Light purple bg */
+            font-size: 0.76rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            white-space: nowrap;
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--color-success);
+            flex-shrink: 0;
+        }
+
+        /* Fixed Badge Mode Styles */
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .badge-mode:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+        @media (max-width: 480px) {
+            .brand-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .badge-mode {
+                margin-top: 6px;
+            }
+            .week-label {
+                white-space: normal; /* Allow wrap on very small screens */
+            }
+        }
+
+        h1 {
+            font-size: clamp(2rem, 3vw, 2.4rem);
+            line-height: 1.05;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 34rem;
+            margin-bottom: 18px;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        /* Filter buttons */
+        .chapter-filter {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border-radius: 20px;
+            background: rgba(12, 10, 24, 0.05);
+            border: 1px solid rgba(12, 10, 24, 0.1);
+            color: var(--color-text);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+        .filter-btn.active {
+            background: var(--color-primary);
+            color: white;
+            border-color: var(--color-primary);
+        }
+
+        /* Progress counter */
+        .progress-counter {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(175, 75, 239, 0.05);
+            border-radius: 16px;
+            padding: 12px 18px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(175, 75, 239, 0.1);
+        }
+
+        .counter-item {
+            text-align: center;
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .counter-item:nth-child(1) { animation-delay: 0.8s; }
+        .counter-item:nth-child(2) { animation-delay: 1s; }
+        .counter-item:nth-child(3) { animation-delay: 1.2s; }
+
+        .counter-number {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--color-primary);
+            display: block;
+        }
+
+        .counter-label {
+            font-size: 0.75rem;
+            color: var(--color-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Objectives List */
+        .objectives-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .objective-card {
+            background: #08070a;
+            color: #ffffff;
+            border-radius: 18px;
+            padding: 10px 16px 14px;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .objective-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.7s ease;
+        }
+
+        .objective-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .objective-card:hover::before {
+            left: 100%;
+        }
+
+        .objective-card.active {
+            background: linear-gradient(135deg, #0f172a, #1e1b4b);
+            border-left: 4px solid var(--color-accent);
+        }
+
+        .objective-number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 999px;
+            background: #ffffff;
+            color: #111827;
+            font-weight: 700;
+            font-size: 1.05rem;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .objective-card:hover .objective-number {
+            background: var(--color-primary-soft);
+            transform: rotate(5deg);
+        }
+
+        .objective-main {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .objective-verb {
+            font-size: 0.98rem;
+            font-weight: 700;
+            color: var(--color-primary-soft);
+            transition: color 0.3s ease;
+        }
+
+        .objective-card:hover .objective-verb {
+            color: #ffffff;
+        }
+
+        .objective-text {
+            font-size: 0.84rem;
+            color: #e5e7eb;
+            line-height: 1.4;
+        }
+
+        .objective-icon {
+            width: 26px;
+            height: 26px;
+            border-radius: 999px;
+            border: 1px solid rgba(250, 250, 250, 0.16);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: #f9fafb;
+            background: linear-gradient(135deg, rgba(175, 75, 239, 0.1), rgba(0, 0, 0, 0.4));
+            transition: all 0.3s ease;
+        }
+
+        .objective-card:hover .objective-icon {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+            transform: scale(1.1);
+        }
+
+        /* Right Column Styling */
+        .objectives-header {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--color-text);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.5s both;
+        }
+
+        .section-tag {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-primary);
+            font-weight: 600;
+            margin-bottom: 10px;
+            animation: fadeInUp 0.6s ease-out 0.6s both;
+        }
+
+        .week-overview {
+            background: rgba(12, 10, 24, 0.94);
+            border-radius: 18px;
+            padding: 16px 18px 18px;
+            color: #e5e7eb;
+            font-size: 0.88rem;
+            line-height: 1.7;
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.6);
+            margin-bottom: 16px;
+            animation: fadeInUp 0.6s ease-out 0.7s both;
+            transition: transform 0.3s ease;
+        }
+
+        .week-overview:hover {
+            transform: translateY(-2px);
+        }
+
+        .week-overview strong {
+            color: #ffffff;
+        }
+
+        .case-study {
+            background: linear-gradient(135deg, rgba(131, 128, 240, 0.1), rgba(175, 75, 239, 0.1));
+            border-radius: 18px;
+            padding: 18px;
+            margin-top: 20px;
+            border: 1px solid rgba(131, 128, 240, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .case-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--color-accent);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .case-content {
+            font-size: 0.85rem;
+            color: #ffffff;
+            line-height: 1.5;
+        }
+
+        .case-content strong {
+            color: #d492ff;
+        }
+
+        .mini-heading {
+            font-size: 0.86rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: #c4b5fd;
+            font-weight: 600;
+            margin: 8px 0 10px;
+        }
+
+        .outcomes-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-size: 0.86rem;
+            color: #f9fafb;
+        }
+
+        .outcomes-list li {
+            display: flex;
+            gap: 8px;
+            align-items: flex-start;
+            transition: transform 0.3s ease;
+        }
+
+        .outcomes-list li:hover {
+            transform: translateX(5px);
+        }
+
+        .dot {
+            width: 6px;
+            height: 6px;
+            margin-top: 6px;
+            border-radius: 999px;
+            background: var(--color-accent);
+            flex-shrink: 0;
+            animation: pulse 2s infinite;
+        }
+
+        .note-card {
+            margin-top: 14px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            background: rgba(15, 23, 42, 0.7);
+            padding: 10px 12px;
+            font-size: 0.78rem;
+            color: #e5e7eb;
+            transition: all 0.3s ease;
+        }
+
+        .note-card:hover {
+            border-color: var(--color-primary-soft);
+            background: rgba(15, 23, 42, 0.9);
+        }
+
+        .note-card strong {
+            color: #fef3c7;
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="week1-heading">
+        <!-- LEFT COLUMN: title + objective cards -->
+        <section class="column" aria-label="Week 1 objectives list">
+            <header class="brand-row">
+                <div class="brand">
+                    <img
+                        src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                        alt="AlliedRx logo"
+                        class="brand-logo"
+                    />
+                    <div class="course-meta">
+                        <span class="course-name">Clinical Medical Assistant • Week 1</span>
+                        <div class="week-label">
+                            <span class="week-label-dot"></span>
+                            <span>Week 1 — Education & Safety</span>
+                        </div>
+                    </div>
+                </div>
+                <span class="badge-mode">Campus & Online</span>
+            </header>
+
+            <h1 id="week1-heading">Week 1 Objectives</h1>
+            <p class="subtitle">
+                Master the foundations of competency-based education, study skills, and professional behavior while learning critical safety and emergency response protocols.
+            </p>
+
+            <!-- Interactive filter buttons -->
+            <div class="chapter-filter">
+                <button class="filter-btn active" data-filter="all">All Objectives</button>
+                <button class="filter-btn" data-filter="chapter1">Chapter 1: Education</button>
+                <button class="filter-btn" data-filter="chapter12">Chapter 12: Safety</button>
+            </div>
+
+            <!-- Progress counter -->
+            <div class="progress-counter">
+                <div class="counter-item">
+                    <span class="counter-number" id="total-objectives">37</span>
+                    <span class="counter-label">Total Objectives</span>
+                </div>
+                <div class="counter-item">
+                    <span class="counter-number">2</span>
+                    <span class="counter-label">Chapters</span>
+                </div>
+                <div class="counter-item">
+                    <span class="counter-number">15+</span>
+                    <span class="counter-label">Clinical Skills</span>
+                </div>
+            </div>
+
+            <div class="objectives-list" id="objectives-container">
+                <!-- Chapter 1: Education Objectives -->
+                <article class="objective-card" data-chapter="chapter1">
+                    <div class="objective-number">01</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Define & Pronounce</div>
+                        <p class="objective-text">Define, spell, and pronounce the terms listed in the vocabulary for competency-based education.</p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🗣️</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter1">
+                    <div class="objective-number">02</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Discuss</div>
+                        <p class="objective-text">Discuss competency-based education and the specific needs of adult learners.</p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🧠</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter1">
+                    <div class="objective-number">03</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Summarize</div>
+                        <p class="objective-text">Summarize the importance of student portfolios in proving academic success and skill competency.</p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">📁</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter1">
+                    <div class="objective-number">04</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Examine & Interpret</div>
+                        <p class="objective-text">Examine your learning preferences and interpret how your learning style affects your success as a student.</p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🤔</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter1">
+                    <div class="objective-number">05</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Differentiate</div>
+                        <p class="objective-text">Differentiate between adaptive and nonadaptive coping mechanisms for stress.</p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">⚖️</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter1">
+                    <div class="objective-number">06</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Apply</div>
+                        <p class="objective-text">Apply time management strategies to make the most of your learning opportunities.</p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">⏱️</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter1">
+                    <div class="objective-number">07</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Integrate</div>
+                        <p class="objective-text">Integrate effective study skills into your daily activities for better retention.</p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">📚</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter1">
+                    <div class="objective-number">08</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Design</div>
+                        <p class="objective-text">Design test-taking strategies that help you take charge of your success.</p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">📝</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter1">
+                    <div class="objective-number">09</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Incorporate</div>
+                        <p class="objective-text">Incorporate critical thinking and reflection to help you make mental connections as you learn material.</p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🧩</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter1">
+                    <div class="objective-number">10</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Analyze</div>
+                        <p class="objective-text">Analyze healthcare results as reported in graphs and tables.</p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">📊</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter1">
+                    <div class="objective-number">11</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Apply</div>
+                        <p class="objective-text">Apply problem-solving techniques to manage conflict and overcome barriers to your success.</p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🤝</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter1">
+                    <div class="objective-number">12</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Relate & Discuss</div>
+                        <p class="objective-text">Relate assertiveness, aggressiveness, and passive behaviors to professional communication.</p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">💬</div>
+                </article>
+
+                <!-- Chapter 12: Safety Objectives -->
+                <article class="objective-card" data-chapter="chapter12">
+                    <div class="objective-number">13</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Define & Pronounce</div>
+                        <p class="objective-text">Define, spell, and pronounce terms related to safety and emergency practices.</p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🗣️</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter12">
+                    <div class="objective-number">14</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Describe</div>
+                        <p class="objective-text">Describe patient safety factors in the medical office environment.</p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🏥</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter12">
+                    <div class="objective-number">15</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Interpret & Comply</div>
+                        <p class="objective-text">Interpret safety signs/symbols and evaluate the environment for safe/unsafe conditions.</p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🛑</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter12">
+                    <div class="objective-number">16</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Identify & Discuss</div>
+                        <p class="objective-text">Identify environmental safety issues and discuss fire safety issues in healthcare.</p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🔥</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter12">
+                    <div class="objective-number">17</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Demonstrate</div>
+                        <p class="objective-text">Demonstrate the proper use of a fire extinguisher (PASS technique).</p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🧯</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter12">
+                    <div class="objective-number">18</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Describe & Role-play</div>
+                        <p class="objective-text">Describe evacuation principles and role-play a mock environmental exposure event.</p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🏃</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter12">
+                    <div class="objective-number">19</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Discuss</div>
+                        <p class="objective-text">Discuss the requirements for proper disposal of hazardous materials.</p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">☣️</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter12">
+                    <div class="objective-number">20</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Identify</div>
+                        <p class="objective-text">Identify critical elements of an emergency plan for response to disasters.</p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">📋</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter12">
+                    <div class="objective-number">21</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Maintain</div>
+                        <p class="objective-text">Maintain an up-to-date list of community resources for emergency preparedness.</p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">📞</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter12">
+                    <div class="objective-number">22</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Describe</div>
+                        <p class="objective-text">Describe the medical assistant's role in emergency response.</p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">👩‍⚕️</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter12">
+                    <div class="objective-number">23</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Summarize</div>
+                        <p class="objective-text">Summarize typical emergency supplies and equipment (Crash Cart).</p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🛒</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter12">
+                    <div class="objective-number">24</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Demonstrate</div>
+                        <p class="objective-text">Demonstrate the use of an automated external defibrillator (AED).</p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">⚡</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter12">
+                    <div class="objective-number">25</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Summarize</div>
+                        <p class="objective-text">Summarize the general rules for managing emergencies.</p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🚨</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter12">
+                    <div class="objective-number">26</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Demonstrate</div>
+                        <p class="objective-text">Demonstrate telephone screening techniques and documentation guidelines for emergencies.</p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">☎️</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter12">
+                    <div class="objective-number">27</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Recognize & Respond</div>
+                        <p class="objective-text">Recognize and respond to life-threatening emergencies in ambulatory care.</p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🆘</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter12">
+                    <div class="objective-number">28</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Describe & Perform</div>
+                        <p class="objective-text">Describe handling unresponsive patients and perform professional-level CPR.</p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">💓</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter12">
+                    <div class="objective-number">29</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Discuss & Administer</div>
+                        <p class="objective-text">Discuss cardiac emergencies and administer oxygen via nasal cannula.</p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🫁</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter12">
+                    <div class="objective-number">30</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Identify & Assist</div>
+                        <p class="objective-text">Identify and assist a patient with an obstructed airway.</p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🤐</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter12">
+                    <div class="objective-number">31</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Discuss & Assist</div>
+                        <p class="objective-text">Discuss cerebrovascular accidents (stroke) and assist a patient in shock.</p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🧠</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter12">
+                    <div class="objective-number">32</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Determine</div>
+                        <p class="objective-text">Determine appropriate action for fainting, poisoning, bites, stings, and asthma attacks.</p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🐝</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter12">
+                    <div class="objective-number">33</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Discuss & Perform</div>
+                        <p class="objective-text">Discuss seizures and perform first aid procedures for a patient seizing.</p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">📉</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter12">
+                    <div class="objective-number">34</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Discuss & Perform</div>
+                        <p class="objective-text">Discuss abdominal pain, sprains, fractures; perform first aid for wrist fracture.</p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🦴</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter12">
+                    <div class="objective-number">35</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Discuss & Control</div>
+                        <p class="objective-text">Discuss burns/tissue injuries and control a hemorrhagic wound.</p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🩸</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter12">
+                    <div class="objective-number">36</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Discuss & Perform</div>
+                        <p class="objective-text">Discuss nosebleeds, head injuries, heat/cold injuries, diabetic emergencies; perform first aid.</p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">🩹</div>
+                </article>
+
+                <article class="objective-card" data-chapter="chapter12">
+                    <div class="objective-number">37</div>
+                    <div class="objective-main">
+                        <div class="objective-verb">Discuss</div>
+                        <p class="objective-text">Discuss legal and ethical concerns arising from medical emergencies.</p>
+                    </div>
+                    <div class="objective-icon" aria-hidden="true">⚖️</div>
+                </article>
+            </div>
+        </section>
+
+        <!-- RIGHT COLUMN: narrative + outcomes framing -->
+        <aside class="column" aria-label="Overview of this week's content">
+            <h2 class="objectives-header">Foundations & Safety Protocols</h2>
+            <p class="section-tag">Study Skills • Emergency Response • Professionalism</p>
+
+            <div class="week-overview">
+                <p>
+                    Week 1 establishes the professional and safety groundwork. You'll explore how to learn effectively in a competency-based program and how to keep patients (and yourself) safe during emergencies.
+                </p>
+
+                <p>
+                    These chapters provide the toolkit for your success as a student and a future professional: mastering <strong>how to learn</strong> and <strong>how to respond</strong> when seconds count.
+                </p>
+
+                <!-- Case Study Chapter 1 -->
+                <div class="case-study">
+                    <div class="case-title">
+                        <span>🧠</span> Chapter 1 Case Study: Shawna Long
+                    </div>
+                    <div class="case-content">
+                        <strong>Situation:</strong> Newly admitted MA student, anxious about success, works part-time.<br>
+                        <strong>Challenge:</strong> Balancing work/school, overcoming past academic struggles.<br>
+                        <strong>Key Tools:</strong> Learning styles analysis, time management, adaptive coping mechanisms.
+                    </div>
+                </div>
+
+                <!-- Case Study Chapter 12 -->
+                <div class="case-study">
+                    <div class="case-title">
+                        <span>🚑</span> Chapter 12 Case Study: Cheryl Skurka
+                    </div>
+                    <div class="case-content">
+                        <strong>Situation:</strong> Working for 6 months, concerned about emergency preparedness.<br>
+                        <strong>Challenge:</strong> Needs to learn telephone screening for emergencies and disaster response.<br>
+                        <strong>Key Tools:</strong> Emergency protocols, community resources, drill participation.
+                    </div>
+                </div>
+
+                <p class="mini-heading">Key Skills Focus:</p>
+                <ul class="outcomes-list">
+                    <li>
+                        <span class="dot"></span>
+                        <span><strong>CPR & First Aid:</strong> Provider-level response for cardiac arrest, bleeding, and shock.</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span><strong>Fire Safety:</strong> RACE acronym and PASS technique for extinguishers.</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span><strong>Triage:</strong> Telephone screening to identify life-threatening conditions.</span>
+                    </li>
+                    <li>
+                        <span class="dot"></span>
+                        <span><strong>Self-Management:</strong> Time management and stress reduction strategies.</span>
+                    </li>
+                </ul>
+
+                <div class="note-card">
+                    <strong>Emergency Supplies:</strong> Familiarize yourself with the <strong>Crash Cart</strong>. Know the location of the AED, oxygen tank, and emergency medications (epinephrine, nitroglycerin) in your facility.
+                </div>
+
+                <div class="note-card" style="margin-top: 12px;">
+                    <strong>Study Tip:</strong> Use <strong>Mnemonics</strong> to memorize lists (e.g., PASS for fire extinguishers, CAB for CPR). Active <strong>Reflection</strong> helps connect new knowledge to real-world scenarios.
+                </div>
+
+                <div class="note-card" style="margin-top: 12px;">
+                    <strong>Legal Note:</strong> In emergencies, always act within your <strong>Scope of Practice</strong>. Provide care you are trained and authorized to give, and document all actions thoroughly.
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Filter functionality
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const objectiveCards = document.querySelectorAll('.objective-card');
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Update active button
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+
+                    const filter = this.getAttribute('data-filter');
+
+                    // Filter cards
+                    objectiveCards.forEach(card => {
+                        if (filter === 'all') {
+                            card.style.display = 'grid';
+                            setTimeout(() => {
+                                card.style.opacity = '1';
+                                card.style.transform = 'translateY(0)';
+                            }, 10);
+                        } else {
+                            if (card.getAttribute('data-chapter') === filter) {
+                                card.style.display = 'grid';
+                                setTimeout(() => {
+                                    card.style.opacity = '1';
+                                    card.style.transform = 'translateY(0)';
+                                }, 10);
+                            } else {
+                                card.style.opacity = '0';
+                                card.style.transform = 'translateY(10px)';
+                                setTimeout(() => {
+                                    card.style.display = 'none';
+                                }, 300);
+                            }
+                        }
+                    });
+                });
+            });
+
+            // Interactive objective cards
+            objectiveCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    // Toggle active state
+                    this.classList.toggle('active');
+
+                    // Add subtle animation
+                    if (this.classList.contains('active')) {
+                        const icon = this.querySelector('.objective-icon');
+                        icon.style.transform = 'scale(1.2) rotate(10deg)';
+                        setTimeout(() => {
+                            icon.style.transform = 'scale(1.1)';
+                        }, 300);
+                    }
+                });
+
+                // Add keyboard navigation
+                card.setAttribute('tabindex', '0');
+                card.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        this.click();
+                    }
+                });
+            });
+
+            // Animate counter numbers
+            function animateCounter(element, target, duration) {
+                let start = 0;
+                const increment = target / (duration / 16);
+                const timer = setInterval(() => {
+                    start += increment;
+                    if (start >= target) {
+                        element.textContent = target;
+                        clearInterval(timer);
+                    } else {
+                        element.textContent = Math.floor(start);
+                    }
+                }, 16);
+            }
+
+            // Start counter animation after page load
+            setTimeout(() => {
+                const counterElement = document.getElementById('total-objectives');
+                animateCounter(counterElement, 37, 1200);
+            }, 1500);
+
+            // Add hover effect to outcomes list items
+            const outcomesItems = document.querySelectorAll('.outcomes-list li');
+            outcomesItems.forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    const dot = this.querySelector('.dot');
+                    dot.style.transform = 'scale(1.5)';
+                    dot.style.background = 'var(--color-primary)';
+                });
+                item.addEventListener('mouseleave', function() {
+                    const dot = this.querySelector('.dot');
+                    dot.style.transform = 'scale(1)';
+                    dot.style.background = 'var(--color-accent)';
+                });
+            });
+
+            // Add scroll animation for cards
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all objective cards
+            objectiveCards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                observer.observe(card);
+            });
+
+            // Add interactivity to case study boxes
+            const caseStudies = document.querySelectorAll('.case-study');
+            caseStudies.forEach(study => {
+                study.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-3px)';
+                    this.style.boxShadow = '0 12px 30px rgba(131, 128, 240, 0.2)';
+                });
+                study.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                    this.style.boxShadow = 'none';
+                });
+            });
+        });
+    </script>
 </body>
 </html>
