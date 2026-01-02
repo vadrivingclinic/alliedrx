@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Week 2 -- CCMA Lab Course</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d9b8ff;
+            --color-accent: #8380f0;
+            --color-bg: #f7f5fb;
+            --color-text: #1e2030;
+            --color-muted: #727089;
+            --radius-lg: 24px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 18px 14px 24px;
+            background: radial-gradient(circle at top left, #ffffff 0, #f3edff 40%, var(--color-bg) 100%);
+            color: var(--color-text);
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1120px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 22px 20px 26px;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr);
+            gap: 22px;
+            position: relative;
+        }
+
+        @media (min-width: 900px) {
+            .page {
+                grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+            }
+        }
+
+        .column {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            min-width: 0;
+        }
+
+        /* Header / branding */
+        .brand-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: nowrap;
+            min-width: 0;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+        }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            min-width: 0;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: #00b894;
+            flex-shrink: 0;
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+        }
+
+        h1 {
+            font-size: clamp(1.9rem, 3vw, 2.3rem);
+            line-height: 1.1;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+        }
+
+        .subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 36rem;
+            margin-bottom: 18px;
+        }
+
+        .subtitle strong {
+            color: var(--color-primary);
+        }
+
+        /* Sections */
+        .section-label {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-primary);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--color-text);
+        }
+
+        .card {
+            border-radius: 18px;
+            border: 1px solid rgba(15, 23, 42, 0.06);
+            padding: 14px 16px 16px;
+            margin-bottom: 14px;
+            background: linear-gradient(
+                135deg,
+                rgba(175, 75, 239, 0.06),
+                rgba(255, 255, 255, 0.98)
+            );
+            width: 100%;
+        }
+
+        .card p {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--color-text);
+        }
+
+        .small {
+            font-size: 0.82rem;
+            color: var(--color-muted);
+        }
+
+        /* Welcome Banner */
+        .welcome-banner {
+            background: linear-gradient(135deg, var(--color-primary), #7c3aed);
+            color: white;
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(175, 75, 239, 0.3);
+        }
+
+        .welcome-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .welcome-subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-bottom: 16px;
+        }
+
+        /* Skills Progress */
+        .skills-container {
+            margin: 24px 0;
+        }
+
+        .skill-item {
+            margin-bottom: 24px;
+            padding: 16px;
+            background: rgba(248, 250, 252, 0.9);
+            border-radius: 14px;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+        }
+
+        .skill-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .skill-dots {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+
+        .skill-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #d1d5db;
+        }
+
+        .skill-dot.active {
+            background: var(--color-primary);
+        }
+
+        /* Schedule Cards */
+        .schedule-card {
+            background: linear-gradient(135deg, rgba(131, 128, 240, 0.08), rgba(255, 255, 255, 0.95));
+            border: 1px solid rgba(131, 128, 240, 0.2);
+            border-radius: 16px;
+            padding: 18px;
+            margin: 16px 0;
+        }
+
+        .schedule-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .schedule-icon {
+            font-size: 1.2rem;
+            color: var(--color-accent);
+        }
+
+        .schedule-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-accent);
+        }
+
+        .time-slot {
+            background: white;
+            border-radius: 12px;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+        }
+
+        .time-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-text);
+            margin-bottom: 4px;
+        }
+
+        .time-detail {
+            font-size: 0.85rem;
+            color: var(--color-muted);
+        }
+
+        /* Requirements */
+        .requirements-card {
+            background: linear-gradient(135deg, rgba(0, 184, 148, 0.08), rgba(255, 255, 255, 0.95));
+            border: 1px solid rgba(0, 184, 148, 0.2);
+            border-radius: 16px;
+            padding: 18px;
+            margin: 16px 0;
+        }
+
+        .requirement-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+        }
+
+        .requirement-icon {
+            color: #00b894;
+            font-size: 1rem;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        /* Location Card */
+        .location-card {
+            background: rgba(12, 10, 24, 0.96);
+            color: #e5e7eb;
+            border-radius: 18px;
+            padding: 16px 18px 18px;
+            font-size: 0.88rem;
+            line-height: 1.7;
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.6);
+            margin-bottom: 16px;
+            width: 100%;
+        }
+
+        .location-title {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #c4b5fd;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .address {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 12px;
+            margin-top: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .address-line {
+            margin-bottom: 4px;
+        }
+
+        /* Right column cards */
+        .side-card {
+            background: rgba(12, 10, 24, 0.96);
+            color: #e5e7eb;
+            border-radius: 18px;
+            padding: 16px 18px 18px;
+            font-size: 0.88rem;
+            line-height: 1.7;
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.6);
+            margin-bottom: 16px;
+            width: 100%;
+        }
+
+        .side-card strong {
+            color: #ffffff;
+        }
+
+        .side-subtitle {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #c4b5fd;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .side-list {
+            list-style: none;
+            margin-top: 6px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            font-size: 0.86rem;
+        }
+
+        .side-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 7px;
+        }
+
+        .dot {
+            width: 6px;
+            height: 6px;
+            margin-top: 7px;
+            border-radius: 999px;
+            background: #a5b4fc;
+            flex-shrink: 0;
+        }
+
+        .completion-card {
+            border-radius: 18px;
+            border: 1px dashed rgba(148, 163, 184, 0.7);
+            padding: 12px 14px;
+            font-size: 0.84rem;
+            color: var(--color-muted);
+            background: rgba(248, 250, 252, 0.9);
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="lab-heading">
+        <!-- LEFT COLUMN -->
+        <section class="column">
+            <header class="brand-row">
+                <div class="brand">
+                    <img
+                        src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                        alt="AlliedRx logo"
+                        class="brand-logo"
+                    />
+                    <div class="course-meta">
+                        <span class="course-name">Clinical Medical Assistant Lab • Hands-on Skills</span>
+                        <div class="week-label">
+                            <span class="week-label-dot"></span>
+                            <span>Week 2 — Exams & Sterile Fields</span>
+                        </div>
+                    </div>
+                </div>
+                <span class="badge-mode">In-Person Lab</span>
+            </header>
+
+            <h1 id="lab-heading">Clinical Medical Assistant Lab</h1>
+
+            <p class="subtitle">
+                Week 2 expands your clinical repertoire with <strong>patient positioning</strong>, 
+                <strong>specialty testing</strong>, and the critical techniques for <strong>maintaining a sterile field</strong>.
+            </p>
+
+            <!-- WELCOME BANNER -->
+            <div class="welcome-banner">
+                <div class="welcome-title">Welcome</div>
+                <div class="welcome-subtitle">Week 2 • Physical Exams & Sterile Fields</div>
+            </div>
+
+            <!-- SKILLS PROGRESS -->
+            <section aria-label="skills progress">
+                <p class="section-label">Course Skills</p>
+                <h2 class="section-title">Hands-on Skill Development</h2>
+                
+                <div class="skills-container">
+                    <div class="skill-item">
+                        <div class="skill-title">
+                            <span>SKILL 04 - Patient Positioning</span>
+                        </div>
+                        <div class="skill-dots">
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                        </div>
+                        <p class="small" style="margin-top: 8px;">
+                            Demonstrate Fowler's, Lithotomy, Prone, Supine, and Sims' positions with proper draping.
+                        </p>
+                    </div>
+
+                    <div class="skill-item">
+                        <div class="skill-title">
+                            <span>SKILL 05 - Sensory Testing</span>
+                        </div>
+                        <div class="skill-dots">
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                        </div>
+                        <p class="small" style="margin-top: 8px;">
+                            Perform distance vision (Snellen), color vision (Ishihara), and assist with ear irrigation.
+                        </p>
+                    </div>
+
+                    <div class="skill-item">
+                        <div class="skill-title">
+                            <span>SKILL 06 - Surgical Asepsis</span>
+                        </div>
+                        <div class="skill-dots">
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                        </div>
+                        <p class="small" style="margin-top: 8px;">
+                            Master sterile gloving, setting up a sterile field, and passing surgical instruments.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- LAB SCHEDULE -->
+            <section aria-label="lab schedule">
+                <p class="section-label">Lab Schedule</p>
+                <h2 class="section-title">Henrico Campus Location</h2>
+                
+                <div class="card">
+                    <p class="small">
+                        All CCMA students must attend each skills session – it is mandatory, no exceptions!
+                    </p>
+                    
+                    <div class="schedule-card">
+                        <div class="schedule-header">
+                            <span class="schedule-icon">⏰</span>
+                            <span class="schedule-title">Daytime Session</span>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time-label">10:00 AM - 1:00 PM</div>
+                            <div class="time-detail">All Daytime CCMA Students will be required to meet in person for hands-on skills training.</div>
+                        </div>
+                    </div>
+
+                    <div class="schedule-card">
+                        <div class="schedule-header">
+                            <span class="schedule-icon">🌙</span>
+                            <span class="schedule-title">Evening Session</span>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time-label">6:00 PM - 9:00 PM</div>
+                            <div class="time-detail">All Evening CCMA Students will be required to meet in person for hands-on skills training.</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- RIGHT COLUMN -->
+        <aside class="column" aria-label="requirements and location">
+            <!-- DRESS CODE & PREPARATION -->
+            <section>
+                <p class="section-label">Requirements</p>
+                <h2 class="section-title">Dress Code & Preparation</h2>
+                
+                <div class="requirements-card">
+                    <p class="small">
+                        Students are expected to come prepared to begin their skills lab sessions.
+                    </p>
+                    
+                    <div style="margin-top: 16px;">
+                        <div class="requirement-item">
+                            <span class="requirement-icon">👕</span>
+                            <span><strong>Scrubs:</strong> Professional medical scrubs are required for all lab sessions.</span>
+                        </div>
+                        <div class="requirement-item">
+                            <span class="requirement-icon">👟</span>
+                            <span><strong>Closed Toe Tennis Shoes:</strong> Protective footwear must be worn at all times.</span>
+                        </div>
+                        <div class="requirement-item">
+                            <span class="requirement-icon">💅</span>
+                            <span><strong>Nails:</strong> No artificial nails or chipped polish (critical for sterile field).</span>
+                        </div>
+                        <div class="requirement-item">
+                            <span class="requirement-icon">💍</span>
+                            <span><strong>Jewelry:</strong> Minimal to none; hands/wrists must be bare for surgical scrub.</span>
+                        </div>
+                        <div class="requirement-item">
+                            <span class="requirement-icon">📚</span>
+                            <span><strong>Course Materials:</strong> Bring your textbook, skills checklist, and a pen.</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CAMPUS LOCATION -->
+            <section>
+                <p class="section-label">Location</p>
+                <h2 class="section-title">Meet Us</h2>
+                
+                <div class="location-card">
+                    <div class="location-title">Henrico Campus</div>
+                    <p>
+                        All in-person clinical skills labs are held at our Henrico Campus location.
+                    </p>
+                    
+                    <div class="address">
+                        <div class="address-line">
+                            <strong>AlliedRx Institute of Healthcare</strong>
+                        </div>
+                        <div class="address-line">2105 East Parham Road, #108</div>
+                        <div class="address-line">Henrico, Virginia 23228</div>
+                    </div>
+                    
+                    <div style="margin-top: 16px;">
+                        <p class="small" style="color: #c4b5fd;">
+                            <strong>Health & Safety:</strong> To protect the health and safety of all our students and staff, 
+                            standard health and safety protocols will be followed during all in-person sessions.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- IMPORTANT REMINDERS -->
+            <section>
+                <p class="section-label">Reminders</p>
+                <h2 class="section-title">Important Information</h2>
+                
+                <div class="side-card">
+                    <p class="side-subtitle">Attendance Policy</p>
+                    <p>
+                        Attendance at all skills lab sessions is mandatory for successful completion of the CCMA Lab Course.
+                    </p>
+                    
+                    <ul class="side-list" style="margin-top: 12px;">
+                        <li>
+                            <span class="dot"></span>
+                            <span>Arrive 10-15 minutes before your scheduled session time</span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span>Bring your student ID for check-in</span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span>Complete any pre-lab assignments before arrival</span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span>Notify your instructor immediately if you cannot attend</span>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- COMPLETION CHECKLIST -->
+            <section>
+                <p class="section-label">Before You Arrive</p>
+                <h2 class="section-title">Lab Readiness Checklist</h2>
+                
+                <div class="completion-card">
+                    <p>
+                        Before attending your first lab session, ensure you have:
+                    </p>
+                    
+                    <ul class="side-list" style="margin-top: 8px;">
+                        <li>
+                            <span class="dot"></span>
+                            <span>Removed all <strong>artificial nails and hand jewelry</strong></span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span>Tied back <strong>long hair</strong> securely</span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span>Reviewed the <strong>Sterile Gloving video</strong> on the portal</span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span>Confirmed your <strong>session time (daytime or evening)</strong></span>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+        </aside>
+    </main>
+</body>
+</html>
