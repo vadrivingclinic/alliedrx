@@ -1,1626 +1,1162 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Chapter 9 Wrap-Up — Principles of Pharmacology</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-        :root {
-            --color-primary: #af4bef;
-            --color-primary-soft: #d492ff;
-            --color-accent: #8380f0;
-            --color-success: #00b894;
-            --color-error: #e17055;
-            --color-warning: #fdcb6e;
-            --color-info: #0984e3;
-            --color-bg: #f7f5fb;
-            --color-text: #2b2b2b;
-            --color-muted: #6c6880;
-            --color-dark: #0c0a18;
-            --radius-lg: 24px;
-            --radius-md: 16px;
-            --radius-sm: 12px;
-            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
-            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
-            --shadow-card: 0 12px 30px rgba(15, 23, 42, 0.1);
-        }
-
-        /* Animations */
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-        @keyframes checkmarkPop {
-            0% { transform: scale(0); opacity: 0; }
-            70% { transform: scale(1.2); opacity: 1; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        html, body {
-            width: 100%;
-            overflow-x: hidden;
-            min-height: 100vh;
-        }
-
-        body {
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            padding: 24px;
-            background: radial-gradient(circle at top left, #ffffff 0, #f3edff 40%, var(--color-bg) 100%);
-            color: var(--color-text);
-            -webkit-text-size-adjust: 100%;
-            animation: fadeIn 0.8s ease;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-        }
-
-        @media (max-width: 600px) {
-            body { padding: 12px; }
-        }
-
-        .page {
-            width: 100%;
-            max-width: 1200px;
-            min-width: 320px;
-            margin: 0 auto;
-            background: #ffffff;
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-soft);
-            padding: 28px 30px 32px;
-            display: grid;
-            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-            gap: 32px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        @media (max-width: 1024px) {
-            .page {
-                max-width: 900px;
-            }
-        }
-
-        @media (max-width: 900px) {
-            .page {
-                grid-template-columns: 1fr;
-                padding: 22px;
-                gap: 24px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            body { padding: 0; }
-            .page {
-                border-radius: 0;
-                box-shadow: none;
-                padding: 18px 14px 22px;
-                gap: 22px;
-            }
-        }
-
-        img, .page, .column, .card, .side-card, .completion-card {
-            max-width: 100%;
-        }
-
-        .column {
-            position: relative;
-            z-index: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-        }
-
-        /* Header / Branding */
-        .brand-row {
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
-            gap: 14px;
-            margin-bottom: 10px;
-            flex-wrap: wrap;
-            width: 100%;
-            animation: fadeInUp 0.6s ease;
-            grid-column: 1 / -1;
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
-        .brand-logo {
-            height: 40px;
-            width: auto;
-            max-width: 100%;
-            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
-        }
-
-        .course-meta {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-            max-width: 100%;
-        }
-
-        .course-name {
-            font-size: 0.78rem;
-            text-transform: uppercase;
-            letter-spacing: 0.16em;
-            color: var(--color-muted);
-            white-space: normal;
-        }
-
-        .week-label {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 4px 10px;
-            border-radius: 999px;
-            background: rgba(175, 75, 239, 0.08);
-            font-size: 0.76rem;
-            color: var(--color-primary);
-            white-space: normal;
-        }
-
-        .week-label-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 999px;
-            background: var(--color-success);
-            flex-shrink: 0;
-        }
-
-        .badge-mode {
-            padding: 5px 10px;
-            border-radius: 999px;
-            background: rgba(12, 10, 24, 0.06);
-            border: 1px solid rgba(12, 10, 24, 0.08);
-            font-size: 0.74rem;
-            text-transform: uppercase;
-            letter-spacing: 0.14em;
-            color: var(--color-muted);
-            white-space: nowrap;
-        }
-
-        @media (max-width: 480px) {
-            .brand-row { flex-direction: column; align-items: flex-start; }
-            .badge-mode { margin-top: 6px; }
-        }
-
-        h1 {
-            font-size: clamp(1.9rem, 3vw, 2.3rem);
-            line-height: 1.05;
-            color: var(--color-primary);
-            margin-bottom: 6px;
-            animation: fadeInUp 0.7s ease 0.1s both;
-            grid-column: 1 / -1;
-        }
-
-        .subtitle {
-            font-size: 0.98rem;
-            color: var(--color-muted);
-            max-width: 100%;
-            margin-bottom: 18px;
-            animation: fadeInUp 0.7s ease 0.2s both;
-            grid-column: 1 / -1;
-        }
-
-        .subtitle strong {
-            color: var(--color-primary);
-        }
-
-        /* Progress Tracker */
-        .progress-tracker {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            margin: 20px 0;
-            padding: 10px;
-            background: rgba(175, 75, 239, 0.05);
-            border-radius: var(--radius-lg);
-            grid-column: 1 / -1;
-        }
-
-        .progress-step {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            flex: 1;
-            max-width: 200px;
-        }
-
-        .step-circle {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: rgba(175, 75, 239, 0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: var(--color-primary);
-            transition: all 0.3s ease;
-        }
-
-        .progress-step.active .step-circle {
-            background: var(--color-primary);
-            color: white;
-            box-shadow: 0 8px 20px rgba(175, 75, 239, 0.3);
-            animation: pulse 2s infinite;
-        }
-
-        .step-label {
-            font-size: 0.85rem;
-            color: var(--color-muted);
-            text-align: center;
-            line-height: 1.3;
-        }
-
-        .progress-step.active .step-label {
-            color: var(--color-primary);
-            font-weight: 600;
-        }
-
-        /* Sections */
-        .section-label {
-            font-size: 0.78rem;
-            text-transform: uppercase;
-            letter-spacing: 0.16em;
-            color: var(--color-primary);
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .section-title {
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin-bottom: 12px;
-            color: var(--color-text);
-            line-height: 1.3;
-        }
-
-        .card {
-            border-radius: var(--radius-md);
-            border: 1px solid rgba(15, 23, 42, 0.06);
-            padding: 18px 20px 20px;
-            margin-bottom: 16px;
-            background: linear-gradient(135deg, rgba(175, 75, 239, 0.04), rgba(255, 255, 255, 0.98));
-            animation: fadeInUp 0.6s ease;
-            width: 100%;
-        }
-
-        .card p {
-            font-size: 0.92rem;
-            line-height: 1.6;
-            color: var(--color-text);
-            margin-bottom: 12px;
-        }
-
-        .small {
-            font-size: 0.82rem;
-            color: var(--color-muted);
-            line-height: 1.5;
-        }
-
-        /* Quiz Styles */
-        .quiz-item {
-            margin-top: 14px;
-            padding-top: 14px;
-            border-top: 1px dashed rgba(148, 163, 184, 0.7);
-        }
-
-        .quiz-question {
-            font-size: 0.95rem;
-            font-weight: 600;
-            margin-bottom: 8px;
-            line-height: 1.4;
-        }
-
-        .quiz-options {
-            list-style: none;
-            padding-left: 0;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            font-size: 0.9rem;
-        }
-
-        .quiz-options li {
-            display: flex;
-            align-items: flex-start;
-            gap: 8px;
-            padding: 10px;
-            border-radius: var(--radius-sm);
-            transition: background-color 0.2s;
-            cursor: pointer;
-            border: 1px solid transparent;
-        }
-
-        .quiz-options li:hover {
-            background-color: rgba(175, 75, 239, 0.05);
-            border-color: rgba(175, 75, 239, 0.1);
-        }
-
-        .quiz-options input {
-            margin-top: 3px;
-            cursor: pointer;
-        }
-
-        .quiz-feedback {
-            font-size: 0.85rem;
-            margin-top: 8px;
-            min-height: 1.1em;
-            padding: 10px;
-            border-radius: var(--radius-sm);
-            display: none;
-            line-height: 1.4;
-        }
-
-        .quiz-feedback.correct {
-            color: var(--color-success);
-            background-color: rgba(0, 184, 148, 0.1);
-            border: 1px solid rgba(0, 184, 148, 0.2);
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-
-        .quiz-feedback.incorrect {
-            color: var(--color-error);
-            background-color: rgba(225, 112, 85, 0.1);
-            border: 1px solid rgba(225, 112, 85, 0.2);
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-
-        .btn {
-            border-radius: 999px;
-            border: none;
-            padding: 12px 24px;
-            margin-top: 12px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-            cursor: pointer;
-            background: linear-gradient(135deg, var(--color-primary), #7c3aed);
-            color: #ffffff;
-            box-shadow: 0 10px 25px rgba(88, 28, 135, 0.35);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            display: inline-block;
-            min-width: 140px;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 15px 30px rgba(88, 28, 135, 0.4);
-        }
-
-        .btn:active {
-            transform: translateY(1px);
-            box-shadow: 0 5px 12px rgba(88, 28, 135, 0.4);
-        }
-
-        /* Drag and Drop Styles */
-        .drag-container {
-            margin: 20px 0;
-        }
-
-        .drag-drop-zone {
-            min-height: 100px;
-            border: 2px dashed var(--color-primary-soft);
-            border-radius: var(--radius-md);
-            padding: 20px;
-            margin: 12px 0;
-            background: rgba(175, 75, 239, 0.03);
-            transition: all 0.3s ease;
-        }
-
-        .drag-drop-zone.active {
-            border-color: var(--color-primary);
-            background: rgba(175, 75, 239, 0.08);
-            transform: scale(1.01);
-        }
-
-        .drag-drop-zone strong {
-            display: block;
-            color: var(--color-primary);
-            margin-bottom: 4px;
-            font-size: 0.95rem;
-        }
-
-        .drag-drop-zone small {
-            display: block;
-            color: var(--color-muted);
-            font-size: 0.85rem;
-            line-height: 1.4;
-        }
-
-        .drag-item {
-            display: inline-block;
-            padding: 10px 16px;
-            margin: 6px;
-            background: var(--color-primary);
-            color: white;
-            border-radius: var(--radius-sm);
-            cursor: move;
-            user-select: none;
-            box-shadow: var(--shadow-card);
-            transition: transform 0.2s ease;
-            font-size: 0.9rem;
-            max-width: 100%;
-            word-break: break-word;
-        }
-
-        .drag-item:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-hover);
-        }
-
-        .drag-item.dragging {
-            opacity: 0.5;
-            transform: scale(0.95);
-        }
-
-        /* FIXED: Schedule Cards - PURPLE WITH WHITE TEXT */
-        .agency-match-container {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin: 20px 0;
-        }
-
-        .agency-item {
-            padding: 14px 16px;
-            border-radius: var(--radius-md);
-            background: linear-gradient(135deg, var(--color-primary), #9d4edd);
-            border: 2px solid var(--color-primary-soft);
-            cursor: move;
-            user-select: none;
-            transition: all 0.3s ease;
-            color: white;
-            box-shadow: 0 6px 20px rgba(175, 75, 239, 0.25);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            min-height: 80px;
-            text-align: center;
-        }
-
-        .agency-item:hover {
-            transform: translateY(-3px);
-            border-color: white;
-            box-shadow: 0 12px 30px rgba(175, 75, 239, 0.35);
-            background: linear-gradient(135deg, #c95eff, var(--color-primary));
-        }
-
-        .agency-item strong {
-            color: white;
-            display: block;
-            margin-bottom: 6px;
-            font-size: 1rem;
-            font-weight: 700;
-        }
-
-        .agency-item small {
-            color: rgba(255, 255, 255, 0.95);
-            font-size: 0.85rem;
-            line-height: 1.4;
-            display: block;
-            opacity: 0.9;
-        }
-
-        /* Different purple shades for each schedule */
-        .agency-item[data-schedule="I"] {
-            background: linear-gradient(135deg, #af4bef, #8a2be2);
-            border-color: #d492ff;
-        }
-        
-        .agency-item[data-schedule="II"] {
-            background: linear-gradient(135deg, #9d4edd, #7b2cbf);
-            border-color: #c084fc;
-        }
-        
-        .agency-item[data-schedule="III"] {
-            background: linear-gradient(135deg, #8a3dc7, #6a1b9a);
-            border-color: #a855f7;
-        }
-        
-        .agency-item[data-schedule="IV"] {
-            background: linear-gradient(135deg, #7a2fb2, #5a189a);
-            border-color: #9333ea;
-        }
-
-        /* Match Zones - Dark background for contrast */
-        .match-zone-container {
-            margin-top: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .match-zone-header {
-            color: white;
-            font-weight: 600;
-            font-size: 0.95rem;
-            margin-bottom: 12px;
-            text-align: center;
-            background: rgba(12, 10, 24, 0.7);
-            padding: 8px 16px;
-            border-radius: var(--radius-sm);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .agency-match-zone {
-            min-height: 90px;
-            border: 2px solid rgba(255, 255, 255, 0.4);
-            border-radius: var(--radius-md);
-            padding: 16px;
-            background: rgba(12, 10, 24, 0.85);
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            position: relative;
-        }
-
-        .agency-match-zone strong {
-            color: #ffffff;
-            font-size: 0.95rem;
-            line-height: 1.4;
-            margin-bottom: 4px;
-            display: block;
-            font-weight: 700;
-        }
-
-        .agency-match-zone .regulation-desc {
-            color: rgba(255, 255, 255, 0.95);
-            font-size: 0.85rem;
-            line-height: 1.5;
-            opacity: 0.9;
-        }
-
-        .agency-match-zone.correct {
-            border-color: var(--color-success);
-            background: rgba(12, 10, 24, 0.95);
-            box-shadow: 0 0 0 2px rgba(0, 184, 148, 0.4), 0 4px 12px rgba(0, 184, 148, 0.2);
-        }
-
-        .agency-match-zone.incorrect {
-            border-color: var(--color-error);
-            background: rgba(12, 10, 24, 0.95);
-            box-shadow: 0 0 0 2px rgba(225, 112, 85, 0.4), 0 4px 12px rgba(225, 112, 85, 0.2);
-        }
-
-        .correct-match {
-            color: var(--color-success);
-            font-weight: 600;
-            margin-top: 8px;
-            display: none;
-            font-size: 0.9rem;
-            padding: 6px 12px;
-            background: rgba(0, 184, 148, 0.15);
-            border-radius: var(--radius-sm);
-            align-self: flex-start;
-            border: 1px solid rgba(0, 184, 148, 0.3);
-        }
-
-        .correct-match.show {
-            display: inline-block;
-            animation: fadeIn 0.5s ease;
-        }
-
-        /* Vocabulary Flashcards */
-        .vocab-grid {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 12px;
-            margin-top: 8px;
-        }
-
-        @media (max-width: 900px) {
-            .vocab-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .vocab-card {
-            border-radius: var(--radius-md);
-            padding: 14px 16px;
-            background: linear-gradient(135deg, rgba(12, 10, 24, 0.95), rgba(30, 25, 60, 0.98));
-            color: #f0f0f0;
-            font-size: 0.9rem;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            min-height: 100px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .vocab-card:hover {
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-hover);
-        }
-
-        .vocab-term {
-            font-weight: 700;
-            margin-bottom: 6px;
-            color: #fef9c3;
-            font-size: 0.95rem;
-            line-height: 1.3;
-        }
-
-        .vocab-definition {
-            font-size: 0.86rem;
-            line-height: 1.5;
-            display: none;
-            color: #e5e7eb;
-        }
-
-        .vocab-card.active .vocab-definition {
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-
-        .vocab-card::after {
-            content: "Tap to flip";
-            position: absolute;
-            right: 10px;
-            bottom: 8px;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 0.12em;
-            color: #c4b5fd;
-            background: rgba(12, 10, 24, 0.8);
-            padding: 4px 8px;
-            border-radius: 4px;
-            border: 1px solid rgba(196, 181, 253, 0.3);
-        }
-
-        .vocab-card.active::after {
-            content: "Hide";
-            color: #a5b4fc;
-        }
-
-        /* Reflection */
-        textarea {
-            width: 100%;
-            min-height: 100px;
-            border-radius: var(--radius-sm);
-            border: 1px solid rgba(148, 163, 184, 0.7);
-            padding: 12px;
-            font-family: inherit;
-            font-size: 0.9rem;
-            resize: vertical;
-            margin-top: 8px;
-            transition: border-color 0.3s, box-shadow 0.3s;
-            background: rgba(255, 255, 255, 0.05);
-            color: #f0f0f0;
-        }
-
-        textarea:focus {
-            outline: none;
-            border-color: var(--color-primary);
-            box-shadow: 0 0 0 3px rgba(175, 75, 239, 0.2);
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        textarea::placeholder {
-            color: rgba(200, 200, 220, 0.6);
-        }
-
-        .checklist {
-            list-style: none;
-            margin-top: 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            font-size: 0.9rem;
-        }
-
-        .checklist li {
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            padding: 10px;
-            border-radius: var(--radius-sm);
-            transition: background-color 0.2s;
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .checklist li:hover {
-            background-color: rgba(175, 75, 239, 0.1);
-        }
-
-        .checklist input {
-            margin-top: 3px;
-            cursor: pointer;
-            transform: scale(1.2);
-        }
-
-        .checklist label {
-            color: #e5e7eb;
-            line-height: 1.5;
-            flex: 1;
-        }
-
-        /* Right Column Cards */
-        .side-card {
-            background: linear-gradient(135deg, rgba(12, 10, 24, 0.95), rgba(30, 25, 60, 0.98));
-            color: #f0f0f0;
-            border-radius: var(--radius-md);
-            padding: 20px 22px 22px;
-            font-size: 0.92rem;
-            line-height: 1.6;
-            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.6);
-            margin-bottom: 20px;
-            animation: fadeInUp 0.6s ease;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            width: 100%;
-        }
-
-        .side-card p {
-            color: #e5e7eb;
-            margin-bottom: 14px;
-            line-height: 1.6;
-        }
-
-        .side-card strong {
-            color: #ffffff;
-            font-weight: 700;
-        }
-
-        .side-subtitle {
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 0.12em;
-            color: #c4b5fd;
-            font-weight: 700;
-            margin-bottom: 12px;
-            display: block;
-        }
-
-        .side-list {
-            list-style: none;
-            margin-top: 10px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            font-size: 0.9rem;
-        }
-
-        .side-list li {
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            color: #e5e7eb;
-            line-height: 1.5;
-        }
-
-        .dot {
-            width: 8px;
-            height: 8px;
-            margin-top: 8px;
-            border-radius: 999px;
-            background: #a5b4fc;
-            flex-shrink: 0;
-        }
-
-        .completion-card {
-            border-radius: var(--radius-md);
-            border: 1px dashed rgba(148, 163, 184, 0.7);
-            padding: 18px 20px;
-            font-size: 0.88rem;
-            color: var(--color-text);
-            background: rgba(248, 250, 252, 0.95);
-            animation: fadeInUp 0.6s ease;
-            width: 100%;
-        }
-
-        .completion-card p {
-            color: var(--color-text);
-            margin-bottom: 12px;
-        }
-
-        .completion-card .side-list li {
-            color: var(--color-text);
-        }
-
-        /* Label improvements */
-        label.small {
-            color: #d1d5db;
-            display: block;
-            margin-top: 15px;
-            font-size: 0.88rem;
-            line-height: 1.5;
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .agency-match-container {
-                grid-template-columns: 1fr;
-            }
-            
-            .drag-item {
-                font-size: 0.85rem;
-                padding: 8px 12px;
-            }
-            
-            .agency-match-zone {
-                min-height: 80px;
-                padding: 12px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .progress-tracker {
-                gap: 20px;
-            }
-            
-            .step-label {
-                font-size: 0.8rem;
-            }
-            
-            .btn {
-                padding: 10px 20px;
-                font-size: 0.85rem;
-                width: 100%;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <title>AlliedRx – Week 9 EKG Reading Assignments</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    :root {
+      /* Maintaining original brand colors */
+      --color-primary: #af4bef;
+      --color-primary-soft: #d492ff;
+      --color-accent: #8380f0;
+      --color-success: #00b894;
+      --color-error: #e17055;
+      --color-bg: #f7f5fb;
+      --color-text: #2b2b2b;
+      --color-muted: #6c6880;
+      --radius-lg: 24px;
+      --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+      --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      width: 100%;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      padding: 24px;
+      background: radial-gradient(
+        circle at top left,
+        #ffffff 0,
+        #f1ecff 40%,
+        var(--color-bg) 100%
+      );
+      color: var(--color-text);
+      -webkit-text-size-adjust: 100%;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 12px;
+      }
+    }
+
+    .page {
+      width: 100%;
+      max-width: 1120px;
+      margin: 0 auto;
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+      padding: 28px 30px 32px 30px;
+      display: grid;
+      grid-template-columns: minmax(0, 3.1fr) minmax(0, 2.4fr);
+      gap: 28px;
+      position: relative;
+      overflow: hidden;
+      animation: fadeInUp 0.8s ease-out;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @media (max-width: 900px) {
+      .page {
+        grid-template-columns: 1fr;
+        padding: 22px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 0;
+      }
+      .page {
+        border-radius: 0;
+        box-shadow: none;
+        padding: 18px 14px 22px;
+        gap: 22px;
+      }
+    }
+
+    img,
+    .page,
+    .column,
+    .reading-card,
+    .side-card {
+      max-width: 100%;
+    }
+
+    .column {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Header / branding */
+    .brand-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+      width: 100%;
+      animation: fadeIn 0.6s ease-out 0.2s both;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .brand-logo {
+      height: 40px;
+      width: auto;
+      max-width: 100%;
+      filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+      transition: transform 0.3s ease;
+    }
+
+    .brand-logo:hover {
+      transform: scale(1.05);
+    }
+
+    .course-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      max-width: 100%;
+    }
+
+    .course-name {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--color-muted);
+      white-space: normal;
+    }
+
+    .week-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(175, 75, 239, 0.08);
+      font-size: 0.76rem;
+      color: var(--color-primary);
+      white-space: normal;
+      animation: pulse 3s infinite;
+    }
+
+    .week-label-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--color-success);
+      flex-shrink: 0;
+      animation: blink 1.5s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .badge-mode {
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: rgba(12, 10, 24, 0.06);
+      border: 1px solid rgba(12, 10, 24, 0.08);
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--color-muted);
+      white-space: nowrap;
+      transition: all 0.3s ease;
+    }
+
+    .badge-mode:hover {
+      background: rgba(175, 75, 239, 0.1);
+      border-color: var(--color-primary-soft);
+      color: var(--color-primary);
+    }
+
+    @media (max-width: 480px) {
+      .brand-row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .badge-mode {
+        margin-top: 6px;
+      }
+    }
+
+    h1 {
+      font-size: clamp(2rem, 3vw, 2.4rem);
+      line-height: 1.05;
+      color: var(--color-primary);
+      margin-bottom: 6px;
+      animation: fadeInUp 0.6s ease-out 0.3s both;
+    }
+
+    .subtitle {
+      font-size: 0.98rem;
+      color: var(--color-muted);
+      max-width: 34rem;
+      margin-bottom: 18px;
+      animation: fadeInUp 0.6s ease-out 0.4s both;
+    }
+
+    .subtitle strong {
+      color: var(--color-primary);
+    }
+
+    /* Reading cards */
+    .reading-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+
+    .reading-card {
+      border-radius: 18px;
+      padding: 14px 16px 14px;
+      border: 1px solid rgba(15, 23, 42, 0.06);
+      background: linear-gradient(
+        135deg,
+        rgba(175, 75, 239, 0.07),
+        rgba(255, 255, 255, 0.95)
+      );
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 12px;
+      align-items: center;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .reading-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: left 0.7s ease;
+    }
+
+    .reading-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover);
+      border-color: var(--color-primary-soft);
+    }
+
+    .reading-card:hover::before {
+      left: 100%;
+    }
+
+    .reading-card.completed {
+      border-color: var(--color-success);
+      background: linear-gradient(
+        135deg,
+        rgba(0, 184, 148, 0.07),
+        rgba(255, 255, 255, 0.95)
+      );
+    }
+
+    @media (max-width: 600px) {
+      .reading-card {
+        grid-template-columns: 1fr;
+        align-items: flex-start;
+      }
+      .chapter-pill {
+        justify-self: flex-start;
+      }
+      .tag-time {
+        justify-self: flex-start;
+        margin-top: 6px;
+      }
+    }
+
+    .chapter-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 11px;
+      border-radius: 999px;
+      background: #ffffff;
+      box-shadow: 0 6px 18px rgba(79, 70, 229, 0.16);
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--color-primary);
+      white-space: nowrap;
+      transition: all 0.3s ease;
+    }
+
+    .reading-card:hover .chapter-pill {
+      background: var(--color-primary);
+      color: white;
+      transform: scale(1.05);
+    }
+
+    .chapter-main {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .chapter-title {
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: var(--color-text);
+      transition: color 0.3s ease;
+    }
+
+    .reading-card:hover .chapter-title {
+      color: var(--color-primary);
+    }
+
+    .chapter-text {
+      font-size: 0.84rem;
+      color: var(--color-muted);
+      line-height: 1.4;
+    }
+
+    .tag-time {
+      padding: 5px 8px;
+      border-radius: 999px;
+      background: rgba(12, 10, 24, 0.06);
+      font-size: 0.74rem;
+      color: var(--color-muted);
+      white-space: nowrap;
+      transition: all 0.3s ease;
+    }
+
+    .reading-card:hover .tag-time {
+      background: var(--color-primary);
+      color: white;
+    }
+
+    /* Progress tracker */
+    .progress-container {
+      margin: 20px 0;
+      background: rgba(12, 10, 24, 0.03);
+      border-radius: 16px;
+      padding: 16px 18px;
+      border: 1px solid rgba(12, 10, 24, 0.06);
+    }
+
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .progress-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--color-text);
+    }
+
+    .progress-percent {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--color-primary);
+    }
+
+    .progress-bar {
+      height: 8px;
+      background: rgba(12, 10, 24, 0.08);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+      border-radius: 4px;
+      width: 0%;
+      transition: width 1s ease-out;
+    }
+
+    /* Interactive checklist */
+    .checklist-heading {
+      font-size: 0.86rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--color-primary);
+      font-weight: 600;
+      margin-top: 24px;
+      margin-bottom: 12px;
+      animation: slideInRight 0.6s ease-out 0.6s both;
+    }
+
+    .checklist {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 0.86rem;
+      color: var(--color-text);
+    }
+
+    .checklist li {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 8px;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .checklist li:hover {
+      background: rgba(175, 75, 239, 0.05);
+      transform: translateX(5px);
+    }
+
+    .checklist li.completed {
+      opacity: 0.7;
+    }
+
+    .check-dot {
+      width: 20px;
+      height: 20px;
+      border-radius: 6px;
+      border: 2px solid rgba(148, 163, 184, 0.9);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.72rem;
+      color: rgba(148, 163, 184, 0.9);
+      flex-shrink: 0;
+      transition: all 0.3s ease;
+    }
+
+    .checklist li:hover .check-dot {
+      border-color: var(--color-primary);
+    }
+
+    .checklist li.completed .check-dot {
+      background: var(--color-success);
+      border-color: var(--color-success);
+      color: white;
+    }
+
+    .reading-notes {
+      font-size: 0.85rem;
+      color: var(--color-muted);
+      line-height: 1.6;
+      margin-top: 16px;
+      animation: fadeIn 0.6s ease-out 0.7s both;
+    }
+
+    .reading-notes strong {
+      color: var(--color-text);
+    }
+
+    .complete-hint {
+      font-size: 0.8rem;
+      color: var(--color-muted);
+      margin-top: 20px;
+      padding: 12px;
+      background: rgba(175, 75, 239, 0.05);
+      border-radius: 12px;
+      border-left: 3px solid var(--color-primary);
+      animation: fadeIn 0.6s ease-out 0.8s both;
+    }
+
+    /* Right column */
+    .section-tag {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--color-primary);
+      font-weight: 600;
+      margin-bottom: 10px;
+      animation: slideInRight 0.6s ease-out 0.5s both;
+    }
+
+    .side-heading {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--color-text);
+      margin-bottom: 10px;
+      animation: slideInRight 0.6s ease-out 0.6s both;
+    }
+
+    .side-card {
+      background: rgba(12, 10, 24, 0.94);
+      color: #e5e7eb;
+      border-radius: 18px;
+      padding: 16px 18px 18px;
+      font-size: 0.88rem;
+      line-height: 1.7;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.6);
+      margin-bottom: 14px;
+      transition: transform 0.3s ease;
+      animation: slideInRight 0.6s ease-out 0.7s both;
+    }
+
+    .side-card:hover {
+      transform: translateY(-2px);
+    }
+
+    .side-card strong {
+      color: #ffffff;
+    }
+
+    .side-subheading {
+      font-size: 0.86rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: #c4b5fd;
+      font-weight: 600;
+      margin: 14px 0 10px;
+    }
+
+    .side-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 0.86rem;
+    }
+
+    .side-list li {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      transition: transform 0.3s ease;
+      padding: 4px 0;
+    }
+
+    .side-list li:hover {
+      transform: translateX(5px);
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      margin-top: 6px;
+      border-radius: 999px;
+      background: var(--color-accent);
+      flex-shrink: 0;
+      animation: pulse 2s infinite;
+    }
+
+    .side-list li:hover .dot {
+      background: var(--color-primary);
+      transform: scale(1.3);
+    }
+
+    .note-card {
+      margin-top: 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(15, 23, 42, 0.75);
+      padding: 10px 12px;
+      font-size: 0.8rem;
+      color: #e5e7eb;
+      transition: all 0.3s ease;
+    }
+
+    .note-card:hover {
+      border-color: var(--color-primary-soft);
+      background: rgba(15, 23, 42, 0.9);
+    }
+
+    .note-card strong {
+      color: #fef3c7;
+    }
+
+    /* Action buttons */
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 10px 18px;
+      border-radius: 12px;
+      border: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background: var(--color-primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #9a3bd6;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(175, 75, 239, 0.3);
+    }
+
+    .btn-secondary {
+      background: rgba(12, 10, 24, 0.06);
+      color: var(--color-text);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(12, 10, 24, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .btn-icon {
+      font-size: 1.1em;
+    }
+
+    /* Completion celebration */
+    .completion-celebration {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .celebration-content {
+      background: white;
+      padding: 40px;
+      border-radius: var(--radius-lg);
+      text-align: center;
+      max-width: 500px;
+      animation: fadeInUp 0.5s ease;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+    }
+
+    .celebration-icon {
+      font-size: 4rem;
+      margin-bottom: 20px;
+      animation: pulse 2s infinite;
+    }
+
+    .celebration-title {
+      font-size: 1.8rem;
+      color: var(--color-primary);
+      margin-bottom: 10px;
+    }
+
+    .celebration-text {
+      color: var(--color-muted);
+      margin-bottom: 20px;
+    }
+
+    .celebration-btn {
+      padding: 12px 24px;
+      background: var(--color-primary);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .celebration-btn:hover {
+      background: #9a3bd6;
+      transform: scale(1.05);
+    }
+  </style>
 </head>
+
 <body>
-    <div class="page">
-        <!-- Progress Tracker -->
-        <div class="progress-tracker">
-            <div class="progress-step active" data-step="1">
-                <div class="step-circle">1</div>
-                <div class="step-label">Pharma Knowledge Check</div>
+  <main class="page" aria-labelledby="week9-reading-heading">
+    <!-- LEFT COLUMN: title + reading cards + checklist -->
+    <section class="column" aria-label="Week 9 reading assignments">
+      <header class="brand-row">
+        <div class="brand">
+          <img
+            src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+            alt="AlliedRx logo"
+            class="brand-logo"
+          />
+          <div class="course-meta">
+            <span class="course-name">EKG Technician Program • Campus & Distance Learning</span>
+            <div class="week-label">
+              <span class="week-label-dot"></span>
+              <span>Week 9 — Introduction to 12-Lead</span>
             </div>
-            <div class="progress-step" data-step="2">
-                <div class="step-circle">2</div>
-                <div class="step-label">DEA Regulations & Safety</div>
-            </div>
+          </div>
         </div>
 
-        <!-- Header -->
-        <header class="brand-row">
-            <div class="brand">
-                <img
-                    src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
-                    alt="AlliedRx logo"
-                    class="brand-logo"
-                />
-                <div class="course-meta">
-                    <span class="course-name">Clinical Medical Assistant • Week 9</span>
-                    <div class="week-label">
-                        <span class="week-label-dot"></span>
-                        <span>Chapter 9: Principles of Pharmacology</span>
-                    </div>
-                </div>
-            </div>
-            <span class="badge-mode">Campus & Online</span>
-        </header>
+        <span class="badge-mode">Campus &amp; Online</span>
+      </header>
 
-        <h1 id="wrapup-heading">Pharmacology Principles Wrap-Up</h1>
-        <p class="subtitle">
-            Review key concepts from <strong>Chapter 9 — Principles of Pharmacology</strong>. 
-            Test your knowledge of drug regulation, terminology, and safety protocols essential for medication management.
+      <h1 id="week9-reading-heading">Week 9 Reading Assignments</h1>
+      <p class="subtitle">
+        Week 9 moves beyond rhythm strips to the full diagnostic power of the <strong>12-Lead ECG</strong>. You will learn 
+        to determine <strong>Electrical Axis</strong> and identify signs of <strong>Myocardial Infarction</strong> (Heart Attack).
+      </p>
+
+      <!-- Progress tracker -->
+      <div class="progress-container">
+        <div class="progress-header">
+          <span class="progress-title">Reading Progress</span>
+          <span class="progress-percent" id="progress-percent">0%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+      </div>
+
+      <!-- Reading cards -->
+      <div class="reading-grid">
+        <!-- Chapter 9 - Part 1 -->
+        <article class="reading-card" id="part1-card" data-part="1">
+          <div class="chapter-pill">Chapter 9</div>
+          <div class="chapter-main">
+            <div class="chapter-title">
+              Axis, Hypertrophy & Progression
+            </div>
+            <p class="chapter-text">
+              Understand the <strong>Electrical Axis</strong> (Direction of current), how to identify <strong>Hypertrophy</strong> (Chamber enlargement), 
+              and normal <strong>R-Wave Progression</strong>.
+            </p>
+          </div>
+          <div class="tag-time" id="part1-time">Est. 55–65 min</div>
+        </article>
+
+        <!-- Chapter 9 - Part 2 -->
+        <article class="reading-card" id="part2-card" data-part="2">
+          <div class="chapter-pill">Chapter 9</div>
+          <div class="chapter-main">
+            <div class="chapter-title">
+              Ischemia, Injury & Infarction
+            </div>
+            <p class="chapter-text">
+              Master the "Three I's" of acute coronary syndromes: <strong>Ischemia</strong> (ST depression), <strong>Injury</strong> (ST Elevation), 
+              and <strong>Infarction</strong> (Pathologic Q waves).
+            </p>
+          </div>
+          <div class="tag-time" id="part2-time">Est. 60–70 min</div>
+        </article>
+      </div>
+
+      <!-- Interactive checklist -->
+      <p class="checklist-heading">How to maximize your reading effectiveness</p>
+      <ul class="checklist" id="reading-checklist">
+        <li data-index="0">
+          <span class="check-dot">□</span>
+          <span>Memorize Axis Rule: Lead I & aVF both Up = Normal Axis.</span>
+        </li>
+        <li data-index="1">
+          <span class="check-dot">□</span>
+          <span>Identify Left Axis Deviation: Lead I Up, aVF Down.</span>
+        </li>
+        <li data-index="2">
+          <span class="check-dot">□</span>
+          <span>Recognize ST Elevation (STEMI) as a sign of acute injury.</span>
+        </li>
+        <li data-index="3">
+          <span class="check-dot">□</span>
+          <span>Understand "R-Wave Progression": R waves should grow larger from V1 to V6.</span>
+        </li>
+        <li data-index="4">
+          <span class="check-dot">□</span>
+          <span>Define "Hypertrophy": Muscle thickening caused by pressure overload.</span>
+        </li>
+      </ul>
+
+      <!-- Action buttons -->
+      <div class="action-buttons">
+        <button class="btn btn-primary" id="mark-all-read">
+          <span class="btn-icon">✓</span>
+          Mark All as Read
+        </button>
+        <button class="btn btn-secondary" id="reset-progress">
+          <span class="btn-icon">↺</span>
+          Reset Progress
+        </button>
+      </div>
+
+      <p class="complete-hint">
+        Once you've completed these readings, you'll be able to interpret a 12-lead ECG systematically.
+      </p>
+    </section>
+
+    <!-- RIGHT COLUMN: framing & why these readings matter -->
+    <aside class="column" aria-label="Why these readings are important">
+      <p class="section-tag">Clinical Application</p>
+      <h2 class="side-heading">Viewing the Heart in 3D</h2>
+
+      <div class="side-card">
+        <p>
+          A single lead rhythm strip tells you <em>when</em> the heart beats, but a <strong>12-Lead ECG</strong> tells you 
+          <em>where</em> the damage is. It provides a 360-degree view of the heart's electrical activity.
+        </p>
+        <p>
+          <strong>Key Concept:</strong> "Time is Muscle." Identifying ST Elevation (Injury) immediately allows for rapid intervention (Cath Lab), saving heart muscle from permanent death (Infarction).
         </p>
 
-        <!-- LEFT COLUMN -->
-        <section class="column">
-            <!-- ACTIVITY 1: Drag & Drop Drug Name Exercise -->
-            <section aria-label="Activity 1: Drug Name Matching">
-                <p class="section-label">Activity 1</p>
-                <h2 class="section-title">Drug Name Identification</h2>
-                <div class="card">
-                    <p class="small">
-                        Drag each drug name example to its correct classification. Understanding these distinctions is crucial for accurate medication documentation.
-                    </p>
+        <p class="side-subheading">Clinical Connections:</p>
+        <ul class="side-list">
+          <li>
+            <span class="dot"></span>
+            <span><strong>Axis Deviation:</strong> If electricity flows away from a damaged area, the axis shifts. Significant deviation can signal blocks, infarcts, or hypertrophy.</span>
+          </li>
+          <li>
+            <span class="dot"></span>
+            <span><strong>Reciprocal Changes:</strong> If one side of the heart shows ST elevation (Injury), the opposite side often shows ST depression. This confirms the diagnosis!</span>
+          </li>
+          <li>
+            <span class="dot"></span>
+            <span><strong>The Systematic Method:</strong> Always analyze in order: Rate -> Rhythm -> Axis -> Hypertrophy -> Ischemia/Infarction. Don't jump straight to the ST segments!</span>
+          </li>
+        </ul>
 
-                    <div class="drag-container">
-                        <div class="drag-drop-zone" id="chemical-zone" data-type="chemical">
-                            <strong>Chemical Name</strong>
-                            <small>The precise molecular structure</small>
-                        </div>
-                        
-                        <div class="drag-drop-zone" id="generic-zone" data-type="generic">
-                            <strong>Generic Name</strong>
-                            <small>Non-proprietary name assigned by manufacturer</small>
-                        </div>
-                        
-                        <div class="drag-drop-zone" id="trade-zone" data-type="trade">
-                            <strong>Trade/Brand Name</strong>
-                            <small>Proprietary name registered by pharmaceutical company</small>
-                        </div>
+        <div class="note-card">
+          <strong>High-Yield Focus Areas:</strong> 
+          <ul style="margin-top: 8px; padding-left: 20px;">
+            <li>Lead I & aVF for Axis</li>
+            <li>J-Point Elevation</li>
+            <li>Pathologic Q Waves (>0.04 sec)</li>
+            <li>Poor R-Wave Progression</li>
+          </ul>
+        </div>
 
-                        <div style="margin-top: 20px; padding: 15px; background: rgba(175, 75, 239, 0.05); border-radius: var(--radius-md);">
-                            <p style="margin-bottom: 12px; font-weight: 600; color: var(--color-text);">Drag these items to the correct zones above:</p>
-                            <div class="drag-item" draggable="true" data-type="chemical">7-chloro-1,3-dihydro-1-methyl-5-phenyl-2H-1,4-benzodiazepin-2-one</div>
-                            <div class="drag-item" draggable="true" data-type="generic">Diazepam</div>
-                            <div class="drag-item" draggable="true" data-type="trade">Valium®</div>
-                            <div class="drag-item" draggable="true" data-type="chemical">N-(4-hydroxyphenyl)acetamide</div>
-                            <div class="drag-item" draggable="true" data-type="generic">Acetaminophen</div>
-                            <div class="drag-item" draggable="true" data-type="trade">Tylenol®</div>
-                        </div>
-                    </div>
+        <div class="note-card" style="margin-top: 12px;">
+          <strong>Clinical Insight:</strong> "Dilatation" is stretching (Volume problem), while "Hypertrophy" is thickening (Pressure problem). Both change the ECG shape.
+        </div>
+      </div>
+    </aside>
+  </main>
 
-                    <button class="btn" type="button" onclick="checkDragDrop()" aria-label="Check drag and drop answers">Check Matches</button>
-                    <div id="drag-feedback" class="quiz-feedback" style="display:none;"></div>
-                </div>
-            </section>
-
-            <!-- Drug Regulation Quiz -->
-            <section aria-label="Regulation Quiz">
-                <p class="section-label">Knowledge Check</p>
-                <h2 class="section-title">Government Regulation Quiz</h2>
-                <div class="card" id="quiz-card">
-                    <p class="small">
-                        Test your understanding of U.S. drug regulation agencies and controlled substance schedules.
-                    </p>
-
-                    <div class="quiz-item" data-answer="b">
-                        <p class="quiz-question">
-                            1. Which agency regulates the development and approval of all prescription and OTC drugs in the U.S.?
-                        </p>
-                        <ul class="quiz-options">
-                            <li>
-                                <input type="radio" name="q1" value="a" id="q1a" />
-                                <label for="q1a">Drug Enforcement Administration (DEA)</label>
-                            </li>
-                            <li>
-                                <input type="radio" name="q1" value="b" id="q1b" />
-                                <label for="q1b">Food and Drug Administration (FDA)</label>
-                            </li>
-                            <li>
-                                <input type="radio" name="q1" value="c" id="q1c" />
-                                <label for="q1c">Centers for Disease Control and Prevention (CDC)</label>
-                            </li>
-                        </ul>
-                        <div class="quiz-feedback" id="q1-feedback"></div>
-                    </div>
-
-                    <div class="quiz-item" data-answer="c">
-                        <p class="quiz-question">
-                            2. Schedule II controlled substances (like oxycodone) require what type of prescription under DEA regulations?
-                        </p>
-                        <ul class="quiz-options">
-                            <li>
-                                <input type="radio" name="q2" value="a" id="q2a" />
-                                <label for="q2a">Verbal orders only, no written prescription needed</label>
-                            </li>
-                            <li>
-                                <input type="radio" name="q2" value="b" id="q2b" />
-                                <label for="q2b">May be refilled up to 5 times within 6 months</label>
-                            </li>
-                            <li>
-                                <input type="radio" name="q2" value="c" id="q2c" />
-                                <label for="q2c">Written prescription only, no refills permitted</label>
-                            </li>
-                        </ul>
-                        <div class="quiz-feedback" id="q2-feedback"></div>
-                    </div>
-
-                    <div class="quiz-item" data-answer="a">
-                        <p class="quiz-question">
-                            3. What is the primary purpose of a drug formulary in healthcare?
-                        </p>
-                        <ul class="quiz-options">
-                            <li>
-                                <input type="radio" name="q3" value="a" id="q3a" />
-                                <label for="q3a">Lists drugs covered by insurance and guides prescribing decisions</label>
-                            </li>
-                            <li>
-                                <input type="radio" name="q3" value="b" id="q3b" />
-                                <label for="q3b">Documents drug interactions for pharmacy reference</label>
-                            </li>
-                            <li>
-                                <input type="radio" name="q3" value="c" id="q3c" />
-                                <label for="q3c">Tracks controlled substance inventory in the practice</label>
-                            </li>
-                        </ul>
-                        <div class="quiz-feedback" id="q3-feedback"></div>
-                    </div>
-
-                    <button class="btn" type="button" onclick="checkQuiz()" aria-label="Check quiz answers">Check Answers</button>
-                </div>
-            </section>
-
-            <!-- Key Vocabulary Flashcards -->
-            <section aria-label="Key vocabulary flashcards">
-                <p class="section-label">Essential Terms</p>
-                <h2 class="section-title">Pharmacology Vocabulary</h2>
-                <div class="card">
-                    <p class="small">
-                        Select each card to reveal definitions. Master these terms for safe medication administration.
-                    </p>
-                    <div class="vocab-grid">
-                        <div class="vocab-card" onclick="toggleVocab(this)" tabindex="0" role="button" aria-label="Flip card to see definition of Therapeutic Range">
-                            <div class="vocab-term">Therapeutic Range</div>
-                            <div class="vocab-definition">
-                                The blood concentration of a drug that produces the desired effect without causing toxicity. Maintaining levels within this range is crucial for safe, effective treatment.
-                            </div>
-                        </div>
-                        <div class="vocab-card" onclick="toggleVocab(this)" tabindex="0" role="button" aria-label="Flip card to see definition of Enteric Coated">
-                            <div class="vocab-term">Enteric Coated</div>
-                            <div class="vocab-definition">
-                                An oral medication coated to resist stomach acid, ensuring absorption in the small intestine. These should NOT be crushed or chewed.
-                            </div>
-                        </div>
-                        <div class="vocab-card" onclick="toggleVocab(this)" tabindex="0" role="button" aria-label="Flip card to see definition of Pharmacology">
-                            <div class="vocab-term">Pharmacology</div>
-                            <div class="vocab-definition">
-                                The science of drugs, including their origin, nature, chemistry, effects, and uses. Clinical pharmacology studies drug effects in medical treatment.
-                            </div>
-                        </div>
-                        <div class="vocab-card" onclick="toggleVocab(this)" tabindex="0" role="button" aria-label="Flip card to see definition of Pharmacokinetics">
-                            <div class="vocab-term">Pharmacokinetics</div>
-                            <div class="vocab-definition">
-                                What the body does to a drug: absorption, distribution, metabolism, and excretion (ADME). Understanding this helps predict drug behavior.
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </section>
-
-        <!-- RIGHT COLUMN -->
-        <section class="column" aria-label="Activity 2: DEA Regulations & Safety">
-            <!-- ACTIVITY 2: Controlled Substance Schedules -->
-            <section>
-                <p class="section-label">Activity 2</p>
-                <h2 class="section-title">Controlled Substance Schedules</h2>
-                <div class="side-card">
-                    <p class="side-subtitle">Kathy's Scenario</p>
-                    <p>
-                        Kathy, a new medical assistant, must manage controlled substances in her primary care practice. 
-                        She needs to understand DEA schedules to ensure compliance and prevent drug abuse.
-                    </p>
-                    
-                    <!-- FIXED: Purple schedule cards with white text -->
-                    <div class="agency-match-container">
-                        <div class="agency-item" draggable="true" data-schedule="I" id="schedule1">
-                            <strong>Schedule I</strong>
-                            <small>Heroin, LSD, marijuana</small>
-                        </div>
-                        <div class="agency-item" draggable="true" data-schedule="II" id="schedule2">
-                            <strong>Schedule II</strong>
-                            <small>Oxycodone, fentanyl, Adderall®</small>
-                        </div>
-                        <div class="agency-item" draggable="true" data-schedule="III" id="schedule3">
-                            <strong>Schedule III</strong>
-                            <small>Codeine combinations, ketamine</small>
-                        </div>
-                        <div class="agency-item" draggable="true" data-schedule="IV" id="schedule4">
-                            <strong>Schedule IV</strong>
-                            <small>Xanax®, Ambien®, Valium®</small>
-                        </div>
-                    </div>
-
-                    <div class="match-zone-container">
-                        <p class="match-zone-header">Drag schedules to match DEA Regulations:</p>
-                        
-                        <div class="agency-match-zone" id="zone-no-accepted" data-regulation="No accepted medical use, high abuse potential">
-                            <strong>No accepted medical use</strong>
-                            <div class="regulation-desc">High abuse potential, no prescriptions allowed</div>
-                            <div class="correct-match" id="match1">✓ Correct: Schedule I</div>
-                        </div>
-                        
-                        <div class="agency-match-zone" id="zone-written-no-refills" data-regulation="Written Rx only, no refills, high abuse potential">
-                            <strong>Written prescription only</strong>
-                            <div class="regulation-desc">No refills permitted, high abuse potential</div>
-                            <div class="correct-match" id="match2">✓ Correct: Schedule II</div>
-                        </div>
-                        
-                        <div class="agency-match-zone" id="zone-refills-6months" data-regulation="May be refilled up to 5 times in 6 months, moderate abuse potential">
-                            <strong>Refills: Up to 5 times in 6 months</strong>
-                            <div class="regulation-desc">Moderate abuse potential</div>
-                            <div class="correct-match" id="match3">✓ Correct: Schedule III</div>
-                        </div>
-                        
-                        <div class="agency-match-zone" id="zone-refills-5times" data-regulation="May be refilled up to 5 times in 6 months, low abuse potential">
-                            <strong>Refills: Up to 5 times in 6 months</strong>
-                            <div class="regulation-desc">Low abuse potential</div>
-                            <div class="correct-match" id="match4">✓ Correct: Schedule IV</div>
-                        </div>
-                    </div>
-
-                    <button class="btn" type="button" onclick="checkScheduleMatches()" style="margin-top: 20px;" aria-label="Check schedule matching">Check Schedule Matches</button>
-                </div>
-            </section>
-
-            <!-- Prescription Safety -->
-            <section>
-                <p class="section-label">Safety Focus</p>
-                <h2 class="section-title">Prescription Accuracy & Safety</h2>
-                <div class="side-card">
-                    <p>
-                        As Kathy works with e-prescriptions, she must ensure accuracy and patient safety. Consider these critical elements:
-                    </p>
-                    
-                    <ul class="side-list" style="margin-top: 14px;">
-                        <li>
-                            <span class="dot"></span>
-                            <span><strong>Rights of Medication Administration:</strong> Right patient, drug, dose, route, time, documentation</span>
-                        </li>
-                        <li>
-                            <span class="dot"></span>
-                            <span><strong>E-prescription Requirements:</strong> Identity proofing, two-factor authentication, audit trails</span>
-                        </li>
-                        <li>
-                            <span class="dot"></span>
-                            <span><strong>Patient Education:</strong> Purpose, side effects, administration instructions, storage</span>
-                        </li>
-                        <li>
-                            <span class="dot"></span>
-                            <span><strong>Age Considerations:</strong> Pediatric dosing, geriatric metabolism changes, polypharmacy risks</span>
-                        </li>
-                    </ul>
-
-                    <label class="small" for="safety-notes" style="display:block;margin-top:18px;">
-                        What steps would you take if you discovered a prescription error? Document your response:
-                    </label>
-                    <textarea 
-                        id="safety-notes" 
-                        placeholder="Describe your process for identifying, reporting, and correcting a medication error..."
-                        aria-label="Safety protocol text area"
-                        oninput="updateActivity2Progress()"
-                    ></textarea>
-                </div>
-            </section>
-
-            <!-- Pharmacology Readiness Checklist -->
-            <section>
-                <p class="section-label">Self-Assessment</p>
-                <h2 class="section-title">Pharmacology Competency Checklist</h2>
-                <div class="side-card">
-                    <p>
-                        Mark each item when you feel confident in these essential pharmacology skills:
-                    </p>
-                    <ul class="checklist" style="margin-top:12px;">
-                        <li>
-                            <input type="checkbox" id="check-dea" onclick="updateActivity2Progress()" />
-                            <label for="check-dea">I can identify the five DEA controlled substance schedules and their restrictions.</label>
-                        </li>
-                        <li>
-                            <input type="checkbox" id="check-names" onclick="updateActivity2Progress()" />
-                            <label for="check-names">I differentiate between chemical, generic, and trade names of medications.</label>
-                        </li>
-                        <li>
-                            <input type="checkbox" id="check-safety" onclick="updateActivity2Progress()" />
-                            <label for="check-safety">I understand safety measures for OTC drugs and patient education requirements.</label>
-                        </li>
-                        <li>
-                            <input type="checkbox" id="check-age" onclick="updateActivity2Progress()" />
-                            <label for="check-age">I recognize how age affects drug action (pediatric vs. geriatric considerations).</label>
-                        </li>
-                        <li>
-                            <input type="checkbox" id="check-refs" onclick="updateActivity2Progress()" />
-                            <label for="check-refs">I know how to use drug reference materials to verify medication information.</label>
-                        </li>
-                    </ul>
-                </div>
-            </section>
-
-            <!-- Completion Reminder -->
-            <section>
-                <p class="section-label">Ready to Move Forward?</p>
-                <h2 class="section-title">Chapter 9 Completion</h2>
-                <div class="completion-card">
-                    <p>
-                        Before continuing to Chapter 10, ensure you have:
-                    </p>
-                    <ul class="side-list" style="margin-top:10px;">
-                        <li>
-                            <span class="dot"></span>
-                            <span>Completed the <strong>Drug Name Matching</strong> activity successfully</span>
-                        </li>
-                        <li>
-                            <span class="dot"></span>
-                            <span>Answered all <strong>Regulation Quiz</strong> questions correctly</span>
-                        </li>
-                        <li>
-                            <span class="dot"></span>
-                            <span>Matched all <strong>DEA Schedules</strong> to their regulations</span>
-                        </li>
-                        <li>
-                            <span class="dot"></span>
-                            <span>Documented your <strong>safety protocol</strong> for medication errors</span>
-                        </li>
-                        <li>
-                            <span class="dot"></span>
-                            <span>Completed your <strong>competency checklist</strong></span>
-                        </li>
-                    </ul>
-                    <p style="margin-top:10px;">
-                        When confident with pharmacology principles, mark this chapter complete and proceed.
-                    </p>
-                </div>
-            </section>
-        </section>
+  <!-- Completion Celebration Modal -->
+  <div class="completion-celebration" id="celebration-modal">
+    <div class="celebration-content">
+      <div class="celebration-icon">📈</div>
+      <h2 class="celebration-title">Week 9 Reading Complete!</h2>
+      <p class="celebration-text">
+        Outstanding! You've unlocked the full diagnostic potential of the ECG.
+      </p>
+      <p class="celebration-text">
+        You are ready to identify heart attacks and structural changes in the lab.
+      </p>
+      <button class="celebration-btn" id="close-celebration">Continue</button>
     </div>
+  </div>
 
-    <script>
-        // State management for 2 activities
-        const moduleState = {
-            activities: {
-                1: { completed: false, correct: 0, total: 6, score: 0 },
-                2: { completed: false }
-            },
-            startedAt: new Date(),
-            timeSpent: 0
-        };
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // State management
+      let readingState = {
+        part1: false,
+        part2: false,
+        checklist: [false, false, false, false, false]
+      };
 
-        // Drag and Drop functionality for Activity 1
-        let draggedItem = null;
-        const correctMatches = {
-            'chemical': ['7-chloro-1,3-dihydro-1-methyl-5-phenyl-2H-1,4-benzodiazepin-2-one', 'N-(4-hydroxyphenyl)acetamide'],
-            'generic': ['Diazepam', 'Acetaminophen'],
-            'trade': ['Valium®', 'Tylenol®']
-        };
+      // DOM elements
+      const part1Card = document.getElementById('part1-card');
+      const part2Card = document.getElementById('part2-card');
+      const checklistItems = document.querySelectorAll('#reading-checklist li');
+      const progressFill = document.getElementById('progress-fill');
+      const progressPercent = document.getElementById('progress-percent');
+      const markAllBtn = document.getElementById('mark-all-read');
+      const resetBtn = document.getElementById('reset-progress');
+      const celebrationModal = document.getElementById('celebration-modal');
+      const closeCelebrationBtn = document.getElementById('close-celebration');
 
-        // Setup draggable items
-        document.querySelectorAll('.drag-item').forEach(item => {
-            item.addEventListener('dragstart', handleDragStart);
-            item.addEventListener('dragend', handleDragEnd);
+      // Calculate progress
+      function calculateProgress() {
+        const totalItems = 7; // 2 reading parts + 5 checklist items
+        let completed = 0;
+        
+        if (readingState.part1) completed++;
+        if (readingState.part2) completed++;
+        
+        readingState.checklist.forEach(item => {
+          if (item) completed++;
         });
+        
+        const percentage = Math.round((completed / totalItems) * 100);
+        
+        // Update progress bar
+        progressFill.style.width = `${percentage}%`;
+        progressPercent.textContent = `${percentage}%`;
+        
+        // Update progress bar color based on completion
+        if (percentage === 100) {
+          progressFill.style.background = 'linear-gradient(90deg, var(--color-success), #00d2a0)';
+          progressPercent.style.color = 'var(--color-success)';
+          showCelebration();
+        } else if (percentage >= 50) {
+          progressFill.style.background = 'linear-gradient(90deg, var(--color-primary), var(--color-accent))';
+          progressPercent.style.color = 'var(--color-primary)';
+        } else {
+          progressFill.style.background = 'linear-gradient(90deg, var(--color-primary), var(--color-accent))';
+          progressPercent.style.color = 'var(--color-primary)';
+        }
+        
+        return percentage;
+      }
 
-        // Setup drop zones
-        document.querySelectorAll('.drag-drop-zone').forEach(zone => {
-            zone.addEventListener('dragover', handleDragOver);
-            zone.addEventListener('dragleave', handleDragLeave);
-            zone.addEventListener('drop', handleDrop);
+      // Toggle chapter completion
+      function toggleChapter(part) {
+        const card = part === 1 ? part1Card : part2Card;
+        const isCompleted = part === 1 ? readingState.part1 : readingState.part2;
+        
+        if (isCompleted) {
+          // Mark as incomplete
+          card.classList.remove('completed');
+          if (part === 1) {
+            readingState.part1 = false;
+            document.getElementById('part1-time').textContent = 'Est. 55–65 min';
+          } else {
+            readingState.part2 = false;
+            document.getElementById('part2-time').textContent = 'Est. 60–70 min';
+          }
+        } else {
+          // Mark as complete
+          card.classList.add('completed');
+          if (part === 1) {
+            readingState.part1 = true;
+            document.getElementById('part1-time').textContent = '✓ Completed';
+          } else {
+            readingState.part2 = true;
+            document.getElementById('part2-time').textContent = '✓ Completed';
+          }
+          
+          // Add animation
+          card.style.transform = 'scale(1.02)';
+          setTimeout(() => {
+            card.style.transform = '';
+          }, 300);
+        }
+        
+        calculateProgress();
+      }
+
+      // Toggle checklist item
+      function toggleChecklistItem(index) {
+        const item = checklistItems[index];
+        const dot = item.querySelector('.check-dot');
+        
+        readingState.checklist[index] = !readingState.checklist[index];
+        
+        if (readingState.checklist[index]) {
+          item.classList.add('completed');
+          dot.textContent = '✓';
+          dot.style.background = 'var(--color-success)';
+          dot.style.borderColor = 'var(--color-success)';
+          dot.style.color = 'white';
+        } else {
+          item.classList.remove('completed');
+          dot.textContent = '□';
+          dot.style.background = '';
+          dot.style.borderColor = 'rgba(148, 163, 184, 0.9)';
+          dot.style.color = 'rgba(148, 163, 184, 0.9)';
+        }
+        
+        calculateProgress();
+      }
+
+      // Mark all as read
+      function markAllAsRead() {
+        // Mark both parts
+        readingState.part1 = true;
+        readingState.part2 = true;
+        part1Card.classList.add('completed');
+        part2Card.classList.add('completed');
+        document.getElementById('part1-time').textContent = '✓ Completed';
+        document.getElementById('part2-time').textContent = '✓ Completed';
+        
+        // Mark all checklist items
+        readingState.checklist = [true, true, true, true, true];
+        checklistItems.forEach((item, index) => {
+          item.classList.add('completed');
+          const dot = item.querySelector('.check-dot');
+          dot.textContent = '✓';
+          dot.style.background = 'var(--color-success)';
+          dot.style.borderColor = 'var(--color-success)';
+          dot.style.color = 'white';
         });
+        
+        calculateProgress();
+        
+        // Celebration animation
+        const cards = document.querySelectorAll('.reading-card');
+        cards.forEach(card => {
+          card.style.transform = 'scale(1.05)';
+          setTimeout(() => {
+            card.style.transform = '';
+          }, 300);
+        });
+      }
 
-        function handleDragStart(e) {
-            draggedItem = this;
-            this.classList.add('dragging');
-            e.dataTransfer.setData('text/plain', this.textContent);
-            e.dataTransfer.effectAllowed = 'move';
+      // Reset progress
+      function resetProgress() {
+        // Reset parts
+        readingState.part1 = false;
+        readingState.part2 = false;
+        part1Card.classList.remove('completed');
+        part2Card.classList.remove('completed');
+        document.getElementById('part1-time').textContent = 'Est. 55–65 min';
+        document.getElementById('part2-time').textContent = 'Est. 60–70 min';
+        
+        // Reset checklist
+        readingState.checklist = [false, false, false, false, false];
+        checklistItems.forEach((item, index) => {
+          item.classList.remove('completed');
+          const dot = item.querySelector('.check-dot');
+          dot.textContent = '□';
+          dot.style.background = '';
+          dot.style.borderColor = 'rgba(148, 163, 184, 0.9)';
+          dot.style.color = 'rgba(148, 163, 184, 0.9)';
+        });
+        
+        calculateProgress();
+      }
+
+      // Show celebration modal
+      function showCelebration() {
+        setTimeout(() => {
+          celebrationModal.style.display = 'flex';
+        }, 500);
+      }
+
+      // Close celebration modal
+      function closeCelebration() {
+        celebrationModal.style.display = 'none';
+      }
+
+      // Event listeners
+      part1Card.addEventListener('click', () => toggleChapter(1));
+      part2Card.addEventListener('click', () => toggleChapter(2));
+      
+      part1Card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggleChapter(1);
         }
-
-        function handleDragEnd() {
-            this.classList.remove('dragging');
-            draggedItem = null;
+      });
+      
+      part2Card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggleChapter(2);
         }
+      });
 
-        function handleDragOver(e) {
+      checklistItems.forEach((item, index) => {
+        item.addEventListener('click', () => toggleChecklistItem(index));
+        
+        item.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
-            this.classList.add('active');
-        }
-
-        function handleDragLeave() {
-            this.classList.remove('active');
-        }
-
-        function handleDrop(e) {
-            e.preventDefault();
-            this.classList.remove('active');
-            
-            if (draggedItem) {
-                // Check if item already exists in a zone
-                const existingItems = document.querySelectorAll(`.drag-item[data-original="${draggedItem.textContent}"]`);
-                existingItems.forEach(item => item.remove());
-                
-                // Create a new item for the drop zone
-                const newItem = draggedItem.cloneNode(true);
-                newItem.setAttribute('data-original', draggedItem.textContent);
-                newItem.style.margin = '5px';
-                newItem.draggable = false;
-                newItem.style.cursor = 'default';
-                newItem.addEventListener('click', function() {
-                    this.remove();
-                });
-                
-                this.appendChild(newItem);
-            }
-        }
-
-        function checkDragDrop() {
-            const zones = document.querySelectorAll('.drag-drop-zone');
-            let correctCount = 0;
-            let totalItems = 0;
-            const feedback = document.getElementById('drag-feedback');
-            
-            zones.forEach(zone => {
-                const zoneType = zone.getAttribute('data-type');
-                const items = zone.querySelectorAll('.drag-item');
-                totalItems += items.length;
-                
-                items.forEach(item => {
-                    const itemText = item.getAttribute('data-original') || item.textContent;
-                    if (correctMatches[zoneType] && correctMatches[zoneType].includes(itemText)) {
-                        item.style.backgroundColor = 'var(--color-success)';
-                        correctCount++;
-                    } else {
-                        item.style.backgroundColor = 'var(--color-error)';
-                        item.style.animation = 'shake 0.5s ease';
-                    }
-                });
-            });
-            
-            // Update activity state
-            moduleState.activities[1].completed = true;
-            moduleState.activities[1].correct = correctCount;
-            moduleState.activities[1].score = Math.round((correctCount / 6) * 100);
-            
-            // Show feedback
-            feedback.style.display = 'block';
-            if (correctCount === 6) {
-                feedback.textContent = '✓ Perfect! You correctly identified all drug name types.';
-                feedback.className = 'quiz-feedback correct';
-            } else {
-                feedback.textContent = `You matched ${correctCount} out of 6 correctly. Review chemical vs. generic vs. trade names.`;
-                feedback.className = 'quiz-feedback incorrect';
-            }
-            
-            updateProgressTracker();
-        }
-
-        // Quiz logic for Activity 1
-        function checkQuiz() {
-            const items = document.querySelectorAll('.quiz-item');
-            let correctCount = 0;
-            
-            items.forEach((item, index) => {
-                const correctAnswer = item.getAttribute('data-answer');
-                const name = `q${index + 1}`;
-                const selected = document.querySelector(`input[name="${name}"]:checked`);
-                const feedback = document.getElementById(`${name}-feedback`);
-                
-                if (!selected) {
-                    feedback.textContent = 'Please select an answer.';
-                    feedback.className = 'quiz-feedback incorrect';
-                    feedback.style.display = 'block';
-                    return;
-                }
-                
-                if (selected.value === correctAnswer) {
-                    feedback.textContent = getQuizFeedback(index, true);
-                    feedback.className = 'quiz-feedback correct';
-                    feedback.style.display = 'block';
-                    correctCount++;
-                    
-                    const selectedLabel = selected.closest('li');
-                    selectedLabel.style.backgroundColor = 'rgba(0, 184, 148, 0.1)';
-                } else {
-                    feedback.textContent = getQuizFeedback(index, false);
-                    feedback.className = 'quiz-feedback incorrect';
-                    feedback.style.display = 'block';
-                    
-                    const selectedLabel = selected.closest('li');
-                    selectedLabel.style.animation = 'shake 0.5s ease';
-                    selectedLabel.style.backgroundColor = 'rgba(225, 112, 85, 0.1)';
-                    
-                    // Highlight correct answer
-                    const correctInput = document.querySelector(`input[name="${name}"][value="${correctAnswer}"]`);
-                    if (correctInput) {
-                        const correctLabel = correctInput.closest('li');
-                        correctLabel.style.backgroundColor = 'rgba(0, 184, 148, 0.1)';
-                        correctLabel.style.border = '1px solid rgba(0, 184, 148, 0.3)';
-                    }
-                }
-            });
-            
-            // Update activity state
-            if (!moduleState.activities[1].completed) {
-                moduleState.activities[1].completed = true;
-                moduleState.activities[1].correct += correctCount;
-                moduleState.activities[1].score = Math.round((moduleState.activities[1].correct / 9) * 100);
-            }
-            
-            updateProgressTracker();
-            
-            // Show summary
-            if (correctCount === 3) {
-                showQuizCompletionMessage('Excellent! You understand drug regulation agencies and requirements.');
-            }
-        }
-        
-        function getQuizFeedback(questionIndex, isCorrect) {
-            const correctFeedbacks = [
-                '✓ Correct! The FDA regulates drug development and approval.',
-                '✓ Correct! Schedule II substances require written prescriptions with no refills.',
-                '✓ Correct! Formularies guide insurance coverage and prescribing decisions.'
-            ];
-            
-            const incorrectFeedbacks = [
-                '✗ The FDA regulates drug approval. DEA manages controlled substances.',
-                '✗ Schedule II has strictest controls: written Rx only, no refills.',
-                '✗ Formularies primarily list covered drugs for insurance purposes.'
-            ];
-            
-            return isCorrect ? correctFeedbacks[questionIndex] : incorrectFeedbacks[questionIndex];
-        }
-        
-        function showQuizCompletionMessage(message) {
-            const quizCard = document.getElementById('quiz-card');
-            const existingMessage = quizCard.querySelector('.completion-message');
-            
-            if (existingMessage) {
-                existingMessage.remove();
-            }
-            
-            const messageDiv = document.createElement('div');
-            messageDiv.className = 'quiz-feedback correct';
-            messageDiv.style.marginTop = '15px';
-            messageDiv.style.padding = '12px';
-            messageDiv.textContent = message;
-            messageDiv.classList.add('completion-message');
-            
-            const button = quizCard.querySelector('.btn');
-            quizCard.insertBefore(messageDiv, button.nextSibling);
-        }
-
-        // Schedule matching for Activity 2
-        let draggedSchedule = null;
-        
-        document.querySelectorAll('.agency-item').forEach(item => {
-            item.addEventListener('dragstart', function(e) {
-                draggedSchedule = this;
-                this.style.opacity = '0.5';
-                e.dataTransfer.setData('text/plain', this.id);
-            });
-            
-            item.addEventListener('dragend', function() {
-                this.style.opacity = '1';
-                draggedSchedule = null;
-            });
+            toggleChecklistItem(index);
+          }
         });
-        
-        document.querySelectorAll('.agency-match-zone').forEach(zone => {
-            zone.addEventListener('dragover', function(e) {
-                e.preventDefault();
-                this.style.borderColor = 'var(--color-primary)';
-                this.style.boxShadow = '0 0 0 2px rgba(175, 75, 239, 0.2)';
-            });
-            
-            zone.addEventListener('dragleave', function() {
-                this.style.borderColor = '';
-                this.style.boxShadow = '';
-            });
-            
-            zone.addEventListener('drop', function(e) {
-                e.preventDefault();
-                this.style.borderColor = '';
-                this.style.boxShadow = '';
-                
-                if (draggedSchedule) {
-                    const schedule = draggedSchedule.getAttribute('data-schedule');
-                    const zoneId = this.id;
-                    
-                    // Remove any existing matches
-                    const existingMatch = this.querySelector('.agency-item');
-                    if (existingMatch) {
-                        existingMatch.remove();
-                    }
-                    
-                    // Add the dragged item
-                    const clone = draggedSchedule.cloneNode(true);
-                    clone.style.opacity = '1';
-                    clone.style.marginTop = '10px';
-                    clone.style.marginBottom = '10px';
-                    clone.draggable = false;
-                    this.appendChild(clone);
-                }
-            });
+      });
+
+      markAllBtn.addEventListener('click', markAllAsRead);
+      resetBtn.addEventListener('click', resetProgress);
+      closeCelebrationBtn.addEventListener('click', closeCelebration);
+
+      // Close modal when clicking outside
+      celebrationModal.addEventListener('click', (e) => {
+        if (e.target === celebrationModal) {
+          closeCelebration();
+        }
+      });
+
+      // Add scroll animations
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+          }
         });
-        
-        function checkScheduleMatches() {
-            const correctMatches = {
-                'zone-no-accepted': 'I',
-                'zone-written-no-refills': 'II',
-                'zone-refills-6months': 'III',
-                'zone-refills-5times': 'IV'
-            };
-            
-            let allCorrect = true;
-            
-            Object.keys(correctMatches).forEach(zoneId => {
-                const zone = document.getElementById(zoneId);
-                const item = zone.querySelector('.agency-item');
-                const matchDiv = zone.querySelector('.correct-match');
-                
-                if (item && item.getAttribute('data-schedule') === correctMatches[zoneId]) {
-                    zone.classList.remove('incorrect');
-                    zone.classList.add('correct');
-                    matchDiv.classList.add('show');
-                    allCorrect = true;
-                } else {
-                    zone.classList.remove('correct');
-                    zone.classList.add('incorrect');
-                    if (matchDiv) matchDiv.classList.remove('show');
-                    allCorrect = false;
-                }
-            });
-            
-            // Update Activity 2 completion
-            if (allCorrect) {
-                moduleState.activities[2].completed = true;
-                updateProgressTracker();
-            }
-        }
+      }, observerOptions);
 
-        // Vocabulary flip functionality
-        function toggleVocab(card) {
-            card.classList.toggle('active');
-            
-            if (card.classList.contains('active')) {
-                card.style.transform = 'translateY(-3px)';
-                card.style.boxShadow = 'var(--shadow-hover)';
-            }
-        }
-
-        // Update progress tracker
-        function updateProgressTracker() {
-            const step2 = document.querySelector('[data-step="2"]');
-            
-            if (moduleState.activities[1].completed) {
-                step2.classList.add('active');
-            }
-        }
-
-        // Track Activity 2 progress
-        function updateActivity2Progress() {
-            const textarea = document.getElementById('safety-notes');
-            const checkboxes = document.querySelectorAll('.side-card input[type="checkbox"]:checked');
-            
-            if (textarea.value.trim().length > 0 && checkboxes.length >= 3) {
-                moduleState.activities[2].completed = true;
-            }
-        }
-
-        // Track time spent
-        setInterval(() => {
-            moduleState.timeSpent++;
-        }, 1000);
-
-        // Initialize checklist interactions
-        document.querySelectorAll('.checklist input').forEach(checkbox => {
-            checkbox.addEventListener('change', function() {
-                if (this.checked) {
-                    const label = this.closest('li');
-                    label.style.textDecoration = 'line-through';
-                    label.style.opacity = '0.7';
-                }
-            });
-        });
-
-        // Keyboard accessibility for vocabulary cards
-        document.querySelectorAll('.vocab-card').forEach(card => {
-            card.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    toggleVocab(this);
-                }
-            });
-        });
-    </script>
+      // Observe reading cards
+      const readingCards = document.querySelectorAll('.reading-card');
+      readingCards.forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        observer.observe(card);
+      });
+      
+      // Observe checklist items with delay
+      checklistItems.forEach((item, index) => {
+        item.style.opacity = '0';
+        item.style.transform = 'translateX(-20px)';
+        item.style.transition = `opacity 0.5s ease ${index * 0.1}s, transform 0.5s ease ${index * 0.1}s`;
+        observer.observe(item);
+      });
+    });
+  </script>
 </body>
 </html>
