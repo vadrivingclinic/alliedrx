@@ -1,0 +1,2027 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>AlliedRx EKG Program - Chapter 1: Cardiac Function & Cycle</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        /* BRANDING FROM PROVIDED CSS */
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-error: #e17055;
+            --color-warning: #fdcb6e;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
+            --color-dark: #0c0a18;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+            --shadow-card: 0 12px 30px rgba(15, 23, 42, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(
+                circle at top left,
+                #ffffff 0,
+                #f1ecff 40%,
+                var(--color-bg) 100%
+            );
+            color: var(--color-text);
+            -webkit-text-size-adjust: 100%;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 12px; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes checkmarkPop {
+            0% { transform: scale(0); opacity: 0; }
+            70% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @media (max-width: 900px) {
+            .page { padding: 22px; }
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 0; }
+            .page {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 18px 14px 22px;
+            }
+        }
+
+        /* Header */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .brand-logo:hover { transform: scale(1.05); }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--color-success);
+            flex-shrink: 0;
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .badge-mode:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 3vw, 2.2rem);
+            line-height: 1.1;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .module-subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 600px;
+            margin-bottom: 24px;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        /* Progress Tracker */
+        .progress-tracker {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            position: relative;
+            padding: 0 20px;
+        }
+
+        .progress-tracker::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 50px;
+            right: 50px;
+            height: 3px;
+            background: rgba(12, 10, 24, 0.08);
+            z-index: 1;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+
+        .step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--color-muted);
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.active .step-circle {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .progress-step.completed .step-circle {
+            background: var(--color-success);
+            border-color: var(--color-success);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.75rem;
+            color: var(--color-muted);
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .progress-step.active .step-label {
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        /* Progress Summary */
+        .progress-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+            animation: fadeInUp 0.6s ease-out 0.5s both;
+        }
+
+        @media (max-width: 600px) {
+            .progress-summary {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+        }
+
+        .summary-card {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            border: 1px solid rgba(12, 10, 24, 0.06);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-card);
+            border-color: var(--color-primary-soft);
+        }
+
+        .summary-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--color-primary);
+            display: block;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .summary-label {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Content Cards */
+        .content-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .content-card {
+            background: white;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            padding: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .content-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--color-primary);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .content-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--color-primary-soft);
+        }
+
+        .content-card:hover::before {
+            opacity: 1;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: var(--radius-md);
+            background: rgba(175, 75, 239, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--color-primary);
+            flex-shrink: 0;
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+
+        .card-subtitle {
+            font-size: 0.9rem;
+            color: var(--color-muted);
+            line-height: 1.5;
+        }
+
+        /* Activity Containers */
+        .activity-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-md);
+            padding: 25px;
+            margin: 25px 0;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+        }
+
+        .activity-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .activity-instructions {
+            font-size: 0.9rem;
+            color: var(--color-muted);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        /* Atrial Kick Scenario */
+        .scenario-box {
+            background: white;
+            border-radius: var(--radius-md);
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 2px solid rgba(175, 75, 239, 0.2);
+            box-shadow: 0 8px 25px rgba(175, 75, 239, 0.1);
+        }
+
+        .scenario-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(12, 10, 24, 0.08);
+        }
+
+        .scenario-icon {
+            font-size: 1.5rem;
+            color: var(--color-primary);
+        }
+
+        .scenario-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+
+        .scenario-content {
+            font-size: 0.95rem;
+            color: var(--color-text);
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .scenario-question {
+            font-weight: 600;
+            color: var(--color-text);
+            margin-bottom: 15px;
+            font-size: 1rem;
+        }
+
+        /* Quiz Options */
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .quiz-option {
+            padding: 14px 18px;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            background: white;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--color-primary-soft);
+            background: rgba(175, 75, 239, 0.05);
+            transform: translateX(5px);
+        }
+
+        .quiz-option.selected {
+            border-color: var(--color-success);
+            background: rgba(0, 184, 148, 0.1);
+        }
+
+        .quiz-option.wrong {
+            border-color: var(--color-error);
+            background: rgba(225, 112, 85, 0.1);
+            animation: shake 0.5s ease;
+        }
+
+        /* Sorting Activity */
+        .sorting-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .sorting-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .sorting-columns {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .sorting-column {
+            background: white;
+            border-radius: var(--radius-md);
+            padding: 20px;
+            border: 2px solid rgba(12, 10, 24, 0.08);
+            min-height: 250px;
+        }
+
+        .column-header {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(175, 75, 239, 0.2);
+            text-align: center;
+        }
+
+        .column-header.sympathetic {
+            color: #e74c3c;
+            border-bottom-color: rgba(231, 76, 60, 0.2);
+        }
+
+        .column-header.parasympathetic {
+            color: #3498db;
+            border-bottom-color: rgba(52, 152, 219, 0.2);
+        }
+
+        .sorting-dropzone {
+            min-height: 180px;
+            border: 2px dashed rgba(12, 10, 24, 0.1);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .sorting-dropzone.hover {
+            border-color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.05);
+        }
+
+        .sortable-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+        }
+
+        .sortable-item {
+            padding: 10px 15px;
+            background: white;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            border-radius: var(--radius-sm);
+            cursor: grab;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .sortable-item:hover {
+            border-color: var(--color-primary-soft);
+            background: rgba(175, 75, 239, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .sortable-item.dragging {
+            opacity: 0.7;
+            transform: scale(0.95);
+        }
+
+        .sortable-item.placed {
+            opacity: 1;
+            cursor: default;
+            margin-bottom: 5px;
+        }
+
+        .sortable-item.placed.sympathetic {
+            background: rgba(231, 76, 60, 0.1);
+            border-color: #e74c3c;
+            color: #c0392b;
+        }
+
+        .sortable-item.placed.parasympathetic {
+            background: rgba(52, 152, 219, 0.1);
+            border-color: #3498db;
+            color: #2980b9;
+        }
+
+        /* Cardiac Cycle Timeline */
+        .timeline-container {
+            background: white;
+            border-radius: var(--radius-md);
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 2px solid rgba(12, 10, 24, 0.08);
+        }
+
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--color-primary);
+            opacity: 0.3;
+        }
+
+        .timeline-phase {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            position: relative;
+        }
+
+        .phase-number {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--color-primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 700;
+            flex-shrink: 0;
+            position: absolute;
+            left: -30px;
+            top: 0;
+        }
+
+        .phase-content {
+            flex: 1;
+        }
+
+        .phase-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .phase-name {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+
+        .phase-dropdown {
+            padding: 8px 12px;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            border-radius: var(--radius-sm);
+            background: white;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 200px;
+        }
+
+        .phase-dropdown:hover {
+            border-color: var(--color-primary-soft);
+        }
+
+        .phase-dropdown.correct {
+            border-color: var(--color-success);
+            background: rgba(0, 184, 148, 0.1);
+        }
+
+        .phase-dropdown.incorrect {
+            border-color: var(--color-error);
+            background: rgba(225, 112, 85, 0.1);
+        }
+
+        .phase-description {
+            font-size: 0.85rem;
+            color: var(--color-muted);
+            line-height: 1.5;
+            padding-left: 10px;
+            border-left: 3px solid rgba(12, 10, 24, 0.1);
+        }
+
+        /* Feedback */
+        .feedback-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            margin-top: 20px;
+            display: none;
+        }
+
+        .feedback-container.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .feedback-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feedback-icon {
+            font-size: 1.2rem;
+        }
+
+        .feedback-icon.correct { color: var(--color-success); }
+        .feedback-icon.incorrect { color: var(--color-error); }
+
+        .feedback-content {
+            font-size: 0.85rem;
+            color: var(--color-text);
+            line-height: 1.5;
+        }
+
+        .feedback-content strong { color: var(--color-primary); }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #9a3bd6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(175, 75, 239, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-text);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(12, 10, 24, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-icon {
+            font-size: 1.1em;
+        }
+
+        /* Results Panel */
+        .results-panel {
+            background: var(--color-dark);
+            color: white;
+            border-radius: var(--radius-md);
+            padding: 30px;
+            margin-top: 30px;
+            display: none;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .results-panel.show {
+            display: block;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .results-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .score-display {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--color-primary-soft);
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .function-insights {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .insights-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-primary-soft);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .insights-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .insights-list li {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            font-size: 0.9rem;
+            color: #e5e7eb;
+        }
+
+        .insight-dot {
+            width: 6px;
+            height: 6px;
+            margin-top: 6px;
+            border-radius: 999px;
+            background: var(--color-accent);
+            flex-shrink: 0;
+        }
+
+        /* Remember Box */
+        .remember-box {
+            background: rgba(253, 203, 110, 0.1);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid var(--color-warning);
+        }
+
+        .remember-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--color-warning);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .remember-text {
+            font-size: 0.85rem;
+            color: var(--color-text);
+            line-height: 1.5;
+        }
+
+        /* Key Term Box */
+        .term-box {
+            background: rgba(131, 128, 240, 0.08);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid var(--color-accent);
+        }
+
+        .term-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--color-accent);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .term-text {
+            font-size: 0.85rem;
+            color: var(--color-text);
+            line-height: 1.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .progress-tracker {
+                padding: 0;
+            }
+            
+            .progress-tracker::before {
+                left: 40px;
+                right: 40px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .card-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .phase-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .phase-dropdown {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="module-heading">
+        <!-- Header -->
+        <header class="brand-row">
+            <div class="brand">
+                <img
+                    src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                    alt="AlliedRx logo"
+                    class="brand-logo"
+                />
+                <div class="course-meta">
+                    <span class="course-name">EKG Technician Program • Chapter 1</span>
+                    <div class="week-label">
+                        <span class="week-label-dot"></span>
+                        <span>Cardiac Function & The Cardiac Cycle</span>
+                    </div>
+                </div>
+            </div>
+            <span class="badge-mode">Self-Paced Module</span>
+        </header>
+
+        <h1 id="module-heading">Cardiac Function & The Cardiac Cycle</h1>
+        <p class="module-subtitle">
+            Understand atrial kick, autonomic nervous system effects, and the sequential phases of the cardiac cycle.
+        </p>
+
+        <!-- Progress Tracker -->
+        <div class="progress-tracker">
+            <div class="progress-step active" data-step="1">
+                <div class="step-circle">1</div>
+                <div class="step-label">Atrial Kick</div>
+            </div>
+            <div class="progress-step" data-step="2">
+                <div class="step-circle">2</div>
+                <div class="step-label">ANS Effects</div>
+            </div>
+            <div class="progress-step" data-step="3">
+                <div class="step-circle">3</div>
+                <div class="step-label">Cardiac Cycle</div>
+            </div>
+        </div>
+
+        <!-- Progress Summary -->
+        <div class="progress-summary">
+            <div class="summary-card">
+                <span class="summary-number" id="completed-activities">0</span>
+                <span class="summary-label">Activities Completed</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="accuracy-rate">0%</span>
+                <span class="summary-label">Current Accuracy</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="study-time">0:00</span>
+                <span class="summary-label">Study Time</span>
+            </div>
+        </div>
+
+        <!-- Content Cards -->
+        <div class="content-cards">
+            <!-- Activity 1: Atrial Kick & Valve Function -->
+            <section class="content-card">
+                <div class="card-header">
+                    <div class="card-icon">💓</div>
+                    <div>
+                        <h2 class="card-title">Atrial Kick & Valve Function</h2>
+                        <p class="card-subtitle">Understand the role of atrial contraction in ventricular filling</p>
+                    </div>
+                </div>
+
+                <div class="activity-container">
+                    <h3 class="activity-title">🎯 Activity 1: Atrial Kick Scenario Analysis</h3>
+                    <p class="activity-instructions">
+                        Read the clinical scenario below and select the correct physiological consequence. All answer choices are randomized.
+                    </p>
+
+                    <!-- Scenario Box -->
+                    <div class="scenario-box">
+                        <div class="scenario-header">
+                            <span class="scenario-icon">🏥</span>
+                            <h4 class="scenario-title">Clinical Scenario: Loss of Atrial Kick</h4>
+                        </div>
+                        
+                        <div class="scenario-content">
+                            <p>A 68-year-old patient with chronic atrial fibrillation presents for an echocardiogram. The report notes: "Severely reduced left atrial contraction - essentially absent atrial kick."</p>
+                            
+                            <p>The cardiologist explains that the patient's irregularly irregular rhythm prevents coordinated atrial contraction. At rest, the patient's ventricular filling appears adequate, but during exercise they develop shortness of breath.</p>
+                        </div>
+                        
+                        <div class="scenario-question">
+                            What is the most significant DIRECT physiological consequence of losing atrial kick for this patient's cardiac function?
+                        </div>
+                        
+                        <!-- Quiz Options (Will be randomized) -->
+                        <div class="quiz-options" id="atrial-kick-options">
+                            <div class="quiz-option" data-correct="true">
+                                A 20-30% reduction in ventricular end-diastolic volume (preload)
+                            </div>
+                            <div class="quiz-option" data-correct="false">
+                                Increased afterload due to higher aortic pressure
+                            </div>
+                            <div class="quiz-option" data-correct="false">
+                                Immediate mitral valve regurgitation
+                            </div>
+                            <div class="quiz-option" data-correct="false">
+                                Increased sympathetic stimulation to compensate
+                            </div>
+                            <div class="quiz-option" data-correct="false">
+                                Reduced coronary artery perfusion during diastole
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="term-box">
+                        <div class="term-title">
+                            <span>📚</span>
+                            Key Term: Atrial Kick
+                        </div>
+                        <div class="term-text">
+                            <strong>Atrial Kick</strong> = The additional 20-30% of ventricular filling provided by atrial contraction at the end of diastole. In atrial fibrillation, this coordinated contraction is lost, reducing stroke volume by up to 30% at rest.
+                        </div>
+                    </div>
+
+                    <!-- Feedback -->
+                    <div class="feedback-container" id="feedback-1">
+                        <div class="feedback-title">
+                            <span class="feedback-icon correct">✓</span>
+                            Atrial Kick Analysis Complete!
+                        </div>
+                        <div class="feedback-content" id="feedback-content-1">
+                            <!-- Feedback will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity 2: Autonomic Nervous System Effects -->
+            <section class="content-card">
+                <div class="card-header">
+                    <div class="card-icon">🧠</div>
+                    <div>
+                        <h2 class="card-title">Autonomic Nervous System Effects</h2>
+                        <p class="card-subtitle">Sort sympathetic vs. parasympathetic effects on the heart</p>
+                    </div>
+                </div>
+
+                <div class="activity-container">
+                    <h3 class="activity-title">🔄 Activity 2: Sympathetic vs. Parasympathetic Sorting</h3>
+                    <p class="activity-instructions">
+                        Drag each physiological effect into the correct autonomic nervous system column. Items are randomized each attempt.
+                    </p>
+
+                    <div class="sorting-container">
+                        <div class="sorting-columns">
+                            <!-- Sympathetic Column -->
+                            <div class="sorting-column">
+                                <div class="column-header sympathetic">Sympathetic (Adrenergic)</div>
+                                <div class="sorting-dropzone" id="sympathetic-dropzone">
+                                    <!-- Dragged items will appear here -->
+                                </div>
+                            </div>
+
+                            <!-- Parasympathetic Column -->
+                            <div class="sorting-column">
+                                <div class="column-header parasympathetic">Parasympathetic (Cholinergic)</div>
+                                <div class="sorting-dropzone" id="parasympathetic-dropzone">
+                                    <!-- Dragged items will appear here -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sortable Items (Randomized) -->
+                        <div class="sortable-items" id="autonomic-items">
+                            <!-- Items will be populated by JavaScript -->
+                        </div>
+                    </div>
+
+                    <div class="remember-box">
+                        <div class="remember-title">
+                            <span>💡</span>
+                            Autonomic Nervous System Mnemonic
+                        </div>
+                        <div class="remember-text">
+                            <strong>Sympathetic</strong> = "Fight or Flight" = Increases everything (HR, contractility, conduction).<br>
+                            <strong>Parasympathetic</strong> = "Rest and Digest" = Decreases HR and conduction (via vagus nerve).
+                        </div>
+                    </div>
+
+                    <!-- Feedback -->
+                    <div class="feedback-container" id="feedback-2">
+                        <div class="feedback-title">
+                            <span class="feedback-icon correct">✓</span>
+                            Autonomic Sorting Complete!
+                        </div>
+                        <div class="feedback-content" id="feedback-content-2">
+                            <!-- Feedback will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity 3: Cardiac Cycle Phase Identification -->
+            <section class="content-card">
+                <div class="card-header">
+                    <div class="card-icon">🔄</div>
+                    <div>
+                        <h2 class="card-title">The Cardiac Cycle</h2>
+                        <p class="card-subtitle">Identify each phase of ventricular systole and diastole</p>
+                    </div>
+                </div>
+
+                <div class="activity-container">
+                    <h3 class="activity-title">📊 Activity 3: Cardiac Cycle Phase Identification</h3>
+                    <p class="activity-instructions">
+                        For each numbered phase of the cardiac cycle, select the correct description from the dropdown. Phase order is fixed, but descriptions are randomized.
+                    </p>
+
+                    <!-- Cardiac Cycle Timeline -->
+                    <div class="timeline-container">
+                        <div class="timeline">
+                            <!-- Phase 1 -->
+                            <div class="timeline-phase" data-phase="1">
+                                <div class="phase-number">1</div>
+                                <div class="phase-content">
+                                    <div class="phase-header">
+                                        <div class="phase-name">Ventricular Systole Begins</div>
+                                        <select class="phase-dropdown" data-phase="1">
+                                            <option value="">Select phase description...</option>
+                                            <option value="isovolumetric-contraction">All valves closed, ventricular pressure rises</option>
+                                            <option value="rapid-ejection">Aortic valve opens, blood rapidly ejected</option>
+                                            <option value="reduced-ejection">Ejection continues at slower rate</option>
+                                            <option value="isovolumetric-relaxation">All valves closed, ventricular pressure falls</option>
+                                            <option value="rapid-filling">AV valves open, blood rushes into ventricles</option>
+                                            <option value="diastasis">Slow passive filling continues</option>
+                                            <option value="atrial-systole">Atrial contraction completes filling</option>
+                                        </select>
+                                    </div>
+                                    <div class="phase-description">
+                                        This phase marks the beginning of ventricular contraction.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Phase 2 -->
+                            <div class="timeline-phase" data-phase="2">
+                                <div class="phase-number">2</div>
+                                <div class="phase-content">
+                                    <div class="phase-header">
+                                        <div class="phase-name">Rapid Ventricular Ejection</div>
+                                        <select class="phase-dropdown" data-phase="2">
+                                            <option value="">Select phase description...</option>
+                                            <option value="isovolumetric-contraction">All valves closed, ventricular pressure rises</option>
+                                            <option value="rapid-ejection">Aortic valve opens, blood rapidly ejected</option>
+                                            <option value="reduced-ejection">Ejection continues at slower rate</option>
+                                            <option value="isovolumetric-relaxation">All valves closed, ventricular pressure falls</option>
+                                            <option value="rapid-filling">AV valves open, blood rushes into ventricles</option>
+                                            <option value="diastasis">Slow passive filling continues</option>
+                                            <option value="atrial-systole">Atrial contraction completes filling</option>
+                                        </select>
+                                    </div>
+                                    <div class="phase-description">
+                                        Approximately 70% of stroke volume is ejected during this phase.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Phase 3 -->
+                            <div class="timeline-phase" data-phase="3">
+                                <div class="phase-number">3</div>
+                                <div class="phase-content">
+                                    <div class="phase-header">
+                                        <div class="phase-name">Reduced Ventricular Ejection</div>
+                                        <select class="phase-dropdown" data-phase="3">
+                                            <option value="">Select phase description...</option>
+                                            <option value="isovolumetric-contraction">All valves closed, ventricular pressure rises</option>
+                                            <option value="rapid-ejection">Aortic valve opens, blood rapidly ejected</option>
+                                            <option value="reduced-ejection">Ejection continues at slower rate</option>
+                                            <option value="isovolumetric-relaxation">All valves closed, ventricular pressure falls</option>
+                                            <option value="rapid-filling">AV valves open, blood rushes into ventricles</option>
+                                            <option value="diastasis">Slow passive filling continues</option>
+                                            <option value="atrial-systole">Atrial contraction completes filling</option>
+                                        </select>
+                                    </div>
+                                    <div class="phase-description">
+                                        Ventricular pressure starts to fall below aortic pressure.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Phase 4 -->
+                            <div class="timeline-phase" data-phase="4">
+                                <div class="phase-number">4</div>
+                                <div class="phase-content">
+                                    <div class="phase-header">
+                                        <div class="phase-name">Isovolumetric Relaxation</div>
+                                        <select class="phase-dropdown" data-phase="4">
+                                            <option value="">Select phase description...</option>
+                                            <option value="isovolumetric-contraction">All valves closed, ventricular pressure rises</option>
+                                            <option value="rapid-ejection">Aortic valve opens, blood rapidly ejected</option>
+                                            <option value="reduced-ejection">Ejection continues at slower rate</option>
+                                            <option value="isovolumetric-relaxation">All valves closed, ventricular pressure falls</option>
+                                            <option value="rapid-filling">AV valves open, blood rushes into ventricles</option>
+                                            <option value="diastasis">Slow passive filling continues</option>
+                                            <option value="atrial-systole">Atrial contraction completes filling</option>
+                                        </select>
+                                    </div>
+                                    <div class="phase-description">
+                                        All cardiac valves are closed during this phase.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Phase 5 -->
+                            <div class="timeline-phase" data-phase="5">
+                                <div class="phase-number">5</div>
+                                <div class="phase-content">
+                                    <div class="phase-header">
+                                        <div class="phase-name">Rapid Ventricular Filling</div>
+                                        <select class="phase-dropdown" data-phase="5">
+                                            <option value="">Select phase description...</option>
+                                            <option value="isovolumetric-contraction">All valves closed, ventricular pressure rises</option>
+                                            <option value="rapid-ejection">Aortic valve opens, blood rapidly ejected</option>
+                                            <option value="reduced-ejection">Ejection continues at slower rate</option>
+                                            <option value="isovolumetric-relaxation">All valves closed, ventricular pressure falls</option>
+                                            <option value="rapid-filling">AV valves open, blood rushes into ventricles</option>
+                                            <option value="diastasis">Slow passive filling continues</option>
+                                            <option value="atrial-systole">Atrial contraction completes filling</option>
+                                        </select>
+                                    </div>
+                                    <div class="phase-description">
+                                        AV valves open when ventricular pressure falls below atrial pressure.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Phase 6 -->
+                            <div class="timeline-phase" data-phase="6">
+                                <div class="phase-number">6</div>
+                                <div class="phase-content">
+                                    <div class="phase-header">
+                                        <div class="phase-name">Diastasis (Slow Filling)</div>
+                                        <select class="phase-dropdown" data-phase="6">
+                                            <option value="">Select phase description...</option>
+                                            <option value="isovolumetric-contraction">All valves closed, ventricular pressure rises</option>
+                                            <option value="rapid-ejection">Aortic valve opens, blood rapidly ejected</option>
+                                            <option value="reduced-ejection">Ejection continues at slower rate</option>
+                                            <option value="isovolumetric-relaxation">All valves closed, ventricular pressure falls</option>
+                                            <option value="rapid-filling">AV valves open, blood rushes into ventricles</option>
+                                            <option value="diastasis">Slow passive filling continues</option>
+                                            <option value="atrial-systole">Atrial contraction completes filling</option>
+                                        </select>
+                                    </div>
+                                    <div class="phase-description">
+                                        Slow passive filling continues as blood returns from veins.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Phase 7 -->
+                            <div class="timeline-phase" data-phase="7">
+                                <div class="phase-number">7</div>
+                                <div class="phase-content">
+                                    <div class="phase-header">
+                                        <div class="phase-name">Atrial Systole (Atrial Kick)</div>
+                                        <select class="phase-dropdown" data-phase="7">
+                                            <option value="">Select phase description...</option>
+                                            <option value="isovolumetric-contraction">All valves closed, ventricular pressure rises</option>
+                                            <option value="rapid-ejection">Aortic valve opens, blood rapidly ejected</option>
+                                            <option value="reduced-ejection">Ejection continues at slower rate</option>
+                                            <option value="isovolumetric-relaxation">All valves closed, ventricular pressure falls</option>
+                                            <option value="rapid-filling">AV valves open, blood rushes into ventricles</option>
+                                            <option value="diastasis">Slow passive filling continues</option>
+                                            <option value="atrial-systole">Atrial contraction completes filling</option>
+                                        </select>
+                                    </div>
+                                    <div class="phase-description">
+                                        Atrial contraction adds 20-30% to ventricular filling.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="remember-box">
+                        <div class="remember-title">
+                            <span>💡</span>
+                            Cardiac Cycle Key Points
+                        </div>
+                        <div class="remember-text">
+                            <strong>Systole</strong> = Contraction (phases 1-3). <strong>Diastole</strong> = Relaxation/filling (phases 4-7).<br>
+                            Valves open/close based on pressure gradients. Remember: "Lub" = AV valves close (systole begins), "Dub" = Semilunar valves close (diastole begins).
+                        </div>
+                    </div>
+
+                    <!-- Feedback -->
+                    <div class="feedback-container" id="feedback-3">
+                        <div class="feedback-title">
+                            <span class="feedback-icon correct">✓</span>
+                            Cardiac Cycle Complete!
+                        </div>
+                        <div class="feedback-content" id="feedback-content-3">
+                            <!-- Feedback will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn btn-secondary" id="reset-activities-btn">
+                <span class="btn-icon">↻</span>
+                Reset All Activities
+            </button>
+            <button class="btn btn-secondary" id="check-answers-btn">
+                <span class="btn-icon">✓</span>
+                Check All Answers
+            </button>
+            <button class="btn btn-primary" id="view-results-btn">
+                <span class="btn-icon">📊</span>
+                View Module Results
+            </button>
+        </div>
+
+        <!-- Results Panel -->
+        <div class="results-panel" id="results-panel">
+            <div class="results-header">
+                <h2 class="results-title">Module 2: Cardiac Function Results</h2>
+                <div class="score-display" id="final-score">0%</div>
+            </div>
+            
+            <div class="function-insights">
+                <h3 class="insights-title">
+                    <span>🧠</span> Key Functional Insights
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Atrial Kick Importance:</strong> Atrial contraction contributes 20-30% of ventricular filling at rest. Loss of atrial kick (as in atrial fibrillation) reduces cardiac output, especially during exercise when heart rate increases.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Autonomic Balance:</strong> Sympathetic stimulation increases HR, contractility, and conduction velocity (positive chronotropy, inotropy, dromotropy). Parasympathetic stimulation (via vagus) decreases HR and conduction (negative chronotropy and dromotropy).</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Cardiac Cycle Sequence:</strong> 1) Isovolumetric contraction (all valves closed), 2) Rapid ejection, 3) Reduced ejection, 4) Isovolumetric relaxation, 5) Rapid filling, 6) Diastasis, 7) Atrial systole. Valves open/close based on pressure gradients.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Clinical Correlation:</strong> Understanding these concepts helps interpret dysrhythmias, heart failure, and responses to medications like beta-blockers and digoxin.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>ECG Relationship:</strong> The cardiac cycle corresponds to ECG waves: P wave = atrial depolarization (atrial systole follows), QRS = ventricular depolarization (ventricular systole follows), T wave = ventricular repolarization (ventricular diastole begins).</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="function-insights" style="margin-top: 20px;">
+                <h3 class="insights-title">
+                    <span>📚</span> Review These Key Terms
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Atrial Kick:</strong> Additional ventricular filling from atrial contraction</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Chronotropy:</strong> Change in heart rate (+ = increase, - = decrease)</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Inotropy:</strong> Change in contractility (+ = stronger contraction)</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Dromotropy:</strong> Change in conduction velocity (+ = faster conduction)</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Isovolumetric:</strong> Volume constant, pressure changes (both contraction and relaxation phases)</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Application State
+            const state = {
+                activities: {
+                    atrialKick: { completed: false, correct: false, score: 0 },
+                    autonomic: { completed: false, correctItems: 0, totalItems: 8, score: 0 },
+                    cardiacCycle: { completed: false, correctPhases: 0, totalPhases: 7, score: 0 }
+                },
+                startTime: new Date(),
+                studyTime: 0
+            };
+
+            // DOM Elements
+            const progressSteps = document.querySelectorAll('.progress-step');
+            const completedActivities = document.getElementById('completed-activities');
+            const accuracyRate = document.getElementById('accuracy-rate');
+            const studyTime = document.getElementById('study-time');
+            const resetBtn = document.getElementById('reset-activities-btn');
+            const checkBtn = document.getElementById('check-answers-btn');
+            const resultsBtn = document.getElementById('view-results-btn');
+            const resultsPanel = document.getElementById('results-panel');
+            const finalScore = document.getElementById('final-score');
+
+            // Initialize
+            function init() {
+                updateProgressSummary();
+                startStudyTimer();
+                setupEventListeners();
+                randomizeAllActivities();
+            }
+
+            // Randomize all activities
+            function randomizeAllActivities() {
+                randomizeAtrialKickActivity();
+                randomizeAutonomicActivity();
+                randomizeCardiacCycleActivity();
+            }
+
+            // ACTIVITY 1: Atrial Kick
+            function randomizeAtrialKickActivity() {
+                const optionsContainer = document.getElementById('atrial-kick-options');
+                const options = Array.from(optionsContainer.children);
+                
+                // Shuffle options
+                shuffleArray(options);
+                optionsContainer.innerHTML = '';
+                options.forEach(option => optionsContainer.appendChild(option));
+                
+                setupAtrialKickActivity();
+            }
+
+            function setupAtrialKickActivity() {
+                const quizOptions = document.querySelectorAll('#atrial-kick-options .quiz-option');
+                
+                quizOptions.forEach(option => {
+                    option.addEventListener('click', function() {
+                        if (state.activities.atrialKick.completed) return;
+                        
+                        const isCorrect = this.dataset.correct === 'true';
+                        
+                        // Mark all options
+                        quizOptions.forEach(opt => {
+                            opt.classList.remove('selected', 'wrong');
+                            opt.style.pointerEvents = 'none';
+                        });
+                        
+                        this.classList.add(isCorrect ? 'selected' : 'wrong');
+                        
+                        // Show correct answer if wrong
+                        if (!isCorrect) {
+                            const correctOption = document.querySelector('#atrial-kick-options .quiz-option[data-correct="true"]');
+                            correctOption.classList.add('selected');
+                        }
+                        
+                        // Update state and show feedback
+                        state.activities.atrialKick.completed = true;
+                        state.activities.atrialKick.correct = isCorrect;
+                        state.activities.atrialKick.score = isCorrect ? 100 : 0;
+                        
+                        showAtrialKickFeedback(isCorrect);
+                        updateProgressSummary();
+                    });
+                });
+            }
+
+            function showAtrialKickFeedback(isCorrect) {
+                const feedback = document.getElementById('feedback-content-1');
+                
+                if (isCorrect) {
+                    feedback.innerHTML = `
+                        <strong>Correct! Atrial kick contributes 20-30% of ventricular filling.</strong><br><br>
+                        <strong>Key Points:</strong><br>
+                        • Atrial contraction adds the final 20-30% to ventricular end-diastolic volume<br>
+                        • This is called the "atrial kick" or "atrial contribution"<br>
+                        • In atrial fibrillation, loss of coordinated atrial contraction reduces stroke volume by up to 30%<br>
+                        • Patients may be asymptomatic at rest but develop symptoms during exercise when heart rate increases<br><br>
+                        <strong>Clinical Implication:</strong> Patients with atrial fibrillation often require rate control and anticoagulation. The loss of atrial kick explains their reduced exercise tolerance.
+                    `;
+                } else {
+                    feedback.innerHTML = `
+                        <strong>Not quite. The correct answer is: A 20-30% reduction in ventricular end-diastolic volume (preload).</strong><br><br>
+                        <strong>Explanation:</strong><br>
+                        Atrial kick contributes 20-30% of ventricular filling at rest. When lost (as in atrial fibrillation):<br><br>
+                        • <strong>Direct effect:</strong> Reduced preload (end-diastolic volume)<br>
+                        • <strong>Result:</strong> Reduced stroke volume by Frank-Starling mechanism<br>
+                        • <strong>At rest:</strong> May be compensated by other mechanisms<br>
+                        • <strong>During exercise:</strong> Symptoms appear due to inability to increase cardiac output adequately<br><br>
+                        <strong>Remember:</strong> Atrial kick = the "extra push" that completes ventricular filling.
+                    `;
+                }
+                
+                document.getElementById('feedback-1').classList.add('show');
+            }
+
+            // ACTIVITY 2: Autonomic Sorting
+            function randomizeAutonomicActivity() {
+                const autonomicItems = [
+                    { text: 'Increases heart rate (+ chronotropy)', type: 'sympathetic' },
+                    { text: 'Decreases heart rate (- chronotropy)', type: 'parasympathetic' },
+                    { text: 'Increases conduction velocity (+ dromotropy)', type: 'sympathetic' },
+                    { text: 'Decreases conduction velocity (- dromotropy)', type: 'parasympathetic' },
+                    { text: 'Increases contractility (+ inotropy)', type: 'sympathetic' },
+                    { text: 'Has little effect on ventricular contractility', type: 'parasympathetic' },
+                    { text: 'Releases norepinephrine at synapses', type: 'sympathetic' },
+                    { text: 'Releases acetylcholine at synapses', type: 'parasympathetic' }
+                ];
+                
+                shuffleArray(autonomicItems);
+                
+                const itemsContainer = document.getElementById('autonomic-items');
+                itemsContainer.innerHTML = '';
+                
+                autonomicItems.forEach(item => {
+                    const div = document.createElement('div');
+                    div.className = 'sortable-item';
+                    div.textContent = item.text;
+                    div.dataset.type = item.type;
+                    div.draggable = true;
+                    itemsContainer.appendChild(div);
+                });
+                
+                setupAutonomicActivity();
+            }
+
+            function setupAutonomicActivity() {
+                const items = document.querySelectorAll('.sortable-item');
+                const sympatheticDropzone = document.getElementById('sympathetic-dropzone');
+                const parasympatheticDropzone = document.getElementById('parasympathetic-dropzone');
+                
+                // Drag and drop setup
+                items.forEach(item => {
+                    item.addEventListener('dragstart', function(e) {
+                        e.dataTransfer.setData('text/plain', this.textContent);
+                        e.dataTransfer.setData('type', this.dataset.type);
+                        this.classList.add('dragging');
+                    });
+                    
+                    item.addEventListener('dragend', function() {
+                        this.classList.remove('dragging');
+                    });
+                });
+                
+                [sympatheticDropzone, parasympatheticDropzone].forEach(dropzone => {
+                    dropzone.addEventListener('dragover', function(e) {
+                        e.preventDefault();
+                        this.classList.add('hover');
+                    });
+                    
+                    dropzone.addEventListener('dragleave', function() {
+                        this.classList.remove('hover');
+                    });
+                    
+                    dropzone.addEventListener('drop', function(e) {
+                        e.preventDefault();
+                        this.classList.remove('hover');
+                        
+                        if (state.activities.autonomic.completed) return;
+                        
+                        const text = e.dataTransfer.getData('text/plain');
+                        const type = e.dataTransfer.getData('type');
+                        const targetType = this.id === 'sympathetic-dropzone' ? 'sympathetic' : 'parasympathetic';
+                        
+                        // Find and remove the dragged item
+                        const draggedItem = Array.from(items).find(item => 
+                            item.textContent === text && !item.classList.contains('placed')
+                        );
+                        
+                        if (draggedItem) {
+                            // Create placed item
+                            const placedItem = document.createElement('div');
+                            placedItem.className = `sortable-item placed ${targetType}`;
+                            placedItem.textContent = text;
+                            placedItem.dataset.type = type;
+                            placedItem.dataset.placedIn = targetType;
+                            
+                            this.appendChild(placedItem);
+                            draggedItem.style.display = 'none';
+                            
+                            // Check if all items placed
+                            const allPlaced = Array.from(items).every(item => 
+                                item.style.display === 'none' || item.classList.contains('placed')
+                            );
+                            
+                            if (allPlaced) {
+                                completeAutonomicActivity();
+                            }
+                        }
+                    });
+                });
+            }
+
+            function completeAutonomicActivity() {
+                // Count correct placements
+                const placedItems = document.querySelectorAll('.sortable-item.placed');
+                let correctCount = 0;
+                
+                placedItems.forEach(item => {
+                    if (item.dataset.type === item.dataset.placedIn) {
+                        correctCount++;
+                    } else {
+                        item.style.border = '2px solid var(--color-error)';
+                        item.style.background = 'rgba(225, 112, 85, 0.2)';
+                    }
+                });
+                
+                state.activities.autonomic.completed = true;
+                state.activities.autonomic.correctItems = correctCount;
+                state.activities.autonomic.score = Math.round((correctCount / state.activities.autonomic.totalItems) * 100);
+                
+                showAutonomicFeedback(correctCount);
+                updateProgressSummary();
+            }
+
+            function showAutonomicFeedback(correctCount) {
+                const feedback = document.getElementById('feedback-content-2');
+                
+                if (correctCount === 8) {
+                    feedback.innerHTML = `
+                        <strong>Perfect! All 8 items correctly sorted.</strong><br><br>
+                        <strong>Sympathetic (Adrenergic) Effects:</strong><br>
+                        • Increases heart rate (+ chronotropy)<br>
+                        • Increases conduction velocity (+ dromotropy)<br>
+                        • Increases contractility (+ inotropy)<br>
+                        • Releases norepinephrine<br><br>
+                        <strong>Parasympathetic (Cholinergic) Effects:</strong><br>
+                        • Decreases heart rate (- chronotropy)<br>
+                        • Decreases conduction velocity (- dromotropy)<br>
+                        • Little effect on ventricular contractility<br>
+                        • Releases acetylcholine<br><br>
+                        <strong>Clinical Relevance:</strong> Beta-blockers block sympathetic effects, slowing HR. Atropine blocks parasympathetic effects, increasing HR.
+                    `;
+                } else {
+                    feedback.innerHTML = `
+                        <strong>${correctCount}/8 items correctly sorted.</strong><br><br>
+                        <strong>Key Distinctions:</strong><br>
+                        • <strong>Sympathetic</strong> = INCREASES everything (HR, conduction, contractility)<br>
+                        • <strong>Parasympathetic</strong> = DECREASES HR and conduction<br>
+                        • Parasympathetic has <strong>minimal effect on ventricular contractility</strong><br>
+                        • Neurotransmitters: Sympathetic = norepinephrine, Parasympathetic = acetylcholine<br><br>
+                        <strong>Remember:</strong> Sympathetic = "Fight or Flight", Parasympathetic = "Rest and Digest"
+                    `;
+                }
+                
+                document.getElementById('feedback-2').classList.add('show');
+            }
+
+            // ACTIVITY 3: Cardiac Cycle
+            function randomizeCardiacCycleActivity() {
+                const phaseDropdowns = document.querySelectorAll('.phase-dropdown');
+                
+                // For each dropdown, shuffle the options (except the first empty option)
+                phaseDropdowns.forEach(dropdown => {
+                    const options = Array.from(dropdown.options);
+                    const firstOption = options[0]; // Keep "Select phase description..." first
+                    const otherOptions = options.slice(1);
+                    
+                    shuffleArray(otherOptions);
+                    
+                    // Clear and rebuild
+                    dropdown.innerHTML = '';
+                    dropdown.appendChild(firstOption);
+                    otherOptions.forEach(opt => dropdown.appendChild(opt));
+                });
+                
+                setupCardiacCycleActivity();
+            }
+
+            function setupCardiacCycleActivity() {
+                const phaseDropdowns = document.querySelectorAll('.phase-dropdown');
+                
+                // Correct answers for each phase
+                const correctAnswers = {
+                    '1': 'isovolumetric-contraction',
+                    '2': 'rapid-ejection',
+                    '3': 'reduced-ejection',
+                    '4': 'isovolumetric-relaxation',
+                    '5': 'rapid-filling',
+                    '6': 'diastasis',
+                    '7': 'atrial-systole'
+                };
+                
+                phaseDropdowns.forEach(dropdown => {
+                    dropdown.addEventListener('change', function() {
+                        if (state.activities.cardiacCycle.completed) return;
+                        
+                        const phaseNum = this.dataset.phase;
+                        const selectedValue = this.value;
+                        const isCorrect = selectedValue === correctAnswers[phaseNum];
+                        
+                        this.classList.remove('correct', 'incorrect');
+                        this.classList.add(isCorrect ? 'correct' : 'incorrect');
+                        
+                        // Check if all phases have selections
+                        const allSelected = Array.from(phaseDropdowns).every(dd => dd.value !== '');
+                        if (allSelected) {
+                            completeCardiacCycleActivity();
+                        }
+                    });
+                });
+            }
+
+            function completeCardiacCycleActivity() {
+                const phaseDropdowns = document.querySelectorAll('.phase-dropdown');
+                const correctAnswers = {
+                    '1': 'isovolumetric-contraction',
+                    '2': 'rapid-ejection',
+                    '3': 'reduced-ejection',
+                    '4': 'isovolumetric-relaxation',
+                    '5': 'rapid-filling',
+                    '6': 'diastasis',
+                    '7': 'atrial-systole'
+                };
+                
+                let correctCount = 0;
+                
+                phaseDropdowns.forEach(dropdown => {
+                    const phaseNum = dropdown.dataset.phase;
+                    if (dropdown.value === correctAnswers[phaseNum]) {
+                        correctCount++;
+                        dropdown.classList.add('correct');
+                        dropdown.classList.remove('incorrect');
+                    } else {
+                        dropdown.classList.add('incorrect');
+                        dropdown.classList.remove('correct');
+                        
+                        // Show correct answer
+                        const correctOption = dropdown.querySelector(`option[value="${correctAnswers[phaseNum]}"]`);
+                        if (correctOption) {
+                            correctOption.style.fontWeight = '700';
+                            correctOption.style.color = 'var(--color-success)';
+                        }
+                    }
+                });
+                
+                state.activities.cardiacCycle.completed = true;
+                state.activities.cardiacCycle.correctPhases = correctCount;
+                state.activities.cardiacCycle.score = Math.round((correctCount / state.activities.cardiacCycle.totalPhases) * 100);
+                
+                showCardiacCycleFeedback(correctCount);
+                updateProgressSummary();
+            }
+
+            function showCardiacCycleFeedback(correctCount) {
+                const feedback = document.getElementById('feedback-content-3');
+                
+                if (correctCount === 7) {
+                    feedback.innerHTML = `
+                        <strong>Perfect! All 7 cardiac cycle phases correctly identified.</strong><br><br>
+                        <strong>Cardiac Cycle Sequence:</strong><br>
+                        1. <strong>Isovolumetric Contraction:</strong> All valves closed, ventricular pressure rises<br>
+                        2. <strong>Rapid Ejection:</strong> Aortic valve opens, 70% SV ejected rapidly<br>
+                        3. <strong>Reduced Ejection:</strong> Continued ejection at slower rate<br>
+                        4. <strong>Isovolumetric Relaxation:</strong> All valves closed, pressure falls<br>
+                        5. <strong>Rapid Filling:</strong> AV valves open, blood rushes in (70% of filling)<br>
+                        6. <strong>Diastasis:</strong> Slow passive filling continues<br>
+                        7. <strong>Atrial Systole:</strong> Atrial contraction adds final 20-30% (atrial kick)<br><br>
+                        <strong>ECG Correlation:</strong> QRS = phase 1, T wave = phase 4, P wave = phase 7.
+                    `;
+                } else {
+                    feedback.innerHTML = `
+                        <strong>${correctCount}/7 phases correctly identified.</strong><br><br>
+                        <strong>Complete Cardiac Cycle:</strong><br>
+                        1. <strong>Isovolumetric Contraction</strong> - All valves closed, ventricular pressure rises<br>
+                        2. <strong>Rapid Ejection</strong> - Aortic valve opens, rapid ejection (70% SV)<br>
+                        3. <strong>Reduced Ejection</strong> - Slower continued ejection<br>
+                        4. <strong>Isovolumetric Relaxation</strong> - All valves closed, pressure falls<br>
+                        5. <strong>Rapid Filling</strong> - AV valves open, rapid filling (70% of filling)<br>
+                        6. <strong>Diastasis</strong> - Slow passive filling<br>
+                        7. <strong>Atrial Systole</strong> - Atrial contraction (atrial kick, 20-30% of filling)<br><br>
+                        <strong>Key Concept:</strong> Valves open/close based on pressure gradients. "Lub" = AV valves close (phase 1), "Dub" = semilunar valves close (phase 4).
+                    `;
+                }
+                
+                document.getElementById('feedback-3').classList.add('show');
+            }
+
+            // Utility Functions
+            function shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            }
+
+            function updateProgressSummary() {
+                let completed = 0;
+                let totalScore = 0;
+                let totalPossible = 0;
+                
+                Object.values(state.activities).forEach(activity => {
+                    if (activity.completed) completed++;
+                    totalScore += activity.score;
+                    totalPossible += 100;
+                });
+                
+                completedActivities.textContent = completed;
+                const accuracy = totalPossible > 0 ? Math.round((totalScore / totalPossible) * 100) : 0;
+                accuracyRate.textContent = `${accuracy}%`;
+                
+                // Update progress steps
+                progressSteps.forEach((step, index) => {
+                    if (index < completed) {
+                        step.classList.add('completed');
+                        step.classList.remove('active');
+                    } else if (index === completed) {
+                        step.classList.add('active');
+                        step.classList.remove('completed');
+                    } else {
+                        step.classList.remove('active', 'completed');
+                    }
+                });
+            }
+
+            function startStudyTimer() {
+                setInterval(() => {
+                    const now = new Date();
+                    const diff = Math.floor((now - state.startTime) / 1000);
+                    state.studyTime = diff;
+                    
+                    const minutes = Math.floor(diff / 60);
+                    const seconds = diff % 60;
+                    studyTime.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                }, 1000);
+            }
+
+            function resetAllActivities() {
+                // Reset state
+                state.activities = {
+                    atrialKick: { completed: false, correct: false, score: 0 },
+                    autonomic: { completed: false, correctItems: 0, totalItems: 8, score: 0 },
+                    cardiacCycle: { completed: false, correctPhases: 0, totalPhases: 7, score: 0 }
+                };
+                state.startTime = new Date();
+                
+                // Reset Activity 1
+                document.querySelectorAll('#atrial-kick-options .quiz-option').forEach(option => {
+                    option.classList.remove('selected', 'wrong');
+                    option.style.pointerEvents = 'auto';
+                });
+                
+                // Reset Activity 2
+                const sympatheticDropzone = document.getElementById('sympathetic-dropzone');
+                const parasympatheticDropzone = document.getElementById('parasympathetic-dropzone');
+                sympatheticDropzone.innerHTML = '';
+                parasympatheticDropzone.innerHTML = '';
+                
+                document.querySelectorAll('.sortable-item').forEach(item => {
+                    item.style.display = '';
+                    item.classList.remove('placed', 'dragging');
+                });
+                
+                // Reset Activity 3
+                document.querySelectorAll('.phase-dropdown').forEach(dropdown => {
+                    dropdown.value = '';
+                    dropdown.classList.remove('correct', 'incorrect');
+                    
+                    // Reset option styling
+                    Array.from(dropdown.options).forEach(option => {
+                        option.style.fontWeight = '';
+                        option.style.color = '';
+                    });
+                });
+                
+                document.querySelectorAll('.feedback-container').forEach(fb => {
+                    fb.classList.remove('show');
+                });
+                
+                resultsPanel.classList.remove('show');
+                
+                // Randomize again
+                randomizeAllActivities();
+                updateProgressSummary();
+            }
+
+            function checkAllAnswers() {
+                // Complete any uncompleted activities
+                if (!state.activities.atrialKick.completed) {
+                    const selectedOption = document.querySelector('#atrial-kick-options .quiz-option.selected');
+                    if (!selectedOption) {
+                        alert('Please answer the atrial kick scenario before checking all answers.');
+                        return;
+                    }
+                    // Trigger click to complete
+                    selectedOption.click();
+                }
+                
+                if (!state.activities.autonomic.completed) {
+                    const placedItems = document.querySelectorAll('.sortable-item.placed');
+                    if (placedItems.length < 8) {
+                        alert('Please sort all autonomic items before checking all answers.');
+                        return;
+                    }
+                    completeAutonomicActivity();
+                }
+                
+                if (!state.activities.cardiacCycle.completed) {
+                    const phaseDropdowns = document.querySelectorAll('.phase-dropdown');
+                    const allSelected = Array.from(phaseDropdowns).every(dd => dd.value !== '');
+                    if (!allSelected) {
+                        alert('Please select an option for all cardiac cycle phases before checking all answers.');
+                        return;
+                    }
+                    completeCardiacCycleActivity();
+                }
+                
+                updateProgressSummary();
+            }
+
+            function viewFinalResults() {
+                let totalScore = 0;
+                let activityCount = 0;
+                
+                Object.values(state.activities).forEach(activity => {
+                    if (activity.completed) {
+                        totalScore += activity.score;
+                        activityCount++;
+                    }
+                });
+                
+                if (activityCount < 3) {
+                    alert('Please complete all 3 activities before viewing final results.');
+                    return;
+                }
+                
+                const averageScore = Math.round(totalScore / 3);
+                finalScore.textContent = `${averageScore}%`;
+                resultsPanel.classList.add('show');
+                resultsPanel.scrollIntoView({ behavior: 'smooth' });
+            }
+
+            function setupEventListeners() {
+                resetBtn.addEventListener('click', resetAllActivities);
+                checkBtn.addEventListener('click', checkAllAnswers);
+                resultsBtn.addEventListener('click', viewFinalResults);
+            }
+
+            // Initialize the module
+            init();
+        });
+    </script>
+</body>
+</html>
