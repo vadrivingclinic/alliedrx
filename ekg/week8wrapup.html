@@ -1,0 +1,1421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chapter 8 Wrap-Up — Pacemaker Rhythms</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        :root {
+            /* Brand Colors */
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-error: #e17055;
+            --color-warning: #fdcb6e;
+            --color-info: #0984e3;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
+            --color-dark: #0c0a18;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+            --shadow-card: 0 12px 30px rgba(15, 23, 42, 0.1);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            padding: 24px;
+            background: radial-gradient(circle at top left, #ffffff 0, #f3edff 40%, var(--color-bg) 100%);
+            color: var(--color-text);
+            -webkit-text-size-adjust: 100%;
+            animation: fadeIn 0.8s ease;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 12px; }
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1200px;
+            min-width: 320px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            gap: 32px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @media (max-width: 900px) {
+            .page {
+                grid-template-columns: 1fr;
+                padding: 22px;
+                gap: 24px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 18px 14px 22px;
+                gap: 22px;
+            }
+        }
+
+        img, .page, .column, .card, .side-card, .completion-card {
+            max-width: 100%;
+        }
+
+        .column {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* Header / Branding */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            width: 100%;
+            animation: fadeInUp 0.6s ease;
+            grid-column: 1 / -1;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+        }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--color-success);
+            flex-shrink: 0;
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        h1 {
+            font-size: clamp(1.9rem, 3vw, 2.3rem);
+            line-height: 1.05;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.7s ease 0.1s both;
+            grid-column: 1 / -1;
+        }
+
+        .subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 100%;
+            margin-bottom: 18px;
+            animation: fadeInUp 0.7s ease 0.2s both;
+            grid-column: 1 / -1;
+        }
+
+        .subtitle strong {
+            color: var(--color-primary);
+        }
+
+        /* Progress Tracker */
+        .progress-tracker {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin: 20px 0;
+            padding: 10px;
+            background: rgba(175, 75, 239, 0.05);
+            border-radius: var(--radius-lg);
+            grid-column: 1 / -1;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+            max-width: 200px;
+        }
+
+        .step-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(175, 75, 239, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--color-primary);
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.active .step-circle {
+            background: var(--color-primary);
+            color: white;
+            box-shadow: 0 8px 20px rgba(175, 75, 239, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        .step-label {
+            font-size: 0.85rem;
+            color: var(--color-muted);
+            text-align: center;
+            line-height: 1.3;
+        }
+
+        .progress-step.active .step-label {
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        /* Sections */
+        .section-label {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-primary);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--color-text);
+            line-height: 1.3;
+        }
+
+        .card {
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(15, 23, 42, 0.06);
+            padding: 18px 20px 20px;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, rgba(175, 75, 239, 0.04), rgba(255, 255, 255, 0.98));
+            animation: fadeInUp 0.6s ease;
+            width: 100%;
+        }
+
+        .card p {
+            font-size: 0.92rem;
+            line-height: 1.6;
+            color: var(--color-text);
+            margin-bottom: 12px;
+        }
+
+        .small {
+            font-size: 0.82rem;
+            color: var(--color-muted);
+            line-height: 1.5;
+        }
+
+        /* Quiz Styles */
+        .quiz-item {
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 1px dashed rgba(148, 163, 184, 0.7);
+        }
+
+        .quiz-question {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .quiz-options {
+            list-style: none;
+            padding-left: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            font-size: 0.9rem;
+        }
+
+        .quiz-options li {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            padding: 10px;
+            border-radius: var(--radius-sm);
+            transition: background-color 0.2s;
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+
+        .quiz-options li:hover {
+            background-color: rgba(175, 75, 239, 0.05);
+            border-color: rgba(175, 75, 239, 0.1);
+        }
+
+        .quiz-options input {
+            margin-top: 3px;
+            cursor: pointer;
+        }
+
+        .quiz-feedback {
+            font-size: 0.85rem;
+            margin-top: 8px;
+            min-height: 1.1em;
+            padding: 10px;
+            border-radius: var(--radius-sm);
+            display: none;
+            line-height: 1.4;
+        }
+
+        .quiz-feedback.correct {
+            color: var(--color-success);
+            background-color: rgba(0, 184, 148, 0.1);
+            border: 1px solid rgba(0, 184, 148, 0.2);
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .quiz-feedback.incorrect {
+            color: var(--color-error);
+            background-color: rgba(225, 112, 85, 0.1);
+            border: 1px solid rgba(225, 112, 85, 0.2);
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .btn {
+            border-radius: 999px;
+            border: none;
+            padding: 12px 24px;
+            margin-top: 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            cursor: pointer;
+            background: linear-gradient(135deg, var(--color-primary), #7c3aed);
+            color: #ffffff;
+            box-shadow: 0 10px 25px rgba(88, 28, 135, 0.35);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: inline-block;
+            min-width: 140px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(88, 28, 135, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 5px 12px rgba(88, 28, 135, 0.4);
+        }
+
+        /* Drag and Drop Styles */
+        .drag-container {
+            margin: 20px 0;
+        }
+
+        .drag-drop-zone {
+            min-height: 100px;
+            border: 2px dashed var(--color-primary-soft);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            margin: 12px 0;
+            background: rgba(175, 75, 239, 0.03);
+            transition: all 0.3s ease;
+        }
+
+        .drag-drop-zone.active {
+            border-color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.08);
+            transform: scale(1.01);
+        }
+
+        .drag-drop-zone strong {
+            display: block;
+            color: var(--color-primary);
+            margin-bottom: 4px;
+            font-size: 0.95rem;
+        }
+
+        .drag-drop-zone small {
+            display: block;
+            color: var(--color-muted);
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        .drag-item {
+            display: inline-block;
+            padding: 10px 16px;
+            margin: 6px;
+            background: var(--color-primary);
+            color: white;
+            border-radius: var(--radius-sm);
+            cursor: move;
+            user-select: none;
+            box-shadow: var(--shadow-card);
+            transition: transform 0.2s ease;
+            font-size: 0.9rem;
+            max-width: 100%;
+            word-break: break-word;
+        }
+
+        .drag-item:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .drag-item.dragging {
+            opacity: 0.5;
+            transform: scale(0.95);
+        }
+
+        /* Clinical Management Matching Cards */
+        .agency-match-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .agency-item {
+            padding: 14px 16px;
+            border-radius: var(--radius-md);
+            background: linear-gradient(135deg, var(--color-primary), #9d4edd);
+            border: 2px solid var(--color-primary-soft);
+            cursor: move;
+            user-select: none;
+            transition: all 0.3s ease;
+            color: white;
+            box-shadow: 0 6px 20px rgba(175, 75, 239, 0.25);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 80px;
+            text-align: center;
+        }
+
+        .agency-item:hover {
+            transform: translateY(-3px);
+            border-color: white;
+            box-shadow: 0 12px 30px rgba(175, 75, 239, 0.35);
+            background: linear-gradient(135deg, #c95eff, var(--color-primary));
+        }
+
+        .agency-item strong {
+            color: white;
+            display: block;
+            margin-bottom: 6px;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .agency-item small {
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 0.85rem;
+            line-height: 1.4;
+            display: block;
+            opacity: 0.9;
+        }
+
+        /* Match Zones */
+        .match-zone-container {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .match-zone-header {
+            color: white;
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 12px;
+            text-align: center;
+            background: rgba(12, 10, 24, 0.7);
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .agency-match-zone {
+            min-height: 90px;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            background: rgba(12, 10, 24, 0.85);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        .agency-match-zone strong {
+            color: #ffffff;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            margin-bottom: 4px;
+            display: block;
+            font-weight: 700;
+        }
+
+        .agency-match-zone .regulation-desc {
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 0.85rem;
+            line-height: 1.5;
+            opacity: 0.9;
+        }
+
+        .agency-match-zone.correct {
+            border-color: var(--color-success);
+            background: rgba(12, 10, 24, 0.95);
+            box-shadow: 0 0 0 2px rgba(0, 184, 148, 0.4), 0 4px 12px rgba(0, 184, 148, 0.2);
+        }
+
+        .agency-match-zone.incorrect {
+            border-color: var(--color-error);
+            background: rgba(12, 10, 24, 0.95);
+            box-shadow: 0 0 0 2px rgba(225, 112, 85, 0.4), 0 4px 12px rgba(225, 112, 85, 0.2);
+        }
+
+        .correct-match {
+            color: var(--color-success);
+            font-weight: 600;
+            margin-top: 8px;
+            display: none;
+            font-size: 0.9rem;
+            padding: 6px 12px;
+            background: rgba(0, 184, 148, 0.15);
+            border-radius: var(--radius-sm);
+            align-self: flex-start;
+            border: 1px solid rgba(0, 184, 148, 0.3);
+        }
+
+        .correct-match.show {
+            display: inline-block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* Vocabulary Flashcards */
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        @media (max-width: 900px) {
+            .vocab-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .vocab-card {
+            border-radius: var(--radius-md);
+            padding: 14px 16px;
+            background: linear-gradient(135deg, rgba(12, 10, 24, 0.95), rgba(30, 25, 60, 0.98));
+            color: #f0f0f0;
+            font-size: 0.9rem;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .vocab-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .vocab-term {
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: #fef9c3;
+            font-size: 0.95rem;
+            line-height: 1.3;
+        }
+
+        .vocab-definition {
+            font-size: 0.86rem;
+            line-height: 1.5;
+            display: none;
+            color: #e5e7eb;
+        }
+
+        .vocab-card.active .vocab-definition {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .vocab-card::after {
+            content: "Tap to flip";
+            position: absolute;
+            right: 10px;
+            bottom: 8px;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #c4b5fd;
+            background: rgba(12, 10, 24, 0.8);
+            padding: 4px 8px;
+            border-radius: 4px;
+            border: 1px solid rgba(196, 181, 253, 0.3);
+        }
+
+        .vocab-card.active::after {
+            content: "Hide";
+            color: #a5b4fc;
+        }
+
+        /* Reflection */
+        textarea {
+            width: 100%;
+            min-height: 100px;
+            border-radius: var(--radius-sm);
+            border: 1px solid rgba(148, 163, 184, 0.7);
+            padding: 12px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            resize: vertical;
+            margin-top: 8px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            background: rgba(255, 255, 255, 0.05);
+            color: #f0f0f0;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(175, 75, 239, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        textarea::placeholder {
+            color: rgba(200, 200, 220, 0.6);
+        }
+
+        /* Right Column Cards */
+        .side-card {
+            background: linear-gradient(135deg, rgba(12, 10, 24, 0.95), rgba(30, 25, 60, 0.98));
+            color: #f0f0f0;
+            border-radius: var(--radius-md);
+            padding: 20px 22px 22px;
+            font-size: 0.92rem;
+            line-height: 1.6;
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.6);
+            margin-bottom: 20px;
+            animation: fadeInUp 0.6s ease;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            width: 100%;
+        }
+
+        .side-card p {
+            color: #e5e7eb;
+            margin-bottom: 14px;
+            line-height: 1.6;
+        }
+
+        .side-card strong {
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+        .side-subtitle {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #c4b5fd;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .side-list {
+            list-style: none;
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-size: 0.9rem;
+        }
+
+        .side-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            color: #e5e7eb;
+            line-height: 1.5;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            margin-top: 8px;
+            border-radius: 999px;
+            background: #a5b4fc;
+            flex-shrink: 0;
+        }
+
+        .completion-card {
+            border-radius: var(--radius-md);
+            border: 1px dashed rgba(148, 163, 184, 0.7);
+            padding: 18px 20px;
+            font-size: 0.88rem;
+            color: var(--color-text);
+            background: rgba(248, 250, 252, 0.95);
+            animation: fadeInUp 0.6s ease;
+            width: 100%;
+        }
+
+        .completion-card p {
+            color: var(--color-text);
+            margin-bottom: 12px;
+        }
+
+        .completion-card .side-list li {
+            color: var(--color-text);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .agency-match-container {
+                grid-template-columns: 1fr;
+            }
+            .drag-item {
+                font-size: 0.85rem;
+                padding: 8px 12px;
+            }
+            .agency-match-zone {
+                min-height: 80px;
+                padding: 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .progress-tracker {
+                gap: 20px;
+            }
+            .step-label {
+                font-size: 0.8rem;
+            }
+            .btn {
+                padding: 10px 20px;
+                font-size: 0.85rem;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <!-- Progress Tracker -->
+        <div class="progress-tracker">
+            <div class="progress-step active" data-step="1">
+                <div class="step-circle">1</div>
+                <div class="step-label">Pacing Basics</div>
+            </div>
+            <div class="progress-step" data-step="2">
+                <div class="step-circle">2</div>
+                <div class="step-label">Troubleshooting</div>
+            </div>
+        </div>
+
+        <!-- Header -->
+        <header class="brand-row">
+            <div class="brand">
+                <img
+                    src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                    alt="AlliedRx logo"
+                    class="brand-logo"
+                />
+                <div class="course-meta">
+                    <span class="course-name">EKG Technician Program • Week 8</span>
+                    <div class="week-label">
+                        <span class="week-label-dot"></span>
+                        <span>Chapter 8: Pacemaker Rhythms</span>
+                    </div>
+                </div>
+            </div>
+            <span class="badge-mode">Campus & Online</span>
+        </header>
+
+        <h1 id="wrapup-heading">Pacemaker Rhythms Wrap-Up</h1>
+        <p class="subtitle">
+            Review key concepts from <strong>Chapter 8</strong>. 
+            Identify pacing spikes, distinguish between pacing modes, and troubleshoot common malfunctions.
+        </p>
+
+        <!-- LEFT COLUMN -->
+        <section class="column">
+            <!-- ACTIVITY 1: Drag & Drop Pacing Types -->
+            <section aria-label="Activity 1: Pacing Identification">
+                <p class="section-label">Activity 1</p>
+                <h2 class="section-title">Pacing Modes</h2>
+                <div class="card">
+                    <p class="small">
+                        Drag each ECG feature to the correct Pacemaker type.
+                    </p>
+
+                    <div class="drag-container">
+                        <div class="drag-drop-zone" id="atrial-zone" data-type="atrial">
+                            <strong>Atrial Pacing</strong>
+                            <small>Single Chamber</small>
+                        </div>
+                        
+                        <div class="drag-drop-zone" id="ventricular-zone" data-type="ventricular">
+                            <strong>Ventricular Pacing</strong>
+                            <small>Single Chamber</small>
+                        </div>
+                        
+                        <div class="drag-drop-zone" id="dual-zone" data-type="dual">
+                            <strong>Dual Chamber</strong>
+                            <small>AV Sequential</small>
+                        </div>
+
+                        <div style="margin-top: 20px; padding: 15px; background: rgba(175, 75, 239, 0.05); border-radius: var(--radius-md);">
+                            <p style="margin-bottom: 12px; font-weight: 600; color: var(--color-text);">Drag these items to the correct zones above:</p>
+                            <div class="drag-item" draggable="true" data-type="atrial">Spike before P wave</div>
+                            <div class="drag-item" draggable="true" data-type="ventricular">Spike before wide QRS</div>
+                            <div class="drag-item" draggable="true" data-type="dual">Two spikes per cycle</div>
+                            <div class="drag-item" draggable="true" data-type="atrial">P-wave follows spike</div>
+                            <div class="drag-item" draggable="true" data-type="ventricular">QRS follows spike</div>
+                            <div class="drag-item" draggable="true" data-type="dual">AV Sequential Pacing</div>
+                        </div>
+                    </div>
+
+                    <button class="btn" type="button" onclick="checkDragDrop()" aria-label="Check drag and drop answers">Check Matches</button>
+                    <div id="drag-feedback" class="quiz-feedback" style="display:none;"></div>
+                </div>
+            </section>
+
+            <!-- Quiz -->
+            <section aria-label="Knowledge Quiz">
+                <p class="section-label">Knowledge Check</p>
+                <h2 class="section-title">Pacing Concepts Quiz</h2>
+                <div class="card" id="quiz-card">
+                    <p class="small">
+                        Test your understanding of pacemaker function.
+                    </p>
+
+                    <div class="quiz-item" data-answer="b">
+                        <p class="quiz-question">
+                            1. What does the term "Capture" mean in relation to pacemakers?
+                        </p>
+                        <ul class="quiz-options">
+                            <li>
+                                <input type="radio" name="q1" value="a" id="q1a" />
+                                <label for="q1a">The pacemaker detects the patient's own heartbeat.</label>
+                            </li>
+                            <li>
+                                <input type="radio" name="q1" value="b" id="q1b" />
+                                <label for="q1b">The electrical stimulus successfully depolarizes the heart muscle.</label>
+                            </li>
+                            <li>
+                                <input type="radio" name="q1" value="c" id="q1c" />
+                                <label for="q1c">The battery life is sufficient for operation.</label>
+                            </li>
+                        </ul>
+                        <div class="quiz-feedback" id="q1-feedback"></div>
+                    </div>
+
+                    <div class="quiz-item" data-answer="a">
+                        <p class="quiz-question">
+                            2. A "Demand" pacemaker functions by:
+                        </p>
+                        <ul class="quiz-options">
+                            <li>
+                                <input type="radio" name="q2" value="a" id="q2a" />
+                                <label for="q2a">Firing only when the patient's heart rate drops below a preset limit.</label>
+                            </li>
+                            <li>
+                                <input type="radio" name="q2" value="b" id="q2b" />
+                                <label for="q2b">Firing continuously regardless of the patient's own rhythm.</label>
+                            </li>
+                            <li>
+                                <input type="radio" name="q2" value="c" id="q2c" />
+                                <label for="q2c">Delivering a shock if V-Fib is detected.</label>
+                            </li>
+                        </ul>
+                        <div class="quiz-feedback" id="q2-feedback"></div>
+                    </div>
+
+                    <div class="quiz-item" data-answer="c">
+                        <p class="quiz-question">
+                            3. Why is the QRS complex wide in Ventricular Pacing?
+                        </p>
+                        <ul class="quiz-options">
+                            <li>
+                                <input type="radio" name="q3" value="a" id="q3a" />
+                                <label for="q3a">Because the pacemaker uses too much voltage.</label>
+                            </li>
+                            <li>
+                                <input type="radio" name="q3" value="b" id="q3b" />
+                                <label for="q3b">Because the impulse travels down the Bundle of His.</label>
+                            </li>
+                            <li>
+                                <input type="radio" name="q3" value="c" id="q3c" />
+                                <label for="q3c">Because the impulse bypasses the normal conduction system.</label>
+                            </li>
+                        </ul>
+                        <div class="quiz-feedback" id="q3-feedback"></div>
+                    </div>
+
+                    <button class="btn" type="button" onclick="checkQuiz()" aria-label="Check quiz answers">Check Answers</button>
+                </div>
+            </section>
+
+            <!-- Key Vocabulary Flashcards -->
+            <section aria-label="Key vocabulary flashcards">
+                <p class="section-label">Essential Terms</p>
+                <h2 class="section-title">Pacemaker Vocabulary</h2>
+                <div class="card">
+                    <p class="small">
+                        Select each card to reveal definitions.
+                    </p>
+                    <div class="vocab-grid">
+                        <div class="vocab-card" onclick="toggleVocab(this)" tabindex="0" role="button" aria-label="Flip card">
+                            <div class="vocab-term">Capture</div>
+                            <div class="vocab-definition">
+                                Depolarization of the heart muscle after an electrical stimulus (spike). Seen as a P-wave or QRS following the spike.
+                            </div>
+                        </div>
+                        <div class="vocab-card" onclick="toggleVocab(this)" tabindex="0" role="button" aria-label="Flip card">
+                            <div class="vocab-term">Sensitivity</div>
+                            <div class="vocab-definition">
+                                The ability of the pacemaker to "see" or sense the patient's intrinsic electrical activity.
+                            </div>
+                        </div>
+                        <div class="vocab-card" onclick="toggleVocab(this)" tabindex="0" role="button" aria-label="Flip card">
+                            <div class="vocab-term">Inhibition</div>
+                            <div class="vocab-definition">
+                                The pacemaker's response to sensing an intrinsic beat: it holds (inhibits) its own fire to prevent competition.
+                            </div>
+                        </div>
+                        <div class="vocab-card" onclick="toggleVocab(this)" tabindex="0" role="button" aria-label="Flip card">
+                            <div class="vocab-term">Threshold</div>
+                            <div class="vocab-definition">
+                                The minimum amount of electrical energy (milliamperes) required to consistently capture the heart.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- RIGHT COLUMN -->
+        <section class="column" aria-label="Activity 2: Troubleshooting">
+            <!-- ACTIVITY 2: Troubleshooting Matching -->
+            <section>
+                <p class="section-label">Activity 2</p>
+                <h2 class="section-title">Pacemaker Malfunctions</h2>
+                <div class="side-card">
+                    <p class="side-subtitle">Problem Solving</p>
+                    <p>
+                        Identify the malfunction based on the ECG evidence.
+                    </p>
+                    
+                    <div class="agency-match-container">
+                        <div class="agency-item" draggable="true" data-term="capture" id="item-capture">
+                            <strong>Failure to Capture</strong>
+                            <small>Spike, No Beat</small>
+                        </div>
+                        <div class="agency-item" draggable="true" data-term="pace" id="item-pace">
+                            <strong>Failure to Pace</strong>
+                            <small>No Spike</small>
+                        </div>
+                        <div class="agency-item" draggable="true" data-term="under" id="item-under">
+                            <strong>Undersensing</strong>
+                            <small>Ignores Patient</small>
+                        </div>
+                        <div class="agency-item" draggable="true" data-term="over" id="item-over">
+                            <strong>Oversensing</strong>
+                            <small>Pauses from Noise</small>
+                        </div>
+                    </div>
+
+                    <div class="match-zone-container">
+                        <p class="match-zone-header">Drag malfunction to the scenario:</p>
+                        
+                        <div class="agency-match-zone" id="zone-no-beat" data-correct="capture">
+                            <strong>Spikes present, no QRS</strong>
+                            <div class="regulation-desc">Electricity is delivered, but the heart does not respond.</div>
+                            <div class="correct-match" id="match1">✓ Correct: Failure to Capture</div>
+                        </div>
+                        
+                        <div class="agency-match-zone" id="zone-no-spike" data-correct="pace">
+                            <strong>HR drops, no spikes</strong>
+                            <div class="regulation-desc">Patient becomes bradycardic, but the pacemaker fails to fire.</div>
+                            <div class="correct-match" id="match2">✓ Correct: Failure to Pace</div>
+                        </div>
+                        
+                        <div class="agency-match-zone" id="zone-random" data-correct="under">
+                            <strong>Spikes on T-waves</strong>
+                            <div class="regulation-desc">Pacemaker fails to see the patient's own beat and fires inappropriately.</div>
+                            <div class="correct-match" id="match3">✓ Correct: Undersensing</div>
+                        </div>
+                        
+                        <div class="agency-match-zone" id="zone-noise" data-correct="over">
+                            <strong>Inappropriate Pauses</strong>
+                            <div class="regulation-desc">Pacemaker interprets muscle artifact as heartbeats and withholds pacing.</div>
+                            <div class="correct-match" id="match4">✓ Correct: Oversensing</div>
+                        </div>
+                    </div>
+
+                    <button class="btn" type="button" onclick="checkClinicalLogic()" style="margin-top: 20px;" aria-label="Check malfunction matching">Check Matches</button>
+                </div>
+            </section>
+
+            <!-- Reflection -->
+            <section>
+                <p class="section-label">Clinical Application</p>
+                <h2 class="section-title">Mechanical Capture</h2>
+                <div class="side-card">
+                    <p>
+                        <strong>"Electrical capture does not guarantee mechanical capture."</strong>
+                    </p>
+                    <ul class="side-list" style="margin-top: 14px;">
+                        <li>
+                            <span class="dot"></span>
+                            <span><strong>The Monitor:</strong> Shows electrical spikes and QRS complexes.</span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span><strong>The Patient:</strong> May have Pulseless Electrical Activity (PEA) even with a "perfect" paced rhythm on screen.</span>
+                        </li>
+                    </ul>
+
+                    <label class="small" for="reflection-notes" style="display:block;margin-top:18px; color: #d1d5db;">
+                        Why is it vital to palpate a pulse when assessing a patient with a pacemaker, rather than just looking at the ECG?
+                    </label>
+                    <textarea 
+                        id="reflection-notes" 
+                        placeholder="Explain electromechanical dissociation..."
+                        aria-label="Reflection text area"
+                        oninput="updateActivity2Progress()"
+                    ></textarea>
+                </div>
+            </section>
+
+            <!-- Completion Reminder -->
+            <section>
+                <p class="section-label">Ready to Move Forward?</p>
+                <h2 class="section-title">Chapter 8 Completion</h2>
+                <div class="completion-card">
+                    <p>
+                        Before continuing to Chapter 9 (12-Lead ECG), ensure you have:
+                    </p>
+                    <ul class="side-list" style="margin-top:10px;">
+                        <li>
+                            <span class="dot"></span>
+                            <span>Completed the <strong>Pacing Modes</strong> drag & drop</span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span>Answered all <strong>Pacing Quiz</strong> questions correctly</span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span>Matched the <strong>Malfunctions</strong> correctly</span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span>Reflected on <strong>Mechanical Capture</strong></span>
+                        </li>
+                    </ul>
+                    <p style="margin-top:10px;">
+                        When confident with Pacemaker Rhythms, mark this chapter complete and proceed.
+                    </p>
+                </div>
+            </section>
+        </section>
+    </div>
+
+    <script>
+        // State management
+        const moduleState = {
+            activities: {
+                1: { completed: false, correct: 0, total: 6, score: 0 },
+                2: { completed: false }
+            },
+            startedAt: new Date(),
+            timeSpent: 0
+        };
+
+        // Drag and Drop functionality for Activity 1 (Modes)
+        let draggedItem = null;
+        const correctMatches = {
+            'atrial': ['Spike before P wave', 'P-wave follows spike'],
+            'ventricular': ['Spike before wide QRS', 'QRS follows spike'],
+            'dual': ['Two spikes per cycle', 'AV Sequential Pacing']
+        };
+
+        // Setup draggable items
+        document.querySelectorAll('.drag-item').forEach(item => {
+            item.addEventListener('dragstart', handleDragStart);
+            item.addEventListener('dragend', handleDragEnd);
+        });
+
+        // Setup drop zones
+        document.querySelectorAll('.drag-drop-zone').forEach(zone => {
+            zone.addEventListener('dragover', handleDragOver);
+            zone.addEventListener('dragleave', handleDragLeave);
+            zone.addEventListener('drop', handleDrop);
+        });
+
+        function handleDragStart(e) {
+            draggedItem = this;
+            this.classList.add('dragging');
+            e.dataTransfer.setData('text/plain', this.textContent);
+            e.dataTransfer.effectAllowed = 'move';
+        }
+
+        function handleDragEnd() {
+            this.classList.remove('dragging');
+            draggedItem = null;
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            this.classList.add('active');
+        }
+
+        function handleDragLeave() {
+            this.classList.remove('active');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            this.classList.remove('active');
+            
+            if (draggedItem) {
+                // Check if item already exists in a zone
+                const existingItems = document.querySelectorAll(`.drag-item[data-original="${draggedItem.textContent}"]`);
+                existingItems.forEach(item => item.remove());
+                
+                // Create a new item for the drop zone
+                const newItem = draggedItem.cloneNode(true);
+                newItem.setAttribute('data-original', draggedItem.textContent);
+                newItem.style.margin = '5px';
+                newItem.draggable = false;
+                newItem.style.cursor = 'default';
+                newItem.addEventListener('click', function() {
+                    this.remove();
+                });
+                
+                this.appendChild(newItem);
+            }
+        }
+
+        function checkDragDrop() {
+            const zones = document.querySelectorAll('.drag-drop-zone');
+            let correctCount = 0;
+            let totalItems = 0;
+            const feedback = document.getElementById('drag-feedback');
+            
+            zones.forEach(zone => {
+                const zoneType = zone.getAttribute('data-type');
+                const items = zone.querySelectorAll('.drag-item');
+                totalItems += items.length;
+                
+                items.forEach(item => {
+                    const itemText = item.getAttribute('data-original') || item.textContent;
+                    if (correctMatches[zoneType] && correctMatches[zoneType].includes(itemText)) {
+                        item.style.backgroundColor = 'var(--color-success)';
+                        correctCount++;
+                    } else {
+                        item.style.backgroundColor = 'var(--color-error)';
+                        item.style.animation = 'shake 0.5s ease';
+                    }
+                });
+            });
+            
+            // Update activity state
+            moduleState.activities[1].completed = true;
+            
+            // Show feedback
+            feedback.style.display = 'block';
+            if (correctCount === 6) {
+                feedback.textContent = '✓ Perfect! You correctly classified all pacing modes.';
+                feedback.className = 'quiz-feedback correct';
+            } else {
+                feedback.textContent = `You matched ${correctCount} correctly. Review Atrial vs. Ventricular spikes.`;
+                feedback.className = 'quiz-feedback incorrect';
+            }
+            
+            updateProgressTracker();
+        }
+
+        // Quiz logic for Activity 1
+        function checkQuiz() {
+            const items = document.querySelectorAll('.quiz-item');
+            let correctCount = 0;
+            
+            items.forEach((item, index) => {
+                const correctAnswer = item.getAttribute('data-answer');
+                const name = `q${index + 1}`;
+                const selected = document.querySelector(`input[name="${name}"]:checked`);
+                const feedback = document.getElementById(`${name}-feedback`);
+                
+                if (!selected) {
+                    feedback.textContent = 'Please select an answer.';
+                    feedback.className = 'quiz-feedback incorrect';
+                    feedback.style.display = 'block';
+                    return;
+                }
+                
+                if (selected.value === correctAnswer) {
+                    feedback.textContent = getQuizFeedback(index, true);
+                    feedback.className = 'quiz-feedback correct';
+                    feedback.style.display = 'block';
+                    correctCount++;
+                    
+                    const selectedLabel = selected.closest('li');
+                    selectedLabel.style.backgroundColor = 'rgba(0, 184, 148, 0.1)';
+                } else {
+                    feedback.textContent = getQuizFeedback(index, false);
+                    feedback.className = 'quiz-feedback incorrect';
+                    feedback.style.display = 'block';
+                    
+                    const selectedLabel = selected.closest('li');
+                    selectedLabel.style.animation = 'shake 0.5s ease';
+                    selectedLabel.style.backgroundColor = 'rgba(225, 112, 85, 0.1)';
+                    
+                    // Highlight correct answer
+                    const correctInput = document.querySelector(`input[name="${name}"][value="${correctAnswer}"]`);
+                    if (correctInput) {
+                        const correctLabel = correctInput.closest('li');
+                        correctLabel.style.backgroundColor = 'rgba(0, 184, 148, 0.1)';
+                        correctLabel.style.border = '1px solid rgba(0, 184, 148, 0.3)';
+                    }
+                }
+            });
+            
+            updateProgressTracker();
+        }
+        
+        function getQuizFeedback(questionIndex, isCorrect) {
+            const correctFeedbacks = [
+                '✓ Correct! Capture means the muscle responded to the electricity.',
+                '✓ Correct! Demand pacing is safe because it only fires when needed.',
+                '✓ Correct! Ventricular pacing impulse starts in the ventricle, bypassing the fast conduction system.'
+            ];
+            
+            const incorrectFeedbacks = [
+                '✗ Incorrect. Sensing detects the beat. Capture means depolarization.',
+                '✗ Incorrect. That is Fixed-Rate pacing, which can be dangerous.',
+                '✗ Incorrect. Voltage affects capture height, not width. Wide QRS is due to slow conduction.'
+            ];
+            
+            return isCorrect ? correctFeedbacks[questionIndex] : incorrectFeedbacks[questionIndex];
+        }
+
+        // Clinical Logic Matching for Activity 2
+        let draggedLogic = null;
+        
+        document.querySelectorAll('.agency-item').forEach(item => {
+            item.addEventListener('dragstart', function(e) {
+                draggedLogic = this;
+                this.style.opacity = '0.5';
+                e.dataTransfer.setData('text/plain', this.id);
+            });
+            
+            item.addEventListener('dragend', function() {
+                this.style.opacity = '1';
+                draggedLogic = null;
+            });
+        });
+        
+        document.querySelectorAll('.agency-match-zone').forEach(zone => {
+            zone.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                this.style.borderColor = 'var(--color-primary)';
+                this.style.boxShadow = '0 0 0 2px rgba(175, 75, 239, 0.2)';
+            });
+            
+            zone.addEventListener('dragleave', function() {
+                this.style.borderColor = '';
+                this.style.boxShadow = '';
+            });
+            
+            zone.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.style.borderColor = '';
+                this.style.boxShadow = '';
+                
+                if (draggedLogic) {
+                    const term = draggedLogic.getAttribute('data-term');
+                    
+                    // Remove any existing matches
+                    const existingMatch = this.querySelector('.agency-item');
+                    if (existingMatch) {
+                        existingMatch.remove();
+                    }
+                    
+                    // Add the dragged item
+                    const clone = draggedLogic.cloneNode(true);
+                    clone.style.opacity = '1';
+                    clone.style.marginTop = '10px';
+                    clone.style.marginBottom = '10px';
+                    clone.draggable = false;
+                    this.appendChild(clone);
+                }
+            });
+        });
+        
+        function checkClinicalLogic() {
+            let allCorrect = true;
+            
+            document.querySelectorAll('.agency-match-zone').forEach(zone => {
+                const requiredTerm = zone.getAttribute('data-correct');
+                const item = zone.querySelector('.agency-item');
+                const matchDiv = zone.querySelector('.correct-match');
+                
+                if (item && item.getAttribute('data-term') === requiredTerm) {
+                    zone.classList.remove('incorrect');
+                    zone.classList.add('correct');
+                    matchDiv.classList.add('show');
+                } else {
+                    zone.classList.remove('correct');
+                    zone.classList.add('incorrect');
+                    if (matchDiv) matchDiv.classList.remove('show');
+                    allCorrect = false;
+                }
+            });
+            
+            if (allCorrect) {
+                moduleState.activities[2].completed = true;
+                updateProgressTracker();
+            }
+        }
+
+        // Vocabulary flip
+        function toggleVocab(card) {
+            card.classList.toggle('active');
+            if (card.classList.contains('active')) {
+                card.style.transform = 'translateY(-3px)';
+                card.style.boxShadow = 'var(--shadow-hover)';
+            }
+        }
+
+        // Update progress tracker
+        function updateProgressTracker() {
+            const step2 = document.querySelector('[data-step="2"]');
+            if (moduleState.activities[1].completed) {
+                step2.classList.add('active');
+            }
+        }
+
+        // Track Activity 2 progress
+        function updateActivity2Progress() {
+            const textarea = document.getElementById('reflection-notes');
+            if (textarea.value.trim().length > 0) {
+                moduleState.activities[2].completed = true;
+            }
+        }
+    </script>
+</body>
+</html>
