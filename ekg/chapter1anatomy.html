@@ -1,0 +1,1524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>AlliedRx EKG Program - Chapter 1: Heart Anatomy & Physiology</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        /* BRANDING FROM PROVIDED CSS */
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-error: #e17055;
+            --color-warning: #fdcb6e;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
+            --color-dark: #0c0a18;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+            --shadow-card: 0 12px 30px rgba(15, 23, 42, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(
+                circle at top left,
+                #ffffff 0,
+                #f1ecff 40%,
+                var(--color-bg) 100%
+            );
+            color: var(--color-text);
+            -webkit-text-size-adjust: 100%;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 12px; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes checkmarkPop {
+            0% { transform: scale(0); opacity: 0; }
+            70% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @media (max-width: 900px) {
+            .page { padding: 22px; }
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 0; }
+            .page {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 18px 14px 22px;
+            }
+        }
+
+        /* Header */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .brand-logo:hover { transform: scale(1.05); }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--color-success);
+            flex-shrink: 0;
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .badge-mode:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 3vw, 2.2rem);
+            line-height: 1.1;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .module-subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 600px;
+            margin-bottom: 24px;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        /* Progress Tracker */
+        .progress-tracker {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            position: relative;
+            padding: 0 20px;
+        }
+
+        .progress-tracker::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 50px;
+            right: 50px;
+            height: 3px;
+            background: rgba(12, 10, 24, 0.08);
+            z-index: 1;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+
+        .step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--color-muted);
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.active .step-circle {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .progress-step.completed .step-circle {
+            background: var(--color-success);
+            border-color: var(--color-success);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.75rem;
+            color: var(--color-muted);
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .progress-step.active .step-label {
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        /* Progress Summary */
+        .progress-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+            animation: fadeInUp 0.6s ease-out 0.5s both;
+        }
+
+        @media (max-width: 600px) {
+            .progress-summary {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+        }
+
+        .summary-card {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            border: 1px solid rgba(12, 10, 24, 0.06);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-card);
+            border-color: var(--color-primary-soft);
+        }
+
+        .summary-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--color-primary);
+            display: block;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .summary-label {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Content Cards */
+        .content-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .content-card {
+            background: white;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            padding: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .content-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--color-primary);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .content-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--color-primary-soft);
+        }
+
+        .content-card:hover::before {
+            opacity: 1;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: var(--radius-md);
+            background: rgba(175, 75, 239, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--color-primary);
+            flex-shrink: 0;
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+
+        .card-subtitle {
+            font-size: 0.9rem;
+            color: var(--color-muted);
+            line-height: 1.5;
+        }
+
+        /* Activity Containers */
+        .activity-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-md);
+            padding: 25px;
+            margin: 25px 0;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+        }
+
+        .activity-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .activity-instructions {
+            font-size: 0.9rem;
+            color: var(--color-muted);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        /* Matching Activity Styles */
+        .matching-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .matching-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .matching-column {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .matching-item {
+            padding: 12px 15px;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            background: white;
+            user-select: none;
+        }
+
+        .matching-item:hover {
+            border-color: var(--color-primary-soft);
+            background: rgba(175, 75, 239, 0.05);
+        }
+
+        .matching-item.selected {
+            border-color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.1);
+        }
+
+        .matching-item.correct {
+            border-color: var(--color-success) !important;
+            background: rgba(0, 184, 148, 0.1) !important;
+            cursor: default;
+        }
+
+        .matching-item.incorrect {
+            border-color: var(--color-error) !important;
+            background: rgba(225, 112, 85, 0.1) !important;
+            animation: shake 0.5s ease;
+        }
+
+        /* Flow Builder Activity */
+        .flow-builder {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .flow-step {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: var(--radius-sm);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            min-height: 60px;
+        }
+
+        .step-number {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(175, 75, 239, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--color-primary);
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .step-dropzone {
+            flex: 1;
+            min-height: 30px;
+            border: 2px dashed rgba(12, 10, 24, 0.1);
+            border-radius: var(--radius-sm);
+            padding: 8px 12px;
+            transition: all 0.3s ease;
+        }
+
+        .step-dropzone.hover {
+            border-color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.05);
+        }
+        
+        .step-dropzone.incorrect-drop {
+            border-color: var(--color-error);
+            background: rgba(225, 112, 85, 0.1);
+            animation: shake 0.5s ease;
+        }
+
+        .step-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+        }
+
+        .step-option {
+            padding: 8px 12px;
+            background: white;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            border-radius: var(--radius-sm);
+            cursor: grab;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .step-option:hover {
+            border-color: var(--color-primary-soft);
+            background: rgba(175, 75, 239, 0.05);
+        }
+
+        .step-option.dragging {
+            opacity: 0.7;
+            transform: scale(0.95);
+        }
+
+        .step-option.used {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        /* Quiz Activity */
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .quiz-option {
+            padding: 12px 15px;
+            border: 2px solid rgba(12, 10, 24, 0.1);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            background: white;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--color-primary-soft);
+            background: rgba(175, 75, 239, 0.05);
+        }
+
+        .quiz-option.selected {
+            border-color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.1);
+        }
+
+        .quiz-option.correct {
+            border-color: var(--color-success) !important;
+            background: rgba(0, 184, 148, 0.1) !important;
+        }
+
+        .quiz-option.wrong {
+            border-color: var(--color-error) !important;
+            background: rgba(225, 112, 85, 0.1) !important;
+            animation: shake 0.5s ease;
+        }
+
+        /* Feedback */
+        .feedback-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            margin-top: 20px;
+            display: none;
+        }
+
+        .feedback-container.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .feedback-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feedback-icon {
+            font-size: 1.2rem;
+        }
+
+        .feedback-icon.correct { color: var(--color-success); }
+        .feedback-icon.incorrect { color: var(--color-error); }
+
+        .feedback-content {
+            font-size: 0.85rem;
+            color: var(--color-text);
+            line-height: 1.5;
+        }
+
+        .feedback-content strong { color: var(--color-primary); }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #9a3bd6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(175, 75, 239, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-text);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(12, 10, 24, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-icon {
+            font-size: 1.1em;
+        }
+
+        /* Results Panel */
+        .results-panel {
+            background: var(--color-dark);
+            color: white;
+            border-radius: var(--radius-md);
+            padding: 30px;
+            margin-top: 30px;
+            display: none;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .results-panel.show {
+            display: block;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .results-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .score-display {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--color-primary-soft);
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .anatomy-insights {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .insights-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-primary-soft);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .insights-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .insights-list li {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            font-size: 0.9rem;
+            color: #e5e7eb;
+        }
+
+        .insight-dot {
+            width: 6px;
+            height: 6px;
+            margin-top: 6px;
+            border-radius: 999px;
+            background: var(--color-accent);
+            flex-shrink: 0;
+        }
+
+        /* Remember Box */
+        .remember-box {
+            background: rgba(253, 203, 110, 0.1);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid var(--color-warning);
+        }
+
+        .remember-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--color-warning);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .remember-text {
+            font-size: 0.85rem;
+            color: var(--color-text);
+            line-height: 1.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .progress-tracker {
+                padding: 0;
+            }
+            
+            .progress-tracker::before {
+                left: 40px;
+                right: 40px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .card-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="module-heading">
+        <!-- Header -->
+        <header class="brand-row">
+            <div class="brand">
+                <img
+                    src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                    alt="AlliedRx logo"
+                    class="brand-logo"
+                />
+                <div class="course-meta">
+                    <span class="course-name">EKG Technician Program • Chapter 1</span>
+                    <div class="week-label">
+                        <span class="week-label-dot"></span>
+                        <span>Anatomy & Physiology of the Heart</span>
+                    </div>
+                </div>
+            </div>
+            <span class="badge-mode">Self-Paced Module</span>
+        </header>
+
+        <h1 id="module-heading">Heart Structure & Blood Flow</h1>
+        <p class="module-subtitle">
+            Master the anatomical structures of the heart and understand the pathway of blood flow through the cardiac chambers and vessels.
+        </p>
+
+        <!-- Progress Tracker -->
+        <div class="progress-tracker">
+            <div class="progress-step active" data-step="1">
+                <div class="step-circle">1</div>
+                <div class="step-label">Heart Anatomy</div>
+            </div>
+            <div class="progress-step" data-step="2">
+                <div class="step-circle">2</div>
+                <div class="step-label">Blood Flow</div>
+            </div>
+            <div class="progress-step" data-step="3">
+                <div class="step-circle">3</div>
+                <div class="step-label">Coronary Supply</div>
+            </div>
+        </div>
+
+        <!-- Progress Summary -->
+        <div class="progress-summary">
+            <div class="summary-card">
+                <span class="summary-number" id="completed-activities">0</span>
+                <span class="summary-label">Activities Completed</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="accuracy-rate">0%</span>
+                <span class="summary-label">Current Accuracy</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="study-time">0:00</span>
+                <span class="summary-label">Study Time</span>
+            </div>
+        </div>
+
+        <!-- Content Cards -->
+        <div class="content-cards">
+            <!-- Activity 1: Heart Anatomy Matching -->
+            <section class="content-card">
+                <div class="card-header">
+                    <div class="card-icon">❤️</div>
+                    <div>
+                        <h2 class="card-title">Heart Anatomy Matching</h2>
+                        <p class="card-subtitle">Match cardiac structures to their descriptions and locations</p>
+                    </div>
+                </div>
+
+                <div class="activity-container">
+                    <h3 class="activity-title">🎯 Activity 1: Surface & Layer Identification</h3>
+                    <p class="activity-instructions">
+                        Match each cardiac structure with its correct description. <strong>Immediate feedback will appear</strong>: Green for correct, Red for incorrect.
+                    </p>
+
+                    <div class="matching-grid">
+                        <!-- Left Column - Terms (Randomized) -->
+                        <div class="matching-column" id="terms-column">
+                            <div class="matching-item" data-term="mediastinum">Mediastinum</div>
+                            <div class="matching-item" data-term="apex">Apex of the heart</div>
+                            <div class="matching-item" data-term="base">Base of the heart</div>
+                            <div class="matching-item" data-term="epicardium">Epicardium</div>
+                            <div class="matching-item" data-term="myocardium">Myocardium</div>
+                            <div class="matching-item" data-term="endocardium">Endocardium</div>
+                        </div>
+
+                        <!-- Right Column - Descriptions (Randomized) -->
+                        <div class="matching-column" id="descriptions-column">
+                            <div class="matching-item" data-match="mediastinum">Middle thoracic compartment containing heart</div>
+                            <div class="matching-item" data-match="apex">Lower pointed tip formed by left ventricle</div>
+                            <div class="matching-item" data-match="base">Superior posterior part formed by left atrium</div>
+                            <div class="matching-item" data-match="epicardium">Outer layer of heart wall (visceral pericardium)</div>
+                            <div class="matching-item" data-match="myocardium">Middle muscular layer with cardiac muscle fibers</div>
+                            <div class="matching-item" data-match="endocardium">Inner layer lining chambers and valves</div>
+                        </div>
+                    </div>
+
+                    <div class="remember-box">
+                        <div class="remember-title">
+                            <span>💡</span>
+                            Remember!
+                        </div>
+                        <div class="remember-text">
+                            The heart has <strong>three layers</strong>: Epicardium (outer), Myocardium (middle muscle), Endocardium (inner lining). It sits in the <strong>mediastinum</strong> with the apex pointing inferiorly and leftward.
+                        </div>
+                    </div>
+
+                    <!-- Feedback -->
+                    <div class="feedback-container" id="feedback-1">
+                        <div class="feedback-title">
+                            <span class="feedback-icon correct">✓</span>
+                            Matching Complete!
+                        </div>
+                        <div class="feedback-content" id="feedback-content-1">
+                            <!-- Feedback will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity 2: Blood Flow Pathway Builder -->
+            <section class="content-card">
+                <div class="card-header">
+                    <div class="card-icon">🔄</div>
+                    <div>
+                        <h2 class="card-title">Blood Flow Pathway</h2>
+                        <p class="card-subtitle">Build the complete pathway of blood through the heart and lungs</p>
+                    </div>
+                </div>
+
+                <div class="activity-container">
+                    <h3 class="activity-title">🔄 Activity 2: Sequential Flow Builder</h3>
+                    <p class="activity-instructions">
+                        Drag and drop steps into the correct order. <strong>Incorrect items will snap back to the list.</strong>
+                    </p>
+
+                    <div class="flow-builder">
+                        <!-- Flow Steps -->
+                        <div class="flow-step"><div class="step-number">1</div><div class="step-content"><div class="step-dropzone" data-correct="svc-ivc"></div></div></div>
+                        <div class="flow-step"><div class="step-number">2</div><div class="step-content"><div class="step-dropzone" data-correct="right-atrium"></div></div></div>
+                        <div class="flow-step"><div class="step-number">3</div><div class="step-content"><div class="step-dropzone" data-correct="tricuspid-valve"></div></div></div>
+                        <div class="flow-step"><div class="step-number">4</div><div class="step-content"><div class="step-dropzone" data-correct="right-ventricle"></div></div></div>
+                        <div class="flow-step"><div class="step-number">5</div><div class="step-content"><div class="step-dropzone" data-correct="pulmonary-valve"></div></div></div>
+                        <div class="flow-step"><div class="step-number">6</div><div class="step-content"><div class="step-dropzone" data-correct="pulmonary-arteries"></div></div></div>
+                        <div class="flow-step"><div class="step-number">7</div><div class="step-content"><div class="step-dropzone" data-correct="lungs"></div></div></div>
+                        <div class="flow-step"><div class="step-number">8</div><div class="step-content"><div class="step-dropzone" data-correct="pulmonary-veins"></div></div></div>
+                        <div class="flow-step"><div class="step-number">9</div><div class="step-content"><div class="step-dropzone" data-correct="left-atrium"></div></div></div>
+                        <div class="flow-step"><div class="step-number">10</div><div class="step-content"><div class="step-dropzone" data-correct="mitral-valve"></div></div></div>
+                        <div class="flow-step"><div class="step-number">11</div><div class="step-content"><div class="step-dropzone" data-correct="left-ventricle"></div></div></div>
+                        <div class="flow-step"><div class="step-number">12</div><div class="step-content"><div class="step-dropzone" data-correct="aortic-valve"></div></div></div>
+                        <div class="flow-step"><div class="step-number">13</div><div class="step-content"><div class="step-dropzone" data-correct="aorta"></div></div></div>
+                    </div>
+
+                    <!-- Draggable Options (Randomized) -->
+                    <div class="step-options" id="flow-options">
+                        <!-- Options will be populated by JavaScript -->
+                    </div>
+
+                    <div class="remember-box">
+                        <div class="remember-title">
+                            <span>💡</span>
+                            Blood Flow Mnemonic
+                        </div>
+                        <div class="remember-text">
+                            <strong>Right side</strong> = Deoxygenated blood TO lungs. <strong>Left side</strong> = Oxygenated blood FROM lungs to body. Remember: "Veins carry blood TO the heart, Arteries carry blood AWAY from the heart."
+                        </div>
+                    </div>
+
+                    <!-- Feedback -->
+                    <div class="feedback-container" id="feedback-2">
+                        <div class="feedback-title">
+                            <span class="feedback-icon correct">✓</span>
+                            Flow Pathway Complete!
+                        </div>
+                        <div class="feedback-content" id="feedback-content-2">
+                            <!-- Feedback will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity 3: Coronary Artery Quiz -->
+            <section class="content-card">
+                <div class="card-header">
+                    <div class="card-icon">🫀</div>
+                    <div>
+                        <h2 class="card-title">Coronary Circulation</h2>
+                        <p class="card-subtitle">Identify which coronary arteries supply specific heart regions</p>
+                    </div>
+                </div>
+
+                <div class="activity-container">
+                    <h3 class="activity-title">🫀 Activity 3: "Supplies Which Area?" Quiz</h3>
+                    <p class="activity-instructions">
+                        For each coronary artery, select the primary area of the heart it supplies. Questions and answer choices are randomized.
+                    </p>
+
+                    <!-- Quiz Questions (Randomized Order) -->
+                    <div class="quiz-questions">
+                        <!-- Question 1 -->
+                        <div class="quiz-question" data-question="1">
+                            <div class="question-text" style="font-weight: 600; margin-bottom: 10px;">
+                                The Left Anterior Descending (LAD) artery primarily supplies which area?
+                            </div>
+                            <div class="quiz-options">
+                                <div class="quiz-option" data-question="1" data-answer="anterior-septum">Anterior wall & Interventricular septum</div>
+                                <div class="quiz-option" data-question="1" data-answer="lateral">Lateral wall</div>
+                                <div class="quiz-option" data-question="1" data-answer="inferior">Inferior wall & SA/AV nodes</div>
+                                <div class="quiz-option" data-question="1" data-answer="posterior">Posterior wall</div>
+                                <div class="quiz-option" data-question="1" data-answer="apex">Apex</div>
+                            </div>
+                        </div>
+
+                        <!-- Question 2 -->
+                        <div class="quiz-question" data-question="2" style="margin-top: 25px;">
+                            <div class="question-text" style="font-weight: 600; margin-bottom: 10px;">
+                                The Circumflex artery primarily supplies which area?
+                            </div>
+                            <div class="quiz-options">
+                                <div class="quiz-option" data-question="2" data-answer="anterior-septum">Anterior wall & Interventricular septum</div>
+                                <div class="quiz-option" data-question="2" data-answer="lateral">Lateral wall</div>
+                                <div class="quiz-option" data-question="2" data-answer="inferior">Inferior wall & SA/AV nodes</div>
+                                <div class="quiz-option" data-question="2" data-answer="posterior">Posterior wall</div>
+                                <div class="quiz-option" data-question="2" data-answer="apex">Apex</div>
+                            </div>
+                        </div>
+
+                        <!-- Question 3 -->
+                        <div class="quiz-question" data-question="3" style="margin-top: 25px;">
+                            <div class="question-text" style="font-weight: 600; margin-bottom: 10px;">
+                                The Right Coronary Artery (RCA) primarily supplies which area?
+                            </div>
+                            <div class="quiz-options">
+                                <div class="quiz-option" data-question="3" data-answer="anterior-septum">Anterior wall & Interventricular septum</div>
+                                <div class="quiz-option" data-question="3" data-answer="lateral">Lateral wall</div>
+                                <div class="quiz-option" data-question="3" data-answer="inferior">Inferior wall & SA/AV nodes</div>
+                                <div class="quiz-option" data-question="3" data-answer="posterior">Posterior wall</div>
+                                <div class="quiz-option" data-question="3" data-answer="apex">Apex</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="remember-box">
+                        <div class="remember-title">
+                            <span>💡</span>
+                            Coronary Artery Facts
+                        </div>
+                        <div class="remember-text">
+                            <strong>LAD</strong> = "Widowmaker" - supplies anterior wall & septum. <strong>Circumflex</strong> = supplies lateral wall. <strong>RCA</strong> = supplies inferior wall & conduction system (SA/AV nodes).
+                        </div>
+                    </div>
+
+                    <!-- Feedback -->
+                    <div class="feedback-container" id="feedback-3">
+                        <div class="feedback-title">
+                            <span class="feedback-icon correct">✓</span>
+                            Coronary Quiz Complete!
+                        </div>
+                        <div class="feedback-content" id="feedback-content-3">
+                            <!-- Feedback will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn btn-secondary" id="reset-activities-btn">
+                <span class="btn-icon">↻</span>
+                Reset All Activities
+            </button>
+            <button class="btn btn-secondary" id="check-answers-btn">
+                <span class="btn-icon">✓</span>
+                Check All Answers
+            </button>
+            <button class="btn btn-primary" id="view-results-btn">
+                <span class="btn-icon">📊</span>
+                View Module Results
+            </button>
+        </div>
+
+        <!-- Results Panel -->
+        <div class="results-panel" id="results-panel">
+            <div class="results-header">
+                <h2 class="results-title">Module 1: Anatomy & Physiology Results</h2>
+                <div class="score-display" id="final-score">0%</div>
+            </div>
+            
+            <div class="anatomy-insights">
+                <h3 class="insights-title">
+                    <span>🧠</span> Key Anatomical Insights
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Heart Location:</strong> The heart sits in the mediastinum between the lungs. The apex points inferiorly and leftward - this is where you auscultate the apical pulse.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Cardiac Layers:</strong> Epicardium (outer), Myocardium (muscle), Endocardium (inner lining). The myocardium is thickest in the left ventricle.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Blood Flow Pathway:</strong> Body → SVC/IVC → RA → Tricuspid → RV → Pulmonary valve → Pulmonary arteries → Lungs → Pulmonary veins → LA → Mitral → LV → Aortic valve → Aorta → Body</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Coronary Supply:</strong> LAD = anterior wall/septum, Circumflex = lateral wall, RCA = inferior wall/conduction system. Blockages in these arteries cause specific ECG changes.</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Clinical Correlation:</strong> Understanding this anatomy is essential for interpreting ECGs. Different heart regions correspond to specific ECG leads.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="anatomy-insights" style="margin-top: 20px;">
+                <h3 class="insights-title">
+                    <span>📚</span> Review These Key Terms
+                </h3>
+                <ul class="insights-list">
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Mediastinum:</strong> Central thoracic compartment containing heart, great vessels</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Myocardium:</strong> Cardiac muscle layer responsible for contraction</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>LAD (Left Anterior Descending):</strong> "Widowmaker" artery supplying anterior wall</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Pulmonary Circulation:</strong> Right heart → Lungs → Left heart</span>
+                    </li>
+                    <li>
+                        <span class="insight-dot"></span>
+                        <span><strong>Systemic Circulation:</strong> Left heart → Body → Right heart</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Application State
+            const state = {
+                activities: {
+                    matching: { completed: false, score: 0, matches: 0, total: 6 },
+                    flow: { completed: false, score: 0, correctSteps: 0, total: 13 },
+                    quiz: { completed: false, score: 0, correctAnswers: 0, total: 3 }
+                },
+                startTime: new Date(),
+                studyTime: 0
+            };
+
+            // DOM Elements
+            const progressSteps = document.querySelectorAll('.progress-step');
+            const completedActivities = document.getElementById('completed-activities');
+            const accuracyRate = document.getElementById('accuracy-rate');
+            const studyTime = document.getElementById('study-time');
+            const resetBtn = document.getElementById('reset-activities-btn');
+            const checkBtn = document.getElementById('check-answers-btn');
+            const resultsBtn = document.getElementById('view-results-btn');
+            const resultsPanel = document.getElementById('results-panel');
+            const finalScore = document.getElementById('final-score');
+
+            // Initialize
+            function init() {
+                updateProgressSummary();
+                startStudyTimer();
+                setupEventListeners();
+                randomizeAllActivities();
+            }
+
+            function randomizeAllActivities() {
+                randomizeMatchingActivity();
+                randomizeFlowActivity();
+                randomizeQuizActivity();
+            }
+
+            // --- ACTIVITY 1: MATCHING FIXED ---
+            function randomizeMatchingActivity() {
+                const termsColumn = document.getElementById('terms-column');
+                const descColumn = document.getElementById('descriptions-column');
+                const terms = Array.from(termsColumn.children);
+                const descs = Array.from(descColumn.children);
+                shuffleArray(terms);
+                shuffleArray(descs);
+                termsColumn.innerHTML = '';
+                descColumn.innerHTML = '';
+                terms.forEach(term => termsColumn.appendChild(term));
+                descs.forEach(desc => descColumn.appendChild(desc));
+                setupMatchingActivity();
+            }
+
+            function setupMatchingActivity() {
+                let selectedTerm = null;
+                const matchingItems = document.querySelectorAll('.matching-item');
+                
+                matchingItems.forEach(item => {
+                    item.addEventListener('click', function() {
+                        if (state.activities.matching.completed || this.classList.contains('correct')) return;
+                        
+                        // Term selected
+                        if (this.parentElement.id === 'terms-column') {
+                            matchingItems.forEach(i => i.classList.remove('selected'));
+                            this.classList.add('selected');
+                            selectedTerm = this.dataset.term;
+                        }
+                        // Description clicked
+                        else if (this.parentElement.id === 'descriptions-column' && selectedTerm) {
+                            const termItem = document.querySelector(`[data-term="${selectedTerm}"]`);
+                            const isCorrect = this.dataset.match === selectedTerm;
+                            
+                            if (isCorrect) {
+                                // CORRECT: Turn Green & Lock
+                                termItem.classList.remove('selected');
+                                termItem.classList.add('correct');
+                                this.classList.add('correct');
+                                state.activities.matching.matches++;
+                                selectedTerm = null; // Reset selection
+
+                                if (state.activities.matching.matches === state.activities.matching.total) {
+                                    completeMatchingActivity();
+                                }
+                            } else {
+                                // INCORRECT: Turn Red, Shake, Reset
+                                termItem.classList.add('incorrect');
+                                this.classList.add('incorrect');
+                                
+                                // Reset after animation
+                                setTimeout(() => {
+                                    termItem.classList.remove('incorrect', 'selected');
+                                    this.classList.remove('incorrect');
+                                    selectedTerm = null;
+                                }, 800);
+                            }
+                        }
+                    });
+                });
+            }
+
+            function completeMatchingActivity() {
+                state.activities.matching.completed = true;
+                state.activities.matching.score = 100;
+                
+                const feedback = document.getElementById('feedback-content-1');
+                feedback.innerHTML = `<strong>Excellent! All matches correct.</strong>`;
+                document.getElementById('feedback-1').classList.add('show');
+                updateProgressSummary();
+            }
+
+            // --- ACTIVITY 2: FLOW FIXED ---
+            function randomizeFlowActivity() {
+                const flowOptions = [
+                    { id: 'svc-ivc', text: 'Superior & Inferior Vena Cava' },
+                    { id: 'right-atrium', text: 'Right Atrium' },
+                    { id: 'tricuspid-valve', text: 'Tricuspid Valve' },
+                    { id: 'right-ventricle', text: 'Right Ventricle' },
+                    { id: 'pulmonary-valve', text: 'Pulmonary Valve' },
+                    { id: 'pulmonary-arteries', text: 'Pulmonary Arteries' },
+                    { id: 'lungs', text: 'Lungs (Gas Exchange)' },
+                    { id: 'pulmonary-veins', text: 'Pulmonary Veins' },
+                    { id: 'left-atrium', text: 'Left Atrium' },
+                    { id: 'mitral-valve', text: 'Mitral (Bicuspid) Valve' },
+                    { id: 'left-ventricle', text: 'Left Ventricle' },
+                    { id: 'aortic-valve', text: 'Aortic Valve' },
+                    { id: 'aorta', text: 'Aorta' }
+                ];
+                shuffleArray(flowOptions);
+                const optionsContainer = document.getElementById('flow-options');
+                optionsContainer.innerHTML = '';
+                flowOptions.forEach(option => {
+                    const div = document.createElement('div');
+                    div.className = 'step-option';
+                    div.textContent = option.text;
+                    div.dataset.optionId = option.id;
+                    div.draggable = true;
+                    optionsContainer.appendChild(div);
+                });
+                setupFlowActivity();
+            }
+
+            function setupFlowActivity() {
+                const options = document.querySelectorAll('.step-option');
+                const dropzones = document.querySelectorAll('.step-dropzone');
+                
+                options.forEach(option => {
+                    option.addEventListener('dragstart', function(e) {
+                        e.dataTransfer.setData('text/plain', this.dataset.optionId);
+                        this.classList.add('dragging');
+                    });
+                    option.addEventListener('dragend', function() {
+                        this.classList.remove('dragging');
+                    });
+                });
+                
+                dropzones.forEach(dropzone => {
+                    dropzone.addEventListener('dragover', function(e) {
+                        e.preventDefault();
+                        this.classList.add('hover');
+                    });
+                    
+                    dropzone.addEventListener('dragleave', function() {
+                        this.classList.remove('hover');
+                    });
+                    
+                    dropzone.addEventListener('drop', function(e) {
+                        e.preventDefault();
+                        this.classList.remove('hover');
+                        if (state.activities.flow.completed) return;
+                        
+                        const optionId = e.dataTransfer.getData('text/plain');
+                        const option = document.querySelector(`[data-option-id="${optionId}"]`);
+                        
+                        if (option && !option.classList.contains('used')) {
+                            // Check Logic
+                            const isCorrect = optionId === this.dataset.correct;
+                            
+                            if (isCorrect) {
+                                // Correct drop
+                                this.textContent = option.textContent;
+                                this.style.border = '2px solid var(--color-success)';
+                                this.style.background = 'rgba(0, 184, 148, 0.1)';
+                                option.classList.add('used');
+                                state.activities.flow.correctSteps++;
+                                
+                                // Check if all done
+                                const allPlaced = Array.from(dropzones).every(dz => dz.textContent.trim() !== '');
+                                if (allPlaced) completeFlowActivity();
+                            } else {
+                                // INCORRECT: Snap back logic (Shake red)
+                                this.classList.add('incorrect-drop');
+                                setTimeout(() => {
+                                    this.classList.remove('incorrect-drop');
+                                }, 500);
+                            }
+                        }
+                    });
+                });
+            }
+
+            function completeFlowActivity() {
+                state.activities.flow.completed = true;
+                state.activities.flow.score = 100;
+                const feedback = document.getElementById('feedback-content-2');
+                feedback.innerHTML = `<strong>Flow Pathway Complete!</strong>`;
+                document.getElementById('feedback-2').classList.add('show');
+                updateProgressSummary();
+            }
+
+            // --- ACTIVITY 3: QUIZ FIXED ---
+            function randomizeQuizActivity() {
+                const questions = document.querySelectorAll('.quiz-question');
+                shuffleArray(Array.from(questions));
+                const quizContainer = document.querySelector('.quiz-questions');
+                quizContainer.innerHTML = '';
+                questions.forEach(q => quizContainer.appendChild(q));
+                
+                document.querySelectorAll('.quiz-options').forEach(optionsContainer => {
+                    const options = Array.from(optionsContainer.children);
+                    shuffleArray(options);
+                    optionsContainer.innerHTML = '';
+                    options.forEach(opt => optionsContainer.appendChild(opt));
+                });
+                setupQuizActivity();
+            }
+
+            function setupQuizActivity() {
+                const correctAnswers = { '1': 'anterior-septum', '2': 'lateral', '3': 'inferior' };
+                const quizOptions = document.querySelectorAll('.quiz-option');
+                
+                quizOptions.forEach(option => {
+                    option.addEventListener('click', function() {
+                        // Prevent changing answer if this question is already answered correctly
+                        const questionNum = this.dataset.question;
+                        const parent = this.parentElement;
+                        if (parent.querySelector('.correct')) return;
+
+                        const selectedAnswer = this.dataset.answer;
+                        const isCorrect = selectedAnswer === correctAnswers[questionNum];
+
+                        if (isCorrect) {
+                            // CORRECT: Turn Green
+                            this.classList.add('correct');
+                            state.activities.quiz.correctAnswers++;
+                            
+                            // Check if all answered
+                            const correctCount = document.querySelectorAll('.quiz-option.correct').length;
+                            if (correctCount === 3) completeQuizActivity();
+                        } else {
+                            // INCORRECT: Turn Red
+                            this.classList.add('wrong');
+                            // Optional: Highlight the correct one immediately? 
+                            // Or let them keep trying. Let's let them keep trying but mark this one wrong.
+                        }
+                    });
+                });
+            }
+
+            function completeQuizActivity() {
+                state.activities.quiz.completed = true;
+                state.activities.quiz.score = 100;
+                const feedback = document.getElementById('feedback-content-3');
+                feedback.innerHTML = `<strong>Quiz Complete!</strong>`;
+                document.getElementById('feedback-3').classList.add('show');
+                updateProgressSummary();
+            }
+
+            // --- UTILS ---
+            function shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            }
+
+            function updateProgressSummary() {
+                let completed = 0;
+                let totalScore = 0;
+                let totalPossible = 0;
+                
+                Object.values(state.activities).forEach(activity => {
+                    if (activity.completed) completed++;
+                    totalScore += activity.score;
+                    totalPossible += 100;
+                });
+                
+                completedActivities.textContent = completed;
+                const accuracy = totalPossible > 0 ? Math.round((totalScore / totalPossible) * 100) : 0;
+                accuracyRate.textContent = `${accuracy}%`;
+                
+                progressSteps.forEach((step, index) => {
+                    if (index < completed) {
+                        step.classList.add('completed');
+                        step.classList.remove('active');
+                    } else if (index === completed) {
+                        step.classList.add('active');
+                        step.classList.remove('completed');
+                    } else {
+                        step.classList.remove('active', 'completed');
+                    }
+                });
+            }
+
+            function startStudyTimer() {
+                setInterval(() => {
+                    const now = new Date();
+                    const diff = Math.floor((now - state.startTime) / 1000);
+                    const minutes = Math.floor(diff / 60);
+                    const seconds = diff % 60;
+                    studyTime.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                }, 1000);
+            }
+
+            function resetAllActivities() {
+                location.reload(); // Simplest way to reset randomization and state
+            }
+
+            // Button Event Listeners
+            function setupEventListeners() {
+                resetBtn.addEventListener('click', resetAllActivities);
+                
+                checkBtn.addEventListener('click', () => {
+                    alert("This module provides instant feedback. Please complete the activities above by interacting with them directly.");
+                });
+                
+                resultsBtn.addEventListener('click', () => {
+                    // Score Calculation
+                    const matchScore = (state.activities.matching.matches / state.activities.matching.total) * 100;
+                    const flowScore = (state.activities.flow.correctSteps / state.activities.flow.total) * 100;
+                    const quizScore = (state.activities.quiz.correctAnswers / state.activities.quiz.total) * 100;
+                    
+                    const finalAvg = Math.round((matchScore + flowScore + quizScore) / 3);
+                    
+                    // Show results unconditionally
+                    document.getElementById('final-score').textContent = `${finalAvg}%`;
+                    resultsPanel.classList.add('show');
+                    resultsPanel.scrollIntoView({ behavior: 'smooth' });
+                });
+            }
+
+            init();
+        });
+    </script>
+</body>
+</html>
