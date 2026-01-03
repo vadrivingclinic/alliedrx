@@ -1,0 +1,1421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chapter 5 Wrap-Up — Junctional Rhythms</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        :root {
+            /* Brand Colors */
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-error: #e17055;
+            --color-warning: #fdcb6e;
+            --color-info: #0984e3;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
+            --color-dark: #0c0a18;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+            --shadow-card: 0 12px 30px rgba(15, 23, 42, 0.1);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            padding: 24px;
+            background: radial-gradient(circle at top left, #ffffff 0, #f3edff 40%, var(--color-bg) 100%);
+            color: var(--color-text);
+            -webkit-text-size-adjust: 100%;
+            animation: fadeIn 0.8s ease;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 12px; }
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1200px;
+            min-width: 320px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            gap: 32px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @media (max-width: 900px) {
+            .page {
+                grid-template-columns: 1fr;
+                padding: 22px;
+                gap: 24px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 18px 14px 22px;
+                gap: 22px;
+            }
+        }
+
+        img, .page, .column, .card, .side-card, .completion-card {
+            max-width: 100%;
+        }
+
+        .column {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* Header / Branding */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            width: 100%;
+            animation: fadeInUp 0.6s ease;
+            grid-column: 1 / -1;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+        }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--color-success);
+            flex-shrink: 0;
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        h1 {
+            font-size: clamp(1.9rem, 3vw, 2.3rem);
+            line-height: 1.05;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.7s ease 0.1s both;
+            grid-column: 1 / -1;
+        }
+
+        .subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 100%;
+            margin-bottom: 18px;
+            animation: fadeInUp 0.7s ease 0.2s both;
+            grid-column: 1 / -1;
+        }
+
+        .subtitle strong {
+            color: var(--color-primary);
+        }
+
+        /* Progress Tracker */
+        .progress-tracker {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin: 20px 0;
+            padding: 10px;
+            background: rgba(175, 75, 239, 0.05);
+            border-radius: var(--radius-lg);
+            grid-column: 1 / -1;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+            max-width: 200px;
+        }
+
+        .step-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(175, 75, 239, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--color-primary);
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.active .step-circle {
+            background: var(--color-primary);
+            color: white;
+            box-shadow: 0 8px 20px rgba(175, 75, 239, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        .step-label {
+            font-size: 0.85rem;
+            color: var(--color-muted);
+            text-align: center;
+            line-height: 1.3;
+        }
+
+        .progress-step.active .step-label {
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        /* Sections */
+        .section-label {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-primary);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--color-text);
+            line-height: 1.3;
+        }
+
+        .card {
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(15, 23, 42, 0.06);
+            padding: 18px 20px 20px;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, rgba(175, 75, 239, 0.04), rgba(255, 255, 255, 0.98));
+            animation: fadeInUp 0.6s ease;
+            width: 100%;
+        }
+
+        .card p {
+            font-size: 0.92rem;
+            line-height: 1.6;
+            color: var(--color-text);
+            margin-bottom: 12px;
+        }
+
+        .small {
+            font-size: 0.82rem;
+            color: var(--color-muted);
+            line-height: 1.5;
+        }
+
+        /* Quiz Styles */
+        .quiz-item {
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 1px dashed rgba(148, 163, 184, 0.7);
+        }
+
+        .quiz-question {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .quiz-options {
+            list-style: none;
+            padding-left: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            font-size: 0.9rem;
+        }
+
+        .quiz-options li {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            padding: 10px;
+            border-radius: var(--radius-sm);
+            transition: background-color 0.2s;
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+
+        .quiz-options li:hover {
+            background-color: rgba(175, 75, 239, 0.05);
+            border-color: rgba(175, 75, 239, 0.1);
+        }
+
+        .quiz-options input {
+            margin-top: 3px;
+            cursor: pointer;
+        }
+
+        .quiz-feedback {
+            font-size: 0.85rem;
+            margin-top: 8px;
+            min-height: 1.1em;
+            padding: 10px;
+            border-radius: var(--radius-sm);
+            display: none;
+            line-height: 1.4;
+        }
+
+        .quiz-feedback.correct {
+            color: var(--color-success);
+            background-color: rgba(0, 184, 148, 0.1);
+            border: 1px solid rgba(0, 184, 148, 0.2);
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .quiz-feedback.incorrect {
+            color: var(--color-error);
+            background-color: rgba(225, 112, 85, 0.1);
+            border: 1px solid rgba(225, 112, 85, 0.2);
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .btn {
+            border-radius: 999px;
+            border: none;
+            padding: 12px 24px;
+            margin-top: 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            cursor: pointer;
+            background: linear-gradient(135deg, var(--color-primary), #7c3aed);
+            color: #ffffff;
+            box-shadow: 0 10px 25px rgba(88, 28, 135, 0.35);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: inline-block;
+            min-width: 140px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(88, 28, 135, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 5px 12px rgba(88, 28, 135, 0.4);
+        }
+
+        /* Drag and Drop Styles */
+        .drag-container {
+            margin: 20px 0;
+        }
+
+        .drag-drop-zone {
+            min-height: 100px;
+            border: 2px dashed var(--color-primary-soft);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            margin: 12px 0;
+            background: rgba(175, 75, 239, 0.03);
+            transition: all 0.3s ease;
+        }
+
+        .drag-drop-zone.active {
+            border-color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.08);
+            transform: scale(1.01);
+        }
+
+        .drag-drop-zone strong {
+            display: block;
+            color: var(--color-primary);
+            margin-bottom: 4px;
+            font-size: 0.95rem;
+        }
+
+        .drag-drop-zone small {
+            display: block;
+            color: var(--color-muted);
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        .drag-item {
+            display: inline-block;
+            padding: 10px 16px;
+            margin: 6px;
+            background: var(--color-primary);
+            color: white;
+            border-radius: var(--radius-sm);
+            cursor: move;
+            user-select: none;
+            box-shadow: var(--shadow-card);
+            transition: transform 0.2s ease;
+            font-size: 0.9rem;
+            max-width: 100%;
+            word-break: break-word;
+        }
+
+        .drag-item:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .drag-item.dragging {
+            opacity: 0.5;
+            transform: scale(0.95);
+        }
+
+        /* Cardiac Properties Matching Cards */
+        .agency-match-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .agency-item {
+            padding: 14px 16px;
+            border-radius: var(--radius-md);
+            background: linear-gradient(135deg, var(--color-primary), #9d4edd);
+            border: 2px solid var(--color-primary-soft);
+            cursor: move;
+            user-select: none;
+            transition: all 0.3s ease;
+            color: white;
+            box-shadow: 0 6px 20px rgba(175, 75, 239, 0.25);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 80px;
+            text-align: center;
+        }
+
+        .agency-item:hover {
+            transform: translateY(-3px);
+            border-color: white;
+            box-shadow: 0 12px 30px rgba(175, 75, 239, 0.35);
+            background: linear-gradient(135deg, #c95eff, var(--color-primary));
+        }
+
+        .agency-item strong {
+            color: white;
+            display: block;
+            margin-bottom: 6px;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .agency-item small {
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 0.85rem;
+            line-height: 1.4;
+            display: block;
+            opacity: 0.9;
+        }
+
+        /* Match Zones */
+        .match-zone-container {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .match-zone-header {
+            color: white;
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 12px;
+            text-align: center;
+            background: rgba(12, 10, 24, 0.7);
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .agency-match-zone {
+            min-height: 90px;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            background: rgba(12, 10, 24, 0.85);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        .agency-match-zone strong {
+            color: #ffffff;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            margin-bottom: 4px;
+            display: block;
+            font-weight: 700;
+        }
+
+        .agency-match-zone .regulation-desc {
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 0.85rem;
+            line-height: 1.5;
+            opacity: 0.9;
+        }
+
+        .agency-match-zone.correct {
+            border-color: var(--color-success);
+            background: rgba(12, 10, 24, 0.95);
+            box-shadow: 0 0 0 2px rgba(0, 184, 148, 0.4), 0 4px 12px rgba(0, 184, 148, 0.2);
+        }
+
+        .agency-match-zone.incorrect {
+            border-color: var(--color-error);
+            background: rgba(12, 10, 24, 0.95);
+            box-shadow: 0 0 0 2px rgba(225, 112, 85, 0.4), 0 4px 12px rgba(225, 112, 85, 0.2);
+        }
+
+        .correct-match {
+            color: var(--color-success);
+            font-weight: 600;
+            margin-top: 8px;
+            display: none;
+            font-size: 0.9rem;
+            padding: 6px 12px;
+            background: rgba(0, 184, 148, 0.15);
+            border-radius: var(--radius-sm);
+            align-self: flex-start;
+            border: 1px solid rgba(0, 184, 148, 0.3);
+        }
+
+        .correct-match.show {
+            display: inline-block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* Vocabulary Flashcards */
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        @media (max-width: 900px) {
+            .vocab-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .vocab-card {
+            border-radius: var(--radius-md);
+            padding: 14px 16px;
+            background: linear-gradient(135deg, rgba(12, 10, 24, 0.95), rgba(30, 25, 60, 0.98));
+            color: #f0f0f0;
+            font-size: 0.9rem;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .vocab-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .vocab-term {
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: #fef9c3;
+            font-size: 0.95rem;
+            line-height: 1.3;
+        }
+
+        .vocab-definition {
+            font-size: 0.86rem;
+            line-height: 1.5;
+            display: none;
+            color: #e5e7eb;
+        }
+
+        .vocab-card.active .vocab-definition {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .vocab-card::after {
+            content: "Tap to flip";
+            position: absolute;
+            right: 10px;
+            bottom: 8px;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #c4b5fd;
+            background: rgba(12, 10, 24, 0.8);
+            padding: 4px 8px;
+            border-radius: 4px;
+            border: 1px solid rgba(196, 181, 253, 0.3);
+        }
+
+        .vocab-card.active::after {
+            content: "Hide";
+            color: #a5b4fc;
+        }
+
+        /* Reflection */
+        textarea {
+            width: 100%;
+            min-height: 100px;
+            border-radius: var(--radius-sm);
+            border: 1px solid rgba(148, 163, 184, 0.7);
+            padding: 12px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            resize: vertical;
+            margin-top: 8px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            background: rgba(255, 255, 255, 0.05);
+            color: #f0f0f0;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(175, 75, 239, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        textarea::placeholder {
+            color: rgba(200, 200, 220, 0.6);
+        }
+
+        /* Right Column Cards */
+        .side-card {
+            background: linear-gradient(135deg, rgba(12, 10, 24, 0.95), rgba(30, 25, 60, 0.98));
+            color: #f0f0f0;
+            border-radius: var(--radius-md);
+            padding: 20px 22px 22px;
+            font-size: 0.92rem;
+            line-height: 1.6;
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.6);
+            margin-bottom: 20px;
+            animation: fadeInUp 0.6s ease;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            width: 100%;
+        }
+
+        .side-card p {
+            color: #e5e7eb;
+            margin-bottom: 14px;
+            line-height: 1.6;
+        }
+
+        .side-card strong {
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+        .side-subtitle {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #c4b5fd;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .side-list {
+            list-style: none;
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-size: 0.9rem;
+        }
+
+        .side-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            color: #e5e7eb;
+            line-height: 1.5;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            margin-top: 8px;
+            border-radius: 999px;
+            background: #a5b4fc;
+            flex-shrink: 0;
+        }
+
+        .completion-card {
+            border-radius: var(--radius-md);
+            border: 1px dashed rgba(148, 163, 184, 0.7);
+            padding: 18px 20px;
+            font-size: 0.88rem;
+            color: var(--color-text);
+            background: rgba(248, 250, 252, 0.95);
+            animation: fadeInUp 0.6s ease;
+            width: 100%;
+        }
+
+        .completion-card p {
+            color: var(--color-text);
+            margin-bottom: 12px;
+        }
+
+        .completion-card .side-list li {
+            color: var(--color-text);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .agency-match-container {
+                grid-template-columns: 1fr;
+            }
+            .drag-item {
+                font-size: 0.85rem;
+                padding: 8px 12px;
+            }
+            .agency-match-zone {
+                min-height: 80px;
+                padding: 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .progress-tracker {
+                gap: 20px;
+            }
+            .step-label {
+                font-size: 0.8rem;
+            }
+            .btn {
+                padding: 10px 20px;
+                font-size: 0.85rem;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <!-- Progress Tracker -->
+        <div class="progress-tracker">
+            <div class="progress-step active" data-step="1">
+                <div class="step-circle">1</div>
+                <div class="step-label">Rhythm Identification</div>
+            </div>
+            <div class="progress-step" data-step="2">
+                <div class="step-circle">2</div>
+                <div class="step-label">Physiology & Management</div>
+            </div>
+        </div>
+
+        <!-- Header -->
+        <header class="brand-row">
+            <div class="brand">
+                <img
+                    src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                    alt="AlliedRx logo"
+                    class="brand-logo"
+                />
+                <div class="course-meta">
+                    <span class="course-name">EKG Technician Program • Week 5</span>
+                    <div class="week-label">
+                        <span class="week-label-dot"></span>
+                        <span>Chapter 5: Junctional Rhythms</span>
+                    </div>
+                </div>
+            </div>
+            <span class="badge-mode">Campus & Online</span>
+        </header>
+
+        <h1 id="wrapup-heading">Junctional Rhythms Wrap-Up</h1>
+        <p class="subtitle">
+            Review key concepts from <strong>Chapter 5</strong>. 
+            Identify Junctional Escape beats, Accelerated Rhythms, and understand the AV Junction's critical role as a backup pacemaker.
+        </p>
+
+        <!-- LEFT COLUMN -->
+        <section class="column">
+            <!-- ACTIVITY 1: Drag & Drop Rhythm Rates -->
+            <section aria-label="Activity 1: Rate Classification">
+                <p class="section-label">Activity 1</p>
+                <h2 class="section-title">Rate Classification</h2>
+                <div class="card">
+                    <p class="small">
+                        Drag each rate or description to the correct Junctional Rhythm category.
+                    </p>
+
+                    <div class="drag-container">
+                        <div class="drag-drop-zone" id="escape-zone" data-type="escape">
+                            <strong>Junctional Escape</strong>
+                            <small>40 - 60 bpm</small>
+                        </div>
+                        
+                        <div class="drag-drop-zone" id="accel-zone" data-type="accel">
+                            <strong>Accelerated Junctional</strong>
+                            <small>61 - 100 bpm</small>
+                        </div>
+                        
+                        <div class="drag-drop-zone" id="tachy-zone" data-type="tachy">
+                            <strong>Junctional Tachycardia</strong>
+                            <small>&gt; 100 bpm</small>
+                        </div>
+
+                        <div style="margin-top: 20px; padding: 15px; background: rgba(175, 75, 239, 0.05); border-radius: var(--radius-md);">
+                            <p style="margin-bottom: 12px; font-weight: 600; color: var(--color-text);">Drag these items to the correct zones above:</p>
+                            <div class="drag-item" draggable="true" data-type="escape">Intrinsic AV Rate</div>
+                            <div class="drag-item" draggable="true" data-type="tachy">Rate 120 bpm</div>
+                            <div class="drag-item" draggable="true" data-type="accel">Rate 80 bpm</div>
+                            <div class="drag-item" draggable="true" data-type="escape">Rate 50 bpm</div>
+                            <div class="drag-item" draggable="true" data-type="tachy">Digoxin Toxicity (Fast)</div>
+                            <div class="drag-item" draggable="true" data-type="accel">Faster than intrinsic</div>
+                        </div>
+                    </div>
+
+                    <button class="btn" type="button" onclick="checkDragDrop()" aria-label="Check drag and drop answers">Check Matches</button>
+                    <div id="drag-feedback" class="quiz-feedback" style="display:none;"></div>
+                </div>
+            </section>
+
+            <!-- Quiz -->
+            <section aria-label="Knowledge Quiz">
+                <p class="section-label">Knowledge Check</p>
+                <h2 class="section-title">Junctional Quiz</h2>
+                <div class="card" id="quiz-card">
+                    <p class="small">
+                        Test your understanding of P-wave patterns and beat timing.
+                    </p>
+
+                    <div class="quiz-item" data-answer="b">
+                        <p class="quiz-question">
+                            1. What is the intrinsic firing rate of the AV Junction (Bundle of His)?
+                        </p>
+                        <ul class="quiz-options">
+                            <li>
+                                <input type="radio" name="q1" value="a" id="q1a" />
+                                <label for="q1a">60-100 bpm</label>
+                            </li>
+                            <li>
+                                <input type="radio" name="q1" value="b" id="q1b" />
+                                <label for="q1b">40-60 bpm</label>
+                            </li>
+                            <li>
+                                <input type="radio" name="q1" value="c" id="q1c" />
+                                <label for="q1c">20-40 bpm</label>
+                            </li>
+                        </ul>
+                        <div class="quiz-feedback" id="q1-feedback"></div>
+                    </div>
+
+                    <div class="quiz-item" data-answer="c">
+                        <p class="quiz-question">
+                            2. In a junctional rhythm, if the atria depolarize AFTER the ventricles, where is the P-wave found?
+                        </p>
+                        <ul class="quiz-options">
+                            <li>
+                                <input type="radio" name="q2" value="a" id="q2a" />
+                                <label for="q2a">Upright before the QRS</label>
+                            </li>
+                            <li>
+                                <input type="radio" name="q2" value="b" id="q2b" />
+                                <label for="q2b">Hidden inside the QRS</label>
+                            </li>
+                            <li>
+                                <input type="radio" name="q2" value="c" id="q2c" />
+                                <label for="q2c">Inverted after the QRS</label>
+                            </li>
+                        </ul>
+                        <div class="quiz-feedback" id="q2-feedback"></div>
+                    </div>
+
+                    <div class="quiz-item" data-answer="a">
+                        <p class="quiz-question">
+                            3. What distinguishes a Premature Junctional Complex (PJC) from a Junctional Escape Beat?
+                        </p>
+                        <ul class="quiz-options">
+                            <li>
+                                <input type="radio" name="q3" value="a" id="q3a" />
+                                <label for="q3a">Timing: PJC is early, Escape is late</label>
+                            </li>
+                            <li>
+                                <input type="radio" name="q3" value="b" id="q3b" />
+                                <label for="q3b">Rate: PJC is fast, Escape is slow</label>
+                            </li>
+                            <li>
+                                <input type="radio" name="q3" value="c" id="q3c" />
+                                <label for="q3c">Shape: PJC has a wide QRS</label>
+                            </li>
+                        </ul>
+                        <div class="quiz-feedback" id="q3-feedback"></div>
+                    </div>
+
+                    <button class="btn" type="button" onclick="checkQuiz()" aria-label="Check quiz answers">Check Answers</button>
+                </div>
+            </section>
+
+            <!-- Key Vocabulary Flashcards -->
+            <section aria-label="Key vocabulary flashcards">
+                <p class="section-label">Essential Terms</p>
+                <h2 class="section-title">Junctional Vocabulary</h2>
+                <div class="card">
+                    <p class="small">
+                        Select each card to reveal definitions.
+                    </p>
+                    <div class="vocab-grid">
+                        <div class="vocab-card" onclick="toggleVocab(this)" tabindex="0" role="button" aria-label="Flip card">
+                            <div class="vocab-term">Retrograde</div>
+                            <div class="vocab-definition">
+                                Moving backward. In junctional rhythms, the electrical impulse travels backward up to the atria, causing inverted P waves.
+                            </div>
+                        </div>
+                        <div class="vocab-card" onclick="toggleVocab(this)" tabindex="0" role="button" aria-label="Flip card">
+                            <div class="vocab-term">Escape Rhythm</div>
+                            <div class="vocab-definition">
+                                A safety mechanism where a lower pacemaker (AV Junction) takes over when the SA Node fails. It prevents cardiac arrest.
+                            </div>
+                        </div>
+                        <div class="vocab-card" onclick="toggleVocab(this)" tabindex="0" role="button" aria-label="Flip card">
+                            <div class="vocab-term">PJC</div>
+                            <div class="vocab-definition">
+                                Premature Junctional Complex. An irritable spot in the AV junction fires early, interrupting the underlying rhythm.
+                            </div>
+                        </div>
+                        <div class="vocab-card" onclick="toggleVocab(this)" tabindex="0" role="button" aria-label="Flip card">
+                            <div class="vocab-term">Digoxin Toxicity</div>
+                            <div class="vocab-definition">
+                                A common cause of junctional rhythms. Digitalis slows conduction through the AV node and increases its automaticity.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- RIGHT COLUMN -->
+        <section class="column" aria-label="Activity 2: P-Wave Logic">
+            <!-- ACTIVITY 2: P-Wave Logic Matching -->
+            <section>
+                <p class="section-label">Activity 2</p>
+                <h2 class="section-title">The Mystery of the P-Wave</h2>
+                <div class="side-card">
+                    <p class="side-subtitle">Retrograde Conduction</p>
+                    <p>
+                        The location of the P-wave depends on the speed of conduction to the atria versus the ventricles.
+                    </p>
+                    
+                    <div class="agency-match-container">
+                        <div class="agency-item" draggable="true" data-term="high" id="item-high">
+                            <strong>High Junction</strong>
+                            <small>Atria First</small>
+                        </div>
+                        <div class="agency-item" draggable="true" data-term="mid" id="item-mid">
+                            <strong>Mid Junction</strong>
+                            <small>Simultaneous</small>
+                        </div>
+                        <div class="agency-item" draggable="true" data-term="low" id="item-low">
+                            <strong>Low Junction</strong>
+                            <small>Ventricles First</small>
+                        </div>
+                        <div class="agency-item" draggable="true" data-term="retro" id="item-retro">
+                            <strong>Retrograde</strong>
+                            <small>Direction</small>
+                        </div>
+                    </div>
+
+                    <div class="match-zone-container">
+                        <p class="match-zone-header">Drag logic to the ECG pattern:</p>
+                        
+                        <div class="agency-match-zone" id="zone-before" data-correct="high">
+                            <strong>Inverted P before QRS</strong>
+                            <div class="regulation-desc">Impulse reaches atria slightly before ventricles.</div>
+                            <div class="correct-match" id="match1">✓ Correct: High Junction</div>
+                        </div>
+                        
+                        <div class="agency-match-zone" id="zone-hidden" data-correct="mid">
+                            <strong>No Visible P Wave</strong>
+                            <div class="regulation-desc">Atria and ventricles depolarize at the exact same time.</div>
+                            <div class="correct-match" id="match2">✓ Correct: Mid Junction</div>
+                        </div>
+                        
+                        <div class="agency-match-zone" id="zone-after" data-correct="low">
+                            <strong>Inverted P after QRS</strong>
+                            <div class="regulation-desc">Impulse reaches ventricles before it travels back to atria.</div>
+                            <div class="correct-match" id="match3">✓ Correct: Low Junction</div>
+                        </div>
+                        
+                        <div class="agency-match-zone" id="zone-concept" data-correct="retro">
+                            <strong>Backward Flow</strong>
+                            <div class="regulation-desc">The term for conduction moving opposite to normal.</div>
+                            <div class="correct-match" id="match4">✓ Correct: Retrograde</div>
+                        </div>
+                    </div>
+
+                    <button class="btn" type="button" onclick="checkPWaveMatches()" style="margin-top: 20px;" aria-label="Check logic matching">Check Matches</button>
+                </div>
+            </section>
+
+            <!-- Reflection -->
+            <section>
+                <p class="section-label">Clinical Application</p>
+                <h2 class="section-title">Loss of Atrial Kick</h2>
+                <div class="side-card">
+                    <p>
+                        In junctional rhythms, the atria are depolarizing backward. This means they are not contracting efficiently to fill the ventricles.
+                    </p>
+                    <ul class="side-list" style="margin-top: 14px;">
+                        <li>
+                            <span class="dot"></span>
+                            <span><strong>Reduced Cardiac Output:</strong> The loss of the "priming" contraction from the atria can reduce output by 20-30%.</span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span><strong>Bradycardia Impact:</strong> Combine the slow rate (40-60) with the loss of kick, and patients often become symptomatic.</span>
+                        </li>
+                    </ul>
+
+                    <label class="small" for="reflection-notes" style="display:block;margin-top:18px; color: #d1d5db;">
+                        Why might a patient with a Junctional Escape Rhythm feel dizzy or lightheaded?
+                    </label>
+                    <textarea 
+                        id="reflection-notes" 
+                        placeholder="Discuss heart rate and stroke volume..."
+                        aria-label="Reflection text area"
+                        oninput="updateActivity2Progress()"
+                    ></textarea>
+                </div>
+            </section>
+
+            <!-- Completion Reminder -->
+            <section>
+                <p class="section-label">Ready to Move Forward?</p>
+                <h2 class="section-title">Chapter 5 Completion</h2>
+                <div class="completion-card">
+                    <p>
+                        Before continuing to Chapter 6 (Ventricular Rhythms), ensure you have:
+                    </p>
+                    <ul class="side-list" style="margin-top:10px;">
+                        <li>
+                            <span class="dot"></span>
+                            <span>Completed the <strong>Rate Classification</strong> drag & drop</span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span>Answered all <strong>Junctional Quiz</strong> questions correctly</span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span>Matched the <strong>P-Wave Patterns</strong> correctly</span>
+                        </li>
+                        <li>
+                            <span class="dot"></span>
+                            <span>Reflected on <strong>Loss of Atrial Kick</strong></span>
+                        </li>
+                    </ul>
+                    <p style="margin-top:10px;">
+                        When confident with Junctional Rhythms, mark this chapter complete and proceed.
+                    </p>
+                </div>
+            </section>
+        </section>
+    </div>
+
+    <script>
+        // State management
+        const moduleState = {
+            activities: {
+                1: { completed: false, correct: 0, total: 6, score: 0 },
+                2: { completed: false }
+            },
+            startedAt: new Date(),
+            timeSpent: 0
+        };
+
+        // Drag and Drop functionality for Activity 1 (Rates)
+        let draggedItem = null;
+        const correctMatches = {
+            'escape': ['Intrinsic AV Rate', 'Rate 50 bpm'],
+            'accel': ['Rate 80 bpm', 'Faster than intrinsic'],
+            'tachy': ['Rate 120 bpm', 'Digoxin Toxicity (Fast)']
+        };
+
+        // Setup draggable items
+        document.querySelectorAll('.drag-item').forEach(item => {
+            item.addEventListener('dragstart', handleDragStart);
+            item.addEventListener('dragend', handleDragEnd);
+        });
+
+        // Setup drop zones
+        document.querySelectorAll('.drag-drop-zone').forEach(zone => {
+            zone.addEventListener('dragover', handleDragOver);
+            zone.addEventListener('dragleave', handleDragLeave);
+            zone.addEventListener('drop', handleDrop);
+        });
+
+        function handleDragStart(e) {
+            draggedItem = this;
+            this.classList.add('dragging');
+            e.dataTransfer.setData('text/plain', this.textContent);
+            e.dataTransfer.effectAllowed = 'move';
+        }
+
+        function handleDragEnd() {
+            this.classList.remove('dragging');
+            draggedItem = null;
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            this.classList.add('active');
+        }
+
+        function handleDragLeave() {
+            this.classList.remove('active');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            this.classList.remove('active');
+            
+            if (draggedItem) {
+                // Check if item already exists in a zone
+                const existingItems = document.querySelectorAll(`.drag-item[data-original="${draggedItem.textContent}"]`);
+                existingItems.forEach(item => item.remove());
+                
+                // Create a new item for the drop zone
+                const newItem = draggedItem.cloneNode(true);
+                newItem.setAttribute('data-original', draggedItem.textContent);
+                newItem.style.margin = '5px';
+                newItem.draggable = false;
+                newItem.style.cursor = 'default';
+                newItem.addEventListener('click', function() {
+                    this.remove();
+                });
+                
+                this.appendChild(newItem);
+            }
+        }
+
+        function checkDragDrop() {
+            const zones = document.querySelectorAll('.drag-drop-zone');
+            let correctCount = 0;
+            let totalItems = 0;
+            const feedback = document.getElementById('drag-feedback');
+            
+            zones.forEach(zone => {
+                const zoneType = zone.getAttribute('data-type');
+                const items = zone.querySelectorAll('.drag-item');
+                totalItems += items.length;
+                
+                items.forEach(item => {
+                    const itemText = item.getAttribute('data-original') || item.textContent;
+                    if (correctMatches[zoneType] && correctMatches[zoneType].includes(itemText)) {
+                        item.style.backgroundColor = 'var(--color-success)';
+                        correctCount++;
+                    } else {
+                        item.style.backgroundColor = 'var(--color-error)';
+                        item.style.animation = 'shake 0.5s ease';
+                    }
+                });
+            });
+            
+            // Update activity state
+            moduleState.activities[1].completed = true;
+            
+            // Show feedback
+            feedback.style.display = 'block';
+            if (correctCount === 6) {
+                feedback.textContent = '✓ Perfect! You correctly classified all junctional rates.';
+                feedback.className = 'quiz-feedback correct';
+            } else {
+                feedback.textContent = `You matched ${correctCount} correctly. Remember: 40-60 is Escape, 61-100 is Accelerated.`;
+                feedback.className = 'quiz-feedback incorrect';
+            }
+            
+            updateProgressTracker();
+        }
+
+        // Quiz logic for Activity 1
+        function checkQuiz() {
+            const items = document.querySelectorAll('.quiz-item');
+            let correctCount = 0;
+            
+            items.forEach((item, index) => {
+                const correctAnswer = item.getAttribute('data-answer');
+                const name = `q${index + 1}`;
+                const selected = document.querySelector(`input[name="${name}"]:checked`);
+                const feedback = document.getElementById(`${name}-feedback`);
+                
+                if (!selected) {
+                    feedback.textContent = 'Please select an answer.';
+                    feedback.className = 'quiz-feedback incorrect';
+                    feedback.style.display = 'block';
+                    return;
+                }
+                
+                if (selected.value === correctAnswer) {
+                    feedback.textContent = getQuizFeedback(index, true);
+                    feedback.className = 'quiz-feedback correct';
+                    feedback.style.display = 'block';
+                    correctCount++;
+                    
+                    const selectedLabel = selected.closest('li');
+                    selectedLabel.style.backgroundColor = 'rgba(0, 184, 148, 0.1)';
+                } else {
+                    feedback.textContent = getQuizFeedback(index, false);
+                    feedback.className = 'quiz-feedback incorrect';
+                    feedback.style.display = 'block';
+                    
+                    const selectedLabel = selected.closest('li');
+                    selectedLabel.style.animation = 'shake 0.5s ease';
+                    selectedLabel.style.backgroundColor = 'rgba(225, 112, 85, 0.1)';
+                    
+                    // Highlight correct answer
+                    const correctInput = document.querySelector(`input[name="${name}"][value="${correctAnswer}"]`);
+                    if (correctInput) {
+                        const correctLabel = correctInput.closest('li');
+                        correctLabel.style.backgroundColor = 'rgba(0, 184, 148, 0.1)';
+                        correctLabel.style.border = '1px solid rgba(0, 184, 148, 0.3)';
+                    }
+                }
+            });
+            
+            updateProgressTracker();
+        }
+        
+        function getQuizFeedback(questionIndex, isCorrect) {
+            const correctFeedbacks = [
+                '✓ Correct! The AV Junction fires at 40-60 bpm if the SA node fails.',
+                '✓ Correct! If ventricles fire first, the P-wave follows the QRS and is inverted.',
+                '✓ Correct! A PJC is an early beat interrupting the rhythm. An Escape beat is late, filling a pause.'
+            ];
+            
+            const incorrectFeedbacks = [
+                '✗ Incorrect. 60-100 is SA node. 20-40 is Ventricles.',
+                '✗ Incorrect. Upright P before QRS suggests Sinus origin. Hidden means simultaneous.',
+                '✗ Incorrect. The key difference is timing. Premature = Early. Escape = Late.'
+            ];
+            
+            return isCorrect ? correctFeedbacks[questionIndex] : incorrectFeedbacks[questionIndex];
+        }
+
+        // P-Wave Logic Matching for Activity 2
+        let draggedLogic = null;
+        
+        document.querySelectorAll('.agency-item').forEach(item => {
+            item.addEventListener('dragstart', function(e) {
+                draggedLogic = this;
+                this.style.opacity = '0.5';
+                e.dataTransfer.setData('text/plain', this.id);
+            });
+            
+            item.addEventListener('dragend', function() {
+                this.style.opacity = '1';
+                draggedLogic = null;
+            });
+        });
+        
+        document.querySelectorAll('.agency-match-zone').forEach(zone => {
+            zone.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                this.style.borderColor = 'var(--color-primary)';
+                this.style.boxShadow = '0 0 0 2px rgba(175, 75, 239, 0.2)';
+            });
+            
+            zone.addEventListener('dragleave', function() {
+                this.style.borderColor = '';
+                this.style.boxShadow = '';
+            });
+            
+            zone.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.style.borderColor = '';
+                this.style.boxShadow = '';
+                
+                if (draggedLogic) {
+                    const term = draggedLogic.getAttribute('data-term');
+                    
+                    // Remove any existing matches
+                    const existingMatch = this.querySelector('.agency-item');
+                    if (existingMatch) {
+                        existingMatch.remove();
+                    }
+                    
+                    // Add the dragged item
+                    const clone = draggedLogic.cloneNode(true);
+                    clone.style.opacity = '1';
+                    clone.style.marginTop = '10px';
+                    clone.style.marginBottom = '10px';
+                    clone.draggable = false;
+                    this.appendChild(clone);
+                }
+            });
+        });
+        
+        function checkPWaveMatches() {
+            let allCorrect = true;
+            
+            document.querySelectorAll('.agency-match-zone').forEach(zone => {
+                const requiredTerm = zone.getAttribute('data-correct');
+                const item = zone.querySelector('.agency-item');
+                const matchDiv = zone.querySelector('.correct-match');
+                
+                if (item && item.getAttribute('data-term') === requiredTerm) {
+                    zone.classList.remove('incorrect');
+                    zone.classList.add('correct');
+                    matchDiv.classList.add('show');
+                } else {
+                    zone.classList.remove('correct');
+                    zone.classList.add('incorrect');
+                    if (matchDiv) matchDiv.classList.remove('show');
+                    allCorrect = false;
+                }
+            });
+            
+            if (allCorrect) {
+                moduleState.activities[2].completed = true;
+                updateProgressTracker();
+            }
+        }
+
+        // Vocabulary flip
+        function toggleVocab(card) {
+            card.classList.toggle('active');
+            if (card.classList.contains('active')) {
+                card.style.transform = 'translateY(-3px)';
+                card.style.boxShadow = 'var(--shadow-hover)';
+            }
+        }
+
+        // Update progress tracker
+        function updateProgressTracker() {
+            const step2 = document.querySelector('[data-step="2"]');
+            if (moduleState.activities[1].completed) {
+                step2.classList.add('active');
+            }
+        }
+
+        // Track Activity 2 progress
+        function updateActivity2Progress() {
+            const textarea = document.getElementById('reflection-notes');
+            if (textarea.value.trim().length > 0) {
+                moduleState.activities[2].completed = true;
+            }
+        }
+    </script>
+</body>
+</html>
