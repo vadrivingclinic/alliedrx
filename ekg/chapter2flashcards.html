@@ -1,0 +1,1383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>AlliedRx -- Module: Chapter 2 Basic Electrophysiology</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        :root {
+            --color-primary: #af4bef;
+            --color-primary-soft: #d492ff;
+            --color-accent: #8380f0;
+            --color-success: #00b894;
+            --color-error: #e17055;
+            --color-warning: #fdcb6e;
+            --color-bg: #f7f5fb;
+            --color-text: #2b2b2b;
+            --color-muted: #6c6880;
+            --color-dark: #0c0a18;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --shadow-soft: 0 18px 45px rgba(23, 10, 61, 0.18);
+            --shadow-hover: 0 25px 50px rgba(175, 75, 239, 0.15);
+            --shadow-card: 0 12px 30px rgba(15, 23, 42, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 24px;
+            background: radial-gradient(
+                circle at top left,
+                #ffffff 0,
+                #f1ecff 40%,
+                var(--color-bg) 100%
+            );
+            color: var(--color-text);
+            line-height: 1.5;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 12px; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            padding: 28px 30px 32px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @media (max-width: 900px) {
+            .page { padding: 22px; }
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 0; }
+            .page {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 18px 14px 22px;
+            }
+        }
+
+        /* Header */
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .brand-logo:hover { transform: scale(1.05); }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .course-name {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--color-muted);
+            white-space: normal;
+        }
+
+        .week-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(175, 75, 239, 0.08);
+            font-size: 0.76rem;
+            color: var(--color-primary);
+            white-space: normal;
+        }
+
+        .week-label-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--color-success);
+            flex-shrink: 0;
+        }
+
+        .badge-mode {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-muted);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .badge-mode:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 3vw, 2.2rem);
+            line-height: 1.1;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .module-subtitle {
+            font-size: 0.98rem;
+            color: var(--color-muted);
+            max-width: 600px;
+            margin-bottom: 24px;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        /* Progress Summary */
+        .progress-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+            animation: fadeInUp 0.6s ease-out 0.5s both;
+        }
+
+        .summary-card {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            border: 1px solid rgba(12, 10, 24, 0.06);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-card);
+            border-color: var(--color-primary-soft);
+        }
+
+        .summary-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--color-primary);
+            display: block;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .summary-label {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Study Controls */
+        .study-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding: 20px;
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(12, 10, 24, 0.06);
+        }
+
+        .filter-container {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border-radius: 20px;
+            background: rgba(12, 10, 24, 0.06);
+            border: 1px solid rgba(12, 10, 24, 0.08);
+            font-size: 0.85rem;
+            color: var(--color-text);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+        .filter-btn.active {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+            color: white;
+        }
+
+        .study-mode-toggle {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .mode-label {
+            font-size: 0.85rem;
+            color: var(--color-muted);
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 26px;
+        }
+
+        .toggle-checkbox {
+            display: none;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(12, 10, 24, 0.1);
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        .toggle-checkbox:checked + .toggle-slider {
+            background-color: var(--color-primary);
+        }
+
+        .toggle-checkbox:checked + .toggle-slider:before {
+            transform: translateX(24px);
+        }
+
+        /* Flashcard Container */
+        .flashcard-container {
+            perspective: 1000px;
+            margin-bottom: 30px;
+            animation: fadeInUp 0.6s ease-out 0.6s both;
+        }
+
+        .flashcard {
+            width: 100%;
+            height: 350px; /* Slightly taller for long definitions */
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .flashcard-front, .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: var(--radius-lg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .flashcard-front {
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+            color: white;
+        }
+
+        .flashcard-back {
+            background: white;
+            color: var(--color-text);
+            transform: rotateY(180deg);
+            border: 2px solid rgba(175, 75, 239, 0.2);
+            overflow-y: auto; /* Allow scrolling for long definitions */
+        }
+
+        .term-category {
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 15px;
+            color: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.15);
+            padding: 6px 12px;
+            border-radius: 20px;
+        }
+
+        .term-name {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .flip-instruction {
+            position: absolute;
+            bottom: 20px;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.7);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 15px;
+            color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.1);
+            padding: 6px 12px;
+            border-radius: 20px;
+        }
+
+        .term-definition {
+            font-size: 1.15rem;
+            line-height: 1.6;
+            color: var(--color-text);
+            max-width: 90%;
+        }
+
+        /* Card Navigation */
+        .card-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 0 10px;
+        }
+
+        .nav-btn {
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-text);
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            background: rgba(175, 75, 239, 0.1);
+            border-color: var(--color-primary-soft);
+            color: var(--color-primary);
+            transform: translateY(-2px);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .card-counter {
+            font-size: 0.9rem;
+            color: var(--color-muted);
+        }
+
+        .current-card {
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+
+        /* Mastery Progress */
+        .mastery-progress {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(12, 10, 24, 0.06);
+        }
+
+        .mastery-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .mastery-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+
+        .mastery-stats {
+            font-size: 0.85rem;
+            color: var(--color-muted);
+        }
+
+        .mastery-bars {
+            display: flex;
+            gap: 8px;
+            height: 10px;
+            margin-bottom: 10px;
+        }
+
+        .mastery-bar {
+            flex: 1;
+            background: rgba(12, 10, 24, 0.08);
+            border-radius: 5px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .mastery-fill {
+            height: 100%;
+            transition: width 0.5s ease;
+        }
+
+        .mastery-fill.unknown { background: rgba(12, 10, 24, 0.15); }
+        .mastery-fill.learning { background: var(--color-warning); }
+        .mastery-fill.mastered { background: var(--color-success); }
+
+        .mastery-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--color-muted);
+        }
+
+        /* Term List Table */
+        .term-list-container {
+            background: rgba(12, 10, 24, 0.02);
+            border-radius: var(--radius-md);
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(12, 10, 24, 0.06);
+        }
+
+        .list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .list-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+
+        .term-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .term-table th {
+            text-align: left;
+            padding: 12px 15px;
+            background: rgba(175, 75, 239, 0.08);
+            color: var(--color-primary);
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border-bottom: 2px solid rgba(175, 75, 239, 0.2);
+        }
+
+        .term-table td {
+            padding: 15px;
+            border-bottom: 1px solid rgba(12, 10, 24, 0.06);
+            font-size: 0.9rem;
+            vertical-align: top;
+        }
+
+        .term-table tr:hover {
+            background: rgba(175, 75, 239, 0.05);
+        }
+
+        .term-class-cell {
+            font-weight: 600;
+            color: var(--color-primary);
+            background: rgba(175, 75, 239, 0.05);
+            width: 15%;
+        }
+
+        .mastery-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .mastery-indicator.unknown { background: rgba(12, 10, 24, 0.15); }
+        .mastery-indicator.learning { background: var(--color-warning); }
+        .mastery-indicator.mastered { background: var(--color-success); }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #9a3bd6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(175, 75, 239, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(12, 10, 24, 0.06);
+            color: var(--color-text);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(12, 10, 24, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-icon {
+            font-size: 1.1em;
+        }
+
+        /* Instructions */
+        .instructions-box {
+            background: rgba(0, 184, 148, 0.08);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-bottom: 25px;
+            border-left: 4px solid var(--color-success);
+        }
+
+        .instructions-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--color-success);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .instructions-content {
+            font-size: 0.9rem;
+            color: var(--color-text);
+            line-height: 1.5;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .flashcard {
+                height: 300px;
+            }
+            
+            .term-name {
+                font-size: 1.8rem;
+            }
+            
+            .term-table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .study-controls {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .flashcard {
+                height: 280px;
+            }
+            
+            .term-name {
+                font-size: 1.5rem;
+            }
+            
+            .term-definition {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="page" aria-labelledby="module-heading">
+        <!-- Header -->
+        <header class="brand-row">
+            <div class="brand">
+                <img
+                    src="https://cdn.prod.website-files.com/64d0ccc1558d601cbfb09021/64e9d2f719b1e5258e5d57f5_IMG_1512-p-500.png"
+                    alt="AlliedRx logo"
+                    class="brand-logo"
+                />
+                <div class="course-meta">
+                    <span class="course-name">EKG Technician Program • Chapter 2</span>
+                    <div class="week-label">
+                        <span class="week-label-dot"></span>
+                        <span>Flashcard Module: Basic Electrophysiology</span>
+                    </div>
+                </div>
+            </div>
+            <span class="badge-mode">Campus & Online</span>
+        </header>
+
+        <h1 id="module-heading">Chapter 2: Basic Electrophysiology Flashcards</h1>
+        
+        <p class="module-subtitle">
+            Master the essential terms related to cardiac cells, action potentials, conduction systems, and ECG waveforms.
+        </p>
+
+        <!-- Progress Summary -->
+        <div class="progress-summary">
+            <div class="summary-card">
+                <span class="summary-number" id="total-cards">0</span>
+                <span class="summary-label">Total Terms</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="mastered-count">0</span>
+                <span class="summary-label">Mastered</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-number" id="study-time">0:00</span>
+                <span class="summary-label">Study Time</span>
+            </div>
+        </div>
+
+        <!-- Instructions -->
+        <div class="instructions-box">
+            <div class="instructions-title">
+                <span>📚</span>
+                How to Use This Flashcard Module
+            </div>
+            <div class="instructions-content">
+                <p><strong>Study Instructions:</strong></p>
+                <ol style="margin-left: 20px; margin-top: 8px;">
+                    <li>Click or tap the flashcard to flip between the <strong>Term</strong> and its <strong>Definition</strong>.</li>
+                    <li>Use the navigation buttons to move between terms.</li>
+                    <li>Filter by <strong>Physiology</strong>, <strong>Anatomy</strong>, or <strong>ECG Basics</strong> to focus your study session.</li>
+                    <li>Mark terms as "Learning" or "Mastered" to track your progress.</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Study Controls -->
+        <div class="study-controls">
+            <div class="filter-container">
+                <button class="filter-btn active" data-filter="all">All Terms</button>
+                <button class="filter-btn" data-filter="physiology">Physiology</button>
+                <button class="filter-btn" data-filter="anatomy">Anatomy</button>
+                <button class="filter-btn" data-filter="ecg">ECG Basics</button>
+                <button class="filter-btn" data-filter="learning">Need Practice</button>
+                <button class="filter-btn" data-filter="mastered">Mastered</button>
+            </div>
+            
+            <div class="study-mode-toggle">
+                <span class="mode-label">Study Mode:</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" class="toggle-checkbox" id="study-mode-toggle">
+                    <span class="toggle-slider"></span>
+                </label>
+                <span class="mode-label" id="mode-label-text">Term → Definition</span>
+            </div>
+        </div>
+
+        <!-- Flashcard Container -->
+        <div class="flashcard-container">
+            <div class="flashcard" id="flashcard">
+                <div class="flashcard-front">
+                    <div class="term-category" id="front-class">Category</div>
+                    <div class="term-name" id="front-name">Term Name</div>
+                    <div class="flip-instruction">
+                        <span>Click to flip →</span>
+                    </div>
+                </div>
+                <div class="flashcard-back">
+                    <div class="card-label">Definition</div>
+                    <div class="term-definition" id="term-definition">
+                        <!-- Definition text -->
+                    </div>
+                    <div class="flip-instruction" style="color: var(--color-muted); margin-top: auto;">
+                        <span>← Click to flip back</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card Navigation -->
+        <div class="card-navigation">
+            <button class="nav-btn" id="prev-btn">
+                <span class="btn-icon">←</span>
+                Previous
+            </button>
+            
+            <div class="card-counter">
+                Card <span class="current-card" id="current-card">1</span> of <span id="total-cards-display">60</span>
+            </div>
+            
+            <button class="nav-btn" id="next-btn">
+                Next
+                <span class="btn-icon">→</span>
+            </button>
+        </div>
+
+        <!-- Mastery Controls -->
+        <div class="mastery-progress">
+            <div class="mastery-header">
+                <div class="mastery-title">Mastery Progress</div>
+                <div class="mastery-stats">
+                    <span id="mastered-percentage">0%</span> Mastered
+                </div>
+            </div>
+            
+            <div class="mastery-bars">
+                <div class="mastery-bar">
+                    <div class="mastery-fill unknown" id="unknown-bar" style="width: 100%"></div>
+                </div>
+                <div class="mastery-bar">
+                    <div class="mastery-fill learning" id="learning-bar" style="width: 0%"></div>
+                </div>
+                <div class="mastery-bar">
+                    <div class="mastery-fill mastered" id="mastered-bar" style="width: 0%"></div>
+                </div>
+            </div>
+            
+            <div class="mastery-labels">
+                <span>Need Practice</span>
+                <span>Learning</span>
+                <span>Mastered</span>
+            </div>
+            
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button class="btn btn-secondary" id="mark-learning-btn">
+                    <span class="btn-icon">📖</span>
+                    Mark as Learning
+                </button>
+                <button class="btn btn-primary" id="mark-mastered-btn">
+                    <span class="btn-icon">✓</span>
+                    Mark as Mastered
+                </button>
+            </div>
+        </div>
+
+        <!-- Term List Table -->
+        <div class="term-list-container">
+            <div class="list-header">
+                <h3 class="list-title">Key Term Reference List</h3>
+                <button class="btn btn-secondary" id="toggle-table-view">
+                    <span class="btn-icon">📋</span>
+                    Hide Table
+                </button>
+            </div>
+            
+            <div id="term-table-container">
+                <table class="term-table">
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Term</th>
+                            <th>Definition</th>
+                            <th>Mastery</th>
+                        </tr>
+                    </thead>
+                    <tbody id="term-table-body">
+                        <!-- Table rows will be inserted here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn btn-secondary" id="reset-progress-btn">
+                <span class="btn-icon">↻</span>
+                Reset Progress
+            </button>
+            <button class="btn btn-secondary" id="shuffle-cards-btn">
+                <span class="btn-icon">🔀</span>
+                Shuffle Cards
+            </button>
+            <button class="btn btn-primary" id="practice-weak-btn">
+                <span class="btn-icon">🎯</span>
+                Practice Weak Areas
+            </button>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // EKG Chapter 2 Key Terms Data
+            const termsData = [
+                // PHYSIOLOGY (Function, Action Potential, Electrical Properties)
+                { id: 1, category: "Physiology", term: "Absolute refractory period", definition: "Corresponds with the onset of the QRS complex to the peak of the T wave; cardiac cells cannot be stimulated to conduct an electrical impulse, no matter how strong the stimulus." },
+                { id: 2, category: "Physiology", term: "Action potential", definition: "A five-phase cycle that reflects the difference in the concentration of charged particles across the cell membrane at any given time." },
+                { id: 3, category: "Physiology", term: "Altered automaticity", definition: "A disorder of impulse formation in which cardiac cells fire and initiate impulses before a normal SA node impulse." },
+                { id: 4, category: "Physiology", term: "Arrhythmia", definition: "Abnormal heart rhythm." },
+                { id: 5, category: "Physiology", term: "Automaticity", definition: "Ability of cardiac pacemaker cells to spontaneously initiate an electrical impulse without being stimulated from another source." },
+                { id: 6, category: "Physiology", term: "Conductivity", definition: "Ability of a cardiac cell to receive an electrical stimulus and conduct that impulse to an adjacent cardiac cell." },
+                { id: 7, category: "Physiology", term: "Contractility", definition: "Ability of cardiac cells to shorten, causing cardiac muscle contraction in response to an electrical stimulus." },
+                { id: 8, category: "Physiology", term: "Depolarization", definition: "Movement of ions across a cell membrane causing the inside of the cell to become more positive; an electrical event expected to result in contraction." },
+                { id: 9, category: "Physiology", term: "Dysrhythmia", definition: "Abnormal heart rhythm." },
+                { id: 10, category: "Physiology", term: "Ectopic", definition: "Impulse(s) originating from a source other than the SA node." },
+                { id: 11, category: "Physiology", term: "Effective refractory period", definition: "Period of the cardiac action potential that includes the absolute refractory period and the first half of the relative refractory period." },
+                { id: 12, category: "Physiology", term: "Electrolytes", definition: "Elements or compounds that break into charged particles (ions) when melted or dissolved in water or another solvent." },
+                { id: 13, category: "Physiology", term: "Enhanced automaticity", definition: "Abnormal condition where cardiac cells begin to depolarize spontaneously or escape pacemaker sites increase their firing rate." },
+                { id: 14, category: "Physiology", term: "Excitability", definition: "The ability of cardiac muscle cells to respond to an outside stimulus." },
+                { id: 15, category: "Physiology", term: "Inherent", definition: "Natural, intrinsic." },
+                { id: 16, category: "Physiology", term: "Intrinsic rate", definition: "Rate at which a pacemaker of the heart normally generates impulses." },
+                { id: 17, category: "Physiology", term: "Ion", definition: "Electrically charged particle." },
+                { id: 18, category: "Physiology", term: "Membrane potential", definition: "Difference in electrical charge across the cell membrane." },
+                { id: 19, category: "Physiology", term: "Permeability", definition: "Ability of a membrane channel to allow passage of electrolytes once it is open." },
+                { id: 20, category: "Physiology", term: "Polarized state", definition: "Period after repolarization (resting state) when the outside of the cell is positive and the interior is negative." },
+                { id: 21, category: "Physiology", term: "Refractoriness", definition: "Period of recovery that cells need after being discharged before they are able to respond to a stimulus." },
+                { id: 22, category: "Physiology", term: "Relative refractory period", definition: "Corresponds with the downslope of the T wave; cardiac cells can be stimulated to depolarize if the stimulus is strong enough." },
+                { id: 23, category: "Physiology", term: "Reentry", definition: "Spread of an impulse through tissue already stimulated by that same impulse." },
+                { id: 24, category: "Physiology", term: "Repolarization", definition: "Movement of ions across a cell membrane in which the inside of the cell is restored to its negative charge." },
+                { id: 25, category: "Physiology", term: "Supranormal period", definition: "Period during the cardiac cycle when a weaker than normal stimulus can cause cardiac cells to depolarize." },
+                { id: 26, category: "Physiology", term: "Triggered activity", definition: "Disorder of impulse formation where cells fire more than once after stimulation by a single impulse." },
+
+                // ANATOMY (Structures)
+                { id: 27, category: "Anatomy", term: "Atrioventricular bundle", definition: "The bundle of His." },
+                { id: 28, category: "Anatomy", term: "Atrioventricular node", definition: "A group of cells in the floor of the right atrium that conduct an electrical impulse through the heart." },
+                { id: 29, category: "Anatomy", term: "AV bundle", definition: "The bundle of His." },
+                { id: 30, category: "Anatomy", term: "AV node", definition: "Specialized cells in the lower right atrium; delays the impulse to allow atria to contract and fill ventricles." },
+                { id: 31, category: "Anatomy", term: "Bundle of His", definition: "Fibers in the upper interventricular septum that receive impulses from the AV node and conduct to bundle branches." },
+                { id: 32, category: "Anatomy", term: "Conduction system", definition: "A system of pathways in the heart composed of specialized electrical (pacemaker) cells." },
+                { id: 33, category: "Anatomy", term: "His-Purkinje system", definition: "Portion of the conduction system consisting of the bundle of His, bundle branches, and Purkinje fibers." },
+                { id: 34, category: "Anatomy", term: "Myocardial cells", definition: "Working cells of the myocardium that contain contractile filaments and form the muscular layers of the heart." },
+                { id: 35, category: "Anatomy", term: "Pacemaker cells", definition: "Specialized cells of the heart's electrical conduction system capable of spontaneously generating impulses." },
+                { id: 36, category: "Anatomy", term: "Purkinje fibers", definition: "Fibers found in both ventricles that conduct an electrical impulse through the heart." },
+                { id: 37, category: "Anatomy", term: "Sinoatrial node", definition: "Normal pacemaker of the heart that normally discharges at a rhythmic rate of 60 to 100 beats/min." },
+
+                // ECG BASICS (Waveforms, Leads, Measurements)
+                { id: 38, category: "ECG Basics", term: "Amplitude", definition: "Height (voltage) of a waveform on the ECG." },
+                { id: 39, category: "ECG Basics", term: "Artifact", definition: "Distortion of an ECG tracing by electrical activity that is noncardiac in origin." },
+                { id: 40, category: "ECG Basics", term: "Augmented limb lead", definition: "Leads aVR, aVL, and aVF; record difference in potential at one location relative to zero potential." },
+                { id: 41, category: "ECG Basics", term: "Axis", definition: "Imaginary line joining the positive and negative electrodes of a lead." },
+                { id: 42, category: "ECG Basics", term: "Baseline", definition: "Straight line recorded on ECG graph paper when no electrical activity is detected." },
+                { id: 43, category: "ECG Basics", term: "Biphasic", definition: "Waveform that is partly positive and partly negative." },
+                { id: 44, category: "ECG Basics", term: "Bipolar limb lead", definition: "ECG lead consisting of a positive and negative electrode." },
+                { id: 45, category: "ECG Basics", term: "Complex", definition: "Several waveforms." },
+                { id: 46, category: "ECG Basics", term: "Electrode", definition: "Adhesive pad with conductive gel applied to patient's skin and connected by cables to an ECG machine." },
+                { id: 47, category: "ECG Basics", term: "Ground electrode", definition: "Third ECG electrode which minimizes electrical activity from other sources." },
+                { id: 48, category: "ECG Basics", term: "Indicative changes", definition: "ECG changes observed in leads that look directly at the affected area of the heart." },
+                { id: 49, category: "ECG Basics", term: "Interval", definition: "Waveform and a segment; measured in milliseconds between two designated cardiac events." },
+                { id: 50, category: "ECG Basics", term: "Isoelectric line", definition: "Absence of electrical activity; observed on the ECG as a straight line." },
+                { id: 51, category: "ECG Basics", term: "J point", definition: "Point where the QRS complex and ST segment meet." },
+                { id: 52, category: "ECG Basics", term: "Lead", definition: "Electrical connection attached to the body to record electrical activity." },
+                { id: 53, category: "ECG Basics", term: "Millivolt (mV)", definition: "Difference in electrical charge between two points in a circuit." },
+                { id: 54, category: "ECG Basics", term: "PR interval", definition: "P wave plus PR segment; reflects depolarization of atria and spread of impulse through AV node/bundle/branches." },
+                { id: 55, category: "ECG Basics", term: "P wave", definition: "First wave in the cardiac cycle; represents atrial depolarization." },
+                { id: 56, category: "ECG Basics", term: "QRS complex", definition: "Waveforms (Q, R, S) representing the spread of an electrical impulse through the ventricles (ventricular depolarization)." },
+                { id: 57, category: "ECG Basics", term: "R wave", definition: "First positive deflection in the QRS complex, representing ventricular depolarization." },
+                { id: 58, category: "ECG Basics", term: "Reciprocal change", definition: "ECG changes observed in leads opposite the affected area of the heart (mirror image changes)." },
+                { id: 59, category: "ECG Basics", term: "Segment", definition: "Line between waveforms; named by the waveform that precedes and follows it." },
+                { id: 60, category: "ECG Basics", term: "ST segment", definition: "Portion of ECG representing end of ventricular depolarization and beginning of ventricular repolarization." },
+                { id: 61, category: "ECG Basics", term: "T wave", definition: "Waveform that follows the QRS complex and represents ventricular repolarization." },
+                { id: 62, category: "ECG Basics", term: "TP segment", definition: "Interval between two successive PQRST complexes during which electrical activity is absent." },
+                { id: 63, category: "ECG Basics", term: "Unipolar lead", definition: "Lead that consists of a single positive electrode and a reference point." },
+                { id: 64, category: "ECG Basics", term: "Voltage", definition: "Difference in electrical charge between two points." },
+                { id: 65, category: "ECG Basics", term: "Waveform", definition: "Movement away from the baseline in either a positive or negative direction." }
+            ];
+
+            // Clean data to ensure mastery property exists
+            termsData.forEach(t => t.mastery = 'unknown');
+
+            // Application State
+            const state = {
+                currentIndex: 0,
+                studyMode: 'termToDef', // termToDef or defToTerm
+                filter: 'all',
+                filteredTerms: [...termsData],
+                shuffled: false,
+                startTime: new Date(),
+                studyTime: 0
+            };
+
+            // DOM Elements
+            const flashcard = document.getElementById('flashcard');
+            const frontClass = document.getElementById('front-class');
+            const frontName = document.getElementById('front-name');
+            const termDefinition = document.getElementById('term-definition');
+            const currentCard = document.getElementById('current-card');
+            const totalCardsDisplay = document.getElementById('total-cards-display');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const studyModeToggle = document.getElementById('study-mode-toggle');
+            const modeLabelText = document.getElementById('mode-label-text');
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const markLearningBtn = document.getElementById('mark-learning-btn');
+            const markMasteredBtn = document.getElementById('mark-mastered-btn');
+            const resetProgressBtn = document.getElementById('reset-progress-btn');
+            const shuffleCardsBtn = document.getElementById('shuffle-cards-btn');
+            const practiceWeakBtn = document.getElementById('practice-weak-btn');
+            const toggleTableViewBtn = document.getElementById('toggle-table-view');
+            const termTableBody = document.getElementById('term-table-body');
+            const masteredCount = document.getElementById('mastered-count');
+            const masteredPercentage = document.getElementById('mastered-percentage');
+            const unknownBar = document.getElementById('unknown-bar');
+            const learningBar = document.getElementById('learning-bar');
+            const masteredBar = document.getElementById('mastered-bar');
+            const totalCardsHeader = document.getElementById('total-cards');
+
+            // Initialize
+            function init() {
+                updateCard();
+                updateMasteryProgress();
+                updateTable();
+                startStudyTimer();
+                setupEventListeners();
+                
+                // Set total count
+                totalCardsHeader.textContent = termsData.length;
+            }
+
+            // Update the current card display
+            function updateCard() {
+                const term = state.filteredTerms[state.currentIndex];
+                if (!term) return;
+
+                if (state.studyMode === 'termToDef') {
+                    // Front: Term
+                    frontClass.textContent = term.category;
+                    frontName.textContent = term.term;
+                    
+                    // Back: Definition
+                    termDefinition.textContent = term.definition;
+                } else {
+                    // Front: Definition (concept)
+                    frontClass.textContent = term.category;
+                    frontName.textContent = term.definition;
+                    frontName.style.fontSize = "1.2rem";
+                    frontName.style.fontWeight = "500";
+                    
+                    // Back: Term
+                    termDefinition.innerHTML = `<div style="font-size: 1.8rem; font-weight: 700; color: var(--color-primary);">${term.term}</div>`;
+                }
+
+                // Update navigation
+                currentCard.textContent = state.currentIndex + 1;
+                totalCardsDisplay.textContent = state.filteredTerms.length;
+                
+                // Update button states
+                prevBtn.disabled = state.currentIndex === 0;
+                nextBtn.disabled = state.currentIndex === state.filteredTerms.length - 1;
+                
+                // Reset card to front
+                flashcard.classList.remove('flipped');
+                
+                // Update mastery buttons state
+                updateMasteryButtons();
+            }
+
+            // Update mastery progress bars and counts
+            function updateMasteryProgress() {
+                const total = termsData.length;
+                const mastered = termsData.filter(d => d.mastery === 'mastered').length;
+                const learning = termsData.filter(d => d.mastery === 'learning').length;
+                const unknown = total - mastered - learning;
+                
+                // Update counts
+                masteredCount.textContent = mastered;
+                const percentage = total > 0 ? Math.round((mastered / total) * 100) : 0;
+                masteredPercentage.textContent = `${percentage}%`;
+                
+                // Update progress bars
+                const unknownPercent = (unknown / total) * 100;
+                const learningPercent = (learning / total) * 100;
+                const masteredPercent = (mastered / total) * 100;
+                
+                unknownBar.style.width = `${unknownPercent}%`;
+                learningBar.style.width = `${learningPercent}%`;
+                masteredBar.style.width = `${masteredPercent}%`;
+            }
+
+            // Update the term table
+            function updateTable() {
+                termTableBody.innerHTML = '';
+                
+                termsData.forEach(term => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td class="term-class-cell">${term.category}</td>
+                        <td><strong>${term.term}</strong></td>
+                        <td>${term.definition}</td>
+                        <td>
+                            <span class="mastery-indicator ${term.mastery}"></span>
+                            ${term.mastery.charAt(0).toUpperCase() + term.mastery.slice(1)}
+                        </td>
+                    `;
+                    termTableBody.appendChild(row);
+                });
+            }
+
+            // Update mastery buttons based on current term
+            function updateMasteryButtons() {
+                const term = state.filteredTerms[state.currentIndex];
+                if (!term) return;
+                
+                // Reset button states
+                markLearningBtn.classList.remove('active');
+                markMasteredBtn.classList.remove('active');
+                
+                // Set active state based on current mastery
+                const originalTerm = termsData.find(t => t.id === term.id);
+                
+                if (originalTerm.mastery === 'learning') {
+                    markLearningBtn.classList.add('active');
+                } else if (originalTerm.mastery === 'mastered') {
+                    markMasteredBtn.classList.add('active');
+                }
+            }
+
+            // Apply filter to terms
+            function applyFilter(filter) {
+                state.filter = filter;
+                
+                switch(filter) {
+                    case 'all':
+                        state.filteredTerms = [...termsData];
+                        break;
+                    case 'anatomy':
+                        state.filteredTerms = termsData.filter(d => d.category === "Anatomy");
+                        break;
+                    case 'physiology':
+                        state.filteredTerms = termsData.filter(d => d.category === "Physiology");
+                        break;
+                    case 'ecg': // Corrected key for ECG Basics
+                        state.filteredTerms = termsData.filter(d => d.category === "ECG Basics");
+                        break;
+                    case 'learning':
+                        state.filteredTerms = termsData.filter(d => d.mastery === 'learning');
+                        break;
+                    case 'mastered':
+                        state.filteredTerms = termsData.filter(d => d.mastery === 'mastered');
+                        break;
+                }
+                
+                // Handle empty results
+                if (state.filteredTerms.length === 0) {
+                    if (filter === 'learning' || filter === 'mastered') {
+                        alert(`No terms marked as "${filter}" yet!`);
+                        document.querySelector('.filter-btn[data-filter="all"]').click();
+                        return;
+                    }
+                }
+                
+                // Reset to first card
+                state.currentIndex = 0;
+                
+                // Update display
+                updateCard();
+                
+                // Update filter button states
+                filterButtons.forEach(btn => {
+                    if (btn.dataset.filter === filter) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
+            }
+
+            // Shuffle the cards
+            function shuffleCards() {
+                for (let i = state.filteredTerms.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [state.filteredTerms[i], state.filteredTerms[j]] = 
+                    [state.filteredTerms[j], state.filteredTerms[i]];
+                }
+                state.shuffled = true;
+                state.currentIndex = 0;
+                updateCard();
+                
+                // Visual feedback
+                const originalText = shuffleCardsBtn.innerHTML;
+                shuffleCardsBtn.innerHTML = `<span class="btn-icon">🔀</span> Shuffled!`;
+                setTimeout(() => {
+                    shuffleCardsBtn.innerHTML = originalText;
+                }, 1000);
+            }
+
+            // Set mastery level for current term
+            function setMastery(level) {
+                const currentTerm = state.filteredTerms[state.currentIndex];
+                const termInData = termsData.find(d => d.id === currentTerm.id);
+                
+                if (termInData) {
+                    termInData.mastery = level;
+                    
+                    updateMasteryProgress();
+                    updateTable();
+                    updateMasteryButtons();
+                    
+                    // Visual feedback toast
+                    const feedback = document.createElement('div');
+                    feedback.style.position = 'fixed';
+                    feedback.style.top = '20px';
+                    feedback.style.right = '20px';
+                    feedback.style.padding = '15px 20px';
+                    feedback.style.background = level === 'mastered' ? 'var(--color-success)' : 'var(--color-warning)';
+                    feedback.style.color = 'white';
+                    feedback.style.borderRadius = 'var(--radius-sm)';
+                    feedback.style.boxShadow = 'var(--shadow-soft)';
+                    feedback.style.zIndex = '1000';
+                    feedback.style.fontWeight = '600';
+                    feedback.textContent = level === 'mastered' 
+                        ? `✓ Mastered: ${currentTerm.term}` 
+                        : `📖 Learning: ${currentTerm.term}`;
+                    
+                    document.body.appendChild(feedback);
+                    
+                    setTimeout(() => {
+                        feedback.style.opacity = '0';
+                        feedback.style.transition = 'opacity 0.5s ease';
+                        setTimeout(() => document.body.removeChild(feedback), 500);
+                    }, 1500);
+                }
+            }
+
+            // Reset all progress
+            function resetProgress() {
+                if (confirm('Are you sure you want to reset all mastery progress? This cannot be undone.')) {
+                    termsData.forEach(t => t.mastery = 'unknown');
+                    
+                    updateMasteryProgress();
+                    updateTable();
+                    updateMasteryButtons();
+                    
+                    // Reset study time
+                    state.startTime = new Date();
+                    state.studyTime = 0;
+                }
+            }
+
+            // Practice weak areas (terms not mastered)
+            function practiceWeakAreas() {
+                const weakTerms = termsData.filter(d => d.mastery !== 'mastered');
+                
+                if (weakTerms.length === 0) {
+                    alert('Congratulations! You have mastered all terms!');
+                    return;
+                }
+                
+                state.filteredTerms = [...weakTerms];
+                state.currentIndex = 0;
+                
+                // Manually set visual state of buttons
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                
+                // Update UI
+                updateCard();
+                
+                alert(`Starting practice session with ${weakTerms.length} terms you haven't mastered yet.`);
+            }
+
+            // Toggle table view
+            function toggleTableView() {
+                const tableContainer = document.getElementById('term-table-container');
+                if (tableContainer.style.display === 'none') {
+                    tableContainer.style.display = 'block';
+                    toggleTableViewBtn.innerHTML = `<span class="btn-icon">📋</span> Hide Table`;
+                } else {
+                    tableContainer.style.display = 'none';
+                    toggleTableViewBtn.innerHTML = `<span class="btn-icon">📋</span> Show Table`;
+                }
+            }
+
+            // Study timer
+            function startStudyTimer() {
+                setInterval(() => {
+                    const now = new Date();
+                    const diff = Math.floor((now - state.startTime) / 1000);
+                    
+                    const minutes = Math.floor(diff / 60);
+                    const seconds = diff % 60;
+                    document.getElementById('study-time').textContent = 
+                        `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                }, 1000);
+            }
+
+            // Event Listeners
+            function setupEventListeners() {
+                // Flip card on click
+                flashcard.addEventListener('click', () => {
+                    flashcard.classList.toggle('flipped');
+                });
+
+                // Navigation buttons
+                prevBtn.addEventListener('click', () => {
+                    if (state.currentIndex > 0) {
+                        state.currentIndex--;
+                        updateCard();
+                    }
+                });
+
+                nextBtn.addEventListener('click', () => {
+                    if (state.currentIndex < state.filteredTerms.length - 1) {
+                        state.currentIndex++;
+                        updateCard();
+                    }
+                });
+
+                // Study mode toggle
+                studyModeToggle.addEventListener('change', () => {
+                    if (studyModeToggle.checked) {
+                        state.studyMode = 'defToTerm';
+                        modeLabelText.textContent = 'Definition → Term';
+                    } else {
+                        state.studyMode = 'termToDef';
+                        modeLabelText.textContent = 'Term → Definition';
+                    }
+                    updateCard();
+                });
+
+                // Filter buttons
+                filterButtons.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        applyFilter(btn.dataset.filter);
+                    });
+                });
+
+                // Mastery buttons
+                markLearningBtn.addEventListener('click', (e) => {
+                    e.stopPropagation(); // Prevent card flip
+                    setMastery('learning');
+                });
+
+                markMasteredBtn.addEventListener('click', (e) => {
+                    e.stopPropagation(); // Prevent card flip
+                    setMastery('mastered');
+                });
+
+                // Action buttons
+                resetProgressBtn.addEventListener('click', resetProgress);
+                shuffleCardsBtn.addEventListener('click', shuffleCards);
+                practiceWeakBtn.addEventListener('click', practiceWeakAreas);
+                toggleTableViewBtn.addEventListener('click', toggleTableView);
+
+                // Keyboard navigation
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'ArrowLeft') {
+                        if (state.currentIndex > 0) {
+                            state.currentIndex--;
+                            updateCard();
+                        }
+                    } else if (e.key === 'ArrowRight') {
+                        if (state.currentIndex < state.filteredTerms.length - 1) {
+                            state.currentIndex++;
+                            updateCard();
+                        }
+                    } else if (e.key === ' ' || e.key === 'Enter') {
+                        // Space or Enter to flip card
+                        flashcard.classList.toggle('flipped');
+                        e.preventDefault();
+                    }
+                });
+            }
+
+            // Initialize the module
+            init();
+        });
+    </script>
+</body>
+</html>
